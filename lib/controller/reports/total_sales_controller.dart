@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../model/aging_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../model/total_sales_model.dart';
-import '../utils/constants/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../model/total_sales_model.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class TotalSalesController extends Api {
   Future<List<TotalSalesModel>> getTotalSalesMethod(

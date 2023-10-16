@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../model/criteria/search_criteria.dart';
-import '../model/sales_branches_model.dart';
-import '../service/api_service.dart';
-import '../utils/constants/api_constants.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../model/sales_adminstration/sales_branches_model.dart';
+import '../../service/api_service.dart';
+import '../../utils/constants/api_constants.dart';
 
 class SalesBranchesController {
   Future<List<SalesBranchesmodel>> getSalesByBranches(

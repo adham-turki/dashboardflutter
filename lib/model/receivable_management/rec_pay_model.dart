@@ -1,4 +1,4 @@
-import 'package:bi_replicate/model/rec_pay__data_model.dart';
+import 'package:bi_replicate/model/receivable_management/rec_pay__data_model.dart';
 
 class RecPayModel {
   List<RecPayDataModel> payables = [];

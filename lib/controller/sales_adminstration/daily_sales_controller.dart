@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import '../model/aging_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../model/daily_sales_model.dart';
-import '../utils/constants/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
+import '../../model/receivable_management/aging_model.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../model/sales_adminstration/daily_sales_model.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class DailySalesController extends Api {
   Future<List<DailySalesModel>> getDailySale(
