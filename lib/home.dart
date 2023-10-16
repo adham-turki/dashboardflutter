@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -82,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       case 5:
         return Container();
       case 6:
-        return Container();
+        return const InventoryPerfContent();
       case 7:
         return Container();
       case 8:
