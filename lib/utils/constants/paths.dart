@@ -1,0 +1,1 @@
+const journalReportApi = "/journalReports/page";
