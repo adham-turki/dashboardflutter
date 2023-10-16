@@ -32,10 +32,14 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     PieChartModel(value: 40, title: "4", color: Colors.purple),
   ];
 
+  bool isDesktop = false;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
+    isDesktop = Responsive.isDesktop(context);
 
     return SingleChildScrollView(
       child: Container(
@@ -49,17 +53,14 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Responsive.isDesktop(context)
-                    ? desktopCriteria()
-                    : mobileCriteria(),
+                child: isDesktop ? desktopCriteria() : mobileCriteria(),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height:
-                    Responsive.isDesktop(context) ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.5,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -75,11 +76,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                       ],
                     ),
                     PieChartComponent(
-                      radiusNormal: Responsive.isDesktop(context) ? 130 : 70,
-                      radiusHover: Responsive.isDesktop(context) ? 140 : 80,
-                      width: Responsive.isDesktop(context) ? 400 : width * 0.1,
-                      height:
-                          Responsive.isDesktop(context) ? 450 : height * 0.4,
+                      radiusNormal: isDesktop ? 130 : 70,
+                      radiusHover: isDesktop ? 140 : 80,
+                      width: isDesktop ? 400 : width * 0.1,
+                      height: isDesktop ? 450 : height * 0.4,
                       dataList: list,
                     ),
                     const SizedBox(), //Footer
