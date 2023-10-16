@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-import '../model/aging_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../model/sales_category_model.dart';
-import '../utils/constants/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../model/sales_adminstration/sales_category_model.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class SalesCategoryController extends Api {
   Future<List<SalesCategoryModel>> getSalesByCategory(

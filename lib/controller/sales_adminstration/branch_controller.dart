@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import '../model/aging_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../utils/constants/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
+import '../../model/receivable_management/aging_model.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class BranchController extends Api {
   Future<Map<String, dynamic>> getBranch() async {

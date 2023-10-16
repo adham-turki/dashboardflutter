@@ -1,4 +1,4 @@
-import 'branch_model.dart';
+import '../sales_adminstration/branch_model.dart';
 
 class SalesReportModel {
   int? count;

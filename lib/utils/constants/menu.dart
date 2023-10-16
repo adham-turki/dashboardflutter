@@ -139,40 +139,40 @@ List<SideTabModel> menuList = [
   //   ],
   //   value: -1,
   // ),
-  // SideTabModel(
-  //   isParent: true,
-  //   text: "Reports",
-  //   icon: Icons.note_sharp,
-  //   subMenu: [
-  //     SideSubTabModel(
-  //       text: "Total Sales",
-  //       value: 11,
-  //     ),
-  //     SideSubTabModel(
-  //       text: "Sales Report",
-  //       value: 12,
-  //     ),
-  //     SideSubTabModel(
-  //       text: "Purchases Report",
-  //       value: 13,
-  //     ),
-  //   ],
-  //   value: -1,
-  // ),
-  // SideTabModel(
-  //   isParent: true,
-  //   text: "Settings",
-  //   icon: Icons.settings,
-  //   subMenu: [
-  //     SideSubTabModel(
-  //       text: "Setup",
-  //       value: 14,
-  //     ),
-  //     SideSubTabModel(
-  //       text: "Change Password",
-  //       value: 15,
-  //     ),
-  //   ],
-  //   value: -1,
-  // ),
+  SideTabModel(
+    isParent: true,
+    text: "Reports",
+    icon: Icons.note_sharp,
+    subMenu: [
+      SideSubTabModel(
+        text: "Total Sales",
+        value: 11,
+      ),
+      SideSubTabModel(
+        text: "Sales Report",
+        value: 12,
+      ),
+      SideSubTabModel(
+        text: "Purchases Report",
+        value: 13,
+      ),
+    ],
+    value: -1,
+  ),
+  SideTabModel(
+    isParent: true,
+    text: "Settings",
+    icon: Icons.settings,
+    subMenu: [
+      SideSubTabModel(
+        text: "Setup",
+        value: 14,
+      ),
+      SideSubTabModel(
+        text: "Change Password",
+        value: 15,
+      ),
+    ],
+    value: -1,
+  ),
 ];

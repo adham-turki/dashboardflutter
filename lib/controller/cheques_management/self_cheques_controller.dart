@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../model/aging_model.dart';
-import '../model/cheques_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../utils/constants/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
+import '../../model/cheques_bank/cheques_model.dart';
+import '../../model/receivable_management/aging_model.dart';
+import '../../model/criteria/search_criteria.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class SelfChequesController extends Api {
   Future<List<ChequesModel>> getCheques(SearchCriteria searchCriteria) async {
