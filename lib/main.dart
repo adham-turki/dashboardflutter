@@ -1,15 +1,19 @@
 import 'package:bi_replicate/home.dart';
+import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'l10n/l10n.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (e) => ScreenContentProvider(),
-        )
+        ChangeNotifierProvider(create: (e) => ScreenContentProvider()),
+        ChangeNotifierProvider(create: (create) => LocaleProvider()),
       ],
       child: const MyApp(),
     ),
@@ -22,8 +26,31 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<LocaleProvider>(context);
+
+    //    Future<void> loadStoredLocale() async {
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   String? storedLanguageCode = prefs.getString('selectedLanguage');
+
+    //   if (storedLanguageCode != null) {
+    //     Locale storedLocale = Locale(storedLanguageCode);
+    //     provider.setLocale(storedLocale);
+    //   }
+    // }
+
+    // loadStoredLocale();
     return MaterialApp(
       title: 'Bi',
+      //  navigatorKey: navigatorKey,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      locale: provider.locale,
+      supportedLocales: L10n.all,
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         // This is the theme of your application.
         //

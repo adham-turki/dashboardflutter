@@ -31,19 +31,22 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   provider: ^6.0.5
-  pluto_grid: ^6.0.4
+  pluto_grid: ^5.4.9
   dropdown_search: ^5.0.6
   http: ^0.13.6
-  syncfusion_flutter_datepicker: ^23.1.39
+  syncfusion_flutter_datepicker: ^21.2.3
   mask_text_input_formatter: ^2.5.0
   universal_html: ^2.2.2
   fl_chart: ^0.62.0
   flutter_speed_dial: ^7.0.0
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +69,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
