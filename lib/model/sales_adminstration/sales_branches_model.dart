@@ -12,16 +12,16 @@ class SalesBranchesmodel {
   SalesBranchesmodel.fromJson(Map<String, dynamic> salesBranch) {
     totalSales = salesBranch['total_sales'].toString() == "null"
         ? 0.0
-        : salesBranch['total_sales'];
+        : double.parse(salesBranch['total_sales'].toString());
     salesDis = salesBranch['sales_dis'].toString() == "null"
         ? 0.0
-        : salesBranch['sales_dis'];
+        : double.parse(salesBranch['sales_dis'].toString());
     retSalesDis = salesBranch['ret_sales_dis'].toString() == "null"
         ? 0.0
-        : salesBranch['ret_sales_dis'];
+        : double.parse(salesBranch['ret_sales_dis'].toString());
     totalReturnSales = salesBranch['total_return_sales'].toString() == "null"
         ? 0.0
-        : salesBranch['total_return_sales'];
+        : double.parse(salesBranch['total_return_sales'].toString());
     branchCode = salesBranch['branch_code'].toString() == "null"
         ? ""
         : salesBranch['branch_code'].toString();

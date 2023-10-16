@@ -1,8 +1,9 @@
 import 'dart:convert';
-import 'dart:typed_data';
+
+import 'package:flutter/services.dart';
 
 import '../../model/cheques_bank/cheques_model.dart';
-import '../../model/receivable_management/aging_model.dart';
+import '../../model/cheques_bank/cheques_result.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
@@ -28,13 +29,27 @@ class SelfChequesController extends Api {
     return chequesList;
   }
 
+  Future<ChequesResult> getPurchaseResultMehtod(
+      SearchCriteria searchCriteria) async {
+    var api = getChequesResult;
+    late ChequesResult chequesResult = ChequesResult();
+    await postMethods(api, searchCriteria.chequesToJson()).then((response) {
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        chequesResult = ChequesResult.fromJson(jsonData);
+      }
+    });
+    return chequesResult;
+  }
+
   Future<Uint8List> exportToExcelApi(SearchCriteria searchCriteria) async {
     Uint8List excelByteData = Uint8List.fromList([
       0x48, 0x65, 0x6C, 0x6C,
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclCheques/count=${20}';
+    String eUrl = '$exportToExeclCheques/count=${10}';
     var body = {
       "searchForm": {
         "fromDate": searchCriteria.fromDate,

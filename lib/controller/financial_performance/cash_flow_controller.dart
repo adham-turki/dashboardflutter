@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import '../../model/financial_performance/cash_flow_model.dart';
-import '../../model/receivable_management/aging_model.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
@@ -12,7 +11,6 @@ class CashFlowController extends Api {
       SearchCriteria searchCriteria) async {
     var api = getCashFlows;
     List<CashFlowModel> cashFlowList = [];
-
     await postMethods(api, searchCriteria.toJson()).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

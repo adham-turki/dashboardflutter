@@ -1,12 +1,7 @@
-import 'dart:convert';
-
-import '../model/receivable_management/aging_model.dart';
-import '../model/change_password_model.dart';
-import '../model/criteria/search_criteria.dart';
-import '../service/Api.dart';
-import '../utils/constants/api_constants.dart';
-import '../utils/constants/values.dart';
-import 'error_controller.dart';
+import '../../model/settings/change_password_model.dart';
+import '../../service/Api.dart';
+import '../../utils/constants/api_constants.dart';
+import '../error_controller.dart';
 
 class ChangePasswordController extends Api {
   Future<bool> changePassword(ChangePasswordModel body) async {

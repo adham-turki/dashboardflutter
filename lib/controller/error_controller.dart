@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../components/key.dart';
 import '../dialogs/error_dialog.dart';
-import 'error_constant.dart';
+import '../utils/constants/error_constant.dart';
 
 class ErrorController {
   static openErrorDialog(int responseStatus, String errorDetails) {

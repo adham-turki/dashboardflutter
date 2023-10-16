@@ -1,9 +1,8 @@
 import 'dart:convert';
-
-import '../../model/account_model.dart';
-import '../../model/bi_account_model.dart';
-import '../../service/Api.dart';
-import '../../utils/constants/api_constants.dart';
+import '../../../model/settings/setup/account_model.dart';
+import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../service/Api.dart';
+import '../../../utils/constants/api_constants.dart';
 
 class SetupController extends Api {
   Future<List<AccountModel>> getAllAccounts() async {

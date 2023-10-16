@@ -1,26 +1,16 @@
-// import 'package:biproject/Models/search_criteria.dart';
-// import 'package:biproject/component/table_widget.dart';
-// import 'package:biproject/provider/sales_search_provider.dart';
+
 // import 'package:flutter/foundation.dart';
 // import 'package:flutter/material.dart';
-// // import 'package:path_provider/path_provider.dart';
 // import 'package:provider/provider.dart';
-// import '../../Models/sales_cost_report.dart';
-// import '../../component/app_utils.dart';
-// import '../../component/criteria_widget.dart';
-// import '../../component/new_table.dart';
-// import '../../component/order_by_widget.dart';
-// import '../../component/setup_widget.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import 'dart:html' as html;
 
-// import '../../constants/constants.dart';
-// import '../../constants/maps.dart';
-// import '../../controller/dates_controller.dart';
-// import '../../controller/report_controller.dart';
-// import '../../provider/screen_provider.dart';
-// import '../SalesAdministration/sales_by_branches_screen.dart';
-// import '../headerWidget.dart';
+// import '../../../../controller/reports/report_controller.dart';
+// import '../../../../model/criteria/search_criteria.dart';
+// import '../../../../model/sales_adminstration/sales_cost_report.dart';
+// import 'tabs/criteria_widget.dart';
+// import 'tabs/order_by_widget.dart';
+// import 'tabs/setup_widget.dart';
 
 // class SalesReportScreen extends StatefulWidget {
 //   const SalesReportScreen({Key? key}) : super(key: key);
@@ -204,7 +194,7 @@
 //         SingleChildScrollView(
 //           child: Column(
 //             children: [
-//               const HeaderWidget(),
+//               //const HeaderWidget(),
 //               const SizedBox(
 //                 height: 40,
 //               ),
@@ -365,7 +355,6 @@
 //                           customColumns: getColumns(_locale, orderByColumns),
 //                         );
 //                         Map<String, dynamic> body = readProvider.toJson();
-//                         print("ExcelBode $body");
 //                         ReportController()
 //                             .exportToExcelApi(searchCriteria, body)
 //                             .then((value) {
@@ -385,12 +374,12 @@
 //               const SizedBox(
 //                 height: 20,
 //               ),
-//               DataTableWidget(
-//                 columns: orderByColumns,
-//                 list: salesList,
-//                 finalRow: finalRow,
-//                 objectType: "SalesCostReportModel",
-//               ),
+//               // DataTableWidget(
+//               //   columns: orderByColumns,
+//               //   list: salesList,
+//               //   finalRow: finalRow,
+//               //   objectType: "SalesCostReportModel",
+//               // ),
 //               const SizedBox(
 //                 height: 20,
 //               ),
@@ -554,9 +543,7 @@
 //   }
 
 //   Future getResult() async {
-//     // pageNumber = 0;
-//     // limitPage =
-//     print("collllll ${orderByColumns.length}");
+ 
 //     ReportController salesReportController = ReportController();
 
 //     dynamic body = readProvider.toJson();

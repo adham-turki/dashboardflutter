@@ -9,7 +9,7 @@ class ExpensesController extends Api {
   var api = getExpenses;
   Future<List<ExpensesModel>> getExpense(SearchCriteria searchCriteria) async {
     List<ExpensesModel> list = [];
-    await postMethods(api, searchCriteria).then((response) {
+    await postMethods(api, searchCriteria.toJson()).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var elemant in jsonData) {

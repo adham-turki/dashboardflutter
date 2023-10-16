@@ -1,3 +1,4 @@
+
 class BranchModel {
   String? branchName;
   String? branchCode;
