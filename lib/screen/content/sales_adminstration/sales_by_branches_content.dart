@@ -8,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:http/http.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../model/chart/pie_chart_model.dart';
+import '../../../utils/func/dates_controller.dart';
 
 class SalesByBranchesContent extends StatefulWidget {
   const SalesByBranchesContent({super.key});
@@ -21,6 +23,7 @@ class SalesByBranchesContent extends StatefulWidget {
 class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   double width = 0;
   double height = 0;
+  late AppLocalizations _locale;
 
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
@@ -31,8 +34,46 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     PieChartModel(value: 30, title: "3", color: Colors.green),
     PieChartModel(value: 40, title: "4", color: Colors.purple),
   ];
+  List<double> listOfBalances = [];
+  List<String> listOfPeriods = [];
 
+  final List<String> items = [
+    'Print',
+    'Save as JPEG',
+    'Save as PNG',
+  ];
+  DateTime? _selectedDate;
+  DateTime? _selectedDate2;
+  List<String> periods = [];
+  List<String> charts = [];
+  var selectedPeriod = "";
+  var selectedChart = "";
+  List<BarChartData> barData = [];
   bool isDesktop = false;
+
+  @override
+  void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
+    String todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
+    _fromDateController.text = todayDate;
+    _toDateController.text = todayDate;
+    periods = [
+      _locale.daily,
+      _locale.weekly,
+      _locale.monthly,
+      _locale.yearly,
+    ];
+    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    selectedChart = charts[0];
+    selectedPeriod = periods[0];
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +139,28 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomDropDown(
-          label: "Period",
+          items: periods,
+          label: _locale.period,
+          initialValue: selectedPeriod,
+          onChanged: (value) {
+            print(value);
+          },
         ),
         CustomDatePicker(
-          label: "From Date",
+          label: _locale.fromDate,
           controller: _fromDateController,
         ),
         CustomDatePicker(
-          label: "To Date",
+          label: _locale.toDate,
           controller: _toDateController,
         ),
         CustomDropDown(
-          label: "Chart Type",
+          items: charts,
+          label: _locale.chartType,
+          initialValue: selectedChart,
+          onChanged: (value) {
+            print(value);
+          },
         ),
       ],
     );
@@ -121,19 +172,27 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       children: [
         CustomDropDown(
           width: widthMobile,
-          label: "Period",
+          label: _locale.period,
+          initialValue: selectedPeriod,
+          onChanged: (value) {
+            print(value);
+          },
         ),
         CustomDatePicker(
-          label: "From Date",
+          label: _locale.fromDate,
           controller: _fromDateController,
         ),
         CustomDatePicker(
-          label: "To Date",
+          label: _locale.toDate,
           controller: _toDateController,
         ),
         CustomDropDown(
           width: widthMobile,
-          label: "Chart Type",
+          label: _locale.chartType,
+          initialValue: selectedChart,
+          onChanged: (value) {
+            print(value);
+          },
         ),
       ],
     );

@@ -1,0 +1,27 @@
+import 'dart:convert';
+
+import '../model/aging_model.dart';
+import '../model/criteria/search_criteria.dart';
+import '../model/total_collection_model.dart';
+import '../utils/constants/Api.dart';
+import '../utils/constants/api_constants.dart';
+import '../utils/constants/values.dart';
+
+class TotalCollectionConroller extends Api {
+  Future<List<TotalCollectionModel>> getTotalCollectionMethod(
+      SearchCriteria searchCriteria) async {
+    var api = getTotalCollection;
+    List<TotalCollectionModel> totalCollectionList = [];
+
+    await postMethods(api, searchCriteria.toJson()).then((response) {
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var totalCollection in jsonData) {
+          totalCollectionList
+              .add(TotalCollectionModel.fromJson(totalCollection));
+        }
+      }
+    });
+    return totalCollectionList;
+  }
+}
