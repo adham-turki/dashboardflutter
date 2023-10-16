@@ -8,6 +8,8 @@
     "userName":"اسم المستخدم",
     "enterPassword":"ادخل كلمة المرور",
     "password":"كلمة المرور",
+     "wrongInput":"معلومات خاطئة",
+    "wronUserNameOrPass":"اسم المستخدم المدخل أو كلمة السر غير صحيحة",
     "rememberMe":"تذكرني",
     "login":"دخول",
     "salesAdminstration":"إدارة المبيعات",
@@ -15,6 +17,7 @@
     "branchesSalesByCategories":"مبيعات الفرع حسب التصنيف",
     "dailySales":"المبيعات اليومية",
     "totalCollections":"إجمالي التحصيلات",
+    "finalTotal":"المجموع النهائي",
     "financialPerformance":"الأداء المالي",
     "cashFlows":"التدفقات النقدية",
     "expenses":"المصاريف",
@@ -64,7 +67,7 @@
     "code":"الكود",
     "name":"الاسم",
     "currentQty":"رصيد الكميات",
-    "soldQnty":"الكمبية المباعة",
+    "soldQnty":"الكمية المباعة",
     "chequesPayable":"مبالغ الشيكات",
     "bankSettlement":"تسوية البنك",
     "uncollectableCheques":"مجموع الشيكات الواردة - صندوق الشيكات",
@@ -162,11 +165,14 @@
     "user":"مستخدم",
     "ok":"موافق",
     "cancel":"إلغاء",
-    "aliasName":"الاسم المستعار",
+    "aliasName":"اسم الشركة" ,
     "deletedSuccesfully":"تم الحذف بنجاح",
      "aliasReqField" :"الاسم المستعار مطلوب",
    "nameReqField" :"اسم المستخدم مطلوب",
-    "passReqField" :"كلمة المرور مطلوبة"
+    "passReqField" :"كلمة المرور مطلوبة",
+    "cashIn":"حركة النقد الداخلة",
+    "cashOut":"حركة النقد الخارجة",
+        "general":"عام"
 
 
 

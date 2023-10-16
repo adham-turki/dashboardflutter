@@ -9,18 +9,21 @@
     "enterPassword":"Enter paswword",
     "password":"Password",
     "rememberMe":"Remember Me",
+    "wrongInput":"Wrong Information",
+    "wronUserNameOrPass":"Entered Username or Password is incorrect please check it",
     "login":"Login",
     "salesAdminstration":"Sales Adminstration",
     "salesByBranches":"Sales By Branches",
     "branchesSalesByCategories":"Branches Sales By Categories",
     "dailySales":"Daily Sales",
     "totalCollections":"Total Collections",
+    "finalTotal":"Final Total",
     "financialPerformance":"Financial Performance",
     "cashFlows":"Cash Flows",
     "expenses":"Expenses",
     "inventoryPerformance":"Inventory Performance",
     "receivableManagement":"Receivable Management",
-    "monthlyComparsionOFReceivableAndPayables":"Monthly Comparsion OF \n Receivable And Payables",
+    "monthlyComparsionOFReceivableAndPayables":"Monthly Comparsion OF Receivable And Payables",
     "agingReceivable":"Aging Receivable",
     "chequesManagement":"Cheques Management",
     "chequesAndBank":"Cheques & Bank",
@@ -189,6 +192,9 @@
     "deletedSuccesfully":"Deleted Succesfully",
     "aliasReqField" :"Alias name is required",
    "nameReqField" :"Username is required",
-    "passReqField" :"Password is required"
+    "passReqField" :"Password is required",
+"cashIn":"Cash In",
+    "cashOut":"Cash Out",
+    "general":"General"
 
     }

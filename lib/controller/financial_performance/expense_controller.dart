@@ -1,8 +1,6 @@
 import 'dart:convert';
-
-import '../../model/receivable_management/aging_model.dart';
 import '../../model/criteria/search_criteria.dart';
-import '../../model/expense_model.dart';
+import '../../model/financial_performance/expense_model.dart';
 import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
