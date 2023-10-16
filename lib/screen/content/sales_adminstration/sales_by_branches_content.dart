@@ -24,6 +24,14 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
+
+  List<PieChartModel> list = [
+    PieChartModel(value: 10, title: "1", color: Colors.blue),
+    PieChartModel(value: 20, title: "2", color: Colors.red),
+    PieChartModel(value: 30, title: "3", color: Colors.green),
+    PieChartModel(value: 40, title: "4", color: Colors.purple),
+  ];
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -67,10 +75,12 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                       ],
                     ),
                     PieChartComponent(
-                      width: Responsive.isDesktop(context) ? 400 : width * 0.4,
+                      radiusNormal: Responsive.isDesktop(context) ? 130 : 70,
+                      radiusHover: Responsive.isDesktop(context) ? 140 : 80,
+                      width: Responsive.isDesktop(context) ? 400 : width * 0.1,
                       height:
-                          Responsive.isDesktop(context) ? 400 : height * 0.4,
-                      dataList: [],
+                          Responsive.isDesktop(context) ? 450 : height * 0.4,
+                      dataList: list,
                     ),
                     const SizedBox(), //Footer
                   ],

@@ -1,4 +1,5 @@
 import 'package:bi_replicate/utils/constants/colors.dart';
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -22,7 +23,9 @@ class _CustomButtonState extends State<CustomButton> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: primary,
-        fixedSize: Size(width * 0.07, height * 0.05),
+        fixedSize: Size(
+            Responsive.isDesktop(context) ? width * 0.07 : width * 0.3,
+            height * 0.05),
       ),
       onPressed: () {
         Navigator.pop(context);

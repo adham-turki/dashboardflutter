@@ -1,4 +1,5 @@
 import 'package:bi_replicate/model/custom_scroll_behavior.dart';
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,11 +12,15 @@ class PieChartComponent extends StatefulWidget {
   final double? width;
   final double? height;
   final List<PieChartModel> dataList;
+  final double? radiusNormal;
+  final double? radiusHover;
   const PieChartComponent({
     super.key,
     required this.dataList,
     this.width,
     this.height,
+    this.radiusNormal,
+    this.radiusHover,
   });
 
   @override
@@ -32,15 +37,11 @@ class _PieChartComponentState extends State<PieChartComponent> {
   double width = 500;
   double height = 500;
 
+  Color borderColor = Colors.white;
+
   @override
   void initState() {
-    //Check width and height
-    if (widget.width != null) {
-      width = widget.width!;
-    }
-    if (widget.height != null) {
-      height = widget.height!;
-    }
+    setAttributes();
 
     super.initState();
   }
@@ -109,37 +110,41 @@ class _PieChartComponentState extends State<PieChartComponent> {
         radius: radius,
         titleStyle: const TextStyle(color: Colors.white),
         borderSide: isTouched
-            ? const BorderSide(
-                color: Colors.white,
+            ? BorderSide(
+                color: borderColor,
                 strokeAlign: 10,
                 width: 5,
               )
             : null,
-        badgeWidget: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            decoration: BoxDecoration(
-              color: data.color,
-              borderRadius: BorderRadius.circular(4),
-              boxShadow: const [
-                BoxShadow(
-                  blurRadius: 5,
-                  color: Colors.black38,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Text(
-                data.title ?? "NONE",
-                style: const TextStyle(color: Colors.white),
-              ),
-            ),
-          ),
-        ),
+        badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
         badgePositionPercentageOffset: 1.3,
       );
     });
+  }
+
+  Padding badgeLabel(PieChartModel data) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: data.color,
+          borderRadius: BorderRadius.circular(4),
+          boxShadow: const [
+            BoxShadow(
+              blurRadius: 5,
+              color: Colors.black38,
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Text(
+            data.title ?? "NONE",
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
   }
 
   List<PieChartSectionData> noDataList() {
@@ -174,5 +179,21 @@ class _PieChartComponentState extends State<PieChartComponent> {
         ),
       );
     });
+  }
+
+  void setAttributes() {
+    if (widget.width != null) {
+      width = widget.width!;
+    }
+    if (widget.height != null) {
+      height = widget.height!;
+    }
+
+    if (widget.radiusNormal != null) {
+      radiusNormal = widget.radiusNormal!;
+    }
+    if (widget.radiusHover != null) {
+      radiusHover = widget.radiusHover!;
+    }
   }
 }

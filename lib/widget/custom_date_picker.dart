@@ -153,7 +153,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           return AlertDialog(
             title: const Text("Choose Date"),
             content: SizedBox(
-              width: width * 0.2,
+              width: Responsive.isDesktop(context) ? width * 0.2 : width,
               height: height * 0.15,
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),
