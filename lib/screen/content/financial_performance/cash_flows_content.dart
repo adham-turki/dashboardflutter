@@ -171,6 +171,57 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 child: isDesktop ? desktopCriteria() : mobileCriteria(),
               ),
             ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  accountsActive = !accountsActive;
+                  setState(() {});
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width < 800
+                      ? MediaQuery.of(context).size.width * 0.9
+                      : MediaQuery.of(context).size.width * 0.7,
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SelectableText(
+                        maxLines: 1,
+                        _locale.accounts,
+                        style: fourteen400TextStyle(Colors.white),
+                      ),
+                      const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            accountsActive
+                ? Container(
+                    width: MediaQuery.of(context).size.width < 800
+                        ? MediaQuery.of(context).size.width * 0.9
+                        : MediaQuery.of(context).size.width * 0.7,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: SelectableText(
+                      maxLines: 10,
+                      accountName(),
+                      style: twelve400TextStyle(Colors.black),
+                    ))
+                : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -373,6 +424,14 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         ),
       ],
     );
+  }
+
+  String accountName() {
+    accountNameString = "";
+    for (int i = 0; i < cashboxAccounts.length; i++) {
+      accountNameString += "${cashboxAccounts[i].accountName},";
+    }
+    return accountNameString;
   }
 
   void getCashFlows() {
