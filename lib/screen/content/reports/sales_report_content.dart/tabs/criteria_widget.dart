@@ -2053,13 +2053,13 @@
 //                             const SizedBox(
 //                               width: 5,
 //                             ),
-//                             CustomSearchDropDown(
+//                             CustomDropDown(
 //                               width: MediaQuery.of(context).size.width * 0.2,
 //                               // items: customerCategoryList,
 //                               hint: selectedToCustomerCategory.isNotEmpty
 //                                   ? selectedToCustomerCategory
 //                                   : _locale.select,
-//                               value: selectedToCustomerCategory.isNotEmpty
+//                               initialValue: selectedToCustomerCategory.isNotEmpty
 //                                   ? selectedToCustomerCategory
 //                                   : null,
 //                               onChanged: (value) {
