@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_label.dart';
+import '../custom_label.dart';
 
 // ignore: must_be_immutable
 class CustomDropDown extends StatefulWidget {
