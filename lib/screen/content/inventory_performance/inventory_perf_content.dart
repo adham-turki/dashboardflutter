@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/date_text_field.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
@@ -146,7 +147,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 Row(
                   children: [
                     CustomDropDown(
-                      hint: "",
+                      hint: periods[0],
                       label: "Period",
                       items: const [
                         "Last Day",
@@ -159,13 +160,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       onChanged: (value) {
                         setState(() {
                           periodValue = value;
+                          search();
                           // _fetchData();
                         });
                       },
                     ),
                     CustomDropDown(
                       label: "Status",
-                      hint: "",
+                      hint: status[0],
                       items: const [
                         "ALL(DRAFT, POSTED)",
                         "Draft",
@@ -241,7 +243,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     child: TableComponent(
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
-                      polRows: [],
+                      polRows: getStringList().isEmpty ? [] : getStringList(),
                       // footerBuilder: (stateManager) {
                       //    return JournalReport.lazyPaginationFooter(stateManager);
                       // },
@@ -373,15 +375,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       dataInc = [];
       dataDec = [];
       int status = getVoucherStatus(_locale, selectedStatus);
-      //  selectedStatus == _locale.all
-      //     ? -100
-      //     : selectedStatus == _locale.posted
-      //         ? 0
-      //         : selectedStatus == _locale.draft
-      //             ? -1
-      //             : selectedStatus == _locale.canceled
-      //                 ? 1
-      //                 : -100;
+
       String startDate = DatesController().formatDate(fromDate.text);
       String endDate = DatesController().formatDate(toDate.text);
       SearchCriteria searchCriteria = SearchCriteria(
@@ -391,9 +385,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           rownum: int.parse(numberOfrow.text));
 
       inventoryPerformanceController.totalSellInc(searchCriteria).then((value) {
-        // if (value.isEmpty) {
-        //   ErrorController.openErrorDialog(406, "No Data Available");
-        // }
         for (var elemant in value) {
           setState(() {
             dataDec.add(
@@ -432,72 +423,67 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     }
   }
 
-  Future<void> _showCalendar() async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate ?? DateTime.now(),
-        firstDate: DateTime(1950),
-        //  : DateTime.now(),
-        lastDate: DateTime(2101));
+  // List<List<String>> getStringList() {
+  //   // print("ListString ${widget.dataInc.length}");
+  //   //List<List<String>> stringList = [];
+  //   List<PlutoRow> rowList = [];
 
-    if (pickedDate != null && pickedDate != _selectedDate) {
-      setState(() {
-        _selectedDate = pickedDate;
-        fromDate.text =
-            '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}';
-      });
+  //   for (int i = 0; i < dataInc.length; i++) {
+  //     print("ListString ${dataInc.length}");
+  //     List<String> temp = [
+  //       (i + 1).toString(),
+  //       dataInc[i]['code'].toString(),
+  //       dataInc[i]['name'].toString(),
+  //       dataInc[i]['currentQty'].toString(),
+  //       dataInc[i]['soldQty'].toString()
+  //     ];
+  //     // stringList.add(temp);
+  //     rowList.add(
+  //       PlutoRow(
+  //         cells: rowList[i].toPluto(),
+  //       ),
+  //     );
+  //   }
+  //   return stringList;
+  // }
+  List<PlutoRow> getStringList() {
+    List<PlutoRow> rowList = [];
+
+    for (int i = 0; i < dataInc.length; i++) {
+      InventoryPerformanceModel performanceModel =
+          InventoryPerformanceModel.fromJson(dataInc[i]);
+      PlutoRow newRow = PlutoRow(cells: performanceModel.toPluto());
+      rowList.add(newRow);
     }
+
+    return rowList;
   }
 
-  Future<void> _showCalendar2() async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate2 ?? DateTime.now(),
-        firstDate: DateTime(1950),
-        //  : DateTime.now(),
-        lastDate: DateTime(2101));
+  void setLastMonth() {
+    DateTime currentDate = DateTime.now();
+    DateTime lastM =
+        DateTime(currentDate.year, currentDate.month - 1, currentDate.day);
 
-    if (pickedDate != null && pickedDate != _selectedDate2) {
-      setState(() {
-        _selectedDate2 = pickedDate;
-        toDate.text =
-            '${_selectedDate2!.year}-${_selectedDate2!.month}-${_selectedDate2!.day}';
-      });
+    // Handle the case where the current month is January (month 1)
+    if (currentDate.month == 1) {
+      lastM = DateTime(currentDate.year - 1, 12, currentDate.day);
     }
+    int lastDay = lastM.day;
+    int lastMonth = lastM.month;
+    int lastYear = lastM.year;
 
-    void setControllerFromDateText() {
-      return setState(() {
-        fromDateValue = _fromDateController.text;
-        // _fetchData();
-      });
-    }
+    _fromDateController.text = "$lastDay/$lastMonth/$lastYear";
 
-    void setLastMonth() {
-      DateTime currentDate = DateTime.now();
-      DateTime lastM =
-          DateTime(currentDate.year, currentDate.month - 1, currentDate.day);
+    int nowDay = currentDate.day;
+    int nowMonth = currentDate.month;
+    int nowYear = currentDate.year;
 
-      // Handle the case where the current month is January (month 1)
-      if (currentDate.month == 1) {
-        lastM = DateTime(currentDate.year - 1, 12, currentDate.day);
-      }
-      int lastDay = lastM.day;
-      int lastMonth = lastM.month;
-      int lastYear = lastM.year;
+    _toDateController.text = "$nowDay/$nowMonth/$nowYear";
+  }
 
-      _fromDateController.text = "$lastDay/$lastMonth/$lastYear";
-
-      int nowDay = currentDate.day;
-      int nowMonth = currentDate.month;
-      int nowYear = currentDate.year;
-
-      _toDateController.text = "$nowDay/$nowMonth/$nowYear";
-    }
-
-    void setInitialValues() {
-      fromJCodeValue = "A";
-      toJCodeValue = "C";
-      setLastMonth();
-    }
+  void setInitialValues() {
+    fromJCodeValue = "A";
+    toJCodeValue = "C";
+    setLastMonth();
   }
 }
