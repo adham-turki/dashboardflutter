@@ -1,11 +1,22 @@
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class CustomButton extends StatefulWidget {
-  const CustomButton({super.key});
+  final Function()? onPressed;
+  final double? borderRadius;
+  final String? text;
+  final Color? textColor;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  const CustomButton(
+      {super.key,
+      this.onPressed,
+      this.borderRadius,
+      this.text,
+      this.textColor,
+      this.fontSize,
+      this.fontWeight});
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -19,18 +30,31 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
     return ElevatedButton(
+      onPressed: widget.onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(widget.borderRadius ?? 3),
+        ),
+        padding: EdgeInsets.zero,
         fixedSize: Size(
             Responsive.isDesktop(context) ? width * 0.07 : width * 0.3,
             height * 0.05),
       ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      child: const Text("Submit"),
+      child: Container(
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(10),
+        child: Text(
+          maxLines: 1,
+          widget.text.toString(),
+          style: TextStyle(
+            color: widget.textColor ?? Colors.black,
+            fontSize: widget.fontSize ?? 13,
+            fontWeight: widget.fontWeight ?? FontWeight.bold,
+          ),
+        ),
+      ),
     );
   }
 }

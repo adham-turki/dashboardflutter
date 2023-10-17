@@ -5,6 +5,8 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:bi_replicate/widget/custom_dropdown.dart';
+import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -250,6 +252,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           items: periods,
           label: _locale.period,
           initialValue: selectedPeriod,
+          hint: "",
           onChanged: (value) {
             setState(() {
               checkPeriods(value);
@@ -283,6 +286,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         ),
         CustomDropDown(
           items: charts,
+          hint: "",
           label: _locale.chartType,
           initialValue: selectedChart,
           onChanged: (value) {
@@ -306,6 +310,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           width: widthMobile,
           label: _locale.period,
           initialValue: selectedPeriod,
+          hint: "",
           onChanged: (value) {
             setState(() {
               checkPeriods(value);
@@ -339,6 +344,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           width: widthMobile,
           label: _locale.chartType,
           initialValue: selectedChart,
+          hint: "",
           onChanged: (value) {
             setState(() {
               selectedChart = value!;

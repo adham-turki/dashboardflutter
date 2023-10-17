@@ -13,7 +13,7 @@ import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_btn.dart';
 import '../../../widget/custom_date_picker.dart';
-import '../../../widget/custom_dropdown.dart';
+import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
 
 class InventoryPerfContent extends StatefulWidget {
@@ -145,6 +145,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 Row(
                   children: [
                     CustomDropDown(
+                      hint: "",
                       label: "Period",
                       items: const [
                         "Last Day",
@@ -163,6 +164,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     ),
                     CustomDropDown(
                       label: "Status",
+                      hint: "",
                       items: const [
                         "ALL(DRAFT, POSTED)",
                         "Draft",
@@ -215,10 +217,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     ),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.22,
-                        child: blueButton(
-                          height: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .05
-                              : MediaQuery.of(context).size.height * .04,
+                        child: CustomButton(
+                          // height: MediaQuery.of(context).size.width > 800
+                          //     ? MediaQuery.of(context).size.height * .05
+                          //     : MediaQuery.of(context).size.height * .04,
                           text: _locale.search,
                           fontWeight: FontWeight.w400,
                           textColor: Colors.white,

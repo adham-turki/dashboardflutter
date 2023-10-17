@@ -1,7 +1,7 @@
 import 'package:bi_replicate/components/table_component.dart';
 
 import 'package:bi_replicate/widget/custom_date_picker.dart';
-import 'package:bi_replicate/widget/custom_dropdown.dart';
+import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 
 import 'package:flutter/material.dart';
 
@@ -98,6 +98,7 @@ class _JournalContentState extends State<JournalContent> {
                         "Previous Month",
                       ],
                       initialValue: "Last Month",
+                      hint: "",
                       onChanged: (value) {
                         setState(() {
                           periodValue = value;
@@ -110,8 +111,14 @@ class _JournalContentState extends State<JournalContent> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomDropDown(label: "From Account"),
-                    CustomDropDown(label: "To Account"),
+                    CustomDropDown(
+                      label: "From Account",
+                      hint: "",
+                    ),
+                    CustomDropDown(
+                      label: "To Account",
+                      hint: "",
+                    ),
                     CustomDatePicker(
                       label: "From Date",
                       controller: _fromDateController,
@@ -149,6 +156,7 @@ class _JournalContentState extends State<JournalContent> {
                         "A",
                       ],
                       initialValue: "A",
+                      hint: "",
                       onChanged: (value) {
                         setState(() {
                           fromJCodeValue = value;
@@ -162,6 +170,7 @@ class _JournalContentState extends State<JournalContent> {
                         "Z",
                       ],
                       initialValue: "Z",
+                      hint: "",
                       onChanged: (value) {
                         setState(() {
                           toJCodeValue = value;
@@ -175,6 +184,7 @@ class _JournalContentState extends State<JournalContent> {
                         "All",
                       ],
                       initialValue: "All",
+                      hint: "",
                       onChanged: (value) {
                         setState(() {
                           voucherTypeValue = value;
@@ -191,6 +201,7 @@ class _JournalContentState extends State<JournalContent> {
                         "Cancelled",
                       ],
                       initialValue: "ALL(DRAFT, POSTED)",
+                      hint: "",
                       height: height * 0.18,
                       onChanged: (value) {
                         setState(() {

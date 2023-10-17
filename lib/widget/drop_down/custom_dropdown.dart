@@ -1,7 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
-import 'custom_label.dart';
+import '../custom_label.dart';
 
 // ignore: must_be_immutable
 class CustomDropDown extends StatefulWidget {
@@ -10,11 +10,13 @@ class CustomDropDown extends StatefulWidget {
   final double? padding;
   final Key? customKey;
   final List<dynamic>? items;
-  final Function(String? value)? onChanged;
+  final Function(dynamic value)? onChanged;
   final dynamic initialValue;
   final Function(dynamic)? onValidator;
   final bool? showSearchBox;
   final double? height;
+  final String? hint;
+  final Future<List<dynamic>> Function(String)? onSearch;
 
   CustomDropDown({
     Key? key,
@@ -25,9 +27,11 @@ class CustomDropDown extends StatefulWidget {
     this.padding,
     this.customKey,
     required this.label,
+    this.hint,
     this.onChanged,
     this.showSearchBox,
     this.height,
+    this.onSearch,
   }) : super(key: key);
 
   @override
@@ -60,15 +64,18 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   ? null
                   : widget.onValidator!(value),
               items: widget.items ?? [],
+              asyncItems: widget.onSearch,
+              dropdownBuilder:
+                  showSearchBox == true ? _customDropDownPrograms : null,
               popupProps: PopupProps.menu(
                 menuProps: const MenuProps(
                   animationDuration: Duration(milliseconds: 100),
                 ),
                 showSearchBox: showSearchBox,
-                // isFilterOnline: true,
+                isFilterOnline: showSearchBox,
                 constraints: BoxConstraints.tightFor(height: height),
               ),
-              onChanged: (value) {
+              onChanged: (dynamic value) {
                 widget.onChanged!(value);
               },
               selectedItem: widget.initialValue,
@@ -77,5 +84,26 @@ class _CustomDropDownState extends State<CustomDropDown> {
         ],
       ),
     );
+  }
+
+  Widget _customDropDownPrograms(BuildContext context, dynamic? item) {
+    return Container(
+        child: (item == null)
+            ? ListTile(
+                //    contentPadding: EdgeInsets.only(right: 20, left: 50),
+                title: Text(widget.hint!,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(235, 158, 158, 158))),
+              )
+            : ListTile(
+                //contentPadding: const EdgeInsets.only(right: 230, left: 20),
+                title: Text(
+                item.toString(),
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13.5, color: Colors.black),
+              )));
   }
 }

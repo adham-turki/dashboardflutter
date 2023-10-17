@@ -255,41 +255,41 @@ eight400TextStyle(color) {
   );
 }
 
-Widget blueButton({
-  width,
-  onPressed,
-  height,
-  borderRadius,
-  text,
-  textColor,
-  fontSize,
-  fontWeight,
-}) {
-  return ElevatedButton(
-    onPressed: onPressed,
-    style: ElevatedButton.styleFrom(
-      backgroundColor: const Color(0xFF10709e),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius ?? 3),
-      ),
-      padding: EdgeInsets.zero,
-      fixedSize: Size(width ?? 25.0, height ?? 60.0),
-    ),
-    child: Container(
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(10),
-      child: Text(
-        maxLines: 1,
-        text.toString(),
-        style: TextStyle(
-          color: textColor ?? Colors.black,
-          fontSize: fontSize ?? 13,
-          fontWeight: fontWeight ?? FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
+// Widget blueButton({
+//   width,
+//   onPressed,
+//   height,
+//   borderRadius,
+//   text,
+//   textColor,
+//   fontSize,
+//   fontWeight,
+// }) {
+//   return ElevatedButton(
+//     onPressed: onPressed,
+//     style: ElevatedButton.styleFrom(
+//       backgroundColor: const Color(0xFF10709e),
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(borderRadius ?? 3),
+//       ),
+//       padding: EdgeInsets.zero,
+//       fixedSize: Size(width ?? 25.0, height ?? 60.0),
+//     ),
+//     child: Container(
+//       alignment: Alignment.center,
+//       padding: const EdgeInsets.all(10),
+//       child: Text(
+//         maxLines: 1,
+//         text.toString(),
+//         style: TextStyle(
+//           color: textColor ?? Colors.black,
+//           fontSize: fontSize ?? 13,
+//           fontWeight: fontWeight ?? FontWeight.bold,
+//         ),
+//       ),
+//     ),
+//   );
+// }
 
 const gridFooterStyle = TextStyle(
   color: Colors.white,
