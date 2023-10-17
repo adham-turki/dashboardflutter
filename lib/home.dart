@@ -4,6 +4,8 @@ import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
+import 'package:bi_replicate/screen/content/receivable_management/aging_receivable.dart';
+import 'package:bi_replicate/screen/content/receivable_management/month_comp_of_rec_pay_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_cat_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
@@ -91,9 +93,9 @@ class _HomePageState extends State<HomePage> {
       case 6:
         return const InventoryPerfContent();
       case 7:
-        return Container();
+        return const MonthCompOfRecPayContent();
       case 8:
-        return Container();
+        return const AgingReceivable();
       case 9:
         return Container();
       case 10:

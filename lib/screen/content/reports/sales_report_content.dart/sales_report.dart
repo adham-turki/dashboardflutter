@@ -338,11 +338,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           // customColumns: getColumns(_locale, orderByColumns),
                         );
                         Map<String, dynamic> body = readProvider.toJson();
-                        ReportController()
-                            .exportToExcelApi(searchCriteria, body)
-                            .then((value) {
-                          saveExcelFile(value, "SalesReport.xlsx");
-                        });
+                        // ReportController()
+                        //     .exportToExcelApi(searchCriteria, body)
+                        //     .then((value) {
+                        //   saveExcelFile(value, "SalesReport.xlsx");
+                        // });
                       },
                       fontSize: MediaQuery.of(context).size.width > 800
                           ? MediaQuery.of(context).size.height * .016
@@ -529,16 +529,16 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     ReportController salesReportController = ReportController();
 
     dynamic body = readProvider.toJson();
-    await salesReportController.getSalesResultMehtod(body).then((value) {
-      if (value.count! > 0) {
-        pageNumber = 1;
-      }
-      limitPage = (value.count! / 10).ceil();
-      finalRow = limitPage == 0
-          ? []
-          : getTotal(orderByColumns.length, value.total!, value.quantity!,
-              value.avgPrice!);
-    });
+    // await salesReportController.getSalesResultMehtod(body).then((value) {
+    //   if (value.count! > 0) {
+    //     pageNumber = 1;
+    //   }
+    //   limitPage = (value.count! / 10).ceil();
+    //   finalRow = limitPage == 0
+    //       ? []
+    //       : getTotal(orderByColumns.length, value.total!, value.quantity!,
+    //           value.avgPrice!);
+    // });
   }
 
   List<String> getTotal(

@@ -171,8 +171,14 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
             actions: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CustomButton(),
+                children: [
+                  CustomButton(
+                    text: "Submit",
+                    textColor: Colors.white,
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ],
               ),
             ],
