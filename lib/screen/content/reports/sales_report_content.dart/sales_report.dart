@@ -37,11 +37,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     _locale = AppLocalizations.of(context);
     readProvider = context.read<SalesCriteraProvider>();
     readProvider.emptyProvider();
-    // String todayDate = DatesController().formatDateReverse(
-    //     DatesController().formatDate(DatesController().todayDate()));
-    // fromDate.text = todayDate;
-    // print("hello ${fromDate.text}");
-    // toDate.text = todayDate;
+
     orderByColumns = [
       '#',
       _locale.branch,
@@ -185,305 +181,296 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
-      child: Stack(children: [
-        // Image.asset(
-        //   'assets/background.png',
-        //   fit: BoxFit.fill,
-        //   width: double.infinity,
-        //   height: double.infinity,
-        // ),
-        SingleChildScrollView(
-          child: Column(
-            children: [
-              //const HeaderWidget(),
-              const SizedBox(
-                height: 40,
-              ),
-              SizedBox(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            //const HeaderWidget(),
+            // const SizedBox(
+            //   height: 40,
+            // ),
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width < 800
+            //       ? MediaQuery.of(context).size.width * 0.9
+            //       : MediaQuery.of(context).size.width * 0.7,
+            //   child: Center(
+            //     child: SelectableText(
+            //       maxLines: 2,
+            //       _locale.salesreport,
+            //       style: twenty600TextStyle(const Color(0xFF10709e)),
+            //     ),
+            //   ),
+            // ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width < 800
                     ? MediaQuery.of(context).size.width * 0.9
                     : MediaQuery.of(context).size.width * 0.7,
-                child: Center(
-                  child: SelectableText(
-                    maxLines: 2,
-                    _locale.salesreport,
-                    style: twenty600TextStyle(const Color(0xFF10709e)),
-                  ),
+                height: 40,
+                child: TabBar(
+                  unselectedLabelColor: Colors.grey,
+                  labelColor: Colors.black,
+                  tabs: [
+                    Tab(
+                      child: Text(maxLines: 1, _locale.criteria),
+                    ),
+                    Tab(
+                      child: Text(maxLines: 1, _locale.orderBy),
+                    ),
+                    Tab(
+                      child: Text(maxLines: 1, _locale.setUPSetting),
+                    ),
+                  ],
+                  onTap: (index) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
+                  },
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.9
-                      : MediaQuery.of(context).size.width * 0.7,
-                  height: 40,
-                  child: TabBar(
-                    unselectedLabelColor: Colors.grey,
-                    labelColor: Colors.black,
-                    tabs: [
-                      Tab(
-                        child: Text(maxLines: 1, _locale.criteria),
+            ),
+            _currentIndex == 0
+                ? CriteriaWidget(
+                    fromDate: fromDate,
+                    toDate: toDate,
+                  )
+                : _currentIndex == 1
+                    ? OrderByWidget(
+                        fromDate: fromDate,
+                        toDate: toDate,
+                        onSelectedValueChanged1: updateSelectedValue1,
+                        onSelectedValueChanged2: updateSelectedValue2,
+                        onSelectedValueChanged3: updateSelectedValue3,
+                        onSelectedValueChanged4: updateSelectedValue4)
+                    : SetupWidget(
+                        fromDate: fromDate,
+                        toDate: toDate,
                       ),
-                      Tab(
-                        child: Text(maxLines: 1, _locale.orderBy),
-                      ),
-                      Tab(
-                        child: Text(maxLines: 1, _locale.setUPSetting),
-                      ),
-                    ],
-                    onTap: (index) {
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width < 800
+                  ? MediaQuery.of(context).size.width * 0.9
+                  : MediaQuery.of(context).size.width * 0.7,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  CustomButton(
+                    text: _locale.reset,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.white,
+                    borderRadius: 5.0,
+                    onPressed: () {
                       setState(() {
-                        _currentIndex = index;
+                        readProvider.emptyProvider();
+                        salesList = [];
+                        finalRow = [];
+                        orderByColumns = [
+                          '#',
+                          _locale.branch,
+                          _locale.stockCategoryLevel("1"),
+                          _locale.stockCategoryLevel("2"),
+                          _locale.stockCategoryLevel("3"),
+                          _locale.supplier("1"),
+                          _locale.supplier("2"),
+                          _locale.supplier("3"),
+                          _locale.customer,
+                          _locale.stock,
+                          _locale.modelNo,
+                          _locale.qty,
+                          _locale.averagePrice,
+                          _locale.total
+                        ];
                       });
                     },
+                    fontSize: MediaQuery.of(context).size.width > 800
+                        ? MediaQuery.of(context).size.height * .016
+                        : MediaQuery.of(context).size.height * .011,
                   ),
-                ),
-              ),
-              _currentIndex == 0
-                  ? CriteriaWidget(
-                      fromDate: fromDate,
-                      toDate: toDate,
-                    )
-                  : _currentIndex == 1
-                      ? OrderByWidget(
-                          fromDate: fromDate,
-                          toDate: toDate,
-                          onSelectedValueChanged1: updateSelectedValue1,
-                          onSelectedValueChanged2: updateSelectedValue2,
-                          onSelectedValueChanged3: updateSelectedValue3,
-                          onSelectedValueChanged4: updateSelectedValue4)
-                      : SetupWidget(
-                          fromDate: fromDate,
-                          toDate: toDate,
-                        ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width < 800
-                    ? MediaQuery.of(context).size.width * 0.9
-                    : MediaQuery.of(context).size.width * 0.7,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomButton(
-                      text: _locale.reset,
-                      fontWeight: FontWeight.w400,
-                      textColor: Colors.white,
-                      borderRadius: 5.0,
-                      onPressed: () {
-                        setState(() {
-                          readProvider.emptyProvider();
-                          salesList = [];
-                          finalRow = [];
-                          orderByColumns = [
-                            '#',
-                            _locale.branch,
-                            _locale.stockCategoryLevel("1"),
-                            _locale.stockCategoryLevel("2"),
-                            _locale.stockCategoryLevel("3"),
-                            _locale.supplier("1"),
-                            _locale.supplier("2"),
-                            _locale.supplier("3"),
-                            _locale.customer,
-                            _locale.stock,
-                            _locale.modelNo,
-                            _locale.qty,
-                            _locale.averagePrice,
-                            _locale.total
-                          ];
-                        });
-                      },
-                      fontSize: MediaQuery.of(context).size.width > 800
-                          ? MediaQuery.of(context).size.height * .016
-                          : MediaQuery.of(context).size.height * .011,
-                    ),
-                    CustomButton(
-                      text: _locale.search,
-                      fontWeight: FontWeight.w400,
-                      textColor: Colors.white,
-                      borderRadius: 5.0,
-                      onPressed: () async {
-                        print("frommm ${fromDate.text}");
-                        context.read<SalesCriteraProvider>().setFromDate(
-                            DatesController().formatDate(fromDate.text));
-                        context.read<SalesCriteraProvider>().setToDate(
-                            DatesController().formatDate(toDate.text));
-                        await generateColumns();
+                  CustomButton(
+                    text: _locale.search,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.white,
+                    borderRadius: 5.0,
+                    onPressed: () async {
+                      print("frommm ${fromDate.text}");
+                      context.read<SalesCriteraProvider>().setFromDate(
+                          DatesController().formatDate(fromDate.text));
+                      context
+                          .read<SalesCriteraProvider>()
+                          .setToDate(DatesController().formatDate(toDate.text));
+                      await generateColumns();
 
-                        getResult().then(
-                          (value) {
-                            searchSalesCostReport(1);
-                          },
-                        );
-                      },
-                      fontSize: MediaQuery.of(context).size.width > 800
-                          ? MediaQuery.of(context).size.height * .016
-                          : MediaQuery.of(context).size.height * .011,
-                    ),
-                    CustomButton(
-                      text: _locale.exportToExcel,
-                      fontWeight: FontWeight.w400,
-                      textColor: Colors.white,
-                      borderRadius: 5.0,
-                      onPressed: () {
-                        SearchCriteria searchCriteria = SearchCriteria(
-                          fromDate: readProvider.fromDate,
-                          toDate: readProvider.toDate,
-                          voucherStatus: -100,
-                          // columns: getColumns(_locale, orderByColumns),
-                          // customColumns: getColumns(_locale, orderByColumns),
-                        );
-                        Map<String, dynamic> body = readProvider.toJson();
-                        ReportController()
-                            .exportToExcelApi(searchCriteria, body)
-                            .then((value) {
-                          saveExcelFile(value, "SalesReport.xlsx");
-                        });
-                      },
-                      fontSize: MediaQuery.of(context).size.width > 800
-                          ? MediaQuery.of(context).size.height * .016
-                          : MediaQuery.of(context).size.height * .011,
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                  ],
-                ),
+                      getResult().then(
+                        (value) {
+                          searchSalesCostReport(1);
+                        },
+                      );
+                    },
+                    fontSize: MediaQuery.of(context).size.width > 800
+                        ? MediaQuery.of(context).size.height * .016
+                        : MediaQuery.of(context).size.height * .011,
+                  ),
+                  CustomButton(
+                    text: _locale.exportToExcel,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.white,
+                    borderRadius: 5.0,
+                    onPressed: () {
+                      SearchCriteria searchCriteria = SearchCriteria(
+                        fromDate: readProvider.fromDate,
+                        toDate: readProvider.toDate,
+                        voucherStatus: -100,
+                        // columns: getColumns(_locale, orderByColumns),
+                        // customColumns: getColumns(_locale, orderByColumns),
+                      );
+                      Map<String, dynamic> body = readProvider.toJson();
+                      ReportController()
+                          .exportToExcelApi(searchCriteria, body)
+                          .then((value) {
+                        saveExcelFile(value, "SalesReport.xlsx");
+                      });
+                    },
+                    fontSize: MediaQuery.of(context).size.width > 800
+                        ? MediaQuery.of(context).size.height * .016
+                        : MediaQuery.of(context).size.height * .011,
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              // DataTableWidget(
-              //   columns: orderByColumns,
-              //   list: salesList,
-              //   finalRow: finalRow,
-              //   objectType: "SalesCostReportModel",
-              // ),
-              const SizedBox(
-                height: 20,
-              ),
-              Directionality(
-                textDirection: TextDirection.ltr,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (pageNumber != 0) {
-                          pageNumber =
-                              pageNumber == 1 ? pageNumber : pageNumber - 1;
-                          searchSalesCostReport(pageNumber);
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            // DataTableWidget(
+            //   columns: orderByColumns,
+            //   list: salesList,
+            //   finalRow: finalRow,
+            //   objectType: "SalesCostReportModel",
+            // ),
+            const SizedBox(
+              height: 20,
+            ),
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (pageNumber != 0) {
+                        pageNumber =
+                            pageNumber == 1 ? pageNumber : pageNumber - 1;
+                        searchSalesCostReport(pageNumber);
+                      }
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      child: Center(
+                          child: Text(
+                        maxLines: 1,
+                        "<<",
+                        style: fourteen400TextStyle(
+                          Colors.blue,
+                        ),
+                      )),
+                    ),
+                  ),
+                  for (int i =
+                          limitPage <= 5 || pageNumber < 4 ? 1 : pageNumber - 2;
+                      limitPage <= 5
+                          ? i <= limitPage
+                          : pageNumber < 4
+                              ? i < 6
+                              : (i <= pageNumber + 2) && i <= limitPage;
+                      i++)
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * .002,
+                          right: MediaQuery.of(context).size.width * .002),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            // print("selected : $selected ,,,, i : $i");
+                            pageNumber = i;
+                            // print("selected1 : $selected ,,,, i1 : $i");
+                            // print("selectedcustomerscreen : $selected");
+                            searchSalesCostReport(pageNumber);
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width > 800
+                              ? MediaQuery.of(context).size.width * .02
+                              : MediaQuery.of(context).size.width * .06,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                              ),
+                              // shape: BoxShape.rectangle,
+                              color:
+                                  i == pageNumber ? Colors.blue : Colors.white),
+                          child: Center(
+                              child: Text(
+                                  // maxLines: 1,
+                                  i.toString(),
+                                  style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.height *
+                                              0.012,
+                                      color: i == pageNumber
+                                          ? Colors.white
+                                          : Colors.blue))),
+                        ),
+                      ),
+                    ),
+                  GestureDetector(
+                    onTap: () {
+                      if (pageNumber != 0) {
+                        if (pageNumber < limitPage) {
+                          pageNumber = pageNumber + 1;
                         }
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
+                        searchSalesCostReport(pageNumber);
+                      }
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 30,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
                         ),
-                        child: Center(
-                            child: Text(
-                          maxLines: 1,
-                          "<<",
-                          style: fourteen400TextStyle(
-                            Colors.blue,
-                          ),
-                        )),
                       ),
+                      child: Center(
+                          child: Text(
+                        maxLines: 1,
+                        ">>",
+                        style: fourteen400TextStyle(
+                          Colors.blue,
+                        ),
+                      )),
                     ),
-                    for (int i = limitPage <= 5 || pageNumber < 4
-                            ? 1
-                            : pageNumber - 2;
-                        limitPage <= 5
-                            ? i <= limitPage
-                            : pageNumber < 4
-                                ? i < 6
-                                : (i <= pageNumber + 2) && i <= limitPage;
-                        i++)
-                      Padding(
-                        padding: EdgeInsets.only(
-                            left: MediaQuery.of(context).size.width * .002,
-                            right: MediaQuery.of(context).size.width * .002),
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              // print("selected : $selected ,,,, i : $i");
-                              pageNumber = i;
-                              // print("selected1 : $selected ,,,, i1 : $i");
-                              // print("selectedcustomerscreen : $selected");
-                              searchSalesCostReport(pageNumber);
-                            });
-                          },
-                          child: Container(
-                            width: MediaQuery.of(context).size.width > 800
-                                ? MediaQuery.of(context).size.width * .02
-                                : MediaQuery.of(context).size.width * .06,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey,
-                                ),
-                                // shape: BoxShape.rectangle,
-                                color: i == pageNumber
-                                    ? Colors.blue
-                                    : Colors.white),
-                            child: Center(
-                                child: Text(
-                                    // maxLines: 1,
-                                    i.toString(),
-                                    style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.height *
-                                                0.012,
-                                        color: i == pageNumber
-                                            ? Colors.white
-                                            : Colors.blue))),
-                          ),
-                        ),
-                      ),
-                    GestureDetector(
-                      onTap: () {
-                        if (pageNumber != 0) {
-                          if (pageNumber < limitPage) {
-                            pageNumber = pageNumber + 1;
-                          }
-                          searchSalesCostReport(pageNumber);
-                        }
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                        ),
-                        child: Center(
-                            child: Text(
-                          maxLines: 1,
-                          ">>",
-                          style: fourteen400TextStyle(
-                            Colors.blue,
-                          ),
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 100,
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+          ],
         ),
-      ]),
+      ),
     );
   }
 

@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: height * 0.08,
+                height: height * 0.3,
                 child: const ContentHeader(),
               ),
               SizedBox(
