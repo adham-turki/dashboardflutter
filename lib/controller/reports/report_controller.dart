@@ -3,10 +3,9 @@ import 'dart:typed_data';
 
 import '../../model/criteria/search_criteria.dart';
 import '../../model/reports/purchase_cost_report.dart';
-import '../../model/reports/reports_result.dart';
 import '../../model/reports/sales_report_model/sales_cost_report.dart';
-import '../../model/sales_adminstration/branch_model.dart';
 import '../../model/reports/sales_report_model/sales_report_model.dart';
+import '../../model/sales_adminstration/branch_model.dart';
 import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
@@ -201,8 +200,6 @@ class ReportController extends Api {
     List<PurchaseCostReportModel> purchaseCostReportList = [];
 
     await postMethods(api, purchaseProvider).then((response) {
-      print("Response2222 ${response.statusCode}");
-      print("ResponseBody2222 ${response.body}");
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -215,53 +212,22 @@ class ReportController extends Api {
     return purchaseCostReportList;
   }
 
-  Future<ReportsResult> getSalesResultMehtod(dynamic salesProvider) async {
-    var api = getSalesResult;
-    late ReportsResult salesResult = ReportsResult();
-
-    await postMethods(api, salesProvider).then((response) {
-      print("body ${salesProvider}");
-
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        print("response ${response.body}");
-        salesResult = ReportsResult.fromJson(jsonData);
-      }
-    });
-    return salesResult;
-  }
-
-  Future<ReportsResult> getPurchaseResultMehtod(
-      dynamic purchaseProvider) async {
-    var api = getPurchaseResult;
-    ReportsResult purchaseResult = ReportsResult();
-    await postMethods(api, purchaseProvider).then((response) {
-      print("Response ${response.statusCode}");
-      print("ResponseBody ${response.body}");
-
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        purchaseResult = ReportsResult.fromJson(jsonData);
-      }
-    });
-    return purchaseResult;
-  }
-
-  Future<Uint8List> exportToExcelApi(
-      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
+  Future<Uint8List> exportToExcelApi(SearchCriteria searchCriteria) async {
     Uint8List excelByteData = Uint8List.fromList([
       0x48, 0x65, 0x6C, 0x6C,
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclSalesReport/count=${10}';
+    String eUrl = '$exportToExeclSalesReport/count=${20}';
     var body = {
-      "mainForm": searchBody,
+      "mainForm": {
+        "fromDate": searchCriteria.fromDate,
+        "toDate": searchCriteria.toDate,
+        "voucherStatus": searchCriteria.voucherStatus
+      },
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    print("search ${body}");
     await postMethods(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
@@ -269,21 +235,24 @@ class ReportController extends Api {
   }
 
   Future<Uint8List> exportPurchaseToExcelApi(
-      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
+      SearchCriteria searchCriteria) async {
     Uint8List excelByteData = Uint8List.fromList([
       0x48, 0x65, 0x6C, 0x6C,
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclPurchaseReport/count=${10}';
+    String eUrl = '$exportToExeclPurchaseReport/count=${20}';
     var body = {
-      "purchasesForm": searchBody,
+      "purchasesForm": {
+        "fromDate": searchCriteria.fromDate,
+        "toDate": searchCriteria.toDate,
+        "voucherStatus": searchCriteria.voucherStatus
+      },
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
     await postMethods(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
-      print("ressss ${value.statusCode}");
     });
     return excelByteData;
   }

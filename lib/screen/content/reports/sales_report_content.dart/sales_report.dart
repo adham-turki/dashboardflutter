@@ -1,582 +1,564 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:html' as html;
+import '../../../../controller/reports/report_controller.dart';
+import '../../../../model/criteria/search_criteria.dart';
+import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
+import '../../../../provider/sales_search_provider.dart';
+import '../../../../utils/constants/styles.dart';
+import '../../../../utils/func/dates_controller.dart';
+import '../../../../widget/custom_btn.dart';
+import 'tabs/criteria_widget.dart';
+import 'tabs/order_by_widget.dart';
+import 'tabs/setup_widget.dart';
 
-// import 'package:flutter/foundation.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// import 'dart:html' as html;
+class SalesReportScreen extends StatefulWidget {
+  const SalesReportScreen({Key? key}) : super(key: key);
 
-// import '../../../../controller/reports/report_controller.dart';
-// import '../../../../model/criteria/search_criteria.dart';
-// import '../../../../model/sales_adminstration/sales_cost_report.dart';
-// import 'tabs/criteria_widget.dart';
-// import 'tabs/order_by_widget.dart';
-// import 'tabs/setup_widget.dart';
+  @override
+  State<SalesReportScreen> createState() => _SalesReportScreenState();
+}
 
-// class SalesReportScreen extends StatefulWidget {
-//   const SalesReportScreen({Key? key}) : super(key: key);
+class _SalesReportScreenState extends State<SalesReportScreen> {
+  int _currentIndex = 0;
+  late AppLocalizations _locale;
+  List<SalesCostReportModel> salesList = [];
+  List<String> orderByColumns = [];
+  int pageNumber = 0;
+  late SalesCriteraProvider readProvider;
+  int limitPage = 0;
+  List<String> finalRow = [];
+  TextEditingController fromDate = TextEditingController();
+  TextEditingController toDate = TextEditingController();
+  @override
+  void didChangeDependencies() async {
+    _locale = AppLocalizations.of(context);
+    readProvider = context.read<SalesCriteraProvider>();
+    readProvider.emptyProvider();
+    // String todayDate = DatesController().formatDateReverse(
+    //     DatesController().formatDate(DatesController().todayDate()));
+    // fromDate.text = todayDate;
+    // print("hello ${fromDate.text}");
+    // toDate.text = todayDate;
+    orderByColumns = [
+      '#',
+      _locale.branch,
+      _locale.stockCategoryLevel("1"),
+      _locale.stockCategoryLevel("2"),
+      _locale.stockCategoryLevel("3"),
+      _locale.supplier("1"),
+      _locale.supplier("2"),
+      _locale.supplier("3"),
+      _locale.customer,
+      _locale.stock,
+      _locale.modelNo,
+      _locale.qty,
+      _locale.averagePrice,
+      _locale.total
+    ];
 
-//   @override
-//   State<SalesReportScreen> createState() => _SalesReportScreenState();
-// }
+    await getResult().then(
+      (value) {
+        searchSalesCostReport(1);
+      },
+    );
+    super.didChangeDependencies();
+  }
 
-// class _SalesReportScreenState extends State<SalesReportScreen> {
-//   var utils = Components();
-//   int _currentIndex = 0;
-//   late AppLocalizations _locale;
-//   List<SalesCostReportModel> salesList = [];
-//   List<String> orderByColumns = [];
-//   int pageNumber = 0;
-//   late SalesCriteraProvider readProvider;
-//   int limitPage = 0;
-//   List<String> finalRow = [];
-//   TextEditingController fromDate = TextEditingController();
-//   TextEditingController toDate = TextEditingController();
-//   @override
-//   void didChangeDependencies() async {
-//     _locale = AppLocalizations.of(context);
-//     readProvider = context.read<SalesCriteraProvider>();
-//     readProvider.emptyProvider();
-//     // String todayDate = DatesController().formatDateReverse(
-//     //     DatesController().formatDate(DatesController().todayDate()));
-//     // fromDate.text = todayDate;
-//     // print("hello ${fromDate.text}");
-//     // toDate.text = todayDate;
-//     orderByColumns = [
-//       '#',
-//       _locale.branch,
-//       _locale.stockCategoryLevel("1"),
-//       _locale.stockCategoryLevel("2"),
-//       _locale.stockCategoryLevel("3"),
-//       _locale.supplier("1"),
-//       _locale.supplier("2"),
-//       _locale.supplier("3"),
-//       _locale.customer,
-//       _locale.stock,
-//       _locale.modelNo,
-//       _locale.qty,
-//       _locale.averagePrice,
-//       _locale.total
-//     ];
+  String selectedValueFromDropdown1 = "";
+  String selectedValueFromDropdown2 = "";
+  String selectedValueFromDropdown3 = "";
+  String selectedValueFromDropdown4 = "";
 
-//     await getResult().then(
-//       (value) {
-//         searchSalesCostReport(1);
-//       },
-//     );
-//     super.didChangeDependencies();
-//   }
+  void updateSelectedValue1(String value) {
+    // setState(() {
+    selectedValueFromDropdown1 = value;
+    // });
+  }
 
-//   String selectedValueFromDropdown1 = "";
-//   String selectedValueFromDropdown2 = "";
-//   String selectedValueFromDropdown3 = "";
-//   String selectedValueFromDropdown4 = "";
+  void updateSelectedValue2(String value) {
+    // setState(() {
+    selectedValueFromDropdown2 = value;
+    // });
+  }
 
-//   void updateSelectedValue1(String value) {
-//     // setState(() {
-//     selectedValueFromDropdown1 = value;
-//     // });
-//   }
+  void updateSelectedValue3(String value) {
+    // setState(() {
+    selectedValueFromDropdown3 = value;
+    // });
+  }
 
-//   void updateSelectedValue2(String value) {
-//     // setState(() {
-//     selectedValueFromDropdown2 = value;
-//     // });
-//   }
+  void updateSelectedValue4(String value) {
+    // setState(() {
+    selectedValueFromDropdown4 = value;
+    // });
+  }
 
-//   void updateSelectedValue3(String value) {
-//     // setState(() {
-//     selectedValueFromDropdown3 = value;
-//     // });
-//   }
+  generateColumns() {
+    List<String> orderByColumnsTemp = [
+      '#',
+      _locale.branch,
+      _locale.stockCategoryLevel("1"),
+      _locale.stockCategoryLevel("2"),
+      _locale.stockCategoryLevel("3"),
+      _locale.supplier("1"),
+      _locale.supplier("2"),
+      _locale.supplier("3"),
+      _locale.customer,
+      _locale.stock,
+      _locale.modelNo,
+      _locale.qty,
+      _locale.averagePrice,
+      _locale.total
+    ];
 
-//   void updateSelectedValue4(String value) {
-//     // setState(() {
-//     selectedValueFromDropdown4 = value;
-//     // });
-//   }
+    if ((selectedValueFromDropdown1.isEmpty ||
+            selectedValueFromDropdown1 == "") &&
+        (selectedValueFromDropdown2.isEmpty ||
+            selectedValueFromDropdown2 == "") &&
+        (selectedValueFromDropdown3.isEmpty ||
+            selectedValueFromDropdown3 == "") &&
+        (selectedValueFromDropdown4.isEmpty ||
+            selectedValueFromDropdown4 == "")) {
+      // setState(() {
+      orderByColumns = orderByColumnsTemp;
+      // });
+    } else {
+      Set<String> selectedValues = {};
 
-//   generateColumns() {
-//     List<String> orderByColumnsTemp = [
-//       '#',
-//       _locale.branch,
-//       _locale.stockCategoryLevel("1"),
-//       _locale.stockCategoryLevel("2"),
-//       _locale.stockCategoryLevel("3"),
-//       _locale.supplier("1"),
-//       _locale.supplier("2"),
-//       _locale.supplier("3"),
-//       _locale.customer,
-//       _locale.stock,
-//       _locale.modelNo,
-//       _locale.qty,
-//       _locale.averagePrice,
-//       _locale.total
-//     ];
+      if (selectedValueFromDropdown1 != "") {
+        if (selectedValueFromDropdown1 == _locale.supp) {
+          selectedValues.add(_locale.supplier("1"));
+          selectedValues.add(_locale.supplier("2"));
+          selectedValues.add(_locale.supplier("3"));
+        } else {
+          selectedValues.add(selectedValueFromDropdown1);
+        }
+      }
 
-//     if ((selectedValueFromDropdown1.isEmpty ||
-//             selectedValueFromDropdown1 == "") &&
-//         (selectedValueFromDropdown2.isEmpty ||
-//             selectedValueFromDropdown2 == "") &&
-//         (selectedValueFromDropdown3.isEmpty ||
-//             selectedValueFromDropdown3 == "") &&
-//         (selectedValueFromDropdown4.isEmpty ||
-//             selectedValueFromDropdown4 == "")) {
-//       // setState(() {
-//       orderByColumns = orderByColumnsTemp;
-//       // });
-//     } else {
-//       Set<String> selectedValues = {};
+      if (selectedValueFromDropdown2 != "") {
+        if (selectedValueFromDropdown2 == _locale.supp) {
+          selectedValues.add(_locale.supplier("1"));
+          selectedValues.add(_locale.supplier("2"));
+          selectedValues.add(_locale.supplier("3"));
+        } else {
+          selectedValues.add(selectedValueFromDropdown2);
+        }
+      }
 
-//       if (selectedValueFromDropdown1 != "") {
-//         if (selectedValueFromDropdown1 == _locale.supp) {
-//           selectedValues.add(_locale.supplier("1"));
-//           selectedValues.add(_locale.supplier("2"));
-//           selectedValues.add(_locale.supplier("3"));
-//         } else {
-//           selectedValues.add(selectedValueFromDropdown1);
-//         }
-//       }
+      if (selectedValueFromDropdown3 != "") {
+        if (selectedValueFromDropdown3 == _locale.supp) {
+          selectedValues.add(_locale.supplier("1"));
+          selectedValues.add(_locale.supplier("2"));
+          selectedValues.add(_locale.supplier("3"));
+        } else {
+          selectedValues.add(selectedValueFromDropdown3);
+        }
+      }
 
-//       if (selectedValueFromDropdown2 != "") {
-//         if (selectedValueFromDropdown2 == _locale.supp) {
-//           selectedValues.add(_locale.supplier("1"));
-//           selectedValues.add(_locale.supplier("2"));
-//           selectedValues.add(_locale.supplier("3"));
-//         } else {
-//           selectedValues.add(selectedValueFromDropdown2);
-//         }
-//       }
+      if (selectedValueFromDropdown4 != "") {
+        if (selectedValueFromDropdown4 == _locale.supp) {
+          selectedValues.add(_locale.supplier("1"));
+          selectedValues.add(_locale.supplier("2"));
+          selectedValues.add(_locale.supplier("3"));
+        } else {
+          selectedValues.add(selectedValueFromDropdown4);
+        }
+      }
 
-//       if (selectedValueFromDropdown3 != "") {
-//         if (selectedValueFromDropdown3 == _locale.supp) {
-//           selectedValues.add(_locale.supplier("1"));
-//           selectedValues.add(_locale.supplier("2"));
-//           selectedValues.add(_locale.supplier("3"));
-//         } else {
-//           selectedValues.add(selectedValueFromDropdown3);
-//         }
-//       }
+      List<String> columns = ['#'];
+      columns.addAll(selectedValues);
+      columns.addAll([
+        _locale.qty,
+        _locale.averagePrice,
+        _locale.total,
+      ]);
+      // setState(() {
+      orderByColumns = columns;
+      // });
+    }
+  }
 
-//       if (selectedValueFromDropdown4 != "") {
-//         if (selectedValueFromDropdown4 == _locale.supp) {
-//           selectedValues.add(_locale.supplier("1"));
-//           selectedValues.add(_locale.supplier("2"));
-//           selectedValues.add(_locale.supplier("3"));
-//         } else {
-//           selectedValues.add(selectedValueFromDropdown4);
-//         }
-//       }
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Stack(children: [
+        // Image.asset(
+        //   'assets/background.png',
+        //   fit: BoxFit.fill,
+        //   width: double.infinity,
+        //   height: double.infinity,
+        // ),
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              //const HeaderWidget(),
+              const SizedBox(
+                height: 40,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width < 800
+                    ? MediaQuery.of(context).size.width * 0.9
+                    : MediaQuery.of(context).size.width * 0.7,
+                child: Center(
+                  child: SelectableText(
+                    maxLines: 2,
+                    _locale.salesreport,
+                    style: twenty600TextStyle(const Color(0xFF10709e)),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width < 800
+                      ? MediaQuery.of(context).size.width * 0.9
+                      : MediaQuery.of(context).size.width * 0.7,
+                  height: 40,
+                  child: TabBar(
+                    unselectedLabelColor: Colors.grey,
+                    labelColor: Colors.black,
+                    tabs: [
+                      Tab(
+                        child: Text(maxLines: 1, _locale.criteria),
+                      ),
+                      Tab(
+                        child: Text(maxLines: 1, _locale.orderBy),
+                      ),
+                      Tab(
+                        child: Text(maxLines: 1, _locale.setUPSetting),
+                      ),
+                    ],
+                    onTap: (index) {
+                      setState(() {
+                        _currentIndex = index;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              _currentIndex == 0
+                  ? CriteriaWidget(
+                      fromDate: fromDate,
+                      toDate: toDate,
+                    )
+                  : _currentIndex == 1
+                      ? OrderByWidget(
+                          fromDate: fromDate,
+                          toDate: toDate,
+                          onSelectedValueChanged1: updateSelectedValue1,
+                          onSelectedValueChanged2: updateSelectedValue2,
+                          onSelectedValueChanged3: updateSelectedValue3,
+                          onSelectedValueChanged4: updateSelectedValue4)
+                      : SetupWidget(
+                          fromDate: fromDate,
+                          toDate: toDate,
+                        ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width < 800
+                    ? MediaQuery.of(context).size.width * 0.9
+                    : MediaQuery.of(context).size.width * 0.7,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      text: _locale.reset,
+                      fontWeight: FontWeight.w400,
+                      textColor: Colors.white,
+                      borderRadius: 5.0,
+                      onPressed: () {
+                        setState(() {
+                          readProvider.emptyProvider();
+                          salesList = [];
+                          finalRow = [];
+                          orderByColumns = [
+                            '#',
+                            _locale.branch,
+                            _locale.stockCategoryLevel("1"),
+                            _locale.stockCategoryLevel("2"),
+                            _locale.stockCategoryLevel("3"),
+                            _locale.supplier("1"),
+                            _locale.supplier("2"),
+                            _locale.supplier("3"),
+                            _locale.customer,
+                            _locale.stock,
+                            _locale.modelNo,
+                            _locale.qty,
+                            _locale.averagePrice,
+                            _locale.total
+                          ];
+                        });
+                      },
+                      fontSize: MediaQuery.of(context).size.width > 800
+                          ? MediaQuery.of(context).size.height * .016
+                          : MediaQuery.of(context).size.height * .011,
+                    ),
+                    CustomButton(
+                      text: _locale.search,
+                      fontWeight: FontWeight.w400,
+                      textColor: Colors.white,
+                      borderRadius: 5.0,
+                      onPressed: () async {
+                        print("frommm ${fromDate.text}");
+                        context.read<SalesCriteraProvider>().setFromDate(
+                            DatesController().formatDate(fromDate.text));
+                        context.read<SalesCriteraProvider>().setToDate(
+                            DatesController().formatDate(toDate.text));
+                        await generateColumns();
 
-//       List<String> columns = ['#'];
-//       columns.addAll(selectedValues);
-//       columns.addAll([
-//         _locale.qty,
-//         _locale.averagePrice,
-//         _locale.total,
-//       ]);
-//       // setState(() {
-//       orderByColumns = columns;
-//       // });
-//     }
-//   }
+                        getResult().then(
+                          (value) {
+                            searchSalesCostReport(1);
+                          },
+                        );
+                      },
+                      fontSize: MediaQuery.of(context).size.width > 800
+                          ? MediaQuery.of(context).size.height * .016
+                          : MediaQuery.of(context).size.height * .011,
+                    ),
+                    CustomButton(
+                      text: _locale.exportToExcel,
+                      fontWeight: FontWeight.w400,
+                      textColor: Colors.white,
+                      borderRadius: 5.0,
+                      onPressed: () {
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: readProvider.fromDate,
+                          toDate: readProvider.toDate,
+                          voucherStatus: -100,
+                          // columns: getColumns(_locale, orderByColumns),
+                          // customColumns: getColumns(_locale, orderByColumns),
+                        );
+                        Map<String, dynamic> body = readProvider.toJson();
+                        ReportController()
+                            .exportToExcelApi(searchCriteria, body)
+                            .then((value) {
+                          saveExcelFile(value, "SalesReport.xlsx");
+                        });
+                      },
+                      fontSize: MediaQuery.of(context).size.width > 800
+                          ? MediaQuery.of(context).size.height * .016
+                          : MediaQuery.of(context).size.height * .011,
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              // DataTableWidget(
+              //   columns: orderByColumns,
+              //   list: salesList,
+              //   finalRow: finalRow,
+              //   objectType: "SalesCostReportModel",
+              // ),
+              const SizedBox(
+                height: 20,
+              ),
+              Directionality(
+                textDirection: TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        if (pageNumber != 0) {
+                          pageNumber =
+                              pageNumber == 1 ? pageNumber : pageNumber - 1;
+                          searchSalesCostReport(pageNumber);
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        child: Center(
+                            child: Text(
+                          maxLines: 1,
+                          "<<",
+                          style: fourteen400TextStyle(
+                            Colors.blue,
+                          ),
+                        )),
+                      ),
+                    ),
+                    for (int i = limitPage <= 5 || pageNumber < 4
+                            ? 1
+                            : pageNumber - 2;
+                        limitPage <= 5
+                            ? i <= limitPage
+                            : pageNumber < 4
+                                ? i < 6
+                                : (i <= pageNumber + 2) && i <= limitPage;
+                        i++)
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: MediaQuery.of(context).size.width * .002,
+                            right: MediaQuery.of(context).size.width * .002),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              // print("selected : $selected ,,,, i : $i");
+                              pageNumber = i;
+                              // print("selected1 : $selected ,,,, i1 : $i");
+                              // print("selectedcustomerscreen : $selected");
+                              searchSalesCostReport(pageNumber);
+                            });
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width > 800
+                                ? MediaQuery.of(context).size.width * .02
+                                : MediaQuery.of(context).size.width * .06,
+                            height: 40,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey,
+                                ),
+                                // shape: BoxShape.rectangle,
+                                color: i == pageNumber
+                                    ? Colors.blue
+                                    : Colors.white),
+                            child: Center(
+                                child: Text(
+                                    // maxLines: 1,
+                                    i.toString(),
+                                    style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.012,
+                                        color: i == pageNumber
+                                            ? Colors.white
+                                            : Colors.blue))),
+                          ),
+                        ),
+                      ),
+                    GestureDetector(
+                      onTap: () {
+                        if (pageNumber != 0) {
+                          if (pageNumber < limitPage) {
+                            pageNumber = pageNumber + 1;
+                          }
+                          searchSalesCostReport(pageNumber);
+                        }
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        child: Center(
+                            child: Text(
+                          maxLines: 1,
+                          ">>",
+                          style: fourteen400TextStyle(
+                            Colors.blue,
+                          ),
+                        )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 100,
+              ),
+            ],
+          ),
+        ),
+      ]),
+    );
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: 3,
-//       child: Stack(children: [
-//         // Image.asset(
-//         //   'assets/background.png',
-//         //   fit: BoxFit.fill,
-//         //   width: double.infinity,
-//         //   height: double.infinity,
-//         // ),
-//         SingleChildScrollView(
-//           child: Column(
-//             children: [
-//               //const HeaderWidget(),
-//               const SizedBox(
-//                 height: 40,
-//               ),
-//               SizedBox(
-//                 width: MediaQuery.of(context).size.width < 800
-//                     ? MediaQuery.of(context).size.width * 0.9
-//                     : MediaQuery.of(context).size.width * 0.7,
-//                 child: Center(
-//                   child: SelectableText(
-//                     maxLines: 2,
-//                     _locale.salesreport,
-//                     style: utils.twenty600TextStyle(const Color(0xFF10709e)),
-//                   ),
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 10,
-//               ),
-//               Center(
-//                 child: SizedBox(
-//                   width: MediaQuery.of(context).size.width < 800
-//                       ? MediaQuery.of(context).size.width * 0.9
-//                       : MediaQuery.of(context).size.width * 0.7,
-//                   height: 40,
-//                   child: TabBar(
-//                     unselectedLabelColor: Colors.grey,
-//                     labelColor: Colors.black,
-//                     tabs: [
-//                       Tab(
-//                         child: Text(maxLines: 1, _locale.criteria),
-//                       ),
-//                       Tab(
-//                         child: Text(maxLines: 1, _locale.orderBy),
-//                       ),
-//                       Tab(
-//                         child: Text(maxLines: 1, _locale.setUPSetting),
-//                       ),
-//                     ],
-//                     onTap: (index) {
-//                       setState(() {
-//                         _currentIndex = index;
-//                       });
-//                     },
-//                   ),
-//                 ),
-//               ),
-//               _currentIndex == 0
-//                   ? CriteriaWidget(
-//                       fromDate: fromDate,
-//                       toDate: toDate,
-//                     )
-//                   : _currentIndex == 1
-//                       ? OrderByWidget(
-//                           fromDate: fromDate,
-//                           toDate: toDate,
-//                           onSelectedValueChanged1: updateSelectedValue1,
-//                           onSelectedValueChanged2: updateSelectedValue2,
-//                           onSelectedValueChanged3: updateSelectedValue3,
-//                           onSelectedValueChanged4: updateSelectedValue4)
-//                       : SetupWidget(
-//                           fromDate: fromDate,
-//                           toDate: toDate,
-//                         ),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               SizedBox(
-//                 width: MediaQuery.of(context).size.width < 800
-//                     ? MediaQuery.of(context).size.width * 0.9
-//                     : MediaQuery.of(context).size.width * 0.7,
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     utils.blueButton(
-//                       width: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.width * .14
-//                           : MediaQuery.of(context).size.width * .25,
-//                       height: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .05
-//                           : MediaQuery.of(context).size.height * .04,
-//                       text: _locale.reset,
-//                       fontWeight: FontWeight.w400,
-//                       textColor: Colors.white,
-//                       borderRadius: 5.0,
-//                       onPressed: () {
-//                         setState(() {
-//                           readProvider.emptyProvider();
-//                           salesList = [];
-//                           finalRow = [];
-//                           orderByColumns = [
-//                             '#',
-//                             _locale.branch,
-//                             _locale.stockCategoryLevel("1"),
-//                             _locale.stockCategoryLevel("2"),
-//                             _locale.stockCategoryLevel("3"),
-//                             _locale.supplier("1"),
-//                             _locale.supplier("2"),
-//                             _locale.supplier("3"),
-//                             _locale.customer,
-//                             _locale.stock,
-//                             _locale.modelNo,
-//                             _locale.qty,
-//                             _locale.averagePrice,
-//                             _locale.total
-//                           ];
-//                         });
-//                       },
-//                       fontSize: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .016
-//                           : MediaQuery.of(context).size.height * .011,
-//                     ),
-//                     utils.blueButton(
-//                       width: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.width * .14
-//                           : MediaQuery.of(context).size.width * .25,
-//                       height: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .05
-//                           : MediaQuery.of(context).size.height * .04,
-//                       text: _locale.search,
-//                       fontWeight: FontWeight.w400,
-//                       textColor: Colors.white,
-//                       borderRadius: 5.0,
-//                       onPressed: () async {
-//                         print("frommm ${fromDate.text}");
-//                         context.read<SalesCriteraProvider>().setFromDate(
-//                             DatesController().formatDate(fromDate.text));
-//                         context.read<SalesCriteraProvider>().setToDate(
-//                             DatesController().formatDate(toDate.text));
-//                         await generateColumns();
+  Future<void> saveExcelFile(Uint8List byteList, String filename) async {
+    if (html.window != null) {
+      final blob = html.Blob([byteList]);
 
-//                         getResult().then(
-//                           (value) {
-//                             searchSalesCostReport(1);
-//                           },
-//                         );
-//                       },
-//                       fontSize: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .016
-//                           : MediaQuery.of(context).size.height * .011,
-//                     ),
-//                     utils.blueButton(
-//                       width: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.width * .14
-//                           : MediaQuery.of(context).size.width * .25,
-//                       height: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .05
-//                           : MediaQuery.of(context).size.height * .04,
-//                       text: _locale.exportToExcel,
-//                       fontWeight: FontWeight.w400,
-//                       textColor: Colors.white,
-//                       borderRadius: 5.0,
-//                       onPressed: () {
-//                         SearchCriteria searchCriteria = SearchCriteria(
-//                           fromDate: readProvider.fromDate,
-//                           toDate: readProvider.toDate,
-//                           voucherStatus: -100,
-//                           // columns: getColumns(_locale, orderByColumns),
-//                           // customColumns: getColumns(_locale, orderByColumns),
-//                         );
-//                         Map<String, dynamic> body = readProvider.toJson();
-//                         ReportController()
-//                             .exportToExcelApi(searchCriteria, body)
-//                             .then((value) {
-//                           saveExcelFile(value, "SalesReport.xlsx");
-//                         });
-//                       },
-//                       fontSize: MediaQuery.of(context).size.width > 800
-//                           ? MediaQuery.of(context).size.height * .016
-//                           : MediaQuery.of(context).size.height * .011,
-//                     ),
-//                     const SizedBox(
-//                       width: 20,
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               // DataTableWidget(
-//               //   columns: orderByColumns,
-//               //   list: salesList,
-//               //   finalRow: finalRow,
-//               //   objectType: "SalesCostReportModel",
-//               // ),
-//               const SizedBox(
-//                 height: 20,
-//               ),
-//               Directionality(
-//                 textDirection: TextDirection.ltr,
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     GestureDetector(
-//                       onTap: () {
-//                         if (pageNumber != 0) {
-//                           pageNumber =
-//                               pageNumber == 1 ? pageNumber : pageNumber - 1;
-//                           searchSalesCostReport(pageNumber);
-//                         }
-//                       },
-//                       child: Container(
-//                         width: 40,
-//                         height: 30,
-//                         decoration: BoxDecoration(
-//                           border: Border.all(
-//                             color: Colors.grey,
-//                           ),
-//                         ),
-//                         child: Center(
-//                             child: Text(
-//                           maxLines: 1,
-//                           "<<",
-//                           style: utils.fourteen400TextStyle(
-//                             Colors.blue,
-//                           ),
-//                         )),
-//                       ),
-//                     ),
-//                     for (int i = limitPage <= 5 || pageNumber < 4
-//                             ? 1
-//                             : pageNumber - 2;
-//                         limitPage <= 5
-//                             ? i <= limitPage
-//                             : pageNumber < 4
-//                                 ? i < 6
-//                                 : (i <= pageNumber + 2) && i <= limitPage;
-//                         i++)
-//                       Padding(
-//                         padding: EdgeInsets.only(
-//                             left: MediaQuery.of(context).size.width * .002,
-//                             right: MediaQuery.of(context).size.width * .002),
-//                         child: GestureDetector(
-//                           onTap: () {
-//                             setState(() {
-//                               // print("selected : $selected ,,,, i : $i");
-//                               pageNumber = i;
-//                               // print("selected1 : $selected ,,,, i1 : $i");
-//                               // print("selectedcustomerscreen : $selected");
-//                               searchSalesCostReport(pageNumber);
-//                             });
-//                           },
-//                           child: Container(
-//                             width: MediaQuery.of(context).size.width > 800
-//                                 ? MediaQuery.of(context).size.width * .02
-//                                 : MediaQuery.of(context).size.width * .06,
-//                             height: 40,
-//                             decoration: BoxDecoration(
-//                                 border: Border.all(
-//                                   color: Colors.grey,
-//                                 ),
-//                                 // shape: BoxShape.rectangle,
-//                                 color: i == pageNumber
-//                                     ? Colors.blue
-//                                     : Colors.white),
-//                             child: Center(
-//                                 child: Text(
-//                                     // maxLines: 1,
-//                                     i.toString(),
-//                                     style: TextStyle(
-//                                         fontSize:
-//                                             MediaQuery.of(context).size.height *
-//                                                 0.012,
-//                                         color: i == pageNumber
-//                                             ? Colors.white
-//                                             : Colors.blue))),
-//                           ),
-//                         ),
-//                       ),
-//                     GestureDetector(
-//                       onTap: () {
-//                         if (pageNumber != 0) {
-//                           if (pageNumber < limitPage) {
-//                             pageNumber = pageNumber + 1;
-//                           }
-//                           searchSalesCostReport(pageNumber);
-//                         }
-//                       },
-//                       child: Container(
-//                         width: 40,
-//                         height: 30,
-//                         decoration: BoxDecoration(
-//                           border: Border.all(
-//                             color: Colors.grey,
-//                           ),
-//                         ),
-//                         child: Center(
-//                             child: Text(
-//                           maxLines: 1,
-//                           ">>",
-//                           style: utils.fourteen400TextStyle(
-//                             Colors.blue,
-//                           ),
-//                         )),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 100,
-//               ),
-//             ],
-//           ),
-//         ),
-//       ]),
-//     );
-//   }
+      final url = html.Url.createObjectUrlFromBlob(blob);
 
-//   Future<void> saveExcelFile(Uint8List byteList, String filename) async {
-//     if (html.window != null) {
-//       final blob = html.Blob([byteList]);
+      final anchor = html.AnchorElement(href: url)
+        ..target = 'blank'
+        ..download = filename
+        ..click();
 
-//       final url = html.Url.createObjectUrlFromBlob(blob);
+      html.Url.revokeObjectUrl(url);
+    } else {
+      // final directory = await getTemporaryDirectory();
+      // final file = File('${directory.path}/$filename');
+      // await file.writeAsBytes(byteList);
+      // Use platform-specific code to open the file in a Flutter app
+      // For example: launch(url) from the url_launcher package
+    }
+  }
 
-//       final anchor = html.AnchorElement(href: url)
-//         ..target = 'blank'
-//         ..download = filename
-//         ..click();
+  Future searchSalesCostReport(int pageNum) async {
+    ReportController salesReportController = ReportController();
+    List<SalesCostReportModel> newList = salesList;
+    readProvider.setPage(pageNum);
+    dynamic body = readProvider.toJson();
+    print("Bodddddy $body");
+    await salesReportController.postSalesCostReportMethod(body).then((value) {
+      salesList = value;
+      if (pageNum > 1 && salesList.isEmpty) {
+        pageNumber = pageNum - 1;
 
-//       html.Url.revokeObjectUrl(url);
-//     } else {
-//       // final directory = await getTemporaryDirectory();
-//       // final file = File('${directory.path}/$filename');
-//       // await file.writeAsBytes(byteList);
-//       // Use platform-specific code to open the file in a Flutter app
-//       // For example: launch(url) from the url_launcher package
-//     }
-//   }
+        salesList = newList;
+      }
+      setState(() {});
+    });
+  }
 
-//   Future searchSalesCostReport(int pageNum) async {
-//     ReportController salesReportController = ReportController();
-//     List<SalesCostReportModel> newList = salesList;
-//     readProvider.setPage(pageNum);
-//     dynamic body = readProvider.toJson();
-//     print("Bodddddy $body");
-//     await salesReportController.postSalesCostReportMethod(body).then((value) {
-//       salesList = value;
-//       if (pageNum > 1 && salesList.isEmpty) {
-//         pageNumber = pageNum - 1;
+  Future getResult() async {
+    ReportController salesReportController = ReportController();
 
-//         salesList = newList;
-//       }
-//       setState(() {});
-//     });
-//   }
+    dynamic body = readProvider.toJson();
+    await salesReportController.getSalesResultMehtod(body).then((value) {
+      if (value.count! > 0) {
+        pageNumber = 1;
+      }
+      limitPage = (value.count! / 10).ceil();
+      finalRow = limitPage == 0
+          ? []
+          : getTotal(orderByColumns.length, value.total!, value.quantity!,
+              value.avgPrice!);
+    });
+  }
 
-//   Future getResult() async {
- 
-//     ReportController salesReportController = ReportController();
+  List<String> getTotal(
+      int length, double totalAmount, double qty, double price) {
+    List<String> stringList = [];
 
-//     dynamic body = readProvider.toJson();
-//     await salesReportController.getSalesResultMehtod(body).then((value) {
-//       if (value.count! > 0) {
-//         pageNumber = 1;
-//       }
-//       limitPage = (value.count! / 10).ceil();
-//       finalRow = limitPage == 0
-//           ? []
-//           : getTotal(orderByColumns.length, value.total!, value.quantity!,
-//               value.avgPrice!);
-//     });
-//   }
-
-//   List<String> getTotal(
-//       int length, double totalAmount, double qty, double price) {
-//     List<String> stringList = [];
-
-//     for (int i = 0; i < length; i++) {
-//       if (i == length - 1) {
-//         stringList.add(totalAmount.toStringAsFixed(2));
-//       } else if (i == length - 2) {
-//         stringList.add(price.toStringAsFixed(2));
-//       } else if (i == length - 3) {
-//         stringList.add(qty.toStringAsFixed(2));
-//       } else if (i == length - 4) {
-//         stringList.add(AppLocalizations.of(context).finalTotal);
-//       } else {
-//         stringList.add("");
-//       }
-//     }
-//     print("ListFinal ${stringList.length}");
-//     return stringList;
-//   }
-// }
+    for (int i = 0; i < length; i++) {
+      if (i == length - 1) {
+        stringList.add(totalAmount.toStringAsFixed(2));
+      } else if (i == length - 2) {
+        stringList.add(price.toStringAsFixed(2));
+      } else if (i == length - 3) {
+        stringList.add(qty.toStringAsFixed(2));
+      } else if (i == length - 4) {
+        stringList.add(AppLocalizations.of(context).finalTotal);
+      } else {
+        stringList.add("");
+      }
+    }
+    print("ListFinal ${stringList.length}");
+    return stringList;
+  }
+}

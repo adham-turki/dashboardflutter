@@ -36,7 +36,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   int dateLimit = 2000;
 
   final MaskTextInputFormatter _maskTextInputFormatter = MaskTextInputFormatter(
-      mask: "##/##/####", type: MaskAutoCompletionType.eager);
+      mask: "####-##-##", type: MaskAutoCompletionType.eager);
 
   // final TextEditingController controller = TextEditingController();
 
@@ -89,7 +89,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                 //   borderSide: const BorderSide(color: Colors.red),
                 // ),
                 // errorText: "errorText",
-                hintText: "dd/mm/yyyy",
+                hintText: "yyyy-mm-dd",
                 hintStyle: TextStyle(
                   color: Colors.black.withOpacity(0.5),
                 ),
@@ -192,7 +192,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       String monthStr = month < 10 ? "0$month" : month.toString();
 
       setState(() {
-        widget.controller.text = "$dayStr/$monthStr/$year";
+        widget.controller.text = "$year-$monthStr-$dayStr";
       });
     }
   }
@@ -201,10 +201,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     String value = widget.controller.text;
 
     try {
-      List<String> list = value.split("/");
-      int day = int.parse(list[0]);
+      List<String> list = value.split("-");
+      int year = int.parse(list[0]);
       int month = int.parse(list[1]);
-      int year = int.parse(list[2]);
+      int day = int.parse(list[2]);
 
       int nowYear = nowDate.year;
 

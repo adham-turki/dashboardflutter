@@ -1,5 +1,7 @@
 import 'package:bi_replicate/home.dart';
 import 'package:bi_replicate/provider/local_provider.dart';
+import 'package:bi_replicate/provider/purchase_provider.dart';
+import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +16,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (e) => ScreenContentProvider()),
         ChangeNotifierProvider(create: (create) => LocaleProvider()),
+        ChangeNotifierProvider(create: (create) => LocaleProvider()),
+        ChangeNotifierProvider(create: (create) => SalesCriteraProvider()),
+        ChangeNotifierProvider(create: (create) => PurchaseCriteraProvider()),
       ],
       child: const MyApp(),
     ),

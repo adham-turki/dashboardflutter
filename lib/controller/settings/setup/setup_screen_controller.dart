@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../../model/settings/setup/account_model.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
 import '../../../service/Api.dart';
@@ -21,7 +23,7 @@ class SetupController extends Api {
   Future<List<BiAccountModel>> getBiAccounts() async {
     List<BiAccountModel> list = [];
     String biUrl = getBiAccount;
-    await getMethods(biUrl).then((response) {
+    await ApiService.getRequest(biUrl).then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {
         list.add(BiAccountModel.fromJson(elemant));

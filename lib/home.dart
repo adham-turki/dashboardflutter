@@ -1,8 +1,13 @@
 import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
+import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
+import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_cat_content.dart';
+import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
+import 'package:bi_replicate/screen/content/sales_adminstration/total_collections_content.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +16,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import 'screen/content/journal_report_content.dart';
+import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -73,15 +79,15 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return const SalesByBranchesContent();
       case 1:
-        return Container();
+        return const BranchSalesByCatContent();
       case 2:
-        return Container();
+        return const DailySalesContent();
       case 3:
-        return Container();
+        return const TotalCollectionsContent();
       case 4:
-        return Container();
+        return const CashFlowsContent();
       case 5:
-        return Container();
+        return const ExpensesContent();
       case 6:
         return const InventoryPerfContent();
       case 7:
@@ -95,7 +101,7 @@ class _HomePageState extends State<HomePage> {
       case 11:
         return const JournalContent();
       case 12:
-        return Container();
+        return const SalesReportScreen();
       case 13:
         return Container();
       case 14:

@@ -415,7 +415,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           toDate: endDate,
           voucherStatus: status,
           rownum: int.parse(numberOfrow.text));
-      print("statuss:${statusValue}");
+
       inventoryPerformanceController
           .totalSellDic(searchCriteria2)
           .then((value) {
