@@ -93,14 +93,14 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
   void initState() {
     // getExpensesAccounts();
     payableRecAccounts = [];
-    // getPayableAccounts().then((value) {
-    //   payableRecAccounts = value;
-    //   setState(() {});
-    // });
-    // getReceivableAccounts().then((value) {
-    //   payableRecAccounts.addAll(value);
-    //   setState(() {});
-    // });
+    getPayableAccounts().then((value) {
+      payableRecAccounts = value;
+      setState(() {});
+    });
+    getReceivableAccounts().then((value) {
+      payableRecAccounts.addAll(value);
+      setState(() {});
+    });
     super.initState();
   }
 
