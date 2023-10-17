@@ -351,8 +351,8 @@
 //                           fromDate: readProvider.fromDate,
 //                           toDate: readProvider.toDate,
 //                           voucherStatus: -100,
-//                           columns: getColumns(_locale, orderByColumns),
-//                           customColumns: getColumns(_locale, orderByColumns),
+//                           // columns: getColumns(_locale, orderByColumns),
+//                           // customColumns: getColumns(_locale, orderByColumns),
 //                         );
 //                         Map<String, dynamic> body = readProvider.toJson();
 //                         ReportController()
