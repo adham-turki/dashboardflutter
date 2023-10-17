@@ -241,71 +241,42 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              TableComponent(
-                plCols: [],
-                polRows: [],
-                // footerBuilder: (stateManager) {
-                //    return JournalReport.lazyPaginationFooter(stateManager);
-                // },
-                onSelected: (event) {
-                  setState(() {
-                    data = event.row!.cells['account']!.value.toString();
-                  });
-                },
-                doubleTab: (event) {
-                  showDialog(
-                      context: context,
-                      builder: (builder) {
-                        return const AlertDialog(
-                          title: Text("ACTION"),
-                        );
-                      });
-                },
-                rightClickTap: (event) {
-                  showDialog(
-                      context: context,
-                      builder: (builder) {
-                        return const AlertDialog(
-                          title: Text("ACTION"),
-                        );
-                      });
-                },
-                // headerBuilder: (event) {
-                //   return headerTableSection(data);
-                // },
-              ),
-              TableComponent(
-                plCols: [],
-                polRows: [],
-                // footerBuilder: (stateManager) {
-                //    return JournalReport.lazyPaginationFooter(stateManager);
-                // },
-                onSelected: (event) {
-                  setState(() {
-                    data = event.row!.cells['account']!.value.toString();
-                  });
-                },
-                doubleTab: (event) {
-                  showDialog(
-                      context: context,
-                      builder: (builder) {
-                        return const AlertDialog(
-                          title: Text("ACTION"),
-                        );
-                      });
-                },
-                rightClickTap: (event) {
-                  showDialog(
-                      context: context,
-                      builder: (builder) {
-                        return const AlertDialog(
-                          title: Text("ACTION"),
-                        );
-                      });
-                },
-                // headerBuilder: (event) {
-                //   return headerTableSection(data);
-                // },
+              SizedBox(
+                width: width * 0.75,
+                height: height * 0.7,
+                child: TableComponent(
+                  plCols: [],
+                  polRows: [],
+                  // footerBuilder: (stateManager) {
+                  //    return JournalReport.lazyPaginationFooter(stateManager);
+                  // },
+                  onSelected: (event) {
+                    setState(() {
+                      data = event.row!.cells['account']!.value.toString();
+                    });
+                  },
+                  doubleTab: (event) {
+                    showDialog(
+                        context: context,
+                        builder: (builder) {
+                          return const AlertDialog(
+                            title: Text("ACTION"),
+                          );
+                        });
+                  },
+                  rightClickTap: (event) {
+                    showDialog(
+                        context: context,
+                        builder: (builder) {
+                          return const AlertDialog(
+                            title: Text("ACTION"),
+                          );
+                        });
+                  },
+                  // headerBuilder: (event) {
+                  //   return headerTableSection(data);
+                  // },
+                ),
               ),
             ],
           ),
