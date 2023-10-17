@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
-import '../model/pie_chart_data_model.dart';
 
 class BalanceLineChart extends StatelessWidget {
   final String xAxisText;

@@ -1,3 +1,4 @@
+import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -7,7 +8,6 @@ import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
-import '../../../model/pie_chart_data_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
@@ -77,9 +77,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     'Save as PNG',
   ];
 
-  final List<PieChartData> pieData = [
-    PieChartData('', 50),
-    PieChartData('', 50),
+  final List<PieChartModel> pieData = [
+    // PieChartModel('', 50),
+    // PieChartModel('', 50),
   ];
 
   final List<BarChartData> barData = [

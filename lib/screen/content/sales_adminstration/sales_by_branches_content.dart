@@ -4,15 +4,10 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
-import 'package:bi_replicate/widget/custom_dropdown.dart';
-import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
-import 'package:fl_chart/fl_chart.dart';
+import '../../../widget/drop_down/custom_dropdown.dart';
+// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:http/http.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';

@@ -29,7 +29,7 @@ class SelfChequesController extends Api {
     return chequesList;
   }
 
-  Future<ChequesResult> getPurchaseResultMehtod(
+  Future<ChequesResult> getChequeResultMethod(
       SearchCriteria searchCriteria) async {
     var api = getChequesResult;
     late ChequesResult chequesResult = ChequesResult();
