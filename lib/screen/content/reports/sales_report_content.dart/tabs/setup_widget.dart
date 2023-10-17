@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../provider/sales_search_provider.dart';
+import '../../../../../utils/constants/responsive.dart';
 import '../../../../../utils/constants/styles.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
@@ -34,6 +35,11 @@ class _SetupWidgetState extends State<SetupWidget> {
 
   late AppLocalizations _locale;
   late SalesCriteraProvider readProvider;
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isTablet = false;
+  bool isMobile = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -57,6 +63,10 @@ class _SetupWidgetState extends State<SetupWidget> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
     valueAppearBasicUnitEquiv = readProvider.getAppearBasicUnitEquiv!;
     valueAppearInactiveStocksForPurchase =
         readProvider.getAppearInactiveStocksForPurchase!;
@@ -76,10 +86,8 @@ class _SetupWidgetState extends State<SetupWidget> {
       ),
       //
       padding: const EdgeInsets.all(10.0),
-      width: MediaQuery.of(context).size.width < 800
-          ? MediaQuery.of(context).size.width * 0.9
-          : MediaQuery.of(context).size.width * 0.7,
-      height: MediaQuery.of(context).size.height * 0.35,
+      width: isTablet ? width * 0.9 : width * 0.7,
+      height: height * 0.35,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -121,7 +129,7 @@ class _SetupWidgetState extends State<SetupWidget> {
                               setState(() {});
                             }),
                         Text(
-                          MediaQuery.of(context).size.width < 800
+                          isTablet
                               ? _locale.appearBasicUnitEquivalenceMobile
                               : _locale.appearBasicUnitEquivalence,
                           style: twelve400TextStyle(Colors.black),
@@ -140,7 +148,7 @@ class _SetupWidgetState extends State<SetupWidget> {
                               setState(() {});
                             }),
                         Text(
-                          MediaQuery.of(context).size.width < 800
+                          isTablet
                               ? _locale.appearInactiveStocksForPurchaseMobile
                               : _locale.appearInactiveStocksForPurchase,
                           style: twelve400TextStyle(Colors.black),
@@ -238,7 +246,7 @@ class _SetupWidgetState extends State<SetupWidget> {
                               setState(() {});
                             }),
                         Text(
-                          MediaQuery.of(context).size.width < 800
+                          isTablet
                               ? _locale.appearInactiveStocksMobile
                               : _locale.appearInactiveStocks,
                           style: twelve400TextStyle(Colors.black),

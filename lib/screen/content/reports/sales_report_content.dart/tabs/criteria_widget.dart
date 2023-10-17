@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/criteria/drop_down_search_criteria.dart';
 import 'package:flutter/material.dart';
 import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../provider/sales_search_provider.dart';
+import '../../../../../utils/constants/responsive.dart';
 import '../../../../../utils/constants/styles.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/custom_date_picker.dart';
@@ -26,7 +27,11 @@ class CriteriaWidget extends StatefulWidget {
 class _CriteriaWidgetState extends State<CriteriaWidget> {
   // TextEditingController fromDate = TextEditingController();
   // TextEditingController toDate = TextEditingController();
-
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isTablet = false;
+  bool isMobile = false;
   @override
   void initState() {
     super.initState();
@@ -34,16 +39,19 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
       ),
       padding: const EdgeInsets.all(10.0),
-      width: MediaQuery.of(context).size.width < 800
-          ? MediaQuery.of(context).size.width * 0.9
-          : MediaQuery.of(context).size.width * 0.85,
-      child: MediaQuery.of(context).size.width < 800
+      width: isTablet ? width * 0.9 : width * 0.85,
+      child: isTablet
           ? Column(
               children: [
                 LeftWidget(fromDate: widget.fromDate, toDate: widget.toDate),
@@ -113,6 +121,11 @@ class _LeftWidgetState extends State<LeftWidget> {
   bool valueSelectAllStock = false;
   late SalesCriteraProvider readProvider;
 
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isTablet = false;
+  bool isMobile = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -183,6 +196,10 @@ class _LeftWidgetState extends State<LeftWidget> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     String nextMonth = DatesController().formatDateReverse(DatesController()
@@ -228,9 +245,7 @@ class _LeftWidgetState extends State<LeftWidget> {
     return Column(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.79 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -281,7 +296,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   const SizedBox(
                     width: 5,
                   ),
-                  MediaQuery.of(context).size.width > 800
+                  isDesktop
                       ? CustomDatePicker(
                           controller: widget.toDate,
                           label: _locale.toDate,
@@ -302,7 +317,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                           }, // Show the calendar on tap
                           child: Container(
                             height: 30,
-                            width: MediaQuery.of(context).size.width * 0.26,
+                            width: width * 0.26,
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(5.0),
@@ -327,9 +342,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.79 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -352,7 +365,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                               ? selectedFromStkCategory1
                               : _locale.select,
                           label: _locale.from,
-                          width: MediaQuery.of(context).size.width * .2,
+                          width: width * .2,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -391,13 +404,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -454,7 +464,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                               getCategory1List();
                             });
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -495,9 +505,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.79 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -531,7 +539,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                               getCategory3List();
                             });
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -558,13 +566,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -611,7 +616,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                               ? selectedToStkCategory3
                               : _locale.select,
                           label: _locale.to,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -662,9 +667,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.79 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -692,7 +695,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                                 .getSalesCustomersMethod(
                                     dropDownSearchCriteria.toJson());
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: customersList,
                           hint: selectedFromCustomers.isNotEmpty
                               ? selectedFromCustomers
@@ -725,13 +728,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -785,7 +785,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                                 .getSalesCustomersMethod(
                                     dropDownSearchCriteria.toJson());
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: customersList,
                           hint: selectedToCustomers.isNotEmpty
                               ? selectedToCustomers
@@ -831,9 +831,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.79 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -860,7 +858,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                             return salesReportController.getSalesStkMethod(
                                 dropDownSearchCriteria.toJson());
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: stocksList,
                           hint: selectedFromStocks.isNotEmpty
                               ? selectedFromStocks
@@ -893,13 +891,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -950,7 +945,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                             return salesReportController.getSalesStkMethod(
                                 dropDownSearchCriteria.toJson());
                           },
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           //items: stocksList,
                           hint: selectedToStocks.isNotEmpty
                               ? selectedToStocks
@@ -1165,7 +1160,11 @@ class _RightWidgetState extends State<RightWidget> {
 
   late AppLocalizations _locale;
   late SalesCriteraProvider readProvider;
-
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isTablet = false;
+  bool isMobile = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -1176,6 +1175,10 @@ class _RightWidgetState extends State<RightWidget> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
@@ -1214,9 +1217,7 @@ class _RightWidgetState extends State<RightWidget> {
     return Column(
       children: [
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.8 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1236,7 +1237,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleBranches == false
                       ? CustomDropDown(
                           label: _locale.from,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: branchesList,
                           hint: selectedFromBranches.isNotEmpty
                               ? selectedFromBranches
@@ -1275,13 +1276,10 @@ class _RightWidgetState extends State<RightWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -1325,7 +1323,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleBranches == false
                       ? CustomDropDown(
                           label: _locale.to,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: branchesList,
                           hint: selectedToBranches.isNotEmpty
                               ? selectedToBranches
@@ -1375,9 +1373,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.8 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1397,7 +1393,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleStkCategory2 == false
                       ? CustomDropDown(
                           label: _locale.from,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: stkCategory2List,
                           hint: selectedFromStkCategory2.isNotEmpty
                               ? selectedFromStkCategory2
@@ -1438,13 +1434,10 @@ class _RightWidgetState extends State<RightWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -1488,7 +1481,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleStkCategory2 == false
                       ? CustomDropDown(
                           label: _locale.to,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: stkCategory2List,
                           hint: selectedToStkCategory2.isNotEmpty
                               ? selectedToStkCategory2
@@ -1541,9 +1534,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.8 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1563,7 +1554,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleSupplier == false
                       ? CustomDropDown(
                           label: _locale.from,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: suppliersList,
                           hint: selectedFromSupplier.isNotEmpty
                               ? selectedFromSupplier
@@ -1603,13 +1594,10 @@ class _RightWidgetState extends State<RightWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -1653,7 +1641,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleSupplier == false
                       ? CustomDropDown(
                           label: _locale.to,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: suppliersList,
                           hint: selectedToSupplier.isNotEmpty
                               ? selectedToSupplier
@@ -1705,9 +1693,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.8 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1727,7 +1713,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleCustomerCategory == false
                       ? CustomDropDown(
                           label: _locale.from,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: customerCategoryList,
                           hint: selectedFromCustomerCategory.isNotEmpty
                               ? selectedFromCustomerCategory
@@ -1768,13 +1754,10 @@ class _RightWidgetState extends State<RightWidget> {
                                   setState(() {});
                                 }),
                             SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.185,
-                              height:
-                                  MediaQuery.of(context).size.height * 0.052,
+                              width: width * 0.185,
+                              height: height * 0.052,
                               child: Padding(
-                                padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height *
-                                        0.018),
+                                padding: EdgeInsets.only(top: height * 0.018),
                                 child: SelectableText(
                                   maxLines: 1,
                                   _locale.selectAll,
@@ -1818,7 +1801,7 @@ class _RightWidgetState extends State<RightWidget> {
                   valueMultipleCustomerCategory == false
                       ? CustomDropDown(
                           label: _locale.to,
-                          width: MediaQuery.of(context).size.width * 0.2,
+                          width: width * 0.2,
                           // items: customerCategoryList,
                           hint: selectedToCustomerCategory.isNotEmpty
                               ? selectedToCustomerCategory
@@ -1872,9 +1855,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: 5,
         ),
         Container(
-          width: MediaQuery.of(context).size.width < 800
-              ? MediaQuery.of(context).size.width * 0.9
-              : MediaQuery.of(context).size.width * 0.8 / 2.1,
+          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1893,7 +1874,7 @@ class _RightWidgetState extends State<RightWidget> {
               // ),
               // Container(
               //   height: 30,
-              //   width: MediaQuery.of(context).size.width * 0.15,
+              //   width: width * 0.15,
               //   decoration: BoxDecoration(
               //     color: Colors.grey[200],
               //     borderRadius: BorderRadius.circular(5.0),
@@ -1923,7 +1904,7 @@ class _RightWidgetState extends State<RightWidget> {
               // ),
               // Container(
               //   height: 30,
-              //   width: MediaQuery.of(context).size.width * 0.15,
+              //   width: width * 0.15,
               //   decoration: BoxDecoration(
               //     color: Colors.grey[200],
               //     borderRadius: BorderRadius.circular(5.0),

@@ -7,6 +7,7 @@ import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
+import '../../../../utils/constants/responsive.dart';
 import '../../../../utils/constants/styles.dart';
 import '../../../../utils/func/dates_controller.dart';
 import '../../../../widget/custom_btn.dart';
@@ -32,6 +33,12 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   List<String> finalRow = [];
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isTablet = false;
+  bool isMobile = false;
+
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
@@ -179,36 +186,20 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
+
     return DefaultTabController(
       length: 3,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            //const HeaderWidget(),
-            // const SizedBox(
-            //   height: 40,
-            // ),
-            // SizedBox(
-            //   width: MediaQuery.of(context).size.width < 800
-            //       ? MediaQuery.of(context).size.width * 0.9
-            //       : MediaQuery.of(context).size.width * 0.7,
-            //   child: Center(
-            //     child: SelectableText(
-            //       maxLines: 2,
-            //       _locale.salesreport,
-            //       style: twenty600TextStyle(const Color(0xFF10709e)),
-            //     ),
-            //   ),
-            // ),
-            const SizedBox(
-              height: 10,
-            ),
             Center(
               child: SizedBox(
-                width: MediaQuery.of(context).size.width < 800
-                    ? MediaQuery.of(context).size.width * 0.9
-                    : MediaQuery.of(context).size.width * 0.7,
-                height: 40,
+                width: isTablet ? width * 0.9 : width * 0.7,
+                height: isTablet ? height * 0.1 : height * 0.1,
                 child: TabBar(
                   unselectedLabelColor: Colors.grey,
                   labelColor: Colors.black,
@@ -248,13 +239,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         fromDate: fromDate,
                         toDate: toDate,
                       ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: isTablet ? height * 0.05 : height * 0.05,
             ),
             SizedBox(
-              width: MediaQuery.of(context).size.width < 800
-                  ? MediaQuery.of(context).size.width * 0.9
-                  : MediaQuery.of(context).size.width * 0.7,
+              width: isTablet ? width * 0.9 : width * 0.7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -286,9 +275,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         ];
                       });
                     },
-                    fontSize: MediaQuery.of(context).size.width > 800
-                        ? MediaQuery.of(context).size.height * .016
-                        : MediaQuery.of(context).size.height * .011,
+                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
                   CustomButton(
                     text: _locale.search,
@@ -310,9 +297,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         },
                       );
                     },
-                    fontSize: MediaQuery.of(context).size.width > 800
-                        ? MediaQuery.of(context).size.height * .016
-                        : MediaQuery.of(context).size.height * .011,
+                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
                   CustomButton(
                     text: _locale.exportToExcel,
@@ -334,18 +319,16 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         saveExcelFile(value, "SalesReport.xlsx");
                       });
                     },
-                    fontSize: MediaQuery.of(context).size.width > 800
-                        ? MediaQuery.of(context).size.height * .016
-                        : MediaQuery.of(context).size.height * .011,
+                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
-                  const SizedBox(
-                    width: 20,
+                  SizedBox(
+                    width: isTablet ? width * 0.05 : width * 0.05,
                   ),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: isTablet ? height * 0.05 : height * 0.05,
             ),
             // DataTableWidget(
             //   columns: orderByColumns,
@@ -353,121 +336,117 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             //   finalRow: finalRow,
             //   objectType: "SalesCostReportModel",
             // ),
-            const SizedBox(
-              height: 20,
-            ),
-            Directionality(
-              textDirection: TextDirection.ltr,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (pageNumber != 0) {
-                        pageNumber =
-                            pageNumber == 1 ? pageNumber : pageNumber - 1;
-                        searchSalesCostReport(pageNumber);
-                      }
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      child: Center(
-                          child: Text(
-                        maxLines: 1,
-                        "<<",
-                        style: fourteen400TextStyle(
-                          Colors.blue,
-                        ),
-                      )),
-                    ),
-                  ),
-                  for (int i =
-                          limitPage <= 5 || pageNumber < 4 ? 1 : pageNumber - 2;
-                      limitPage <= 5
-                          ? i <= limitPage
-                          : pageNumber < 4
-                              ? i < 6
-                              : (i <= pageNumber + 2) && i <= limitPage;
-                      i++)
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * .002,
-                          right: MediaQuery.of(context).size.width * .002),
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            // print("selected : $selected ,,,, i : $i");
-                            pageNumber = i;
-                            // print("selected1 : $selected ,,,, i1 : $i");
-                            // print("selectedcustomerscreen : $selected");
-                            searchSalesCostReport(pageNumber);
-                          });
-                        },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.width * .02
-                              : MediaQuery.of(context).size.width * .06,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                              ),
-                              // shape: BoxShape.rectangle,
-                              color:
-                                  i == pageNumber ? Colors.blue : Colors.white),
-                          child: Center(
-                              child: Text(
-                                  // maxLines: 1,
-                                  i.toString(),
-                                  style: TextStyle(
-                                      fontSize:
-                                          MediaQuery.of(context).size.height *
-                                              0.012,
-                                      color: i == pageNumber
-                                          ? Colors.white
-                                          : Colors.blue))),
-                        ),
-                      ),
-                    ),
-                  GestureDetector(
-                    onTap: () {
-                      if (pageNumber != 0) {
-                        if (pageNumber < limitPage) {
-                          pageNumber = pageNumber + 1;
-                        }
-                        searchSalesCostReport(pageNumber);
-                      }
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                      ),
-                      child: Center(
-                          child: Text(
-                        maxLines: 1,
-                        ">>",
-                        style: fourteen400TextStyle(
-                          Colors.blue,
-                        ),
-                      )),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 100,
-            ),
+            // SizedBox(
+            //   height: isTablet ? height * 0.2 : height * 0.2,
+            // ),
+            // Directionality(
+            //   textDirection: TextDirection.ltr,
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       GestureDetector(
+            //         onTap: () {
+            //           if (pageNumber != 0) {
+            //             pageNumber =
+            //                 pageNumber == 1 ? pageNumber : pageNumber - 1;
+            //             searchSalesCostReport(pageNumber);
+            //           }
+            //         },
+            //         child: Container(
+            //           width:               height: isTablet ? height * 0.05 : height * 0.05,
+
+            //           height: 30,
+            //           decoration: BoxDecoration(
+            //             border: Border.all(
+            //               color: Colors.grey,
+            //             ),
+            //           ),
+            //           child: Center(
+            //               child: Text(
+            //             maxLines: 1,
+            //             "<<",
+            //             style: fourteen400TextStyle(
+            //               Colors.blue,
+            //             ),
+            //           )),
+            //         ),
+            //       ),
+            //       for (int i =
+            //               limitPage <= 5 || pageNumber < 4 ? 1 : pageNumber - 2;
+            //           limitPage <= 5
+            //               ? i <= limitPage
+            //               : pageNumber < 4
+            //                   ? i < 6
+            //                   : (i <= pageNumber + 2) && i <= limitPage;
+            //           i++)
+            //         Padding(
+            //           padding: EdgeInsets.only(
+            //               left: width * .002, right: width * .002),
+            //           child: GestureDetector(
+            //             onTap: () {
+            //               setState(() {
+            //                 // print("selected : $selected ,,,, i : $i");
+            //                 pageNumber = i;
+            //                 // print("selected1 : $selected ,,,, i1 : $i");
+            //                 // print("selectedcustomerscreen : $selected");
+            //                 searchSalesCostReport(pageNumber);
+            //               });
+            //             },
+            //             child: Container(
+            //               width: isDesktop ? width * .02 : width * .06,
+            //               height: 40,
+            //               decoration: BoxDecoration(
+            //                   border: Border.all(
+            //                     color: Colors.grey,
+            //                   ),
+            //                   // shape: BoxShape.rectangle,
+            //                   color:
+            //                       i == pageNumber ? Colors.blue : Colors.white),
+            //               child: Center(
+            //                   child: Text(
+            //                       // maxLines: 1,
+            //                       i.toString(),
+            //                       style: TextStyle(
+            //                           fontSize: height * 0.012,
+            //                           color: i == pageNumber
+            //                               ? Colors.white
+            //                               : Colors.blue))),
+            //             ),
+            //           ),
+            //         ),
+            //       GestureDetector(
+            //         onTap: () {
+            //           if (pageNumber != 0) {
+            //             if (pageNumber < limitPage) {
+            //               pageNumber = pageNumber + 1;
+            //             }
+            //             searchSalesCostReport(pageNumber);
+            //           }
+            //         },
+            //         child: Container(
+            //           width: 40,
+            //           height: 30,
+            //           decoration: BoxDecoration(
+            //             border: Border.all(
+            //               color: Colors.grey,
+            //             ),
+            //           ),
+            //           child: Center(
+            //               child: Text(
+            //             maxLines: 1,
+            //             ">>",
+            //             style: fourteen400TextStyle(
+            //               Colors.blue,
+            //             ),
+            //           )),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(
+            //   height: 100,
+            // ),
           ],
         ),
       ),
