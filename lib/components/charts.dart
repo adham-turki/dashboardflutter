@@ -1,0 +1,220 @@
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../model/bar_chart_data_model.dart';
+import '../model/line_chart_data_model.dart';
+import '../model/pie_chart_data_model.dart';
+
+class BalanceLineChart extends StatelessWidget {
+  final String xAxisText;
+  final String yAxisText;
+  final List<double> balances;
+  final List<String> periods;
+
+  const BalanceLineChart(
+      {super.key,
+      required this.balances,
+      required this.periods,
+      required this.xAxisText,
+      required this.yAxisText});
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    List<ChartData> data = _getChartData();
+
+    return SizedBox(
+      height: height * 0.48,
+      child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
+        primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
+        plotAreaBorderColor: Colors.transparent,
+        plotAreaBackgroundColor: Colors.transparent,
+        borderColor: Colors.transparent,
+        borderWidth: 0,
+        plotAreaBorderWidth: 0,
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: <ChartSeries>[
+          LineSeries<ChartData, String>(
+            dataSource: data,
+            xValueMapper: (ChartData value, _) => value.period,
+            yValueMapper: (ChartData value, _) => value.balance,
+            markerSettings:
+                const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
+            dataLabelSettings: const DataLabelSettings(isVisible: false),
+            enableTooltip: true,
+            animationDuration: 1000,
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<ChartData> _getChartData() {
+    List<ChartData> data = [];
+    for (int i = 0; i < balances.length; i++) {
+      data.add(ChartData(periods[i], balances[i]));
+    }
+    return data;
+  }
+}
+
+class BalanceDoubleLineChart extends StatelessWidget {
+  final String xAxisText;
+  final String yAxisText;
+  final List<double> balances;
+  final List<String> periods;
+  final List<double> balances2;
+  final List<String> periods2;
+
+  const BalanceDoubleLineChart({
+    Key? key,
+    required this.balances,
+    required this.periods,
+    required this.balances2,
+    required this.periods2,
+    required this.xAxisText,
+    required this.yAxisText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    List<ChartData> data = _getChartData();
+    List<ChartData> data2 = _getChartData2();
+
+    return SfCartesianChart(
+      primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
+      primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
+      plotAreaBorderColor: Colors.transparent,
+      plotAreaBackgroundColor: Colors.transparent,
+      borderColor: Colors.transparent,
+      borderWidth: 0,
+      plotAreaBorderWidth: 0,
+      tooltipBehavior: TooltipBehavior(enable: true),
+      series: <ChartSeries>[
+        LineSeries<ChartData, String>(
+          dataSource: data,
+          xValueMapper: (ChartData value, _) => value.period,
+          yValueMapper: (ChartData value, _) => value.balance,
+          markerSettings:
+              const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
+          dataLabelSettings: const DataLabelSettings(isVisible: false),
+          enableTooltip: true,
+          animationDuration: 1000,
+          color: Colors.red,
+        ),
+        LineSeries<ChartData, String>(
+          dataSource: data2,
+          xValueMapper: (ChartData value, _) => value.period,
+          yValueMapper: (ChartData value, _) => value.balance,
+          markerSettings:
+              const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
+          dataLabelSettings: const DataLabelSettings(isVisible: false),
+          enableTooltip: true,
+          animationDuration: 1000,
+          color: Colors.green,
+        ),
+      ],
+    );
+  }
+
+  List<ChartData> _getChartData() {
+    List<ChartData> data = [];
+    for (int i = 0; i < balances.length; i++) {
+      data.add(ChartData(periods[i], balances[i]));
+    }
+    return data;
+  }
+
+  List<ChartData> _getChartData2() {
+    List<ChartData> data2 = [];
+    for (int i = 0; i < balances2.length; i++) {
+      data2.add(ChartData(periods2[i], balances2[i]));
+    }
+    return data2;
+  }
+}
+
+class BalanceBarChart extends StatelessWidget {
+  final List<BarChartData> data;
+
+  const BalanceBarChart({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return Container(
+      height: height * 0.48,
+      padding: const EdgeInsets.all(16.0),
+      child: SfCartesianChart(
+        isTransposed: true,
+        primaryXAxis: CategoryAxis(),
+        // primaryYAxis: NumericAxis(
+        //   minimum: 0,
+        //   maximum: double.infinity,
+        //   interval: 100,
+        // ),
+        plotAreaBorderWidth: 0,
+        series: <ChartSeries>[
+          BarSeries<BarChartData, String>(
+            dataSource: data,
+            xValueMapper: (BarChartData value, _) => value.category,
+            yValueMapper: (BarChartData value, _) => value.value,
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: const Color(0xff9AA0C5),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BalanceDoubleBarChart extends StatelessWidget {
+  final List<BarChartData> data;
+  final List<BarChartData> data2;
+
+  const BalanceDoubleBarChart(
+      {Key? key, required this.data, required this.data2})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: SfCartesianChart(
+        isTransposed: true,
+        primaryXAxis: CategoryAxis(),
+        // primaryYAxis: NumericAxis(
+        //   minimum:
+        //       -200, // Adjust the minimum and maximum based on your data range.
+        //   maximum: 200,
+        //   interval: 50,
+        // ),
+        plotAreaBorderWidth: 0,
+        series: <ChartSeries>[
+          BarSeries<BarChartData, String>(
+            dataSource: data,
+            xValueMapper: (BarChartData value, _) => value.category,
+            yValueMapper: (BarChartData value, _) => value.value,
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: const Color(0xff9AA0C5),
+            //   dataLabelSettings: const DataLabelSettings(isVisible: true),
+          ),
+          BarSeries<BarChartData, String>(
+            dataSource: data2,
+            xValueMapper: (BarChartData value, _) => value.category,
+            yValueMapper: (BarChartData value, _) => value.value,
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: Colors.red,
+            //  dataLabelSettings: const DataLabelSettings(isVisible: true),
+          ),
+        ],
+      ),
+    );
+  }
+}
