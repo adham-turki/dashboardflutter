@@ -10,11 +10,9 @@ class SalesBranchesController {
       SearchCriteria searchCriteria) async {
     var api = salesByBranches;
     List<SalesBranchesmodel> salesBranchesList = [];
-
     await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-
         for (var totalCollection in jsonData) {
           salesBranchesList.add(SalesBranchesmodel.fromJson(totalCollection));
         }

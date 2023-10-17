@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../model/financial_performance/cash_flow_model.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../service/Api.dart';
@@ -11,7 +13,7 @@ class CashFlowController extends Api {
       SearchCriteria searchCriteria) async {
     var api = getCashFlows;
     List<CashFlowModel> cashFlowList = [];
-    await postMethods(api, searchCriteria.toJson()).then((response) {
+    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var cashFlow in jsonData) {
