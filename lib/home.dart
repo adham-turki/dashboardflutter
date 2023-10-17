@@ -11,6 +11,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 import 'screen/content/journal_report_content.dart';
+import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       case 11:
         return const JournalContent();
       case 12:
-        return Container();
+        return const SalesReportScreen();
       case 13:
         return Container();
       case 14:

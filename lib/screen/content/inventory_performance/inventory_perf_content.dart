@@ -217,10 +217,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     ),
                     SizedBox(
                         width: MediaQuery.of(context).size.width * 0.22,
-                        child: blueButton(
-                          height: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .05
-                              : MediaQuery.of(context).size.height * .04,
+                        child: CustomButton(
+                          // height: MediaQuery.of(context).size.width > 800
+                          //     ? MediaQuery.of(context).size.height * .05
+                          //     : MediaQuery.of(context).size.height * .04,
                           text: _locale.search,
                           fontWeight: FontWeight.w400,
                           textColor: Colors.white,
