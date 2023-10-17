@@ -15,7 +15,7 @@ class CustomDropDown extends StatefulWidget {
   final Function(dynamic)? onValidator;
   final bool? showSearchBox;
   final double? height;
-  final String hint;
+  final String? hint;
   final Future<List<dynamic>> Function(String)? onSearch;
 
   CustomDropDown({
@@ -27,7 +27,7 @@ class CustomDropDown extends StatefulWidget {
     this.padding,
     this.customKey,
     required this.label,
-    required this.hint,
+    this.hint,
     this.onChanged,
     this.showSearchBox,
     this.height,
@@ -65,6 +65,8 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   : widget.onValidator!(value),
               items: widget.items ?? [],
               asyncItems: widget.onSearch,
+              dropdownBuilder:
+                  showSearchBox == true ? _customDropDownPrograms : null,
               popupProps: PopupProps.menu(
                 menuProps: const MenuProps(
                   animationDuration: Duration(milliseconds: 100),
@@ -82,5 +84,26 @@ class _CustomDropDownState extends State<CustomDropDown> {
         ],
       ),
     );
+  }
+
+  Widget _customDropDownPrograms(BuildContext context, dynamic? item) {
+    return Container(
+        child: (item == null)
+            ? ListTile(
+                //    contentPadding: EdgeInsets.only(right: 20, left: 50),
+                title: Text(widget.hint!,
+                    textAlign: TextAlign.start,
+                    style: const TextStyle(
+                        fontSize: 13,
+                        color: Color.fromARGB(235, 158, 158, 158))),
+              )
+            : ListTile(
+                //contentPadding: const EdgeInsets.only(right: 230, left: 20),
+                title: Text(
+                item.toString(),
+                textAlign: TextAlign.start,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 13.5, color: Colors.black),
+              )));
   }
 }
