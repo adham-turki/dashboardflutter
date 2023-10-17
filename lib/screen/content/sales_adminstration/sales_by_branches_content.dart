@@ -4,7 +4,6 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
-import 'package:bi_replicate/widget/custom_dropdown.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +54,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   List<String> charts = [];
   var selectedPeriod = "";
   var selectedChart = "";
-  List<BarChartData> barData = [];
+  // List<BarChartData> barData = [];
   List<PieChartModel> pieData = [];
 
   bool isDesktop = false;
@@ -183,7 +182,8 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                   dataList: pieData,
                                 ),
                               )
-                            : BalanceBarChart(data: barData),
+                            : Container(),
+                    // : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -201,7 +201,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         toDate: DatesController().formatDate(_toDateController.text),
         voucherStatus: -100);
     pieData = [];
-    barData = [];
+    //  barData = [];
     listOfBalances = [];
     listOfPeriods = [];
     salesBranchesController.getSalesByBranches(searchCriteria).then((value) {
@@ -217,9 +217,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
           pieData.add(PieChartModel(
               title: element.namee!, value: a, color: Colors.blue));
-          barData.add(
-            BarChartData(element.namee!, a),
-          );
+          // barData.add(
+          //   BarChartData(element.namee!, a),
+          // );
         });
       }
     });

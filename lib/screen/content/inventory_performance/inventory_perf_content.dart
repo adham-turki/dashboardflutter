@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import '../../../components/date_text_field.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
@@ -255,9 +254,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     child: TableComponent(
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
-                      polRows: getStringList().isEmpty ? [] : getStringList(),
+                      //dummy row
+                      polRows: [],
                       // footerBuilder: (stateManager) {
-                      //    return JournalReport.lazyPaginationFooter(stateManager);
+                      //   return JournalReport.lazyPaginationFooter(stateManager);
                       // },
                       // onSelected: (event) {
                       //   setState(() {
