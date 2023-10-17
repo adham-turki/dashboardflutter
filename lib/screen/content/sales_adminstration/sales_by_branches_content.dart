@@ -142,6 +142,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           items: periods,
           label: _locale.period,
           initialValue: selectedPeriod,
+          hint: "",
           onChanged: (value) {
             print(value);
           },
@@ -156,6 +157,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         ),
         CustomDropDown(
           items: charts,
+          hint: "",
           label: _locale.chartType,
           initialValue: selectedChart,
           onChanged: (value) {
@@ -174,6 +176,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           width: widthMobile,
           label: _locale.period,
           initialValue: selectedPeriod,
+          hint: "",
           onChanged: (value) {
             print(value);
           },
@@ -190,6 +193,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           width: widthMobile,
           label: _locale.chartType,
           initialValue: selectedChart,
+          hint: "",
           onChanged: (value) {
             print(value);
           },

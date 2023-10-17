@@ -10,11 +10,13 @@ class CustomDropDown extends StatefulWidget {
   final double? padding;
   final Key? customKey;
   final List<dynamic>? items;
-  final Function(String? value)? onChanged;
+  final Function(dynamic value)? onChanged;
   final dynamic initialValue;
   final Function(dynamic)? onValidator;
   final bool? showSearchBox;
   final double? height;
+  final String hint;
+  final Future<List<dynamic>> Function(String)? onSearch;
 
   CustomDropDown({
     Key? key,
@@ -25,9 +27,11 @@ class CustomDropDown extends StatefulWidget {
     this.padding,
     this.customKey,
     required this.label,
+    required this.hint,
     this.onChanged,
     this.showSearchBox,
     this.height,
+    this.onSearch,
   }) : super(key: key);
 
   @override
@@ -60,15 +64,16 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   ? null
                   : widget.onValidator!(value),
               items: widget.items ?? [],
+              asyncItems: widget.onSearch,
               popupProps: PopupProps.menu(
                 menuProps: const MenuProps(
                   animationDuration: Duration(milliseconds: 100),
                 ),
                 showSearchBox: showSearchBox,
-                // isFilterOnline: true,
+                isFilterOnline: showSearchBox,
                 constraints: BoxConstraints.tightFor(height: height),
               ),
-              onChanged: (value) {
+              onChanged: (dynamic value) {
                 widget.onChanged!(value);
               },
               selectedItem: widget.initialValue,
