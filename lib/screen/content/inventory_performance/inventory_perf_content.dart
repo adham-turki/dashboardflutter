@@ -156,10 +156,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         "Last Year",
                         "Previous Month",
                       ],
-                      initialValue: "Last Month",
+                      initialValue:
+                          selectedPeriod.isNotEmpty ? selectedPeriod : null,
                       onChanged: (value) {
                         setState(() {
                           periodValue = value;
+                          print("preiod value :${periodValue}");
                           search();
                           // _fetchData();
                         });
@@ -174,18 +176,25 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         "Posted",
                         "Cancelled",
                       ],
-                      initialValue: "ALL(DRAFT, POSTED)",
+                      initialValue:
+                          selectedStatus.isNotEmpty ? selectedStatus : null,
                       height: height * 0.18,
                       onChanged: (value) {
                         setState(() {
                           statusValue = value;
+                          search();
                           // _fetchData();
                         });
                       },
                     ),
                     CustomTextField(
                       controller: numberOfrow,
-                      label: "",
+                      initialValue: hintValue,
+                      label: "Number of rows",
+                      onSubmitted: (value) {
+                        hintValue = value;
+                        search();
+                      },
                     ),
                   ],
                 ),
@@ -197,6 +206,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       controller: _fromDateController,
                       onChanged: (value) {
                         setControllerFromDateText();
+                        search();
                       },
                       onSelected: (value) {
                         setControllerFromDateText();
@@ -209,12 +219,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         setState(() {
                           toDateValue = value;
                           // _fetchData();
+                          search();
                         });
                       },
                       onSelected: (value) {
                         setState(() {
                           toDateValue = value;
                           // _fetchData();
+                          // search();
                         });
                       },
                     ),
@@ -247,11 +259,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       // footerBuilder: (stateManager) {
                       //    return JournalReport.lazyPaginationFooter(stateManager);
                       // },
-                      onSelected: (event) {
-                        setState(() {
-                          data = event.row!.cells['account']!.value.toString();
-                        });
-                      },
+                      // onSelected: (event) {
+                      //   setState(() {
+                      //     data = event.row!.cells['account']!.value.toString();
+                      //   });
+                      // },
                       doubleTab: (event) {
                         showDialog(
                             context: context,
@@ -403,7 +415,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           toDate: endDate,
           voucherStatus: status,
           rownum: int.parse(numberOfrow.text));
-
+      print("statuss:${statusValue}");
       inventoryPerformanceController
           .totalSellDic(searchCriteria2)
           .then((value) {
@@ -423,39 +435,29 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     }
   }
 
-  // List<List<String>> getStringList() {
-  //   // print("ListString ${widget.dataInc.length}");
-  //   //List<List<String>> stringList = [];
-  //   List<PlutoRow> rowList = [];
+  List<List<String>> getStringList1() {
+    List<List<String>> stringList = [];
+    for (int i = 0; i < dataInc.length; i++) {
+      List<String> temp = [
+        (i + 1).toString(),
+        dataInc[i]['code'].toString(),
+        dataInc[i]['name'].toString(),
+        dataInc[i]['currentQty'].toString(),
+        dataInc[i]['soldQty'].toString()
+      ];
+      stringList.add(temp);
+    }
+    return stringList;
+  }
 
-  //   for (int i = 0; i < dataInc.length; i++) {
-  //     print("ListString ${dataInc.length}");
-  //     List<String> temp = [
-  //       (i + 1).toString(),
-  //       dataInc[i]['code'].toString(),
-  //       dataInc[i]['name'].toString(),
-  //       dataInc[i]['currentQty'].toString(),
-  //       dataInc[i]['soldQty'].toString()
-  //     ];
-  //     // stringList.add(temp);
-  //     rowList.add(
-  //       PlutoRow(
-  //         cells: rowList[i].toPluto(),
-  //       ),
-  //     );
-  //   }
-  //   return stringList;
-  // }
   List<PlutoRow> getStringList() {
     List<PlutoRow> rowList = [];
-
     for (int i = 0; i < dataInc.length; i++) {
       InventoryPerformanceModel performanceModel =
           InventoryPerformanceModel.fromJson(dataInc[i]);
       PlutoRow newRow = PlutoRow(cells: performanceModel.toPluto());
       rowList.add(newRow);
     }
-
     return rowList;
   }
 

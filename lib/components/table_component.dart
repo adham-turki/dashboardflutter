@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:universal_html/html.dart' as html;
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
@@ -40,16 +39,16 @@ class _TableComponentState extends State<TableComponent> {
   var _preventContextMenu;
   @override
   void initState() {
-    _preventContextMenu = (html.Event event) => {
-          event.preventDefault(),
-        };
-    html.document.addEventListener('contextmenu', _preventContextMenu);
+    // _preventContextMenu = (html.Event event) => {
+    //       event.preventDefault(),
+    //     };
+    // html.document.addEventListener('contextmenu', _preventContextMenu);
     super.initState();
   }
 
   @override
   void dispose() {
-    html.document.removeEventListener('contextmenu', _preventContextMenu);
+    //  html.document.removeEventListener('contextmenu', _preventContextMenu);
     super.dispose();
   }
 
