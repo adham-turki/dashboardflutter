@@ -146,6 +146,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 Row(
                   children: [
                     CustomDropDown(
+                      hint: "",
                       label: "Period",
                       items: const [
                         "Last Day",
@@ -164,6 +165,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     ),
                     CustomDropDown(
                       label: "Status",
+                      hint: "",
                       items: const [
                         "ALL(DRAFT, POSTED)",
                         "Draft",

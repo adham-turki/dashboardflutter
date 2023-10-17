@@ -1,23 +1,18 @@
 // // ignore_for_file: must_be_immutable
-// import 'package:biproject/Models/branch_model.dart';
-// import 'package:biproject/component/search_drop_down.dart';
-// import 'package:biproject/component/text_field_custom.dart';
+
 // import 'package:flutter/material.dart';
-// import '../../../../../components/drop_down/multi_selection_drop_down.dart';
-// import '../../../../../components/drop_down/search_drop_down.dart';
+// import '../../../../../controller/reports/report_controller.dart';
 // import '../../../../../model/criteria/drop_down_search_criteria.dart';
+// import '../../../../../provider/sales_search_provider.dart';
+// import '../../../../../utils/constants/styles.dart';
 // import '../../../../../utils/func/dates_controller.dart';
-// import '../Models/drop_down_search_criteria.dart';
-// import '../controller/dates_controller.dart';
-// import '../controller/report_controller.dart';
-// import '../provider/sales_search_provider.dart';
-// import 'app_utils.dart';
-// import 'custom_drop_down.dart';
-// import 'date_text_field.dart';
+// import '../../../../../widget/custom_date_picker.dart';
+// import '../../../../../widget/custom_textfield.dart';
+// import '../../../../../widget/drop_down/custom_dropdown.dart';
+// import '../../../../../widget/drop_down/multi_selection_drop_down.dart';
+// import '../../../../../widget/drop_down/search_drop_down.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import 'package:provider/provider.dart';
-
-// import 'drop_down_search.dart';
 
 // class CriteriaWidget extends StatefulWidget {
 //   TextEditingController fromDate;
@@ -30,8 +25,6 @@
 // }
 
 // class _CriteriaWidgetState extends State<CriteriaWidget> {
-//   var utils = Components();
-
 //   // TextEditingController fromDate = TextEditingController();
 //   // TextEditingController toDate = TextEditingController();
 
@@ -129,7 +122,7 @@
 //     super.didChangeDependencies();
 //   }
 
-//   var utils = Components();
+//   // var utils = Components();
 //   Future<void> _showCalendar() async {
 //     final DateTime? pickedDate = await showDatePicker(
 //         context: context,
@@ -259,49 +252,16 @@
 //                     child: SelectableText(
 //                       maxLines: 1,
 //                       _locale.fromDate,
-//                       style: utils.twelve400TextStyle(Colors.black),
+//                       style: twelve400TextStyle(Colors.black),
 //                     ),
 //                   ),
 //                   const SizedBox(
 //                     width: 5,
 //                   ),
-//                   MediaQuery.of(context).size.width > 800
-//                       ? DateField(
-//                           controller: widget.fromDate,
-//                           isFromTrans: true,
-//                           // onChange: (text) {
-//                           //   print("object");
-//                           //   String startDate = DatesController()
-//                           //       .formatDate(widget.fromDate.text);
-//                           //   String endDate = DatesController()
-//                           //       .formatDate(widget.toDate.text);
-
-//                           //   readProvider.setFromDate(startDate);
-//                           //   readProvider.setToDate(endDate);
-//                           // },
-//                         )
-//                       : GestureDetector(
-//                           onTap: () {
-//                             _showCalendar();
-//                           }, //
-//                           child: Container(
-//                             height: 30,
-//                             width: MediaQuery.of(context).size.width * 0.26,
-//                             decoration: BoxDecoration(
-//                               color: Colors.grey[200],
-//                               borderRadius: BorderRadius.circular(5.0),
-//                             ),
-//                             padding: const EdgeInsets.symmetric(
-//                                 vertical: 4, horizontal: 10),
-//                             child: Text(
-//                               maxLines: 1,
-//                               _selectedDate != null
-//                                   ? "${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}"
-//                                   : _locale.select,
-//                               style: const TextStyle(color: Colors.black),
-//                             ),
-//                           ),
-//                         ),
+//                   CustomDatePicker(
+//                     controller: widget.fromDate,
+//                     label: _locale.fromDate,
+//                   )
 //                 ],
 //               ),
 //               const SizedBox(
@@ -316,16 +276,17 @@
 //                     child: SelectableText(
 //                       maxLines: 1,
 //                       _locale.toDate,
-//                       style: utils.twelve400TextStyle(Colors.black),
+//                       style: twelve400TextStyle(Colors.black),
 //                     ),
 //                   ),
 //                   const SizedBox(
 //                     width: 5,
 //                   ),
 //                   MediaQuery.of(context).size.width > 800
-//                       ? DateField(
+//                       ? CustomDatePicker(
 //                           controller: widget.toDate,
-//                           isFromTrans: true,
+//                           label: _locale.toDate,
+//                           // isFromTrans: true,
 //                           // onChange: (text) {
 //                           //   String startDate = DatesController()
 //                           //       .formatDate(widget.fromDate.text);
@@ -384,7 +345,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.stockCategoryLevel("1"),
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleStkCateg1 == false
 //                       ? Row(
@@ -393,7 +354,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -470,7 +431,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -503,7 +464,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -513,7 +474,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -593,7 +554,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.stockCategoryLevel("3"),
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleStkCateg3 == false
 //                       ? Row(
@@ -601,7 +562,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -677,7 +638,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -710,7 +671,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -720,7 +681,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -817,7 +778,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.customer,
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleCustomer == false
 //                       ? Row(
@@ -825,7 +786,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -885,7 +846,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -919,7 +880,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -929,7 +890,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -1009,7 +970,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.stock,
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleStock == false
 //                       ? Row(
@@ -1017,7 +978,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -1075,7 +1036,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -1108,7 +1069,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -1118,7 +1079,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -1335,7 +1296,6 @@
 
 //   var selectedFromCustomerCategoryCode = "";
 //   var selectedToCustomerCategoryCode = "";
-//   var utils = Components();
 
 //   bool valueMultipleStkCategory2 = false;
 //   bool valueMultipleBranches = false;
@@ -1415,7 +1375,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.branch,
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleBranches == false
 //                       ? Row(
@@ -1423,18 +1383,18 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
 //                             ),
-//                             CustomSearchDropDown(
+//                             CustomDropDown(
 //                               width: MediaQuery.of(context).size.width * 0.2,
 //                               // items: branchesList,
 //                               hint: selectedFromBranches.isNotEmpty
 //                                   ? selectedFromBranches
 //                                   : _locale.select,
-//                               value: selectedFromBranches.isNotEmpty
+//                               initialValue: selectedFromBranches.isNotEmpty
 //                                   ? selectedFromBranches
 //                                   : null,
 //                               onChanged: (value) {
@@ -1482,7 +1442,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -1515,7 +1475,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -1525,7 +1485,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -1601,7 +1561,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.stockCategoryLevel("2"),
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleStkCategory2 == false
 //                       ? Row(
@@ -1609,7 +1569,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -1668,7 +1628,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -1701,7 +1661,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -1711,7 +1671,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -1790,7 +1750,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.supplier(""),
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleSupplier == false
 //                       ? Row(
@@ -1798,7 +1758,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -1857,7 +1817,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -1890,7 +1850,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -1900,7 +1860,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -1977,7 +1937,7 @@
 //                 children: [
 //                   Text(
 //                     _locale.customerCategory,
-//                     style: utils.twelve400TextStyle(Colors.black),
+//                     style: twelve400TextStyle(Colors.black),
 //                   ),
 //                   valueMultipleCustomerCategory == false
 //                       ? Row(
@@ -1985,7 +1945,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.from,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 10,
@@ -2045,7 +2005,7 @@
 //                                 child: SelectableText(
 //                                   maxLines: 1,
 //                                   _locale.selectAll,
-//                                   style: utils.twelve400TextStyle(Colors.black),
+//                                   style: twelve400TextStyle(Colors.black),
 //                                 ),
 //                               ),
 //                             )
@@ -2078,7 +2038,7 @@
 //                           }),
 //                       Text(
 //                         _locale.multiple,
-//                         style: utils.twelve400TextStyle(Colors.black),
+//                         style: twelve400TextStyle(Colors.black),
 //                       ),
 //                     ],
 //                   ),
@@ -2088,7 +2048,7 @@
 //                           children: [
 //                             Text(
 //                               _locale.to,
-//                               style: utils.twelve400TextStyle(Colors.black),
+//                               style: twelve400TextStyle(Colors.black),
 //                             ),
 //                             const SizedBox(
 //                               width: 5,
@@ -2162,75 +2122,65 @@
 //           padding: const EdgeInsets.all(10.0),
 //           child: Row(
 //             children: [
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     _locale.campaignNo,
-//                     style: utils.twelve400TextStyle(Colors.black),
-//                   ),
-//                   const SizedBox(
-//                     height: 5,
-//                   ),
-//                   Container(
-//                     height: 30,
-//                     width: MediaQuery.of(context).size.width * 0.15,
-//                     decoration: BoxDecoration(
-//                       color: Colors.grey[200],
-//                       borderRadius: BorderRadius.circular(5.0),
-//                     ),
-//                     padding:
-//                         const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-//                     child: TextFieldCustom(
-//                       controller: campaignNoController,
-//                       onChanged: (text) {
-//                         readProvider.setCampaignNo(campaignNoController.text);
-//                       },
-//                       decoration: const InputDecoration(
-//                         border: InputBorder.none,
-//                       ),
-//                     ),
-//                   ),
-//                 ],
+//               // Text(
+//               //   _locale.campaignNo,
+//               //   style: twelve400TextStyle(Colors.black),
+//               // ),
+//               // const SizedBox(
+//               //   height: 5,
+//               // ),
+//               // Container(
+//               //   height: 30,
+//               //   width: MediaQuery.of(context).size.width * 0.15,
+//               //   decoration: BoxDecoration(
+//               //     color: Colors.grey[200],
+//               //     borderRadius: BorderRadius.circular(5.0),
+//               //   ),
+//               //   padding:
+//               //       const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+//               CustomTextField(
+//                 label: _locale.campaignNo,
+//                 controller: campaignNoController,
+//                 onSubmitted: (text) {
+//                   readProvider.setCampaignNo(campaignNoController.text);
+//                 },
+//                 // decoration: const InputDecoration(
+//                 //   border: InputBorder.none,
+//                 // ),
+//                 // ),
 //               ),
 //               const SizedBox(
 //                 width: 20,
 //               ),
-//               Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   Text(
-//                     _locale.modelNo,
-//                     style: utils.twelve400TextStyle(Colors.black),
-//                   ),
-//                   const SizedBox(
-//                     height: 5,
-//                   ),
-//                   GestureDetector(
-//                     child: Container(
-//                       height: 30,
-//                       width: MediaQuery.of(context).size.width * 0.15,
-//                       decoration: BoxDecoration(
-//                         color: Colors.grey[200],
-//                         borderRadius: BorderRadius.circular(5.0),
-//                       ),
-//                       padding: const EdgeInsets.symmetric(
-//                           vertical: 4, horizontal: 10),
-//                       child: TextFieldCustom(
-//                         controller: modelNoController,
-//                         onChanged: (text) {
-//                           print(modelNoController.text);
+//               // Text(
+//               //   _locale.modelNo,
+//               //   style: twelve400TextStyle(Colors.black),
+//               // ),
+//               // const SizedBox(
+//               //   height: 5,
+//               // ),
+//               // Container(
+//               //   height: 30,
+//               //   width: MediaQuery.of(context).size.width * 0.15,
+//               //   decoration: BoxDecoration(
+//               //     color: Colors.grey[200],
+//               //     borderRadius: BorderRadius.circular(5.0),
+//               //   ),
+//               //   padding: const EdgeInsets.symmetric(
+//               //       vertical: 4, horizontal: 10),
+//               CustomTextField(
+//                 label: _locale.modelNo,
+//                 controller: modelNoController,
+//                 onSubmitted: (text) {
+//                   print(modelNoController.text);
 
-//                           readProvider.setModelNo(modelNoController.text);
-//                           print("provider ${readProvider.getModelNo}");
-//                         },
-//                         decoration: const InputDecoration(
-//                           border: InputBorder.none,
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 ],
+//                   readProvider.setModelNo(modelNoController.text);
+//                   print("provider ${readProvider.getModelNo}");
+//                 },
+//                 // decoration: const InputDecoration(
+//                 //   border: InputBorder.none,
+//                 // ),
+//                 // ),
 //               ),
 //             ],
 //           ),
