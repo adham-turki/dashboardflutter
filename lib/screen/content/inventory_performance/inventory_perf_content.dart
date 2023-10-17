@@ -7,6 +7,7 @@ import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
+import '../../../model/inventory_performance/inventory_performance_model.dart';
 import '../../../model/pie_chart_data_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/styles.dart';
@@ -213,24 +214,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         });
                       },
                     ),
-                    SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.22,
-                        child: blueButton(
-                          height: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .05
-                              : MediaQuery.of(context).size.height * .04,
-                          text: _locale.search,
-                          fontWeight: FontWeight.w400,
-                          textColor: Colors.white,
-                          borderRadius: 5.0,
-                          onPressed: () {
-                            search();
-                            setState(() {});
-                          },
-                          fontSize: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .016
-                              : MediaQuery.of(context).size.height * .011,
-                        ))
                   ],
                 ),
               ],
@@ -240,43 +223,102 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                width: width * 0.75,
-                height: height * 0.7,
-                child: TableComponent(
-                  plCols: [],
-                  polRows: [],
-                  // footerBuilder: (stateManager) {
-                  //    return JournalReport.lazyPaginationFooter(stateManager);
-                  // },
-                  onSelected: (event) {
-                    setState(() {
-                      data = event.row!.cells['account']!.value.toString();
-                    });
-                  },
-                  doubleTab: (event) {
-                    showDialog(
-                        context: context,
-                        builder: (builder) {
-                          return const AlertDialog(
-                            title: Text("ACTION"),
-                          );
+              Column(
+                children: [
+                  SelectableText(
+                    maxLines: 1,
+                    _locale.topOfInventoryPerformance,
+                    style: eighteen500TextStyle(Colors.green),
+                  ),
+                  SizedBox(
+                    width: width * 0.37,
+                    height: height * 0.7,
+                    child: TableComponent(
+                      plCols: InventoryPerformanceModel.getColumns(
+                          AppLocalizations.of(context)),
+                      polRows: [],
+                      // footerBuilder: (stateManager) {
+                      //    return JournalReport.lazyPaginationFooter(stateManager);
+                      // },
+                      onSelected: (event) {
+                        setState(() {
+                          data = event.row!.cells['account']!.value.toString();
                         });
-                  },
-                  rightClickTap: (event) {
-                    showDialog(
-                        context: context,
-                        builder: (builder) {
-                          return const AlertDialog(
-                            title: Text("ACTION"),
-                          );
+                      },
+                      doubleTab: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      rightClickTap: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      // headerBuilder: (event) {
+                      //   return headerTableSection(data);
+                      // },
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  SelectableText(
+                    maxLines: 1,
+                    _locale.leastOfInventoryPerformance,
+                    style: eighteen500TextStyle(Colors.red),
+                  ),
+                  SizedBox(
+                    width: width * 0.37,
+                    height: height * 0.7,
+                    child: TableComponent(
+                      plCols: InventoryPerformanceModel.getColumns(
+                          AppLocalizations.of(context)),
+                      polRows: [],
+                      // footerBuilder: (stateManager) {
+                      //    return JournalReport.lazyPaginationFooter(stateManager);
+                      // },
+                      onSelected: (event) {
+                        setState(() {
+                          data = event.row!.cells['account']!.value.toString();
                         });
-                  },
-                  // headerBuilder: (event) {
-                  //   return headerTableSection(data);
-                  // },
-                ),
+                      },
+                      doubleTab: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      rightClickTap: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      // headerBuilder: (event) {
+                      //   return headerTableSection(data);
+                      // },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
