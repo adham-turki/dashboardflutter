@@ -28,30 +28,55 @@ class _ContentHeaderState extends State<ContentHeader> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Consumer<ScreenContentProvider>(
-                  builder: ((context, value, child) {
-                return Text(
-                  provider.getTitle(),
-                  style: TextStyle(
-                    fontSize:
-                        Responsive.isDesktop(context) ? width * 0.015 : 18,
-                    fontWeight: FontWeight.w500,
-                  ),
-                );
-              })),
-              const Text(
-                "Base Currency: ILS",
-                style: TextStyle(
-                  fontSize: 18,
+          Responsive.isDesktop(context)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Consumer<ScreenContentProvider>(
+                        builder: ((context, value, child) {
+                      return Text(
+                        provider.getTitle(),
+                        style: TextStyle(
+                          fontSize: Responsive.isDesktop(context)
+                              ? width * 0.015
+                              : 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    })),
+                    const Text(
+                      "Base Currency: ILS",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Consumer<ScreenContentProvider>(
+                        builder: ((context, value, child) {
+                      return Text(
+                        provider.getTitle(),
+                        style: TextStyle(
+                          fontSize: Responsive.isDesktop(context)
+                              ? width * 0.015
+                              : 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      );
+                    })),
+                    const Text(
+                      "Base Currency: ILS",
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
           SizedBox(
-            height: height * 0.05,
+            height: height * 0.04,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

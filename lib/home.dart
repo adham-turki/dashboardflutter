@@ -53,12 +53,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: height * 0.3,
+                height: Responsive.isDesktop(context)
+                    ? height * 0.3
+                    : height * 0.25,
                 child: const ContentHeader(),
               ),
               SizedBox(
                 height:
-                    Responsive.isDesktop(context) ? height * .7 : height * 0.85,
+                    Responsive.isDesktop(context) ? height * .7 : height * 0.66,
                 width: width * 0.835,
                 child: SingleChildScrollView(
                   child: Consumer<ScreenContentProvider>(
