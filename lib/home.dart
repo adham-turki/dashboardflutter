@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
       case 8:
         return const AgingReceivable();
       case 9:
-        return Container();
+        return const ChequesAndBankContent();
       case 10:
         return Container();
       case 11:

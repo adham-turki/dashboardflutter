@@ -79,7 +79,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   ];
 
   SearchCriteria criteria = SearchCriteria();
-  List<PlutoRow> polRows = [];
+  List<PlutoRow> polTopRows = [];
 
   @override
   void initState() {
@@ -132,7 +132,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    print("INSIDE BUILD POLroWS: ${polRows.length}");
+    print("INSIDE BUILD POLToproWS: ${polTopRows.length}");
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -197,11 +197,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                             // fetch(PlutoLazyPaginationRequest(
                             //     page: criteria.page!));
                             // });
-                            // polRows = [];
+                            // polTopRows = [];
                             setState(() {
                               hintValue = value;
                               criteria.rownum = int.parse(numberOfrow.text);
-                              // polRows = [];
+                              // polTopRows = [];
                             });
                           },
                         ),
@@ -258,8 +258,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       key: UniqueKey(),
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
-                      //dummy row
-                      polRows: polRows,
+                      polRows: polTopRows,
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
                       },
@@ -282,9 +281,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       polRows: [],
-                      // footerBuilder: (stateManager) {
-                      //   return lazyPaginationFooterLeast(stateManager);
-                      // },
+                      footerBuilder: (stateManager) {
+                        return lazyPaginationFooterLeast(stateManager);
+                      },
                     ),
                   ),
                 ],
@@ -359,7 +358,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
-    print("INSIDE PLUTO LAZY: -----");
     return PlutoLazyPagination(
       initialPage: 1,
       initialFetch: true,
@@ -375,7 +373,45 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
-    print("INSIDE FETCH");
+    int page = request.page;
+
+    //To send the number of page to the JSON Object
+    criteria.page = page;
+
+    List<PlutoRow> topList = [];
+    print("from date critiria :${criteria.fromDate}");
+    List<InventoryPerformanceModel> invList =
+        await inventoryPerformanceController.totalSellDic(criteria);
+
+    int totalPage = 1;
+
+    for (int i = 0; i < invList.length; i++) {
+      topList.add(invList[i].toPluto());
+    }
+
+    return PlutoLazyPaginationResponse(
+      totalPage: totalPage,
+      rows: topList,
+    );
+  }
+
+  PlutoLazyPagination lazyPaginationFooterLeast(
+      PlutoGridStateManager stateManager) {
+    return PlutoLazyPagination(
+      initialPage: 1,
+      initialFetch: true,
+      pageSizeToMove: null,
+      fetchWithSorting: false,
+      fetchWithFiltering: false,
+      fetch: (request) {
+        return fetchLeast(request);
+      },
+      stateManager: stateManager,
+    );
+  }
+
+  Future<PlutoLazyPaginationResponse> fetchLeast(
+      PlutoLazyPaginationRequest request) async {
     int page = request.page;
 
     //To send the number of page to the JSON Object
