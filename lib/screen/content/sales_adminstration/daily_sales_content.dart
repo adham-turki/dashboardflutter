@@ -161,7 +161,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
               ),
             ),
             SizedBox(
-              height: height * 0.02,
+              height: height * 0.01,
             ),
             Center(
               child: GestureDetector(
@@ -211,9 +211,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
                       style: twelve400TextStyle(Colors.black),
                     ))
                 : Container(),
-            SizedBox(
-              height: height * 0.02,
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -236,60 +233,64 @@ class _DailySalesContentState extends State<DailySalesContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                right: 20,
+                                bottom: 0,
+                                child: SizedBox(
+                                  width: 50,
+                                  height: 0,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton2(
+                                      key: dropdownKey,
+                                      isExpanded: true,
+                                      iconStyleData: const IconStyleData(
+                                        iconDisabledColor: Colors.transparent,
+                                        iconEnabledColor: Colors.transparent,
                                       ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
+                                      dropdownStyleData: DropdownStyleData(
+                                        width: 120,
+                                        padding: EdgeInsets.zero,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(14),
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      items: items
+                                          .map(
+                                            (item) => DropdownMenuItem<String>(
+                                              alignment: Alignment.center,
+                                              value: item,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    item,
+                                                    style: twelve400TextStyle(
+                                                        Colors.black),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
+                                          )
+                                          .toList(),
+                                      onChanged: (value) {},
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
+                              GestureDetector(
+                                  onTap: () {
+                                    dropdownKey.currentState!.callTap();
+                                  },
+                                  child: const Icon(Icons.list)),
+                            ],
+                          ),
                         ),
                       ],
                     ),
