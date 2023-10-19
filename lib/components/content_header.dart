@@ -5,6 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
+import 'customCard.dart';
+
 class ContentHeader extends StatefulWidget {
   const ContentHeader({super.key});
 
@@ -14,33 +16,75 @@ class ContentHeader extends StatefulWidget {
 
 class _ContentHeaderState extends State<ContentHeader> {
   double width = 0;
-
+  double height = 0;
   late ScreenContentProvider provider;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
 
     provider = context.read<ScreenContentProvider>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          Consumer<ScreenContentProvider>(builder: ((context, value, child) {
-            return Text(
-              provider.getTitle(),
-              style: TextStyle(
-                fontSize: Responsive.isDesktop(context) ? width * 0.015 : 18,
-                fontWeight: FontWeight.w500,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Consumer<ScreenContentProvider>(
+                  builder: ((context, value, child) {
+                return Text(
+                  provider.getTitle(),
+                  style: TextStyle(
+                    fontSize:
+                        Responsive.isDesktop(context) ? width * 0.015 : 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                );
+              })),
+              const Text(
+                "Base Currency: ILS",
+                style: TextStyle(
+                  fontSize: 18,
+                ),
               ),
-            );
-          })),
-          const Text(
-            "Base Currency: ILS",
-            style: TextStyle(
-              fontSize: 18,
-            ),
+            ],
+          ),
+          SizedBox(
+            height: height * 0.05,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              CustomCard(
+                gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
+                title: '42136',
+                subtitle: 'Mon-Fri',
+                label: 'Overall Sale',
+                icon: Icons.attach_money, // Provide the actual path to the icon
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              CustomCard(
+                gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
+                title: '1446',
+                subtitle: 'Mon-Fri',
+                label: 'Total Visited',
+                icon: Icons.abc, // Provide the actual path to the icon
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              CustomCard(
+                gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
+                title: '61%',
+                subtitle: 'Mon-Fri',
+                label: 'Overall Growth',
+                icon: Icons.bar_chart, // Provide the actual path to the icon
+              ),
+            ],
           ),
         ],
       ),

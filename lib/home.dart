@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
@@ -52,13 +53,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: height * 0.08,
+                height: height * 0.3,
                 child: const ContentHeader(),
               ),
               SizedBox(
-                height: Responsive.isDesktop(context)
-                    ? height * 0.9
-                    : height * 0.85,
+                height:
+                    Responsive.isDesktop(context) ? height * .7 : height * 0.85,
                 width: width * 0.835,
                 child: SingleChildScrollView(
                   child: Consumer<ScreenContentProvider>(
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
       case 8:
         return const AgingReceivable();
       case 9:
-        return Container();
+        return const ChequesAndBankContent();
       case 10:
         return Container();
       case 11:
