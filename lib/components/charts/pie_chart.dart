@@ -2,9 +2,6 @@ import 'package:bi_replicate/model/custom_scroll_behavior.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../model/chart/pie_chart_model.dart';
 import 'indicator.dart';
 

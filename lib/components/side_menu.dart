@@ -3,8 +3,7 @@ import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/widget/sidebar/tab_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 import 'package:provider/provider.dart';
 
 import '../utils/constants/menu.dart';
