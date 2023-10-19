@@ -85,12 +85,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   void initState() {
     fromDate.text = todayDate;
     toDate.text = nextMonth;
-    criteria = SearchCriteria(
-      fromDate: fromDate.text,
-      toDate: toDate.text,
-      voucherStatus: -100,
-      rownum: 10,
-    );
+
+    criteria.fromDate = todayDate;
+    criteria.toDate = nextMonth;
+    criteria.voucherStatus = -100;
+    criteria.rownum = 10;
+
     super.initState();
   }
 
@@ -126,10 +126,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   String? toJCodeValue;
   String? periodValue;
   double height = 0;
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
+    print("INSIDE BUILD POLroWS: ${polRows.length}");
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -138,6 +141,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           width: width * 0.76,
           child: Column(
             children: [
+              const HeaderWidget(),
               Container(
                 width: width * 0.7,
                 decoration: borderDecoration,
@@ -183,12 +187,21 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           initialValue: numberOfrow.text,
                           label: "Number of rows",
                           onChanged: (value) {
+                            // setState(() {
+
+                            // fetch(PlutoLazyPaginationRequest(
+                            //     page: criteria.page!));
+
+                            // print("Hello");
+                            // print("CRITERIA BEFORE JSON: ${criteria.toJson()}");
+                            // fetch(PlutoLazyPaginationRequest(
+                            //     page: criteria.page!));
+                            // });
+                            // polRows = [];
                             setState(() {
                               hintValue = value;
                               criteria.rownum = int.parse(numberOfrow.text);
-                              print("HELELELELELEOOOO");
-                              // fetch(PlutoLazyPaginationRequest(
-                              //     page: criteria.page!));
+                              // polRows = [];
                             });
                           },
                         ),
@@ -242,6 +255,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     width: width * 0.37,
                     height: height * 0.7,
                     child: TableComponent(
+                      key: UniqueKey(),
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       //dummy row
@@ -249,32 +263,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
                       },
-                      // onSelected: (event) {
-                      //   setState(() {
-                      //     data = event.row!.cells['account']!.value.toString();
-                      //   });
-                      // },
-                      doubleTab: (event) {
-                        showDialog(
-                            context: context,
-                            builder: (builder) {
-                              return const AlertDialog(
-                                title: Text("ACTION"),
-                              );
-                            });
-                      },
-                      rightClickTap: (event) {
-                        showDialog(
-                            context: context,
-                            builder: (builder) {
-                              return const AlertDialog(
-                                title: Text("ACTION"),
-                              );
-                            });
-                      },
-                      // headerBuilder: (event) {
-                      //   return headerTableSection(data);
-                      // },
                     ),
                   ),
                 ],
@@ -290,37 +278,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     width: width * 0.37,
                     height: height * 0.7,
                     child: TableComponent(
+                      key: UniqueKey(),
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       polRows: [],
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooterLeast(stateManager);
-                      },
-                      // onSelected: (event) {
-                      //   setState(() {
-                      //     data = event.row!.cells['account']!.value.toString();
-                      //   });
-                      // },
-                      doubleTab: (event) {
-                        showDialog(
-                            context: context,
-                            builder: (builder) {
-                              return const AlertDialog(
-                                title: Text("ACTION"),
-                              );
-                            });
-                      },
-                      rightClickTap: (event) {
-                        showDialog(
-                            context: context,
-                            builder: (builder) {
-                              return const AlertDialog(
-                                title: Text("ACTION"),
-                              );
-                            });
-                      },
-                      // headerBuilder: (event) {
-                      //   return headerTableSection(data);
+                      // footerBuilder: (stateManager) {
+                      //   return lazyPaginationFooterLeast(stateManager);
                       // },
                     ),
                   ),
@@ -338,8 +301,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       fromDateValue = fromDate.text;
       String startDate = DatesController().formatDate(fromDateValue!);
       criteria.fromDate = startDate;
-      print("startdate1 : ${startDate}");
-      print("startDate2 :${criteria.fromDate}");
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -348,6 +310,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       toDateValue = toDate.text;
       String endDate = DatesController().formatDate(toDateValue!);
       criteria.toDate = endDate;
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -390,9 +353,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           .formatDate(DatesController().todayDate())
           .toString();
     }
+
+    criteria.fromDate = fromDate.text;
+    criteria.toDate = toDate.text;
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
+    print("INSIDE PLUTO LAZY: -----");
     return PlutoLazyPagination(
       initialPage: 1,
       initialFetch: true,
@@ -408,88 +375,32 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
+    print("INSIDE FETCH");
     int page = request.page;
 
     //To send the number of page to the JSON Object
     criteria.page = page;
+    print(criteria.toJson());
 
-    print("CRITERIA date NUM: ${criteria.fromDate}");
-    print(
-        "criteria.voucherStatus inside fetch data :${criteria.voucherStatus}");
-    InventoryPerformanceController controller =
-        InventoryPerformanceController();
     List<PlutoRow> topList = [];
 
     List<InventoryPerformanceModel> invList =
-        await controller.totalSellInc(criteria);
+        await inventoryPerformanceController.totalSellInc(criteria);
+
+    print(invList.length);
 
     int totalPage = 1;
 
     for (int i = 0; i < invList.length; i++) {
+      print("object");
       topList.add(invList[i].toPluto());
     }
 
-    setState(() {
-      polRows = topList; // Update polRows with the new data
-    });
-    print("invList.length ${invList.length}");
-    print("invList ${invList}");
+    print("TOP LIST: ${topList.length}");
 
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
       rows: topList,
-    );
-  }
-
-  PlutoLazyPagination lazyPaginationFooterLeast(
-      PlutoGridStateManager stateManager) {
-    return PlutoLazyPagination(
-      initialPage: 1,
-      initialFetch: true,
-      pageSizeToMove: null,
-      fetchWithSorting: false,
-      fetchWithFiltering: false,
-      fetch: (request) {
-        return fetchLeast(request);
-      },
-      stateManager: stateManager,
-    );
-  }
-
-  Future<PlutoLazyPaginationResponse> fetchLeast(
-      PlutoLazyPaginationRequest request) async {
-    int page = request.page;
-
-    //To send the number of page to the JSON Object
-    criteria.page = page;
-
-    print("CRITERIA date NUM: ${criteria.fromDate}");
-    print(
-        "criteria.voucherStatus inside fetch data :${criteria.voucherStatus}");
-
-    print("CRITERIA ROWNUM: ${criteria.rownum}");
-    InventoryPerformanceController controller =
-        InventoryPerformanceController();
-    List<PlutoRow> leastList = [];
-
-    List<InventoryPerformanceModel> invList =
-        await controller.totalSellDic(criteria);
-
-    int totalPage = 1;
-
-    for (int i = 0; i < invList.length; i++) {
-      leastList.add(invList[i].toPluto());
-    }
-
-    // setState(() {
-    //   polRows = leastList; // Update polRows with the new data
-    // });
-    print("invList.length ${invList.length}");
-    print("invList ${invList}");
-
-    return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
-      rows: leastList,
     );
   }
 }

@@ -14,8 +14,10 @@ class TableComponent extends StatefulWidget {
   final Function(PlutoGridOnRowDoubleTapEvent event)? doubleTab;
   final Function(PlutoGridOnRowSecondaryTapEvent event)? rightClickTap;
   final Function(PlutoGridStateManager event)? headerBuilder;
+  final Key key;
   const TableComponent({
-    super.key,
+    required this.key,
+    // super.key,
     required this.plCols,
     required this.polRows,
     this.onSelected,
@@ -24,7 +26,6 @@ class TableComponent extends StatefulWidget {
     this.rightClickTap,
     this.headerBuilder,
   });
-
   @override
   State<TableComponent> createState() => _TableComponentState();
 }
@@ -34,7 +35,6 @@ class _TableComponentState extends State<TableComponent> {
   double height = 0;
   double scrollThickness = 20;
   double scrollRadius = 10;
-
   late final PlutoGridStateManager stateManager;
   var _preventContextMenu;
   @override
@@ -56,10 +56,9 @@ class _TableComponentState extends State<TableComponent> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
     List<PlutoColumn> polCols = widget.plCols;
     List<PlutoRow> polRows = widget.polRows;
-
+    print("INSIDE TABLE COMP ROWS: ${polRows.length}");
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
         scrollbar: PlutoGridScrollbarConfig(
