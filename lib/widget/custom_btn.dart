@@ -30,28 +30,31 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return ElevatedButton(
-      onPressed: widget.onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(widget.borderRadius ?? 3),
+    return SizedBox(
+      width: Responsive.isDesktop(context) ? width * 0.13 : width * 0.16,
+      child: ElevatedButton(
+        onPressed: widget.onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(widget.borderRadius ?? 3),
+          ),
+          padding: EdgeInsets.zero,
+          fixedSize: Size(
+              Responsive.isDesktop(context) ? width * 0.07 : width * 0.3,
+              height * 0.05),
         ),
-        padding: EdgeInsets.zero,
-        fixedSize: Size(
-            Responsive.isDesktop(context) ? width * 0.07 : width * 0.3,
-            height * 0.05),
-      ),
-      child: Container(
-        alignment: Alignment.center,
-        padding: const EdgeInsets.all(10),
-        child: Text(
-          maxLines: 1,
-          widget.text.toString(),
-          style: TextStyle(
-            color: widget.textColor ?? Colors.black,
-            fontSize: widget.fontSize ?? 13,
-            fontWeight: widget.fontWeight ?? FontWeight.bold,
+        child: Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            maxLines: 1,
+            widget.text.toString(),
+            style: TextStyle(
+              color: widget.textColor ?? Colors.black,
+              fontSize: widget.fontSize ?? 13,
+              fontWeight: widget.fontWeight ?? FontWeight.bold,
+            ),
           ),
         ),
       ),

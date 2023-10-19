@@ -30,7 +30,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  bool isTablet = false;
+  // bool isMobile = false;
   bool isMobile = false;
   @override
   void initState() {
@@ -42,21 +42,21 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    isTablet = Responsive.isTablet(context);
+    isMobile = Responsive.isMobile(context);
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
       ),
-      padding: const EdgeInsets.all(10.0),
-      width: isTablet ? width * 0.9 : width * 0.85,
-      child: isTablet
+      padding: const EdgeInsets.all(20.0),
+      width: width * 0.7,
+      child: isMobile
           ? Column(
               children: [
                 LeftWidget(fromDate: widget.fromDate, toDate: widget.toDate),
-                const SizedBox(
-                  width: 5,
+                SizedBox(
+                  height: height * .01,
                 ),
                 RightWidget(fromDate: widget.fromDate, toDate: widget.toDate),
               ],
@@ -124,7 +124,7 @@ class _LeftWidgetState extends State<LeftWidget> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  bool isTablet = false;
+  // bool isMobile = false;
   bool isMobile = false;
   @override
   void didChangeDependencies() {
@@ -134,72 +134,13 @@ class _LeftWidgetState extends State<LeftWidget> {
     super.didChangeDependencies();
   }
 
-  // var utils = Components();
-  Future<void> _showCalendar() async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate ?? DateTime.now(),
-        firstDate: DateTime(1950),
-        //  : DateTime.now(),
-        lastDate: DateTime(2101));
-
-    if (pickedDate != null && pickedDate != _selectedDate) {
-      setState(() {
-        _selectedDate = pickedDate;
-        String day = _selectedDate!.day.toString();
-        String month = _selectedDate!.month.toString();
-
-        if (_selectedDate!.day.toString().length == 1) {
-          day = "0${_selectedDate!.day.toString()}";
-        }
-        if (_selectedDate!.month.toString().length == 1) {
-          month = "0${_selectedDate!.month.toString()}";
-        }
-        widget.fromDate.text = '${_selectedDate!.year.toString()}-$month-$day';
-        print("selected $_selectedDate");
-        print("fromdate ${widget.fromDate.text}");
-
-        readProvider
-            .setFromDate(DatesController().formatDate(widget.fromDate.text));
-      });
-    }
-  }
-
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
-  Future<void> showCalendar2() async {
-    final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate2 ?? DateTime.now(),
-        firstDate: DateTime(1950),
-        //  : DateTime.now(),
-        lastDate: DateTime(2101));
-
-    if (pickedDate != null && pickedDate != _selectedDate2) {
-      setState(() {
-        _selectedDate2 = pickedDate;
-        String day = _selectedDate2!.day.toString();
-        String month = _selectedDate2!.month.toString();
-
-        if (_selectedDate2!.day.toString().length == 1) {
-          day = "0${_selectedDate2!.day.toString()}";
-        }
-        if (_selectedDate2!.month.toString().length == 1) {
-          month = "0${_selectedDate2!.month.toString()}";
-        }
-        widget.toDate.text = '${_selectedDate2!.year.toString()}-$month-$day';
-        readProvider
-            .setToDate(DatesController().formatDate(widget.toDate.text));
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    isTablet = Responsive.isTablet(context);
+    // isMobile = Responsive.isMobile(context);
+    isMobile = Responsive.isMobile(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     String nextMonth = DatesController().formatDateReverse(DatesController()
@@ -215,8 +156,6 @@ class _LeftWidgetState extends State<LeftWidget> {
         ? DatesController().formatDateReverse(readProvider.getToDate.toString())
         : nextMonth;
 
-    _selectedDate = DateTime.parse(widget.fromDate.text);
-    _selectedDate2 = DateTime.parse(widget.toDate.text);
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
     selectedToStkCategory1 = readProvider.getToCateg1!;
@@ -240,12 +179,52 @@ class _LeftWidgetState extends State<LeftWidget> {
     valueSelectAllStkCateg3 = readProvider.getCheckAllStockCategory3!;
     valueSelectAllCustomer = readProvider.getCheckAllCustomer!;
     valueSelectAllStock = readProvider.getCheckAllStock!;
-    print("readProv ${readProvider.getStkCat1List!}");
 
     return Column(
       children: [
         Container(
-          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+              color: Colors.grey,
+            ),
+          ),
+          padding: const EdgeInsets.all(2),
+          child: isDesktop
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomDatePicker(
+                      controller: widget.fromDate,
+                      label: _locale.fromDate,
+                    ),
+                    CustomDatePicker(
+                      controller: widget.toDate,
+                      label: _locale.toDate,
+                    )
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomDatePicker(
+                      controller: widget.fromDate,
+                      label: _locale.fromDate,
+                    ),
+                    CustomDatePicker(
+                      controller: widget.toDate,
+                      label: _locale.toDate,
+                    )
+                  ],
+                ),
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Container(
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -254,118 +233,26 @@ class _LeftWidgetState extends State<LeftWidget> {
           ),
           padding: const EdgeInsets.all(10.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 70,
-                    child: SelectableText(
-                      maxLines: 1,
-                      _locale.fromDate,
-                      style: twelve400TextStyle(Colors.black),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  CustomDatePicker(
-                    controller: widget.fromDate,
-                    label: _locale.fromDate,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 70,
-                    child: SelectableText(
-                      maxLines: 1,
-                      _locale.toDate,
-                      style: twelve400TextStyle(Colors.black),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  isDesktop
-                      ? CustomDatePicker(
-                          controller: widget.toDate,
-                          label: _locale.toDate,
-                          // isFromTrans: true,
-                          // onChange: (text) {
-                          //   String startDate = DatesController()
-                          //       .formatDate(widget.fromDate.text);
-                          //   String endDate = DatesController()
-                          //       .formatDate(widget.toDate.text);
-
-                          //   readProvider.setFromDate(startDate);
-                          //   readProvider.setToDate(endDate);
-                          // },
-                        )
-                      : GestureDetector(
-                          onTap: () {
-                            showCalendar2();
-                          }, // Show the calendar on tap
-                          child: Container(
-                            height: 30,
-                            width: width * 0.26,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 10),
-                            child: Text(
-                              maxLines: 1,
-                              _selectedDate2 != null
-                                  ? "${_selectedDate2!.day}/${_selectedDate2!.month}/${_selectedDate2!.year}"
-                                  : _locale.select,
-                              style: const TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Container(
-          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            border: Border.all(
-              color: Colors.grey,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.stockCategoryLevel("1"),
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleStkCateg1 == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleStkCateg1 == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           hint: selectedFromStkCategory1.isNotEmpty
                               ? selectedFromStkCategory1
                               : _locale.select,
                           label: _locale.from,
-                          width: width * .2,
+                          width: isDesktop ? width * .17 : width * .38,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -376,7 +263,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                           },
                           onChanged: (value) {
                             setState(() {
-                              print("val  $value");
                               selectedFromStkCategory1 = value.toString();
                               selectedFromStkCategory1Code =
                                   value.codeToString();
@@ -387,125 +273,137 @@ class _LeftWidgetState extends State<LeftWidget> {
                               ? selectedFromStkCategory1
                               : null,
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllStkCateg1,
-                                onChanged: (val) {
-                                  valueSelectAllStkCateg1 = val!;
-                                  readProvider.setCheckAllStockCategory1(
-                                      valueSelectAllStkCateg1);
-                                  // if (val) {
-                                  //   readProvider.setCodesStockCategory1(
-                                  //       stkCategory1StringList);
-                                  // } else {
-                                  readProvider.setCodesStockCategory1([]);
-                                  // }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllStkCateg1,
+                              onChanged: (val) {
+                                valueSelectAllStkCateg1 = val!;
+                                readProvider.setCheckAllStockCategory1(
+                                    valueSelectAllStkCateg1);
+
+                                readProvider.setCodesStockCategory1([]);
+
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleStkCateg1,
-                          onChanged: (val) {
-                            valueMultipleStkCateg1 = val!;
-                            readProvider.setCheckMultipleStockCategory1(
-                                valueMultipleStkCateg1);
+                      SizedBox(
+                        height: valueMultipleStkCateg1 == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        // crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueMultipleStkCateg1,
+                              onChanged: (val) {
+                                valueMultipleStkCateg1 = val!;
+                                readProvider.setCheckMultipleStockCategory1(
+                                    valueMultipleStkCateg1);
 
-                            readProvider.setCodesStockCategory1([]);
-                            readProvider.setStkCat1List([]);
-                            readProvider.setFromCateg1("");
-                            readProvider.setToCateg1("");
-                            selectedFromStkCategory1 = "";
-                            selectedToStkCategory1 = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesStockCategory1([]);
+                                readProvider.setStkCat1List([]);
+                                readProvider.setFromCateg1("");
+                                readProvider.setToCateg1("");
+                                selectedFromStkCategory1 = "";
+                                selectedToStkCategory1 = "";
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  valueMultipleStkCateg1 == false
-                      ? CustomDropDown(
-                          hint: selectedToStkCategory1.isNotEmpty
-                              ? selectedToStkCategory1
-                              : _locale.select,
-                          label: _locale.to,
-                          initialValue: selectedToStkCategory1.isNotEmpty
-                              ? selectedToStkCategory1
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToStkCategory1 = value.toString();
-                              selectedToStkCategory1Code = value.codeToString();
-                              getCategory1List();
-                            });
-                          },
-                          width: width * 0.2,
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                  Row(
+                    children: [
+                      valueMultipleStkCateg1 == false
+                          ? CustomDropDown(
+                              hint: selectedToStkCategory1.isNotEmpty
+                                  ? selectedToStkCategory1
+                                  : _locale.select,
+                              label: _locale.to,
+                              initialValue: selectedToStkCategory1.isNotEmpty
+                                  ? selectedToStkCategory1
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToStkCategory1 = value.toString();
+                                  selectedToStkCategory1Code =
+                                      value.codeToString();
+                                  getCategory1List();
+                                });
+                              },
+                              width: isDesktop ? width * .17 : width * .38,
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
 
-                            return salesReportController
-                                .getSalesStkCountCateg1Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: stkCategory1List,
-                          enabled: !valueSelectAllStkCateg1,
-                          hintString: readProvider.getStkCat1List!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider
-                                  .setCodesStockCategory1(getCodesList(val));
-                              readProvider.setStkCat1List(getStringList(val));
-                              print("readProv ${readProvider.getStkCat1List}");
-                            });
-                          },
+                                return salesReportController
+                                    .getSalesStkCountCateg1Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: stkCategory1List,
+                              enabled: !valueSelectAllStkCateg1,
+                              hintString: readProvider.getStkCat1List!,
 
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider.setCodesStockCategory1(
+                                      getCodesList(val));
+                                  readProvider
+                                      .setStkCat1List(getStringList(val));
+                                });
+                              },
 
-                            return salesReportController
-                                .getSalesStkCountCateg1Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+
+                                return salesReportController
+                                    .getSalesStkCountCateg1Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -516,14 +414,19 @@ class _LeftWidgetState extends State<LeftWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.stockCategoryLevel("3"),
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleStkCateg3 == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleStkCateg3 == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           hint: selectedFromStkCategory3.isNotEmpty
                               ? selectedFromStkCategory3
                               : _locale.select,
@@ -539,7 +442,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                               getCategory3List();
                             });
                           },
-                          width: width * 0.2,
+                          width: isDesktop ? width * .17 : width * .38,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -549,125 +452,134 @@ class _LeftWidgetState extends State<LeftWidget> {
                                     dropDownSearchCriteria.toJson());
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllStkCateg3,
-                                onChanged: (val) {
-                                  valueSelectAllStkCateg3 = val!;
-                                  readProvider.setCheckAllStockCategory3(
-                                      valueSelectAllStkCateg3);
-                                  // if (val) {
-                                  //   readProvider.setCodesStockCategory3(
-                                  //       stkCategory3StringList);
-                                  // } else {
-                                  readProvider.setCodesStockCategory3([]);
-                                  //   }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllStkCateg3,
+                              onChanged: (val) {
+                                valueSelectAllStkCateg3 = val!;
+                                readProvider.setCheckAllStockCategory3(
+                                    valueSelectAllStkCateg3);
+
+                                readProvider.setCodesStockCategory3([]);
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleStkCateg3,
-                          onChanged: (val) {
-                            valueMultipleStkCateg3 = val!;
-                            readProvider.setCheckMultipleStockCategory3(
-                                valueMultipleStkCateg3);
+                      SizedBox(
+                        height: valueMultipleStkCateg3 == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleStkCateg3,
+                              onChanged: (val) {
+                                valueMultipleStkCateg3 = val!;
+                                readProvider.setCheckMultipleStockCategory3(
+                                    valueMultipleStkCateg3);
 
-                            readProvider.setCodesStockCategory3([]);
-                            readProvider.setStkCat3List([]);
-                            readProvider.setFromCateg3("");
-                            readProvider.setToCateg3("");
-                            selectedFromStkCategory3 = "";
-                            selectedToStkCategory3 = "";
-                            setState(() {});
-                          }),
+                                readProvider.setCodesStockCategory3([]);
+                                readProvider.setStkCat3List([]);
+                                readProvider.setFromCateg3("");
+                                readProvider.setToCateg3("");
+                                selectedFromStkCategory3 = "";
+                                selectedToStkCategory3 = "";
+                                setState(() {});
+                              }),
+                        ],
+                      ),
                       Text(
                         _locale.multiple,
                         style: twelve400TextStyle(Colors.black),
                       ),
                     ],
                   ),
-                  valueMultipleStkCateg3 == false
-                      ? CustomDropDown(
-                          hint: selectedToStkCategory3.isNotEmpty
-                              ? selectedToStkCategory3
-                              : _locale.select,
-                          label: _locale.to,
-                          width: width * 0.2,
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                  Row(
+                    children: [
+                      valueMultipleStkCateg3 == false
+                          ? CustomDropDown(
+                              hint: selectedToStkCategory3.isNotEmpty
+                                  ? selectedToStkCategory3
+                                  : _locale.select,
+                              label: _locale.to,
+                              width: isDesktop ? width * .17 : width * .38,
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
 
-                            return salesReportController
-                                .getSalesStkCountCateg3Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                          initialValue: selectedToStkCategory3.isNotEmpty
-                              ? selectedToStkCategory3
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToStkCategory3 = value.toString();
-                              selectedToStkCategory3Code = value.codeToString();
-                              getCategory3List();
-                            });
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: stkCategory3List,
-                          enabled: !valueSelectAllStkCateg3,
-                          hintString: readProvider.getStkCat3List == null
-                              ? []
-                              : readProvider.getStkCat3List!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider
-                                  .setCodesStockCategory3(getCodesList(val));
-                              readProvider.setStkCat3List(getStringList(val));
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesStkCountCateg3Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                              initialValue: selectedToStkCategory3.isNotEmpty
+                                  ? selectedToStkCategory3
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToStkCategory3 = value.toString();
+                                  selectedToStkCategory3Code =
+                                      value.codeToString();
+                                  getCategory3List();
+                                });
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: stkCategory3List,
+                              enabled: !valueSelectAllStkCateg3,
+                              hintString: readProvider.getStkCat3List == null
+                                  ? []
+                                  : readProvider.getStkCat3List!,
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider.setCodesStockCategory3(
+                                      getCodesList(val));
+                                  readProvider
+                                      .setStkCat3List(getStringList(val));
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
 
-                            return salesReportController
-                                .getSalesStkCountCateg3Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                                return salesReportController
+                                    .getSalesStkCountCateg3Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -678,14 +590,19 @@ class _LeftWidgetState extends State<LeftWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.customer,
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleCustomer == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleCustomer == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
@@ -695,8 +612,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                                 .getSalesCustomersMethod(
                                     dropDownSearchCriteria.toJson());
                           },
-                          width: width * 0.2,
-                          // items: customersList,
+                          width: isDesktop ? width * .17 : width * .38,
                           hint: selectedFromCustomers.isNotEmpty
                               ? selectedFromCustomers
                               : _locale.select,
@@ -711,72 +627,74 @@ class _LeftWidgetState extends State<LeftWidget> {
                             });
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllCustomer,
-                                onChanged: (val) {
-                                  valueSelectAllCustomer = val!;
-                                  readProvider.setCheckAllCustomer(
-                                      valueSelectAllCustomer);
-                                  // if (val) {
-                                  //   readProvider
-                                  //       .setCodesCustomer(customersStringList);
-                                  // } else {
-                                  readProvider.setCodesCustomer([]);
-                                  // }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllCustomer,
+                              onChanged: (val) {
+                                valueSelectAllCustomer = val!;
+                                readProvider.setCheckAllCustomer(
+                                    valueSelectAllCustomer);
+
+                                readProvider.setCodesCustomer([]);
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleCustomer,
-                          onChanged: (val) {
-                            valueMultipleCustomer = val!;
-                            readProvider.setCheckMultipleCustomer(
-                                valueMultipleCustomer);
+                      SizedBox(
+                        height: valueMultipleCustomer == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleCustomer,
+                              onChanged: (val) {
+                                valueMultipleCustomer = val!;
+                                readProvider.setCheckMultipleCustomer(
+                                    valueMultipleCustomer);
 
-                            readProvider.setCodesCustomer([]);
-                            readProvider.setCustomersList([]);
-                            readProvider.setFromCust("");
-                            readProvider.setToCust("");
-                            selectedFromCustomers = "";
-                            selectedToCustomers = "";
-                            //    }
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesCustomer([]);
+                                readProvider.setCustomersList([]);
+                                readProvider.setFromCust("");
+                                readProvider.setToCust("");
+                                selectedFromCustomers = "";
+                                selectedToCustomers = "";
+                                //    }
+                                setState(() {});
+                              }),
+                          Text(
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   valueMultipleCustomer == false
                       ? CustomDropDown(
                           label: _locale.to,
-
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
                                 getSearchCriteria(text);
@@ -785,8 +703,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                                 .getSalesCustomersMethod(
                                     dropDownSearchCriteria.toJson());
                           },
-                          width: width * 0.2,
-                          // items: customersList,
+                          width: isDesktop ? width * .17 : width * .38,
                           hint: selectedToCustomers.isNotEmpty
                               ? selectedToCustomers
                               : _locale.select,
@@ -827,11 +744,11 @@ class _LeftWidgetState extends State<LeftWidget> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.79 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -842,14 +759,19 @@ class _LeftWidgetState extends State<LeftWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.stock,
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleStock == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleStock == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
                           onSearch: (text) {
                             DropDownSearchCriteria dropDownSearchCriteria =
@@ -858,8 +780,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                             return salesReportController.getSalesStkMethod(
                                 dropDownSearchCriteria.toJson());
                           },
-                          width: width * 0.2,
-                          // items: stocksList,
+                          width: isDesktop ? width * .17 : width * .38,
                           hint: selectedFromStocks.isNotEmpty
                               ? selectedFromStocks
                               : _locale.select,
@@ -874,113 +795,120 @@ class _LeftWidgetState extends State<LeftWidget> {
                             });
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllStock,
-                                onChanged: (val) {
-                                  valueSelectAllStock = val!;
-                                  readProvider
-                                      .setCheckAllStock(valueSelectAllStock);
-                                  // if (val) {
-                                  //   readProvider
-                                  //       .setCodesStock(stocksStringList);
-                                  // } else {
-                                  readProvider.setCodesStock([]);
-                                  //  }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllStock,
+                              onChanged: (val) {
+                                valueSelectAllStock = val!;
+                                readProvider
+                                    .setCheckAllStock(valueSelectAllStock);
+
+                                readProvider.setCodesStock([]);
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleStock,
-                          onChanged: (val) {
-                            valueMultipleStock = val!;
-                            readProvider
-                                .setCheckMultipleStock(valueMultipleStock);
+                      SizedBox(
+                        height: valueMultipleStock == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleStock,
+                              onChanged: (val) {
+                                valueMultipleStock = val!;
+                                readProvider
+                                    .setCheckMultipleStock(valueMultipleStock);
 
-                            readProvider.setCodesStock([]);
-                            readProvider.setStockList([]);
-                            readProvider.setFromStock("");
-                            readProvider.setToStock("");
-                            selectedFromStocks = "";
-                            selectedToStocks = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesStock([]);
+                                readProvider.setStockList([]);
+                                readProvider.setFromStock("");
+                                readProvider.setToStock("");
+                                selectedFromStocks = "";
+                                selectedToStocks = "";
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  valueMultipleStock == false
-                      ? CustomDropDown(
-                          label: _locale.to,
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                  Row(
+                    children: [
+                      valueMultipleStock == false
+                          ? CustomDropDown(
+                              label: _locale.to,
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
 
-                            return salesReportController.getSalesStkMethod(
-                                dropDownSearchCriteria.toJson());
-                          },
-                          width: width * 0.2,
-                          //items: stocksList,
-                          hint: selectedToStocks.isNotEmpty
-                              ? selectedToStocks
-                              : _locale.select,
-                          initialValue: selectedToStocks.isNotEmpty
-                              ? selectedToStocks
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToStocks = value.toString();
-                              selectedToStocksCode = value.codeToString();
-                              getStockList();
-                            });
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: stocksList,
-                          enabled: !valueSelectAllStock,
-                          hintString: readProvider.getStockList == null
-                              ? []
-                              : readProvider.getStockList!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider.setCodesStock(getCodesList(val));
-                              readProvider.setStockList(getStringList(val));
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
+                                return salesReportController.getSalesStkMethod(
+                                    dropDownSearchCriteria.toJson());
+                              },
+                              width: isDesktop ? width * .17 : width * .38,
+                              hint: selectedToStocks.isNotEmpty
+                                  ? selectedToStocks
+                                  : _locale.select,
+                              initialValue: selectedToStocks.isNotEmpty
+                                  ? selectedToStocks
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToStocks = value.toString();
+                                  selectedToStocksCode = value.codeToString();
+                                  getStockList();
+                                });
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: stocksList,
+                              enabled: !valueSelectAllStock,
+                              hintString: readProvider.getStockList == null
+                                  ? []
+                                  : readProvider.getStockList!,
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider.setCodesStock(getCodesList(val));
+                                  readProvider.setStockList(getStringList(val));
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
 
-                            return salesReportController.getSalesStkMethod(
-                                dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                                return salesReportController.getSalesStkMethod(
+                                    dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -1024,14 +952,7 @@ class _LeftWidgetState extends State<LeftWidget> {
 
   void getCategory3List() {
     List<String> stringStkCategory3List = [];
-    // for (int i = 0; i < stkCategory3List.length; i++) {
-    //   if (stkCategory3List[i].toString() == selectedFromStkCategory3) {
 
-    //   }
-    //   if (stkCategory3List[i].toString() == selectedToStkCategory3) {
-
-    //   }
-    // }
     if (selectedFromStkCategory3Code.isNotEmpty) {
       stringStkCategory3List.add(selectedFromStkCategory3Code);
     }
@@ -1046,14 +967,6 @@ class _LeftWidgetState extends State<LeftWidget> {
   void getCustomerList() {
     List<String> stringCustomerList = [];
 
-    // for (int i = 0; i < customersList.length; i++) {
-    //   if (customersList[i].toString() == selectedFromCustomers) {
-
-    //   }
-    //   if (customersList[i].toString() == selectedToCustomers) {
-
-    //   }
-    // }
     if (selectedFromCustomersCode.isNotEmpty) {
       stringCustomerList.add(selectedFromCustomersCode);
     }
@@ -1068,10 +981,6 @@ class _LeftWidgetState extends State<LeftWidget> {
   void getStockList() {
     List<String> stringStockList = [];
 
-    // for (int i = 0; i < stocksList.length; i++) {
-    //   if (stocksList[i].toString() == selectedFromStocks) {}
-    //   if (stocksList[i].toString() == selectedToStocks) {}
-    // }
     if (selectedFromStocksCode.isNotEmpty) {
       stringStockList.add(selectedFromStocksCode);
     }
@@ -1102,6 +1011,195 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     return codesString;
   }
+
+  // Widget getCard(
+  //     String title,
+  //     String selectedFrom,
+  //     String selectedFromCode,
+  //     Future<List<dynamic>> Function(Map<String, dynamic> toJson)
+  //         getDropDownItem,
+  //     Function() getList,
+  //     bool valueSelectAll,
+  //     Function(bool valueSelectAll) setCheckAll,
+  //     Function(List codeList) setCodes,
+  //     bool valueMultiple,
+  //     Function(bool valueSelectAll) setCheckMultiple,
+  //     Function(List code2List) setStkCat1List,
+  //     Function setFrom,
+  //     Function  setTo,
+  //     String selectedTo,
+  //     String selectedToCode) {
+  //   return Container(
+  //     width: isMobile ? width * 0.9 : width * 0.65 / 2,
+  //     decoration: BoxDecoration(
+  //       borderRadius: BorderRadius.circular(5.0),
+  //       border: Border.all(
+  //         color: Colors.grey,
+  //       ),
+  //     ),
+  //     padding: const EdgeInsets.all(10.0),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               title,
+  //               style: fourteen500TextStyle(Colors.black),
+  //             ),
+  //           ],
+  //         ),
+  //         valueMultiple == false
+  //             ? Row(
+  //                 mainAxisAlignment: MainAxisAlignment.end,
+  //                 children: [
+  //                   CustomDropDown(
+  //                     hint: selectedFrom.isNotEmpty
+  //                         ? selectedFrom
+  //                         : _locale.select,
+  //                     label: _locale.from,
+  //                     width: isDesktop ? width * .17 : width * .4,
+  //                     onSearch: (text) {
+  //                       DropDownSearchCriteria dropDownSearchCriteria =
+  //                           getSearchCriteria(text);
+
+  //                       return getDropDownItem(
+  //                               dropDownSearchCriteria.toJson());
+  //                     },
+  //                     onChanged: (value) {
+  //                       setState(() {
+  //                         selectedFrom = value.toString();
+  //                         selectedFromCode = value.codeToString();
+  //                         getList();
+  //                       });
+  //                     },
+  //                     initialValue: selectedFrom.isNotEmpty
+  //                         ? selectedFrom
+  //                         : null,
+  //                   )
+  //                 ],
+  //               )
+  //             : Padding(
+  //                 padding:  EdgeInsets.symmetric(horizontal: isDesktop ? 180: 80),
+  //                 child: Row(
+  //                   mainAxisAlignment: MainAxisAlignment.end,
+  //                   children: [
+  //                     Checkbox(
+  //                         value: valueSelectAll,
+  //                         onChanged: (val) {
+  //                           valueSelectAll = val!;
+  //                          setCheckAll(
+  //                               valueSelectAll);
+
+  //                          setCodes([]);
+
+  //                           setState(() {});
+  //                         }),
+  //                     SelectableText(
+  //                       maxLines: 1,
+  //                       _locale.selectAll,
+  //                       style: twelve400TextStyle(Colors.black),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ),
+  //         SizedBox(
+  //           height: height * .005,
+  //         ),
+  //         Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //           children: [
+  //             Column(
+  //               children: [
+  //                 SizedBox(
+  //                   height: valueMultiple == false
+  //                       ? height * .07
+  //                       : height * .02,
+  //                 ),
+  //                 Row(
+  //                   // crossAxisAlignment: CrossAxisAlignment.end,
+  //                   children: [
+  //                     Checkbox(
+  //                         value: valueMultiple,
+  //                         onChanged: (val) {
+  //                           valueMultiple = val!;
+  //                         setCheckMultiple(
+  //                               valueMultiple);
+
+  //                          setCodes([]);
+  //                           setStkCat1List([]);
+  //                           setFrom;
+  //                          setTo;
+  //                           selectedFrom = "";
+  //                           selectedTo = "";
+  //                           setState(() {});
+  //                         }),
+  //                     SelectableText(
+  //                       maxLines: 1,
+  //                       _locale.multiple,
+  //                       style: twelve400TextStyle(Colors.black),
+  //                     ),
+  //                   ],
+  //                 ),
+  //               ],
+  //             ),
+  //             Row(
+  //               children: [
+  //                 valueMultipleStkCateg1 == false
+  //                     ? CustomDropDown(
+  //                         hint: selectedTo.isNotEmpty
+  //                             ? selectedTo
+  //                             : _locale.select,
+  //                         label: _locale.to,
+  //                         initialValue: selectedTo.isNotEmpty
+  //                             ? selectedTo
+  //                             : null,
+  //                         onChanged: (value) {
+  //                           setState(() {
+  //                             selectedTo= value.toString();
+  //                             selectedToCode = value.codeToString();
+  //                             getCategory1List();
+  //                           });
+  //                         },
+  //                         width: isDesktop ? width * .17 : width * .4,
+  //                         onSearch: (text) {
+  //                           DropDownSearchCriteria dropDownSearchCriteria =
+  //                               getSearchCriteria(text);
+
+  //                           return getDropDownItem(
+  //                                   dropDownSearchCriteria.toJson());
+  //                         },
+  //                       )
+  //                     : SimpleDropdownSearch(
+  //                         // list: stkCategory1List,
+  //                         enabled: !valueSelectAll,
+  //                         hintString: getStkCat1List,
+
+  //                         onChanged: (val) {
+  //                           setState(() {
+  //                             readProvider
+  //                                 .setCodesStockCategory1(getCodesList(val));
+  //                             readProvider.setStkCat1List(getStringList(val));
+  //                           });
+  //                         },
+
+  //                         onSearch: (text) {
+  //                           DropDownSearchCriteria dropDownSearchCriteria =
+  //                               getSearchCriteria(text);
+
+  //                           return salesReportController
+  //                               .getSalesStkCountCateg1Method(
+  //                                   dropDownSearchCriteria.toJson());
+  //                         },
+  //                       ),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class RightWidget extends StatefulWidget {
@@ -1118,11 +1216,6 @@ class _RightWidgetState extends State<RightWidget> {
   ReportController salesReportController = ReportController();
   TextEditingController campaignNoController = TextEditingController();
   TextEditingController modelNoController = TextEditingController();
-
-  // List<BranchModel> stkCategory2List = [];
-  // List<BranchModel> branchesList = [];
-  // List<BranchModel> suppliersList = [];
-  // List<BranchModel> customerCategoryList = [];
 
   var selectedFromStkCategory2 = "";
   var selectedToStkCategory2 = "";
@@ -1163,7 +1256,7 @@ class _RightWidgetState extends State<RightWidget> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  bool isTablet = false;
+  // bool isMobile = false;
   bool isMobile = false;
   @override
   void didChangeDependencies() {
@@ -1178,7 +1271,7 @@ class _RightWidgetState extends State<RightWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    isTablet = Responsive.isTablet(context);
+    isMobile = Responsive.isMobile(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
@@ -1215,9 +1308,10 @@ class _RightWidgetState extends State<RightWidget> {
     modelNoController.text = readProvider.getModelNo!;
     campaignNoController.text = readProvider.getCampaignNo!;
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1228,16 +1322,21 @@ class _RightWidgetState extends State<RightWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.branch,
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleBranches == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleBranches == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
-                          width: width * 0.2,
+                          width: isDesktop ? width * .17 : width * .38,
                           // items: branchesList,
                           hint: selectedFromBranches.isNotEmpty
                               ? selectedFromBranches
@@ -1259,71 +1358,75 @@ class _RightWidgetState extends State<RightWidget> {
                                 dropDownSearchCriteria.toJson());
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllBranches,
-                                onChanged: (val) {
-                                  valueSelectAllBranches = val!;
-                                  readProvider.setCheckAllBranch(
-                                      valueSelectAllBranches);
-                                  // if (val) {
-                                  //   readProvider
-                                  //       .setCodesBranch(branchesStringList);
-                                  // } else {
-                                  readProvider.setCodesBranch([]);
-                                  //  }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllBranches,
+                              onChanged: (val) {
+                                valueSelectAllBranches = val!;
+                                readProvider
+                                    .setCheckAllBranch(valueSelectAllBranches);
+
+                                readProvider.setCodesBranch([]);
+
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleBranches,
-                          onChanged: (val) {
-                            valueMultipleBranches = val!;
-                            readProvider
-                                .setCheckMultipleBranch(valueMultipleBranches);
+                      SizedBox(
+                        height: valueMultipleBranches == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleBranches,
+                              onChanged: (val) {
+                                valueMultipleBranches = val!;
+                                readProvider.setCheckMultipleBranch(
+                                    valueMultipleBranches);
 
-                            readProvider.setCodesBranch([]);
-                            readProvider.setBranchList([]);
-                            readProvider.setFromBranch("");
-                            readProvider.setToBranch("");
-                            selectedFromBranches = "";
-                            selectedToBranches = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesBranch([]);
+                                readProvider.setBranchList([]);
+                                readProvider.setFromBranch("");
+                                readProvider.setToBranch("");
+                                selectedFromBranches = "";
+                                selectedToBranches = "";
+                                setState(() {});
+                              }),
+                          Text(
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                   valueMultipleBranches == false
                       ? CustomDropDown(
                           label: _locale.to,
-                          width: width * 0.2,
+                          width: isDesktop ? width * .17 : width * .38,
                           // items: branchesList,
                           hint: selectedToBranches.isNotEmpty
                               ? selectedToBranches
@@ -1369,11 +1472,11 @@ class _RightWidgetState extends State<RightWidget> {
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1384,16 +1487,21 @@ class _RightWidgetState extends State<RightWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.stockCategoryLevel("2"),
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleStkCategory2 == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleStkCategory2 == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
-                          width: width * 0.2,
+                          width: isDesktop ? width * .17 : width * .38,
                           // items: stkCategory2List,
                           hint: selectedFromStkCategory2.isNotEmpty
                               ? selectedFromStkCategory2
@@ -1417,124 +1525,133 @@ class _RightWidgetState extends State<RightWidget> {
                                     dropDownSearchCriteria.toJson());
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllStkCategory2,
-                                onChanged: (val) {
-                                  valueSelectAllStkCategory2 = val!;
-                                  readProvider.setCheckAllStockCategory2(
-                                      valueSelectAllStkCategory2);
-                                  // if (val) {
-                                  //   readProvider.setCodesStockCategory2(
-                                  //       stkCategory2StringList);
-                                  // } else {
-                                  readProvider.setCodesStockCategory2([]);
-                                  //  }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllStkCategory2,
+                              onChanged: (val) {
+                                valueSelectAllStkCategory2 = val!;
+                                readProvider.setCheckAllStockCategory2(
+                                    valueSelectAllStkCategory2);
+
+                                readProvider.setCodesStockCategory2([]);
+
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleStkCategory2,
-                          onChanged: (val) {
-                            valueMultipleStkCategory2 = val!;
-                            readProvider.setCheckMultipleStockCategory2(
-                                valueMultipleStkCategory2);
+                      SizedBox(
+                        height: valueMultipleStkCategory2 == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleStkCategory2,
+                              onChanged: (val) {
+                                valueMultipleStkCategory2 = val!;
+                                readProvider.setCheckMultipleStockCategory2(
+                                    valueMultipleStkCategory2);
 
-                            readProvider.setCodesStockCategory2([]);
-                            readProvider.setStkCat2List([]);
-                            readProvider.setFromCateg2("");
-                            readProvider.setToCateg2("");
-                            selectedFromStkCategory2 = "";
-                            selectedToStkCategory2 = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesStockCategory2([]);
+                                readProvider.setStkCat2List([]);
+                                readProvider.setFromCateg2("");
+                                readProvider.setToCateg2("");
+                                selectedFromStkCategory2 = "";
+                                selectedToStkCategory2 = "";
+                                setState(() {});
+                              }),
+                          Text(
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  valueMultipleStkCategory2 == false
-                      ? CustomDropDown(
-                          label: _locale.to,
-                          width: width * 0.2,
-                          // items: stkCategory2List,
-                          hint: selectedToStkCategory2.isNotEmpty
-                              ? selectedToStkCategory2
-                              : _locale.select,
-                          initialValue: selectedToStkCategory2.isNotEmpty
-                              ? selectedToStkCategory2
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToStkCategory2 = value.toString();
-                              selectedToStkCategory2Code = value.codeToString();
-                              getCategory2List();
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesStkCountCateg2Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: stkCategory2List,
-                          enabled: !valueSelectAllStkCategory2,
-                          hintString: readProvider.getStkCat2List == null
-                              ? []
-                              : readProvider.getStkCat2List!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider
-                                  .setCodesStockCategory2(getCodesList(val));
-                              readProvider.setStkCat2List(getStringList(val));
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesStkCountCateg2Method(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                  Row(
+                    children: [
+                      valueMultipleStkCategory2 == false
+                          ? CustomDropDown(
+                              label: _locale.to,
+                              width: isDesktop ? width * .17 : width * .38,
+                              hint: selectedToStkCategory2.isNotEmpty
+                                  ? selectedToStkCategory2
+                                  : _locale.select,
+                              initialValue: selectedToStkCategory2.isNotEmpty
+                                  ? selectedToStkCategory2
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToStkCategory2 = value.toString();
+                                  selectedToStkCategory2Code =
+                                      value.codeToString();
+                                  getCategory2List();
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesStkCountCateg2Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: stkCategory2List,
+                              enabled: !valueSelectAllStkCategory2,
+                              hintString: readProvider.getStkCat2List == null
+                                  ? []
+                                  : readProvider.getStkCat2List!,
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider.setCodesStockCategory2(
+                                      getCodesList(val));
+                                  readProvider
+                                      .setStkCat2List(getStringList(val));
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesStkCountCateg2Method(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1545,16 +1662,21 @@ class _RightWidgetState extends State<RightWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.supplier(""),
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleSupplier == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleSupplier == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
-                          width: width * 0.2,
+                          width: isDesktop ? width * .17 : width * .38,
                           // items: suppliersList,
                           hint: selectedFromSupplier.isNotEmpty
                               ? selectedFromSupplier
@@ -1577,123 +1699,132 @@ class _RightWidgetState extends State<RightWidget> {
                                     dropDownSearchCriteria.toJson());
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllSupplier,
-                                onChanged: (val) {
-                                  valueSelectAllSupplier = val!;
-                                  readProvider.setCheckAllSupplier(
-                                      valueSelectAllSupplier);
-                                  // if (val) {
-                                  //   readProvider
-                                  //       .setCodesSupplier(suppliersStringList);
-                                  // } else {
-                                  readProvider.setCodesSupplier([]);
-                                  // }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllSupplier,
+                              onChanged: (val) {
+                                valueSelectAllSupplier = val!;
+                                readProvider.setCheckAllSupplier(
+                                    valueSelectAllSupplier);
+
+                                readProvider.setCodesSupplier([]);
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleSupplier,
-                          onChanged: (val) {
-                            valueMultipleSupplier = val!;
-                            readProvider.setCheckMultipleSupplier(
-                                valueMultipleSupplier);
+                      SizedBox(
+                        height: valueMultipleSupplier == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleSupplier,
+                              onChanged: (val) {
+                                valueMultipleSupplier = val!;
+                                readProvider.setCheckMultipleSupplier(
+                                    valueMultipleSupplier);
 
-                            readProvider.setCodesSupplier([]);
-                            readProvider.setSupplierList([]);
-                            readProvider.setFromSupp("");
-                            readProvider.setToSupp("");
-                            selectedFromSupplier = "";
-                            selectedToSupplier = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesSupplier([]);
+                                readProvider.setSupplierList([]);
+                                readProvider.setFromSupp("");
+                                readProvider.setToSupp("");
+                                selectedFromSupplier = "";
+                                selectedToSupplier = "";
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  valueMultipleSupplier == false
-                      ? CustomDropDown(
-                          label: _locale.to,
-                          width: width * 0.2,
-                          // items: suppliersList,
-                          hint: selectedToSupplier.isNotEmpty
-                              ? selectedToSupplier
-                              : _locale.select,
-                          initialValue: selectedToSupplier.isNotEmpty
-                              ? selectedToSupplier
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToSupplier = value.toString();
-                              selectedToSupplierCode = value.codeToString();
-                              getSupplierList();
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesSuppliersMethod(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: suppliersList,
-                          enabled: !valueSelectAllSupplier,
-                          hintString: readProvider.getSupplierList == null
-                              ? []
-                              : readProvider.getSupplierList!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider.setCodesSupplier(getCodesList(val));
-                              readProvider.setSupplierList(getStringList(val));
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesSuppliersMethod(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                  Row(
+                    children: [
+                      valueMultipleSupplier == false
+                          ? CustomDropDown(
+                              label: _locale.to,
+                              width: isDesktop ? width * .17 : width * .38,
+                              hint: selectedToSupplier.isNotEmpty
+                                  ? selectedToSupplier
+                                  : _locale.select,
+                              initialValue: selectedToSupplier.isNotEmpty
+                                  ? selectedToSupplier
+                                  : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToSupplier = value.toString();
+                                  selectedToSupplierCode = value.codeToString();
+                                  getSupplierList();
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesSuppliersMethod(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: suppliersList,
+                              enabled: !valueSelectAllSupplier,
+                              hintString: readProvider.getSupplierList == null
+                                  ? []
+                                  : readProvider.getSupplierList!,
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider
+                                      .setCodesSupplier(getCodesList(val));
+                                  readProvider
+                                      .setSupplierList(getStringList(val));
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesSuppliersMethod(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1704,17 +1835,21 @@ class _RightWidgetState extends State<RightWidget> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     _locale.customerCategory,
-                    style: twelve400TextStyle(Colors.black),
+                    style: fourteen500TextStyle(Colors.black),
                   ),
-                  valueMultipleCustomerCategory == false
-                      ? CustomDropDown(
+                ],
+              ),
+              valueMultipleCustomerCategory == false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustomDropDown(
                           label: _locale.from,
-                          width: width * 0.2,
-                          // items: customerCategoryList,
+                          width: isDesktop ? width * .17 : width * .38,
                           hint: selectedFromCustomerCategory.isNotEmpty
                               ? selectedFromCustomerCategory
                               : _locale.select,
@@ -1737,196 +1872,183 @@ class _RightWidgetState extends State<RightWidget> {
                                     dropDownSearchCriteria.toJson());
                           },
                         )
-                      : Row(
-                          children: [
-                            Checkbox(
-                                value: valueSelectAllCustomerCategory,
-                                onChanged: (val) {
-                                  valueSelectAllCustomerCategory = val!;
-                                  readProvider.setCheckAllCustomerCategory(
-                                      valueSelectAllCustomerCategory);
-                                  // if (val) {
-                                  //   readProvider.setCodesCustomerCategory(
-                                  //       customerCategoryStringList);
-                                  // } else {
-                                  readProvider.setCodesCustomerCategory([]);
-                                  //   }
-                                  setState(() {});
-                                }),
-                            SizedBox(
-                              width: width * 0.185,
-                              height: height * 0.052,
-                              child: Padding(
-                                padding: EdgeInsets.only(top: height * 0.018),
-                                child: SelectableText(
-                                  maxLines: 1,
-                                  _locale.selectAll,
-                                  style: twelve400TextStyle(Colors.black),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
+                      ],
+                    )
+                  : Padding(
+                      padding: EdgeInsets.only(
+                          right: isDesktop ? 180 : 120, top: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                              value: valueSelectAllCustomerCategory,
+                              onChanged: (val) {
+                                valueSelectAllCustomerCategory = val!;
+                                readProvider.setCheckAllCustomerCategory(
+                                    valueSelectAllCustomerCategory);
+
+                                readProvider.setCodesCustomerCategory([]);
+                                setState(() {});
+                              }),
+                          SelectableText(
+                            maxLines: 1,
+                            _locale.selectAll,
+                            style: twelve400TextStyle(Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                height: height * .005,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
+                  Column(
                     children: [
-                      Checkbox(
-                          value: valueMultipleCustomerCategory,
-                          onChanged: (val) {
-                            valueMultipleCustomerCategory = val!;
-                            readProvider.setCheckMultipleCustomerCategory(
-                                valueMultipleCustomerCategory);
+                      SizedBox(
+                        height: valueMultipleCustomerCategory == false
+                            ? height * .07
+                            : height * .02,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                              value: valueMultipleCustomerCategory,
+                              onChanged: (val) {
+                                valueMultipleCustomerCategory = val!;
+                                readProvider.setCheckMultipleCustomerCategory(
+                                    valueMultipleCustomerCategory);
 
-                            readProvider.setCodesCustomerCategory([]);
-                            readProvider.setCustCateg([]);
-                            readProvider.setFromCustCateg("");
-                            readProvider.setToCustCateg("");
-                            selectedFromCustomerCategory = "";
-                            selectedToCustomerCategory = "";
-                            setState(() {});
-                          }),
-                      Text(
-                        _locale.multiple,
-                        style: twelve400TextStyle(Colors.black),
+                                readProvider.setCodesCustomerCategory([]);
+                                readProvider.setCustCateg([]);
+                                readProvider.setFromCustCateg("");
+                                readProvider.setToCustCateg("");
+                                selectedFromCustomerCategory = "";
+                                selectedToCustomerCategory = "";
+                                setState(() {});
+                              }),
+                          Text(
+                            _locale.multiple,
+                            style: twelve400TextStyle(Colors.black),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  valueMultipleCustomerCategory == false
-                      ? CustomDropDown(
-                          label: _locale.to,
-                          width: width * 0.2,
-                          // items: customerCategoryList,
-                          hint: selectedToCustomerCategory.isNotEmpty
-                              ? selectedToCustomerCategory
-                              : _locale.select,
-                          initialValue: selectedToCustomerCategory.isNotEmpty
-                              ? selectedToCustomerCategory
-                              : null,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedToCustomerCategory = value.toString();
-                              selectedToCustomerCategoryCode =
-                                  value.codeToString();
-                              getCustomerCategoryList();
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesCustomersCategMethod(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        )
-                      : SimpleDropdownSearch(
-                          // list: customerCategoryList,
-                          enabled: !valueSelectAllCustomerCategory,
-                          hintString: readProvider.getCustCateg == null
-                              ? []
-                              : readProvider.getCustCateg!,
-                          onChanged: (val) {
-                            setState(() {
-                              readProvider
-                                  .setCodesCustomerCategory(getCodesList(val));
-                              readProvider.setCustCateg(getStringList(val));
-                            });
-                          },
-                          onSearch: (text) {
-                            DropDownSearchCriteria dropDownSearchCriteria =
-                                getSearchCriteria(text);
-                            return salesReportController
-                                .getSalesCustomersCategMethod(
-                                    dropDownSearchCriteria.toJson());
-                          },
-                        ),
+                  Row(
+                    children: [
+                      valueMultipleCustomerCategory == false
+                          ? CustomDropDown(
+                              label: _locale.to,
+                              width: isDesktop ? width * .17 : width * .38,
+                              hint: selectedToCustomerCategory.isNotEmpty
+                                  ? selectedToCustomerCategory
+                                  : _locale.select,
+                              initialValue:
+                                  selectedToCustomerCategory.isNotEmpty
+                                      ? selectedToCustomerCategory
+                                      : null,
+                              onChanged: (value) {
+                                setState(() {
+                                  selectedToCustomerCategory = value.toString();
+                                  selectedToCustomerCategoryCode =
+                                      value.codeToString();
+                                  getCustomerCategoryList();
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesCustomersCategMethod(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            )
+                          : SimpleDropdownSearch(
+                              // list: customerCategoryList,
+                              enabled: !valueSelectAllCustomerCategory,
+                              hintString: readProvider.getCustCateg == null
+                                  ? []
+                                  : readProvider.getCustCateg!,
+                              onChanged: (val) {
+                                setState(() {
+                                  readProvider.setCodesCustomerCategory(
+                                      getCodesList(val));
+                                  readProvider.setCustCateg(getStringList(val));
+                                });
+                              },
+                              onSearch: (text) {
+                                DropDownSearchCriteria dropDownSearchCriteria =
+                                    getSearchCriteria(text);
+                                return salesReportController
+                                    .getSalesCustomersCategMethod(
+                                        dropDownSearchCriteria.toJson());
+                              },
+                            ),
+                    ],
+                  ),
                 ],
               ),
             ],
           ),
         ),
-        const SizedBox(
-          height: 5,
+        SizedBox(
+          height: height * .01,
         ),
         Container(
-          width: isTablet ? width * 0.9 : width * 0.8 / 2.1,
+          width: isMobile ? width * 0.9 : width * 0.65 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
               color: Colors.grey,
             ),
           ),
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              // Text(
-              //   _locale.campaignNo,
-              //   style: twelve400TextStyle(Colors.black),
-              // ),
-              // const SizedBox(
-              //   height: 5,
-              // ),
-              // Container(
-              //   height: 30,
-              //   width: width * 0.15,
-              //   decoration: BoxDecoration(
-              //     color: Colors.grey[200],
-              //     borderRadius: BorderRadius.circular(5.0),
-              //   ),
-              //   padding:
-              //       const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-              CustomTextField(
-                label: _locale.campaignNo,
-                controller: campaignNoController,
-                onSubmitted: (text) {
-                  readProvider.setCampaignNo(campaignNoController.text);
-                },
-                // decoration: const InputDecoration(
-                //   border: InputBorder.none,
-                // ),
-                // ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              // Text(
-              //   _locale.modelNo,
-              //   style: twelve400TextStyle(Colors.black),
-              // ),
-              // const SizedBox(
-              //   height: 5,
-              // ),
-              // Container(
-              //   height: 30,
-              //   width: width * 0.15,
-              //   decoration: BoxDecoration(
-              //     color: Colors.grey[200],
-              //     borderRadius: BorderRadius.circular(5.0),
-              //   ),
-              //   padding: const EdgeInsets.symmetric(
-              //       vertical: 4, horizontal: 10),
-              CustomTextField(
-                label: _locale.modelNo,
-                controller: modelNoController,
-                onSubmitted: (text) {
-                  print(modelNoController.text);
-
-                  readProvider.setModelNo(modelNoController.text);
-                  print("provider ${readProvider.getModelNo}");
-                },
-                // decoration: const InputDecoration(
-                //   border: InputBorder.none,
-                // ),
-                // ),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: isDesktop
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomTextField(
+                      width: width * 0.74,
+                      label: _locale.campaignNo,
+                      controller: campaignNoController,
+                      onSubmitted: (text) {
+                        readProvider.setCampaignNo(campaignNoController.text);
+                      },
+                    ),
+                    CustomTextField(
+                      width: width * 0.74,
+                      label: _locale.modelNo,
+                      controller: modelNoController,
+                      onSubmitted: (text) {
+                        readProvider.setModelNo(modelNoController.text);
+                      },
+                    ),
+                  ],
+                )
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextField(
+                      width: width * 4,
+                      label: _locale.campaignNo,
+                      controller: campaignNoController,
+                      onSubmitted: (text) {
+                        readProvider.setCampaignNo(campaignNoController.text);
+                      },
+                    ),
+                    CustomTextField(
+                      width: width * 4,
+                      label: _locale.modelNo,
+                      controller: modelNoController,
+                      onSubmitted: (text) {
+                        readProvider.setModelNo(modelNoController.text);
+                      },
+                    ),
+                  ],
+                ),
         ),
       ],
     );

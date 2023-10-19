@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../model/criteria/search_criteria.dart';
 import '../../model/reports/purchase_cost_report.dart';
 import '../../model/reports/reports_result.dart';
@@ -11,13 +13,13 @@ import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class ReportController extends Api {
+class ReportController extends ApiService {
   Future<List<BranchModel>> getSalesStkMethod(
       dynamic salesSearchCriteria) async {
     var api = getSalesStk;
     late SalesReportModel salesStkObj;
     List<BranchModel> salesStkList = [];
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkObj = SalesReportModel.fromJson(jsonData);
@@ -33,7 +35,7 @@ class ReportController extends Api {
 
     late SalesReportModel salesCampObj;
     List<BranchModel> salesCampList = [];
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCampObj = SalesReportModel.fromJson(jsonData);
@@ -48,7 +50,7 @@ class ReportController extends Api {
     var api = getSalesBranches;
     late SalesReportModel salesBranchesObj;
     List<BranchModel> branchList = [];
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesBranchesObj = SalesReportModel.fromJson(jsonData);
@@ -65,7 +67,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesSuppliersList = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesSuppliersObj = SalesReportModel.fromJson(jsonData);
@@ -82,7 +84,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesCustomersList = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCustomersObj = SalesReportModel.fromJson(jsonData);
@@ -99,7 +101,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesCustomersCategList = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCustomersCategObj = SalesReportModel.fromJson(jsonData);
@@ -116,7 +118,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesSuppliersCategList = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesSuppliersCategObj = SalesReportModel.fromJson(jsonData);
@@ -133,7 +135,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesStkCountCateg1List = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg1Obj = SalesReportModel.fromJson(jsonData);
@@ -150,7 +152,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesStkCountCateg2List = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg2Obj = SalesReportModel.fromJson(jsonData);
@@ -167,7 +169,7 @@ class ReportController extends Api {
 
     List<BranchModel> salesStkCountCateg3List = [];
 
-    await postMethods(api, salesSearchCriteria).then((response) {
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg3Obj = SalesReportModel.fromJson(jsonData);
@@ -182,7 +184,7 @@ class ReportController extends Api {
     var api = postSalesCostReport;
     List<SalesCostReportModel> salesCostReportList = [];
 
-    await postMethods(api, salesProvider).then((response) {
+    await ApiService.postRequest(api, salesProvider).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -200,7 +202,7 @@ class ReportController extends Api {
     var api = postPurchaseCostReport;
     List<PurchaseCostReportModel> purchaseCostReportList = [];
 
-    await postMethods(api, purchaseProvider).then((response) {
+    await ApiService.postRequest(api, purchaseProvider).then((response) {
       print("Response2222 ${response.statusCode}");
       print("ResponseBody2222 ${response.body}");
       if (response.statusCode == statusOk) {
@@ -219,7 +221,7 @@ class ReportController extends Api {
     var api = getSalesResult;
     late ReportsResult salesResult = ReportsResult();
 
-    await postMethods(api, salesProvider).then((response) {
+    await ApiService.postRequest(api, salesProvider).then((response) {
       print("body ${salesProvider}");
 
       if (response.statusCode == statusOk) {
@@ -235,7 +237,7 @@ class ReportController extends Api {
       dynamic purchaseProvider) async {
     var api = getPurchaseResult;
     ReportsResult purchaseResult = ReportsResult();
-    await postMethods(api, purchaseProvider).then((response) {
+    await ApiService.postRequest(api, purchaseProvider).then((response) {
       print("Response ${response.statusCode}");
       print("ResponseBody ${response.body}");
 
@@ -262,7 +264,7 @@ class ReportController extends Api {
       "customColumns": searchCriteria.customColumns
     };
     print("search ${body}");
-    await postMethods(eUrl, body).then((value) {
+    await ApiService.postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
     return excelByteData;
@@ -281,7 +283,7 @@ class ReportController extends Api {
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    await postMethods(eUrl, body).then((value) {
+    await ApiService.postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
       print("ressss ${value.statusCode}");
     });

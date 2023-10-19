@@ -1,6 +1,8 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/constants/responsive.dart';
+
 class SimpleDropdownSearch extends StatefulWidget {
   final List<dynamic>? list;
   final List<String> hintString;
@@ -22,6 +24,9 @@ class SimpleDropdownSearch extends StatefulWidget {
 
 class _SimpleDropdownSearchState extends State<SimpleDropdownSearch> {
   List<String> items = [];
+  bool isDesktop = false;
+  // bool isMobile = false;
+  bool isMobile = false;
   @override
   void initState() {
     // for (int i = 0; i < widget.list.length; i++) {
@@ -34,15 +39,17 @@ class _SimpleDropdownSearchState extends State<SimpleDropdownSearch> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height * 0.2;
-
+    double width = MediaQuery.of(context).size.width;
+    isDesktop = Responsive.isDesktop(context);
+    // isMobile = Responsive.isMobile(context);
+    isMobile = Responsive.isMobile(context);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      // mainAxisAlignment: MainAxisAlignment.end,
+      // crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         SizedBox(
-          width: MediaQuery.of(context).size.width > 800
-              ? MediaQuery.of(context).size.width * .2
-              : MediaQuery.of(context).size.width * .4, // height: 100,
+          width: isDesktop ? width * .17 : width * .4,
+          // height: 100,
           child: DropdownSearch<dynamic>.multiSelection(
               enabled: widget.enabled,
               // mode: Mode.MENU,
