@@ -4,13 +4,9 @@ import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../controller/sales_adminstration/sales_category_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,8 +31,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  DateTime? _selectedDate;
-  DateTime? _selectedDate2;
   final storage = const FlutterSecureStorage();
   final dropdownKey = GlobalKey<DropdownButton2State>();
 
@@ -74,6 +68,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool temp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -189,61 +185,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
-                        ),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -325,7 +266,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                       selectedBranch = value.toString();
                       selectedBranchCode = branchesMap[value.toString()]!;
                       getBranchByCat();
-                      print(selectedBranch);
                     });
                   },
                 ),
@@ -337,7 +277,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       selectedChart = value!;
                       getBranchByCat();
-                      print(selectedChart);
                     });
                   },
                 ),
@@ -350,7 +289,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                       checkPeriods(value);
                       selectedPeriod = value!;
                       getBranchByCat();
-                      print(selectedPeriod);
                     });
                   },
                 ),
@@ -362,7 +300,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       selectedCategories = value!;
                       getBranchByCat();
-                      print(selectedCategories);
                     });
                   },
                 ),
@@ -378,7 +315,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       _fromDateController.text = value;
                       getBranchByCat();
-                      print(_fromDateController.text);
                     });
                   },
                 ),
@@ -389,7 +325,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       _toDateController.text = value;
                       getBranchByCat();
-                      print(_toDateController.text);
                     });
                   },
                 ),
@@ -416,7 +351,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               selectedBranch = value.toString();
               selectedBranchCode = branchesMap[value.toString()]!;
               getBranchByCat();
-              print(selectedBranch);
             });
           },
         ),
@@ -429,7 +363,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               selectedChart = value!;
               getBranchByCat();
-              print(selectedChart);
             });
           },
         ),
@@ -443,7 +376,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getBranchByCat();
-              print(selectedPeriod);
             });
           },
         ),
@@ -456,7 +388,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               selectedCategories = value!;
               getBranchByCat();
-              print(selectedCategories);
             });
           },
         ),
@@ -467,7 +398,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               _fromDateController.text = value;
               getBranchByCat();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -478,7 +408,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               _toDateController.text = value;
               getBranchByCat();
-              print(_toDateController.text);
             });
           },
         ),
@@ -509,7 +438,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     //             : 4;
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);
-    print("selectedBranch: ${selectedBranchCode}");
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate,
         toDate: endDate,
@@ -519,7 +447,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     barData = [];
     listOfBalances = [];
     listOfPeriods = [];
-    final random = Random();
 
     salesCategoryController.getSalesByCategory(searchCriteria).then((value) {
       for (var element in value) {
@@ -528,14 +455,21 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
         // Generate a random color
         Color randomColor = getRandomColor(); // Use the getRandomColor function
-
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(bal);
           listOfPeriods.add(element.categoryName!);
-          pieData.add(PieChartModel(
-              title: element.categoryName!,
-              value: bal,
-              color: randomColor)); // Set random color
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: element.categoryName!,
+                value: bal,
+                color: randomColor)); // Set random color
+          }
+
           barData.add(
             BarChartData(
               element.categoryName!,

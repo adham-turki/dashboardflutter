@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:bi_replicate/components/charts/pie_chart.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -7,20 +6,12 @@ import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
-import '../../../utils/func/converters.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
-
-import '../../../widget/drop_down/custom_dropdown.dart';
-// import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../components/charts.dart';
-import '../../../components/customCard.dart';
-import '../../../controller/sales_adminstration/total_collection_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
-import '../../../utils/constants/maps.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class SalesByBranchesContent extends StatefulWidget {
@@ -34,6 +25,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   double width = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   double height = 0;
+  bool temp = false;
   late AppLocalizations _locale;
   SalesBranchesController salesBranchesController = SalesBranchesController();
   final TextEditingController _fromDateController = TextEditingController();
@@ -53,8 +45,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
-  DateTime? _selectedDate;
-  DateTime? _selectedDate2;
+
   List<String> periods = [];
   List<String> charts = [];
   var selectedPeriod = "";
@@ -169,61 +160,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
-                        ),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -269,14 +205,19 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         double a = (element.totalSales! + element.retSalesDis!) -
             (element.salesDis! + element.totalReturnSales!);
         a = Converters().formateDouble(a);
-        print("name: ${element.namee!}");
-        print("double: $a");
+        if (a != 0.0) {
+          temp = true;
+        } else if (a == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(a);
           listOfPeriods.add(element.namee!);
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: element.namee!, value: a, color: Colors.blue));
+          }
 
-          pieData.add(PieChartModel(
-              title: element.namee!, value: a, color: Colors.blue));
           barData.add(
             BarChartData(element.namee!, a),
           );
@@ -318,7 +259,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getSalesByBranch();
-              print(selectedPeriod);
             });
           },
         ),
@@ -329,7 +269,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             setState(() {
               _fromDateController.text = value;
               getSalesByBranch();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -340,7 +279,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             setState(() {
               _toDateController.text = value;
               getSalesByBranch();
-              print(_toDateController.text);
             });
           },
         ),
@@ -353,7 +291,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             setState(() {
               selectedChart = value!;
               getSalesByBranch();
-              print(selectedChart);
             });
           },
         ),
@@ -375,7 +312,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             setState(() {
               checkPeriods(value);
               selectedPeriod = value!;
-              print(selectedPeriod);
             });
           },
         ),
@@ -385,7 +321,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;
-              print(_fromDateController.text);
             });
           },
         ),
@@ -395,7 +330,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onSelected: (value) {
             setState(() {
               _toDateController.text = value;
-              print(_toDateController.text);
             });
           },
         ),
@@ -408,7 +342,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onChanged: (value) {
             setState(() {
               selectedChart = value!;
-              print(selectedChart);
             });
           },
         ),

@@ -1,16 +1,9 @@
 import 'dart:math';
-
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:bi_replicate/utils/constants/api_constants.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/financial_performance/expense_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -35,9 +28,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  bool boolTemp = false;
   final dropdownKey = GlobalKey<DropdownButton2State>();
-  DateTime? _selectedDate = DateTime.now();
-  TextEditingController _fromDateController = TextEditingController();
+  final TextEditingController _fromDateController = TextEditingController();
   late AppLocalizations _locale;
   List<String> status = [];
   List<String> periods = [];
@@ -200,61 +193,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
-                        ),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -298,7 +236,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               selectedChart = value!;
               getExpenses();
-              print(selectedChart);
             });
           },
         ),
@@ -314,7 +251,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
                   selectedStatus = value.toString();
 
                   getExpenses();
-                  print(selectedStatus);
                 });
               },
             ),
@@ -325,7 +261,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 setState(() {
                   _fromDateController.text = value;
                   getExpenses();
-                  print(_fromDateController.text);
                 });
               },
             ),
@@ -349,7 +284,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               selectedChart = value!;
               getExpenses();
-              print(selectedChart);
             });
           },
         ),
@@ -363,7 +297,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
               selectedStatus = value.toString();
 
               getExpenses();
-              print(selectedStatus);
             });
           },
         ),
@@ -374,7 +307,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               _fromDateController.text = value;
               getExpenses();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -397,13 +329,23 @@ class _ExpensesContentState extends State<ExpensesContent> {
     expensesController.getExpense(searchCriteria).then((value) {
       for (var elemant in value) {
         String temp = DatesController().formatDate(getNextDay(date).toString());
+        if (double.parse(elemant.expense.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.expense.toString()) == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(elemant.expense!);
           listOfPeriods.add(temp);
-          pieData.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.expense.toString()),
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.expense.toString()) == 0.0
+                    ? 1.0
+                    : double.parse(elemant.expense.toString()),
+                color: getRandomColor()));
+          }
+
           barData.add(
               BarChartData(temp, double.parse(elemant.expense.toString())));
         });

@@ -6,18 +6,15 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../components/charts.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/total_collection_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/drop_down/custom_dropdown.dart';
 
 class TotalCollectionsContent extends StatefulWidget {
   const TotalCollectionsContent({super.key});
@@ -33,15 +30,11 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   bool isDesktop = false;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
-  TextEditingController _fromDateController = TextEditingController();
-  TextEditingController _toDateController = TextEditingController();
+  final TextEditingController _fromDateController = TextEditingController();
+  final TextEditingController _toDateController = TextEditingController();
   var storage = const FlutterSecureStorage();
   TotalCollectionConroller totalCollectionController =
       TotalCollectionConroller();
-
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
-
   List<String> periods = [];
   List<String> status = [];
   List<String> charts = [];
@@ -63,6 +56,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool boolTemp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -179,61 +174,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
-                        ),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -283,7 +223,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                       checkPeriods(value);
                       selectedPeriod = value!;
                       getTotalCollections();
-                      print(selectedPeriod);
                     });
                   },
                 ),
@@ -295,7 +234,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       selectedStatus = value!;
                       getTotalCollections();
-                      print(selectedStatus);
                     });
                   },
                 ),
@@ -307,7 +245,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       selectedChart = value!;
                       getTotalCollections();
-                      print(selectedChart);
                     });
                   },
                 ),
@@ -323,7 +260,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       _fromDateController.text = value;
                       getTotalCollections();
-                      print(_fromDateController.text);
                     });
                   },
                 ),
@@ -334,7 +270,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       _toDateController.text = value;
                       getTotalCollections();
-                      print(_toDateController.text);
                     });
                   },
                 ),
@@ -360,7 +295,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               selectedChart = value!;
               getTotalCollections();
-              print(selectedChart);
             });
           },
         ),
@@ -374,7 +308,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getTotalCollections();
-              print(selectedPeriod);
             });
           },
         ),
@@ -387,7 +320,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               selectedStatus = value!;
               getTotalCollections();
-              print(selectedStatus);
             });
           },
         ),
@@ -398,7 +330,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               _fromDateController.text = value;
               getTotalCollections();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -409,7 +340,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               _toDateController.text = value;
               getTotalCollections();
-              print(_toDateController.text);
             });
           },
         ),
@@ -433,13 +363,21 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         .getTotalCollectionMethod(searchCriteria)
         .then((value) {
       for (var element in value) {
+        if (element.collection != 0.0) {
+          boolTemp = true;
+        } else if (element.collection == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(element.collection!);
           listOfPeriods.add(element.name!);
-          pieData.add(PieChartModel(
-              title: element.name!,
-              value: element.collection!,
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: element.name!,
+                value: element.collection,
+                color: getRandomColor()));
+          }
+
           barData.add(
             BarChartData(element.name!, element.collection!),
           );

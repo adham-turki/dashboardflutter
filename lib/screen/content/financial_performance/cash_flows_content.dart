@@ -1,17 +1,15 @@
 import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:bi_replicate/utils/constants/api_constants.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/financial_performance/cash_flow_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -33,15 +31,14 @@ class CashFlowsContent extends StatefulWidget {
 }
 
 class _CashFlowsContentState extends State<CashFlowsContent> {
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
   final dropdownKey = GlobalKey<DropdownButton2State>();
   final storage = const FlutterSecureStorage();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  TextEditingController _fromDateController = TextEditingController();
-  TextEditingController _toDateController = TextEditingController();
+  bool temp = false;
+  final TextEditingController _fromDateController = TextEditingController();
+  final TextEditingController _toDateController = TextEditingController();
   CashFlowController cashFlowController = CashFlowController();
   List<String> periods = [];
   List<String> status = [];
@@ -246,61 +243,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                             style: const TextStyle(fontSize: 24),
                           ),
                         ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
-                        ),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -350,7 +292,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                       checkPeriods(value);
                       selectedPeriod = value!;
                       getCashFlows();
-                      print(selectedPeriod);
                     });
                   },
                 ),
@@ -362,7 +303,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     setState(() {
                       selectedStatus = value!;
                       getCashFlows();
-                      print(selectedStatus);
                     });
                   },
                 ),
@@ -374,7 +314,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     setState(() {
                       selectedChart = value!;
                       getCashFlows();
-                      print(selectedChart);
                     });
                   },
                 ),
@@ -390,7 +329,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     setState(() {
                       _fromDateController.text = value;
                       getCashFlows();
-                      print(_fromDateController.text);
                     });
                   },
                 ),
@@ -401,7 +339,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     setState(() {
                       _toDateController.text = value;
                       getCashFlows();
-                      print(_toDateController.text);
                     });
                   },
                 ),
@@ -427,7 +364,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             setState(() {
               selectedChart = value!;
               getCashFlows();
-              print(selectedChart);
             });
           },
         ),
@@ -441,7 +377,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getCashFlows();
-              print(selectedPeriod);
             });
           },
         ),
@@ -454,7 +389,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             setState(() {
               selectedStatus = value!;
               getCashFlows();
-              print(selectedStatus);
             });
           },
         ),
@@ -465,7 +399,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             setState(() {
               _fromDateController.text = value;
               getCashFlows();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -476,7 +409,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             setState(() {
               _toDateController.text = value;
               getCashFlows();
-              print(_toDateController.text);
             });
           },
         ),
@@ -497,9 +429,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     pieData = [];
     barData = [];
 
-    print("hi ");
     int status = getVoucherStatus(_locale, selectedStatus);
-    print("hello $status");
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);
     SearchCriteria searchCriteria = SearchCriteria(
@@ -509,23 +439,32 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         balance = value[0].value! - value[1].value!;
       });
       for (var element in value) {
+        if (element.value != 0.0) {
+          temp = true;
+        } else if (element.value == 0.0) {
+          temp = false;
+        }
         if (element.title! == "debit") {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashIn);
-          pieData.add(PieChartModel(
-              title: _locale.cashIn,
-              value: element.value!,
-              color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: _locale.cashIn,
+                value: element.value,
+                color: getRandomColor()));
+          }
           barData.add(
             BarChartData(_locale.cashIn, element.value!),
           );
         } else {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashOut);
-          pieData.add(PieChartModel(
-              title: _locale.cashOut,
-              value: element.value!,
-              color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: _locale.cashOut,
+                value: element.value,
+                color: getRandomColor()));
+          }
           barData.add(
             BarChartData(_locale.cashOut, element.value!),
           );

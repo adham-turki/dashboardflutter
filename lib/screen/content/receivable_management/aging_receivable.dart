@@ -2,14 +2,9 @@ import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/receivable_management/aging_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,7 +13,6 @@ import '../../../model/criteria/search_criteria.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class AgingReceivable extends StatefulWidget {
@@ -53,6 +47,8 @@ class _AgingReceivableState extends State<AgingReceivable> {
   ];
 
   List<PieChartModel> pieData = [];
+
+  bool temp = false;
   @override
   void initState() {
     super.initState();
@@ -79,7 +75,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
       _locale.barChart,
       _locale.pieChart,
     ];
-    ;
+
     // search();
     selectedChart = charts[0];
     selectedStatus = status[0];
@@ -133,67 +129,11 @@ class _AgingReceivableState extends State<AgingReceivable> {
                             ),
                           ),
                           SizedBox(
-                            // width: width * 0.4,
+                            width: width * 0.4,
                             child: Text(
                               "${_locale.transactionBalance} = $balance",
                               style: twelve400TextStyle(Colors.black),
                             ),
-                          ),
-                          Stack(
-                            children: [
-                              Positioned(
-                                right: 20,
-                                bottom: 0,
-                                child: SizedBox(
-                                  width: 50,
-                                  height: 0,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton2(
-                                      key: dropdownKey,
-                                      isExpanded: true,
-                                      iconStyleData: const IconStyleData(
-                                        iconDisabledColor: Colors.transparent,
-                                        iconEnabledColor: Colors.transparent,
-                                      ),
-                                      dropdownStyleData: DropdownStyleData(
-                                        width: 120,
-                                        padding: EdgeInsets.zero,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(14),
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      items: items
-                                          .map(
-                                            (item) => DropdownMenuItem<String>(
-                                              alignment: Alignment.center,
-                                              value: item,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    item,
-                                                    style: twelve400TextStyle(
-                                                        Colors.black),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: (value) {},
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    dropdownKey.currentState!.callTap();
-                                  },
-                                  child: const Icon(Icons.list)),
-                            ],
                           ),
                         ],
                       ),
@@ -205,20 +145,21 @@ class _AgingReceivableState extends State<AgingReceivable> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? BalancePieChart(data: pieData)
-                            // Center(
-                            //     child:
-                            //     PieChartComponent(
-                            //       radiusNormal: isDesktop ? height * 0.05 : 70,
-                            //       radiusHover: isDesktop ? height * 0.05 : 80,
-                            //       width: isDesktop ? width * 0.42 : width * 0.1,
-                            //       height:
-                            //           isDesktop ? height * 0.42 : height * 0.4,
-                            //       dataList: pieData,
-                            //     ),
-                            //   )
-                            : BalanceBarChart(data: barData),
-                    const SizedBox(), //Footer
+                            ?
+                            // ? BalancePieChart(data: pieData)
+                            Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.4,
+                                  dataList: pieData,
+                                ),
+                              )
+                            :
+                            // : BalanceBarChart(data: barData),
+                            const SizedBox(), //Footer
                   ],
                 ),
               ),
@@ -244,7 +185,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
                 setState(() {
                   selectedChart = value!;
                   getAgingReceivable();
-                  print(selectedChart);
                 });
               },
             ),
@@ -257,7 +197,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
                   selectedStatus = value.toString();
 
                   getAgingReceivable();
-                  print(selectedStatus);
                 });
               },
             ),
@@ -281,7 +220,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
             setState(() {
               selectedChart = value!;
               getAgingReceivable();
-              print(selectedChart);
             });
           },
         ),
@@ -295,7 +233,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
               selectedStatus = value.toString();
 
               getAgingReceivable();
-              print(selectedStatus);
             });
           },
         ),
@@ -330,10 +267,17 @@ class _AgingReceivableState extends State<AgingReceivable> {
         }
       });
       for (var element in value) {
+        if (element.total != 0.0) {
+          temp = true;
+        } else if (element.total == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(element.total!);
-          pieData.add(PieChartModel(
-              title: '', value: element.total!, color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: '', value: element.total, color: getRandomColor()));
+          }
           barData.add(
             BarChartData('', element.total!),
           );

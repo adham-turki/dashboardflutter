@@ -1,18 +1,12 @@
 import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:bi_replicate/utils/constants/api_constants.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -37,8 +31,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
   double height = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   bool isDesktop = false;
-  DateTime? _selectedDate = DateTime.now();
-  TextEditingController _fromDateController = TextEditingController();
+  final TextEditingController _fromDateController = TextEditingController();
   final storage = const FlutterSecureStorage();
   DailySalesController dailySalesController = DailySalesController();
   late AppLocalizations _locale;
@@ -65,6 +58,8 @@ class _DailySalesContentState extends State<DailySalesContent> {
   List<PieChartModel> pieData = [];
   String accountNameString = "";
   List<BarChartData> barData = [];
+
+  bool boolTemp = false;
 
   @override
   void didChangeDependencies() {
@@ -161,7 +156,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
               ),
             ),
             SizedBox(
-              height: height * 0.02,
+              height: height * 0.01,
             ),
             Center(
               child: GestureDetector(
@@ -211,9 +206,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
                       style: twelve400TextStyle(Colors.black),
                     ))
                 : Container(),
-            SizedBox(
-              height: height * 0.02,
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -235,61 +227,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
                                     : _locale.barChart,
                             style: const TextStyle(fontSize: 24),
                           ),
-                        ),
-                        Stack(
-                          children: [
-                            Positioned(
-                              right: 20,
-                              bottom: 0,
-                              child: SizedBox(
-                                width: 50,
-                                height: 0,
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton2(
-                                    key: dropdownKey,
-                                    isExpanded: true,
-                                    iconStyleData: const IconStyleData(
-                                      iconDisabledColor: Colors.transparent,
-                                      iconEnabledColor: Colors.transparent,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      width: 120,
-                                      padding: EdgeInsets.zero,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    items: items
-                                        .map(
-                                          (item) => DropdownMenuItem<String>(
-                                            alignment: Alignment.center,
-                                            value: item,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  item,
-                                                  style: twelve400TextStyle(
-                                                      Colors.black),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (value) {},
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                                onTap: () {
-                                  dropdownKey.currentState!.callTap();
-                                },
-                                child: const Icon(Icons.list)),
-                          ],
                         ),
                       ],
                     ),
@@ -334,7 +271,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
             setState(() {
               selectedChart = value!;
               getDailySales();
-              print(selectedChart);
             });
           },
         ),
@@ -350,7 +286,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
                   selectedStatus = value.toString();
 
                   getDailySales();
-                  print(selectedStatus);
                 });
               },
             ),
@@ -361,7 +296,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 setState(() {
                   _fromDateController.text = value;
                   getDailySales();
-                  print(_fromDateController.text);
                 });
               },
             ),
@@ -385,7 +319,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
             setState(() {
               selectedChart = value!;
               getDailySales();
-              print(selectedChart);
             });
           },
         ),
@@ -399,7 +332,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
               selectedStatus = value.toString();
 
               getDailySales();
-              print(selectedStatus);
             });
           },
         ),
@@ -410,7 +342,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
             setState(() {
               _fromDateController.text = value;
               getDailySales();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -432,13 +363,23 @@ class _DailySalesContentState extends State<DailySalesContent> {
       for (var elemant in response) {
         String temp =
             DatesController().formatDate(getNextDay(startDate).toString());
+        if (double.parse(elemant.dailySale.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(double.parse(elemant.dailySale.toString()));
           listOfPeriods.add(temp);
-          pieData.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.dailySale.toString()),
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.dailySale.toString()) == 0.0
+                    ? 1.0
+                    : double.parse(elemant.dailySale.toString()),
+                color: getRandomColor()));
+          }
+
           barData.add(
             BarChartData(temp, double.parse(elemant.dailySale.toString())),
           );
