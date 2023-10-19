@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
   TextEditingController _fromDateController = TextEditingController();
   TextEditingController _toDateController = TextEditingController();
@@ -164,6 +166,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -175,6 +178,61 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                                     : _locale.barChart,
                             style: const TextStyle(fontSize: 24),
                           ),
+                        ),
+                        Stack(
+                          children: [
+                            Positioned(
+                              right: 20,
+                              bottom: 0,
+                              child: SizedBox(
+                                width: 50,
+                                height: 0,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    key: dropdownKey,
+                                    isExpanded: true,
+                                    iconStyleData: const IconStyleData(
+                                      iconDisabledColor: Colors.transparent,
+                                      iconEnabledColor: Colors.transparent,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      width: 120,
+                                      padding: EdgeInsets.zero,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    items: items
+                                        .map(
+                                          (item) => DropdownMenuItem<String>(
+                                            alignment: Alignment.center,
+                                            value: item,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  item,
+                                                  style: twelve400TextStyle(
+                                                      Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {},
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  dropdownKey.currentState!.callTap();
+                                },
+                                child: const Icon(Icons.list)),
+                          ],
                         ),
                       ],
                     ),

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/utils/constants/api_constants.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,6 +35,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  final dropdownKey = GlobalKey<DropdownButton2State>();
   DateTime? _selectedDate = DateTime.now();
   TextEditingController _fromDateController = TextEditingController();
   late AppLocalizations _locale;
@@ -117,42 +119,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CustomCard(
-                  gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                  title: '42136',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Sale',
-                  icon:
-                      Icons.attach_money, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                  title: '1446',
-                  subtitle: 'Mon-Fri',
-                  label: 'Total Visited',
-                  icon: Icons.abc, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                  title: '61%',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Growth',
-                  icon: Icons.bar_chart, // Provide the actual path to the icon
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height * 0.1,
-            ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -221,6 +187,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -232,6 +199,61 @@ class _ExpensesContentState extends State<ExpensesContent> {
                                     : _locale.barChart,
                             style: const TextStyle(fontSize: 24),
                           ),
+                        ),
+                        Stack(
+                          children: [
+                            Positioned(
+                              right: 20,
+                              bottom: 0,
+                              child: SizedBox(
+                                width: 50,
+                                height: 0,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    key: dropdownKey,
+                                    isExpanded: true,
+                                    iconStyleData: const IconStyleData(
+                                      iconDisabledColor: Colors.transparent,
+                                      iconEnabledColor: Colors.transparent,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      width: 120,
+                                      padding: EdgeInsets.zero,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    items: items
+                                        .map(
+                                          (item) => DropdownMenuItem<String>(
+                                            alignment: Alignment.center,
+                                            value: item,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  item,
+                                                  style: twelve400TextStyle(
+                                                      Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {},
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  dropdownKey.currentState!.callTap();
+                                },
+                                child: const Icon(Icons.list)),
+                          ],
                         ),
                       ],
                     ),
