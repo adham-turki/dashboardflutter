@@ -36,6 +36,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  bool temp = false;
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   CashFlowController cashFlowController = CashFlowController();
@@ -438,23 +439,32 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         balance = value[0].value! - value[1].value!;
       });
       for (var element in value) {
+        if (element.value != 0.0) {
+          temp = true;
+        } else if (element.value == 0.0) {
+          temp = false;
+        }
         if (element.title! == "debit") {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashIn);
-          pieData.add(PieChartModel(
-              title: _locale.cashIn,
-              value: element.value!,
-              color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: _locale.cashIn,
+                value: element.value,
+                color: getRandomColor()));
+          }
           barData.add(
             BarChartData(_locale.cashIn, element.value!),
           );
         } else {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashOut);
-          pieData.add(PieChartModel(
-              title: _locale.cashOut,
-              value: element.value!,
-              color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: _locale.cashOut,
+                value: element.value,
+                color: getRandomColor()));
+          }
           barData.add(
             BarChartData(_locale.cashOut, element.value!),
           );

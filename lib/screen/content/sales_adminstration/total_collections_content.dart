@@ -56,6 +56,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool boolTemp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -361,13 +363,21 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         .getTotalCollectionMethod(searchCriteria)
         .then((value) {
       for (var element in value) {
+        if (element.collection != 0.0) {
+          boolTemp = true;
+        } else if (element.collection == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(element.collection!);
           listOfPeriods.add(element.name!);
-          pieData.add(PieChartModel(
-              title: element.name!,
-              value: element.collection!,
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: element.name!,
+                value: element.collection,
+                color: getRandomColor()));
+          }
+
           barData.add(
             BarChartData(element.name!, element.collection!),
           );

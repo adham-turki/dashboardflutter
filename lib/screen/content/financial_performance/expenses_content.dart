@@ -28,6 +28,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  bool boolTemp = false;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   final TextEditingController _fromDateController = TextEditingController();
   late AppLocalizations _locale;
@@ -328,13 +329,23 @@ class _ExpensesContentState extends State<ExpensesContent> {
     expensesController.getExpense(searchCriteria).then((value) {
       for (var elemant in value) {
         String temp = DatesController().formatDate(getNextDay(date).toString());
+        if (double.parse(elemant.expense.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.expense.toString()) == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(elemant.expense!);
           listOfPeriods.add(temp);
-          pieData.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.expense.toString()),
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.expense.toString()) == 0.0
+                    ? 1.0
+                    : double.parse(elemant.expense.toString()),
+                color: getRandomColor()));
+          }
+
           barData.add(
               BarChartData(temp, double.parse(elemant.expense.toString())));
         });

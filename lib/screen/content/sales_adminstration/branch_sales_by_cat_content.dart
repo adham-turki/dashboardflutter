@@ -68,6 +68,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool temp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -453,14 +455,21 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
         // Generate a random color
         Color randomColor = getRandomColor(); // Use the getRandomColor function
-
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(bal);
           listOfPeriods.add(element.categoryName!);
-          pieData.add(PieChartModel(
-              title: element.categoryName!,
-              value: bal,
-              color: randomColor)); // Set random color
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: element.categoryName!,
+                value: bal,
+                color: randomColor)); // Set random color
+          }
+
           barData.add(
             BarChartData(
               element.categoryName!,

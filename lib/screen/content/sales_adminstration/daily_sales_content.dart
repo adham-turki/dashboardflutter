@@ -59,6 +59,8 @@ class _DailySalesContentState extends State<DailySalesContent> {
   String accountNameString = "";
   List<BarChartData> barData = [];
 
+  bool boolTemp = false;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -361,13 +363,23 @@ class _DailySalesContentState extends State<DailySalesContent> {
       for (var elemant in response) {
         String temp =
             DatesController().formatDate(getNextDay(startDate).toString());
+        if (double.parse(elemant.dailySale.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(double.parse(elemant.dailySale.toString()));
           listOfPeriods.add(temp);
-          pieData.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.dailySale.toString()),
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.dailySale.toString()) == 0.0
+                    ? 1.0
+                    : double.parse(elemant.dailySale.toString()),
+                color: getRandomColor()));
+          }
+
           barData.add(
             BarChartData(temp, double.parse(elemant.dailySale.toString())),
           );

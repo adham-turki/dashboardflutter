@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import '../../../components/charts.dart';
+import '../../../components/charts/pie_chart.dart';
 import '../../../controller/receivable_management/aging_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -46,6 +47,8 @@ class _AgingReceivableState extends State<AgingReceivable> {
   ];
 
   List<PieChartModel> pieData = [];
+
+  bool temp = false;
   @override
   void initState() {
     super.initState();
@@ -142,20 +145,21 @@ class _AgingReceivableState extends State<AgingReceivable> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? BalancePieChart(data: pieData)
-                            // Center(
-                            //     child:
-                            //     PieChartComponent(
-                            //       radiusNormal: isDesktop ? height * 0.05 : 70,
-                            //       radiusHover: isDesktop ? height * 0.05 : 80,
-                            //       width: isDesktop ? width * 0.42 : width * 0.1,
-                            //       height:
-                            //           isDesktop ? height * 0.42 : height * 0.4,
-                            //       dataList: pieData,
-                            //     ),
-                            //   )
-                            : BalanceBarChart(data: barData),
-                    const SizedBox(), //Footer
+                            ?
+                            // ? BalancePieChart(data: pieData)
+                            Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.4,
+                                  dataList: pieData,
+                                ),
+                              )
+                            :
+                            // : BalanceBarChart(data: barData),
+                            const SizedBox(), //Footer
                   ],
                 ),
               ),
@@ -263,10 +267,17 @@ class _AgingReceivableState extends State<AgingReceivable> {
         }
       });
       for (var element in value) {
+        if (element.total != 0.0) {
+          temp = true;
+        } else if (element.total == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(element.total!);
-          pieData.add(PieChartModel(
-              title: '', value: element.total!, color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: '', value: element.total, color: getRandomColor()));
+          }
           barData.add(
             BarChartData('', element.total!),
           );

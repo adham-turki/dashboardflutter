@@ -25,6 +25,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   double width = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   double height = 0;
+  bool temp = false;
   late AppLocalizations _locale;
   SalesBranchesController salesBranchesController = SalesBranchesController();
   final TextEditingController _fromDateController = TextEditingController();
@@ -204,12 +205,19 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         double a = (element.totalSales! + element.retSalesDis!) -
             (element.salesDis! + element.totalReturnSales!);
         a = Converters().formateDouble(a);
+        if (a != 0.0) {
+          temp = true;
+        } else if (a == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(a);
           listOfPeriods.add(element.namee!);
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: element.namee!, value: a, color: Colors.blue));
+          }
 
-          pieData.add(PieChartModel(
-              title: element.namee!, value: a, color: Colors.blue));
           barData.add(
             BarChartData(element.namee!, a),
           );
