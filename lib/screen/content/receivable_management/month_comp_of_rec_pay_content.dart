@@ -174,7 +174,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -189,7 +189,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],

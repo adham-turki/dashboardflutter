@@ -175,7 +175,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -190,7 +190,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -314,6 +314,10 @@ class _ExpensesContentState extends State<ExpensesContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   int count = 0;
   getExpenses() {
     listOfBalances = [];
@@ -342,7 +346,8 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 title: temp,
                 value: double.parse(elemant.expense.toString()) == 0.0
                     ? 1.0
-                    : double.parse(elemant.expense.toString()),
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.expense.toString())),
                 color: getRandomColor()));
           }
 

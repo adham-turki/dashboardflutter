@@ -210,7 +210,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -225,7 +225,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -349,6 +349,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   void getDailySales() {
     listOfBalances = [];
     pieData = [];
@@ -376,7 +380,8 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 title: temp,
                 value: double.parse(elemant.dailySale.toString()) == 0.0
                     ? 1.0
-                    : double.parse(elemant.dailySale.toString()),
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.dailySale.toString())),
                 color: getRandomColor()));
           }
 

@@ -89,7 +89,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
     return SingleChildScrollView(
       child: Container(
-        // height: height,
+        // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -142,7 +142,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -157,7 +157,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -173,7 +173,8 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  width:
+                                      isDesktop ? width * 0.42 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.42 : height * 0.4,
                                   dataList: pieData,
@@ -189,6 +190,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         ),
       ),
     );
+  }
+
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
   }
 
   Future getSalesByBranch() async {
@@ -215,7 +220,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           listOfPeriods.add(element.namee!);
           if (temp) {
             pieData.add(PieChartModel(
-                title: element.namee!, value: a, color: Colors.blue));
+                title: element.namee!,
+                value: formatDoubleToTwoDecimalPlaces(a),
+                color: Colors.blue));
           }
 
           barData.add(

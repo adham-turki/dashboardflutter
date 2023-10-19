@@ -156,7 +156,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
@@ -171,7 +171,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -187,7 +187,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  width:
+                                      isDesktop ? width * 0.42 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.42 : height * 0.4,
                                   dataList: pieData,
@@ -347,6 +348,10 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   getTotalCollections() {
     listOfBalances = [];
     pieData = [];
@@ -374,7 +379,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           if (boolTemp) {
             pieData.add(PieChartModel(
                 title: element.name!,
-                value: element.collection,
+                value: formatDoubleToTwoDecimalPlaces(element.collection!),
                 color: getRandomColor()));
           }
 
