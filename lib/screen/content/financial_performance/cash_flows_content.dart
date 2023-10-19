@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/utils/constants/api_constants.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,6 +35,7 @@ class CashFlowsContent extends StatefulWidget {
 class _CashFlowsContentState extends State<CashFlowsContent> {
   DateTime? _selectedDate = DateTime.now();
   DateTime? _selectedDate2 = DateTime.now();
+  final dropdownKey = GlobalKey<DropdownButton2State>();
   final storage = const FlutterSecureStorage();
   double width = 0;
   double height = 0;
@@ -231,6 +233,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -242,6 +245,61 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                                     : _locale.barChart,
                             style: const TextStyle(fontSize: 24),
                           ),
+                        ),
+                        Stack(
+                          children: [
+                            Positioned(
+                              right: 20,
+                              bottom: 0,
+                              child: SizedBox(
+                                width: 50,
+                                height: 0,
+                                child: DropdownButtonHideUnderline(
+                                  child: DropdownButton2(
+                                    key: dropdownKey,
+                                    isExpanded: true,
+                                    iconStyleData: const IconStyleData(
+                                      iconDisabledColor: Colors.transparent,
+                                      iconEnabledColor: Colors.transparent,
+                                    ),
+                                    dropdownStyleData: DropdownStyleData(
+                                      width: 120,
+                                      padding: EdgeInsets.zero,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(14),
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    items: items
+                                        .map(
+                                          (item) => DropdownMenuItem<String>(
+                                            alignment: Alignment.center,
+                                            value: item,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  item,
+                                                  style: twelve400TextStyle(
+                                                      Colors.black),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {},
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                                onTap: () {
+                                  dropdownKey.currentState!.callTap();
+                                },
+                                child: const Icon(Icons.list)),
+                          ],
                         ),
                       ],
                     ),

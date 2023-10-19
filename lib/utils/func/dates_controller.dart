@@ -2,28 +2,29 @@ import 'package:intl/intl.dart';
 
 class DatesController {
   DateTime today = DateTime.now();
-
   String todayDate() {
-    return today.toString();
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(today);
   }
 
   String currentWeek() {
     int daysUntilFirstDay = (today.weekday + 2) - DateTime.monday;
     DateTime firstDayCurrentWeek =
         today.subtract(Duration(days: daysUntilFirstDay));
-    return firstDayCurrentWeek.toString();
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(firstDayCurrentWeek);
   }
 
   String currentMonth() {
     DateTime firstDayCurrentMonth = DateTime(today.year, today.month, 1);
-
-    return firstDayCurrentMonth.toString();
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(firstDayCurrentMonth);
   }
 
   String currentYear() {
     DateTime firstDayOfYear = DateTime(today.year, 1, 1);
-
-    return firstDayOfYear.toString();
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(firstDayOfYear);
   }
 
   formatDate(String date) {
