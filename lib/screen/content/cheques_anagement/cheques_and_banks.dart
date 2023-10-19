@@ -106,7 +106,6 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           width: width * 0.76,
           child: Column(
             children: [
-              const HeaderWidget(),
               Container(
                 width: width * 0.7,
                 decoration: borderDecoration,
