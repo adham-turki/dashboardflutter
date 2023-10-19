@@ -19,17 +19,17 @@ import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
 import '../../../widget/headerWidget.dart';
 
-class InventoryPerfContent extends StatefulWidget {
-  const InventoryPerfContent({super.key});
+class ChequesAndBankContent extends StatefulWidget {
+  const ChequesAndBankContent({super.key});
 
   @override
-  State<InventoryPerfContent> createState() => _InventoryPerfContentState();
+  State<ChequesAndBankContent> createState() => _ChequesAndBankContentState();
 }
 
 List dataDec = [];
 List dataInc = [];
 
-class _InventoryPerfContentState extends State<InventoryPerfContent> {
+class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
   TextEditingController numberOfrow = TextEditingController();
@@ -48,43 +48,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   var selectedPeriod = "";
   String hintValue = '0';
-  String todayDate = DatesController().formatDateReverse(
-      DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
-  final List<double> listOfBalances = [
-    100.0,
-    150.0,
-    120.0,
-    200.0,
-    180.0,
-    250.0
-  ];
-  final List<String> listOfPeriods = [
-    'Period 1',
-    'Period 2',
-    'Period 3',
-    'Period 4',
-    'Period 5',
-    'Period 6'
-  ];
-  final storage = const FlutterSecureStorage();
-
-  final List<String> items = [
-    'Print',
-    'Save as JPEG',
-    'Save as PNG',
-  ];
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polRows = [];
 
   @override
   void initState() {
-    fromDate.text = todayDate;
-    toDate.text = nextMonth;
     criteria = SearchCriteria(
       fromDate: fromDate.text,
       toDate: toDate.text,
@@ -148,19 +117,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomDropDown(
-                          hint: periods[0],
-                          label: "Period",
-                          items: periods,
-                          initialValue:
-                              selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
                           label: "Status",
                           hint: status[0],
                           items: status,
@@ -178,44 +134,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                             });
                           },
                         ),
-                        CustomTextField(
-                          controller: numberOfrow,
-                          initialValue: numberOfrow.text,
-                          label: "Number of rows",
-                          onChanged: (value) {
-                            setState(() {
-                              hintValue = value;
-                              criteria.rownum = int.parse(numberOfrow.text);
-                              fetch(PlutoLazyPaginationRequest(
-                                  page: criteria.page!));
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDatePicker(
-                          label: "From Date",
-                          controller: fromDate,
-                          onChanged: (value) {
-                            setControllerFromDateText();
-                          },
-                          onSelected: (value) {
-                            setControllerFromDateText();
-                          },
-                        ),
-                        CustomDatePicker(
-                          label: "To Date",
-                          controller: toDate,
-                          onChanged: (value) {
-                            setControllertoDateText();
-                          },
-                          onSelected: (value) {
-                            setControllertoDateText();
-                          },
-                        ),
                       ],
                     ),
                   ],
@@ -226,28 +144,28 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.topOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.green),
+                    _locale.chequesPayable,
+                    style: twenty600TextStyle(Colors.blue[700]),
                   ),
                   SizedBox(
                     width: width * 0.37,
-                    height: height * 0.7,
+                    height: height * 0.2,
                     child: TableComponent(
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       //dummy row
                       polRows: polRows,
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooter(stateManager);
-                      },
+                      // footerBuilder: (stateManager) {
+                      //   return lazyPaginationFooter(stateManager);
+                      // },
                       // onSelected: (event) {
                       //   setState(() {
                       //     data = event.row!.cells['account']!.value.toString();
@@ -282,8 +200,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.leastOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.red),
+                    _locale.bankSettlement,
+                    style: twenty600TextStyle(Colors.blue[700]),
                   ),
                   SizedBox(
                     width: width * 0.37,
@@ -292,9 +210,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       polRows: [],
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooterLeast(stateManager);
-                      },
+                      // footerBuilder: (stateManager) {
+                      //   return lazyPaginationFooterLeast(stateManager);
+                      // },
                       // onSelected: (event) {
                       //   setState(() {
                       //     data = event.row!.cells['account']!.value.toString();

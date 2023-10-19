@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
       case 8:
         return Container();
       case 9:
-        return Container();
+        return const ChequesAndBankContent();
       case 10:
         return Container();
       case 11:

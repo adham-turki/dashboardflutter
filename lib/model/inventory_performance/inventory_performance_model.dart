@@ -1,13 +1,18 @@
+import 'package:bi_replicate/controller/inventory_performance/inventory_performance_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../utils/constants/colors.dart';
+import '../../utils/constants/styles.dart';
+import '../criteria/search_criteria.dart';
 
 class InventoryPerformanceModel {
   String? code;
   String? name;
   double? intQty;
   double? outQty;
+  List? dataInc;
+  static double allOutQty = 0;
   InventoryPerformanceModel(this.code, this.name, this.intQty, this.outQty);
   InventoryPerformanceModel.fromJson(
       Map<String, dynamic> inventoryPerformance) {
@@ -25,47 +30,83 @@ class InventoryPerformanceModel {
         : (double.parse(inventoryPerformance['outQnty'].toString()));
   }
 
-  Map<String, PlutoCell> toPluto() {
+  PlutoRow toPluto() {
     final Map<String, PlutoCell> inventoryPerformance = <String, PlutoCell>{};
-    inventoryPerformance['stkCode'] = PlutoCell(value: code);
-    inventoryPerformance['nameE'] = PlutoCell(value: name);
-    inventoryPerformance['inQnty'] = PlutoCell(value: intQty);
-    inventoryPerformance['outQnty'] = PlutoCell(value: outQty);
-    return inventoryPerformance;
+    inventoryPerformance['stkCode'] = PlutoCell(value: code ?? "");
+    inventoryPerformance['nameE'] = PlutoCell(value: name ?? "");
+    inventoryPerformance['inQnty'] = PlutoCell(value: intQty ?? 0);
+    inventoryPerformance['outQnty'] = PlutoCell(value: outQty ?? 0);
+    return PlutoRow(cells: inventoryPerformance);
   }
 
   static List<PlutoColumn> getColumns(AppLocalizations localizations) {
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
-        field: "code",
+        field: "stkCode",
         type: PlutoColumnType.text(),
         width: 150,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.name,
-        field: "name",
+        field: "nameE",
         type: PlutoColumnType.text(),
         width: 150,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.currentQty,
-        field: "intQty",
-        type: PlutoColumnType.text(),
+        field: "inQnty",
+        type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.soldQnty,
-        field: "outQty",
-        type: PlutoColumnType.text(),
+        field: "outQnty",
+        type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return InventoryPerformanceModel.footerRenderer(
+              rendererContext, allOutQty);
+        },
       ),
     ];
 
     return list;
+  }
+
+  double soldQntyVal() {
+    // print("ListString ${widget.dataInc.length}");
+
+    for (int i = 0; i < dataInc!.length; i++) {
+      allOutQty += double.parse(dataInc![i]['outQnty'].toString());
+    }
+    return allOutQty;
+  }
+
+  static PlutoAggregateColumnFooter footerRenderer(
+      PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: true,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: text.replaceAll("\$", ""),
+            children: [
+              TextSpan(
+                text: valueAll.toStringAsFixed(2),
+              ),
+            ],
+            style: gridFooterStyle,
+          ),
+        ];
+      },
+    );
   }
 }

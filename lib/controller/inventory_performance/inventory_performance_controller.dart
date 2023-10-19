@@ -14,13 +14,16 @@ class InventoryPerformanceController extends Api {
       getTotalSellInc,
       searchCriteria.toJson(),
     ).then((response) {
-      var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      for (var elemant in jsonData) {
-        //creditAmt - debitAmt
-        inventoryPerformanceList
-            .add(InventoryPerformanceModel.fromJson(elemant));
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var elemant in jsonData) {
+          //creditAmt - debitAmt
+          inventoryPerformanceList
+              .add(InventoryPerformanceModel.fromJson(elemant));
+        }
       }
     });
+
     return inventoryPerformanceList;
   }
 
@@ -30,11 +33,13 @@ class InventoryPerformanceController extends Api {
 
     await ApiService.postRequest(getTotalSellDec, searchCriteria.toJson())
         .then((response) {
-      var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-      for (var elemant in jsonData) {
-        //creditAmt - debitAmt
-        inventoryPerformanceList
-            .add(InventoryPerformanceModel.fromJson(elemant));
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var elemant in jsonData) {
+          //creditAmt - debitAmt
+          inventoryPerformanceList
+              .add(InventoryPerformanceModel.fromJson(elemant));
+        }
       }
     });
     return inventoryPerformanceList;
