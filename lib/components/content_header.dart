@@ -78,38 +78,79 @@ class _ContentHeaderState extends State<ContentHeader> {
           SizedBox(
             height: height * 0.04,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              CustomCard(
-                gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                title: '42136',
-                subtitle: 'Mon-Fri',
-                label: 'Overall Sale',
-                icon: Icons.attach_money, // Provide the actual path to the icon
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              CustomCard(
-                gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                title: '1446',
-                subtitle: 'Mon-Fri',
-                label: 'Total Visited',
-                icon: Icons.abc, // Provide the actual path to the icon
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              CustomCard(
-                gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                title: '61%',
-                subtitle: 'Mon-Fri',
-                label: 'Overall Growth',
-                icon: Icons.bar_chart, // Provide the actual path to the icon
-              ),
-            ],
-          ),
+          Responsive.isDesktop(context)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    CustomCard(
+                      gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
+                      title: '42136',
+                      subtitle: 'Mon-Fri',
+                      label: 'Overall Sale',
+                      icon: Icons
+                          .attach_money, // Provide the actual path to the icon
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    CustomCard(
+                      gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
+                      title: '1446',
+                      subtitle: 'Mon-Fri',
+                      label: 'Total Visited',
+                      icon: Icons.abc, // Provide the actual path to the icon
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    CustomCard(
+                      gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
+                      title: '61%',
+                      subtitle: 'Mon-Fri',
+                      label: 'Overall Growth',
+                      icon: Icons
+                          .bar_chart, // Provide the actual path to the icon
+                    ),
+                  ],
+                )
+              : SizedBox(
+                  width: width * 0.8,
+                  height: height * 0.12,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: const [
+                      CustomCard(
+                        gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
+                        title: '42136',
+                        subtitle: 'Mon-Fri',
+                        label: 'Overall Sale',
+                        icon: Icons
+                            .attach_money, // Provide the actual path to the icon
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomCard(
+                        gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
+                        title: '1446',
+                        subtitle: 'Mon-Fri',
+                        label: 'Total Visited',
+                        icon: Icons.abc, // Provide the actual path to the icon
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      CustomCard(
+                        gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
+                        title: '61%',
+                        subtitle: 'Mon-Fri',
+                        label: 'Overall Growth',
+                        icon: Icons
+                            .bar_chart, // Provide the actual path to the icon
+                      ),
+                    ],
+                  ),
+                ),
         ],
       ),
     );
