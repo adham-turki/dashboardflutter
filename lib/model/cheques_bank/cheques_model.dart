@@ -1,3 +1,5 @@
+import 'package:pluto_grid/pluto_grid.dart';
+
 class ChequesModel {
   String? jCode1;
   int? vouchType1;
@@ -29,35 +31,6 @@ class ChequesModel {
   int? counter = 0;
 
   ChequesModel();
-  // ChequesModel(
-  //     {required this.jCode1,
-  //     required this.vouchType1,
-  //     required this.vouchNum1,
-  //     required this.bankCode,
-  //     required this.branchNo,
-  //     required this.bankAccNo,
-  //     required this.chequeNum,
-  //     required this.amount,
-  //     required this.dueDate,
-  //     required this.status,
-  //     required this.relatedAccCode1,
-  //     required this.curRate,
-  //     required this.curCode,
-  //     required this.voucherDate1,
-  //     required this.accName,
-  //     required this.bankName,
-  //     required this.custSupCode,
-  //     required this.custSupName,
-  //     required this.curName,
-  //     required this.custCategory,
-  //     required this.voucherTypeNameE,
-  //     required this.voucherTypeNameA,
-  //     required this.balance,
-  //     required this.depositBankName,
-  //     required this.statusNameA,
-  //     required this.statusNameE,
-  //     required this.accCode,
-  //     this.counter});
 
   ChequesModel.fromJson(Map<String, dynamic> json, int countNum) {
     jCode1 = json['jCode1'];

@@ -1,15 +1,12 @@
 import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../controller/sales_adminstration/sales_category_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,9 +31,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  DateTime? _selectedDate;
-  DateTime? _selectedDate2;
   final storage = const FlutterSecureStorage();
+  final dropdownKey = GlobalKey<DropdownButton2State>();
 
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
@@ -72,6 +68,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool temp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -169,11 +167,12 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -183,7 +182,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -267,7 +266,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                       selectedBranch = value.toString();
                       selectedBranchCode = branchesMap[value.toString()]!;
                       getBranchByCat();
-                      print(selectedBranch);
                     });
                   },
                 ),
@@ -279,7 +277,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       selectedChart = value!;
                       getBranchByCat();
-                      print(selectedChart);
                     });
                   },
                 ),
@@ -292,7 +289,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                       checkPeriods(value);
                       selectedPeriod = value!;
                       getBranchByCat();
-                      print(selectedPeriod);
                     });
                   },
                 ),
@@ -304,7 +300,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       selectedCategories = value!;
                       getBranchByCat();
-                      print(selectedCategories);
                     });
                   },
                 ),
@@ -320,7 +315,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       _fromDateController.text = value;
                       getBranchByCat();
-                      print(_fromDateController.text);
                     });
                   },
                 ),
@@ -331,7 +325,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     setState(() {
                       _toDateController.text = value;
                       getBranchByCat();
-                      print(_toDateController.text);
                     });
                   },
                 ),
@@ -358,7 +351,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               selectedBranch = value.toString();
               selectedBranchCode = branchesMap[value.toString()]!;
               getBranchByCat();
-              print(selectedBranch);
             });
           },
         ),
@@ -371,7 +363,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               selectedChart = value!;
               getBranchByCat();
-              print(selectedChart);
             });
           },
         ),
@@ -385,7 +376,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getBranchByCat();
-              print(selectedPeriod);
             });
           },
         ),
@@ -398,7 +388,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               selectedCategories = value!;
               getBranchByCat();
-              print(selectedCategories);
             });
           },
         ),
@@ -409,7 +398,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               _fromDateController.text = value;
               getBranchByCat();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -420,7 +408,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             setState(() {
               _toDateController.text = value;
               getBranchByCat();
-              print(_toDateController.text);
             });
           },
         ),
@@ -437,6 +424,10 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     return Color.fromARGB(255, red, green, blue);
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   void getBranchByCat() {
     listOfBalances = [];
     pieData = [];
@@ -451,7 +442,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     //             : 4;
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);
-    print("selectedBranch: ${selectedBranchCode}");
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate,
         toDate: endDate,
@@ -461,7 +451,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     barData = [];
     listOfBalances = [];
     listOfPeriods = [];
-    final random = Random();
 
     salesCategoryController.getSalesByCategory(searchCriteria).then((value) {
       for (var element in value) {
@@ -470,14 +459,21 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
         // Generate a random color
         Color randomColor = getRandomColor(); // Use the getRandomColor function
-
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(bal);
           listOfPeriods.add(element.categoryName!);
-          pieData.add(PieChartModel(
-              title: element.categoryName!,
-              value: bal,
-              color: randomColor)); // Set random color
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: element.categoryName!,
+                value: formatDoubleToTwoDecimalPlaces(bal),
+                color: randomColor)); // Set random color
+          }
+
           barData.add(
             BarChartData(
               element.categoryName!,

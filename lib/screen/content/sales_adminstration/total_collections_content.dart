@@ -4,19 +4,17 @@ import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../components/charts.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/sales_adminstration/total_collection_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/drop_down/custom_dropdown.dart';
 
 class TotalCollectionsContent extends StatefulWidget {
   const TotalCollectionsContent({super.key});
@@ -30,16 +28,13 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
-  TextEditingController _fromDateController = TextEditingController();
-  TextEditingController _toDateController = TextEditingController();
+  final TextEditingController _fromDateController = TextEditingController();
+  final TextEditingController _toDateController = TextEditingController();
   var storage = const FlutterSecureStorage();
   TotalCollectionConroller totalCollectionController =
       TotalCollectionConroller();
-
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
-
   List<String> periods = [];
   List<String> status = [];
   List<String> charts = [];
@@ -61,6 +56,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+
+  bool boolTemp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -159,11 +156,12 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -173,7 +171,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -189,7 +187,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  width:
+                                      isDesktop ? width * 0.42 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.42 : height * 0.4,
                                   dataList: pieData,
@@ -225,7 +224,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                       checkPeriods(value);
                       selectedPeriod = value!;
                       getTotalCollections();
-                      print(selectedPeriod);
                     });
                   },
                 ),
@@ -237,7 +235,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       selectedStatus = value!;
                       getTotalCollections();
-                      print(selectedStatus);
                     });
                   },
                 ),
@@ -249,7 +246,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       selectedChart = value!;
                       getTotalCollections();
-                      print(selectedChart);
                     });
                   },
                 ),
@@ -265,7 +261,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       _fromDateController.text = value;
                       getTotalCollections();
-                      print(_fromDateController.text);
                     });
                   },
                 ),
@@ -276,7 +271,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     setState(() {
                       _toDateController.text = value;
                       getTotalCollections();
-                      print(_toDateController.text);
                     });
                   },
                 ),
@@ -302,7 +296,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               selectedChart = value!;
               getTotalCollections();
-              print(selectedChart);
             });
           },
         ),
@@ -316,7 +309,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               checkPeriods(value);
               selectedPeriod = value!;
               getTotalCollections();
-              print(selectedPeriod);
             });
           },
         ),
@@ -329,7 +321,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               selectedStatus = value!;
               getTotalCollections();
-              print(selectedStatus);
             });
           },
         ),
@@ -340,7 +331,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               _fromDateController.text = value;
               getTotalCollections();
-              print(_fromDateController.text);
             });
           },
         ),
@@ -351,12 +341,15 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             setState(() {
               _toDateController.text = value;
               getTotalCollections();
-              print(_toDateController.text);
             });
           },
         ),
       ],
     );
+  }
+
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
   }
 
   getTotalCollections() {
@@ -375,13 +368,21 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         .getTotalCollectionMethod(searchCriteria)
         .then((value) {
       for (var element in value) {
+        if (element.collection != 0.0) {
+          boolTemp = true;
+        } else if (element.collection == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(element.collection!);
           listOfPeriods.add(element.name!);
-          pieData.add(PieChartModel(
-              title: element.name!,
-              value: element.collection!,
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: element.name!,
+                value: formatDoubleToTwoDecimalPlaces(element.collection!),
+                color: getRandomColor()));
+          }
+
           barData.add(
             BarChartData(element.name!, element.collection!),
           );

@@ -1,4 +1,6 @@
+import 'package:bi_replicate/controller/cheques_management/cheques_payable_controller.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:bi_replicate/model/cheques_bank/cheques_payable_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -19,17 +21,14 @@ import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
 import '../../../widget/headerWidget.dart';
 
-class InventoryPerfContent extends StatefulWidget {
-  const InventoryPerfContent({super.key});
+class ChequesAndBankContent extends StatefulWidget {
+  const ChequesAndBankContent({super.key});
 
   @override
-  State<InventoryPerfContent> createState() => _InventoryPerfContentState();
+  State<ChequesAndBankContent> createState() => _ChequesAndBankContentState();
 }
 
-List dataDec = [];
-List dataInc = [];
-
-class _InventoryPerfContentState extends State<InventoryPerfContent> {
+class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
   TextEditingController numberOfrow = TextEditingController();
@@ -43,54 +42,21 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   var selectedStatus = "";
   String? fromDateValue;
   String? toDateValue;
-
+  SearchCriteria criteria = SearchCriteria();
+  ChequesPayableModel chequesPayableModel =
+      ChequesPayableModel(0, 0, 0, 0, 0, 0, 0);
   String data = "";
 
   var selectedPeriod = "";
   String hintValue = '0';
-  String todayDate = DatesController().formatDateReverse(
-      DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
-  final List<double> listOfBalances = [
-    100.0,
-    150.0,
-    120.0,
-    200.0,
-    180.0,
-    250.0
-  ];
-  final List<String> listOfPeriods = [
-    'Period 1',
-    'Period 2',
-    'Period 3',
-    'Period 4',
-    'Period 5',
-    'Period 6'
-  ];
-  final storage = const FlutterSecureStorage();
 
-  final List<String> items = [
-    'Print',
-    'Save as JPEG',
-    'Save as PNG',
-  ];
-
-  SearchCriteria criteria = SearchCriteria();
-  List<PlutoRow> polTopRows = [];
+  List<PlutoRow> polRows = [];
 
   @override
   void initState() {
-    fromDate.text = todayDate;
-    toDate.text = nextMonth;
-
-    criteria.fromDate = todayDate;
-    criteria.toDate = nextMonth;
-    criteria.voucherStatus = -100;
-    criteria.rownum = 10;
-
+    criteria = SearchCriteria(
+      voucherStatus: -100,
+    );
     super.initState();
   }
 
@@ -126,14 +92,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   String? toJCodeValue;
   String? periodValue;
   double height = 0;
-  int count = 0;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
-    print("INSIDE BUILD POLToproWS: ${polTopRows.length}");
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -141,7 +103,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           width: width * 0.76,
           child: Column(
             children: [
-              const HeaderWidget(),
               Container(
                 width: width * 0.7,
                 decoration: borderDecoration,
@@ -151,19 +112,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomDropDown(
-                          hint: periods[0],
-                          label: "Period",
-                          items: periods,
-                          initialValue:
-                              selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value;
-                            });
-                          },
-                        ),
                         CustomDropDown(
                           label: "Status",
                           hint: status[0],
@@ -182,54 +130,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                             });
                           },
                         ),
-                        CustomTextField(
-                          controller: numberOfrow,
-                          initialValue: numberOfrow.text,
-                          label: "Number of rows",
-                          onChanged: (value) {
-                            // setState(() {
-
-                            // fetch(PlutoLazyPaginationRequest(
-                            //     page: criteria.page!));
-
-                            // print("Hello");
-                            // print("CRITERIA BEFORE JSON: ${criteria.toJson()}");
-                            // fetch(PlutoLazyPaginationRequest(
-                            //     page: criteria.page!));
-                            // });
-                            // polTopRows = [];
-                            setState(() {
-                              hintValue = value;
-                              criteria.rownum = int.parse(numberOfrow.text);
-                              // polTopRows = [];
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDatePicker(
-                          label: "From Date",
-                          controller: fromDate,
-                          onChanged: (value) {
-                            setControllerFromDateText();
-                          },
-                          onSelected: (value) {
-                            setControllerFromDateText();
-                          },
-                        ),
-                        CustomDatePicker(
-                          label: "To Date",
-                          controller: toDate,
-                          onChanged: (value) {
-                            setControllertoDateText();
-                          },
-                          onSelected: (value) {
-                            setControllertoDateText();
-                          },
-                        ),
                       ],
                     ),
                   ],
@@ -240,50 +140,114 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.topOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.green),
+                    _locale.chequesPayable,
+                    style: twenty600TextStyle(Colors.blue[700]),
                   ),
                   SizedBox(
-                    width: width * 0.37,
-                    height: height * 0.7,
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: width * 0.5,
+                    height: height * 0.2,
                     child: TableComponent(
-                      key: UniqueKey(),
-                      plCols: InventoryPerformanceModel.getColumns(
+                      plCols: ChequesPayableModel.getColumns(
                           AppLocalizations.of(context)),
-                      polRows: polTopRows,
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooter(stateManager);
+                      //dummy row
+                      polRows: polRows,
+                      // footerBuilder: (stateManager) {
+                      //   return lazyPaginationFooter(stateManager);
+                      // },
+                      // onSelected: (event) {
+                      //   setState(() {
+                      //     data = event.row!.cells['account']!.value.toString();
+                      //   });
+                      // },
+                      doubleTab: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
                       },
+                      rightClickTap: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      key: UniqueKey(),
+                      // headerBuilder: (event) {
+                      //   return headerTableSection(data);
+                      // },
                     ),
                   ),
                 ],
               ),
+              SizedBox(
+                height: 20,
+              ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.leastOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.red),
+                    _locale.bankSettlement,
+                    style: twenty600TextStyle(Colors.blue[700]),
                   ),
                   SizedBox(
-                    width: width * 0.37,
-                    height: height * 0.7,
+                    height: 10,
+                  ),
+                  SizedBox(
+                    width: width * 0.5,
+                    height: height * 0.2,
                     child: TableComponent(
-                      key: UniqueKey(),
                       plCols: InventoryPerformanceModel.getColumns(
                           AppLocalizations.of(context)),
                       polRows: [],
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooterLeast(stateManager);
+                      // footerBuilder: (stateManager) {
+                      //   return lazyPaginationFooterLeast(stateManager);
+                      // },
+                      // onSelected: (event) {
+                      //   setState(() {
+                      //     data = event.row!.cells['account']!.value.toString();
+                      //   });
+                      // },
+                      doubleTab: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
                       },
+                      rightClickTap: (event) {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return const AlertDialog(
+                                title: Text("ACTION"),
+                              );
+                            });
+                      },
+                      key: UniqueKey(),
+                      // headerBuilder: (event) {
+                      //   return headerTableSection(data);
+                      // },
                     ),
                   ),
                 ],
@@ -300,6 +264,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       fromDateValue = fromDate.text;
       String startDate = DatesController().formatDate(fromDateValue!);
       criteria.fromDate = startDate;
+      print("startdate1 : ${startDate}");
+      print("startDate2 :${criteria.fromDate}");
       fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
@@ -352,9 +318,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           .formatDate(DatesController().todayDate())
           .toString();
     }
-
-    criteria.fromDate = fromDate.text;
-    criteria.toDate = toDate.text;
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
@@ -378,61 +341,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     //To send the number of page to the JSON Object
     criteria.page = page;
 
-    List<PlutoRow> topList = [];
-    print("from date critiria :${criteria.fromDate}");
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellDic(criteria);
-
-    int totalPage = 1;
-
-    for (int i = 0; i < invList.length; i++) {
-      topList.add(invList[i].toPluto());
-    }
-
-    return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
-      rows: topList,
-    );
-  }
-
-  PlutoLazyPagination lazyPaginationFooterLeast(
-      PlutoGridStateManager stateManager) {
-    return PlutoLazyPagination(
-      initialPage: 1,
-      initialFetch: true,
-      pageSizeToMove: null,
-      fetchWithSorting: false,
-      fetchWithFiltering: false,
-      fetch: (request) {
-        return fetchLeast(request);
-      },
-      stateManager: stateManager,
-    );
-  }
-
-  Future<PlutoLazyPaginationResponse> fetchLeast(
-      PlutoLazyPaginationRequest request) async {
-    int page = request.page;
-
-    //To send the number of page to the JSON Object
-    criteria.page = page;
-    print(criteria.toJson());
-
+    print(
+        "criteria.voucherStatus inside fetch data :${criteria.voucherStatus}");
+    ChequesPayableController controller = ChequesPayableController();
     List<PlutoRow> topList = [];
 
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellInc(criteria);
-
-    print(invList.length);
-
     int totalPage = 1;
-
-    for (int i = 0; i < invList.length; i++) {
-      print("object");
-      topList.add(invList[i].toPluto());
-    }
-
-    print("TOP LIST: ${topList.length}");
 
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,

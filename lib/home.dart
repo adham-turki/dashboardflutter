@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
@@ -28,36 +29,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isDesktop = false;
   double width = 0;
   double height = 0;
 
   @override
   Widget build(BuildContext context) {
+    isDesktop = Responsive.isDesktop(context);
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: Responsive.isDesktop(context)
+      appBar: isDesktop
           ? null
           : AppBar(
               backgroundColor: primary,
               title: const Text("BI"),
             ),
-      drawer: Responsive.isDesktop(context) ? null : const SideMenu(),
+      drawer: isDesktop ? null : const SideMenu(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Responsive.isDesktop(context) ? const SideMenu() : Container(),
+          isDesktop ? const SideMenu() : Container(),
           Column(
             children: [
               SizedBox(
-                width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: height * 0.3,
+                width: isDesktop ? width * 0.835 : width,
+                height: isDesktop ? height * 0.3 : height * 0.3,
                 child: const ContentHeader(),
               ),
               SizedBox(
-                height:
-                    Responsive.isDesktop(context) ? height * .7 : height * 0.85,
+                height: isDesktop ? height * .7 : height * 0.6,
                 width: width * 0.835,
                 child: SingleChildScrollView(
                   child: Consumer<ScreenContentProvider>(
@@ -96,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       case 8:
         return const AgingReceivable();
       case 9:
-        return Container();
+        return const ChequesAndBankContent();
       case 10:
         return Container();
       case 11:

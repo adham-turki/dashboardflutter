@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   Function(String)? onValidator;
   Key? customKey;
   bool? readOnly;
+  Function(String value)? onChanged;
   CustomTextField({
     Key? key,
     this.onValidator,
@@ -24,6 +25,7 @@ class CustomTextField extends StatefulWidget {
     this.customKey,
     this.width,
     this.readOnly,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -95,6 +97,11 @@ class _CustomTextFieldState extends State<CustomTextField> {
               //       EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               //   border: InputBorder.none, // Remove the default underline
               // ),
+              onChanged: (value) {
+                if (widget.onChanged != null) {
+                  widget.onChanged!(value);
+                }
+              },
             ),
           ),
         ],

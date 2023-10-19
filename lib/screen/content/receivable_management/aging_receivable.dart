@@ -1,14 +1,10 @@
 import 'dart:math';
 
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/receivable_management/aging_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,7 +13,6 @@ import '../../../model/criteria/search_criteria.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class AgingReceivable extends StatefulWidget {
@@ -31,6 +26,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
   List<String> status = [];
   List<String> charts = [];
@@ -51,6 +47,8 @@ class _AgingReceivableState extends State<AgingReceivable> {
   ];
 
   List<PieChartModel> pieData = [];
+
+  bool temp = false;
   @override
   void initState() {
     super.initState();
@@ -77,10 +75,10 @@ class _AgingReceivableState extends State<AgingReceivable> {
       _locale.barChart,
       _locale.pieChart,
     ];
+
+    // search();
     selectedChart = charts[0];
     selectedStatus = status[0];
-    // search();
-
     super.didChangeDependencies();
   }
 
@@ -98,42 +96,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CustomCard(
-                  gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                  title: '42136',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Sale',
-                  icon:
-                      Icons.attach_money, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                  title: '1446',
-                  subtitle: 'Mon-Fri',
-                  label: 'Total Visited',
-                  icon: Icons.abc, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                  title: '61%',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Growth',
-                  icon: Icons.bar_chart, // Provide the actual path to the icon
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height * 0.1,
-            ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -146,32 +108,35 @@ class _AgingReceivableState extends State<AgingReceivable> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            selectedChart == _locale.lineChart
-                                ? _locale.lineChart
-                                : selectedChart == _locale.pieChart
-                                    ? _locale.pieChart
-                                    : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              selectedChart == _locale.lineChart
+                                  ? _locale.lineChart
+                                  : selectedChart == _locale.pieChart
+                                      ? _locale.pieChart
+                                      : _locale.barChart,
+                              style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: width * 0.4,
-                          child: Text(
-                            "${_locale.transactionBalance} = ${balance}",
-                            style: twelve400TextStyle(Colors.black),
+                          SizedBox(
+                            width: width * 0.4,
+                            child: Text(
+                              "${_locale.transactionBalance} = $balance",
+                              style: twelve400TextStyle(Colors.black),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
@@ -180,7 +145,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Center(
+                            ?
+                            // ? BalancePieChart(data: pieData)
+                            Center(
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
@@ -190,8 +157,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
                                   dataList: pieData,
                                 ),
                               )
-                            : BalanceBarChart(data: barData),
-                    const SizedBox(), //Footer
+                            :
+                            // : BalanceBarChart(data: barData),
+                            const SizedBox(), //Footer
                   ],
                 ),
               ),
@@ -217,7 +185,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
                 setState(() {
                   selectedChart = value!;
                   getAgingReceivable();
-                  print(selectedChart);
                 });
               },
             ),
@@ -230,7 +197,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
                   selectedStatus = value.toString();
 
                   getAgingReceivable();
-                  print(selectedStatus);
                 });
               },
             ),
@@ -254,7 +220,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
             setState(() {
               selectedChart = value!;
               getAgingReceivable();
-              print(selectedChart);
             });
           },
         ),
@@ -268,7 +233,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
               selectedStatus = value.toString();
 
               getAgingReceivable();
-              print(selectedStatus);
             });
           },
         ),
@@ -287,6 +251,10 @@ class _AgingReceivableState extends State<AgingReceivable> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   getAgingReceivable() {
     listOfBalances = [];
     pieData = [];
@@ -303,10 +271,19 @@ class _AgingReceivableState extends State<AgingReceivable> {
         }
       });
       for (var element in value) {
+        if (element.total != 0.0) {
+          temp = true;
+        } else if (element.total == 0.0) {
+          temp = false;
+        }
         setState(() {
           listOfBalances.add(element.total!);
-          pieData.add(PieChartModel(
-              title: '', value: element.total!, color: getRandomColor()));
+          if (temp) {
+            pieData.add(PieChartModel(
+                title: '',
+                value: formatDoubleToTwoDecimalPlaces(element.total!),
+                color: getRandomColor()));
+          }
           barData.add(
             BarChartData('', element.total!),
           );

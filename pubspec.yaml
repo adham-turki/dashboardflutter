@@ -45,10 +45,12 @@ dependencies:
   mask_text_input_formatter: ^2.5.0
   universal_html: ^2.2.2
   fl_chart: ^0.62.0
-  flutter_speed_dial: ^7.0.0
+  flutter_speed_dial: ^7.0.0  
+  dropdown_button2: ^2.1.4
   intl: ^0.17.0
   flutter_secure_storage: ^8.0.0
   syncfusion_flutter_charts: ^21.2.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

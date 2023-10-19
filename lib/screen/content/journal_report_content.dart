@@ -250,9 +250,7 @@ class _JournalContentState extends State<JournalContent> {
                       );
                     });
               },
-              // headerBuilder: (event) {
-              //   return headerTableSection(data);
-              // },
+              key: UniqueKey(),
             ),
           ),
         ),

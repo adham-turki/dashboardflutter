@@ -1,15 +1,9 @@
 import 'dart:math';
-
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:bi_replicate/utils/constants/api_constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
-import '../../../components/customCard.dart';
 import '../../../controller/financial_performance/expense_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -34,8 +28,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  DateTime? _selectedDate = DateTime.now();
-  TextEditingController _fromDateController = TextEditingController();
+  bool boolTemp = false;
+  final dropdownKey = GlobalKey<DropdownButton2State>();
+  final TextEditingController _fromDateController = TextEditingController();
   late AppLocalizations _locale;
   List<String> status = [];
   List<String> periods = [];
@@ -117,42 +112,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CustomCard(
-                  gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                  title: '42136',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Sale',
-                  icon:
-                      Icons.attach_money, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                  title: '1446',
-                  subtitle: 'Mon-Fri',
-                  label: 'Total Visited',
-                  icon: Icons.abc, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                  title: '61%',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Growth',
-                  icon: Icons.bar_chart, // Provide the actual path to the icon
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height * 0.1,
-            ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -216,11 +175,12 @@ class _ExpensesContentState extends State<ExpensesContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.5,
+                height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -230,7 +190,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                                 : selectedChart == _locale.pieChart
                                     ? _locale.pieChart
                                     : _locale.barChart,
-                            style: const TextStyle(fontSize: 24),
+                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
@@ -276,7 +236,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               selectedChart = value!;
               getExpenses();
-              print(selectedChart);
             });
           },
         ),
@@ -292,7 +251,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
                   selectedStatus = value.toString();
 
                   getExpenses();
-                  print(selectedStatus);
                 });
               },
             ),
@@ -303,7 +261,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 setState(() {
                   _fromDateController.text = value;
                   getExpenses();
-                  print(_fromDateController.text);
                 });
               },
             ),
@@ -327,7 +284,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               selectedChart = value!;
               getExpenses();
-              print(selectedChart);
             });
           },
         ),
@@ -341,7 +297,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
               selectedStatus = value.toString();
 
               getExpenses();
-              print(selectedStatus);
             });
           },
         ),
@@ -352,12 +307,15 @@ class _ExpensesContentState extends State<ExpensesContent> {
             setState(() {
               _fromDateController.text = value;
               getExpenses();
-              print(_fromDateController.text);
             });
           },
         ),
       ],
     );
+  }
+
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
   }
 
   int count = 0;
@@ -375,13 +333,24 @@ class _ExpensesContentState extends State<ExpensesContent> {
     expensesController.getExpense(searchCriteria).then((value) {
       for (var elemant in value) {
         String temp = DatesController().formatDate(getNextDay(date).toString());
+        if (double.parse(elemant.expense.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.expense.toString()) == 0.0) {
+          boolTemp = false;
+        }
         setState(() {
           listOfBalances.add(elemant.expense!);
           listOfPeriods.add(temp);
-          pieData.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.expense.toString()),
-              color: getRandomColor()));
+          if (boolTemp) {
+            pieData.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.expense.toString()) == 0.0
+                    ? 1.0
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.expense.toString())),
+                color: getRandomColor()));
+          }
+
           barData.add(
               BarChartData(temp, double.parse(elemant.expense.toString())));
         });

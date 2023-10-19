@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
+import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 
 class BalanceLineChart extends StatelessWidget {
   final String xAxisText;
@@ -55,6 +57,67 @@ class BalanceLineChart extends StatelessWidget {
       data.add(ChartData(periods[i], balances[i]));
     }
     return data;
+  }
+}
+
+class BalancePieChart extends StatelessWidget {
+  final List<PieChartModel> data;
+
+  const BalancePieChart({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: SfCircularChart(
+        series: <CircularSeries>[
+          PieSeries<PieChartModel, String>(
+            // legendIconType: ,
+            // showLegends: true,
+            // pointColorMapper: (PieChartData data, _) => const Color(0xff9AA0C5),
+// pointColorMapper: ,
+            dataSource: data,
+            xValueMapper: (PieChartModel value, _) => value.title,
+            yValueMapper: (PieChartModel value, _) => value.value,
+            pointColorMapper: (PieChartModel data, _) => data.color,
+            dataLabelSettings: const DataLabelSettings(
+              textStyle: TextStyle(
+                  fontFamily: 'Roboto',
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 13),
+              labelPosition: ChartDataLabelPosition.outside,
+              margin: EdgeInsets.fromLTRB(7, 7, 7, 7),
+              isVisible: true,
+            ),
+            dataLabelMapper: (
+              PieChartModel value,
+              index,
+            ) =>
+                "${value.value}"
+                "\n${getPercentage(index).toString()}% \n${value.title}",
+            enableTooltip: true,
+            animationDuration: 1000,
+          )
+        ],
+      ),
+    );
+  }
+
+  double getPercentage(index) {
+    if (data[index].value == 0 || data[index].value == null) {
+      return 0;
+    } else {
+      return ((data[index].value! / getSum()) * 100).roundToDouble();
+    }
+  }
+
+  double getSum() {
+    double sum = 0;
+    for (var element in data) {
+      sum += element.value!;
+    }
+    return sum;
   }
 }
 
