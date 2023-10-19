@@ -130,6 +130,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -137,7 +138,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           width: width * 0.76,
           child: Column(
             children: [
-              const HeaderWidget(),
               Container(
                 width: width * 0.7,
                 decoration: borderDecoration,
@@ -186,8 +186,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                             setState(() {
                               hintValue = value;
                               criteria.rownum = int.parse(numberOfrow.text);
-                              fetch(PlutoLazyPaginationRequest(
-                                  page: criteria.page!));
+                              print("HELELELELELEOOOO");
+                              // fetch(PlutoLazyPaginationRequest(
+                              //     page: criteria.page!));
                             });
                           },
                         ),
@@ -339,7 +340,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       criteria.fromDate = startDate;
       print("startdate1 : ${startDate}");
       print("startDate2 :${criteria.fromDate}");
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -348,7 +348,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       toDateValue = toDate.text;
       String endDate = DatesController().formatDate(toDateValue!);
       criteria.toDate = endDate;
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -467,6 +466,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     print("CRITERIA date NUM: ${criteria.fromDate}");
     print(
         "criteria.voucherStatus inside fetch data :${criteria.voucherStatus}");
+
+    print("CRITERIA ROWNUM: ${criteria.rownum}");
     InventoryPerformanceController controller =
         InventoryPerformanceController();
     List<PlutoRow> leastList = [];
