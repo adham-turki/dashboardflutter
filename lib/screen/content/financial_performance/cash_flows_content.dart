@@ -127,42 +127,42 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CustomCard(
-                  gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                  title: '42136',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Sale',
-                  icon:
-                      Icons.attach_money, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                  title: '1446',
-                  subtitle: 'Mon-Fri',
-                  label: 'Total Visited',
-                  icon: Icons.abc, // Provide the actual path to the icon
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                CustomCard(
-                  gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                  title: '61%',
-                  subtitle: 'Mon-Fri',
-                  label: 'Overall Growth',
-                  icon: Icons.bar_chart, // Provide the actual path to the icon
-                ),
-              ],
-            ),
-            SizedBox(
-              height: height * 0.1,
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: const [
+            //     CustomCard(
+            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
+            //       title: '42136',
+            //       subtitle: 'Mon-Fri',
+            //       label: 'Overall Sale',
+            //       icon:
+            //           Icons.attach_money, // Provide the actual path to the icon
+            //     ),
+            //     SizedBox(
+            //       width: 10,
+            //     ),
+            //     CustomCard(
+            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
+            //       title: '1446',
+            //       subtitle: 'Mon-Fri',
+            //       label: 'Total Visited',
+            //       icon: Icons.abc, // Provide the actual path to the icon
+            //     ),
+            //     SizedBox(
+            //       width: 10,
+            //     ),
+            //     CustomCard(
+            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
+            //       title: '61%',
+            //       subtitle: 'Mon-Fri',
+            //       label: 'Overall Growth',
+            //       icon: Icons.bar_chart, // Provide the actual path to the icon
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(
+            //   height: height * 0.1,
+            // ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -171,6 +171,57 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 child: isDesktop ? desktopCriteria() : mobileCriteria(),
               ),
             ),
+            SizedBox(
+              height: height * 0.01,
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  accountsActive = !accountsActive;
+                  setState(() {});
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width < 800
+                      ? MediaQuery.of(context).size.width * 0.9
+                      : MediaQuery.of(context).size.width * 0.7,
+                  decoration: const BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SelectableText(
+                        maxLines: 1,
+                        _locale.accounts,
+                        style: fourteen400TextStyle(Colors.white),
+                      ),
+                      const Icon(
+                        Icons.add,
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            accountsActive
+                ? Container(
+                    width: MediaQuery.of(context).size.width < 800
+                        ? MediaQuery.of(context).size.width * 0.9
+                        : MediaQuery.of(context).size.width * 0.7,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 5),
+                    child: SelectableText(
+                      maxLines: 10,
+                      accountName(),
+                      style: twelve400TextStyle(Colors.black),
+                    ))
+                : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -373,6 +424,14 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         ),
       ],
     );
+  }
+
+  String accountName() {
+    accountNameString = "";
+    for (int i = 0; i < cashboxAccounts.length; i++) {
+      accountNameString += "${cashboxAccounts[i].accountName},";
+    }
+    return accountNameString;
   }
 
   void getCashFlows() {

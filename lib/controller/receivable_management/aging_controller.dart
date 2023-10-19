@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../model/receivable_management/aging_model.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../service/Api.dart';
@@ -10,7 +12,8 @@ class AgingController extends Api {
   Future<List<AgingModel>> getAgingList(SearchCriteria searchCriteria) async {
     var api = getAgingListApi;
     List<AgingModel> list = [];
-    await postMethods(api, searchCriteria.statusToJson()).then((value) {
+    await ApiService.postRequest(api, searchCriteria.statusToJson())
+        .then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (int i = 0; i < jsonData.length; i++) {

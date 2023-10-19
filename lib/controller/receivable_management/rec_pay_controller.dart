@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../model/criteria/search_criteria.dart';
 import '../../model/receivable_management/rec_pay_model.dart';
 import '../../service/Api.dart';
@@ -11,7 +13,8 @@ class RecPayController extends Api {
 
     late RecPayModel recPayObj;
 
-    await postMethods(api, searchCriteria.noToDatetoJson()).then((response) {
+    await ApiService.postRequest(api, searchCriteria.noToDatetoJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         recPayObj = RecPayModel.fromJson(jsonData);

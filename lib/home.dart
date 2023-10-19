@@ -5,6 +5,8 @@ import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
+import 'package:bi_replicate/screen/content/receivable_management/aging_receivable.dart';
+import 'package:bi_replicate/screen/content/receivable_management/month_comp_of_rec_pay_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_cat_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
@@ -51,13 +53,12 @@ class _HomePageState extends State<HomePage> {
             children: [
               SizedBox(
                 width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: height * 0.08,
+                height: height * 0.3,
                 child: const ContentHeader(),
               ),
               SizedBox(
-                height: Responsive.isDesktop(context)
-                    ? height * 0.9
-                    : height * 0.85,
+                height:
+                    Responsive.isDesktop(context) ? height * .7 : height * 0.85,
                 width: width * 0.835,
                 child: SingleChildScrollView(
                   child: Consumer<ScreenContentProvider>(
@@ -92,9 +93,9 @@ class _HomePageState extends State<HomePage> {
       case 6:
         return const InventoryPerfContent();
       case 7:
-        return Container();
+        return const MonthCompOfRecPayContent();
       case 8:
-        return Container();
+        return const AgingReceivable();
       case 9:
         return const ChequesAndBankContent();
       case 10:
