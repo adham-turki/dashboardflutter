@@ -29,38 +29,38 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isDesktop = false;
   double width = 0;
   double height = 0;
 
   @override
   Widget build(BuildContext context) {
+    isDesktop = Responsive.isDesktop(context);
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      appBar: Responsive.isDesktop(context)
+      appBar: isDesktop
           ? null
           : AppBar(
               backgroundColor: primary,
               title: const Text("BI"),
             ),
-      drawer: Responsive.isDesktop(context) ? null : const SideMenu(),
+      drawer: isDesktop ? null : const SideMenu(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Responsive.isDesktop(context) ? const SideMenu() : Container(),
+          isDesktop ? const SideMenu() : Container(),
           Column(
             children: [
               SizedBox(
-                width: Responsive.isDesktop(context) ? width * 0.835 : width,
-                height: Responsive.isDesktop(context)
-                    ? height * 0.3
-                    : height * 0.25,
+                width: isDesktop ? width * 0.835 : width,
+                height: isDesktop ? height * 0.3 : height * 0.3,
                 child: const ContentHeader(),
               ),
               SizedBox(
-                height:
-                    Responsive.isDesktop(context) ? height * .7 : height * 0.66,
+                height: isDesktop ? height * .7 : height * 0.6,
                 width: width * 0.835,
                 child: SingleChildScrollView(
                   child: Consumer<ScreenContentProvider>(

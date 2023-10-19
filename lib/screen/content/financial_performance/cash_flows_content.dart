@@ -424,6 +424,10 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     return accountNameString;
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   void getCashFlows() {
     listOfBalances = [];
     pieData = [];
@@ -450,7 +454,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           if (temp) {
             pieData.add(PieChartModel(
                 title: _locale.cashIn,
-                value: element.value,
+                value: formatDoubleToTwoDecimalPlaces(element.value!),
                 color: getRandomColor()));
           }
           barData.add(

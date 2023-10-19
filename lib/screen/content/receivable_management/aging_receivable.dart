@@ -251,6 +251,10 @@ class _AgingReceivableState extends State<AgingReceivable> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   getAgingReceivable() {
     listOfBalances = [];
     pieData = [];
@@ -276,7 +280,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
           listOfBalances.add(element.total!);
           if (temp) {
             pieData.add(PieChartModel(
-                title: '', value: element.total, color: getRandomColor()));
+                title: '',
+                value: formatDoubleToTwoDecimalPlaces(element.total!),
+                color: getRandomColor()));
           }
           barData.add(
             BarChartData('', element.total!),

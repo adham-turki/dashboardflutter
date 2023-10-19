@@ -192,6 +192,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   Future getSalesByBranch() async {
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: DatesController().formatDate(_fromDateController.text),
@@ -216,7 +220,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           listOfPeriods.add(element.namee!);
           if (temp) {
             pieData.add(PieChartModel(
-                title: element.namee!, value: a, color: Colors.blue));
+                title: element.namee!,
+                value: formatDoubleToTwoDecimalPlaces(a),
+                color: Colors.blue));
           }
 
           barData.add(

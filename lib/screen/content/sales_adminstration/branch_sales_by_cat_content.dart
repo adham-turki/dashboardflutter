@@ -424,6 +424,10 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     return Color.fromARGB(255, red, green, blue);
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   void getBranchByCat() {
     listOfBalances = [];
     pieData = [];
@@ -466,7 +470,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
           if (temp) {
             pieData.add(PieChartModel(
                 title: element.categoryName!,
-                value: bal,
+                value: formatDoubleToTwoDecimalPlaces(bal),
                 color: randomColor)); // Set random color
           }
 

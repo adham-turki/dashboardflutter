@@ -348,6 +348,10 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   getTotalCollections() {
     listOfBalances = [];
     pieData = [];
@@ -375,7 +379,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           if (boolTemp) {
             pieData.add(PieChartModel(
                 title: element.name!,
-                value: element.collection,
+                value: formatDoubleToTwoDecimalPlaces(element.collection!),
                 color: getRandomColor()));
           }
 

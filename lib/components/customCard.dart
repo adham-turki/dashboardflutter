@@ -38,8 +38,8 @@ class CustomCard extends StatelessWidget {
 
     return Container(
       width: isDesktop ? cardsWidth : width * 0.5,
-      height: isDesktop ? cardsHeight : height * 0.2,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      height: isDesktop ? cardsHeight : height * 0.22,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: gradientColor,
@@ -54,7 +54,7 @@ class CustomCard extends StatelessWidget {
             offset: const Offset(4, 4),
           ),
         ],
-        borderRadius: const BorderRadius.all(Radius.circular(24)),
+        borderRadius: const BorderRadius.all(Radius.circular(16)),
       ),
       child: isDesktop
           ? cardDesktop(cardsWidth, isDesktop, context)
@@ -88,10 +88,16 @@ class CustomCard extends StatelessWidget {
             ),
           ],
         ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
+        ),
         Text(
           subtitle,
           style: TextStyle(
-              color: Colors.white, fontSize: 10, fontWeight: FontWeight.w400),
+              color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+        ),
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.01,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

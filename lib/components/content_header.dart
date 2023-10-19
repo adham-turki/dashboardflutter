@@ -115,7 +115,7 @@ class _ContentHeaderState extends State<ContentHeader> {
                 )
               : SizedBox(
                   width: width * 0.8,
-                  height: height * 0.12,
+                  height: height * 0.18,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: const [

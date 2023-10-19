@@ -314,6 +314,10 @@ class _ExpensesContentState extends State<ExpensesContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   int count = 0;
   getExpenses() {
     listOfBalances = [];
@@ -342,7 +346,8 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 title: temp,
                 value: double.parse(elemant.expense.toString()) == 0.0
                     ? 1.0
-                    : double.parse(elemant.expense.toString()),
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.expense.toString())),
                 color: getRandomColor()));
           }
 

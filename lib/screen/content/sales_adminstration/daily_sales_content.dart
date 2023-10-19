@@ -349,6 +349,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
     );
   }
 
+  double formatDoubleToTwoDecimalPlaces(double number) {
+    return double.parse(number.toStringAsFixed(2));
+  }
+
   void getDailySales() {
     listOfBalances = [];
     pieData = [];
@@ -376,7 +380,8 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 title: temp,
                 value: double.parse(elemant.dailySale.toString()) == 0.0
                     ? 1.0
-                    : double.parse(elemant.dailySale.toString()),
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.dailySale.toString())),
                 color: getRandomColor()));
           }
 
