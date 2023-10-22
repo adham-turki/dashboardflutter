@@ -1,279 +1,278 @@
-import 'package:bi_replicate/components/table_component.dart';
-
-import 'package:bi_replicate/widget/custom_date_picker.dart';
-import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
-
+import 'dart:typed_data';
+import 'dart:html' as html;
+import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:bi_replicate/model/cheques_bank/cheques_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import '../../../components/date_text_field.dart';
+import '../../../components/table_component.dart';
+import '../../../controller/cheques_management/self_cheques_controller.dart';
+import '../../../controller/error_controller.dart';
+import '../../../controller/inventory_performance/inventory_performance_controller.dart';
+import '../../../model/bar_chart_data_model.dart';
+import '../../../model/criteria/search_criteria.dart';
+import '../../../model/inventory_performance/inventory_performance_model.dart';
+import '../../../utils/constants/maps.dart';
+import '../../../utils/constants/styles.dart';
+import '../../../utils/func/dates_controller.dart';
+import '../../../widget/custom_btn.dart';
+import '../../../widget/custom_date_picker.dart';
+import '../../../widget/drop_down/custom_dropdown.dart';
+import '../../../widget/custom_textfield.dart';
+import '../../../widget/headerWidget.dart';
 
-import '../../model/criteria/journal_report_criteria.dart';
-import '../../model/db/general_ledger/journal_report/journal_report_model.dart';
-
-class JournalContent extends StatefulWidget {
-  const JournalContent({super.key});
+class TotalSalesContent extends StatefulWidget {
+  const TotalSalesContent({super.key});
 
   @override
-  State<JournalContent> createState() => _JournalContentState();
+  State<TotalSalesContent> createState() => _TotalSalesContentState();
 }
 
-class _JournalContentState extends State<JournalContent> {
-  double width = 0;
-  double height = 0;
+class _TotalSalesContentState extends State<TotalSalesContent> {
+  TextEditingController fromDate = TextEditingController();
+  TextEditingController toDate = TextEditingController();
+  SelfChequesController controller = SelfChequesController();
 
-  // final JournalReport _journalReport = JournalReport();
-  // final JournalReportController _journalController = JournalReportController();
-
-  String? statusValue;
-  String? voucherTypeValue;
-  String? fromJCodeValue;
-  String? toJCodeValue;
-  String? periodValue;
-
-  final TextEditingController _fromDateController = TextEditingController();
-  final TextEditingController _toDateController = TextEditingController();
+  late AppLocalizations _locale;
+  List<String> status = [];
+  List<String> periods = [];
+  var selectedStatus = "";
   String? fromDateValue;
   String? toDateValue;
 
   String data = "";
 
-  JournalReportCriteria criteria = JournalReportCriteria(
-    fromJCode: "A",
-    toJCode: "C",
-    fromDate: "2023-5-1",
-    toDate: "2023-09-27",
-    fromAccCode: "1101010301",
-    toAccCode: "1101010301",
-  );
+  var selectedPeriod = "";
+  String hintValue = '0';
+  String todayDate = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().todayDate()));
+  String nextMonth = DatesController().formatDateReverse(DatesController()
+      .formatDate(DateTime(DatesController().today.year,
+              DatesController().today.month + 1, DatesController().today.day)
+          .toString()));
+  List<String> columnsName = [];
+  List<String> columnsNameMap = [];
 
-  List<PlutoRow> dummyPluto = [
-    PlutoRow(cells: {
-      'date': PlutoCell(value: "-"),
-      'voucher': PlutoCell(value: "-"),
-      'voucherLink': PlutoCell(value: "-"),
-      'status': PlutoCell(value: "-"),
-      'account': PlutoCell(value: "-"),
-      'reference': PlutoCell(value: "-"),
-      'currencyName': PlutoCell(value: "-"),
-      'debit': PlutoCell(value: 0),
-      'credit': PlutoCell(value: 0),
-      'debitInBase': PlutoCell(value: 0),
-      'creditInBase': PlutoCell(value: 0),
-      'comments': PlutoCell(value: "-"),
-    }),
+  final List<double> listOfBalances = [
+    100.0,
+    150.0,
+    120.0,
+    200.0,
+    180.0,
+    250.0
   ];
+  final List<String> listOfPeriods = [
+    'Period 1',
+    'Period 2',
+    'Period 3',
+    'Period 4',
+    'Period 5',
+    'Period 6'
+  ];
+  final storage = const FlutterSecureStorage();
+
+  final List<String> items = [
+    'Print',
+    'Save as JPEG',
+    'Save as PNG',
+  ];
+
+  SearchCriteria criteria = SearchCriteria();
+  List<PlutoRow> polTopRows = [];
 
   @override
   void initState() {
-    setInitialValues();
+    fromDate.text = todayDate;
+    toDate.text = nextMonth;
+
+    criteria.fromDate = todayDate;
+    criteria.toDate = nextMonth;
+    criteria.voucherStatus = -100;
+    criteria.rownum = 10;
 
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
+    status = [
+      _locale.all,
+      _locale.posted,
+      _locale.draft,
+      _locale.canceled,
+    ];
+    periods = [
+      _locale.daily,
+      _locale.weekly,
+      _locale.monthly,
+      _locale.yearly,
+    ];
+    columnsName = [
+      "#",
+      _locale.dueDate,
+      _locale.bankName,
+      _locale.supplier(""),
+      _locale.currency,
+      _locale.chequeNo,
+      _locale.chequeAmount
+    ];
+
+    columnsNameMap = [
+      'dueDate',
+      'bankName',
+      'custSupName',
+      'curName',
+      'chequeNum'
+          'amount'
+    ];
+    selectedStatus = status[0];
+    selectedPeriod = periods[0];
+
+    super.didChangeDependencies();
+  }
+
+  double width = 0;
+  String? statusValue;
+  String? voucherTypeValue;
+  String? fromJCodeValue;
+  String? toJCodeValue;
+  String? periodValue;
+  double height = 0;
+  int count = 0;
+  @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    List<PlutoColumn> polCols = JournalReport.toPlutoColumn();
-
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          child: SizedBox(
-            // height: height * 0.9,
-            width: width * 0.76,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    CustomDropDown(
-                      label: "Period",
-                      items: const [
-                        "Last Day",
-                        "Last Week",
-                        "Last Month",
-                        "Last Year",
-                        "Previous Month",
-                      ],
-                      initialValue: "Last Month",
-                      hint: "",
-                      onChanged: (value) {
-                        setState(() {
-                          periodValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomDropDown(
-                      label: "From Account",
-                      hint: "",
-                    ),
-                    CustomDropDown(
-                      label: "To Account",
-                      hint: "",
-                    ),
-                    CustomDatePicker(
-                      label: "From Date",
-                      controller: _fromDateController,
-                      onChanged: (value) {
-                        setControllerFromDateText();
-                      },
-                      onSelected: (value) {
-                        setControllerFromDateText();
-                      },
-                    ),
-                    CustomDatePicker(
-                      label: "To Date",
-                      controller: _toDateController,
-                      onChanged: (value) {
-                        setState(() {
-                          toDateValue = value;
-                          // _fetchData();
-                        });
-                      },
-                      onSelected: (value) {
-                        setState(() {
-                          toDateValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomDropDown(
-                      label: "From JCode",
-                      items: const [
-                        "A",
-                      ],
-                      initialValue: "A",
-                      hint: "",
-                      onChanged: (value) {
-                        setState(() {
-                          fromJCodeValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                    CustomDropDown(
-                      label: "To JCode",
-                      items: const [
-                        "Z",
-                      ],
-                      initialValue: "Z",
-                      hint: "",
-                      onChanged: (value) {
-                        setState(() {
-                          toJCodeValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                    CustomDropDown(
-                      label: "Voucher Type",
-                      items: const [
-                        "All",
-                      ],
-                      initialValue: "All",
-                      hint: "",
-                      onChanged: (value) {
-                        setState(() {
-                          voucherTypeValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                    CustomDropDown(
-                      label: "Status",
-                      items: const [
-                        "ALL(DRAFT, POSTED)",
-                        "Draft",
-                        "Posted",
-                        "Cancelled",
-                      ],
-                      initialValue: "ALL(DRAFT, POSTED)",
-                      hint: "",
-                      height: height * 0.18,
-                      onChanged: (value) {
-                        setState(() {
-                          statusValue = value;
-                          // _fetchData();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
+        Container(
+          width: width * 0.7,
+          decoration: borderDecoration,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomDropDown(
+                    hint: periods[0],
+                    label: _locale.period,
+                    items: periods,
+                    initialValue:
+                        selectedPeriod.isNotEmpty ? selectedPeriod : null,
+                    onChanged: (value) {
+                      setState(() {
+                        checkPeriods(value);
+                        selectedPeriod = value;
+                      });
+                    },
+                  ),
+                  CustomDropDown(
+                    label: _locale.status,
+                    hint: status[0],
+                    items: status,
+                    initialValue:
+                        selectedStatus.isNotEmpty ? selectedStatus : null,
+                    height: height * 0.18,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value;
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        criteria.voucherStatus = status;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CustomDatePicker(
+                    label: _locale.fromDate,
+                    controller: fromDate,
+                    onChanged: (value) {
+                      setControllerFromDateText();
+                    },
+                    onSelected: (value) {
+                      setControllerFromDateText();
+                    },
+                  ),
+                  CustomDatePicker(
+                    label: _locale.toDate,
+                    controller: toDate,
+                    onChanged: (value) {
+                      setControllertoDateText();
+                    },
+                    onSelected: (value) {
+                      setControllertoDateText();
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width < 800
+                            ? MediaQuery.of(context).size.width * 0.6
+                            : MediaQuery.of(context).size.width * 0.16,
+                        child: CustomButton(
+                          text: _locale.exportToExcel,
+                          fontWeight: FontWeight.w400,
+                          textColor: Colors.white,
+                          borderRadius: 5.0,
+                          onPressed: () {
+                            SelfChequesController()
+                                .exportToExcelApi(criteria)
+                                .then((value) {
+                              saveExcelFile(value, "Cheques.xlsx");
+                            });
+                          },
+                          fontSize: MediaQuery.of(context).size.width > 800
+                              ? MediaQuery.of(context).size.height * .016
+                              : MediaQuery.of(context).size.height * .011,
+                        )),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            width: width * 0.75,
-            height: height * 0.7,
-            child: TableComponent(
-              plCols: polCols,
-              polRows: dummyPluto,
-              footerBuilder: (stateManager) {
-                return JournalReport.lazyPaginationFooter(stateManager);
-              },
-              onSelected: (event) {
-                setState(() {
-                  data = event.row!.cells['account']!.value.toString();
-                });
-              },
-              doubleTab: (event) {
-                showDialog(
-                    context: context,
-                    builder: (builder) {
-                      return const AlertDialog(
-                        title: Text("ACTION"),
-                      );
-                    });
-              },
-              rightClickTap: (event) {
-                showDialog(
-                    context: context,
-                    builder: (builder) {
-                      return const AlertDialog(
-                        title: Text("ACTION"),
-                      );
-                    });
-              },
-              key: UniqueKey(),
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  SelectableText(
+                    maxLines: 1,
+                    _locale.outStandingCheques,
+                    style: eighteen500TextStyle(Colors.green),
+                  ),
+                  SizedBox(
+                    width: width * 0.7,
+                    height: height * 0.7,
+                    child: TableComponent(
+                      key: UniqueKey(),
+                      plCols:
+                          ChequesModel.getColumns(AppLocalizations.of(context)),
+                      polRows: [],
+                      footerBuilder: (stateManager) {
+                        return lazyPaginationFooter(stateManager);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ),
-      ],
-    );
-  }
-
-  Row headerTableSection(String data) {
-    print("object");
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: width * 0.5,
-          height: height * 0.03,
-          child: Text("Account: $data"),
-        ),
-        IconButton(
-          onPressed: () {
-            print("object");
-          },
-          iconSize: 45,
-          icon: const Icon(Icons.print),
         ),
       ],
     );
@@ -281,36 +280,122 @@ class _JournalContentState extends State<JournalContent> {
 
   void setControllerFromDateText() {
     return setState(() {
-      fromDateValue = _fromDateController.text;
-      // _fetchData();
+      fromDateValue = fromDate.text;
+      String startDate = DatesController().formatDate(fromDateValue!);
+      criteria.fromDate = startDate;
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
-  void setInitialValues() {
-    fromJCodeValue = "A";
-    toJCodeValue = "C";
-    setLastMonth();
+  void setControllertoDateText() {
+    return setState(() {
+      toDateValue = toDate.text;
+      String endDate = DatesController().formatDate(toDateValue!);
+      criteria.toDate = endDate;
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+    });
   }
 
-  void setLastMonth() {
-    DateTime currentDate = DateTime.now();
-    DateTime lastM =
-        DateTime(currentDate.year, currentDate.month - 1, currentDate.day);
-
-    // Handle the case where the current month is January (month 1)
-    if (currentDate.month == 1) {
-      lastM = DateTime(currentDate.year - 1, 12, currentDate.day);
+  void checkPeriods(value) {
+    if (value == periods[0]) {
+      // Daily
+      fromDate.text = DatesController()
+          .formatDate(DatesController().todayDate())
+          .toString();
+      DateTime.parse(fromDate.text);
+      toDate.text = DatesController()
+          .formatDate(DatesController().todayDate())
+          .toString();
+      print("cjeck :${toDate.text}");
     }
-    int lastDay = lastM.day;
-    int lastMonth = lastM.month;
-    int lastYear = lastM.year;
+    if (value == periods[1]) {
+      // Weekly
+      fromDate.text = DatesController()
+          .formatDate(DatesController().currentWeek())
+          .toString();
+      toDate.text = DatesController()
+          .formatDate(DatesController().todayDate())
+          .toString();
+    }
+    if (value == periods[2]) {
+      // Monthly
+      fromDate.text = DatesController()
+          .formatDate(DatesController().currentMonth())
+          .toString();
+      toDate.text = DatesController()
+          .formatDate(DatesController().todayDate())
+          .toString();
+    }
+    if (value == periods[3]) {
+      // Yearly
+      fromDate.text = DatesController()
+          .formatDate(DatesController().currentYear())
+          .toString();
+      toDate.text = DatesController()
+          .formatDate(DatesController().todayDate())
+          .toString();
+    }
 
-    _fromDateController.text = "$lastDay/$lastMonth/$lastYear";
+    criteria.fromDate = fromDate.text;
+    criteria.toDate = toDate.text;
+  }
 
-    int nowDay = currentDate.day;
-    int nowMonth = currentDate.month;
-    int nowYear = currentDate.year;
+  Future<void> saveExcelFile(Uint8List byteList, String filename) async {
+// Save the CSV string to a file
+    if (html.window != null) {
+      final blob = html.Blob([byteList]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
 
-    _toDateController.text = "$nowDay/$nowMonth/$nowYear";
+      final anchor = html.AnchorElement(href: url)
+        ..target = 'blank'
+        ..download = filename
+        ..click();
+
+      html.Url.revokeObjectUrl(url);
+    } else {
+      // final directory = await getTemporaryDirectory();
+      // final file = File('${directory.path}/$filename');
+      // await file.writeAsBytes(byteList);
+      // // Use platform-specific code to open the file in a Flutter app
+      // For example: launch(url) from the url_launcher package
+    }
+  }
+
+  PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
+    return PlutoLazyPagination(
+      initialPage: 1,
+      initialFetch: true,
+      pageSizeToMove: null,
+      fetchWithSorting: false,
+      fetchWithFiltering: false,
+      fetch: (request) {
+        return fetch(request);
+      },
+      stateManager: stateManager,
+    );
+  }
+
+  Future<PlutoLazyPaginationResponse> fetch(
+      PlutoLazyPaginationRequest request) async {
+    int page = request.page;
+
+    //To send the number of page to the JSON Object
+    criteria.page = page;
+
+    List<PlutoRow> topList = [];
+    print("from date critiria :${criteria.fromDate}");
+    List<ChequesModel> invList = await controller.getCheques(criteria);
+
+    int totalPage = 1;
+
+    for (int i = 0; i < invList.length; i++) {
+      topList.add(invList[i].toPluto());
+    }
+
+    print("topList :${topList.length}");
+    return PlutoLazyPaginationResponse(
+      totalPage: totalPage,
+      rows: topList,
+    );
   }
 }

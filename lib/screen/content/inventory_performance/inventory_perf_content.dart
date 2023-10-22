@@ -26,17 +26,12 @@ class InventoryPerfContent extends StatefulWidget {
   State<InventoryPerfContent> createState() => _InventoryPerfContentState();
 }
 
-List dataDec = [];
-List dataInc = [];
-
 class _InventoryPerfContentState extends State<InventoryPerfContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
   TextEditingController numberOfrow = TextEditingController();
   InventoryPerformanceController inventoryPerformanceController =
       InventoryPerformanceController();
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
   late AppLocalizations _locale;
   List<String> status = [];
   List<String> periods = [];
@@ -120,13 +115,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   }
 
   double width = 0;
-  String? statusValue;
-  String? voucherTypeValue;
-  String? fromJCodeValue;
-  String? toJCodeValue;
-  String? periodValue;
   double height = 0;
+
   int count = 0;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -174,8 +166,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                               int status =
                                   getVoucherStatus(_locale, selectedStatus);
                               criteria.voucherStatus = status;
-                              print(
-                                  "criteria.voucherStatus :{$criteria.voucherStatus}");
                             });
                           },
                         ),
