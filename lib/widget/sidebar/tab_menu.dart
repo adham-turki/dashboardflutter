@@ -39,6 +39,8 @@ class _TabMenuState extends State<TabMenu> {
 
   late ScreenContentProvider provider;
 
+  bool isDesktop = false;
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -49,6 +51,7 @@ class _TabMenuState extends State<TabMenu> {
     bool isParent = sideTabModel.isParent;
 
     provider = context.read<ScreenContentProvider>();
+    isDesktop = Responsive.isDesktop(context);
     return InkWell(
       onTap: () {
         setState(() {
@@ -85,18 +88,18 @@ class _TabMenuState extends State<TabMenu> {
                       isFinishSelect = true;
                     });
                   },
-                  width: Responsive.isDesktop(context)
-                      ? width * 0.2
-                      : width * 0.65,
+                  width: isDesktop ? width * 0.2 : width * 0.65,
                   height: getDynamicHeight(sideTabModel),
                   color: subMenuColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      for (int i = 0; i < subMenu.length; i++)
-                        isFinishSelect ? subMenuText(subMenu[i]) : Container(),
-                    ],
-                  ),
+                  child: isFinishSelect
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            for (int i = 0; i < subMenu.length; i++)
+                              subMenuText(subMenu[i]),
+                          ],
+                        )
+                      : Container(),
                 )
               : Container(),
         ],
@@ -135,9 +138,7 @@ class _TabMenuState extends State<TabMenu> {
                   Icon(
                     icon,
                     color: Colors.white,
-                    size: Responsive.isDesktop(context)
-                        ? width * 0.014
-                        : width * 0.05,
+                    size: isDesktop ? width * 0.014 : width * 0.05,
                   ),
                   SizedBox(
                     width: width * 0.005,
@@ -146,9 +147,7 @@ class _TabMenuState extends State<TabMenu> {
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: Responsive.isDesktop(context)
-                          ? width * 0.01
-                          : width * 0.045,
+                      fontSize: isDesktop ? width * 0.01 : width * 0.045,
                     ),
                   ),
                 ],
@@ -196,14 +195,12 @@ class _TabMenuState extends State<TabMenu> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: SizedBox(
-            width: Responsive.isDesktop(context) ? width * 0.12 : width * 0.5,
+            width: isDesktop ? width * 0.12 : width * 0.5,
             child: Text(
               ">  $text",
               style: TextStyle(
                 color: activeSubColor(index),
-                fontSize: Responsive.isDesktop(context)
-                    ? width * 0.01
-                    : width * 0.045,
+                fontSize: isDesktop ? width * 0.009 : width * 0.045,
               ),
             ),
           ),
@@ -229,13 +226,20 @@ class _TabMenuState extends State<TabMenu> {
   double getDynamicHeight(SideTabModel sideTabModel) {
     int length = sideTabModel.subMenu.length;
     if (isSelected) {
-      if (length >= 3 && length < 5) {
-        return Responsive.isDesktop(context) ? height * 0.23 : height * 0.3;
-      } else if (length >= 4) {
-        return Responsive.isDesktop(context) ? height * 0.8 : height * 1;
+      if (length == 4) {
+        return isDesktop ? 200 : height * 0.3;
+      } else if (length == 2) {
+        return isDesktop ? 120 : height * 0.2;
       } else {
-        return Responsive.isDesktop(context) ? height * 0.14 : height * 0.2;
+        return isDesktop ? 150 : height * 0.3;
       }
+      // if (length >= 3 && length < 5) {
+      //   return isDesktop ? height * 0.23 : height * 0.3;
+      // } else if (length >= 4) {
+      //   return isDesktop ? height * 0.8 : height * 1;
+      // } else {
+      //   return isDesktop ? height * 0.14 : height * 0.2;
+      // }
     }
     return 0;
   }

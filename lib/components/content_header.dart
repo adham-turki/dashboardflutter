@@ -25,7 +25,7 @@ class _ContentHeaderState extends State<ContentHeader> {
     provider = context.read<ScreenContentProvider>();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
       child: Column(
         children: [
           Responsive.isDesktop(context)
