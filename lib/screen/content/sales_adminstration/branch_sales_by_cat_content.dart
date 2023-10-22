@@ -119,6 +119,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   @override
   void initState() {
     getBranch();
+    // fromDate.addListener(() {});
+    // toDate.addListener(() {});
     super.initState();
   }
 
@@ -176,7 +178,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                               ? Center(
                                   child: PieChartComponent(
                                     radiusNormal:
-                                        isDesktop ? height * 0.13 : 70,
+                                        isDesktop ? height * 0.135 : 70,
                                     radiusHover: isDesktop ? height * 0.14 : 80,
                                     width:
                                         isDesktop ? width * 0.42 : width * 0.1,

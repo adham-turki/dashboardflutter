@@ -102,7 +102,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
       PieChartModel data = dataList[i];
       return PieChartSectionData(
         value: data.value,
-        title: data.value.toString(),
+        title: "${data.title}\n${data.value}",
         color: data.color,
         radius: radius,
         titleStyle: const TextStyle(color: Colors.white),
@@ -113,8 +113,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
                 width: 5,
               )
             : null,
-        badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
-        badgePositionPercentageOffset: 1.3,
+        // badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
+        badgePositionPercentageOffset: 2,
       );
     });
   }
@@ -133,12 +133,9 @@ class _PieChartComponentState extends State<PieChartComponent> {
             ),
           ],
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Text(
-            data.title ?? "NONE",
-            style: const TextStyle(color: Colors.white),
-          ),
+        child: Text(
+          data.title ?? "NONE",
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
