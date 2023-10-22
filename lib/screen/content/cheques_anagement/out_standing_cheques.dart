@@ -49,7 +49,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   String hintValue = '0';
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
+  String netMonth = DatesController().formatDateReverse(DatesController()
       .formatDate(DateTime(DatesController().today.year,
               DatesController().today.month + 1, DatesController().today.day)
           .toString()));
@@ -86,10 +86,10 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   @override
   void initState() {
     fromDate.text = todayDate;
-    toDate.text = nextMonth;
+    toDate.text = todayDate;
 
     criteria.fromDate = todayDate;
-    criteria.toDate = nextMonth;
+    criteria.toDate = todayDate;
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
@@ -149,103 +149,108 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     height = MediaQuery.of(context).size.height;
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          width: width * 0.76,
+        Container(
+          width: width * 0.7,
+          decoration: borderDecoration,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
-                width: width * 0.7,
-                decoration: borderDecoration,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDropDown(
-                          hint: periods[0],
-                          label: _locale.period,
-                          items: periods,
-                          initialValue:
-                              selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value;
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomDropDown(
+                    hint: periods[0],
+                    label: _locale.period,
+                    items: periods,
+                    initialValue:
+                        selectedPeriod.isNotEmpty ? selectedPeriod : null,
+                    onChanged: (value) {
+                      setState(() {
+                        checkPeriods(value);
+                        selectedPeriod = value;
+                      });
+                    },
+                  ),
+                  CustomDropDown(
+                    label: _locale.status,
+                    hint: status[0],
+                    items: status,
+                    initialValue:
+                        selectedStatus.isNotEmpty ? selectedStatus : null,
+                    height: height * 0.18,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value;
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        criteria.voucherStatus = status;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  CustomDatePicker(
+                    label: _locale.fromDate,
+                    controller: fromDate,
+                    onChanged: (value) {
+                      setControllerFromDateText();
+                    },
+                    onSelected: (value) {
+                      setControllerFromDateText();
+                    },
+                  ),
+                  CustomDatePicker(
+                    label: _locale.toDate,
+                    controller: toDate,
+                    onChanged: (value) {
+                      setControllertoDateText();
+                    },
+                    onSelected: (value) {
+                      setControllertoDateText();
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width < 800
+                            ? MediaQuery.of(context).size.width * 0.6
+                            : MediaQuery.of(context).size.width * 0.16,
+                        child: CustomButton(
+                          text: _locale.exportToExcel,
+                          fontWeight: FontWeight.w400,
+                          textColor: Colors.white,
+                          borderRadius: 5.0,
+                          onPressed: () {
+                            int status =
+                                getVoucherStatus(_locale, selectedStatus);
+                            SearchCriteria searchCriteria = SearchCriteria(
+                              fromDate:
+                                  DatesController().formatDate(fromDate.text),
+                              toDate: DatesController().formatDate(toDate.text),
+                              voucherStatus: status,
+                              columns: columnsNameMap,
+                              customColumns: columnsNameMap,
+                            );
+                            SelfChequesController()
+                                .exportToExcelApi(searchCriteria)
+                                .then((value) {
+                              saveExcelFile(value, "Cheques.xlsx");
                             });
                           },
-                        ),
-                        CustomDropDown(
-                          label: _locale.status,
-                          hint: status[0],
-                          items: status,
-                          initialValue:
-                              selectedStatus.isNotEmpty ? selectedStatus : null,
-                          height: height * 0.18,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedStatus = value;
-                              int status =
-                                  getVoucherStatus(_locale, selectedStatus);
-                              criteria.voucherStatus = status;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        CustomDatePicker(
-                          label: _locale.fromDate,
-                          controller: fromDate,
-                          onChanged: (value) {
-                            setControllerFromDateText();
-                          },
-                          onSelected: (value) {
-                            setControllerFromDateText();
-                          },
-                        ),
-                        CustomDatePicker(
-                          label: _locale.toDate,
-                          controller: toDate,
-                          onChanged: (value) {
-                            setControllertoDateText();
-                          },
-                          onSelected: (value) {
-                            setControllertoDateText();
-                          },
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width < 800
-                                ? MediaQuery.of(context).size.width * 0.6
-                                : MediaQuery.of(context).size.width * 0.16,
-                            child: CustomButton(
-                              text: _locale.exportToExcel,
-                              fontWeight: FontWeight.w400,
-                              textColor: Colors.white,
-                              borderRadius: 5.0,
-                              onPressed: () {
-                                SelfChequesController()
-                                    .exportToExcelApi(criteria)
-                                    .then((value) {
-                                  saveExcelFile(value, "Cheques.xlsx");
-                                });
-                              },
-                              fontSize: MediaQuery.of(context).size.width > 800
-                                  ? MediaQuery.of(context).size.height * .016
-                                  : MediaQuery.of(context).size.height * .011,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-              )
+                          fontSize: MediaQuery.of(context).size.width > 800
+                              ? MediaQuery.of(context).size.height * .016
+                              : MediaQuery.of(context).size.height * .011,
+                        )),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -259,7 +264,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.outStandingCheques,
+                    _locale.totalSales,
                     style: eighteen500TextStyle(Colors.green),
                   ),
                   SizedBox(

@@ -34,6 +34,7 @@ class InventoryPerformanceModel {
     final Map<String, PlutoCell> inventoryPerformance = <String, PlutoCell>{};
     inventoryPerformance['stkCode'] = PlutoCell(value: code ?? "");
     inventoryPerformance['nameE'] = PlutoCell(value: name ?? "");
+
     inventoryPerformance['inQnty'] = PlutoCell(value: intQty ?? 0);
     inventoryPerformance['outQnty'] = PlutoCell(value: outQty ?? 0);
     return PlutoRow(cells: inventoryPerformance);

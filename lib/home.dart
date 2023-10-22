@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
       case 10:
         return const OutStandingChequesContent();
       case 11:
-        return const JournalContent();
+        return const TotalSalesContent();
       case 12:
         return const SalesReportScreen();
       case 13:

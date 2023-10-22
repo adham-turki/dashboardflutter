@@ -185,6 +185,7 @@ class ReportController extends ApiService {
     List<SalesCostReportModel> salesCostReportList = [];
 
     await ApiService.postRequest(api, salesProvider).then((response) {
+      print("response ${response.statusCode}");
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -194,6 +195,7 @@ class ReportController extends ApiService {
         }
       }
     });
+    print("lengthhhhh ${salesCostReportList.length}");
     return salesCostReportList;
   }
 
