@@ -54,34 +54,4 @@ class DatesController {
       }
     }
   }
-
-  formatDateReverse1(String date) {
-    if (date == "null") {
-      return "";
-    } else {
-      try {
-        DateTime dateTime = DateFormat("dd-MM-yyyy").parse(date);
-        String newDate = DateFormat("dd-MM-yyyy").format(dateTime).toString();
-        return newDate;
-      } catch (e) {
-        return "null";
-      }
-    }
-  }
-  // @override
-  // String toString() {
-  //   String y = _fourDigits(year);
-  //   String m = _twoDigits(month);
-  //   String d = _twoDigits(day);
-  //   String h = _twoDigits(hour);
-  //   String min = _twoDigits(minute);
-  //   String sec = _twoDigits(second);
-  //   String ms = _threeDigits(millisecond);
-  //   String us = microsecond == 0 ? "" : _threeDigits(microsecond);
-  //   if (isUtc) {
-  //     return "$y-$m-$d $h:$min:$sec.$ms${us}Z";
-  //   } else {
-  //     return "$y-$m-$d $h:$min:$sec.$ms$us";
-  //   }
-  // }
 }
