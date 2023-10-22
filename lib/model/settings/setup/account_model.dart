@@ -129,21 +129,21 @@ class AccountModel {
     double height = MediaQuery.of(context).size.height;
     List<PlutoColumn> list = [
       PlutoColumn(
-        title: localizations.dueDate,
+        title: "#",
         field: "#",
         type: PlutoColumnType.number(),
         width: width * 0.13,
         backgroundColor: colColor,
       ),
       PlutoColumn(
-        title: localizations.bankName,
+        title: localizations.accountCode,
         field: "Account Code",
         type: PlutoColumnType.text(),
         width: width * 0.13,
         backgroundColor: colColor,
       ),
       PlutoColumn(
-        title: localizations.supplier(""),
+        title: localizations.accountName,
         field: "Account Name",
         type: PlutoColumnType.text(),
         width: width * 0.13,
