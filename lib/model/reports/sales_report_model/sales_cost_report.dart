@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../../utils/constants/colors.dart';
 
 class SalesCostReportModel {
   String? dash;
@@ -91,75 +94,122 @@ class SalesCostReportModel {
         ? ""
         : salesReport['invoice'];
   }
+// PlutoRow toPluto() {
+//     final Map<String, PlutoCell> inventoryPerformance = <String, PlutoCell>{};
+//     inventoryPerformance['stkCode'] = PlutoCell(value: code ?? "");
+//     inventoryPerformance['nameE'] = PlutoCell(value: name ?? "");
+//     inventoryPerformance['inQnty'] = PlutoCell(value: intQty ?? 0);
+//     inventoryPerformance['outQnty'] = PlutoCell(value: outQty ?? 0);
+//     return PlutoRow(cells: inventoryPerformance);
+//   }
 
-  List<String> getAllData(List<String> columnsName, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context);
+  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+    List<PlutoColumn> list = [
+      PlutoColumn(
+        title: localizations.code,
+        field: "stkCode",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.name,
+        field: "nameE",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.currentQty,
+        field: "inQnty",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.soldQnty,
+        field: "outQnty",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+        // footerRenderer: (rendererContext) {
+        //   return InventoryPerformanceModel.footerRenderer(
+        //       rendererContext, allOutQty);
+        // },
+      ),
+    ];
 
-    List<String> stringList = [];
-
-    for (int i = 0; i < columnsName.length; i++) {
-      if (columnsName[i] == '#') {
-        stringList.add(dash.toString());
-      } else if (columnsName[i] == locale.branch) {
-        stringList.add(branch.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("1")) {
-        stringList.add(stockCategories1.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("2")) {
-        stringList.add(stockCategories2.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("3")) {
-        stringList.add(stockCategories3.toString());
-      } else if (columnsName[i] == locale.supplier("1")) {
-        stringList.add(supplier1.toString());
-      } else if (columnsName[i] == locale.supplier("2")) {
-        stringList.add(supplier2.toString());
-      } else if (columnsName[i] == locale.supplier("3")) {
-        stringList.add(supplier3.toString());
-      } else if (columnsName[i] == locale.customer) {
-        stringList.add(customer.toString());
-      } else if (columnsName[i] == locale.stock) {
-        stringList.add(stock.toString());
-      } else if (columnsName[i] == locale.modelNo) {
-        stringList.add(modelNo.toString());
-      } else if (columnsName[i] == locale.qty) {
-        stringList.add(quantity.toString());
-      } else if (columnsName[i] == locale.averagePrice) {
-        stringList.add(avgPrice.toString());
-      } else if (columnsName[i] == locale.total) {
-        stringList.add(total.toString());
-      } else if (columnsName[i] == locale.daily) {
-        stringList.add(daily.toString());
-      } else if (columnsName[i] == locale.monthly) {
-        stringList.add(monthly.toString());
-      } else if (columnsName[i] == locale.yearly) {
-        stringList.add(yearly.toString());
-      } else if (columnsName[i] == locale.brand) {
-        stringList.add(brand.toString());
-      } else if (columnsName[i] == locale.invoice) {
-        stringList.add(invoice.toString());
-      }
-    }
-
-    return stringList;
+    return list;
   }
 
-  List<String> getTotal(int length, double totalAmount, double qty,
-      double price, BuildContext context) {
-    List<String> stringList = [];
+  // List<String> getAllData(List<String> columnsName, BuildContext context) {
+  //   AppLocalizations locale = AppLocalizations.of(context);
 
-    for (int i = 0; i < length; i++) {
-      if (i == length - 1) {
-        stringList.add(totalAmount.toString());
-      } else if (i == length - 2) {
-        stringList.add(price.toString());
-      } else if (i == length - 3) {
-        stringList.add(qty.toString());
-      } else if (i == length - 4) {
-        stringList.add(AppLocalizations.of(context).totalCollections);
-      } else {
-        stringList.add("");
-      }
-    }
+  //   List<String> stringList = [];
 
-    return stringList;
-  }
+  //   for (int i = 0; i < columnsName.length; i++) {
+  //     if (columnsName[i] == '#') {
+  //       stringList.add(dash.toString());
+  //     } else if (columnsName[i] == locale.branch) {
+  //       stringList.add(branch.toString());
+  //     } else if (columnsName[i] == locale.stockCategoryLevel("1")) {
+  //       stringList.add(stockCategories1.toString());
+  //     } else if (columnsName[i] == locale.stockCategoryLevel("2")) {
+  //       stringList.add(stockCategories2.toString());
+  //     } else if (columnsName[i] == locale.stockCategoryLevel("3")) {
+  //       stringList.add(stockCategories3.toString());
+  //     } else if (columnsName[i] == locale.supplier("1")) {
+  //       stringList.add(supplier1.toString());
+  //     } else if (columnsName[i] == locale.supplier("2")) {
+  //       stringList.add(supplier2.toString());
+  //     } else if (columnsName[i] == locale.supplier("3")) {
+  //       stringList.add(supplier3.toString());
+  //     } else if (columnsName[i] == locale.customer) {
+  //       stringList.add(customer.toString());
+  //     } else if (columnsName[i] == locale.stock) {
+  //       stringList.add(stock.toString());
+  //     } else if (columnsName[i] == locale.modelNo) {
+  //       stringList.add(modelNo.toString());
+  //     } else if (columnsName[i] == locale.qty) {
+  //       stringList.add(quantity.toString());
+  //     } else if (columnsName[i] == locale.averagePrice) {
+  //       stringList.add(avgPrice.toString());
+  //     } else if (columnsName[i] == locale.total) {
+  //       stringList.add(total.toString());
+  //     } else if (columnsName[i] == locale.daily) {
+  //       stringList.add(daily.toString());
+  //     } else if (columnsName[i] == locale.monthly) {
+  //       stringList.add(monthly.toString());
+  //     } else if (columnsName[i] == locale.yearly) {
+  //       stringList.add(yearly.toString());
+  //     } else if (columnsName[i] == locale.brand) {
+  //       stringList.add(brand.toString());
+  //     } else if (columnsName[i] == locale.invoice) {
+  //       stringList.add(invoice.toString());
+  //     }
+  //   }
+
+  //   return stringList;
+  // }
+
+  // List<String> getTotal(int length, double totalAmount, double qty,
+  //     double price, BuildContext context) {
+  //   List<String> stringList = [];
+
+  //   for (int i = 0; i < length; i++) {
+  //     if (i == length - 1) {
+  //       stringList.add(totalAmount.toString());
+  //     } else if (i == length - 2) {
+  //       stringList.add(price.toString());
+  //     } else if (i == length - 3) {
+  //       stringList.add(qty.toString());
+  //     } else if (i == length - 4) {
+  //       stringList.add(AppLocalizations.of(context).totalCollections);
+  //     } else {
+  //       stringList.add("");
+  //     }
+  //   }
+
+  //   return stringList;
+  // }
 }

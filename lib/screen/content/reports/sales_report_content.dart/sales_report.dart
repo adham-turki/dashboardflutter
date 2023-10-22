@@ -7,6 +7,7 @@ import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
+import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../utils/constants/styles.dart';
 import '../../../../utils/func/dates_controller.dart';
@@ -309,8 +310,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         fromDate: readProvider.fromDate,
                         toDate: readProvider.toDate,
                         voucherStatus: -100,
-                        // columns: getColumns(_locale, orderByColumns),
-                        // customColumns: getColumns(_locale, orderByColumns),
+                        columns: getColumns(_locale, orderByColumns),
+                        customColumns: getColumns(_locale, orderByColumns),
                       );
                       Map<String, dynamic> body = readProvider.toJson();
                       ReportController()
