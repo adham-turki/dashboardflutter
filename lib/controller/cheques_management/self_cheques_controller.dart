@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bi_replicate/service/api_service.dart';
 import 'package:flutter/services.dart';
 
 import '../../model/cheques_bank/cheques_model.dart';
@@ -16,14 +17,19 @@ class SelfChequesController extends Api {
     String pathUrl = getAllCheques;
     int count = 0;
 
-    await postMethods(pathUrl, searchCriteria.chequesToJson()).then((response) {
-      var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    await ApiService.postRequest(pathUrl, searchCriteria.chequesToJson())
+        .then((response) {
+      print("response.body ${response.body}"); // Print the response
 
-      count = ((searchCriteria.page! - 1) * 10) + 1;
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
-      for (var element in jsonData) {
-        chequesList.add(ChequesModel.fromJson(element, count));
-        count++;
+        count = ((searchCriteria.page! - 1) * 10) + 1;
+
+        for (var element in jsonData) {
+          chequesList.add(ChequesModel.fromJson(element, count));
+          count++;
+        }
       }
     });
     return chequesList;
@@ -33,7 +39,8 @@ class SelfChequesController extends Api {
       SearchCriteria searchCriteria) async {
     var api = getChequesResult;
     late ChequesResult chequesResult = ChequesResult();
-    await postMethods(api, searchCriteria.chequesToJson()).then((response) {
+    await ApiService.postRequest(api, searchCriteria.chequesToJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -59,9 +66,7 @@ class SelfChequesController extends Api {
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    await postMethods(eUrl, body).then((value) {
-      // print(value.statusCode);
-      //   print(value.bodyBytes);
+    await ApiService.postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
 

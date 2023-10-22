@@ -51,47 +51,80 @@ class ChequesPayableModel {
 
   PlutoRow toPluto() {
     final Map<String, PlutoCell> chequesPayable = <String, PlutoCell>{};
-    chequesPayable['outStandingCheques'] =
-        PlutoCell(value: outStandingCheques ?? "");
+    chequesPayable['outStandingCheques'] = PlutoCell(value: outStandingCheques);
     chequesPayable['unCollectableCheques'] =
-        PlutoCell(value: unCollectableCheques ?? "");
-    chequesPayable['actualBankBalance'] =
-        PlutoCell(value: actualBankBalance ?? 0);
+        PlutoCell(value: unCollectableCheques);
+    chequesPayable['actualBankBalance'] = PlutoCell(value: actualBankBalance);
     chequesPayable['dueOutStandingCheques'] =
-        PlutoCell(value: dueOutStandingCheques ?? 0);
-
+        PlutoCell(value: dueOutStandingCheques);
+    chequesPayable['underCollectionCheques'] =
+        PlutoCell(value: underCollectionCheques);
+    chequesPayable['finalBalance'] = PlutoCell(value: finalBalance);
     chequesPayable['dueInStandingCheques'] =
-        PlutoCell(value: dueInStandingCheques ?? 0);
-
-    chequesPayable['finalBalance'] = PlutoCell(value: finalBalance ?? 0);
+        PlutoCell(value: dueInStandingCheques);
     return PlutoRow(cells: chequesPayable);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+  static List<PlutoColumn> getColumnsChequesPayable(
+      AppLocalizations localizations) {
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.outStandingCheques,
         field: "outStandingCheques",
-        type: PlutoColumnType.text(),
-        width: 150,
+        type: PlutoColumnType.number(),
+        width: 270,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.uncollectableCheques,
+        field: "unCollectableCheques",
+        type: PlutoColumnType.number(),
+        width: 270,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.underCollectionCheques,
-        field: "unCollectableCheques",
-        type: PlutoColumnType.text(),
-        width: 150,
+        field: "underCollectionCheques",
+        type: PlutoColumnType.number(),
+        width: 270,
+        backgroundColor: colColor,
+      ),
+    ];
+    return list;
+  }
+
+  static List<PlutoColumn> getColumnsBankSettlement(
+      AppLocalizations localizations) {
+    List<PlutoColumn> list = [
+      PlutoColumn(
+        title: localizations.actualBankBalance,
+        field: "actualBankBalance",
+        type: PlutoColumnType.number(),
+        width: 200,
         backgroundColor: colColor,
       ),
       PlutoColumn(
-        title: localizations.underCollectionCheques,
-        field: "unCollectableCheques",
-        type: PlutoColumnType.text(),
+        title: localizations.dueOutstandingCheques,
+        field: "dueOutStandingCheques",
+        type: PlutoColumnType.number(),
+        width: 230,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.dueInstandingCheques,
+        field: "dueInStandingCheques",
+        type: PlutoColumnType.number(),
+        width: 220,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.finalBalance,
+        field: "finalBalance",
+        type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
       ),
     ];
-
     return list;
   }
 }

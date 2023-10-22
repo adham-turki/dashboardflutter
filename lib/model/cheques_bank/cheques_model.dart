@@ -1,4 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../utils/constants/colors.dart';
+import '../../utils/constants/styles.dart';
 
 class ChequesModel {
   String? jCode1;
@@ -31,6 +36,8 @@ class ChequesModel {
   int? counter = 0;
 
   ChequesModel();
+  static double allAmount = 0;
+  List? chequsList;
 
   ChequesModel.fromJson(Map<String, dynamic> json, int countNum) {
     jCode1 = json['jCode1'];
@@ -76,6 +83,68 @@ class ChequesModel {
     return stringList;
   }
 
+  PlutoRow toPluto() {
+    final Map<String, PlutoCell> chequesModel = <String, PlutoCell>{};
+    chequesModel['chequeNum'] = PlutoCell(value: chequeNum);
+    chequesModel['amount'] = PlutoCell(value: amount);
+    chequesModel['dueDate'] = PlutoCell(value: dueDate);
+    chequesModel['bankName'] = PlutoCell(value: bankName);
+    chequesModel['custSupName'] = PlutoCell(value: custSupName);
+    chequesModel['curName'] = PlutoCell(value: curName);
+    return PlutoRow(cells: chequesModel);
+  }
+
+  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+    List<PlutoColumn> list = [
+      PlutoColumn(
+        title: localizations.dueDate,
+        field: "dueDate",
+        type: PlutoColumnType.text(),
+        width: 185,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.bankName,
+        field: "bankName",
+        type: PlutoColumnType.text(),
+        width: 185,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.supplier(""),
+        field: "custSupName",
+        type: PlutoColumnType.text(),
+        width: 185,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.currency,
+        field: "curName",
+        type: PlutoColumnType.text(),
+        width: 185,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.chequeNo,
+        field: "chequeNum",
+        type: PlutoColumnType.text(),
+        width: 185,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.chequeAmount,
+        field: "amount",
+        type: PlutoColumnType.number(),
+        width: 190,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return ChequesModel.footerRenderer(rendererContext, allAmount);
+        },
+      ),
+    ];
+    return list;
+  }
+
   List<String> getTotal(double totalAmount) {
     List<String> stringList = [];
 
@@ -88,5 +157,36 @@ class ChequesModel {
     stringList.add(totalAmount.toString());
 
     return stringList;
+  }
+
+  static PlutoAggregateColumnFooter footerRenderer(
+      PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: true,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: text.replaceAll("\$", ""),
+            children: [
+              TextSpan(
+                text: valueAll.toStringAsFixed(2),
+              ),
+            ],
+            style: gridFooterStyle,
+          ),
+        ];
+      },
+    );
+  }
+
+  double getTotalAmount() {
+    for (int i = 0; i < chequsList!.length; i++) {
+      allAmount += int.parse(chequsList![i].amount.toString());
+    }
+
+    return allAmount;
   }
 }
