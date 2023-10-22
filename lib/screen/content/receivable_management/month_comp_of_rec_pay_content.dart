@@ -49,7 +49,25 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
+  final dataMap = <String, double>{};
 
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
+  ];
   List<BarChartData> barData = [];
   List<BarChartData> barData2 = [];
 

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../controller/financial_performance/expense_controller.dart';
@@ -50,6 +51,25 @@ class _ExpensesContentState extends State<ExpensesContent> {
     'Print',
     'Save as JPEG',
     'Save as PNG',
+  ];
+  final dataMap = <String, double>{};
+
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
   ];
 
   List<PieChartModel> pieData = [];
@@ -202,16 +222,31 @@ class _ExpensesContentState extends State<ExpensesContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
+                            ? Container(
+                                height: height * 0.4,
+                                width: width * 0.4,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: dataMap.isNotEmpty
+                                    ? PieChart(
+                                        dataMap: dataMap,
+                                        chartType: ChartType.disc,
+                                        baseChartColor: Colors.grey[300]!,
+                                        colorList: colorList,
+                                      )
+                                    : const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                               )
+                            //  Center(
+                            //     child: PieChartComponent(
+                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
+                            //       radiusHover: isDesktop ? height * 0.17 : 80,
+                            //       width: isDesktop ? width * 0.42 : width * 0.1,
+                            //       height:
+                            //           isDesktop ? height * 0.42 : height * 0.4,
+                            //       dataList: pieData,
+                            //     ),
+                            //   )
                             : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
@@ -342,6 +377,8 @@ class _ExpensesContentState extends State<ExpensesContent> {
           listOfBalances.add(elemant.expense!);
           listOfPeriods.add(temp);
           if (boolTemp) {
+            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+                double.parse(elemant.expense.toString()));
             pieData.add(PieChartModel(
                 title: temp,
                 value: double.parse(elemant.expense.toString()) == 0.0

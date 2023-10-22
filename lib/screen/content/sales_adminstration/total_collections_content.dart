@@ -5,6 +5,7 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:pie_chart/pie_chart.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -51,6 +52,25 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     'Print',
     'Save as JPEG',
     'Save as PNG',
+  ];
+  final dataMap = <String, double>{};
+
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
   ];
 
   List<PieChartModel> pieData = [];
@@ -183,17 +203,32 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width:
-                                      isDesktop ? width * 0.42 : width * 0.05,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
+                            ? Container(
+                                height: height * 0.4,
+                                width: width * 0.4,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: dataMap.isNotEmpty
+                                    ? PieChart(
+                                        dataMap: dataMap,
+                                        chartType: ChartType.disc,
+                                        baseChartColor: Colors.grey[300]!,
+                                        colorList: colorList,
+                                      )
+                                    : const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                               )
+                            //  Center(
+                            //     child: PieChartComponent(
+                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
+                            //       radiusHover: isDesktop ? height * 0.17 : 80,
+                            //       width:
+                            //           isDesktop ? width * 0.42 : width * 0.05,
+                            //       height:
+                            //           isDesktop ? height * 0.42 : height * 0.4,
+                            //       dataList: pieData,
+                            //     ),
+                            //   )
                             : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
@@ -377,6 +412,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           listOfBalances.add(element.collection!);
           listOfPeriods.add(element.name!);
           if (boolTemp) {
+            dataMap[element.name!] =
+                formatDoubleToTwoDecimalPlaces(element.collection!);
             pieData.add(PieChartModel(
                 title: element.name!,
                 value: formatDoubleToTwoDecimalPlaces(element.collection!),

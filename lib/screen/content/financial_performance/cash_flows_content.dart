@@ -7,6 +7,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
@@ -60,7 +61,25 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
+  final dataMap = <String, double>{};
 
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
+  ];
   List<PieChartModel> pieData = [];
   List<BiAccountModel> cashboxAccounts = [];
 
@@ -252,16 +271,31 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
+                            ? Container(
+                                height: height * 0.4,
+                                width: width * 0.4,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: dataMap.isNotEmpty
+                                    ? PieChart(
+                                        dataMap: dataMap,
+                                        chartType: ChartType.disc,
+                                        baseChartColor: Colors.grey[300]!,
+                                        colorList: colorList,
+                                      )
+                                    : const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
                               )
+                            // Center(
+                            //     child: PieChartComponent(
+                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
+                            //       radiusHover: isDesktop ? height * 0.17 : 80,
+                            //       width: isDesktop ? width * 0.42 : width * 0.1,
+                            //       height:
+                            //           isDesktop ? height * 0.42 : height * 0.4,
+                            //       dataList: pieData,
+                            //     ),
+                            //   )
                             : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
@@ -452,6 +486,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashIn);
           if (temp) {
+            dataMap[_locale.cashIn] =
+                formatDoubleToTwoDecimalPlaces(element.value!);
             pieData.add(PieChartModel(
                 title: _locale.cashIn,
                 value: formatDoubleToTwoDecimalPlaces(element.value!),
@@ -464,6 +500,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           listOfBalances.add(element.value!);
           listOfPeriods.add(_locale.cashOut);
           if (temp) {
+            dataMap[_locale.cashOut] =
+                formatDoubleToTwoDecimalPlaces(element.value!);
             pieData.add(PieChartModel(
                 title: _locale.cashOut,
                 value: element.value,
