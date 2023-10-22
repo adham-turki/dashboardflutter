@@ -48,10 +48,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   String hintValue = '0';
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
+
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
@@ -85,10 +82,10 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   @override
   void initState() {
     fromDate.text = todayDate;
-    toDate.text = nextMonth;
+    toDate.text = todayDate;
 
     criteria.fromDate = todayDate;
-    criteria.toDate = nextMonth;
+    criteria.toDate = todayDate;
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
@@ -227,8 +224,18 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                           textColor: Colors.white,
                           borderRadius: 5.0,
                           onPressed: () {
+                            int status =
+                                getVoucherStatus(_locale, selectedStatus);
+                            SearchCriteria searchCriteria = SearchCriteria(
+                              fromDate:
+                                  DatesController().formatDate(fromDate.text),
+                              toDate: DatesController().formatDate(toDate.text),
+                              voucherStatus: status,
+                              columns: columnsNameMap,
+                              customColumns: columnsNameMap,
+                            );
                             SelfChequesController()
-                                .exportToExcelApi(criteria)
+                                .exportToExcelApi(searchCriteria)
                                 .then((value) {
                               saveExcelFile(value, "Cheques.xlsx");
                             });
@@ -253,7 +260,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.outStandingCheques,
+                    _locale.totalSales,
                     style: eighteen500TextStyle(Colors.green),
                   ),
                   SizedBox(

@@ -264,7 +264,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.totalSales,
+                    _locale.outStandingCheques,
                     style: eighteen500TextStyle(Colors.green),
                   ),
                   SizedBox(

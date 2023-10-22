@@ -55,6 +55,19 @@ class DatesController {
     }
   }
 
+  formatDateReverse1(String date) {
+    if (date == "null") {
+      return "";
+    } else {
+      try {
+        DateTime dateTime = DateFormat("dd-MM-yyyy").parse(date);
+        String newDate = DateFormat("dd-MM-yyyy").format(dateTime).toString();
+        return newDate;
+      } catch (e) {
+        return "null";
+      }
+    }
+  }
   // @override
   // String toString() {
   //   String y = _fourDigits(year);
