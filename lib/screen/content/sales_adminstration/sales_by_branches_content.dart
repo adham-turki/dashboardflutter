@@ -202,7 +202,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                         colorList: colorList,
                                       )
                                     : const Center(
-                                        child: CircularProgressIndicator(),
+                                        child: Text(
+                                          "Pie Chart is Empty!",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
                                       ),
                               )
                             // Center(

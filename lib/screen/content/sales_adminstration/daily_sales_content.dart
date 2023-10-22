@@ -268,7 +268,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
                                         colorList: colorList,
                                       )
                                     : const Center(
-                                        child: CircularProgressIndicator(),
+                                        child: Text(
+                                          "Pie Chart is Empty!",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
                                       ),
                               )
                             //  Center(
