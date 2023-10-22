@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+import 'dart:html' as html;
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:bi_replicate/model/cheques_bank/cheques_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/date_text_field.dart';
 import '../../../components/table_component.dart';
+import '../../../controller/cheques_management/self_cheques_controller.dart';
 import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -19,24 +23,19 @@ import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
 import '../../../widget/headerWidget.dart';
 
-class InventoryPerfContent extends StatefulWidget {
-  const InventoryPerfContent({super.key});
+class OutStandingChequesContent extends StatefulWidget {
+  const OutStandingChequesContent({super.key});
 
   @override
-  State<InventoryPerfContent> createState() => _InventoryPerfContentState();
+  State<OutStandingChequesContent> createState() =>
+      _OutStandingChequesContentState();
 }
 
-List dataDec = [];
-List dataInc = [];
-
-class _InventoryPerfContentState extends State<InventoryPerfContent> {
+class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
-  TextEditingController numberOfrow = TextEditingController();
-  InventoryPerformanceController inventoryPerformanceController =
-      InventoryPerformanceController();
-  DateTime? _selectedDate = DateTime.now();
-  DateTime? _selectedDate2 = DateTime.now();
+  SelfChequesController controller = SelfChequesController();
+
   late AppLocalizations _locale;
   List<String> status = [];
   List<String> periods = [];
@@ -54,6 +53,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       .formatDate(DateTime(DatesController().today.year,
               DatesController().today.month + 1, DatesController().today.day)
           .toString()));
+  List<String> columnsName = [];
+  List<String> columnsNameMap = [];
+
   final List<double> listOfBalances = [
     100.0,
     150.0,
@@ -97,8 +99,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-
-    hintValue = numberOfrow.text == "" ? "0" : (numberOfrow.text);
     status = [
       _locale.all,
       _locale.posted,
@@ -111,10 +111,26 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       _locale.monthly,
       _locale.yearly,
     ];
+    columnsName = [
+      "#",
+      _locale.dueDate,
+      _locale.bankName,
+      _locale.supplier(""),
+      _locale.currency,
+      _locale.chequeNo,
+      _locale.chequeAmount
+    ];
 
+    columnsNameMap = [
+      'dueDate',
+      'bankName',
+      'custSupName',
+      'curName',
+      'chequeNum'
+          'amount'
+    ];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
-    numberOfrow.text = 10.toString();
 
     super.didChangeDependencies();
   }
@@ -134,6 +150,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SizedBox(
           width: width * 0.76,
@@ -144,6 +161,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 decoration: borderDecoration,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -174,19 +192,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                               int status =
                                   getVoucherStatus(_locale, selectedStatus);
                               criteria.voucherStatus = status;
-                              print(
-                                  "criteria.voucherStatus :{$criteria.voucherStatus}");
-                            });
-                          },
-                        ),
-                        CustomTextField(
-                          controller: numberOfrow,
-                          initialValue: numberOfrow.text,
-                          label: _locale.itemsNumber,
-                          onChanged: (value) {
-                            setState(() {
-                              hintValue = value;
-                              criteria.rownum = int.parse(numberOfrow.text);
                             });
                           },
                         ),
@@ -194,6 +199,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomDatePicker(
                           label: _locale.fromDate,
@@ -215,6 +221,26 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                             setControllertoDateText();
                           },
                         ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width < 800
+                                ? MediaQuery.of(context).size.width * 0.6
+                                : MediaQuery.of(context).size.width * 0.16,
+                            child: CustomButton(
+                              text: _locale.exportToExcel,
+                              fontWeight: FontWeight.w400,
+                              textColor: Colors.white,
+                              borderRadius: 5.0,
+                              onPressed: () {
+                                SelfChequesController()
+                                    .exportToExcelApi(criteria)
+                                    .then((value) {
+                                  saveExcelFile(value, "Cheques.xlsx");
+                                });
+                              },
+                              fontSize: MediaQuery.of(context).size.width > 800
+                                  ? MediaQuery.of(context).size.height * .016
+                                  : MediaQuery.of(context).size.height * .011,
+                            )),
                       ],
                     ),
                   ],
@@ -233,41 +259,19 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.topOfInventoryPerformance,
+                    _locale.outStandingCheques,
                     style: eighteen500TextStyle(Colors.green),
                   ),
                   SizedBox(
-                    width: width * 0.37,
+                    width: width * 0.7,
                     height: height * 0.7,
                     child: TableComponent(
                       key: UniqueKey(),
-                      plCols: InventoryPerformanceModel.getColumns(
-                          AppLocalizations.of(context)),
-                      polRows: polTopRows,
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooter(stateManager);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  SelectableText(
-                    maxLines: 1,
-                    _locale.leastOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.red),
-                  ),
-                  SizedBox(
-                    width: width * 0.37,
-                    height: height * 0.7,
-                    child: TableComponent(
-                      key: UniqueKey(),
-                      plCols: InventoryPerformanceModel.getColumns(
-                          AppLocalizations.of(context)),
+                      plCols:
+                          ChequesModel.getColumns(AppLocalizations.of(context)),
                       polRows: [],
                       footerBuilder: (stateManager) {
-                        return lazyPaginationFooterLeast(stateManager);
+                        return lazyPaginationFooter(stateManager);
                       },
                     ),
                   ),
@@ -342,6 +346,27 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     criteria.toDate = toDate.text;
   }
 
+  Future<void> saveExcelFile(Uint8List byteList, String filename) async {
+// Save the CSV string to a file
+    if (html.window != null) {
+      final blob = html.Blob([byteList]);
+      final url = html.Url.createObjectUrlFromBlob(blob);
+
+      final anchor = html.AnchorElement(href: url)
+        ..target = 'blank'
+        ..download = filename
+        ..click();
+
+      html.Url.revokeObjectUrl(url);
+    } else {
+      // final directory = await getTemporaryDirectory();
+      // final file = File('${directory.path}/$filename');
+      // await file.writeAsBytes(byteList);
+      // // Use platform-specific code to open the file in a Flutter app
+      // For example: launch(url) from the url_launcher package
+    }
+  }
+
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
     return PlutoLazyPagination(
       initialPage: 1,
@@ -365,8 +390,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     List<PlutoRow> topList = [];
     print("from date critiria :${criteria.fromDate}");
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellDic(criteria);
+    List<ChequesModel> invList = await controller.getCheques(criteria);
 
     int totalPage = 1;
 
@@ -374,51 +398,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       topList.add(invList[i].toPluto());
     }
 
-    return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
-      rows: topList,
-    );
-  }
-
-  PlutoLazyPagination lazyPaginationFooterLeast(
-      PlutoGridStateManager stateManager) {
-    return PlutoLazyPagination(
-      initialPage: 1,
-      initialFetch: true,
-      pageSizeToMove: null,
-      fetchWithSorting: false,
-      fetchWithFiltering: false,
-      fetch: (request) {
-        return fetchLeast(request);
-      },
-      stateManager: stateManager,
-    );
-  }
-
-  Future<PlutoLazyPaginationResponse> fetchLeast(
-      PlutoLazyPaginationRequest request) async {
-    int page = request.page;
-
-    //To send the number of page to the JSON Object
-    criteria.page = page;
-    print(criteria.toJson());
-
-    List<PlutoRow> topList = [];
-
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellInc(criteria);
-
-    print(invList.length);
-
-    int totalPage = 1;
-
-    for (int i = 0; i < invList.length; i++) {
-      print("object");
-      topList.add(invList[i].toPluto());
-    }
-
-    print("TOP LIST: ${topList.length}");
-
+    print("topList :${topList.length}");
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
       rows: topList,
