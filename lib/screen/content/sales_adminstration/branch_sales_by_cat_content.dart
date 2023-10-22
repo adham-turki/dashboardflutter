@@ -119,8 +119,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   @override
   void initState() {
     getBranch();
-    // fromDate.addListener(() {});
-    // toDate.addListener(() {});
     super.initState();
   }
 
@@ -132,123 +130,81 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     isDesktop = Responsive.isDesktop(context);
 
     return SingleChildScrollView(
-      child: Container(
-        // height: height,
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CustomCard(
-            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-            //       title: '42136',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Sale',
-            //       icon:
-            //           Icons.attach_money, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-            //       title: '1446',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Total Visited',
-            //       icon: Icons.abc, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-            //       title: '61%',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Growth',
-            //       icon: Icons.bar_chart, // Provide the actual path to the icon
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: height * 0.1,
-            // ),
-            Container(
-              width: width * 0.7,
-              decoration: borderDecoration,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: isDesktop ? desktopCriteria() : mobileCriteria(),
-              ),
-            ),
-            Padding(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: width * 0.7,
+            decoration: borderDecoration,
+            child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.6,
-                decoration: borderDecoration,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            selectedChart == _locale.lineChart
-                                ? _locale.lineChart
-                                : selectedChart == _locale.pieChart
-                                    ? _locale.pieChart
-                                    : _locale.barChart,
-                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
-                          ),
+              child: isDesktop ? desktopCriteria() : mobileCriteria(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: width * 0.7,
+              height: isDesktop ? height * 0.6 : height * 0.6,
+              decoration: borderDecoration,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          selectedChart == _locale.lineChart
+                              ? _locale.lineChart
+                              : selectedChart == _locale.pieChart
+                                  ? _locale.pieChart
+                                  : _locale.barChart,
+                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
                         ),
-                      ],
-                    ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : selectedChart == _locale.pieChart
-                            ? Container(
-                                height: height * 0.4,
-                                width: width * 0.4,
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: dataMap.isNotEmpty
-                                    ? PieChart(
-                                        dataMap: dataMap,
-                                        chartType: ChartType.disc,
-                                        baseChartColor: Colors.grey[300]!,
-                                        colorList: colorList,
-                                      )
-                                    : const Center(
-                                        child: Text(
-                                          "Pie Chart is Empty!",
-                                          style: TextStyle(fontSize: 24),
-                                        ),
-                                      ),
-                              )
-                            // Center(
-                            //     child: PieChartComponent(
-                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
-                            //       radiusHover: isDesktop ? height * 0.17 : 80,
-                            //       width: isDesktop ? width * 0.42 : width * 0.1,
-                            //       height:
-                            //           isDesktop ? height * 0.42 : height * 0.4,
-                            //       dataList: pieData,
-                            //     ),
-                            //   )
-                            : BalanceBarChart(data: barData),
-                    const SizedBox(), //Footer
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  selectedChart == _locale.lineChart
+                      ? BalanceLineChart(
+                          yAxisText: _locale.balances,
+                          xAxisText: _locale.periods,
+                          balances: listOfBalances,
+                          periods: listOfPeriods)
+                      : selectedChart == _locale.pieChart
+                          ? dataMap.isNotEmpty
+                              ? Center(
+                                  child: PieChartComponent(
+                                    radiusNormal:
+                                        isDesktop ? height * 0.13 : 70,
+                                    radiusHover: isDesktop ? height * 0.14 : 80,
+                                    width:
+                                        isDesktop ? width * 0.42 : width * 0.1,
+                                    height: isDesktop
+                                        ? height * 0.42
+                                        : height * 0.3,
+                                    dataList: pieData,
+                                  ),
+                                )
+                              // ? PieChart(
+                              //     dataMap: dataMap,
+                              //     chartType: ChartType.disc,
+                              //     baseChartColor: Colors.grey[300]!,
+                              //     colorList: colorList,
+                              //   )
+                              : const Center(
+                                  child: Text(
+                                    "Pie Chart is Empty!",
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                )
+                          : BalanceBarChart(data: barData),
+                  const SizedBox(), //Footer
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -489,7 +445,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     listOfBalances = [];
     listOfPeriods = [];
 
-    print("ddddddddddd");
+    // print("ddddddddddd");
     salesCategoryController.getSalesByCategory(searchCriteria).then((value) {
       for (var element in value) {
         // creditAmt - debitAmt
@@ -513,7 +469,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 title: element.categoryName!,
                 value: formatDoubleToTwoDecimalPlaces(bal),
                 color: randomColor)); // Set random color
-            print("asdasd: ${pieData.length}");
+            // print("asdasd: ${pieData.length}");
           }
 
           barData.add(
