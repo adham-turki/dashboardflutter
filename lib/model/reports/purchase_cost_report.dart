@@ -1,5 +1,11 @@
+import 'package:bi_replicate/model/reports/reports_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../utils/constants/colors.dart';
+import '../../utils/constants/maps.dart';
+import '../../utils/constants/styles.dart';
 
 class PurchaseCostReportModel {
   String? dash;
@@ -103,76 +109,94 @@ class PurchaseCostReportModel {
         : purchaseReport['invoice'];
   }
 
-  List<String> getAllData(List<String> columnsName, BuildContext context) {
-    AppLocalizations locale = AppLocalizations.of(context);
+  PlutoRow toPluto() {
+    final Map<String, PlutoCell> purchaseReport = <String, PlutoCell>{};
 
-    List<String> stringList = [];
+    purchaseReport['dash'] = PlutoCell(value: dash ?? "");
+    purchaseReport['branch'] = PlutoCell(value: branch ?? "");
+    purchaseReport['stockCategories1'] =
+        PlutoCell(value: stockCategories1 ?? "");
+    purchaseReport['stockCategories2'] =
+        PlutoCell(value: stockCategories2 ?? "");
+    purchaseReport['stockCategories3'] =
+        PlutoCell(value: stockCategories3 ?? "");
+    purchaseReport['supplier1'] = PlutoCell(value: supplier1 ?? "");
+    purchaseReport['supplier2'] = PlutoCell(value: supplier2 ?? "");
+    purchaseReport['supplier3'] = PlutoCell(value: supplier3 ?? "");
+    purchaseReport['stock'] = PlutoCell(value: stock ?? "");
+    purchaseReport['modelNo'] = PlutoCell(value: modelNo ?? "");
+    purchaseReport['quantity'] = PlutoCell(value: quantity ?? 0.0);
+    purchaseReport['averagePrice'] = PlutoCell(value: avgPrice ?? 0.0);
+    purchaseReport['total'] = PlutoCell(value: total ?? 0.0);
+    purchaseReport['yearly'] = PlutoCell(value: yearly ?? "");
+    purchaseReport['daily'] = PlutoCell(value: daily ?? "");
+    purchaseReport['monthly'] = PlutoCell(value: monthly ?? "");
+    purchaseReport['brand'] = PlutoCell(value: brand ?? "");
+    purchaseReport['invoice'] = PlutoCell(value: invoice ?? "");
 
-    for (int i = 0; i < columnsName.length; i++) {
-      if (columnsName[i] == '#') {
-        stringList.add(dash.toString());
-      } else if (columnsName[i] == locale.branch) {
-        stringList.add(branch.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("1")) {
-        stringList.add(stockCategories1.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("2")) {
-        stringList.add(stockCategories2.toString());
-      } else if (columnsName[i] == locale.stockCategoryLevel("3")) {
-        stringList.add(stockCategories3.toString());
-      } else if (columnsName[i] == locale.supplier("1")) {
-        stringList.add(supplier1.toString());
-      } else if (columnsName[i] == locale.supplier("2")) {
-        stringList.add(supplier2.toString());
-      } else if (columnsName[i] == locale.supplier("3")) {
-        stringList.add(supplier3.toString());
-      } else if (columnsName[i] == locale.stockCode) {
-        stringList.add(stockCode.toString());
-      } else if (columnsName[i] == locale.stockBarcode) {
-        stringList.add(stockBarcode.toString());
-      } else if (columnsName[i] == locale.stock) {
-        stringList.add(stock.toString());
-      } else if (columnsName[i] == locale.modelNo) {
-        stringList.add(modelNo.toString());
-      } else if (columnsName[i] == locale.qty) {
-        stringList.add(quantity.toString());
-      } else if (columnsName[i] == locale.averagePrice) {
-        stringList.add(avgPrice.toString());
-      } else if (columnsName[i] == locale.total) {
-        stringList.add(total.toString());
-      } else if (columnsName[i] == locale.daily) {
-        stringList.add(daily.toString());
-      } else if (columnsName[i] == locale.monthly) {
-        stringList.add(monthly.toString());
-      } else if (columnsName[i] == locale.yearly) {
-        stringList.add(yearly.toString());
-      } else if (columnsName[i] == locale.brand) {
-        stringList.add(brand.toString());
-      } else if (columnsName[i] == locale.invoice) {
-        stringList.add(invoice.toString());
-      }
-    }
-
-    return stringList;
+    return PlutoRow(cells: purchaseReport);
   }
 
-  List<String> getTotal(int length, double totalAmount, double qty,
-      double price, BuildContext context) {
-    List<String> stringList = [];
+  static List<PlutoColumn> getColumns(AppLocalizations localizations,
+      List<String> colsName, ReportsResult? reportsResult, double width) {
+    // print("reports ${reportsResult!.avgPrice}");
+    List<String> fieldsName = getColumnsName(localizations, colsName, false);
+    List<PlutoColumn> list = [];
+    for (int i = 0; i < colsName.length; i++) {
+      list.add(PlutoColumn(
+        title: colsName[i],
+        field: fieldsName[i],
+        type: PlutoColumnType.text(),
+        width: fieldsName[i] == 'dash' ? width * .07 : width * .1,
+        backgroundColor: colColor,
+        footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
+            ? (rendererContext) {
+                print("avgPrice ${reportsResult.avgPrice}");
 
-    for (int i = 0; i < length; i++) {
-      if (i == length - 1) {
-        stringList.add(totalAmount.toString());
-      } else if (i == length - 2) {
-        stringList.add(price.toString());
-      } else if (i == length - 3) {
-        stringList.add(qty.toString());
-      } else if (i == length - 4) {
-        stringList.add(AppLocalizations.of(context).totalCollections);
-      } else {
-        stringList.add("");
-      }
+                return footerRenderer(rendererContext, reportsResult.avgPrice!);
+              }
+            : fieldsName[i] == 'quantity' && reportsResult != null
+                ? (rendererContext) {
+                    print("quantity ${reportsResult.quantity}");
+
+                    return footerRenderer(
+                        rendererContext, reportsResult.quantity!);
+                  }
+                : fieldsName[i] == 'total' && reportsResult != null
+                    ? (rendererContext) {
+                        print("total ${reportsResult.total}");
+
+                        return footerRenderer(
+                            rendererContext, reportsResult.total!);
+                      }
+                    : null,
+      ));
     }
 
-    return stringList;
+    return list;
+  }
+
+  static PlutoAggregateColumnFooter footerRenderer(
+      PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    print("allll $valueAll");
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: false,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: valueAll.toStringAsFixed(2),
+            // children: [
+            //   TextSpan(
+            //     text: valueAll.toStringAsFixed(2),
+            //   ),
+            // ],
+            style: gridFooterStyle,
+          ),
+        ];
+      },
+    );
   }
 }

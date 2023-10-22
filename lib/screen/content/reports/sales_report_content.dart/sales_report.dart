@@ -1,3 +1,4 @@
+import 'package:bi_replicate/model/reports/reports_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -187,6 +188,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     }
   }
 
+  ReportsResult? reportsResult;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -293,6 +295,10 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           .read<SalesCriteraProvider>()
                           .setToDate(DatesController().formatDate(toDate.text));
                       await generateColumns();
+
+                      dynamic body = readProvider.toJson();
+                      reportsResult =
+                          await ReportController().getSalesResultMehtod(body);
                       setState(() {
                         // fetch(PlutoLazyPaginationRequest(
                         //     page: readProvider.getPage!));
@@ -316,8 +322,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         fromDate: readProvider.fromDate,
                         toDate: readProvider.toDate,
                         voucherStatus: -100,
-                        columns: getColumnsName(_locale, orderByColumns),
-                        customColumns: getColumnsName(_locale, orderByColumns),
+                        columns: getColumnsName(_locale, orderByColumns, true),
+                        customColumns:
+                            getColumnsName(_locale, orderByColumns, true),
                       );
                       Map<String, dynamic> body = readProvider.toJson();
                       ReportController()
@@ -335,17 +342,21 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
               ),
             ),
             SizedBox(
-              height: isMobile ? height * 0.5 : height * 0.05,
+              height: isMobile ? height * 0.05 : height * 0.05,
             ),
             SizedBox(
-              width: width * 0.37,
+              width: width * 0.7,
               height: height * 0.7,
               child: TableComponent(
                 key: UniqueKey(),
                 plCols: SalesCostReportModel.getColumns(
-                    AppLocalizations.of(context), orderByColumns),
+                    AppLocalizations.of(context),
+                    orderByColumns,
+                    reportsResult,
+                    width),
                 polRows: [],
                 footerBuilder: (stateManager) {
+                  // print("stateManager ${stateManager.}");
                   return lazyPaginationFooter(stateManager);
                 },
               ),
@@ -399,19 +410,18 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     // List<SalesCostReportModel> newList = salesList;
     readProvider.setPage(page);
     dynamic body = readProvider.toJson();
-    print("Bodddddy $body");
     salesList = await salesReportController.postSalesCostReportMethod(body);
-
+    // reportsResult = await salesReportController.getSalesResultMehtod(body);
     List<PlutoRow> topList = [];
 
-    int totalPage = 1;
+    limitPage = reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
 
     for (int i = 0; i < salesList.length; i++) {
       topList.add(salesList[i].toPluto());
     }
     print("finish");
     return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
+      totalPage: limitPage,
       rows: topList,
     );
   }
