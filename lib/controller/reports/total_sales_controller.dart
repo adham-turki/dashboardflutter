@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:bi_replicate/service/api_service.dart';
+
 import '../../model/criteria/search_criteria.dart';
 import '../../model/reports/total_sales/total_sales_model.dart';
 import '../../service/Api.dart';
@@ -12,7 +14,7 @@ class TotalSalesController extends Api {
     var api = getTotalSales;
     List<TotalSalesModel> totalSalesList = [];
     int count = 0;
-    await postMethods(api, searchCriteria.toJson()).then((response) {
+    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         count = ((searchCriteria.page! - 1) * 10) + 1;

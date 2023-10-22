@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:html' as html;
+import 'package:bi_replicate/controller/reports/total_sales_controller.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/model/cheques_bank/cheques_model.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
 import '../../../widget/headerWidget.dart';
+import '../../model/reports/total_sales/total_sales_model.dart';
 
 class TotalSalesContent extends StatefulWidget {
   const TotalSalesContent({super.key});
@@ -33,7 +35,7 @@ class TotalSalesContent extends StatefulWidget {
 class _TotalSalesContentState extends State<TotalSalesContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
-  SelfChequesController controller = SelfChequesController();
+  TotalSalesController totalSalesController = TotalSalesController();
 
   late AppLocalizations _locale;
   List<String> status = [];
@@ -48,10 +50,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   String hintValue = '0';
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
+
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
@@ -85,10 +84,10 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   @override
   void initState() {
     fromDate.text = todayDate;
-    toDate.text = nextMonth;
+    toDate.text = todayDate;
 
     criteria.fromDate = todayDate;
-    criteria.toDate = nextMonth;
+    criteria.toDate = todayDate;
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
@@ -227,10 +226,20 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                           textColor: Colors.white,
                           borderRadius: 5.0,
                           onPressed: () {
-                            SelfChequesController()
-                                .exportToExcelApi(criteria)
+                            int status =
+                                getVoucherStatus(_locale, selectedStatus);
+                            SearchCriteria searchCriteria = SearchCriteria(
+                              fromDate:
+                                  DatesController().formatDate(fromDate.text),
+                              toDate: DatesController().formatDate(toDate.text),
+                              voucherStatus: status,
+                              columns: [],
+                              customColumns: [],
+                            );
+                            TotalSalesController()
+                                .exportToExcelApi(searchCriteria)
                                 .then((value) {
-                              saveExcelFile(value, "Cheques.xlsx");
+                              saveExcelFile(value, "TotalsSales.xlsx");
                             });
                           },
                           fontSize: MediaQuery.of(context).size.width > 800
@@ -253,7 +262,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                 children: [
                   SelectableText(
                     maxLines: 1,
-                    _locale.outStandingCheques,
+                    _locale.totalSales,
                     style: eighteen500TextStyle(Colors.green),
                   ),
                   SizedBox(
@@ -261,8 +270,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     height: height * 0.7,
                     child: TableComponent(
                       key: UniqueKey(),
-                      plCols:
-                          ChequesModel.getColumns(AppLocalizations.of(context)),
+                      plCols: TotalSalesModel.getColumns(
+                          AppLocalizations.of(context)),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
@@ -341,7 +350,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   }
 
   Future<void> saveExcelFile(Uint8List byteList, String filename) async {
-// Save the CSV string to a file
     if (html.window != null) {
       final blob = html.Blob([byteList]);
       final url = html.Url.createObjectUrlFromBlob(blob);
@@ -352,13 +360,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
         ..click();
 
       html.Url.revokeObjectUrl(url);
-    } else {
-      // final directory = await getTemporaryDirectory();
-      // final file = File('${directory.path}/$filename');
-      // await file.writeAsBytes(byteList);
-      // // Use platform-specific code to open the file in a Flutter app
-      // For example: launch(url) from the url_launcher package
-    }
+    } else {}
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
@@ -384,7 +386,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
     List<PlutoRow> topList = [];
     print("from date critiria :${criteria.fromDate}");
-    List<ChequesModel> invList = await controller.getCheques(criteria);
+    List<TotalSalesModel> invList =
+        await totalSalesController.getTotalSalesMethod(criteria);
 
     int totalPage = 1;
 

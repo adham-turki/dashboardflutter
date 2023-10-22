@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+
+import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/styles.dart';
 
 class TotalSalesModel {
   String? code;
@@ -43,6 +47,101 @@ class TotalSalesModel {
     counter = countNum;
   }
 
+  PlutoRow toPluto() {
+    final Map<String, PlutoCell> totalSales = <String, PlutoCell>{};
+    totalSales['code'] = PlutoCell(value: code ?? "");
+    totalSales['name'] = PlutoCell(value: name ?? "");
+    totalSales['inQnty'] = PlutoCell(value: inQnty ?? 0);
+    totalSales['outQnty'] = PlutoCell(value: outQnty ?? 0);
+    totalSales['netSold'] = PlutoCell(value: netSold ?? 0);
+    totalSales['debit'] = PlutoCell(value: debit ?? 0);
+    totalSales['credit'] = PlutoCell(value: credit ?? 0);
+    totalSales['totalAmount'] = PlutoCell(value: totalAmount ?? 0);
+    totalSales['count'] = PlutoCell(value: count ?? 0);
+    return PlutoRow(cells: totalSales);
+  }
+
+  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+    List<PlutoColumn> list = [
+      PlutoColumn(
+        title: localizations.code,
+        field: "code",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.name,
+        field: "name",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: localizations.returnQty,
+        field: "inQnty",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+      PlutoColumn(
+        title: localizations.salesQty,
+        field: "outQnty",
+        type: PlutoColumnType.text(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+      PlutoColumn(
+        title: localizations.netSalesQty,
+        field: "netSold",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+      PlutoColumn(
+        title: localizations.returnAmount,
+        field: "debit",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+      PlutoColumn(
+        title: localizations.salesAmount,
+        field: "credit",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+      PlutoColumn(
+        title: localizations.netSalesAmount,
+        field: "totalAmount",
+        type: PlutoColumnType.number(),
+        width: 150,
+        backgroundColor: colColor,
+        footerRenderer: (rendererContext) {
+          return TotalSalesModel.footerRenderer(rendererContext, 0);
+        },
+      ),
+    ];
+
+    return list;
+  }
+
   List<String> getAllData() {
     List<String> stringList = [];
     stringList.add(counter.toString());
@@ -56,5 +155,28 @@ class TotalSalesModel {
     stringList.add(totalAmount.toString());
 
     return stringList;
+  }
+
+  static PlutoAggregateColumnFooter footerRenderer(
+      PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: true,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: text.replaceAll("\$", ""),
+            children: [
+              TextSpan(
+                text: valueAll.toStringAsFixed(2),
+              ),
+            ],
+            style: gridFooterStyle,
+          ),
+        ];
+      },
+    );
   }
 }

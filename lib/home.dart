@@ -13,6 +13,7 @@ import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/total_collections_content.dart';
+import 'package:bi_replicate/screen/content/settings/setup.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +35,14 @@ class _HomePageState extends State<HomePage> {
   bool isDesktop = false;
   double width = 0;
   double height = 0;
-
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     isDesktop = Responsive.isDesktop(context);
 
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
+    print("pageeeeee: ${context.read<ScreenContentProvider>().getPage()}");
     return Scaffold(
       appBar: isDesktop
           ? null
@@ -54,33 +55,43 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           isDesktop ? const SideMenu() : Container(),
-          Column(
-            children: [
-              SizedBox(
-                width: isDesktop ? width * 0.835 : width,
-                height: isDesktop ? height * 0.3 : height * 0.3,
-                child: const ContentHeader(),
-              ),
-              SizedBox(
-                height: isDesktop ? height * .7 : height * 0.6,
-                width: width * 0.835,
-                child: SingleChildScrollView(
-                  child: Consumer<ScreenContentProvider>(
-                      builder: (context, value, build) {
-                    return contentPage();
-                  }),
-                ),
-              )
-              // const Text("footer"),
-            ],
-          ),
+          Consumer<ScreenContentProvider>(builder: (context, value, build) {
+            return Column(
+              children: [
+                context.read<ScreenContentProvider>().getPage() == 14
+                    ? Container()
+                    : SizedBox(
+                        width: isDesktop ? width * 0.835 : width,
+                        height: isDesktop ? height * 0.3 : height * 0.3,
+                        child: const ContentHeader(),
+                      ),
+
+                SizedBox(
+                  height: context.read<ScreenContentProvider>().getPage() != 14
+                      ? isDesktop
+                          ? height * .7
+                          : height * 0.6
+                      : height,
+                  width: width * 0.835,
+                  child: SingleChildScrollView(
+                    child: Consumer<ScreenContentProvider>(
+                        builder: (context, value, build) {
+                      return contentPage();
+                    }),
+                  ),
+                )
+                // const Text("footer"),
+              ],
+            );
+          }),
         ],
       ),
     );
   }
 
   Widget contentPage() {
-    int index = context.read<ScreenContentProvider>().getPage();
+    index = context.read<ScreenContentProvider>().getPage();
+    print(index);
     switch (index) {
       case 0:
         return const SalesByBranchesContent();
@@ -111,7 +122,7 @@ class _HomePageState extends State<HomePage> {
       case 13:
         return const PurchasesReportScreen();
       case 14:
-        return Container();
+        return const SetupScreen();
       case 15:
         return Container();
       default:
