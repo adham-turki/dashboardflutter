@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:html' as html;
+import '../../../../components/table_component.dart';
 import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
+import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../utils/constants/styles.dart';
 import '../../../../utils/func/dates_controller.dart';
@@ -62,11 +65,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.total
     ];
 
-    await getResult().then(
-      (value) {
-        searchSalesCostReport(1);
-      },
-    );
+    // await getResult().then(
+    //   (value) {
+    //     searchSalesCostReport(1);
+    //   },
+    //  );
     super.didChangeDependencies();
   }
 
@@ -290,12 +293,16 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           .read<SalesCriteraProvider>()
                           .setToDate(DatesController().formatDate(toDate.text));
                       await generateColumns();
+                      setState(() {
+                        // fetch(PlutoLazyPaginationRequest(
+                        //     page: readProvider.getPage!));
+                      });
 
-                      getResult().then(
-                        (value) {
-                          searchSalesCostReport(1);
-                        },
-                      );
+                      // getResult().then(
+                      //   (value) {
+                      //     searchSalesCostReport(1);
+                      //   },
+                      // );
                     },
                     fontSize: isDesktop ? height * .016 : height * .011,
                   ),
@@ -309,8 +316,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         fromDate: readProvider.fromDate,
                         toDate: readProvider.toDate,
                         voucherStatus: -100,
-                        // columns: getColumns(_locale, orderByColumns),
-                        // customColumns: getColumns(_locale, orderByColumns),
+                        columns: getColumnsName(_locale, orderByColumns),
+                        customColumns: getColumnsName(_locale, orderByColumns),
                       );
                       Map<String, dynamic> body = readProvider.toJson();
                       ReportController()
@@ -330,123 +337,19 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             SizedBox(
               height: isMobile ? height * 0.5 : height * 0.05,
             ),
-            // DataTableWidget(
-            //   columns: orderByColumns,
-            //   list: salesList,
-            //   finalRow: finalRow,
-            //   objectType: "SalesCostReportModel",
-            // ),
-            // SizedBox(
-            //   height: isMobile ? height * 0.2 : height * 0.2,
-            // ),
-            // Directionality(
-            //   textDirection: TextDirection.ltr,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       GestureDetector(
-            //         onTap: () {
-            //           if (pageNumber != 0) {
-            //             pageNumber =
-            //                 pageNumber == 1 ? pageNumber : pageNumber - 1;
-            //             searchSalesCostReport(pageNumber);
-            //           }
-            //         },
-            //         child: Container(
-            //           width:               height: isMobile ? height * 0.05 : height * 0.05,
-
-            //           height: 30,
-            //           decoration: BoxDecoration(
-            //             border: Border.all(
-            //               color: Colors.grey,
-            //             ),
-            //           ),
-            //           child: Center(
-            //               child: Text(
-            //             maxLines: 1,
-            //             "<<",
-            //             style: fourteen400TextStyle(
-            //               Colors.blue,
-            //             ),
-            //           )),
-            //         ),
-            //       ),
-            //       for (int i =
-            //               limitPage <= 5 || pageNumber < 4 ? 1 : pageNumber - 2;
-            //           limitPage <= 5
-            //               ? i <= limitPage
-            //               : pageNumber < 4
-            //                   ? i < 6
-            //                   : (i <= pageNumber + 2) && i <= limitPage;
-            //           i++)
-            //         Padding(
-            //           padding: EdgeInsets.only(
-            //               left: width * .002, right: width * .002),
-            //           child: GestureDetector(
-            //             onTap: () {
-            //               setState(() {
-            //                 // print("selected : $selected ,,,, i : $i");
-            //                 pageNumber = i;
-            //                 // print("selected1 : $selected ,,,, i1 : $i");
-            //                 // print("selectedcustomerscreen : $selected");
-            //                 searchSalesCostReport(pageNumber);
-            //               });
-            //             },
-            //             child: Container(
-            //               width: isDesktop ? width * .02 : width * .06,
-            //               height: 40,
-            //               decoration: BoxDecoration(
-            //                   border: Border.all(
-            //                     color: Colors.grey,
-            //                   ),
-            //                   // shape: BoxShape.rectangle,
-            //                   color:
-            //                       i == pageNumber ? Colors.blue : Colors.white),
-            //               child: Center(
-            //                   child: Text(
-            //                       // maxLines: 1,
-            //                       i.toString(),
-            //                       style: TextStyle(
-            //                           fontSize: height * 0.012,
-            //                           color: i == pageNumber
-            //                               ? Colors.white
-            //                               : Colors.blue))),
-            //             ),
-            //           ),
-            //         ),
-            //       GestureDetector(
-            //         onTap: () {
-            //           if (pageNumber != 0) {
-            //             if (pageNumber < limitPage) {
-            //               pageNumber = pageNumber + 1;
-            //             }
-            //             searchSalesCostReport(pageNumber);
-            //           }
-            //         },
-            //         child: Container(
-            //           width: 40,
-            //           height: 30,
-            //           decoration: BoxDecoration(
-            //             border: Border.all(
-            //               color: Colors.grey,
-            //             ),
-            //           ),
-            //           child: Center(
-            //               child: Text(
-            //             maxLines: 1,
-            //             ">>",
-            //             style: fourteen400TextStyle(
-            //               Colors.blue,
-            //             ),
-            //           )),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(
-            //   height: 100,
-            // ),
+            SizedBox(
+              width: width * 0.37,
+              height: height * 0.7,
+              child: TableComponent(
+                key: UniqueKey(),
+                plCols: SalesCostReportModel.getColumns(
+                    AppLocalizations.of(context), orderByColumns),
+                polRows: [],
+                footerBuilder: (stateManager) {
+                  return lazyPaginationFooter(stateManager);
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -474,57 +377,96 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     }
   }
 
-  Future searchSalesCostReport(int pageNum) async {
+  PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
+    return PlutoLazyPagination(
+      initialPage: 1,
+      initialFetch: true,
+      pageSizeToMove: null,
+      fetchWithSorting: false,
+      fetchWithFiltering: false,
+      fetch: (request) {
+        return fetch(request);
+      },
+      stateManager: stateManager,
+    );
+  }
+
+  Future<PlutoLazyPaginationResponse> fetch(
+      PlutoLazyPaginationRequest request) async {
+    int page = request.page;
+
     ReportController salesReportController = ReportController();
-    List<SalesCostReportModel> newList = salesList;
-    readProvider.setPage(pageNum);
+    // List<SalesCostReportModel> newList = salesList;
+    readProvider.setPage(page);
     dynamic body = readProvider.toJson();
     print("Bodddddy $body");
-    await salesReportController.postSalesCostReportMethod(body).then((value) {
-      salesList = value;
-      if (pageNum > 1 && salesList.isEmpty) {
-        pageNumber = pageNum - 1;
+    salesList = await salesReportController.postSalesCostReportMethod(body);
 
-        salesList = newList;
-      }
-      setState(() {});
-    });
-  }
+    List<PlutoRow> topList = [];
 
-  Future getResult() async {
-    ReportController salesReportController = ReportController();
+    int totalPage = 1;
 
-    dynamic body = readProvider.toJson();
-    await salesReportController.getSalesResultMehtod(body).then((value) {
-      if (value.count! > 0) {
-        pageNumber = 1;
-      }
-      limitPage = (value.count! / 10).ceil();
-      finalRow = limitPage == 0
-          ? []
-          : getTotal(orderByColumns.length, value.total!, value.quantity!,
-              value.avgPrice!);
-    });
-  }
-
-  List<String> getTotal(
-      int length, double totalAmount, double qty, double price) {
-    List<String> stringList = [];
-
-    for (int i = 0; i < length; i++) {
-      if (i == length - 1) {
-        stringList.add(totalAmount.toStringAsFixed(2));
-      } else if (i == length - 2) {
-        stringList.add(price.toStringAsFixed(2));
-      } else if (i == length - 3) {
-        stringList.add(qty.toStringAsFixed(2));
-      } else if (i == length - 4) {
-        stringList.add(AppLocalizations.of(context).finalTotal);
-      } else {
-        stringList.add("");
-      }
+    for (int i = 0; i < salesList.length; i++) {
+      topList.add(salesList[i].toPluto());
     }
-    print("ListFinal ${stringList.length}");
-    return stringList;
+    print("finish");
+    return PlutoLazyPaginationResponse(
+      totalPage: totalPage,
+      rows: topList,
+    );
   }
+
+  // Future searchSalesCostReport(int pageNum) async {
+  //   ReportController salesReportController = ReportController();
+  //   List<SalesCostReportModel> newList = salesList;
+  //   readProvider.setPage(pageNum);
+  //   dynamic body = readProvider.toJson();
+  //   print("Bodddddy $body");
+  //   await salesReportController.postSalesCostReportMethod(body).then((value) {
+  //     salesList = value;
+  //     if (pageNum > 1 && salesList.isEmpty) {
+  //       pageNumber = pageNum - 1;
+
+  //       salesList = newList;
+  //     }
+  //     setState(() {});
+  //   });
+  // }
+
+  // Future getResult() async {
+  //   ReportController salesReportController = ReportController();
+
+  //   dynamic body = readProvider.toJson();
+  //   await salesReportController.getSalesResultMehtod(body).then((value) {
+  //     if (value.count! > 0) {
+  //       pageNumber = 1;
+  //     }
+  //     limitPage = (value.count! / 10).ceil();
+  //     finalRow = limitPage == 0
+  //         ? []
+  //         : getTotal(orderByColumns.length, value.total!, value.quantity!,
+  //             value.avgPrice!);
+  //   });
+  // }
+
+  // List<String> getTotal(
+  //     int length, double totalAmount, double qty, double price) {
+  //   List<String> stringList = [];
+
+  //   for (int i = 0; i < length; i++) {
+  //     if (i == length - 1) {
+  //       stringList.add(totalAmount.toStringAsFixed(2));
+  //     } else if (i == length - 2) {
+  //       stringList.add(price.toStringAsFixed(2));
+  //     } else if (i == length - 3) {
+  //       stringList.add(qty.toStringAsFixed(2));
+  //     } else if (i == length - 4) {
+  //       stringList.add(AppLocalizations.of(context).finalTotal);
+  //     } else {
+  //       stringList.add("");
+  //     }
+  //   }
+  //   print("ListFinal ${stringList.length}");
+  //   return stringList;
+  // }
 }

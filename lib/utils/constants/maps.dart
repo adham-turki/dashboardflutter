@@ -26,7 +26,7 @@ Map<String, int> byCategoryMap = {
   'Classification': 4
 };
 
-List<String> getColumns(AppLocalizations locale, List<String> columns) {
+List<String> getColumnsName(AppLocalizations locale, List<String> columns) {
   Map<String, String> columnsMap = {
     '#': "dash",
     locale.branch: "branch",
