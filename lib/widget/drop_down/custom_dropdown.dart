@@ -52,10 +52,12 @@ class _CustomDropDownState extends State<CustomDropDown> {
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: padding),
       child: Column(
         children: [
-          CustomLabel(
-            label: label,
-            width: width,
-          ),
+          label.isNotEmpty
+              ? CustomLabel(
+                  label: label,
+                  width: width,
+                )
+              : Container(),
           Container(
             color: Colors.white,
             width: width,

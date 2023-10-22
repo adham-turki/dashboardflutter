@@ -38,8 +38,8 @@ class _SetupWidgetState extends State<SetupWidget> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  bool isTablet = false;
   bool isMobile = false;
+  // bool isMobile = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -66,7 +66,7 @@ class _SetupWidgetState extends State<SetupWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    isTablet = Responsive.isTablet(context);
+    isMobile = Responsive.isMobile(context);
     valueAppearBasicUnitEquiv = readProvider.getAppearBasicUnitEquiv!;
     valueAppearInactiveStocksForPurchase =
         readProvider.getAppearInactiveStocksForPurchase!;
@@ -86,8 +86,8 @@ class _SetupWidgetState extends State<SetupWidget> {
       ),
       //
       padding: const EdgeInsets.all(10.0),
-      width: isTablet ? width * 0.9 : width * 0.7,
-      height: height * 0.35,
+      width: width * 0.7,
+      height: height * 0.42,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -95,213 +95,201 @@ class _SetupWidgetState extends State<SetupWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 50,
-                child: CustomDropDown(
-                  label: _locale.view,
-                  items: viewValues,
-                  hint: viewValues[0],
-                  initialValue:
-                      selectedViewValues.isNotEmpty ? selectedViewValues : null,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedViewValues = value!;
-                      readProvider.setViewCodeBarcode(selectedViewValues);
-                    });
-                  },
-                ),
+              CustomDropDown(
+                label: _locale.view,
+                items: viewValues,
+                hint: viewValues[0],
+                width: isDesktop ? width * .17 : width * .27,
+                initialValue:
+                    selectedViewValues.isNotEmpty ? selectedViewValues : null,
+                onChanged: (value) {
+                  setState(() {
+                    selectedViewValues = value!;
+                    readProvider.setViewCodeBarcode(selectedViewValues);
+                  });
+                },
               ),
-              SizedBox(
-                height: 250,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: valueAppearBasicUnitEquiv,
-                            onChanged: (val) {
-                              valueAppearBasicUnitEquiv = val!;
-                              readProvider.setAppearBasicUnitEquiv(
-                                  valueAppearBasicUnitEquiv);
-                              setState(() {});
-                            }),
-                        Text(
-                          isTablet
-                              ? _locale.appearBasicUnitEquivalenceMobile
-                              : _locale.appearBasicUnitEquivalence,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      //     mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: valueAppearInactiveStocksForPurchase,
-                            onChanged: (val) {
-                              valueAppearInactiveStocksForPurchase = val!;
-                              readProvider.setAppearInactiveStocksForPurchase(
-                                  valueAppearInactiveStocksForPurchase);
-                              setState(() {});
-                            }),
-                        Text(
-                          isTablet
-                              ? _locale.appearInactiveStocksForPurchaseMobile
-                              : _locale.appearInactiveStocksForPurchase,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: valueRoundingQty,
-                            onChanged: (val) {
-                              valueRoundingQty = val!;
-                              readProvider.setRoundingQty(valueRoundingQty);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.roundingQuntity,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: valueTaxIncluded,
-                            onChanged: (val) {
-                              valueTaxIncluded = val!;
-                              readProvider.setTaxIncluded(valueTaxIncluded);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.taxInclude,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Checkbox(
-                            value: valueUseItemCostPrice,
-                            onChanged: (val) {
-                              valueUseItemCostPrice = val!;
-                              readProvider
-                                  .setUseItemCostPrice(valueUseItemCostPrice);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.useItemCostPrice,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: valueAppearBasicUnitEquiv,
+                          onChanged: (val) {
+                            valueAppearBasicUnitEquiv = val!;
+                            readProvider.setAppearBasicUnitEquiv(
+                                valueAppearBasicUnitEquiv);
+                            setState(() {});
+                          }),
+                      Text(
+                        isMobile
+                            ? _locale.appearBasicUnitEquivalenceMobile
+                            : _locale.appearBasicUnitEquivalence,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    //     mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: valueAppearInactiveStocksForPurchase,
+                          onChanged: (val) {
+                            valueAppearInactiveStocksForPurchase = val!;
+                            readProvider.setAppearInactiveStocksForPurchase(
+                                valueAppearInactiveStocksForPurchase);
+                            setState(() {});
+                          }),
+                      Text(
+                        isMobile
+                            ? _locale.appearInactiveStocksForPurchaseMobile
+                            : _locale.appearInactiveStocksForPurchase,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: valueRoundingQty,
+                          onChanged: (val) {
+                            valueRoundingQty = val!;
+                            readProvider.setRoundingQty(valueRoundingQty);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.roundingQuntity,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: valueTaxIncluded,
+                          onChanged: (val) {
+                            valueTaxIncluded = val!;
+                            readProvider.setTaxIncluded(valueTaxIncluded);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.taxInclude,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Checkbox(
+                          value: valueUseItemCostPrice,
+                          onChanged: (val) {
+                            valueUseItemCostPrice = val!;
+                            readProvider
+                                .setUseItemCostPrice(valueUseItemCostPrice);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.useItemCostPrice,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                ],
               )
             ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 50,
-                child: CustomDropDown(
-                  label: _locale.transactionType,
-                  items: transactionTypeValues,
-                  hint: transactionTypeValues[0],
-                  initialValue: selectedTransactionTypeValues.isNotEmpty
-                      ? selectedTransactionTypeValues
-                      : null,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedTransactionTypeValues = value!;
-                      readProvider.setTransType(selectedTransactionTypeValues);
-                    });
-                  },
-                ),
+              CustomDropDown(
+                label: _locale.transactionType,
+                items: transactionTypeValues,
+                hint: transactionTypeValues[0],
+                width: isDesktop ? width * .17 : width * .27,
+                initialValue: selectedTransactionTypeValues.isNotEmpty
+                    ? selectedTransactionTypeValues
+                    : null,
+                onChanged: (value) {
+                  setState(() {
+                    selectedTransactionTypeValues = value!;
+                    readProvider.setTransType(selectedTransactionTypeValues);
+                  });
+                },
               ),
-              SizedBox(
-                height: 150,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: valueAppearInactiveStocks,
-                            onChanged: (val) {
-                              valueAppearInactiveStocks = val!;
-                              readProvider.setAppearInactiveStocks(
-                                  valueAppearInactiveStocks);
-                              setState(() {});
-                            }),
-                        Text(
-                          isTablet
-                              ? _locale.appearInactiveStocksMobile
-                              : _locale.appearInactiveStocks,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: valueAppearLocation,
-                            onChanged: (val) {
-                              valueAppearLocation = val!;
-                              readProvider
-                                  .setAppearLocation(valueAppearLocation);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.appearLocation,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: valueRoundingPrice,
-                            onChanged: (val) {
-                              valueRoundingPrice = val!;
-                              readProvider.setRoundingPrice(valueRoundingPrice);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.roundingPrice,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: valueAppearDiscount,
-                            onChanged: (val) {
-                              valueAppearDiscount = val!;
-                              readProvider
-                                  .setAppearDiscount(valueAppearDiscount);
-                              setState(() {});
-                            }),
-                        Text(
-                          _locale.appearDiscount,
-                          style: twelve400TextStyle(Colors.black),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                          value: valueAppearInactiveStocks,
+                          onChanged: (val) {
+                            valueAppearInactiveStocks = val!;
+                            readProvider.setAppearInactiveStocks(
+                                valueAppearInactiveStocks);
+                            setState(() {});
+                          }),
+                      Text(
+                        isMobile
+                            ? _locale.appearInactiveStocksMobile
+                            : _locale.appearInactiveStocks,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          value: valueAppearLocation,
+                          onChanged: (val) {
+                            valueAppearLocation = val!;
+                            readProvider.setAppearLocation(valueAppearLocation);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.appearLocation,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          value: valueRoundingPrice,
+                          onChanged: (val) {
+                            valueRoundingPrice = val!;
+                            readProvider.setRoundingPrice(valueRoundingPrice);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.roundingPrice,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                          value: valueAppearDiscount,
+                          onChanged: (val) {
+                            valueAppearDiscount = val!;
+                            readProvider.setAppearDiscount(valueAppearDiscount);
+                            setState(() {});
+                          }),
+                      Text(
+                        _locale.appearDiscount,
+                        style: twelve400TextStyle(Colors.black),
+                      ),
+                    ],
+                  ),
+                ],
               )
             ],
           ),

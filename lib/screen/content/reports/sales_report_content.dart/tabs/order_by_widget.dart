@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../provider/sales_search_provider.dart';
+import '../../../../../utils/constants/responsive.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -37,7 +38,11 @@ class _OrderByWidgetState extends State<OrderByWidget> {
   List<int> ordersList = [];
   Map<String, int> ordersMap = {};
   Map<int, String> ordersMap2 = {};
-
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  bool isMobile = false;
+  // bool isMobile = false;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -106,25 +111,30 @@ class _OrderByWidgetState extends State<OrderByWidget> {
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
+
     selectedValue1 = readProvider.getVal1!;
     selectedValue2 = readProvider.getVal2!;
     selectedValue3 = readProvider.getVal3!;
     selectedValue4 = readProvider.getVal4!;
-
     ordersList = readProvider.getOrders == null ? [] : readProvider.getOrders!;
-    print("ordersssssssss ${ordersList}");
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.grey),
       ),
       padding: const EdgeInsets.all(10.0),
-      width: MediaQuery.of(context).size.width * 0.7,
+      width: width * 0.7,
       child: Column(
         children: [
           CustomDropDown(
             items: firstList,
             label: "",
+            width: isDesktop ? null : width * .55,
             onChanged: (value) {
               setState(() {
                 selectedValue1 = value!;
@@ -147,14 +157,9 @@ class _OrderByWidgetState extends State<OrderByWidget> {
               });
             },
           ),
-          const SizedBox(
-            height: 5,
-          ),
           CustomDropDown(
             label: "",
-            width: MediaQuery.of(context).size.width > 800
-                ? MediaQuery.of(context).size.width * .12
-                : MediaQuery.of(context).size.width * .5,
+            width: isDesktop ? null : width * .55,
             items: firstList,
             hint: selectedValue2,
             initialValue: selectedValue2.isNotEmpty ? selectedValue2 : null,
@@ -172,8 +177,6 @@ class _OrderByWidgetState extends State<OrderByWidget> {
                     ordersList.remove(ordersMap[readProvider.getVal2]);
                   }
                 }
-                //  readProvider.setOrders(ordersList);
-                // readProvider.setIndexMap(1, ordersMap[selectedValue2]!);
 
                 readProvider.setVal2(selectedValue2);
 
@@ -181,17 +184,9 @@ class _OrderByWidgetState extends State<OrderByWidget> {
               });
             },
           ),
-          const SizedBox(
-            height: 5,
-          ),
-          const SizedBox(
-            height: 5,
-          ),
           CustomDropDown(
             label: "",
-            width: MediaQuery.of(context).size.width > 800
-                ? MediaQuery.of(context).size.width * .12
-                : MediaQuery.of(context).size.width * .5,
+            width: isDesktop ? null : width * .55,
             items: firstList,
             hint: selectedValue3,
             initialValue: selectedValue3.isNotEmpty ? selectedValue3 : null,
@@ -217,14 +212,9 @@ class _OrderByWidgetState extends State<OrderByWidget> {
               });
             },
           ),
-          const SizedBox(
-            height: 5,
-          ),
           CustomDropDown(
             label: "",
-            width: MediaQuery.of(context).size.width > 800
-                ? MediaQuery.of(context).size.width * .12
-                : MediaQuery.of(context).size.width * .5,
+            width: isDesktop ? null : width * .55,
             items: firstList,
             hint: selectedValue4,
             initialValue: selectedValue4.isNotEmpty ? selectedValue4 : null,

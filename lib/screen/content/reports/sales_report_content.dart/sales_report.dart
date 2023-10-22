@@ -36,8 +36,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  bool isTablet = false;
   bool isMobile = false;
+  // bool isMobile = false;
 
   @override
   void didChangeDependencies() async {
@@ -189,7 +189,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    isTablet = Responsive.isTablet(context);
+    isMobile = Responsive.isMobile(context);
 
     return DefaultTabController(
       length: 3,
@@ -198,8 +198,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
           children: [
             Center(
               child: SizedBox(
-                width: isTablet ? width * 0.9 : width * 0.7,
-                height: isTablet ? height * 0.1 : height * 0.1,
+                width: isMobile ? width * 0.9 : width * 0.7,
+                height: isMobile ? height * 0.1 : height * 0.1,
                 child: TabBar(
                   unselectedLabelColor: Colors.grey,
                   labelColor: Colors.black,
@@ -240,10 +240,10 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         toDate: toDate,
                       ),
             SizedBox(
-              height: isTablet ? height * 0.05 : height * 0.05,
+              height: isMobile ? height * 0.05 : height * 0.05,
             ),
             SizedBox(
-              width: isTablet ? width * 0.9 : width * 0.7,
+              width: isDesktop ? width * 0.5 : width * .7,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -321,14 +321,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     },
                     fontSize: isDesktop ? height * .016 : height * .011,
                   ),
-                  SizedBox(
-                    width: isTablet ? width * 0.05 : width * 0.05,
-                  ),
+                  // SizedBox(
+                  //   width: isMobile ? width * 0.05 : width * 0.05,
+                  // ),
                 ],
               ),
             ),
             SizedBox(
-              height: isTablet ? height * 0.05 : height * 0.05,
+              height: isMobile ? height * 0.5 : height * 0.05,
             ),
             // DataTableWidget(
             //   columns: orderByColumns,
@@ -337,7 +337,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             //   objectType: "SalesCostReportModel",
             // ),
             // SizedBox(
-            //   height: isTablet ? height * 0.2 : height * 0.2,
+            //   height: isMobile ? height * 0.2 : height * 0.2,
             // ),
             // Directionality(
             //   textDirection: TextDirection.ltr,
@@ -353,7 +353,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             //           }
             //         },
             //         child: Container(
-            //           width:               height: isTablet ? height * 0.05 : height * 0.05,
+            //           width:               height: isMobile ? height * 0.05 : height * 0.05,
 
             //           height: 30,
             //           decoration: BoxDecoration(
