@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bi_replicate/components/charts/pie_chart.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -5,6 +7,7 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:pie_chart/pie_chart.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -30,13 +33,31 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   SalesBranchesController salesBranchesController = SalesBranchesController();
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
-
+  final dataMap = <String, double>{};
   List<PieChartModel> list = [
     PieChartModel(value: 10, title: "1", color: Colors.blue),
     PieChartModel(value: 20, title: "2", color: Colors.red),
     PieChartModel(value: 30, title: "3", color: Colors.green),
     PieChartModel(value: 40, title: "4", color: Colors.purple),
   ];
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
+  ];
+
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
 
@@ -169,17 +190,35 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width:
-                                      isDesktop ? width * 0.42 : width * 0.05,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
+                            ? Container(
+                                height: height * 0.4,
+                                width: width * 0.4,
+                                padding: EdgeInsets.symmetric(horizontal: 16),
+                                child: dataMap.isNotEmpty
+                                    ? PieChart(
+                                        dataMap: dataMap,
+                                        chartType: ChartType.disc,
+                                        baseChartColor: Colors.grey[300]!,
+                                        colorList: colorList,
+                                      )
+                                    : const Center(
+                                        child: Text(
+                                          "Pie Chart is Empty!",
+                                          style: TextStyle(fontSize: 24),
+                                        ),
+                                      ),
                               )
+                            // Center(
+                            //     child: PieChartComponent(
+                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
+                            //       radiusHover: isDesktop ? height * 0.17 : 80,
+                            //       width:
+                            //           isDesktop ? width * 0.42 : width * 0.05,
+                            //       height:
+                            //           isDesktop ? height * 0.42 : height * 0.4,
+                            //       dataList: pieData,
+                            //     ),
+                            //   )
                             : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
@@ -202,6 +241,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         toDate: DatesController().formatDate(_toDateController.text),
         voucherStatus: -100);
     pieData = [];
+    dataMap.clear();
     barData = [];
     listOfBalances = [];
     listOfPeriods = [];
@@ -219,10 +259,11 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           listOfBalances.add(a);
           listOfPeriods.add(element.namee!);
           if (temp) {
+            dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
             pieData.add(PieChartModel(
                 title: element.namee!,
                 value: formatDoubleToTwoDecimalPlaces(a),
-                color: Colors.blue));
+                color: getRandomColor()));
           }
 
           barData.add(
@@ -303,6 +344,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         ),
       ],
     );
+  }
+
+  Color getRandomColor() {
+    final random = Random();
+    final red = random.nextInt(256);
+    final green = random.nextInt(256);
+    final blue = random.nextInt(256);
+
+    return Color.fromARGB(255, red, green, blue);
   }
 
   Column mobileCriteria() {

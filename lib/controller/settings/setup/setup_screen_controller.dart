@@ -10,7 +10,7 @@ class SetupController extends Api {
   Future<List<AccountModel>> getAllAccounts() async {
     List<AccountModel> list = [];
     String pathUrl = getAccounts;
-    await getMethods(pathUrl).then((response) {
+    await ApiService.getRequest(pathUrl).then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {
         //creditAmt - debitAmt
@@ -34,12 +34,31 @@ class SetupController extends Api {
 
   Future<bool> addBiAccount(BiAccountModel account) async {
     String pURL = addAccount;
-    await postMethods(pURL, account).then((value) {
+    await ApiService.postRequest(pURL, account).then((value) {
       if (value.statusCode == 200) {
         return true;
       }
     });
     return false;
+  }
+
+  Future<List<AccountModel>> getAccountSearch(
+      dynamic salesSearchCriteria) async {
+    var api = searchAccountApi;
+    late AccountModel accountModel;
+
+    List<AccountModel> accountModelList = [];
+
+    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var ele in jsonData) {
+          accountModel = AccountModel.fromJson(ele);
+          accountModelList.add(accountModel);
+        }
+      }
+    });
+    return accountModelList;
   }
 
   Future<bool> deleteBiAccount(BiAccountModel accountModel) async {
