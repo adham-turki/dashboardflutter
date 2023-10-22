@@ -8,6 +8,7 @@ import 'package:bi_replicate/screen/content/financial_performance/expenses_conte
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
 import 'package:bi_replicate/screen/content/receivable_management/aging_receivable.dart';
 import 'package:bi_replicate/screen/content/receivable_management/month_comp_of_rec_pay_content.dart';
+import 'package:bi_replicate/screen/content/reports/purchase_reporort_content.dart/purchase_report.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_cat_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
       case 12:
         return const SalesReportScreen();
       case 13:
-        return Container();
+        return const PurchasesReportScreen();
       case 14:
         return const SetupScreen();
       case 15:

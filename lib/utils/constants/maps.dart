@@ -26,7 +26,8 @@ Map<String, int> byCategoryMap = {
   'Classification': 4
 };
 
-List<String> getColumnsName(AppLocalizations locale, List<String> columns) {
+List<String> getColumnsName(
+    AppLocalizations locale, List<String> columns, bool sales) {
   Map<String, String> columnsMap = {
     '#': "dash",
     locale.branch: "branch",
@@ -40,7 +41,7 @@ List<String> getColumnsName(AppLocalizations locale, List<String> columns) {
     locale.stock: "stock",
     locale.modelNo: "modelNo",
     locale.qty: "quantity",
-    locale.averagePrice: "averagePrice",
+    locale.averagePrice: sales == true ? "avgPrice" : "averagePrice",
     locale.total: "total",
     locale.daily: "daily",
     locale.monthly: "monthly",

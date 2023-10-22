@@ -4,9 +4,9 @@ import 'package:bi_replicate/model/criteria/drop_down_search_criteria.dart';
 import 'package:flutter/material.dart';
 import '../../../../../components/card.dart';
 import '../../../../../controller/reports/report_controller.dart';
+import '../../../../../provider/purchase_provider.dart';
 import '../../../../../provider/sales_search_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../utils/constants/styles.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/custom_date_picker.dart';
 import '../../../../../widget/custom_textfield.dart';
@@ -98,29 +98,27 @@ class _LeftWidgetState extends State<LeftWidget> {
   var selectedToStkCategory1 = "";
   var selectedFromStkCategory3 = "";
   var selectedToStkCategory3 = "";
-  var selectedFromCustomers = "";
-  var selectedToCustomers = "";
-  var selectedFromStocks = "";
-  var selectedToStocks = "";
+  var selectedFromSuppCateg = "";
+  var selectedToSuppCateg = "";
 
   var selectedFromStkCategory1Code = "";
   var selectedToStkCategory1Code = "";
   var selectedFromStkCategory3Code = "";
   var selectedToStkCategory3Code = "";
-  var selectedFromCustomersCode = "";
-  var selectedToCustomersCode = "";
-  var selectedFromStocksCode = "";
-  var selectedToStocksCode = "";
+  var selectedFromSuppCategCode = "";
+  var selectedToSuppCategCode = "";
 
   bool valueMultipleStkCateg1 = false;
   bool valueMultipleStkCateg3 = false;
-  bool valueMultipleCustomer = false;
-  bool valueMultipleStock = false;
+  bool valueMultipleSuppCateg = false;
   bool valueSelectAllStkCateg1 = false;
   bool valueSelectAllStkCateg3 = false;
-  bool valueSelectAllCustomer = false;
-  bool valueSelectAllStock = false;
-  late SalesCriteraProvider readProvider;
+  bool valueSelectAllSuppCateg = false;
+
+  late PurchaseCriteraProvider readProvider;
+  ReportController purchaseReportController = ReportController();
+  TextEditingController campaignNoController = TextEditingController();
+  TextEditingController modelNoController = TextEditingController();
 
   double width = 0;
   double height = 0;
@@ -130,7 +128,7 @@ class _LeftWidgetState extends State<LeftWidget> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    readProvider = context.read<SalesCriteraProvider>();
+    readProvider = context.read<PurchaseCriteraProvider>();
 
     super.didChangeDependencies();
   }
@@ -164,22 +162,19 @@ class _LeftWidgetState extends State<LeftWidget> {
     selectedFromStkCategory3 = readProvider.getFromCateg3!;
     selectedToStkCategory3 = readProvider.getToCateg1!;
 
-    selectedFromCustomers = readProvider.getFromCust!;
-    selectedToCustomers = readProvider.getToCust!;
-
-    selectedFromStocks = readProvider.getFromstock!;
-    selectedToStocks = readProvider.getTostock!;
+    selectedFromSuppCateg = readProvider.getFromSuppCateg!;
+    selectedToSuppCateg = readProvider.getToSuppCateg!;
 
     valueMultipleStkCateg1 = readProvider.getCheckMultipleStockCategory1!;
     valueMultipleStkCateg3 = readProvider.getCheckMultipleStockCategory3!;
-
-    valueMultipleCustomer = readProvider.getCheckMultipleCustomer!;
-    valueMultipleStock = readProvider.getCheckMultipleStock!;
+    valueMultipleSuppCateg = readProvider.getCheckMultipleSupplierCategory!;
 
     valueSelectAllStkCateg1 = readProvider.getCheckAllStockCategory1!;
     valueSelectAllStkCateg3 = readProvider.getCheckAllStockCategory3!;
-    valueSelectAllCustomer = readProvider.getCheckAllCustomer!;
-    valueSelectAllStock = readProvider.getCheckAllStock!;
+    valueSelectAllSuppCateg = readProvider.getCheckAllSupplierCategory!;
+
+    modelNoController.text = readProvider.getModelNo!;
+    campaignNoController.text = readProvider.getCampaignNo!;
 
     return Column(
       children: [
@@ -424,776 +419,96 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: height * .01,
         ),
         CardComponent(
-            title: _locale.customer,
-            multipleVal: valueMultipleCustomer,
-            fromDropDown: CustomDropDown(
-              label: _locale.from,
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-
-                return salesReportController
-                    .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
-              },
-              width: isDesktop ? width * .17 : width * .38,
-              hint: selectedFromCustomers.isNotEmpty
-                  ? selectedFromCustomers
-                  : _locale.select,
-              initialValue: selectedFromCustomers.isNotEmpty
-                  ? selectedFromCustomers
-                  : null,
-              onChanged: (value) {
-                setState(() {
-                  selectedFromCustomers = value.toString();
-                  selectedFromCustomersCode = value.codeToString();
-                  getCustomerList();
-                });
-              },
-            ),
-            toDropDown: CustomDropDown(
-              label: _locale.to,
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-
-                return salesReportController
-                    .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
-              },
-              width: isDesktop ? width * .17 : width * .38,
-              hint: selectedToCustomers.isNotEmpty
-                  ? selectedToCustomers
-                  : _locale.select,
-              initialValue:
-                  selectedToCustomers.isNotEmpty ? selectedToCustomers : null,
-              onChanged: (value) {
-                setState(() {
-                  selectedToCustomers = value.toString();
-                  selectedToCustomersCode = value.codeToString();
-                  getCustomerList();
-                });
-              },
-            ),
-            selectAll: Checkbox(
-                value: valueSelectAllCustomer,
-                onChanged: (val) {
-                  valueSelectAllCustomer = val!;
-                  readProvider.setCheckAllCustomer(valueSelectAllCustomer);
-
-                  readProvider.setCodesCustomer([]);
-                  setState(() {});
-                }),
-            multipleCheckBox: Checkbox(
-                value: valueMultipleCustomer,
-                onChanged: (val) {
-                  valueMultipleCustomer = val!;
-                  readProvider.setCheckMultipleCustomer(valueMultipleCustomer);
-
-                  readProvider.setCodesCustomer([]);
-                  readProvider.setCustomersList([]);
-                  readProvider.setFromCust("");
-                  readProvider.setToCust("");
-                  selectedFromCustomers = "";
-                  selectedToCustomers = "";
-                  //    }
-                  setState(() {});
-                }),
-            multipleSearch: SimpleDropdownSearch(
-              // list: customersList,
-              enabled: !valueSelectAllCustomer,
-              hintString: readProvider.getCustomersList == null
-                  ? []
-                  : readProvider.getCustomersList!,
-              onChanged: (val) {
-                setState(() {
-                  readProvider.setCodesCustomer(getCodesList(val));
-                  readProvider.setCustomersList(getStringList(val));
-                });
-              },
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-
-                return salesReportController
-                    .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
-              },
-            )),
-        SizedBox(
-          height: height * .01,
-        ),
-        CardComponent(
-          title: _locale.stock,
-          multipleVal: valueMultipleStock,
+          title: _locale.supplierCategory,
+          multipleVal: valueMultipleSuppCateg,
           fromDropDown: CustomDropDown(
+            width: MediaQuery.of(context).size.width * 0.2,
+            hint: selectedFromSuppCateg.isNotEmpty
+                ? selectedFromSuppCateg
+                : _locale.select,
             label: _locale.from,
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-
-              return salesReportController
-                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
-            },
-            width: isDesktop ? width * .17 : width * .38,
-            hint: selectedFromStocks.isNotEmpty
-                ? selectedFromStocks
-                : _locale.select,
             initialValue:
-                selectedFromStocks.isNotEmpty ? selectedFromStocks : null,
+                selectedFromSuppCateg.isNotEmpty ? selectedFromSuppCateg : null,
             onChanged: (value) {
               setState(() {
-                selectedFromStocks = value.toString();
-                selectedFromStocksCode = value.codeToString();
-                getStockList();
-              });
-            },
-          ),
-          toDropDown: CustomDropDown(
-            label: _locale.to,
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-
-              return salesReportController
-                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
-            },
-            width: isDesktop ? width * .17 : width * .38,
-            hint:
-                selectedToStocks.isNotEmpty ? selectedToStocks : _locale.select,
-            initialValue: selectedToStocks.isNotEmpty ? selectedToStocks : null,
-            onChanged: (value) {
-              setState(() {
-                selectedToStocks = value.toString();
-                selectedToStocksCode = value.codeToString();
-                getStockList();
-              });
-            },
-          ),
-          selectAll: Checkbox(
-              value: valueSelectAllStock,
-              onChanged: (val) {
-                valueSelectAllStock = val!;
-                readProvider.setCheckAllStock(valueSelectAllStock);
-                readProvider.setCodesStock([]);
-                setState(() {});
-              }),
-          multipleCheckBox: Checkbox(
-              value: valueMultipleStock,
-              onChanged: (val) {
-                valueMultipleStock = val!;
-                readProvider.setCheckMultipleStock(valueMultipleStock);
-                readProvider.setCodesStock([]);
-                readProvider.setStockList([]);
-                readProvider.setFromStock("");
-                readProvider.setToStock("");
-                selectedFromStocks = "";
-                selectedToStocks = "";
-                setState(() {});
-              }),
-          multipleSearch: SimpleDropdownSearch(
-            // list: stocksList,
-            enabled: !valueSelectAllStock,
-            hintString: readProvider.getStockList == null
-                ? []
-                : readProvider.getStockList!,
-            onChanged: (val) {
-              setState(() {
-                readProvider.setCodesStock(getCodesList(val));
-                readProvider.setStockList(getStringList(val));
+                selectedFromSuppCateg = value.toString();
+                selectedFromSuppCategCode = value.codeToString();
+                getSuppCategList();
               });
             },
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
-
-              return salesReportController
-                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  DropDownSearchCriteria getSearchCriteria(String text) {
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-        ? DatesController()
-            .formatDateReverse(readProvider.getFromDate.toString())
-        : todayDate;
-
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
-        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : todayDate;
-    DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
-        fromDate: DatesController().formatDate(widget.fromDate.text),
-        toDate: DatesController().formatDate(widget.toDate.text),
-        nameCode: text);
-    return dropDownSearchCriteria;
-  }
-
-  void getCategory1List() {
-    List<String> stringStkCategory1List = [];
-
-    if (selectedFromStkCategory1Code.isNotEmpty) {
-      stringStkCategory1List.add(selectedFromStkCategory1Code);
-    }
-    if (selectedToStkCategory1Code.isNotEmpty) {
-      stringStkCategory1List.add(selectedToStkCategory1Code);
-    }
-    readProvider.setFromCateg1(selectedFromStkCategory1);
-    readProvider.setToCateg1(selectedToStkCategory1);
-    readProvider.setCodesStockCategory1(stringStkCategory1List);
-  }
-
-  void getCategory3List() {
-    List<String> stringStkCategory3List = [];
-
-    if (selectedFromStkCategory3Code.isNotEmpty) {
-      stringStkCategory3List.add(selectedFromStkCategory3Code);
-    }
-    if (selectedToStkCategory3Code.isNotEmpty) {
-      stringStkCategory3List.add(selectedToStkCategory3Code);
-    }
-    readProvider.setFromCateg3(selectedFromStkCategory3);
-    readProvider.setToCateg3(selectedToStkCategory3);
-    readProvider.setCodesStockCategory3(stringStkCategory3List);
-  }
-
-  void getCustomerList() {
-    List<String> stringCustomerList = [];
-
-    if (selectedFromCustomersCode.isNotEmpty) {
-      stringCustomerList.add(selectedFromCustomersCode);
-    }
-    if (selectedToCustomersCode.isNotEmpty) {
-      stringCustomerList.add(selectedToCustomersCode);
-    }
-    readProvider.setFromCust(selectedFromCustomers);
-    readProvider.setToCust(selectedToCustomers);
-    readProvider.setCodesCustomer(stringCustomerList);
-  }
-
-  void getStockList() {
-    List<String> stringStockList = [];
-
-    if (selectedFromStocksCode.isNotEmpty) {
-      stringStockList.add(selectedFromStocksCode);
-    }
-    if (selectedToStocksCode.isNotEmpty) {
-      stringStockList.add(selectedToStocksCode);
-    }
-    readProvider.setFromStock(selectedFromStocks);
-    readProvider.setToStock(selectedToStocks);
-    readProvider.setCodesStock(stringStockList);
-  }
-
-  List<String> getCodesList(List<dynamic> val) {
-    List<String> codesString = [];
-    for (int i = 0; i < val.length; i++) {
-      String newString = (val[i].toString().trim()).replaceAll(" ", "");
-      print(newString);
-      codesString.add(newString.substring(0, newString.indexOf("-")));
-    }
-    return codesString;
-  }
-
-  List<String> getStringList(List<dynamic> val) {
-    List<String> codesString = [];
-    for (int i = 0; i < val.length; i++) {
-      String newString = (val[i].toString().trim()).replaceAll(" ", "");
-      print(newString);
-      codesString.add(newString);
-    }
-    return codesString;
-  }
-}
-
-class RightWidget extends StatefulWidget {
-  final TextEditingController fromDate;
-  final TextEditingController toDate;
-  const RightWidget({Key? key, required this.fromDate, required this.toDate})
-      : super(key: key);
-
-  @override
-  State<RightWidget> createState() => _RightWidgetState();
-}
-
-class _RightWidgetState extends State<RightWidget> {
-  ReportController salesReportController = ReportController();
-  TextEditingController campaignNoController = TextEditingController();
-  TextEditingController modelNoController = TextEditingController();
-
-  var selectedFromStkCategory2 = "";
-  var selectedToStkCategory2 = "";
-
-  var selectedFromBranches = "";
-  var selectedToBranches = "";
-
-  var selectedFromSupplier = "";
-  var selectedToSupplier = "";
-
-  var selectedFromCustomerCategory = "";
-  var selectedToCustomerCategory = "";
-
-  var selectedFromStkCategory2Code = "";
-  var selectedToStkCategory2Code = "";
-
-  var selectedFromBranchesCode = "";
-  var selectedToBranchesCode = "";
-
-  var selectedFromSupplierCode = "";
-  var selectedToSupplierCode = "";
-
-  var selectedFromCustomerCategoryCode = "";
-  var selectedToCustomerCategoryCode = "";
-
-  bool valueMultipleStkCategory2 = false;
-  bool valueMultipleBranches = false;
-  bool valueMultipleSupplier = false;
-  bool valueMultipleCustomerCategory = false;
-
-  bool valueSelectAllStkCategory2 = false;
-  bool valueSelectAllBranches = false;
-  bool valueSelectAllSupplier = false;
-  bool valueSelectAllCustomerCategory = false;
-
-  late AppLocalizations _locale;
-  late SalesCriteraProvider readProvider;
-  double width = 0;
-  double height = 0;
-  bool isDesktop = false;
-  // bool isMobile = false;
-  bool isMobile = false;
-  @override
-  void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
-    readProvider = context.read<SalesCriteraProvider>();
-
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    isDesktop = Responsive.isDesktop(context);
-    isMobile = Responsive.isMobile(context);
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-        ? DatesController()
-            .formatDateReverse(readProvider.getFromDate.toString())
-        : todayDate;
-
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
-        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : todayDate;
-
-    selectedFromStkCategory2 = readProvider.getFromCateg2!;
-    selectedToStkCategory2 = readProvider.getToCateg2!;
-
-    selectedFromBranches = readProvider.getFromBranch!;
-    selectedToBranches = readProvider.getToBranch!;
-
-    selectedFromSupplier = readProvider.getFromSupp!;
-    selectedToSupplier = readProvider.getToSupp!;
-
-    selectedFromCustomerCategory = readProvider.getFromCustCateg!;
-    selectedToCustomerCategory = readProvider.getToCustCateg!;
-    valueMultipleStkCategory2 = readProvider.getCheckMultipleStockCategory2!;
-    valueMultipleBranches = readProvider.getCheckMultipleBranch!;
-    valueMultipleSupplier = readProvider.getCheckMultipleSupplier!;
-    valueMultipleCustomerCategory =
-        readProvider.getCheckMultipleCustomerCategory!;
-
-    valueSelectAllStkCategory2 = readProvider.getCheckAllStockCategory2!;
-    valueSelectAllBranches = readProvider.getCheckAllBranch!;
-    valueSelectAllSupplier = readProvider.getCheckAllSupplier!;
-    valueSelectAllCustomerCategory = readProvider.getCheckAllCustomerCategory!;
-
-    modelNoController.text = readProvider.getModelNo!;
-    campaignNoController.text = readProvider.getCampaignNo!;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CardComponent(
-          title: _locale.branch,
-          multipleVal: valueMultipleBranches,
-          fromDropDown: CustomDropDown(
-            label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
-            // items: branchesList,
-            hint: selectedFromBranches.isNotEmpty
-                ? selectedFromBranches
-                : _locale.select,
-            initialValue:
-                selectedFromBranches.isNotEmpty ? selectedFromBranches : null,
-            onChanged: (value) {
-              setState(() {
-                selectedFromBranches = value.toString();
-                selectedFromBranchesCode = value.codeToString();
-                getBranchList();
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController
-                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
-            },
-          ),
-          toDropDown: CustomDropDown(
-            label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
-            // items: branchesList,
-            hint: selectedToBranches.isNotEmpty
-                ? selectedToBranches
-                : _locale.select,
-            initialValue:
-                selectedToBranches.isNotEmpty ? selectedToBranches : null,
-            onChanged: (value) {
-              setState(() {
-                selectedToBranches = value.toString();
-                selectedToBranchesCode = value.codeToString();
-                getBranchList();
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController
-                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
-            },
-          ),
-          selectAll: Checkbox(
-              value: valueSelectAllBranches,
-              onChanged: (val) {
-                valueSelectAllBranches = val!;
-                readProvider.setCheckAllBranch(valueSelectAllBranches);
-
-                readProvider.setCodesBranch([]);
-
-                setState(() {});
-              }),
-          multipleCheckBox: Checkbox(
-              value: valueMultipleBranches,
-              onChanged: (val) {
-                valueMultipleBranches = val!;
-                readProvider.setCheckMultipleBranch(valueMultipleBranches);
-
-                readProvider.setCodesBranch([]);
-                readProvider.setBranchList([]);
-                readProvider.setFromBranch("");
-                readProvider.setToBranch("");
-                selectedFromBranches = "";
-                selectedToBranches = "";
-                setState(() {});
-              }),
-          multipleSearch: SimpleDropdownSearch(
-            // list: branchesList,
-            enabled: !valueSelectAllBranches,
-            hintString: readProvider.getBranchList == null
-                ? []
-                : readProvider.getBranchList!,
-            onChanged: (val) {
-              setState(() {
-                readProvider.setCodesBranch(getCodesList(val));
-                readProvider.setBranchList(getStringList(val));
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController
-                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
-            },
-          ),
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        CardComponent(
-          title: _locale.stockCategoryLevel("2"),
-          multipleVal: valueMultipleStkCategory2,
-          fromDropDown: CustomDropDown(
-            label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
-            // items: stkCategory2List,
-            hint: selectedFromStkCategory2.isNotEmpty
-                ? selectedFromStkCategory2
-                : _locale.select,
-            initialValue: selectedFromStkCategory2.isNotEmpty
-                ? selectedFromStkCategory2
-                : null,
-            onChanged: (value) {
-              setState(() {
-                selectedFromStkCategory2 = value.toString();
-                selectedFromStkCategory2Code = value.codeToString();
-                getCategory2List();
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController.getSalesStkCountCateg2Method(
+              return purchaseReportController.getSalesSuppliersCategMethod(
                   dropDownSearchCriteria.toJson());
             },
           ),
           toDropDown: CustomDropDown(
-            label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
-            hint: selectedToStkCategory2.isNotEmpty
-                ? selectedToStkCategory2
+            width: MediaQuery.of(context).size.width * 0.2,
+            // items: suppCategoryList,
+            hint: selectedToSuppCateg.isNotEmpty
+                ? selectedToSuppCateg
                 : _locale.select,
-            initialValue: selectedToStkCategory2.isNotEmpty
-                ? selectedToStkCategory2
-                : null,
+            label: _locale.to,
+
+            initialValue:
+                selectedToSuppCateg.isNotEmpty ? selectedToSuppCateg : null,
             onChanged: (value) {
               setState(() {
-                selectedToStkCategory2 = value.toString();
-                selectedToStkCategory2Code = value.codeToString();
-                getCategory2List();
+                selectedToSuppCateg = value.toString();
+                selectedToSuppCategCode = value.codeToString();
+                getSuppCategList();
               });
             },
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
-              return salesReportController.getSalesStkCountCateg2Method(
+              return purchaseReportController.getSalesSuppliersCategMethod(
                   dropDownSearchCriteria.toJson());
             },
           ),
           selectAll: Checkbox(
-              value: valueSelectAllStkCategory2,
+              value: valueSelectAllSuppCateg,
               onChanged: (val) {
-                valueSelectAllStkCategory2 = val!;
+                valueSelectAllSuppCateg = val!;
                 readProvider
-                    .setCheckAllStockCategory2(valueSelectAllStkCategory2);
+                    .setCheckAllSupplierCategory(valueSelectAllSuppCateg);
 
-                readProvider.setCodesStockCategory2([]);
+                readProvider.setCodesSupplierCategory([]);
 
                 setState(() {});
               }),
           multipleCheckBox: Checkbox(
-              value: valueMultipleStkCategory2,
+              value: valueMultipleSuppCateg,
               onChanged: (val) {
-                valueMultipleStkCategory2 = val!;
+                valueMultipleSuppCateg = val!;
                 readProvider
-                    .setCheckMultipleStockCategory2(valueMultipleStkCategory2);
+                    .setCheckMultipleSupplierCategory(valueMultipleSuppCateg);
 
-                readProvider.setCodesStockCategory2([]);
-                readProvider.setStkCat2List([]);
-                readProvider.setFromCateg2("");
-                readProvider.setToCateg2("");
-                selectedFromStkCategory2 = "";
-                selectedToStkCategory2 = "";
+                readProvider.setCodesSupplierCategory([]);
+                readProvider.setSuppCategList([]);
+                readProvider.setFromSuppCateg("");
+                readProvider.setToSuppCateg("");
+                selectedFromSuppCateg = "";
+                selectedToSuppCateg = "";
                 setState(() {});
               }),
           multipleSearch: SimpleDropdownSearch(
-            // list: stkCategory2List,
-            enabled: !valueSelectAllStkCategory2,
-            hintString: readProvider.getStkCat2List == null
+            // list: suppCategoryList,
+            enabled: !valueSelectAllSuppCateg,
+            hintString: readProvider.getSuppCategList == null
                 ? []
-                : readProvider.getStkCat2List!,
+                : readProvider.getSuppCategList!,
             onChanged: (val) {
               setState(() {
-                readProvider.setCodesStockCategory2(getCodesList(val));
-                readProvider.setStkCat2List(getStringList(val));
+                readProvider.setCodesSupplierCategory(getCodesList(val));
+                readProvider.setSuppCategList(getStringList(val));
               });
             },
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
-              return salesReportController.getSalesStkCountCateg2Method(
-                  dropDownSearchCriteria.toJson());
-            },
-          ),
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        CardComponent(
-            title: _locale.supplier(""),
-            multipleVal: valueMultipleSupplier,
-            fromDropDown: CustomDropDown(
-              label: _locale.from,
-              width: isDesktop ? width * .17 : width * .38,
-              // items: suppliersList,
-              hint: selectedFromSupplier.isNotEmpty
-                  ? selectedFromSupplier
-                  : _locale.select,
-              initialValue:
-                  selectedFromSupplier.isNotEmpty ? selectedFromSupplier : null,
-              onChanged: (value) {
-                setState(() {
-                  selectedFromSupplier = value.toString();
-                  selectedFromSupplierCode = value.codeToString();
-                  getSupplierList();
-                });
-              },
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-                return salesReportController
-                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
-              },
-            ),
-            toDropDown: CustomDropDown(
-              label: _locale.to,
-              width: isDesktop ? width * .17 : width * .38,
-              hint: selectedToSupplier.isNotEmpty
-                  ? selectedToSupplier
-                  : _locale.select,
-              initialValue:
-                  selectedToSupplier.isNotEmpty ? selectedToSupplier : null,
-              onChanged: (value) {
-                setState(() {
-                  selectedToSupplier = value.toString();
-                  selectedToSupplierCode = value.codeToString();
-                  getSupplierList();
-                });
-              },
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-                return salesReportController
-                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
-              },
-            ),
-            selectAll: Checkbox(
-                value: valueSelectAllSupplier,
-                onChanged: (val) {
-                  valueSelectAllSupplier = val!;
-                  readProvider.setCheckAllSupplier(valueSelectAllSupplier);
-
-                  readProvider.setCodesSupplier([]);
-                  setState(() {});
-                }),
-            multipleCheckBox: Checkbox(
-                value: valueMultipleSupplier,
-                onChanged: (val) {
-                  valueMultipleSupplier = val!;
-                  readProvider.setCheckMultipleSupplier(valueMultipleSupplier);
-
-                  readProvider.setCodesSupplier([]);
-                  readProvider.setSupplierList([]);
-                  readProvider.setFromSupp("");
-                  readProvider.setToSupp("");
-                  selectedFromSupplier = "";
-                  selectedToSupplier = "";
-                  setState(() {});
-                }),
-            multipleSearch: SimpleDropdownSearch(
-              // list: suppliersList,
-              enabled: !valueSelectAllSupplier,
-              hintString: readProvider.getSupplierList == null
-                  ? []
-                  : readProvider.getSupplierList!,
-              onChanged: (val) {
-                setState(() {
-                  readProvider.setCodesSupplier(getCodesList(val));
-                  readProvider.setSupplierList(getStringList(val));
-                });
-              },
-              onSearch: (text) {
-                DropDownSearchCriteria dropDownSearchCriteria =
-                    getSearchCriteria(text);
-                return salesReportController
-                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
-              },
-            )),
-        SizedBox(
-          height: height * .01,
-        ),
-        CardComponent(
-          title: _locale.customerCategory,
-          multipleVal: valueMultipleCustomerCategory,
-          fromDropDown: CustomDropDown(
-            label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
-            hint: selectedFromCustomerCategory.isNotEmpty
-                ? selectedFromCustomerCategory
-                : _locale.select,
-            initialValue: selectedFromCustomerCategory.isNotEmpty
-                ? selectedFromCustomerCategory
-                : null,
-            onChanged: (value) {
-              setState(() {
-                selectedFromCustomerCategory = value.toString();
-                selectedFromCustomerCategoryCode = value.codeToString();
-                getCustomerCategoryList();
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController.getSalesCustomersCategMethod(
-                  dropDownSearchCriteria.toJson());
-            },
-          ),
-          toDropDown: CustomDropDown(
-            label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
-            hint: selectedToCustomerCategory.isNotEmpty
-                ? selectedToCustomerCategory
-                : _locale.select,
-            initialValue: selectedToCustomerCategory.isNotEmpty
-                ? selectedToCustomerCategory
-                : null,
-            onChanged: (value) {
-              setState(() {
-                selectedToCustomerCategory = value.toString();
-                selectedToCustomerCategoryCode = value.codeToString();
-                getCustomerCategoryList();
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController.getSalesCustomersCategMethod(
-                  dropDownSearchCriteria.toJson());
-            },
-          ),
-          selectAll: Checkbox(
-              value: valueSelectAllCustomerCategory,
-              onChanged: (val) {
-                valueSelectAllCustomerCategory = val!;
-                readProvider.setCheckAllCustomerCategory(
-                    valueSelectAllCustomerCategory);
-
-                readProvider.setCodesCustomerCategory([]);
-                setState(() {});
-              }),
-          multipleCheckBox: Checkbox(
-              value: valueMultipleCustomerCategory,
-              onChanged: (val) {
-                valueMultipleCustomerCategory = val!;
-                readProvider.setCheckMultipleCustomerCategory(
-                    valueMultipleCustomerCategory);
-
-                readProvider.setCodesCustomerCategory([]);
-                readProvider.setCustCateg([]);
-                readProvider.setFromCustCateg("");
-                readProvider.setToCustCateg("");
-                selectedFromCustomerCategory = "";
-                selectedToCustomerCategory = "";
-                setState(() {});
-              }),
-          multipleSearch: SimpleDropdownSearch(
-            // list: customerCategoryList,
-            enabled: !valueSelectAllCustomerCategory,
-            hintString: readProvider.getCustCateg == null
-                ? []
-                : readProvider.getCustCateg!,
-            onChanged: (val) {
-              setState(() {
-                readProvider.setCodesCustomerCategory(getCodesList(val));
-                readProvider.setCustCateg(getStringList(val));
-              });
-            },
-            onSearch: (text) {
-              DropDownSearchCriteria dropDownSearchCriteria =
-                  getSearchCriteria(text);
-              return salesReportController.getSalesCustomersCategMethod(
+              return purchaseReportController.getSalesSuppliersCategMethod(
                   dropDownSearchCriteria.toJson());
             },
           ),
@@ -1277,6 +592,584 @@ class _RightWidgetState extends State<RightWidget> {
     return dropDownSearchCriteria;
   }
 
+  void getCategory1List() {
+    List<String> stringStkCategory1List = [];
+
+    if (selectedFromStkCategory1Code.isNotEmpty) {
+      stringStkCategory1List.add(selectedFromStkCategory1Code);
+    }
+    if (selectedToStkCategory1Code.isNotEmpty) {
+      stringStkCategory1List.add(selectedToStkCategory1Code);
+    }
+    readProvider.setFromCateg1(selectedFromStkCategory1);
+    readProvider.setToCateg1(selectedToStkCategory1);
+    readProvider.setCodesStockCategory1(stringStkCategory1List);
+  }
+
+  void getCategory3List() {
+    List<String> stringStkCategory3List = [];
+
+    if (selectedFromStkCategory3Code.isNotEmpty) {
+      stringStkCategory3List.add(selectedFromStkCategory3Code);
+    }
+    if (selectedToStkCategory3Code.isNotEmpty) {
+      stringStkCategory3List.add(selectedToStkCategory3Code);
+    }
+    readProvider.setFromCateg3(selectedFromStkCategory3);
+    readProvider.setToCateg3(selectedToStkCategory3);
+    readProvider.setCodesStockCategory3(stringStkCategory3List);
+  }
+
+  void getSuppCategList() {
+    List<String> stringSuppCategList = [];
+
+    // for (int i = 0; i < suppCategoryList.length; i++) {
+    //   if (suppCategoryList[i].toString() == selectedFromSuppCateg) {
+    //     stringSuppCategList.add(suppCategoryList[i].codeToString());
+    //   }
+    //   if (suppCategoryList[i].toString() == selectedToSuppCateg) {
+    //     stringSuppCategList.add(suppCategoryList[i].codeToString());
+    //   }
+    // }
+
+    if (selectedFromSuppCateg.isNotEmpty) {
+      stringSuppCategList.add(selectedFromSuppCategCode);
+    }
+    if (selectedToSuppCateg.isNotEmpty) {
+      stringSuppCategList.add(selectedToSuppCategCode);
+    }
+    readProvider.setFromSuppCateg(selectedFromSuppCateg);
+    readProvider.setToSuppCateg(selectedToSuppCateg);
+    readProvider.setCodesSupplierCategory(stringSuppCategList);
+  }
+
+  List<String> getCodesList(List<dynamic> val) {
+    List<String> codesString = [];
+    for (int i = 0; i < val.length; i++) {
+      String newString = (val[i].toString().trim()).replaceAll(" ", "");
+      codesString.add(newString.substring(0, newString.indexOf("-")));
+    }
+    return codesString;
+  }
+
+  List<String> getStringList(List<dynamic> val) {
+    List<String> codesString = [];
+    for (int i = 0; i < val.length; i++) {
+      String newString = (val[i].toString().trim()).replaceAll(" ", "");
+      print(newString);
+      codesString.add(newString);
+    }
+    return codesString;
+  }
+}
+
+class RightWidget extends StatefulWidget {
+  final TextEditingController fromDate;
+  final TextEditingController toDate;
+  const RightWidget({Key? key, required this.fromDate, required this.toDate})
+      : super(key: key);
+
+  @override
+  State<RightWidget> createState() => _RightWidgetState();
+}
+
+class _RightWidgetState extends State<RightWidget> {
+  ReportController purchaseReportController = ReportController();
+
+  var selectedFromStkCategory2 = "";
+  var selectedToStkCategory2 = "";
+
+  var selectedFromBranches = "";
+  var selectedToBranches = "";
+
+  var selectedFromSupplier = "";
+  var selectedToSupplier = "";
+  var selectedFromStocks = "";
+  var selectedToStocks = "";
+
+  var selectedFromStkCategory2Code = "";
+  var selectedToStkCategory2Code = "";
+
+  var selectedFromBranchesCode = "";
+  var selectedToBranchesCode = "";
+
+  var selectedFromSupplierCode = "";
+  var selectedToSupplierCode = "";
+
+  var selectedFromStkCode = "";
+  var selectedToStkCode = "";
+
+  var selectedFromStocksCode = "";
+  var selectedToStocksCode = "";
+
+  bool valueMultipleStkCategory2 = false;
+  bool valueMultipleBranches = false;
+  bool valueMultipleSupplier = false;
+  bool valueMultipleCustomerCategory = false;
+  bool valueMultipleStock = false;
+
+  bool valueSelectAllStkCategory2 = false;
+  bool valueSelectAllBranches = false;
+  bool valueSelectAllSupplier = false;
+  bool valueSelectAllCustomerCategory = false;
+  bool valueSelectAllStock = false;
+
+  late AppLocalizations _locale;
+  late PurchaseCriteraProvider readProvider;
+  double width = 0;
+  double height = 0;
+  bool isDesktop = false;
+  // bool isMobile = false;
+  bool isMobile = false;
+  @override
+  void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
+    readProvider = context.read<PurchaseCriteraProvider>();
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
+    String todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
+    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
+        ? DatesController()
+            .formatDateReverse(readProvider.getFromDate.toString())
+        : todayDate;
+
+    widget.toDate.text = readProvider.getToDate!.isNotEmpty
+        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
+        : todayDate;
+
+    selectedFromStkCategory2 = readProvider.getFromCateg2!;
+    selectedToStkCategory2 = readProvider.getToCateg2!;
+
+    selectedFromBranches = readProvider.getFromBranch!;
+    selectedToBranches = readProvider.getToBranch!;
+
+    selectedFromSupplier = readProvider.getFromSupp!;
+    selectedToSupplier = readProvider.getToSupp!;
+
+    selectedFromStocks = readProvider.getFromstock!;
+    selectedToStocks = readProvider.getTostock!;
+    valueMultipleStkCategory2 = readProvider.getCheckMultipleStockCategory2!;
+    valueMultipleBranches = readProvider.getCheckMultipleBranch!;
+    valueMultipleSupplier = readProvider.getCheckMultipleSupplier!;
+
+    valueMultipleStock = readProvider.getCheckMultipleStock!;
+
+    valueSelectAllStkCategory2 = readProvider.getCheckAllStockCategory2!;
+    valueSelectAllBranches = readProvider.getCheckAllBranch!;
+    valueSelectAllSupplier = readProvider.getCheckAllSupplier!;
+    valueSelectAllStock = readProvider.getCheckAllStock!;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CardComponent(
+          title: _locale.branch,
+          multipleVal: valueMultipleBranches,
+          fromDropDown: CustomDropDown(
+            label: _locale.from,
+            width: isDesktop ? width * .17 : width * .38,
+            // items: branchesList,
+            hint: selectedFromBranches.isNotEmpty
+                ? selectedFromBranches
+                : _locale.select,
+            initialValue:
+                selectedFromBranches.isNotEmpty ? selectedFromBranches : null,
+            onChanged: (value) {
+              setState(() {
+                selectedFromBranches = value.toString();
+                selectedFromBranchesCode = value.codeToString();
+                getBranchList();
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController
+                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
+            },
+          ),
+          toDropDown: CustomDropDown(
+            label: _locale.to,
+            width: isDesktop ? width * .17 : width * .38,
+            // items: branchesList,
+            hint: selectedToBranches.isNotEmpty
+                ? selectedToBranches
+                : _locale.select,
+            initialValue:
+                selectedToBranches.isNotEmpty ? selectedToBranches : null,
+            onChanged: (value) {
+              setState(() {
+                selectedToBranches = value.toString();
+                selectedToBranchesCode = value.codeToString();
+                getBranchList();
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController
+                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
+            },
+          ),
+          selectAll: Checkbox(
+              value: valueSelectAllBranches,
+              onChanged: (val) {
+                valueSelectAllBranches = val!;
+                readProvider.setCheckAllBranch(valueSelectAllBranches);
+
+                readProvider.setCodesBranch([]);
+
+                setState(() {});
+              }),
+          multipleCheckBox: Checkbox(
+              value: valueMultipleBranches,
+              onChanged: (val) {
+                valueMultipleBranches = val!;
+                readProvider.setCheckMultipleBranch(valueMultipleBranches);
+
+                readProvider.setCodesBranch([]);
+                readProvider.setBranchList([]);
+                readProvider.setFromBranch("");
+                readProvider.setToBranch("");
+                selectedFromBranches = "";
+                selectedToBranches = "";
+                setState(() {});
+              }),
+          multipleSearch: SimpleDropdownSearch(
+            // list: branchesList,
+            enabled: !valueSelectAllBranches,
+            hintString: readProvider.getBranchList == null
+                ? []
+                : readProvider.getBranchList!,
+            onChanged: (val) {
+              setState(() {
+                readProvider.setCodesBranch(getCodesList(val));
+                readProvider.setBranchList(getStringList(val));
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController
+                  .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
+            },
+          ),
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        CardComponent(
+          title: _locale.stockCategoryLevel("2"),
+          multipleVal: valueMultipleStkCategory2,
+          fromDropDown: CustomDropDown(
+            label: _locale.from,
+            width: isDesktop ? width * .17 : width * .38,
+            // items: stkCategory2List,
+            hint: selectedFromStkCategory2.isNotEmpty
+                ? selectedFromStkCategory2
+                : _locale.select,
+            initialValue: selectedFromStkCategory2.isNotEmpty
+                ? selectedFromStkCategory2
+                : null,
+            onChanged: (value) {
+              setState(() {
+                selectedFromStkCategory2 = value.toString();
+                selectedFromStkCategory2Code = value.codeToString();
+                getCategory2List();
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController.getSalesStkCountCateg2Method(
+                  dropDownSearchCriteria.toJson());
+            },
+          ),
+          toDropDown: CustomDropDown(
+            label: _locale.to,
+            width: isDesktop ? width * .17 : width * .38,
+            hint: selectedToStkCategory2.isNotEmpty
+                ? selectedToStkCategory2
+                : _locale.select,
+            initialValue: selectedToStkCategory2.isNotEmpty
+                ? selectedToStkCategory2
+                : null,
+            onChanged: (value) {
+              setState(() {
+                selectedToStkCategory2 = value.toString();
+                selectedToStkCategory2Code = value.codeToString();
+                getCategory2List();
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController.getSalesStkCountCateg2Method(
+                  dropDownSearchCriteria.toJson());
+            },
+          ),
+          selectAll: Checkbox(
+              value: valueSelectAllStkCategory2,
+              onChanged: (val) {
+                valueSelectAllStkCategory2 = val!;
+                readProvider
+                    .setCheckAllStockCategory2(valueSelectAllStkCategory2);
+
+                readProvider.setCodesStockCategory2([]);
+
+                setState(() {});
+              }),
+          multipleCheckBox: Checkbox(
+              value: valueMultipleStkCategory2,
+              onChanged: (val) {
+                valueMultipleStkCategory2 = val!;
+                readProvider
+                    .setCheckMultipleStockCategory2(valueMultipleStkCategory2);
+
+                readProvider.setCodesStockCategory2([]);
+                readProvider.setStkCat2List([]);
+                readProvider.setFromCateg2("");
+                readProvider.setToCateg2("");
+                selectedFromStkCategory2 = "";
+                selectedToStkCategory2 = "";
+                setState(() {});
+              }),
+          multipleSearch: SimpleDropdownSearch(
+            // list: stkCategory2List,
+            enabled: !valueSelectAllStkCategory2,
+            hintString: readProvider.getStkCat2List == null
+                ? []
+                : readProvider.getStkCat2List!,
+            onChanged: (val) {
+              setState(() {
+                readProvider.setCodesStockCategory2(getCodesList(val));
+                readProvider.setStkCat2List(getStringList(val));
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+              return purchaseReportController.getSalesStkCountCateg2Method(
+                  dropDownSearchCriteria.toJson());
+            },
+          ),
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        CardComponent(
+            title: _locale.supplier(""),
+            multipleVal: valueMultipleSupplier,
+            fromDropDown: CustomDropDown(
+              label: _locale.from,
+              width: isDesktop ? width * .17 : width * .38,
+              // items: suppliersList,
+              hint: selectedFromSupplier.isNotEmpty
+                  ? selectedFromSupplier
+                  : _locale.select,
+              initialValue:
+                  selectedFromSupplier.isNotEmpty ? selectedFromSupplier : null,
+              onChanged: (value) {
+                setState(() {
+                  selectedFromSupplier = value.toString();
+                  selectedFromSupplierCode = value.codeToString();
+                  getSupplierList();
+                });
+              },
+              onSearch: (text) {
+                DropDownSearchCriteria dropDownSearchCriteria =
+                    getSearchCriteria(text);
+                return purchaseReportController
+                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
+              },
+            ),
+            toDropDown: CustomDropDown(
+              label: _locale.to,
+              width: isDesktop ? width * .17 : width * .38,
+              hint: selectedToSupplier.isNotEmpty
+                  ? selectedToSupplier
+                  : _locale.select,
+              initialValue:
+                  selectedToSupplier.isNotEmpty ? selectedToSupplier : null,
+              onChanged: (value) {
+                setState(() {
+                  selectedToSupplier = value.toString();
+                  selectedToSupplierCode = value.codeToString();
+                  getSupplierList();
+                });
+              },
+              onSearch: (text) {
+                DropDownSearchCriteria dropDownSearchCriteria =
+                    getSearchCriteria(text);
+                return purchaseReportController
+                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
+              },
+            ),
+            selectAll: Checkbox(
+                value: valueSelectAllSupplier,
+                onChanged: (val) {
+                  valueSelectAllSupplier = val!;
+                  readProvider.setCheckAllSupplier(valueSelectAllSupplier);
+
+                  readProvider.setCodesSupplier([]);
+                  setState(() {});
+                }),
+            multipleCheckBox: Checkbox(
+                value: valueMultipleSupplier,
+                onChanged: (val) {
+                  valueMultipleSupplier = val!;
+                  readProvider.setCheckMultipleSupplier(valueMultipleSupplier);
+
+                  readProvider.setCodesSupplier([]);
+                  readProvider.setSupplierList([]);
+                  readProvider.setFromSupp("");
+                  readProvider.setToSupp("");
+                  selectedFromSupplier = "";
+                  selectedToSupplier = "";
+                  setState(() {});
+                }),
+            multipleSearch: SimpleDropdownSearch(
+              // list: suppliersList,
+              enabled: !valueSelectAllSupplier,
+              hintString: readProvider.getSupplierList == null
+                  ? []
+                  : readProvider.getSupplierList!,
+              onChanged: (val) {
+                setState(() {
+                  readProvider.setCodesSupplier(getCodesList(val));
+                  readProvider.setSupplierList(getStringList(val));
+                });
+              },
+              onSearch: (text) {
+                DropDownSearchCriteria dropDownSearchCriteria =
+                    getSearchCriteria(text);
+                return purchaseReportController
+                    .getSalesSuppliersMethod(dropDownSearchCriteria.toJson());
+              },
+            )),
+        SizedBox(
+          height: height * .01,
+        ),
+        CardComponent(
+          title: _locale.stock,
+          multipleVal: valueMultipleStock,
+          fromDropDown: CustomDropDown(
+            label: _locale.from,
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+
+              return purchaseReportController
+                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
+            },
+            width: isDesktop ? width * .17 : width * .38,
+            hint: selectedFromStocks.isNotEmpty
+                ? selectedFromStocks
+                : _locale.select,
+            initialValue:
+                selectedFromStocks.isNotEmpty ? selectedFromStocks : null,
+            onChanged: (value) {
+              setState(() {
+                selectedFromStocks = value.toString();
+                selectedFromStocksCode = value.codeToString();
+                getStockList();
+              });
+            },
+          ),
+          toDropDown: CustomDropDown(
+            label: _locale.to,
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+
+              return purchaseReportController
+                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
+            },
+            width: isDesktop ? width * .17 : width * .38,
+            hint:
+                selectedToStocks.isNotEmpty ? selectedToStocks : _locale.select,
+            initialValue: selectedToStocks.isNotEmpty ? selectedToStocks : null,
+            onChanged: (value) {
+              setState(() {
+                selectedToStocks = value.toString();
+                selectedToStocksCode = value.codeToString();
+                getStockList();
+              });
+            },
+          ),
+          selectAll: Checkbox(
+              value: valueSelectAllStock,
+              onChanged: (val) {
+                valueSelectAllStock = val!;
+                readProvider.setCheckAllStock(valueSelectAllStock);
+                readProvider.setCodesStock([]);
+                setState(() {});
+              }),
+          multipleCheckBox: Checkbox(
+              value: valueMultipleStock,
+              onChanged: (val) {
+                valueMultipleStock = val!;
+                readProvider.setCheckMultipleStock(valueMultipleStock);
+                readProvider.setCodesStock([]);
+                readProvider.setStockList([]);
+                readProvider.setFromStock("");
+                readProvider.setToStock("");
+                selectedFromStocks = "";
+                selectedToStocks = "";
+                setState(() {});
+              }),
+          multipleSearch: SimpleDropdownSearch(
+            // list: stocksList,
+            enabled: !valueSelectAllStock,
+            hintString: readProvider.getStockList == null
+                ? []
+                : readProvider.getStockList!,
+            onChanged: (val) {
+              setState(() {
+                readProvider.setCodesStock(getCodesList(val));
+                readProvider.setStockList(getStringList(val));
+              });
+            },
+            onSearch: (text) {
+              DropDownSearchCriteria dropDownSearchCriteria =
+                  getSearchCriteria(text);
+
+              return purchaseReportController
+                  .getSalesStkMethod(dropDownSearchCriteria.toJson());
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  DropDownSearchCriteria getSearchCriteria(String text) {
+    String todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
+    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
+        ? DatesController()
+            .formatDateReverse(readProvider.getFromDate.toString())
+        : todayDate;
+
+    widget.toDate.text = readProvider.getToDate!.isNotEmpty
+        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
+        : todayDate;
+    DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
+        fromDate: DatesController().formatDate(widget.fromDate.text),
+        toDate: DatesController().formatDate(widget.toDate.text),
+        nameCode: text);
+    return dropDownSearchCriteria;
+  }
+
   void getBranchList() {
     List<String> stringBranchList = [];
 
@@ -1320,24 +1213,25 @@ class _RightWidgetState extends State<RightWidget> {
     readProvider.setCodesSupplier(stringSupplierList);
   }
 
-  void getCustomerCategoryList() {
-    List<String> stringCustomerCategoryList = [];
+  void getStockList() {
+    List<String> stringStockList = [];
 
-    if (selectedFromCustomerCategoryCode.isNotEmpty) {
-      stringCustomerCategoryList.add(selectedFromCustomerCategoryCode);
+    if (selectedFromStocksCode.isNotEmpty) {
+      stringStockList.add(selectedFromStocksCode);
     }
-    if (selectedToCustomerCategoryCode.isNotEmpty) {
-      stringCustomerCategoryList.add(selectedToCustomerCategoryCode);
+    if (selectedToStocksCode.isNotEmpty) {
+      stringStockList.add(selectedToStocksCode);
     }
-    readProvider.setFromCustCateg(selectedFromCustomerCategory);
-    readProvider.setToCustCateg(selectedToCustomerCategory);
-    readProvider.setCodesCustomerCategory(stringCustomerCategoryList);
+    readProvider.setFromStock(selectedFromStocks);
+    readProvider.setToStock(selectedToStocks);
+    readProvider.setCodesStock(stringStockList);
   }
 
   List<String> getCodesList(List<dynamic> val) {
     List<String> codesString = [];
     for (int i = 0; i < val.length; i++) {
       String newString = (val[i].toString().trim()).replaceAll(" ", "");
+      print(newString);
       codesString.add(newString.substring(0, newString.indexOf("-")));
     }
     return codesString;

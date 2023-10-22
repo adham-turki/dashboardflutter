@@ -195,7 +195,6 @@ class ReportController extends ApiService {
         }
       }
     });
-    print("lengthhhhh ${salesCostReportList.length}");
     return salesCostReportList;
   }
 
@@ -205,8 +204,6 @@ class ReportController extends ApiService {
     List<PurchaseCostReportModel> purchaseCostReportList = [];
 
     await ApiService.postRequest(api, purchaseProvider).then((response) {
-      print("Response2222 ${response.statusCode}");
-      print("ResponseBody2222 ${response.body}");
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -224,14 +221,13 @@ class ReportController extends ApiService {
     late ReportsResult salesResult = ReportsResult();
 
     await ApiService.postRequest(api, salesProvider).then((response) {
-      print("body ${salesProvider}");
-
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        print("response ${response.body}");
         salesResult = ReportsResult.fromJson(jsonData);
       }
+      print(response.body);
     });
+
     return salesResult;
   }
 
