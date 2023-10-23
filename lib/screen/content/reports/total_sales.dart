@@ -251,11 +251,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             children: [
               Column(
                 children: [
-                  SelectableText(
-                    maxLines: 1,
-                    _locale.totalSales,
-                    style: eighteen500TextStyle(Colors.green),
-                  ),
                   SizedBox(
                     width: width * 0.7,
                     height: height * 0.7,

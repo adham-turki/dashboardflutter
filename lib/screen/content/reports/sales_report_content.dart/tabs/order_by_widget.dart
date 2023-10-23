@@ -98,8 +98,6 @@ class _OrderByWidgetState extends State<OrderByWidget> {
 
   @override
   void initState() {
-    print(widget.fromDate.text);
-    print(widget.toDate.text);
     context
         .read<SalesCriteraProvider>()
         .setFromDate(DatesController().formatDate(widget.fromDate.text));

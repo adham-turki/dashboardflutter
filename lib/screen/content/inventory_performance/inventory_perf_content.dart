@@ -1,23 +1,17 @@
-import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import '../../../components/date_text_field.dart';
 import '../../../components/table_component.dart';
-import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
-import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/inventory_performance/inventory_performance_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_btn.dart';
 import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/custom_textfield.dart';
-import '../../../widget/headerWidget.dart';
 
 class InventoryPerfContent extends StatefulWidget {
   const InventoryPerfContent({super.key});
@@ -221,10 +215,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             children: [
               Column(
                 children: [
+                  SizedBox(
+                    height: height * .03,
+                  ),
                   SelectableText(
                     maxLines: 1,
                     _locale.topOfInventoryPerformance,
                     style: eighteen500TextStyle(Colors.green),
+                  ),
+                  SizedBox(
+                    height: height * .03,
                   ),
                   SizedBox(
                     width: width * 0.37,
@@ -243,10 +243,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               ),
               Column(
                 children: [
+                  SizedBox(
+                    height: height * .03,
+                  ),
                   SelectableText(
                     maxLines: 1,
                     _locale.leastOfInventoryPerformance,
                     style: eighteen500TextStyle(Colors.red),
+                  ),
+                  SizedBox(
+                    height: height * .03,
                   ),
                   SizedBox(
                     width: width * 0.37,
