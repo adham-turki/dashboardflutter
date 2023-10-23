@@ -3,6 +3,7 @@ import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const LoginScreen(),
     );
   }
 }
