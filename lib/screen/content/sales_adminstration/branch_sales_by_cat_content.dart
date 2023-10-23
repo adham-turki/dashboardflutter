@@ -427,6 +427,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     listOfBalances = [];
     pieData = [];
     barData = [];
+    dataMap.clear();
     int cat = byCategoryMap[selectedCategories]!;
     // selectedCategories == "Brands"
     //     ? 1

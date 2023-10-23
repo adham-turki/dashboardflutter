@@ -325,6 +325,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     listOfBalances2 = [];
     listOfPeriods = [];
     listOfPeriods2 = [];
+    dataMap.clear();
     barData = [];
     barData2 = [];
 

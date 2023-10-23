@@ -256,34 +256,35 @@ class _DailySalesContentState extends State<DailySalesContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ? Container(
-                                height: height * 0.4,
-                                width: width * 0.4,
-                                padding: EdgeInsets.symmetric(horizontal: 16),
-                                child: dataMap.isNotEmpty
-                                    ? PieChart(
-                                        dataMap: dataMap,
-                                        chartType: ChartType.disc,
-                                        baseChartColor: Colors.grey[300]!,
-                                        colorList: colorList,
-                                      )
-                                    : const Center(
-                                        child: Text(
-                                          "Pie Chart is Empty!",
-                                          style: TextStyle(fontSize: 24),
-                                        ),
-                                      ),
-                              )
-                            //  Center(
-                            //     child: PieChartComponent(
-                            //       radiusNormal: isDesktop ? height * 0.17 : 70,
-                            //       radiusHover: isDesktop ? height * 0.17 : 80,
-                            //       width: isDesktop ? width * 0.42 : width * 0.1,
-                            //       height:
-                            //           isDesktop ? height * 0.42 : height * 0.4,
-                            //       dataList: pieData,
-                            //     ),
+                            ?
+                            // Container(
+                            //     height: height * 0.4,
+                            //     width: width * 0.4,
+                            //     padding: EdgeInsets.symmetric(horizontal: 16),
+                            //     child: dataMap.isNotEmpty
+                            //         ? PieChart(
+                            //             dataMap: dataMap,
+                            //             chartType: ChartType.disc,
+                            //             baseChartColor: Colors.grey[300]!,
+                            //             colorList: colorList,
+                            //           )
+                            //         : const Center(
+                            //             child: Text(
+                            //               "Pie Chart is Empty!",
+                            //               style: TextStyle(fontSize: 24),
+                            //             ),
+                            //           ),
                             //   )
+                            Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.4,
+                                  dataList: pieData,
+                                ),
+                              )
                             : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
@@ -392,6 +393,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
 
   void getDailySales() {
     listOfBalances = [];
+    dataMap.clear();
     pieData = [];
     barData = [];
     int status = getVoucherStatus(_locale, selectedStatus);
