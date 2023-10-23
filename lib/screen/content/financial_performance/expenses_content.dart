@@ -11,6 +11,7 @@ import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -53,24 +54,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
     'Save as PNG',
   ];
   final dataMap = <String, double>{};
-
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
 
   List<PieChartModel> pieData = [];
 
@@ -371,7 +354,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
                         double.parse(elemant.expense.toString())),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -411,12 +394,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
     return accountNameString;
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 }

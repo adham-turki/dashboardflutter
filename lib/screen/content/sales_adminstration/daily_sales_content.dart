@@ -13,6 +13,7 @@ import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -57,23 +58,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
   ];
   final dataMap = <String, double>{};
 
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
   List<PieChartModel> pieData = [];
   String accountNameString = "";
   List<BarChartData> barData = [];
@@ -130,42 +114,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CustomCard(
-            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-            //       title: '42136',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Sale',
-            //       icon:
-            //           Icons.attach_money, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-            //       title: '1446',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Total Visited',
-            //       icon: Icons.abc, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-            //       title: '61%',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Growth',
-            //       icon: Icons.bar_chart, // Provide the actual path to the icon
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: height * 0.1,
-            // ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -256,26 +204,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ?
-                            // Container(
-                            //     height: height * 0.4,
-                            //     width: width * 0.4,
-                            //     padding: EdgeInsets.symmetric(horizontal: 16),
-                            //     child: dataMap.isNotEmpty
-                            //         ? PieChart(
-                            //             dataMap: dataMap,
-                            //             chartType: ChartType.disc,
-                            //             baseChartColor: Colors.grey[300]!,
-                            //             colorList: colorList,
-                            //           )
-                            //         : const Center(
-                            //             child: Text(
-                            //               "Pie Chart is Empty!",
-                            //               style: TextStyle(fontSize: 24),
-                            //             ),
-                            //           ),
-                            //   )
-                            Center(
+                            ? Center(
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
@@ -423,7 +352,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
                         double.parse(elemant.dailySale.toString())),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -434,13 +363,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
     });
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 
   int count = 0;

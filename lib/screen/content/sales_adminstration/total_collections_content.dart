@@ -6,6 +6,7 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,24 +55,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     'Save as PNG',
   ];
   final dataMap = <String, double>{};
-
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
 
   List<PieChartModel> pieData = [];
 
@@ -128,42 +111,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CustomCard(
-            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-            //       title: '42136',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Sale',
-            //       icon:
-            //           Icons.attach_money, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-            //       title: '1446',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Total Visited',
-            //       icon: Icons.abc, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-            //       title: '61%',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Growth',
-            //       icon: Icons.bar_chart, // Provide the actual path to the icon
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: height * 0.1,
-            // ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -403,7 +350,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             pieData.add(PieChartModel(
                 title: element.name!,
                 value: formatDoubleToTwoDecimalPlaces(element.collection!),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -433,12 +380,9 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     }
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 }

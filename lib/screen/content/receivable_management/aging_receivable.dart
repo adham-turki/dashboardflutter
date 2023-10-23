@@ -11,6 +11,7 @@ import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../model/criteria/search_criteria.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -48,23 +49,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
   ];
   final dataMap = <String, double>{};
 
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
   List<PieChartModel> pieData = [];
 
   bool temp = false;
@@ -252,17 +236,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
             });
           },
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getAgingReceivable();
-        //       print(_fromDateController.text);
-        //     });
-        //   },
-        // ),
       ],
     );
   }
@@ -300,7 +273,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
             pieData.add(PieChartModel(
                 title: '',
                 value: formatDoubleToTwoDecimalPlaces(element.total!),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
           barData.add(
             BarChartData('', element.total!),
@@ -310,12 +283,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
     });
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 }

@@ -17,6 +17,7 @@ import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -63,23 +64,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   ];
   final dataMap = <String, double>{};
 
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
   List<PieChartModel> pieData = [];
   List<BiAccountModel> cashboxAccounts = [];
 
@@ -145,42 +129,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CustomCard(
-            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-            //       title: '42136',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Sale',
-            //       icon:
-            //           Icons.attach_money, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-            //       title: '1446',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Total Visited',
-            //       icon: Icons.abc, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-            //       title: '61%',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Growth',
-            //       icon: Icons.bar_chart, // Provide the actual path to the icon
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: height * 0.1,
-            // ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -477,7 +425,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             pieData.add(PieChartModel(
                 title: _locale.cashIn,
                 value: formatDoubleToTwoDecimalPlaces(element.value!),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
           barData.add(
             BarChartData(_locale.cashIn, element.value!),
@@ -491,7 +439,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             pieData.add(PieChartModel(
                 title: _locale.cashOut,
                 value: element.value,
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
           barData.add(
             BarChartData(_locale.cashOut, element.value!),
@@ -520,12 +468,9 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     }
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 }

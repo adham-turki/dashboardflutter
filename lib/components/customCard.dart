@@ -30,7 +30,7 @@ class CustomCard extends StatelessWidget {
     bool isDesktop = Responsive.isDesktop(context);
     print("asdasdasd ${isDesktop}");
     width > 600
-        ? cardsHeight = height * 0.14 //max size
+        ? cardsHeight = height * 0.16 //max size
         : cardsWidth = width * 0.3; //min size
     MediaQuery.of(context).size.width < 600
         ? cardsHeight = MediaQuery.of(context).size.height * 0.16 //min size

@@ -9,6 +9,7 @@ import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,23 +40,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     PieChartModel(value: 20, title: "2", color: Colors.red),
     PieChartModel(value: 30, title: "3", color: Colors.green),
     PieChartModel(value: 40, title: "4", color: Colors.purple),
-  ];
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
   ];
 
   List<double> listOfBalances = [];
@@ -115,42 +99,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: const [
-            //     CustomCard(
-            //       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-            //       title: '42136',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Sale',
-            //       icon:
-            //           Icons.attach_money, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-            //       title: '1446',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Total Visited',
-            //       icon: Icons.abc, // Provide the actual path to the icon
-            //     ),
-            //     SizedBox(
-            //       width: 10,
-            //     ),
-            //     CustomCard(
-            //       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-            //       title: '61%',
-            //       subtitle: 'Mon-Fri',
-            //       label: 'Overall Growth',
-            //       icon: Icons.bar_chart, // Provide the actual path to the icon
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: height * 0.1,
-            // ),
             Container(
               width: width * 0.7,
               decoration: borderDecoration,
@@ -190,26 +138,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
-                            ?
-                            // Container(
-                            //     height: height * 0.4,
-                            //     width: width * 0.4,
-                            //     padding: EdgeInsets.symmetric(horizontal: 16),
-                            //     child: dataMap.isNotEmpty
-                            //         ? PieChart(
-                            //             dataMap: dataMap,
-                            //             chartType: ChartType.disc,
-                            //             baseChartColor: Colors.grey[300]!,
-                            //             colorList: colorList,
-                            //           )
-                            //         : const Center(
-                            //             child: Text(
-                            //               "Pie Chart is Empty!",
-                            //               style: TextStyle(fontSize: 24),
-                            //             ),
-                            //           ),
-                            //   )
-                            Center(
+                            ? Center(
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
@@ -264,7 +193,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             pieData.add(PieChartModel(
                 title: element.namee!,
                 value: formatDoubleToTwoDecimalPlaces(a),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -347,13 +276,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     );
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 
   Column mobileCriteria() {
