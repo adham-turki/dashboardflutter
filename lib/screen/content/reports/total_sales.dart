@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/table_component.dart';
 import '../../../model/criteria/search_criteria.dart';
+import '../../../model/reports/total_sales/total_sales_result.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
@@ -70,22 +71,15 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
+  TotalSalesResult? reportsResult;
 
   @override
   void initState() {
-    fromDate.text = todayDate;
-    toDate.text = todayDate;
-
-    criteria.fromDate = todayDate;
-    criteria.toDate = todayDate;
-    criteria.voucherStatus = -100;
-    criteria.rownum = 10;
-
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
     status = [
       _locale.all,
@@ -119,7 +113,16 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     ];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
+    fromDate.text = todayDate;
+    toDate.text = todayDate;
 
+    criteria.fromDate = DatesController().formatDate(fromDate.text);
+    criteria.toDate = DatesController().formatDate(toDate.text);
+    criteria.voucherStatus = -100;
+    criteria.rownum = 10;
+
+    reportsResult =
+        await totalSalesController.getTotalSalesResultMehtod(criteria);
     super.didChangeDependencies();
   }
 
@@ -156,11 +159,12 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     items: periods,
                     initialValue:
                         selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                    onChanged: (value) {
-                      setState(() {
-                        checkPeriods(value);
-                        selectedPeriod = value;
-                      });
+                    onChanged: (value) async {
+                      checkPeriods(value);
+                      selectedPeriod = value;
+                      reportsResult = await totalSalesController
+                          .getTotalSalesResultMehtod(criteria);
+                      setState(() {});
                     },
                   ),
                   CustomDropDown(
@@ -170,12 +174,14 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     initialValue:
                         selectedStatus.isNotEmpty ? selectedStatus : null,
                     height: height * 0.18,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedStatus = value;
-                        int status = getVoucherStatus(_locale, selectedStatus);
-                        criteria.voucherStatus = status;
-                      });
+                    onChanged: (value) async {
+                      selectedStatus = value;
+                      int status = getVoucherStatus(_locale, selectedStatus);
+
+                      criteria.voucherStatus = status;
+                      reportsResult = await totalSalesController
+                          .getTotalSalesResultMehtod(criteria);
+                      setState(() {});
                     },
                   ),
                 ],
@@ -187,6 +193,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   CustomDatePicker(
                     label: _locale.fromDate,
                     controller: fromDate,
+                    date: DateTime.parse(toDate.text),
                     onChanged: (value) {
                       setControllerFromDateText();
                     },
@@ -197,6 +204,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   CustomDatePicker(
                     label: _locale.toDate,
                     controller: toDate,
+                    date: DateTime.parse(fromDate.text),
                     onChanged: (value) {
                       setControllertoDateText();
                     },
@@ -257,7 +265,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: TotalSalesModel.getColumns(
-                          AppLocalizations.of(context)),
+                          AppLocalizations.of(context), reportsResult),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
@@ -273,20 +281,24 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     );
   }
 
-  void setControllerFromDateText() {
+  void setControllerFromDateText() async {
+    fromDateValue = fromDate.text;
+    String startDate = DatesController().formatDate(fromDateValue!);
+    criteria.fromDate = startDate;
+    reportsResult =
+        await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
-      fromDateValue = fromDate.text;
-      String startDate = DatesController().formatDate(fromDateValue!);
-      criteria.fromDate = startDate;
       fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
-  void setControllertoDateText() {
+  void setControllertoDateText() async {
+    toDateValue = toDate.text;
+    String endDate = DatesController().formatDate(toDateValue!);
+    criteria.toDate = endDate;
+    reportsResult =
+        await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
-      toDateValue = toDate.text;
-      String endDate = DatesController().formatDate(toDateValue!);
-      criteria.toDate = endDate;
       fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
@@ -371,17 +383,16 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    print("from date critiria :${criteria.fromDate}");
     List<TotalSalesModel> invList =
         await totalSalesController.getTotalSalesMethod(criteria);
 
-    int totalPage = 1;
+    int totalPage =
+        reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
 
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }
 
-    print("topList :${topList.length}");
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
       rows: topList,

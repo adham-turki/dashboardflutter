@@ -25,14 +25,14 @@ class _SetupScreenState extends State<SetupScreen> {
   final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
   bool isFinised = false;
-  List<String> accountsNameList = [];
-  Map<String, dynamic>? accountToAdd;
-  List<BiAccountModel> cashboxAccounts = [];
-  List<BiAccountModel> expensesAccounts = [];
-  List<BiAccountModel> receivableAccounts = [];
-  List<BiAccountModel> bankAccounts = [];
-  List<BiAccountModel> payableAccounts = [];
-  List<AccountModel> accountModelList = [];
+  // List<String> accountsNameList = [];
+  // Map<String, dynamic>? accountToAdd;
+  // List<BiAccountModel> cashboxAccounts = [];
+  // List<BiAccountModel> expensesAccounts = [];
+  // List<BiAccountModel> receivableAccounts = [];
+  // List<BiAccountModel> bankAccounts = [];
+  // List<BiAccountModel> payableAccounts = [];
+  // List<AccountModel> accountModelList = [];
   var selectedPeriod = "";
 
   var selectedStatus = "";
@@ -55,15 +55,7 @@ class _SetupScreenState extends State<SetupScreen> {
   @override
   void initState() {
     // getExpensesAccounts();
-    getAccountList().then((value) {
-      getExpensesAccounts().then((value) {
-        setState(() {
-          isFinised = true;
-        });
-      });
 
-      // setState(() {});
-    });
     super.initState();
   }
 
@@ -84,10 +76,9 @@ class _SetupScreenState extends State<SetupScreen> {
                 color: darkBlueColor,
                 height: height * 0.1,
                 child: TabBar(
+                  // isScrollable: true,
                   labelStyle: TextStyle(
-                    fontSize: MediaQuery.of(context).size.width > 800
-                        ? MediaQuery.of(context).size.height * .016
-                        : MediaQuery.of(context).size.height * .008,
+                    fontSize: isDesktop ? height * .016 : height * .008,
                   ),
                   // labelColor: Colors.black,
                   tabs: [
@@ -127,101 +118,73 @@ class _SetupScreenState extends State<SetupScreen> {
                       text: _locale.bankAccounts, // Custom tab label
                     ),
                   ],
-                  onTap: (int index) {
-                    switch (index) {
-                      case 0:
-                        getExpensesAccounts();
-                        // Handle the first tab press
-                        break;
-                      case 1:
-                        getCashBoxAccount();
-                        // Handle the second tab press
-                        break;
-                      case 2:
-                        getReceivableAccounts();
-                        break;
-                      case 3:
-                        getPayableAccounts();
 
-                        break;
-                      case 4:
-                        getBankAccounts();
-                        break;
+                  // onTap: (int index) {
+                  //   switch (index) {
+                  //     case 0:
+                  //       getExpensesAccounts();
+                  //       // Handle the first tab press
+                  //       break;
+                  //     case 1:
+                  //       getCashBoxAccount();
+                  //       // Handle the second tab press
+                  //       break;
+                  //     case 2:
+                  //       getReceivableAccounts();
+                  //       break;
+                  //     case 3:
+                  //       getPayableAccounts();
 
-                      // Add cases for other tabs as needed
-                    }
-                  },
+                  //       break;
+                  //     case 4:
+                  //       getBankAccounts();
+                  //       break;
+
+                  //     // Add cases for other tabs as needed
+                  //   }
+                  // },
                 ),
               ),
               SizedBox(
                 height: height * 0.85,
                 child: TabBarView(
                   children: [
-                    isFinised == true
-                        ? ExpensesAccountSetupWidget(
-                            list: expensesAccounts,
-                            dropDownData: accountsNameList,
-                            setState: _setState,
-                            addAccount: addAccount,
-                            type: 1,
-                          )
-                        : const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 40,
-                            ),
-                          ),
-                    isFinised == true
-                        ? ExpensesAccountSetupWidget(
-                            list: cashboxAccounts,
-                            dropDownData: accountsNameList,
-                            setState: _setState,
-                            addAccount: addAccount,
-                            type: 2)
-                        : const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 40,
-                            ),
-                          ),
+                    ExpensesAccountSetupWidget(
+                      // list: expensesAccounts,
+                      // dropDownData: accountsNameList,
+                      // setState: _setState,
+                      // addAccount: addAccount,
+                      type: 1,
+                    ),
 
-                    isFinised == true
-                        ? ExpensesAccountSetupWidget(
-                            list: receivableAccounts,
-                            dropDownData: accountsNameList,
-                            setState: _setState,
-                            addAccount: addAccount,
-                            type: 3,
-                          )
-                        : const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 40,
-                            ),
-                          ),
-                    isFinised == true
-                        ? ExpensesAccountSetupWidget(
-                            list: payableAccounts,
-                            dropDownData: accountsNameList,
-                            setState: _setState,
-                            addAccount: addAccount,
-                            type: 4,
-                          )
-                        : const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 40,
-                            ),
-                          ),
-                    isFinised == true
-                        ? ExpensesAccountSetupWidget(
-                            list: bankAccounts,
-                            dropDownData: accountsNameList,
-                            setState: _setState,
-                            addAccount: addAccount,
-                            type: 5,
-                          )
-                        : const Center(
-                            child: CupertinoActivityIndicator(
-                              radius: 40,
-                            ),
-                          ),
+                    ExpensesAccountSetupWidget(
+                        // list: cashboxAccounts,
+                        // dropDownData: accountsNameList,
+                        // setState: _setState,
+                        // addAccount: addAccount,
+                        type: 2),
+                    ExpensesAccountSetupWidget(
+                      // list: receivableAccounts,
+                      // dropDownData: accountsNameList,
+                      // setState: _setState,
+                      // addAccount: addAccount,
+                      type: 3,
+                    ),
+                    ExpensesAccountSetupWidget(
+                      // list: payableAccounts,
+                      // dropDownData: accountsNameList,
+                      // setState: _setState,
+                      // addAccount: addAccount,
+                      type: 4,
+                    ),
+                    ExpensesAccountSetupWidget(
+                      // list: bankAccounts,
+                      // dropDownData: accountsNameList,
+                      // setState: _setState,
+                      // addAccount: addAccount,
+                      type: 5,
+                    )
+
                     // Add your custom icons and content here
                   ],
                 ),
@@ -233,178 +196,178 @@ class _SetupScreenState extends State<SetupScreen> {
     );
   }
 
-  Future getAccountList() async {
-    accountsNameList = [];
-    accountToAdd = <String, dynamic>{};
-    await SetupController().getAllAccounts().then((value) {
-      accountModelList = value;
+  // Future getExpensesAccounts() async {
+  //   setState(() {
+  //     isFinised = false;
+  //     expensesAccounts = [];
+  //   });
+  //   await SetupController().getBiAccounts().then((value) {
+  //     for (var elemant in value) {
+  //       if (elemant.accountType == 1) {
+  //         expensesAccounts.add(elemant);
+  //       }
+  //     }
+  //   });
+  //   isFinised = true;
+  //   print("isFinished $isFinised");
+  //   setState(() {});
+  // }
 
-      for (var elemant in value) {
-        accountsNameList.add(elemant.txtEnglishName!);
-      }
-      for (int i = 0; i < accountModelList.length; i++) {
-        accountToAdd![accountModelList[i].txtEnglishName!] =
-            accountModelList[i].txtCode;
-      }
-    });
+  // Future getAccountList() async {
+  //   accountsNameList = [];
+  //   accountToAdd = <String, dynamic>{};
+  //   await SetupController().getAllAccounts().then((value) {
+  //     accountModelList = value;
 
-    setState(() {});
-  }
+  //     for (var elemant in value) {
+  //       accountsNameList.add(elemant.txtEnglishName!);
+  //     }
+  //     for (int i = 0; i < accountModelList.length; i++) {
+  //       accountToAdd![accountModelList[i].txtEnglishName!] =
+  //           accountModelList[i].txtCode;
+  //     }
+  //   });
 
-  Future getExpensesAccounts() async {
-    setState(() {
-      isFinised = false;
-      expensesAccounts = [];
-    });
-    await SetupController().getBiAccounts().then((value) {
-      for (var elemant in value) {
-        if (elemant.accountType == 1) {
-          expensesAccounts.add(elemant);
-        }
-      }
-    });
-    isFinised = true;
+  //   setState(() {});
+  // }
 
-    setState(() {});
-  }
+  // Future getCashBoxAccount() async {
+  //   cashboxAccounts = [];
 
-  Future getCashBoxAccount() async {
-    cashboxAccounts = [];
+  //   await SetupController().getBiAccounts().then((value) {
+  //     for (var elemant in value) {
+  //       if (elemant.accountType == 2) {
+  //         cashboxAccounts.add(elemant);
+  //       }
+  //     }
+  //   });
+  //   setState(() {});
+  // }
 
-    await SetupController().getBiAccounts().then((value) {
-      for (var elemant in value) {
-        if (elemant.accountType == 2) {
-          cashboxAccounts.add(elemant);
-        }
-      }
-    });
-    setState(() {});
-  }
+  // Future getReceivableAccounts() async {
+  //   receivableAccounts = [];
 
-  Future getReceivableAccounts() async {
-    receivableAccounts = [];
+  //   await SetupController().getBiAccounts().then((value) {
+  //     for (var elemant in value) {
+  //       if (elemant.accountType == 3) {
+  //         receivableAccounts.add(elemant);
+  //       }
+  //     }
+  //   });
+  //   setState(() {});
+  // }
 
-    await SetupController().getBiAccounts().then((value) {
-      for (var elemant in value) {
-        if (elemant.accountType == 3) {
-          receivableAccounts.add(elemant);
-        }
-      }
-    });
-    setState(() {});
-  }
+  // Future getPayableAccounts() async {
+  //   payableAccounts = [];
 
-  Future getPayableAccounts() async {
-    payableAccounts = [];
+  //   await SetupController().getBiAccounts().then((value) {
+  //     for (var elemant in value) {
+  //       if (elemant.accountType == 4) {
+  //         payableAccounts.add(elemant);
+  //       }
+  //     }
+  //   });
+  //   setState(() {});
+  // }
 
-    await SetupController().getBiAccounts().then((value) {
-      for (var elemant in value) {
-        if (elemant.accountType == 4) {
-          payableAccounts.add(elemant);
-        }
-      }
-    });
-    setState(() {});
-  }
+  // Future getBankAccounts() async {
+  //   bankAccounts = [];
 
-  Future getBankAccounts() async {
-    bankAccounts = [];
+  //   await SetupController().getBiAccounts().then((value) {
+  //     for (var elemant in value) {
+  //       if (elemant.accountType == 5) {
+  //         bankAccounts.add(elemant);
+  //       }
+  //     }
+  //   });
+  //   setState(() {});
+  // }
 
-    await SetupController().getBiAccounts().then((value) {
-      for (var elemant in value) {
-        if (elemant.accountType == 5) {
-          bankAccounts.add(elemant);
-        }
-      }
-    });
-    setState(() {});
-  }
+  // addAccount(String name, int id) {
+  //   BiAccountModel account = BiAccountModel(
+  //       account: accountToAdd![name], accountType: id, accountName: name);
+  //   isFinised = false;
 
-  addAccount(String name, int id) {
-    BiAccountModel account = BiAccountModel(
-        account: accountToAdd![name], accountType: id, accountName: name);
-    isFinised = false;
+  //   SetupController().addBiAccount(account).then((value) {
+  //     if (id == 1) {
+  //       getExpensesAccounts().then((value) {
+  //         getAccountList().then((value) {
+  //           isFinised = true;
+  //         });
+  //       });
+  //     } else if (id == 2) {
+  //       getCashBoxAccount().then((value) {
+  //         getAccountList().then((value) {
+  //           isFinised = true;
+  //         });
+  //       });
+  //     } else if (id == 3) {
+  //       getReceivableAccounts().then((value) {
+  //         getAccountList().then((value) {
+  //           isFinised = true;
+  //         });
+  //       });
+  //     } else if (id == 4) {
+  //       getPayableAccounts().then((value) {
+  //         getAccountList().then((value) {
+  //           isFinised = true;
+  //         });
+  //       });
+  //     } else if (id == 5) {
+  //       getBankAccounts().then((value) {
+  //         getAccountList().then((value) {
+  //           isFinised = true;
+  //         });
+  //       });
+  //     }
+  //   });
+  //   setState(() {});
+  // }
 
-    SetupController().addBiAccount(account).then((value) {
-      if (id == 1) {
-        getExpensesAccounts().then((value) {
-          getAccountList().then((value) {
-            isFinised = true;
-          });
-        });
-      } else if (id == 2) {
-        getCashBoxAccount().then((value) {
-          getAccountList().then((value) {
-            isFinised = true;
-          });
-        });
-      } else if (id == 3) {
-        getReceivableAccounts().then((value) {
-          getAccountList().then((value) {
-            isFinised = true;
-          });
-        });
-      } else if (id == 4) {
-        getPayableAccounts().then((value) {
-          getAccountList().then((value) {
-            isFinised = true;
-          });
-        });
-      } else if (id == 5) {
-        getBankAccounts().then((value) {
-          getAccountList().then((value) {
-            isFinised = true;
-          });
-        });
-      }
-    });
-    setState(() {});
-  }
+  // showLoading(BuildContext context) {
+  //   showDialog(
+  //       barrierDismissible: false,
+  //       context: context,
+  //       builder: (context) {
+  //         return Center(
+  //             child: Lottie.asset("assets/images/inventory_loading.json",
+  //                 width: 250, height: 250));
+  //       });
+  // }
 
-  showLoading(BuildContext context) {
-    showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return Center(
-              child: Lottie.asset("assets/images/inventory_loading.json",
-                  width: 250, height: 250));
-        });
-  }
-
-  void _setState(value) {
-    isFinised = false;
-    if (value == 1) {
-      getExpensesAccounts().then((value) {
-        getAccountList().then((value) {
-          isFinised = true;
-        });
-      });
-    } else if (value == 2) {
-      getCashBoxAccount().then((value) {
-        getAccountList().then((value) {
-          isFinised = true;
-        });
-      });
-    } else if (value == 3) {
-      getReceivableAccounts().then((value) {
-        getAccountList().then((value) {
-          isFinised = true;
-        });
-      });
-    } else if (value == 4) {
-      getPayableAccounts().then((value) {
-        getAccountList().then((value) {
-          isFinised = true;
-        });
-      });
-    } else if (value == 5) {
-      getBankAccounts().then((value) {
-        getAccountList().then((value) {
-          isFinised = true;
-        });
-      });
-    }
-    setState(() {});
-  }
+  // void _setState(value) {
+  //   isFinised = false;
+  //   if (value == 1) {
+  //     getExpensesAccounts().then((value) {
+  //       getAccountList().then((value) {
+  //         isFinised = true;
+  //       });
+  //     });
+  //   } else if (value == 2) {
+  //     getCashBoxAccount().then((value) {
+  //       getAccountList().then((value) {
+  //         isFinised = true;
+  //       });
+  //     });
+  //   } else if (value == 3) {
+  //     getReceivableAccounts().then((value) {
+  //       getAccountList().then((value) {
+  //         isFinised = true;
+  //       });
+  //     });
+  //   } else if (value == 4) {
+  //     getPayableAccounts().then((value) {
+  //       getAccountList().then((value) {
+  //         isFinised = true;
+  //       });
+  //     });
+  //   } else if (value == 5) {
+  //     getBankAccounts().then((value) {
+  //       getAccountList().then((value) {
+  //         isFinised = true;
+  //       });
+  //     });
+  //   }
+  //   setState(() {});
+  // }
 }

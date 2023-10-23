@@ -191,9 +191,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                     CustomDatePicker(
                       controller: widget.fromDate,
                       label: _locale.fromDate,
+                      date: DateTime.parse(widget.toDate.text),
                     ),
                     CustomDatePicker(
                       controller: widget.toDate,
+                      date: DateTime.parse(widget.fromDate.text),
                       label: _locale.toDate,
                     )
                   ],
@@ -205,9 +207,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                     CustomDatePicker(
                       controller: widget.fromDate,
                       label: _locale.fromDate,
+                      date: DateTime.parse(widget.toDate.text),
                     ),
                     CustomDatePicker(
                       controller: widget.toDate,
+                      date: DateTime.parse(widget.fromDate.text),
                       label: _locale.toDate,
                     )
                   ],

@@ -1,3 +1,4 @@
+import 'package:bi_replicate/model/cheques_bank/cheques_result.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,8 +37,6 @@ class ChequesModel {
   int? counter = 0;
 
   ChequesModel();
-  static double allAmount = 0;
-  List? chequsList;
 
   ChequesModel.fromJson(Map<String, dynamic> json, int countNum) {
     jCode1 = json['jCode1'];
@@ -94,7 +93,8 @@ class ChequesModel {
     return PlutoRow(cells: chequesModel);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+  static List<PlutoColumn> getColumns(
+      AppLocalizations localizations, ChequesResult? reportResult) {
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.dueDate,
@@ -137,56 +137,32 @@ class ChequesModel {
         type: PlutoColumnType.number(),
         width: 190,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return ChequesModel.footerRenderer(rendererContext, allAmount);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return ChequesModel.footerRenderer(
+                    rendererContext, reportResult.chequesAmount!);
+              }
+            : null,
       ),
     ];
     return list;
-  }
-
-  List<String> getTotal(double totalAmount) {
-    List<String> stringList = [];
-
-    stringList.add("");
-    stringList.add("");
-    stringList.add("");
-    stringList.add("");
-    stringList.add("");
-    stringList.add("");
-    stringList.add(totalAmount.toString());
-
-    return stringList;
   }
 
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
-      formatAsCurrency: true,
+      formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: text.replaceAll("\$", ""),
-            children: [
-              TextSpan(
-                text: valueAll.toStringAsFixed(2),
-              ),
-            ],
+            text: valueAll.toStringAsFixed(2),
             style: gridFooterStyle,
           ),
         ];
       },
     );
-  }
-
-  double getTotalAmount() {
-    for (int i = 0; i < chequsList!.length; i++) {
-      allAmount += int.parse(chequsList![i].amount.toString());
-    }
-
-    return allAmount;
   }
 }

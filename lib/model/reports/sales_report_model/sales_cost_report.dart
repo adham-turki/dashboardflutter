@@ -133,25 +133,19 @@ class SalesCostReportModel {
         title: colsName[i],
         field: fieldsName[i],
         type: PlutoColumnType.text(),
-        width: fieldsName[i] == 'dash' ? width * .07 : width * .1,
+        width: fieldsName[i] == 'dash' ? width * .07 : width * .15,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'avgPrice' && reportsResult != null
             ? (rendererContext) {
-                print("avgPrice ${reportsResult.avgPrice}");
-
                 return footerRenderer(rendererContext, reportsResult.avgPrice!);
               }
             : fieldsName[i] == 'quantity' && reportsResult != null
                 ? (rendererContext) {
-                    print("quantity ${reportsResult.quantity}");
-
                     return footerRenderer(
                         rendererContext, reportsResult.quantity!);
                   }
                 : fieldsName[i] == 'total' && reportsResult != null
                     ? (rendererContext) {
-                        print("total ${reportsResult.total}");
-
                         return footerRenderer(
                             rendererContext, reportsResult.total!);
                       }
@@ -164,21 +158,15 @@ class SalesCostReportModel {
 
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
-    print("allll $valueAll");
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
       formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       titleSpanBuilder: (text) {
         return [
           TextSpan(
             text: valueAll.toStringAsFixed(2),
-            // children: [
-            //   TextSpan(
-            //     text: valueAll.toStringAsFixed(2),
-            //   ),
-            // ],
             style: gridFooterStyle,
           ),
         ];

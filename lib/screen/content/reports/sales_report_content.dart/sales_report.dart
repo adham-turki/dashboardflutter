@@ -409,64 +409,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     for (int i = 0; i < salesList.length; i++) {
       topList.add(salesList[i].toPluto());
     }
-    print("finish");
     return PlutoLazyPaginationResponse(
       totalPage: limitPage,
       rows: topList,
     );
   }
-
-  // Future searchSalesCostReport(int pageNum) async {
-  //   ReportController salesReportController = ReportController();
-  //   List<SalesCostReportModel> newList = salesList;
-  //   readProvider.setPage(pageNum);
-  //   dynamic body = readProvider.toJson();
-  //   print("Bodddddy $body");
-  //   await salesReportController.postSalesCostReportMethod(body).then((value) {
-  //     salesList = value;
-  //     if (pageNum > 1 && salesList.isEmpty) {
-  //       pageNumber = pageNum - 1;
-
-  //       salesList = newList;
-  //     }
-  //     setState(() {});
-  //   });
-  // }
-
-  // Future getResult() async {
-  //   ReportController salesReportController = ReportController();
-
-  //   dynamic body = readProvider.toJson();
-  //   await salesReportController.getSalesResultMehtod(body).then((value) {
-  //     if (value.count! > 0) {
-  //       pageNumber = 1;
-  //     }
-  //     limitPage = (value.count! / 10).ceil();
-  //     finalRow = limitPage == 0
-  //         ? []
-  //         : getTotal(orderByColumns.length, value.total!, value.quantity!,
-  //             value.avgPrice!);
-  //   });
-  // }
-
-  // List<String> getTotal(
-  //     int length, double totalAmount, double qty, double price) {
-  //   List<String> stringList = [];
-
-  //   for (int i = 0; i < length; i++) {
-  //     if (i == length - 1) {
-  //       stringList.add(totalAmount.toStringAsFixed(2));
-  //     } else if (i == length - 2) {
-  //       stringList.add(price.toStringAsFixed(2));
-  //     } else if (i == length - 3) {
-  //       stringList.add(qty.toStringAsFixed(2));
-  //     } else if (i == length - 4) {
-  //       stringList.add(AppLocalizations.of(context).finalTotal);
-  //     } else {
-  //       stringList.add("");
-  //     }
-  //   }
-  //   print("ListFinal ${stringList.length}");
-  //   return stringList;
-  // }
 }

@@ -70,14 +70,14 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   List<BarChartData> barData = [];
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
+  // String nextMonth = DatesController().formatDateReverse(DatesController()
+  //     .formatDate(DateTime(DatesController().today.year,
+  //             DatesController().today.month + 1, DatesController().today.day)
+  //         .toString()));
   @override
   void initState() {
     _fromDateController.text = todayDate;
-    _toDateController.text = nextMonth;
+    _toDateController.text = todayDate;
 
     getCashBoxAccount().then((value) {
       cashboxAccounts = value;
@@ -291,6 +291,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
               children: [
                 CustomDatePicker(
                   label: _locale.fromDate,
+                  date: DateTime.parse(_toDateController.text),
                   controller: _fromDateController,
                   onSelected: (value) {
                     setState(() {
@@ -302,6 +303,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 CustomDatePicker(
                   label: _locale.toDate,
                   controller: _toDateController,
+                  date: DateTime.parse(_fromDateController.text),
                   onSelected: (value) {
                     setState(() {
                       _toDateController.text = value;
@@ -362,6 +364,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         CustomDatePicker(
           label: _locale.fromDate,
           controller: _fromDateController,
+          date: DateTime.parse(_toDateController.text),
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;
@@ -372,6 +375,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         CustomDatePicker(
           label: _locale.toDate,
           controller: _toDateController,
+          date: DateTime.parse(_fromDateController.text),
           onSelected: (value) {
             setState(() {
               _toDateController.text = value;

@@ -1,12 +1,12 @@
 import '../../model/settings/change_password_model.dart';
-import '../../service/Api.dart';
+import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
 import '../error_controller.dart';
 
-class ChangePasswordController extends Api {
+class ChangePasswordController {
   Future<bool> changePassword(ChangePasswordModel body) async {
     String api = changePasswordApi;
-    await postMethods(api, body).then((value) {
+    await ApiService.postRequest(api, body).then((value) {
       if (value.statusCode == 200) {
         ErrorController.openErrorDialog(200, value.body);
 

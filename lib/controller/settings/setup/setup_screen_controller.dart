@@ -3,10 +3,9 @@ import 'package:bi_replicate/service/api_service.dart';
 
 import '../../../model/settings/setup/account_model.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
-import '../../../service/Api.dart';
 import '../../../utils/constants/api_constants.dart';
 
-class SetupController extends ApiService {
+class SetupController {
   Future<List<AccountModel>> getAllAccounts() async {
     List<AccountModel> list = [];
     String pathUrl = getAccounts;

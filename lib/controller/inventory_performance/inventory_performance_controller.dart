@@ -5,7 +5,7 @@ import '../../service/Api.dart';
 import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
 
-class InventoryPerformanceController extends Api {
+class InventoryPerformanceController {
   Future<List<InventoryPerformanceModel>> totalSellInc(
       SearchCriteria searchCriteria) async {
     List<InventoryPerformanceModel> inventoryPerformanceList = [];

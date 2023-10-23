@@ -147,7 +147,7 @@ class PurchaseCostReportModel {
         title: colsName[i],
         field: fieldsName[i],
         type: PlutoColumnType.text(),
-        width: fieldsName[i] == 'dash' ? width * .07 : width * .1,
+        width: fieldsName[i] == 'dash' ? width * .07 : width * .15,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
             ? (rendererContext) {
@@ -183,7 +183,7 @@ class PurchaseCostReportModel {
       rendererContext: rendererContext,
       formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       titleSpanBuilder: (text) {
         return [
           TextSpan(

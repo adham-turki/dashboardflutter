@@ -92,9 +92,9 @@ class InventoryPerformanceModel {
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
-      formatAsCurrency: true,
+      formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       titleSpanBuilder: (text) {
         return [
           TextSpan(

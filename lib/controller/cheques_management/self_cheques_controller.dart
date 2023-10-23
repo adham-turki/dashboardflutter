@@ -10,7 +10,7 @@ import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class SelfChequesController extends Api {
+class SelfChequesController {
   Future<List<ChequesModel>> getCheques(SearchCriteria searchCriteria) async {
     List<ChequesModel> chequesList = [];
 

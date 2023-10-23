@@ -2,9 +2,7 @@ import 'package:bi_replicate/model/custom_scroll_behavior.dart';
 import 'package:bi_replicate/widget/custom_btn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
@@ -17,14 +15,15 @@ class CustomDatePicker extends StatefulWidget {
   Function(String value)? onSelected;
   Function(String value)? onChanged;
   TextEditingController controller;
-  CustomDatePicker({
-    super.key,
-    this.padding,
-    required this.label,
-    this.onChanged,
-    this.onSelected,
-    required this.controller,
-  });
+  final DateTime date;
+  CustomDatePicker(
+      {super.key,
+      this.padding,
+      required this.label,
+      this.onChanged,
+      this.onSelected,
+      required this.controller,
+      required this.date});
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();
@@ -168,24 +167,21 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),
                 child: CupertinoDatePicker(
-                  // minimumDate: widget.label == _locale.fromDate
-                  //     ? DateTime(1950)
-                  //     : widget.label == _locale.toDate
-                  //         ? date
-                  //         : DateTime(1950),
-                  // minimumYear: widget.label == _locale.fromDate
-                  //     ? DateTime(1950).year
-                  //     : widget.label == _locale.toDate
-                  //         ? date!.year
-                  //         : DateTime(1950).year,
-                  maximumDate: nowDate,
-                  maximumYear: nowDate.year,
+                  minimumDate: widget.label == _locale.fromDate
+                      ? DateTime(1900)
+                      : widget.date,
+                  minimumYear: widget.label == _locale.fromDate
+                      ? DateTime(1900).year
+                      : widget.date!.year,
+                  maximumDate:
+                      widget.label == _locale.fromDate ? widget.date : nowDate,
+                  maximumYear: widget.label == _locale.fromDate
+                      ? widget.date!.year
+                      : nowDate.year,
                   initialDateTime: date ?? nowDate,
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime value) {
                     date = value;
-                    print(widget.controller.text);
-                    print("onChanged: ${date.toString()}");
                   },
                 ),
               ),

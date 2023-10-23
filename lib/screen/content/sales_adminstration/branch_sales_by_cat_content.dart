@@ -274,6 +274,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 CustomDatePicker(
                   label: _locale.fromDate,
                   controller: _fromDateController,
+                  date: DateTime.parse(_toDateController.text),
                   onSelected: (value) {
                     setState(() {
                       _fromDateController.text = value;
@@ -284,6 +285,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 CustomDatePicker(
                   label: _locale.toDate,
                   controller: _toDateController,
+                  date: DateTime.parse(_fromDateController.text),
                   onSelected: (value) {
                     setState(() {
                       _toDateController.text = value;
@@ -357,6 +359,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         CustomDatePicker(
           label: _locale.fromDate,
           controller: _fromDateController,
+          date: DateTime.parse(_toDateController.text),
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;
@@ -367,6 +370,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         CustomDatePicker(
           label: _locale.toDate,
           controller: _toDateController,
+          date: DateTime.parse(_fromDateController.text),
           onSelected: (value) {
             setState(() {
               _toDateController.text = value;

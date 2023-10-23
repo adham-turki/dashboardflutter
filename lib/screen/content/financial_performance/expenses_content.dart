@@ -260,6 +260,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
             CustomDatePicker(
               label: _locale.fromDate,
               controller: _fromDateController,
+              date: DateTime.now(),
               onSelected: (value) {
                 setState(() {
                   _fromDateController.text = value;
@@ -306,6 +307,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
         CustomDatePicker(
           label: _locale.fromDate,
           controller: _fromDateController,
+          date: DateTime.now(),
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;

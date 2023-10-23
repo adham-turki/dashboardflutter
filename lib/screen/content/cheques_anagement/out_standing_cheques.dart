@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:bi_replicate/model/cheques_bank/cheques_model.dart';
+import 'package:bi_replicate/model/cheques_bank/cheques_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -74,22 +75,15 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
+  ChequesResult? reportsResult;
 
   @override
   void initState() {
-    fromDate.text = todayDate;
-    toDate.text = todayDate;
-
-    criteria.fromDate = todayDate;
-    criteria.toDate = todayDate;
-    criteria.voucherStatus = -100;
-    criteria.rownum = 10;
-
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
     status = [
       _locale.all,
@@ -123,7 +117,14 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     ];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
+    fromDate.text = todayDate;
+    toDate.text = todayDate;
+    criteria.fromDate = DatesController().formatDate(fromDate.text);
+    criteria.toDate = DatesController().formatDate(toDate.text);
+    criteria.voucherStatus = -100;
+    criteria.rownum = 10;
 
+    reportsResult = await controller.getChequeResultMethod(criteria);
     super.didChangeDependencies();
   }
 
@@ -160,11 +161,13 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     items: periods,
                     initialValue:
                         selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                    onChanged: (value) {
-                      setState(() {
-                        checkPeriods(value);
-                        selectedPeriod = value;
-                      });
+                    onChanged: (value) async {
+                      checkPeriods(value);
+                      selectedPeriod = value;
+                      reportsResult =
+                          await controller.getChequeResultMethod(criteria);
+
+                      setState(() {});
                     },
                   ),
                   CustomDropDown(
@@ -174,12 +177,15 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     initialValue:
                         selectedStatus.isNotEmpty ? selectedStatus : null,
                     height: height * 0.18,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedStatus = value;
-                        int status = getVoucherStatus(_locale, selectedStatus);
-                        criteria.voucherStatus = status;
-                      });
+                    onChanged: (value) async {
+                      selectedStatus = value;
+                      int status = getVoucherStatus(_locale, selectedStatus);
+                      criteria.voucherStatus = status;
+                      selectedPeriod = value;
+                      reportsResult =
+                          await controller.getChequeResultMethod(criteria);
+
+                      setState(() {});
                     },
                   ),
                 ],
@@ -191,6 +197,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                   CustomDatePicker(
                     label: _locale.fromDate,
                     controller: fromDate,
+                    date: DateTime.parse(toDate.text),
                     onChanged: (value) {
                       setControllerFromDateText();
                     },
@@ -201,6 +208,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                   CustomDatePicker(
                     label: _locale.toDate,
                     controller: toDate,
+                    date: DateTime.parse(fromDate.text),
                     onChanged: (value) {
                       setControllertoDateText();
                     },
@@ -260,8 +268,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     height: height * 0.7,
                     child: TableComponent(
                       key: UniqueKey(),
-                      plCols:
-                          ChequesModel.getColumns(AppLocalizations.of(context)),
+                      plCols: ChequesModel.getColumns(
+                          AppLocalizations.of(context), reportsResult),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
@@ -277,20 +285,23 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     );
   }
 
-  void setControllerFromDateText() {
+  void setControllerFromDateText() async {
+    fromDateValue = fromDate.text;
+    String startDate = DatesController().formatDate(fromDateValue!);
+    criteria.fromDate = startDate;
+    reportsResult = await controller.getChequeResultMethod(criteria);
     return setState(() {
-      fromDateValue = fromDate.text;
-      String startDate = DatesController().formatDate(fromDateValue!);
-      criteria.fromDate = startDate;
       fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
-  void setControllertoDateText() {
+  void setControllertoDateText() async {
+    toDateValue = toDate.text;
+    String endDate = DatesController().formatDate(toDateValue!);
+    criteria.toDate = endDate;
+    reportsResult = await controller.getChequeResultMethod(criteria);
+
     return setState(() {
-      toDateValue = toDate.text;
-      String endDate = DatesController().formatDate(toDateValue!);
-      criteria.toDate = endDate;
       fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
@@ -384,8 +395,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     List<PlutoRow> topList = [];
     List<ChequesModel> invList = await controller.getCheques(criteria);
 
-    int totalPage = 1;
-
+    int totalPage =
+        reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }

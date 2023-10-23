@@ -259,6 +259,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
             CustomDatePicker(
               label: _locale.fromDate,
               controller: _fromDateController,
+              date: DateTime.now(),
               onSelected: (value) {
                 setState(() {
                   _fromDateController.text = value;
@@ -305,6 +306,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
         CustomDatePicker(
           label: _locale.fromDate,
           controller: _fromDateController,
+          date: DateTime.now(),
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;

@@ -8,7 +8,7 @@ import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class ExpensesController extends Api {
+class ExpensesController {
   var api = getExpenses;
   Future<List<ExpensesModel>> getExpense(SearchCriteria searchCriteria) async {
     List<ExpensesModel> list = [];

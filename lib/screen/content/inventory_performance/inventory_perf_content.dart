@@ -39,10 +39,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   String hintValue = '0';
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String nextMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
+
   final List<double> listOfBalances = [
     100.0,
     150.0,
@@ -73,10 +70,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   @override
   void initState() {
     fromDate.text = todayDate;
-    toDate.text = nextMonth;
+    toDate.text = todayDate;
 
-    criteria.fromDate = todayDate;
-    criteria.toDate = nextMonth;
+    criteria.fromDate = DatesController().formatDate(fromDate.text);
+    criteria.toDate = DatesController().formatDate(toDate.text);
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
@@ -182,6 +179,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         CustomDatePicker(
                           label: _locale.fromDate,
                           controller: fromDate,
+                          date: DateTime.parse(toDate.text),
                           onChanged: (value) {
                             setControllerFromDateText();
                           },
@@ -191,6 +189,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         ),
                         CustomDatePicker(
                           label: _locale.toDate,
+                          date: DateTime.parse(fromDate.text),
                           controller: toDate,
                           onChanged: (value) {
                             setControllertoDateText();

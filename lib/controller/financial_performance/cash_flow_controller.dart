@@ -8,7 +8,7 @@ import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class CashFlowController extends Api {
+class CashFlowController {
   Future<List<CashFlowModel>> getChartCash(
       SearchCriteria searchCriteria) async {
     var api = getCashFlows;

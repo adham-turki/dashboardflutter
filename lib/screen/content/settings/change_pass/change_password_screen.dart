@@ -5,8 +5,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
-import '../../../provider/text_field_custom.dart';
-import '../../../utils/constants/styles.dart';
+import '../../../../widget/text_field_custom.dart';
+import '../../../../utils/constants/styles.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});

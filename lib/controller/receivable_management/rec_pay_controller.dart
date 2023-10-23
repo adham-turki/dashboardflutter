@@ -7,7 +7,7 @@ import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class RecPayController extends Api {
+class RecPayController {
   Future<RecPayModel> getRecPayMethod(SearchCriteria searchCriteria) async {
     var api = getRecPayList;
 

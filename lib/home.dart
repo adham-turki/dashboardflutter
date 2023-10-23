@@ -15,8 +15,7 @@ import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_cont
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/total_collections_content.dart';
 import 'package:bi_replicate/screen/content/settings/setup_content/setup.dart';
-import 'package:bi_replicate/screen/content/settings/change_password_screen.dart';
-import 'package:bi_replicate/screen/content/settings/setup.dart';
+import 'package:bi_replicate/screen/content/settings/change_pass/change_password_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';

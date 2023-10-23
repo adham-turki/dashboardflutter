@@ -9,11 +9,10 @@ import '../../model/reports/reports_result.dart';
 import '../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../model/reports/sales_report_model/sales_report_model.dart';
 import '../../model/sales_adminstration/branch_model.dart';
-import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class ReportController extends ApiService {
+class ReportController {
   Future<List<BranchModel>> getSalesStkMethod(
       dynamic salesSearchCriteria) async {
     var api = getSalesStk;

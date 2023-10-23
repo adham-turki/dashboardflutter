@@ -1,3 +1,4 @@
+import 'package:bi_replicate/model/reports/total_sales/total_sales_result.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -61,7 +62,8 @@ class TotalSalesModel {
     return PlutoRow(cells: totalSales);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+  static List<PlutoColumn> getColumns(
+      AppLocalizations localizations, TotalSalesResult? reportResult) {
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
@@ -83,9 +85,12 @@ class TotalSalesModel {
         type: PlutoColumnType.text(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.inQnty!);
+              }
+            : null,
       ),
       PlutoColumn(
         title: localizations.salesQty,
@@ -93,9 +98,12 @@ class TotalSalesModel {
         type: PlutoColumnType.text(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.outQnty!);
+              }
+            : null,
       ),
       PlutoColumn(
         title: localizations.netSalesQty,
@@ -103,9 +111,12 @@ class TotalSalesModel {
         type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.netSold!);
+              }
+            : null,
       ),
       PlutoColumn(
         title: localizations.returnAmount,
@@ -113,9 +124,12 @@ class TotalSalesModel {
         type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.debit!);
+              }
+            : null,
       ),
       PlutoColumn(
         title: localizations.salesAmount,
@@ -123,9 +137,12 @@ class TotalSalesModel {
         type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.credit!);
+              }
+            : null,
       ),
       PlutoColumn(
         title: localizations.netSalesAmount,
@@ -133,46 +150,29 @@ class TotalSalesModel {
         type: PlutoColumnType.number(),
         width: 150,
         backgroundColor: colColor,
-        footerRenderer: (rendererContext) {
-          return TotalSalesModel.footerRenderer(rendererContext, 0);
-        },
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.totalAmount!);
+              }
+            : null,
       ),
     ];
 
     return list;
   }
 
-  List<String> getAllData() {
-    List<String> stringList = [];
-    stringList.add(counter.toString());
-    stringList.add(code.toString());
-    stringList.add(name.toString());
-    stringList.add(inQnty.toString());
-    stringList.add(outQnty.toString());
-    stringList.add(netSold.toString());
-    stringList.add(debit.toString());
-    stringList.add(credit.toString());
-    stringList.add(totalAmount.toString());
-
-    return stringList;
-  }
-
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
-      formatAsCurrency: true,
+      formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.center,
+      alignment: Alignment.centerLeft,
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: text.replaceAll("\$", ""),
-            children: [
-              TextSpan(
-                text: valueAll.toStringAsFixed(2),
-              ),
-            ],
+            text: valueAll.toStringAsFixed(2),
             style: gridFooterStyle,
           ),
         ];

@@ -8,7 +8,7 @@ import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
-class AgingController extends Api {
+class AgingController {
   Future<List<AgingModel>> getAgingList(SearchCriteria searchCriteria) async {
     var api = getAgingListApi;
     List<AgingModel> list = [];

@@ -24,20 +24,14 @@ class ExpensesAccountDropDown extends StatefulWidget {
 class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
   // var utils = Components();
   late AppLocalizations _locale;
-  List<String> periods = [];
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    periods = [
-      _locale.daily,
-      _locale.weekly,
-      _locale.monthly,
-      _locale.yearly,
-    ];
+
     super.didChangeDependencies();
   }
 
-  var selectedPeriod = "";
+  var selectedAccount = "";
   double width = 0;
   double height = 0;
   bool isDesktop = false;
@@ -71,11 +65,11 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
             },
             onChanged: (value) {
               setState(() {
-                selectedPeriod = value.toString();
+                selectedAccount = value.toString();
                 // getCategory1List();
               });
             },
-            initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+            initialValue: selectedAccount.isNotEmpty ? selectedAccount : null,
           ),
           SizedBox(
             width: width * .01,
@@ -92,7 +86,7 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
                 borderRadius: 5.0,
                 onPressed: () {
                   setState(() {
-                    widget.addAccount(selectedPeriod, widget.type!);
+                    widget.addAccount(selectedAccount, widget.type!);
                   });
                 },
                 fontSize: isDesktop ? height * .016 : height * .011,

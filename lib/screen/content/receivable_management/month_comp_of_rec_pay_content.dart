@@ -76,13 +76,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     _locale = AppLocalizations.of(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-    String nextMonth = DatesController().formatDateReverse(DatesController()
-        .formatDate(DateTime(DatesController().today.year,
-                DatesController().today.month + 1, DatesController().today.day)
-            .toString()));
 
     _fromDateController.text = todayDate;
-    _toDateController.text = nextMonth;
+    _toDateController.text = todayDate;
     status = [
       _locale.all,
       _locale.posted,
@@ -262,6 +258,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             ),
             CustomDatePicker(
               label: _locale.fromDate,
+              date: DateTime.now(),
               controller: _fromDateController,
               onSelected: (value) {
                 setState(() {
@@ -308,6 +305,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
         ),
         CustomDatePicker(
           label: _locale.fromDate,
+          date: DateTime.now(),
           controller: _fromDateController,
           onSelected: (value) {
             setState(() {
