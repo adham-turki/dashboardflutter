@@ -160,8 +160,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                       : selectedChart == _locale.pieChart
                           ? Center(
                               child: PieChartComponent(
-                                radiusNormal: isDesktop ? height * 0.135 : 70,
-                                radiusHover: isDesktop ? height * 0.14 : 80,
+                                radiusNormal: isDesktop ? height * 0.17 : 70,
+                                radiusHover: isDesktop ? height * 0.17 : 80,
                                 width: isDesktop ? width * 0.42 : width * 0.1,
                                 height:
                                     isDesktop ? height * 0.42 : height * 0.3,
