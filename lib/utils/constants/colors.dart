@@ -39,6 +39,6 @@ final colorNewList = <Color>[
   const Color(0xFF880E4F), // Dark Pink
   const Color(0xFF1A237E), // Dark Blue
 ];
-
+Color hoverColor = const Color.fromRGBO(30, 36, 48, 1);
 // Make sure you have a total of 50 unique colors
 
