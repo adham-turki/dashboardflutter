@@ -158,32 +158,22 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                           balances: listOfBalances,
                           periods: listOfPeriods)
                       : selectedChart == _locale.pieChart
-                          ? dataMap.isNotEmpty
-                              ? Center(
-                                  child: PieChartComponent(
-                                    radiusNormal:
-                                        isDesktop ? height * 0.135 : 70,
-                                    radiusHover: isDesktop ? height * 0.14 : 80,
-                                    width:
-                                        isDesktop ? width * 0.42 : width * 0.1,
-                                    height: isDesktop
-                                        ? height * 0.42
-                                        : height * 0.3,
-                                    dataList: pieData,
-                                  ),
-                                )
-                              // ? PieChart(
-                              //     dataMap: dataMap,
-                              //     chartType: ChartType.disc,
-                              //     baseChartColor: Colors.grey[300]!,
-                              //     colorList: colorList,
-                              //   )
-                              : const Center(
-                                  child: Text(
-                                    "Pie Chart is Empty!",
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                )
+                          ? Center(
+                              child: PieChartComponent(
+                                radiusNormal: isDesktop ? height * 0.135 : 70,
+                                radiusHover: isDesktop ? height * 0.14 : 80,
+                                width: isDesktop ? width * 0.42 : width * 0.1,
+                                height:
+                                    isDesktop ? height * 0.42 : height * 0.3,
+                                dataList: pieData,
+                              ),
+                            )
+                          // ? PieChart(
+                          //     dataMap: dataMap,
+                          //     chartType: ChartType.disc,
+                          //     baseChartColor: Colors.grey[300]!,
+                          //     colorList: colorList,
+                          //   )
                           : BalanceBarChart(data: barData),
                   const SizedBox(), //Footer
                 ],
