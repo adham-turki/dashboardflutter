@@ -1,9 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../../utils/constants/colors.dart';
-
 class AccountModel {
   final String? txtCode;
   final String? txtArabicName;
@@ -122,45 +116,6 @@ class AccountModel {
       bolCurrVariance: json['bolCurrvariance'],
       bolRestrictedCurTransaction: json['bolRestrictedcurtransaction'],
     );
-  }
-  static List<PlutoColumn> getColumns(
-      BuildContext context, AppLocalizations localizations) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    List<PlutoColumn> list = [
-      PlutoColumn(
-        title: "#",
-        field: "#",
-        type: PlutoColumnType.number(),
-        width: width * 0.13,
-        backgroundColor: colColor,
-      ),
-      PlutoColumn(
-        title: localizations.accountCode,
-        field: "Account Code",
-        type: PlutoColumnType.text(),
-        width: width * 0.13,
-        backgroundColor: colColor,
-      ),
-      PlutoColumn(
-        title: localizations.accountName,
-        field: "Account Name",
-        type: PlutoColumnType.text(),
-        width: width * 0.13,
-        backgroundColor: colColor,
-      ),
-      // PlutoColumn(
-      //   title: localizations.chequeAmount,
-      //   field: "amount",
-      //   type: PlutoColumnType.number(),
-      //   width: 190,
-      //   backgroundColor: colColor,
-      //   // footerRenderer: (rendererContext) {
-      //   //   return ChequesModel.footerRenderer(rendererContext, allAmount);
-      //   // },
-      // ),
-    ];
-    return list;
   }
 
   Map<String, dynamic> toJson() {

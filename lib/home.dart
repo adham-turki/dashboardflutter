@@ -9,19 +9,16 @@ import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf
 import 'package:bi_replicate/screen/content/receivable_management/aging_receivable.dart';
 import 'package:bi_replicate/screen/content/receivable_management/month_comp_of_rec_pay_content.dart';
 import 'package:bi_replicate/screen/content/reports/purchase_reporort_content.dart/purchase_report.dart';
+import 'package:bi_replicate/screen/content/reports/total_sales.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_cat_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/total_collections_content.dart';
-import 'package:bi_replicate/screen/content/settings/setup.dart';
+import 'package:bi_replicate/screen/content/settings/setup_content/setup.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
-
-import 'screen/content/journal_report_content.dart';
 import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,7 +39,6 @@ class _HomePageState extends State<HomePage> {
 
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    print("pageeeeee: ${context.read<ScreenContentProvider>().getPage()}");
     return Scaffold(
       appBar: isDesktop
           ? null
@@ -91,7 +87,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget contentPage() {
     index = context.read<ScreenContentProvider>().getPage();
-    print(index);
     switch (index) {
       case 0:
         return const SalesByBranchesContent();

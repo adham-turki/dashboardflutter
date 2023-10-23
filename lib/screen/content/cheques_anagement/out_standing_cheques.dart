@@ -1,27 +1,19 @@
 import 'dart:typed_data';
 import 'dart:html' as html;
-import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/model/cheques_bank/cheques_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import '../../../components/date_text_field.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/cheques_management/self_cheques_controller.dart';
-import '../../../controller/error_controller.dart';
-import '../../../controller/inventory_performance/inventory_performance_controller.dart';
-import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
-import '../../../model/inventory_performance/inventory_performance_model.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_btn.dart';
 import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
-import '../../../widget/custom_textfield.dart';
-import '../../../widget/headerWidget.dart';
 
 class OutStandingChequesContent extends StatefulWidget {
   const OutStandingChequesContent({super.key});
@@ -217,7 +209,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     },
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 8),
                     child: SizedBox(
                         width: MediaQuery.of(context).size.width < 800
                             ? MediaQuery.of(context).size.width * 0.6
@@ -394,7 +387,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    print("from date critiria :${criteria.fromDate}");
     List<ChequesModel> invList = await controller.getCheques(criteria);
 
     int totalPage = 1;
@@ -403,7 +395,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       topList.add(invList[i].toPluto());
     }
 
-    print("topList :${topList.length}");
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
       rows: topList,

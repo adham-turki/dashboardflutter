@@ -1,20 +1,14 @@
+import 'package:bi_replicate/screen/content/settings/setup_content/setup_component/expenses_account_setup_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-
-import '../../../components/expenses_account_setup_widget.dart';
-import '../../../controller/settings/setup/accounts_name.dart';
-import '../../../controller/settings/setup/setup_screen_controller.dart';
-import '../../../model/inventory_performance/inventory_performance_model.dart';
-import '../../../model/settings/setup/account_model.dart';
-import '../../../model/settings/setup/bi_account_model.dart';
-import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/responsive.dart';
+import '../../../../controller/settings/setup/setup_screen_controller.dart';
+import '../../../../model/settings/setup/account_model.dart';
+import '../../../../model/settings/setup/bi_account_model.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/responsive.dart';
 
 class SetupScreen extends StatefulWidget {
   const SetupScreen({super.key});
@@ -100,35 +94,35 @@ class _SetupScreenState extends State<SetupScreen> {
                     Tab(
                       icon: Icon(
                         Icons.account_balance,
-                        color: Color(0xffe7b84e).withOpacity(0.7),
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.expensesAccounts, // Custom tab label
                     ),
                     Tab(
                       icon: Icon(
                         Icons.account_balance,
-                        color: Color(0xffe7b84e).withOpacity(0.7),
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.cachBoxAccounts, // Custom tab label
                     ),
                     Tab(
                       icon: Icon(
                         Icons.account_balance,
-                        color: Color(0xffe7b84e).withOpacity(0.7),
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.receivableAccounts, // Custom tab label
                     ),
                     Tab(
                       icon: Icon(
                         Icons.account_balance,
-                        color: Color(0xffe7b84e).withOpacity(0.7),
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.payableAccounts, // Custom tab label
                     ),
                     Tab(
                       icon: Icon(
                         Icons.account_balance,
-                        color: Color(0xffe7b84e).withOpacity(0.7),
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.bankAccounts, // Custom tab label
                     ),
@@ -159,7 +153,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   },
                 ),
               ),
-              Container(
+              SizedBox(
                 height: height * 0.85,
                 child: TabBarView(
                   children: [
@@ -276,10 +270,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   Future getCashBoxAccount() async {
     cashboxAccounts = [];
-    // setState(() {
-    //   isFinised = false;
-    //   cashboxAccounts = [];
-    // });
+
     await SetupController().getBiAccounts().then((value) {
       for (var elemant in value) {
         if (elemant.accountType == 2) {
@@ -288,9 +279,6 @@ class _SetupScreenState extends State<SetupScreen> {
       }
     });
     setState(() {});
-    // setState(() {
-    //   isFinised = true;
-    // });
   }
 
   Future getReceivableAccounts() async {
@@ -330,23 +318,6 @@ class _SetupScreenState extends State<SetupScreen> {
       }
     });
     setState(() {});
-  }
-
-  Future getBiAccountsLists() async {
-    // bankAccounts = [];
-
-    // await SetupController().getBiAccounts().then((value) {
-    //   for (var elemant in value) {
-    //     if (elemant.accountType == 3) {
-    //       receivableAccounts.add(elemant);
-    //     } else if (elemant.accountType == 4) {
-    //       payableAccounts.add(elemant);
-    //     } else if (elemant.accountType == 5) {
-    //       bankAccounts.add(elemant);
-    //     }
-    //   }
-    // });
-    // setState(() {});
   }
 
   addAccount(String name, int id) {
