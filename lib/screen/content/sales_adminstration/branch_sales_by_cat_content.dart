@@ -168,12 +168,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                                 dataList: pieData,
                               ),
                             )
-                          // ? PieChart(
-                          //     dataMap: dataMap,
-                          //     chartType: ChartType.disc,
-                          //     baseChartColor: Colors.grey[300]!,
-                          //     colorList: colorList,
-                          //   )
                           : BalanceBarChart(data: barData),
                   const SizedBox(), //Footer
                 ],

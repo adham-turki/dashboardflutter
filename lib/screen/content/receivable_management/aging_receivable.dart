@@ -236,17 +236,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
             });
           },
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getAgingReceivable();
-        //       print(_fromDateController.text);
-        //     });
-        //   },
-        // ),
       ],
     );
   }
