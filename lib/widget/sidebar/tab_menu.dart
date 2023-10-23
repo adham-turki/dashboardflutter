@@ -60,10 +60,10 @@ class _TabMenuState extends State<TabMenu> {
 
           if (sideTabModel.isParent) {
             int firstPage = sideTabModel.subMenu[0].value;
-            String title = sideTabModel.subMenu[0].text;
+            // String title = sideTabModel.subMenu[0].text;
             subSelected = firstPage;
             isSelected ? isSelected = false : isSelected = true;
-            provider.setPage(firstPage, title);
+            // provider.setPage(firstPage, title);
           } else {
             int page = sideTabModel.value;
             String title = sideTabModel.text;

@@ -9,6 +9,7 @@ import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,23 +40,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     PieChartModel(value: 20, title: "2", color: Colors.red),
     PieChartModel(value: 30, title: "3", color: Colors.green),
     PieChartModel(value: 40, title: "4", color: Colors.purple),
-  ];
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
   ];
 
   List<double> listOfBalances = [];
@@ -264,7 +248,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             pieData.add(PieChartModel(
                 title: element.namee!,
                 value: formatDoubleToTwoDecimalPlaces(a),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -347,13 +331,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     );
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 
   Column mobileCriteria() {

@@ -13,6 +13,7 @@ import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -57,23 +58,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
   ];
   final dataMap = <String, double>{};
 
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
   List<PieChartModel> pieData = [];
   String accountNameString = "";
   List<BarChartData> barData = [];
@@ -423,7 +407,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
                         double.parse(elemant.dailySale.toString())),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -434,13 +418,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
     });
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 
   int count = 0;

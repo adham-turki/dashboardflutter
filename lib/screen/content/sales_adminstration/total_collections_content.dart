@@ -6,6 +6,7 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -54,24 +55,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     'Save as PNG',
   ];
   final dataMap = <String, double>{};
-
-  final colorList = <Color>[
-    Colors.green,
-    Colors.blue,
-    Colors.red,
-    Colors.orange,
-    Colors.purple,
-    Colors.pink,
-    Colors.teal,
-    Colors.amber,
-    Colors.cyan,
-    Colors.deepPurple,
-    Colors.lime,
-    Colors.indigo,
-    Colors.lightBlue,
-    Colors.deepOrange,
-    Colors.brown,
-  ];
 
   List<PieChartModel> pieData = [];
 
@@ -403,7 +386,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             pieData.add(PieChartModel(
                 title: element.name!,
                 value: formatDoubleToTwoDecimalPlaces(element.collection!),
-                color: getRandomColor()));
+                color: getRandomColor(colorNewList)));
           }
 
           barData.add(
@@ -433,12 +416,9 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     }
   }
 
-  Color getRandomColor() {
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final red = random.nextInt(256);
-    final green = random.nextInt(256);
-    final blue = random.nextInt(256);
-
-    return Color.fromARGB(255, red, green, blue);
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 }
