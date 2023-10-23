@@ -7,9 +7,6 @@ import '../../model/criteria/search_criteria.dart';
 import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 
-import 'dart:convert';
-import 'package:http/http.dart';
-
 class ChequesPayableController extends Api {
   Future<ChequesPayableModel> getchequesAndBanks(
       SearchCriteria searchCriteria) async {

@@ -381,43 +381,6 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
       rows: topList,
     );
   }
-  // Future getResult() async {
-  //   ReportController salesReportController = ReportController();
-
-  //   dynamic body = readProvider.toJson();
-  //   print("result Body $body");
-  //   await salesReportController.getPurchaseResultMehtod(body).then((value) {
-  //     if (value.count! > 0) {
-  //       pageNumber = 1;
-  //     }
-  //     limitPage = (value.count! / 10).ceil();
-  //     finalRow = limitPage == 0
-  //         ? []
-  //         : getTotal(orderByColumns.length, value.total!, value.quantity!,
-  //             value.avgPrice!);
-  //   });
-  // }
-
-  // List<String> getTotal(
-  //     int length, double totalAmount, double qty, double price) {
-  //   List<String> stringList = [];
-
-  //   for (int i = 0; i < length; i++) {
-  //     if (i == length - 1) {
-  //       stringList.add(totalAmount.toStringAsFixed(2));
-  //     } else if (i == length - 2) {
-  //       stringList.add(price.toStringAsFixed(2));
-  //     } else if (i == length - 3) {
-  //       stringList.add(qty.toStringAsFixed(2));
-  //     } else if (i == length - 4) {
-  //       stringList.add(AppLocalizations.of(context).finalTotal);
-  //     } else {
-  //       stringList.add("");
-  //     }
-  //   }
-
-  //   return stringList;
-  // }
 
   void saveExcelFile(Uint8List byteList, String filename) {
     final blob = html.Blob([byteList]);
@@ -429,25 +392,5 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
       ..click();
 
     html.Url.revokeObjectUrl(url);
-  }
-
-  Future searchPurchaseCostReport(int pageNum) async {
-    ReportController salesReportController = ReportController();
-    List<PurchaseCostReportModel> newList = purchaseList;
-    readProvider.setPage(pageNum);
-    dynamic body = readProvider.toJson();
-    print("result22 Body22 $body");
-
-    await salesReportController
-        .postPurchaseCostReportMethod(body)
-        .then((value) {
-      purchaseList = value;
-      if (pageNum > 1 && purchaseList.isEmpty) {
-        pageNumber = pageNum - 1;
-
-        purchaseList = newList;
-      }
-      setState(() {});
-    });
   }
 }

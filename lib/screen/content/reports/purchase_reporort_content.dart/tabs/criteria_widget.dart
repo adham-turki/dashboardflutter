@@ -422,7 +422,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           title: _locale.supplierCategory,
           multipleVal: valueMultipleSuppCateg,
           fromDropDown: CustomDropDown(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: width * 0.2,
             hint: selectedFromSuppCateg.isNotEmpty
                 ? selectedFromSuppCateg
                 : _locale.select,
@@ -444,7 +444,7 @@ class _LeftWidgetState extends State<LeftWidget> {
             },
           ),
           toDropDown: CustomDropDown(
-            width: MediaQuery.of(context).size.width * 0.2,
+            width: width * 0.2,
             // items: suppCategoryList,
             hint: selectedToSuppCateg.isNotEmpty
                 ? selectedToSuppCateg

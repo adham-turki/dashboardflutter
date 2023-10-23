@@ -99,7 +99,8 @@ class _TableComponentState extends State<TableComponent> {
         // print(event);
       },
       onSelected: (event) {
-        // print("on selected");
+        print(event.row);
+        print("on selected");
         if (widget.onSelected != null) {
           widget.onSelected!(event);
         }

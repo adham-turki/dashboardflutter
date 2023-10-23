@@ -6,7 +6,7 @@ import '../../../model/settings/setup/bi_account_model.dart';
 import '../../../service/Api.dart';
 import '../../../utils/constants/api_constants.dart';
 
-class SetupController extends Api {
+class SetupController extends ApiService {
   Future<List<AccountModel>> getAllAccounts() async {
     List<AccountModel> list = [];
     String pathUrl = getAccounts;
@@ -63,7 +63,7 @@ class SetupController extends Api {
 
   Future<bool> deleteBiAccount(BiAccountModel accountModel) async {
     String dUrl = deleteAccount;
-    await postMethods(dUrl, accountModel).then((value) {
+    await ApiService.postRequest(dUrl, accountModel).then((value) {
       if (value.statusCode == 200) {
         return true;
       }
