@@ -83,6 +83,12 @@ class _HomePageState extends State<HomePage> {
           }),
         ],
       ),
+      floatingActionButton: ElevatedButton(
+        child: const Text("Logout"),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 

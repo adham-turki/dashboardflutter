@@ -298,6 +298,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             setState(() {
               checkPeriods(value);
               selectedPeriod = value!;
+              getSalesByBranch();
             });
           },
         ),
@@ -308,6 +309,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;
+              getSalesByBranch();
             });
           },
         ),
@@ -318,6 +320,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onSelected: (value) {
             setState(() {
               _toDateController.text = value;
+              getSalesByBranch();
             });
           },
         ),
@@ -330,6 +333,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           onChanged: (value) {
             setState(() {
               selectedChart = value!;
+              getSalesByBranch();
             });
           },
         ),
