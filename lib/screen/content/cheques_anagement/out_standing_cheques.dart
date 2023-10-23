@@ -255,11 +255,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             children: [
               Column(
                 children: [
-                  SelectableText(
-                    maxLines: 1,
-                    _locale.outStandingCheques,
-                    style: eighteen500TextStyle(Colors.green),
-                  ),
                   SizedBox(
                     width: width * 0.7,
                     height: height * 0.7,

@@ -288,7 +288,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () async {
-                      print("frommm ${fromDate.text}");
                       context.read<SalesCriteraProvider>().setFromDate(
                           DatesController().formatDate(fromDate.text));
                       context
@@ -299,16 +298,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                       dynamic body = readProvider.toJson();
                       reportsResult =
                           await ReportController().getSalesResultMehtod(body);
-                      setState(() {
-                        // fetch(PlutoLazyPaginationRequest(
-                        //     page: readProvider.getPage!));
-                      });
-
-                      // getResult().then(
-                      //   (value) {
-                      //     searchSalesCostReport(1);
-                      //   },
-                      // );
+                      setState(() {});
                     },
                     fontSize: isDesktop ? height * .016 : height * .011,
                   ),

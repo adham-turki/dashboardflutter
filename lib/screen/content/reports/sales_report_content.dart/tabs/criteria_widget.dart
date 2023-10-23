@@ -144,10 +144,7 @@ class _LeftWidgetState extends State<LeftWidget> {
     isMobile = Responsive.isMobile(context);
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-    String nextMonth = DatesController().formatDateReverse(DatesController()
-        .formatDate(DateTime(DatesController().today.year,
-                DatesController().today.month + 1, DatesController().today.day)
-            .toString()));
+
     widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
         ? DatesController()
             .formatDateReverse(readProvider.getFromDate.toString())
@@ -155,7 +152,7 @@ class _LeftWidgetState extends State<LeftWidget> {
 
     widget.toDate.text = readProvider.getToDate!.isNotEmpty
         ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : nextMonth;
+        : todayDate;
 
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 

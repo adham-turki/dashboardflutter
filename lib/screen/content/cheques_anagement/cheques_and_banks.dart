@@ -88,6 +88,9 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
+              height: height * .03,
+            ),
+            SizedBox(
               height: height * 0.07,
               child: SelectableText(
                 maxLines: 1,
@@ -114,6 +117,9 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
+              height: height * .04,
+            ),
+            SizedBox(
               height: height * 0.07,
               child: SelectableText(
                 maxLines: 1,
@@ -135,6 +141,9 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
               ),
             ),
           ],
+        ),
+        SizedBox(
+          height: height * .05,
         ),
       ],
     );
