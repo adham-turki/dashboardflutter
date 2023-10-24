@@ -92,29 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           userController: userController,
                           passwordController: passwordController,
                           onPressed: () {
-                            if (aliasName.text.isEmpty) {
-                              // show dialog missing password
-                              ErrorController.openErrorDialog(
-                                  406, _locale.aliasReqField, context);
-                            } else if (userController.text.isEmpty) {
-                              // show dialog missing email
-                              ErrorController.openErrorDialog(
-                                  406, _locale.nameReqField, context);
-                            } else if (passwordController.text.isEmpty) {
-                              // show dialog missing password
-                              ErrorController.openErrorDialog(
-                                  406, _locale.passReqField, context);
-                            } else {
-                              showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return const Center(
-                                      child: CircularProgressIndicator());
-                                },
-                              );
-                              loadApi();
-                            }
+                            validateLogin(context);
 
                             // if (_keyForm.currentState!.validate()) {
                             //   print("object 22");
@@ -158,6 +136,28 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     ));
+  }
+
+  void validateLogin(BuildContext context) {
+    if (aliasName.text.isEmpty) {
+      // show dialog missing password
+      ErrorController.openErrorDialog(406, _locale.aliasReqField, context);
+    } else if (userController.text.isEmpty) {
+      // show dialog missing email
+      ErrorController.openErrorDialog(406, _locale.nameReqField, context);
+    } else if (passwordController.text.isEmpty) {
+      // show dialog missing password
+      ErrorController.openErrorDialog(406, _locale.passReqField, context);
+    } else {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return const Center(child: CircularProgressIndicator());
+        },
+      );
+      loadApi();
+    }
   }
 
   Future<void> _savingData() async {
