@@ -54,7 +54,7 @@ class _CustomButtonState extends State<CustomButton> {
             style: TextStyle(
               color: widget.textColor ?? Colors.black,
               fontSize:
-                  Responsive.isDesktop(context) ? height * .018 : height * .012,
+                  Responsive.isDesktop(context) ? height * .018 : height * .014,
               fontWeight: FontWeight.w400,
             ),
           ),
