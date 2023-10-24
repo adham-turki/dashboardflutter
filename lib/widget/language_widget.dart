@@ -65,8 +65,9 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   List<Widget> getWidget(Color color) {
     return [
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleFlag(
               'us',
@@ -87,8 +88,9 @@ class _LanguageWidgetState extends State<LanguageWidget> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleFlag(
               'ps',
