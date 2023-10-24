@@ -13,6 +13,7 @@ import '../components/login_components/custom_painter.dart';
 import '../components/login_components/form_component.dart';
 import '../controller/central_api_controller.dart';
 import '../controller/error_controller.dart';
+import '../utils/constants/constants.dart';
 import '../utils/constants/encrypt_key.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -96,6 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 406, "Missing Password!", context);
                           } else {
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return const Center(
@@ -148,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
       var url = value.trim();
       CentralApiController().getApi(url, aliasName.text).then((value) {
         if (value == "204") {
+          Navigator.pop(context); // for Circular
           ErrorController.openErrorDialog(406, "Wrong Alias Name!", context);
         } else {
           const storage = FlutterSecureStorage();
@@ -156,13 +159,14 @@ class _LoginScreenState extends State<LoginScreen> {
             checkLogIn().then((value) {
               if (value) {
                 Navigator.pop(context); // for Circular
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return const HomePage();
-                  },
-                ));
-                // Navigator.pushReplacementNamed(context, mainScreenRoute);
+                Navigator.pushReplacementNamed(context, mainScreenRoute);
+                // Navigator.push(context, MaterialPageRoute(
+                //   builder: (context) {
+                //     return const HomePage();
+                //   },
+                // ));
               } else {
+                Navigator.pop(context); // for Circular
                 ErrorController.openErrorDialog(
                     406, "Wrong Email or Password!", context);
               }

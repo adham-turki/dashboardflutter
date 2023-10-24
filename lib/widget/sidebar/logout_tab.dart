@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../utils/constants/colors.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
 
 class LogoutTab extends StatefulWidget {
@@ -24,7 +25,7 @@ class _LogoutTabState extends State<LogoutTab> {
 
     return InkWell(
       onTap: () {
-        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, loginScreenRoute);
       },
       child: MouseRegion(
         onEnter: (event) {

@@ -3,12 +3,15 @@ import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+
 import 'package:bi_replicate/screen/login_screen.dart';
+import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'components/key.dart';
 import 'l10n/l10n.dart';
 
 void main() {
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
 
     // loadStoredLocale();
     return MaterialApp(
+      navigatorKey: navigatorKey,
       title: 'Bi',
       //  navigatorKey: navigatorKey,
       localizationsDelegates: const [
@@ -58,18 +62,15 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.all,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const LoginScreen(),
+      initialRoute:
+          // hasToken ? mainScreenRoute :
+          loginScreenRoute,
+      routes: {
+        loginScreenRoute: (context) => const LoginScreen(),
+        mainScreenRoute: (context) => const HomePage(),
+      },
     );
   }
 }

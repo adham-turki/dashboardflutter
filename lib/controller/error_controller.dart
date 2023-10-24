@@ -43,6 +43,7 @@ class ErrorController {
   static dialogBasedonResponseStatus(IconData icon, String errorDetails,
       String errorTitle, Color color, int statusCode, BuildContext context) {
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (builder) {
         return ErrorDialog(
