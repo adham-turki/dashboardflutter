@@ -137,6 +137,22 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
+              Positioned(
+                top: 1,
+                right: 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: LanguageWidget(
+                      color: Colors.black,
+                      onLocaleChanged: (locale) {
+                        localeProvider.setLocale(locale);
+                      },
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ],

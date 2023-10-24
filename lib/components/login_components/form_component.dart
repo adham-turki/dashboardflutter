@@ -90,18 +90,6 @@ class _FormComponentState extends State<FormComponent> {
                                   fontSize: width * 0.03,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: LanguageWidget(
-                                  color: Colors.black,
-                                  onLocaleChanged: (locale) {
-                                    localeProvider.setLocale(locale);
-                                  },
-                                ),
-                              ),
-                            ),
                           ],
                         ),
                       ),
