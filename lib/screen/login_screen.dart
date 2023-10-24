@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController aliasName = TextEditingController();
   bool loginTemp = false;
+  final focusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {

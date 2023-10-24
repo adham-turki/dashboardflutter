@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/constants/colors.dart';
@@ -25,6 +26,13 @@ class _FormComponentState extends State<FormComponent> {
   bool obscure2 = true;
   double height = 0;
   double width = 0;
+  late AppLocalizations _locale;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _locale = AppLocalizations.of(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -71,15 +79,15 @@ class _FormComponentState extends State<FormComponent> {
                           fontWeight: FontWeight.bold),
                     ),
                     LoginTextField(
-                      hint: "Alias",
+                      hint: _locale.aliasName,
                       controller: widget.aliasName,
                     ),
                     LoginTextField(
-                      hint: "Username",
+                      hint: _locale.userName,
                       controller: widget.userController,
                     ),
                     LoginTextField(
-                      hint: "Password",
+                      hint: _locale.password,
                       controller: widget.passwordController,
                       obscureText: obscure1,
                       customIconSuffix: GestureDetector(
@@ -118,7 +126,7 @@ class _FormComponentState extends State<FormComponent> {
                     ),
                     onPressed: widget.onPressed,
                     child: Text(
-                      "LOGIN",
+                      _locale.login,
                       style: TextStyle(
                         color: primary,
                         fontSize: width * 0.015,
