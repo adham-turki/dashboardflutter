@@ -196,5 +196,7 @@
     "passReqField": "Password is required",
     "cashIn": "Cash In",
     "cashOut": "Cash Out",
-    "general": "General"
+    "general": "General",
+    "changeSuccessfully": "Password Changed Succesfully"
+
 }

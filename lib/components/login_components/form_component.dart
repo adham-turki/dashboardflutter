@@ -94,29 +94,44 @@ class _FormComponentState extends State<FormComponent> {
                         ),
                       ),
                     ),
-                    LoginTextField(
-                      hint: _locale.aliasName,
-                      controller: widget.aliasName,
+                    Directionality(
+                      textDirection: _locale.localeName == "ar"
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
+                      child: LoginTextField(
+                        hint: _locale.aliasName,
+                        controller: widget.aliasName,
+                      ),
                     ),
-                    LoginTextField(
-                      hint: _locale.userName,
-                      controller: widget.userController,
+                    Directionality(
+                      textDirection: _locale.localeName == "ar"
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
+                      child: LoginTextField(
+                        hint: _locale.userName,
+                        controller: widget.userController,
+                      ),
                     ),
-                    LoginTextField(
-                      hint: _locale.password,
-                      controller: widget.passwordController,
-                      obscureText: obscure1,
-                      customIconSuffix: GestureDetector(
-                        onTap: () {
-                          obscure1 = !obscure1;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          obscure1
-                              ? CupertinoIcons.eye_slash_fill
-                              : CupertinoIcons.eye,
-                          color: Colors.grey,
-                          size: 20,
+                    Directionality(
+                      textDirection: _locale.localeName == "ar"
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
+                      child: LoginTextField(
+                        hint: _locale.password,
+                        controller: widget.passwordController,
+                        obscureText: obscure1,
+                        customIconSuffix: GestureDetector(
+                          onTap: () {
+                            obscure1 = !obscure1;
+                            setState(() {});
+                          },
+                          child: Icon(
+                            obscure1
+                                ? CupertinoIcons.eye_slash_fill
+                                : CupertinoIcons.eye,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
                         ),
                       ),
                     ),

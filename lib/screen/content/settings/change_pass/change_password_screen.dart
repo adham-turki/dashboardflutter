@@ -183,10 +183,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ChangePasswordModel(oldPassEncrypted, newPassEncrypted);
     // print()
     ChangePasswordController()
-        .changePassword(changePasswordModel, context)
+        .changePassword(changePasswordModel, _locale)
         .then((value) {
       // if (value) {
-      //   ErrorController.openErrorDialog(200, "Done", context);
+      //   ErrorController.openErrorDialog(200, _locale.changeSuccessfully);
       // }
     });
   }

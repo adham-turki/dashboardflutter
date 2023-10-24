@@ -172,5 +172,6 @@
         "passReqField": "كلمة المرور مطلوبة",
         "cashIn": "حركة النقد الداخلة",
         "cashOut": "حركة النقد الخارجة",
-        "general": "عام"
+        "general": "عام",
+        "changeSuccessfully": "تم تغيير كلمة المرور بنجاح"
 }
