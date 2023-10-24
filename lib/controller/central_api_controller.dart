@@ -11,13 +11,13 @@ class CentralApiController {
     print("center $api");
     var response = await http.get(Uri.parse(api));
     print("res ${response.statusCode}");
+    if (response.statusCode != 200) {
+      return response.statusCode.toString();
+    }
     var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     String serverUrl = jsonData['serverurl'];
     print("serverrrrrrrr ${jsonData['serverurl']}");
 
-    if (response.statusCode != 200) {
-      ErrorController.openErrorDialog(response.statusCode, response.body);
-    }
     print("serverrrrrr $serverUrl");
     return serverUrl;
   }

@@ -8,7 +8,7 @@ class ChangePasswordController {
     String api = changePasswordApi;
     await ApiService.postRequest(api, body).then((value) {
       if (value.statusCode == 200) {
-        ErrorController.openErrorDialog(200, value.body);
+        // ErrorController.openErrorDialog(200, value.body);
 
         return true;
       }

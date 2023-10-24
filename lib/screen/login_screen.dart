@@ -12,6 +12,7 @@ import '../Encryption/encryption.dart';
 import '../components/login_components/custom_painter.dart';
 import '../components/login_components/form_component.dart';
 import '../controller/central_api_controller.dart';
+import '../controller/error_controller.dart';
 import '../utils/constants/encrypt_key.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -80,8 +81,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         userController: userController,
                         passwordController: passwordController,
                         onPressed: () {
-                          print("object");
-                          loadApi();
+                          if (aliasName.text.isEmpty) {
+                            // show dialog missing password
+                            ErrorController.openErrorDialog(
+                                406, "Missing Alias Name!", context);
+                          } else if (userController.text.isEmpty) {
+                            // show dialog missing email
+                            ErrorController.openErrorDialog(
+                                406, "Missing User Name!", context);
+                          } else if (passwordController.text.isEmpty) {
+                            // show dialog missing password
+                            ErrorController.openErrorDialog(
+                                406, "Missing Password!", context);
+                          } else {
+                            loadApi();
+                          }
+
                           // if (_keyForm.currentState!.validate()) {
                           //   print("object 22");
                           //   _savingData().then((value) {
@@ -103,18 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            // Padding(
-            //   padding: const EdgeInsets.all(50.0),
-            //   child: Center(
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: [
-            //         const FormComponent(),
-            //         // Container(),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ],
@@ -135,31 +138,33 @@ class _LoginScreenState extends State<LoginScreen> {
         .loadString("assets/centralApi/central_api.properties")
         .then((value) {
       var url = value.trim();
-      print("urll $url");
-
       CentralApiController().getApi(url, aliasName.text).then((value) {
-        const storage = FlutterSecureStorage();
+        if (value == "204") {
+          ErrorController.openErrorDialog(406, "Wrong Alias Name!", context);
+        } else {
+          const storage = FlutterSecureStorage();
 
-        storage.write(key: 'api', value: "$value").then((value) {
-          checkLogIn().then((value) {
-            print("val: ${value}");
-            if (value) {
-              Navigator.push(context, MaterialPageRoute(
-                builder: (context) {
-                  return const HomePage();
-                },
-              ));
-              // Navigator.pushReplacementNamed(context, mainScreenRoute);
-            } else {}
+          storage.write(key: 'api', value: value).then((value) {
+            checkLogIn().then((value) {
+              if (value) {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return const HomePage();
+                  },
+                ));
+                // Navigator.pushReplacementNamed(context, mainScreenRoute);
+              } else {
+                ErrorController.openErrorDialog(
+                    406, "Wrong Email or Password!", context);
+              }
+            });
           });
-        });
+        }
       });
     });
   }
 
   checkLogIn() {
-    print(userController.text);
-    print(passwordController.text);
     final iv = [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
     final byteArray =
         Uint8List.fromList(iv.map((bit) => bit == 1 ? 0x01 : 0x00).toList());
