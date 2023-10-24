@@ -12,8 +12,6 @@ import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
-import '../../../../utils/constants/styles.dart';
-import '../../../../utils/func/dates_controller.dart';
 import '../../../../widget/custom_btn.dart';
 import 'tabs/criteria_widget.dart';
 import 'tabs/order_by_widget.dart';
@@ -256,7 +254,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                 children: [
                   CustomButton(
                     text: _locale.reset,
-                    fontWeight: FontWeight.w400,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
@@ -282,11 +279,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         ];
                       });
                     },
-                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
                   CustomButton(
                     text: _locale.search,
-                    fontWeight: FontWeight.w400,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () async {
@@ -302,11 +297,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           await ReportController().getSalesResultMehtod(body);
                       setState(() {});
                     },
-                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
                   CustomButton(
                     text: _locale.exportToExcel,
-                    fontWeight: FontWeight.w400,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
@@ -325,7 +318,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         saveExcelFile(value, "SalesReport.xlsx");
                       });
                     },
-                    fontSize: isDesktop ? height * .016 : height * .011,
                   ),
                   // SizedBox(
                   //   width: isMobile ? width * 0.05 : width * 0.05,

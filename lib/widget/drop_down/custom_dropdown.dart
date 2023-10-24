@@ -1,6 +1,7 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/constants/responsive.dart';
 import '../custom_label.dart';
 
 // ignore: must_be_immutable
@@ -67,8 +68,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   : widget.onValidator!(value),
               items: widget.items ?? [],
               asyncItems: widget.onSearch,
-              dropdownBuilder:
-                  showSearchBox == true ? _customDropDownPrograms : null,
+              dropdownBuilder: _customDropDownPrograms,
               popupProps: PopupProps.menu(
                 menuProps: const MenuProps(
                   animationDuration: Duration(milliseconds: 100),
@@ -88,24 +88,30 @@ class _CustomDropDownState extends State<CustomDropDown> {
     );
   }
 
-  Widget _customDropDownPrograms(BuildContext context, dynamic? item) {
+  Widget _customDropDownPrograms(BuildContext context, dynamic item) {
+    double height = MediaQuery.of(context).size.height;
+    bool isDesktop = Responsive.isDesktop(context);
     return Container(
         child: (item == null)
-            ? ListTile(
-                //    contentPadding: EdgeInsets.only(right: 20, left: 50),
-                title: Text(widget.hint!,
-                    textAlign: TextAlign.start,
-                    style: const TextStyle(
-                        fontSize: 13,
-                        color: Color.fromARGB(235, 158, 158, 158))),
+            ? Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Text(widget.hint!,
+                    // textAlign: TextAlign.start,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: isDesktop ? height * .02 : height * .015,
+                        color: const Color.fromARGB(235, 158, 158, 158))),
               )
-            : ListTile(
-                //contentPadding: const EdgeInsets.only(right: 230, left: 20),
-                title: Text(
-                item.toString(),
-                textAlign: TextAlign.start,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 13.5, color: Colors.black),
-              )));
+            : Padding(
+                padding: const EdgeInsets.only(right: 12),
+                child: Text(
+                  item.toString(),
+                  // textAlign: TextAlign.start,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: isDesktop ? height * .02 : height * .015,
+                      color: Colors.black),
+                ),
+              ));
   }
 }

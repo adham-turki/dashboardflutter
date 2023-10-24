@@ -195,7 +195,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                       Navigator.pop(context);
                     },
                     text: "Submit",
-                    fontWeight: FontWeight.w400,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                   ),

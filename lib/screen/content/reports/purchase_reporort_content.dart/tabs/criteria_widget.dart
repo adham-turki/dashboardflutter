@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 class CriteriaWidget extends StatefulWidget {
   CriteriaWidget({Key? key}) : super(key: key);
+  double unused = 0;
 
   @override
   State<CriteriaWidget> createState() => _CriteriaWidgetState();
@@ -72,6 +73,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
 
 class LeftWidget extends StatefulWidget {
   LeftWidget({Key? key}) : super(key: key);
+  double unused = 0;
 
   @override
   State<LeftWidget> createState() => _LeftWidgetState();
@@ -247,6 +249,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           title: _locale.stockCategoryLevel("1"),
           multipleVal: valueMultipleStkCateg1,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             hint: selectedFromStkCategory1.isNotEmpty
                 ? selectedFromStkCategory1
                 : _locale.select,
@@ -271,6 +274,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 : null,
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             hint: selectedToStkCategory1.isNotEmpty
                 ? selectedToStkCategory1
                 : _locale.select,
@@ -347,6 +351,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           title: _locale.stockCategoryLevel("3"),
           multipleVal: valueMultipleStkCateg3,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             hint: selectedFromStkCategory3.isNotEmpty
                 ? selectedFromStkCategory3
                 : _locale.select,
@@ -371,6 +376,7 @@ class _LeftWidgetState extends State<LeftWidget> {
             },
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             hint: selectedToStkCategory3.isNotEmpty
                 ? selectedToStkCategory3
                 : _locale.select,
@@ -446,6 +452,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           title: _locale.supplierCategory,
           multipleVal: valueMultipleSuppCateg,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             width: width * 0.2,
             hint: selectedFromSuppCateg.isNotEmpty
                 ? selectedFromSuppCateg
@@ -468,6 +475,7 @@ class _LeftWidgetState extends State<LeftWidget> {
             },
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             width: width * 0.2,
             // items: suppCategoryList,
             hint: selectedToSuppCateg.isNotEmpty
@@ -708,6 +716,7 @@ class _LeftWidgetState extends State<LeftWidget> {
 
 class RightWidget extends StatefulWidget {
   RightWidget({Key? key}) : super(key: key);
+  double unused = 0;
 
   @override
   State<RightWidget> createState() => _RightWidgetState();
@@ -805,6 +814,7 @@ class _RightWidgetState extends State<RightWidget> {
           title: _locale.branch,
           multipleVal: valueMultipleBranches,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
             // items: branchesList,
@@ -828,6 +838,7 @@ class _RightWidgetState extends State<RightWidget> {
             },
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.to,
             width: isDesktop ? width * .17 : width * .38,
             // items: branchesList,
@@ -901,6 +912,7 @@ class _RightWidgetState extends State<RightWidget> {
           title: _locale.stockCategoryLevel("2"),
           multipleVal: valueMultipleStkCategory2,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
             // items: stkCategory2List,
@@ -925,6 +937,7 @@ class _RightWidgetState extends State<RightWidget> {
             },
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.to,
             width: isDesktop ? width * .17 : width * .38,
             hint: selectedToStkCategory2.isNotEmpty
@@ -1000,6 +1013,7 @@ class _RightWidgetState extends State<RightWidget> {
             title: _locale.supplier(""),
             multipleVal: valueMultipleSupplier,
             fromDropDown: CustomDropDown(
+              showSearchBox: true,
               label: _locale.from,
               width: isDesktop ? width * .17 : width * .38,
               // items: suppliersList,
@@ -1023,6 +1037,7 @@ class _RightWidgetState extends State<RightWidget> {
               },
             ),
             toDropDown: CustomDropDown(
+              showSearchBox: true,
               label: _locale.to,
               width: isDesktop ? width * .17 : width * .38,
               hint: selectedToSupplier.isNotEmpty
@@ -1093,6 +1108,7 @@ class _RightWidgetState extends State<RightWidget> {
           title: _locale.stock,
           multipleVal: valueMultipleStock,
           fromDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.from,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
@@ -1116,6 +1132,7 @@ class _RightWidgetState extends State<RightWidget> {
             },
           ),
           toDropDown: CustomDropDown(
+            showSearchBox: true,
             label: _locale.to,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
