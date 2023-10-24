@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
 
           return MaterialApp(
             navigatorKey: navigatorKey,
-            title: 'Parking App',
+            title: 'BI | Scope',
             debugShowCheckedModeBanner: false,
             localizationsDelegates: const [
               AppLocalizations.delegate,
