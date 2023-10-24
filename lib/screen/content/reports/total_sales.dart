@@ -457,7 +457,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
-      rows: topList,
+      rows: reportsResult == null ? [] : topList,
     );
   }
 }

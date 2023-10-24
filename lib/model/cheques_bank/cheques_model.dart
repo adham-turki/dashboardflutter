@@ -154,7 +154,7 @@ class ChequesModel {
       rendererContext: rendererContext,
       formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.center,
       titleSpanBuilder: (text) {
         return [
           TextSpan(
