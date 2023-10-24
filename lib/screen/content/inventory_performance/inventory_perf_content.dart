@@ -6,7 +6,9 @@ import '../../../components/table_component.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/inventory_performance/inventory_performance_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
+import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_date_picker.dart';
@@ -33,36 +35,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   String? fromDateValue;
   String? toDateValue;
 
-  String data = "";
-
   var selectedPeriod = "";
   String hintValue = '0';
+
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
 
-  final List<double> listOfBalances = [
-    100.0,
-    150.0,
-    120.0,
-    200.0,
-    180.0,
-    250.0
-  ];
-  final List<String> listOfPeriods = [
-    'Period 1',
-    'Period 2',
-    'Period 3',
-    'Period 4',
-    'Period 5',
-    'Period 6'
-  ];
   final storage = const FlutterSecureStorage();
-
-  final List<String> items = [
-    'Print',
-    'Save as JPEG',
-    'Save as PNG',
-  ];
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
@@ -107,13 +86,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   double width = 0;
   double height = 0;
-
   int count = 0;
+  bool isDesktop = false;
+  bool isMobile = false;
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -206,71 +188,137 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    height: height * .03,
-                  ),
-                  SelectableText(
-                    maxLines: 1,
-                    _locale.topOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.green),
-                  ),
-                  SizedBox(
-                    height: height * .03,
-                  ),
-                  SizedBox(
-                    width: width * 0.37,
-                    height: height * 0.7,
-                    child: TableComponent(
-                      key: UniqueKey(),
-                      plCols: InventoryPerformanceModel.getColumns(
-                          AppLocalizations.of(context)),
-                      polRows: polTopRows,
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooter(stateManager);
-                      },
+        isDesktop
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topOfInventoryPerformance,
+                          style: eighteen500TextStyle(colorNewList[0]),
+                        ),
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SizedBox(
+                          width: width * 0.37,
+                          height: height * 0.7,
+                          child: TableComponent(
+                            key: UniqueKey(),
+                            plCols: InventoryPerformanceModel.getColumns(
+                                AppLocalizations.of(context)),
+                            polRows: polTopRows,
+                            footerBuilder: (stateManager) {
+                              return lazyPaginationFooter(stateManager);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  SizedBox(
-                    height: height * .03,
-                  ),
-                  SelectableText(
-                    maxLines: 1,
-                    _locale.leastOfInventoryPerformance,
-                    style: eighteen500TextStyle(Colors.red),
-                  ),
-                  SizedBox(
-                    height: height * .03,
-                  ),
-                  SizedBox(
-                    width: width * 0.37,
-                    height: height * 0.7,
-                    child: TableComponent(
-                      key: UniqueKey(),
-                      plCols: InventoryPerformanceModel.getColumns(
-                          AppLocalizations.of(context)),
-                      polRows: [],
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooterLeast(stateManager);
-                      },
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.leastOfInventoryPerformance,
+                          style: eighteen500TextStyle(colorNewList[2]),
+                        ),
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SizedBox(
+                          width: width * 0.37,
+                          height: height * 0.7,
+                          child: TableComponent(
+                            key: UniqueKey(),
+                            plCols: InventoryPerformanceModel.getColumns(
+                                AppLocalizations.of(context)),
+                            polRows: [],
+                            footerBuilder: (stateManager) {
+                              return lazyPaginationFooterLeast(stateManager);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topOfInventoryPerformance,
+                          style: eighteen500TextStyle(colorNewList[0]),
+                        ),
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SizedBox(
+                          width: width * 0.37,
+                          height: height * 0.7,
+                          child: TableComponent(
+                            key: UniqueKey(),
+                            plCols: InventoryPerformanceModel.getColumns(
+                                AppLocalizations.of(context)),
+                            polRows: polTopRows,
+                            footerBuilder: (stateManager) {
+                              return lazyPaginationFooter(stateManager);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.leastOfInventoryPerformance,
+                          style: eighteen500TextStyle(colorNewList[2]),
+                        ),
+                        SizedBox(
+                          height: height * .03,
+                        ),
+                        SizedBox(
+                          width: width * 0.37,
+                          height: height * 0.7,
+                          child: TableComponent(
+                            key: UniqueKey(),
+                            plCols: InventoryPerformanceModel.getColumns(
+                                AppLocalizations.of(context)),
+                            polRows: [],
+                            footerBuilder: (stateManager) {
+                              return lazyPaginationFooterLeast(stateManager);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        ),
       ],
     );
   }
@@ -303,7 +351,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       toDate.text = DatesController()
           .formatDate(DatesController().todayDate())
           .toString();
-      print("cjeck :${toDate.text}");
     }
     if (value == periods[1]) {
       // Weekly
@@ -359,7 +406,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    print("from date critiria :${criteria.fromDate}");
     List<InventoryPerformanceModel> invList =
         await inventoryPerformanceController.totalSellDic(criteria);
 
@@ -396,23 +442,17 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     //To send the number of page to the JSON Object
     criteria.page = page;
-    print(criteria.toJson());
 
     List<PlutoRow> topList = [];
 
     List<InventoryPerformanceModel> invList =
         await inventoryPerformanceController.totalSellInc(criteria);
 
-    print(invList.length);
-
     int totalPage = 1;
 
     for (int i = 0; i < invList.length; i++) {
-      print("object");
       topList.add(invList[i].toPluto());
     }
-
-    print("TOP LIST: ${topList.length}");
 
     return PlutoLazyPaginationResponse(
       totalPage: totalPage,
