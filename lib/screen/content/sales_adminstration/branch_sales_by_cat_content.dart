@@ -71,12 +71,13 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+  String todayDate = "";
 
   bool temp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     _fromDateController.text = todayDate;
     _toDateController.text = todayDate;
@@ -405,6 +406,16 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     //         : selectedCategories == "Categorie2"
     //             ? 3
     //             : 4;
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    }
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);
     SearchCriteria searchCriteria = SearchCriteria(

@@ -63,11 +63,11 @@ class _DailySalesContentState extends State<DailySalesContent> {
   List<BarChartData> barData = [];
 
   bool boolTemp = false;
-
+  String todayDate = "";
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     _fromDateController.text = todayDate;
     status = [
@@ -328,7 +328,13 @@ class _DailySalesContentState extends State<DailySalesContent> {
     pieData = [];
     barData = [];
     int status = getVoucherStatus(_locale, selectedStatus);
-
+    if (_fromDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+      });
+    }
     String startDate = DatesController().formatDate(_fromDateController.text);
     SearchCriteria searchCriteria =
         SearchCriteria(fromDate: startDate, voucherStatus: status);

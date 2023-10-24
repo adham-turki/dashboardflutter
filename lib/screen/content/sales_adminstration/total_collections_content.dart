@@ -59,12 +59,12 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
-
+  String todayDate = "";
   bool boolTemp = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
     _fromDateController.text = todayDate;
@@ -327,6 +327,16 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     dataMap.clear();
 
     int status = getVoucherStatus(_locale, selectedStatus);
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    }
 
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);

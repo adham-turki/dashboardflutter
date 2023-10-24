@@ -13,7 +13,8 @@ class DailySalesController {
   Future<List<DailySalesModel>> getDailySale(
       SearchCriteria searchCriteria) async {
     List<DailySalesModel> listDailySales = [];
-    await ApiService.postRequest(getDailySales, searchCriteria.noToDatetoJson())
+    await ApiService()
+        .postRequest(getDailySales, searchCriteria.noToDatetoJson())
         .then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {

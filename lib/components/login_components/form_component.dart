@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/constants/colors.dart';
@@ -20,6 +21,8 @@ class FormComponent extends StatefulWidget {
 }
 
 class _FormComponentState extends State<FormComponent> {
+  bool obscure1 = true;
+  bool obscure2 = true;
   double height = 0;
   double width = 0;
   @override
@@ -78,6 +81,20 @@ class _FormComponentState extends State<FormComponent> {
                     LoginTextField(
                       hint: "Password",
                       controller: widget.passwordController,
+                      obscureText: obscure1,
+                      customIconSuffix: GestureDetector(
+                        onTap: () {
+                          obscure1 = !obscure1;
+                          setState(() {});
+                        },
+                        child: Icon(
+                          obscure1
+                              ? CupertinoIcons.eye_slash_fill
+                              : CupertinoIcons.eye,
+                          color: Colors.grey,
+                          size: 20,
+                        ),
+                      ),
                     ),
                     const SizedBox(),
                     const SizedBox(

@@ -1,6 +1,7 @@
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:bi_replicate/widget/sidebar/logout_tab.dart';
 import 'package:bi_replicate/widget/sidebar/tab_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -51,24 +52,25 @@ class _SideMenuState extends State<SideMenu> {
                     children: [
                       Column(
                         children: [
-                          for (int i = 0; i < menuList.length - 2; i++)
+                          for (int i = 0; i < menuList.length; i++)
                             TabMenu(sideTabModel: menuList[i]),
                         ],
                       ),
-                      Column(
-                        children: [
-                          for (int i = menuList.length - 2;
-                              i < menuList.length;
-                              i++)
-                            TabMenu(sideTabModel: menuList[i]),
-                        ],
-                      ),
+                      // Column(
+                      //   children: [
+                      //     for (int i = menuList.length - 2;
+                      //         i < menuList.length;
+                      //         i++)
+                      //       TabMenu(sideTabModel: menuList[i]),
+                      //   ],
+                      // ),
                     ],
                   );
                 },
               ),
             ),
           ),
+          const LogoutTab(),
         ],
       ),
     );

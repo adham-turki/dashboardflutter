@@ -10,7 +10,7 @@ class BranchController {
     var api = getBranchs;
     Map<String, dynamic> branchesMapCurrent = {};
 
-    await ApiService.getRequest(api).then((value) {
+    await ApiService().getRequest(api).then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (int i = 0; i < jsonData.length; i++) {

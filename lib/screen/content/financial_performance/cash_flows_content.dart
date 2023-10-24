@@ -68,8 +68,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   List<BiAccountModel> cashboxAccounts = [];
 
   List<BarChartData> barData = [];
-  String todayDate = DatesController().formatDateReverse(
-      DatesController().formatDate(DatesController().todayDate()));
+
   // String nextMonth = DatesController().formatDateReverse(DatesController()
   //     .formatDate(DateTime(DatesController().today.year,
   //             DatesController().today.month + 1, DatesController().today.day)
@@ -87,10 +86,13 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     super.initState();
   }
 
+  String todayDate = "";
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-
+    todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
     status = [
       _locale.all,
       _locale.posted,
@@ -404,7 +406,16 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     pieData = [];
     barData = [];
     dataMap.clear();
-
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    }
     int status = getVoucherStatus(_locale, selectedStatus);
     String startDate = DatesController().formatDate(_fromDateController.text);
     String endDate = DatesController().formatDate(_toDateController.text);

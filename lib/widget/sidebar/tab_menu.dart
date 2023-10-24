@@ -23,7 +23,6 @@ class _TabMenuState extends State<TabMenu> {
   double width = 0;
   double height = 0;
 
-  Color hoverColor = const Color.fromRGBO(30, 36, 48, 1);
   Color subMenuColor = const Color.fromRGBO(35, 44, 57, 1);
 
   bool isHovered = false;

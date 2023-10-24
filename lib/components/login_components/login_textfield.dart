@@ -13,20 +13,28 @@ class LoginTextField extends StatefulWidget {
   bool? readOnly;
   Function(String value)? onChanged;
   String? hint;
-  LoginTextField({
-    Key? key,
-    this.onValidator,
-    this.controller,
-    this.label,
-    this.initialValue,
-    this.padding,
-    this.onSubmitted,
-    this.customKey,
-    this.width,
-    this.readOnly,
-    this.onChanged,
-    this.hint,
-  }) : super(key: key);
+  bool? obscureText;
+  Icon? customIcon;
+  dynamic customIconSuffix;
+  bool? showText;
+  LoginTextField(
+      {Key? key,
+      this.onValidator,
+      this.controller,
+      this.label,
+      this.initialValue,
+      this.padding,
+      this.onSubmitted,
+      this.customKey,
+      this.width,
+      this.readOnly,
+      this.onChanged,
+      this.hint,
+      this.customIcon,
+      this.customIconSuffix,
+      this.obscureText,
+      this.showText})
+      : super(key: key);
 
   @override
   State<LoginTextField> createState() => _LoginTextFieldState();
@@ -75,6 +83,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
             //   ],
             // ),
             child: TextFormField(
+              obscureText: widget.obscureText ?? false,
               style: TextStyle(color: Colors.white),
               controller: _textEditingController,
               readOnly: readOnly,
@@ -84,6 +93,8 @@ class _LoginTextFieldState extends State<LoginTextField> {
               onFieldSubmitted: onSubmitted,
 
               decoration: InputDecoration(
+                suffixIcon:
+                    widget.showText == true ? null : widget.customIconSuffix,
                 fillColor: Colors.white,
                 hintText: hint,
                 hintStyle: TextStyle(
