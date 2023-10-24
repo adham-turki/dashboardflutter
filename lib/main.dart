@@ -7,6 +7,7 @@ import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/screen/login_screen.dart';
 import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<LocaleProvider>(context);
+    // final provider = Provider.of<LocaleProvider>(context);
 
     //    Future<void> loadStoredLocale() async {
     //   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,29 +49,64 @@ class MyApp extends StatelessWidget {
     // }
 
     // loadStoredLocale();
-    return MaterialApp(
-      navigatorKey: navigatorKey,
-      title: 'Bi',
-      //  navigatorKey: navigatorKey,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      locale: provider.locale,
-      supportedLocales: L10n.all,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute:
-          // hasToken ? mainScreenRoute :
-          loginScreenRoute,
-      routes: {
-        loginScreenRoute: (context) => const LoginScreen(),
-        mainScreenRoute: (context) => const HomePage(),
+    return FutureBuilder<String?>(
+      future: _getToken(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          final hasToken = snapshot.data != null;
+          final provider = Provider.of<LocaleProvider>(context);
+
+          return MaterialApp(
+            navigatorKey: navigatorKey,
+            title: 'Parking App',
+            debugShowCheckedModeBanner: false,
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            locale: provider.locale,
+            supportedLocales: L10n.all,
+            // home: hasToken ? const HomePage() : const LoginScreen(),
+            initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
+            routes: {
+              loginScreenRoute: (context) => const LoginScreen(),
+              mainScreenRoute: (context) => const HomePage(),
+            },
+          );
+        }
       },
     );
+
+    // return MaterialApp(
+    //   navigatorKey: navigatorKey,
+    //   title: 'Bi',
+    //   //  navigatorKey: navigatorKey,
+    //   localizationsDelegates: const [
+    //     AppLocalizations.delegate,
+    //     GlobalMaterialLocalizations.delegate,
+    //     GlobalCupertinoLocalizations.delegate,
+    //     GlobalWidgetsLocalizations.delegate,
+    //   ],
+    //   locale: provider.locale,
+    //   supportedLocales: L10n.all,
+    //   debugShowCheckedModeBanner: false,
+    //   theme: ThemeData(
+    //     primarySwatch: Colors.blue,
+    //   ),
+    //   initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
+    //   routes: {
+    //     loginScreenRoute: (context) => const LoginScreen(),
+    //     mainScreenRoute: (context) => const HomePage(),
+    //   },
+    // );
+  }
+
+  Future<String?> _getToken() async {
+    const storage = FlutterSecureStorage();
+    return await storage.read(key: 'jwt');
   }
 }
