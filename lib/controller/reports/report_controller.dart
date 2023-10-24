@@ -224,7 +224,7 @@ class ReportController {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesResult = ReportsResult.fromJson(jsonData);
       }
-      print(response.body);
+      print("responseBody ${response.body}");
     });
 
     return salesResult;

@@ -35,8 +35,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   late SalesCriteraProvider readProvider;
   int limitPage = 0;
   List<String> finalRow = [];
-  TextEditingController fromDate = TextEditingController();
-  TextEditingController toDate = TextEditingController();
+  // TextEditingController fromDate = TextEditingController();
+  // TextEditingController toDate = TextEditingController();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
@@ -66,6 +66,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.total
     ];
 
+    // reportsResult =
+    //     await ReportController().getSalesResultMehtod(readProvider.toJson());
     // await getResult().then(
     //   (value) {
     //     searchSalesCostReport(1);
@@ -228,22 +230,22 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
               ),
             ),
             _currentIndex == 0
-                ? CriteriaWidget(
-                    fromDate: fromDate,
-                    toDate: toDate,
-                  )
+                ? const CriteriaWidget(
+                    // fromDate: fromDate,
+                    // toDate: toDate,
+                    )
                 : _currentIndex == 1
                     ? OrderByWidget(
-                        fromDate: fromDate,
-                        toDate: toDate,
+                        // fromDate: fromDate,
+                        // toDate: toDate,
                         onSelectedValueChanged1: updateSelectedValue1,
                         onSelectedValueChanged2: updateSelectedValue2,
                         onSelectedValueChanged3: updateSelectedValue3,
                         onSelectedValueChanged4: updateSelectedValue4)
                     : SetupWidget(
-                        fromDate: fromDate,
-                        toDate: toDate,
-                      ),
+                        // fromDate: fromDate,
+                        // toDate: toDate,
+                        ),
             SizedBox(
               height: isMobile ? height * 0.05 : height * 0.05,
             ),
@@ -288,11 +290,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () async {
-                      context.read<SalesCriteraProvider>().setFromDate(
-                          DatesController().formatDate(fromDate.text));
-                      context
-                          .read<SalesCriteraProvider>()
-                          .setToDate(DatesController().formatDate(toDate.text));
+                      // context.read<SalesCriteraProvider>().setFromDate(
+                      //     DatesController().formatDate(fromDate.text));
+                      // context
+                      //     .read<SalesCriteraProvider>()
+                      //     .setToDate(DatesController().formatDate(toDate.text));
                       await generateColumns();
 
                       dynamic body = readProvider.toJson();

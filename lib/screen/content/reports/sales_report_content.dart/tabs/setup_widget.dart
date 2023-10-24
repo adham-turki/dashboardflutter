@@ -9,10 +9,12 @@ import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 
 class SetupWidget extends StatefulWidget {
-  final TextEditingController fromDate;
-  final TextEditingController toDate;
-  const SetupWidget({Key? key, required this.fromDate, required this.toDate})
-      : super(key: key);
+  // final TextEditingController fromDate;
+  // final TextEditingController toDate;
+  const SetupWidget({
+    Key? key,
+    // required this.fromDate, required this.toDate
+  }) : super(key: key);
 
   @override
   State<SetupWidget> createState() => _SetupWidgetState();
@@ -52,12 +54,12 @@ class _SetupWidgetState extends State<SetupWidget> {
 
   @override
   void initState() {
-    context
-        .read<SalesCriteraProvider>()
-        .setFromDate(DatesController().formatDate(widget.fromDate.text));
-    context
-        .read<SalesCriteraProvider>()
-        .setToDate(DatesController().formatDate(widget.toDate.text));
+    // context
+    //     .read<SalesCriteraProvider>()
+    //     .setFromDate(DatesController().formatDate(widget.fromDate.text));
+    // context
+    //     .read<SalesCriteraProvider>()
+    //     .setToDate(DatesController().formatDate(widget.toDate.text));
     super.initState();
   }
 
