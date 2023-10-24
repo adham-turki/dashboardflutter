@@ -15,7 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class CriteriaWidget extends StatefulWidget {
-  const CriteriaWidget({Key? key}) : super(key: key);
+  CriteriaWidget({Key? key}) : super(key: key);
 
   @override
   State<CriteriaWidget> createState() => _CriteriaWidgetState();
@@ -51,17 +51,17 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
       child: isMobile
           ? Column(
               children: [
-                const LeftWidget(),
+                LeftWidget(),
                 SizedBox(
                   height: height * .01,
                 ),
-                const RightWidget(),
+                RightWidget(),
               ],
             )
           : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
+              children: [
                 LeftWidget(),
                 RightWidget(),
               ],
@@ -71,7 +71,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
 }
 
 class LeftWidget extends StatefulWidget {
-  const LeftWidget({Key? key}) : super(key: key);
+  LeftWidget({Key? key}) : super(key: key);
 
   @override
   State<LeftWidget> createState() => _LeftWidgetState();
@@ -133,7 +133,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
 
     String todayDate = DatesController().formatDateReverse(
@@ -150,6 +149,8 @@ class _LeftWidgetState extends State<LeftWidget> {
 
     readProvider.setFromDate(DatesController().formatDate(fromDate.text));
     readProvider.setToDate(DatesController().formatDate(toDate.text));
+    print("fromDateText ${fromDate.text}");
+
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
     selectedToStkCategory1 = readProvider.getToCateg1!;
@@ -739,7 +740,7 @@ class _LeftWidgetState extends State<LeftWidget> {
 }
 
 class RightWidget extends StatefulWidget {
-  const RightWidget({Key? key}) : super(key: key);
+  RightWidget({Key? key}) : super(key: key);
 
   @override
   State<RightWidget> createState() => _RightWidgetState();
