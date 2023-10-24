@@ -74,15 +74,15 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                   ? MediaQuery.of(context).size.height * 0.03
                   : MediaQuery.of(context).size.height * 0.02,
             ),
-            const SizedBox(width: 10),
-            Text(
-              _local.dropLangEN,
-              style: TextStyle(
-                // backgroundColor: Colors.black,
-                color: color,
-                fontSize: 16,
-              ),
-            ),
+            // const SizedBox(width: 10),
+            // Text(
+            //   _local.dropLangEN,
+            //   style: TextStyle(
+            //     // backgroundColor: Colors.black,
+            //     color: color,
+            //     fontSize: 16,
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -96,14 +96,14 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                   ? MediaQuery.of(context).size.height * 0.03
                   : MediaQuery.of(context).size.height * 0.02,
             ),
-            const SizedBox(width: 10),
-            Text(
-              _local.dropLangAR,
-              style: TextStyle(
-                color: color,
-                fontSize: 16,
-              ),
-            ),
+            // const SizedBox(width: 10),
+            // Text(
+            //   _local.dropLangAR,
+            //   style: TextStyle(
+            //     color: color,
+            //     fontSize: 16,
+            //   ),
+            // ),
           ],
         ),
       ),
