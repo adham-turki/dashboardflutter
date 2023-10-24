@@ -50,6 +50,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
   final dataMap = <String, double>{};
 
   List<PieChartModel> pieData = [];
+  String todayDate = "";
 
   bool temp = false;
   @override

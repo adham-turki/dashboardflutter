@@ -68,10 +68,12 @@ class _ExpensesContentState extends State<ExpensesContent> {
     super.initState();
   }
 
+  String todayDate = "";
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
     _fromDateController.text = todayDate;
@@ -331,6 +333,13 @@ class _ExpensesContentState extends State<ExpensesContent> {
     barData = [];
     dataMap.clear();
     count = 0;
+    if (_fromDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+      });
+    }
     int status = getVoucherStatus(_locale, selectedStatus);
     String date = DatesController().formatDate(_fromDateController.text);
     SearchCriteria searchCriteria =

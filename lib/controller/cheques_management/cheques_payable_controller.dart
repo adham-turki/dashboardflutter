@@ -11,8 +11,8 @@ class ChequesPayableController {
       SearchCriteria searchCriteria) async {
     ChequesPayableModel chequesPayableModel =
         ChequesPayableModel(0, 0, 0, 0, 0, 0, 0);
-    await ApiService.postRequest(
-            getChequesPayable, searchCriteria.statusToJson())
+    await ApiService()
+        .postRequest(getChequesPayable, searchCriteria.statusToJson())
         .then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 

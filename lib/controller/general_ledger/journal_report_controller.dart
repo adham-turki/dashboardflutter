@@ -14,7 +14,7 @@ class JournalReportController {
       JournalReportCriteria criteria) async {
     List<JournalReport> list = [];
     http.Response response =
-        await ApiService.postRequest(journalReportApi, criteria);
+        await ApiService().postRequest(journalReportApi, criteria);
     var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     for (var data in jsonData['list']) {
       list.add(JournalReport.fromJson(data));

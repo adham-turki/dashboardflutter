@@ -14,7 +14,9 @@ class SalesCategoryController {
     var api = getSalesApi;
     List<SalesCategoryModel> salesCategoryList = [];
 
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var salesCategory in jsonData) {

@@ -17,7 +17,8 @@ class SelfChequesController {
     String pathUrl = getAllCheques;
     int count = 0;
 
-    await ApiService.postRequest(pathUrl, searchCriteria.chequesToJson())
+    await ApiService()
+        .postRequest(pathUrl, searchCriteria.chequesToJson())
         .then((response) {
       print("response.body ${response.body}"); // Print the response
 
@@ -39,7 +40,8 @@ class SelfChequesController {
       SearchCriteria searchCriteria) async {
     var api = getChequesResult;
     late ChequesResult chequesResult = ChequesResult();
-    await ApiService.postRequest(api, searchCriteria.chequesToJson())
+    await ApiService()
+        .postRequest(api, searchCriteria.chequesToJson())
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -66,7 +68,7 @@ class SelfChequesController {
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    await ApiService.postRequest(eUrl, body).then((value) {
+    await ApiService().postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
 
