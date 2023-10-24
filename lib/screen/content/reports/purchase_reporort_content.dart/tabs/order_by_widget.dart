@@ -11,17 +11,17 @@ class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged2;
   final Function(String) onSelectedValueChanged3;
   final Function(String) onSelectedValueChanged4;
-  final TextEditingController fromDate;
-  final TextEditingController toDate;
-  const OrderByWidget(
-      {Key? key,
-      required this.onSelectedValueChanged1,
-      required this.onSelectedValueChanged2,
-      required this.onSelectedValueChanged3,
-      required this.onSelectedValueChanged4,
-      required this.fromDate,
-      required this.toDate})
-      : super(key: key);
+  // final TextEditingController fromDate;
+  // final TextEditingController toDate;
+  OrderByWidget({
+    Key? key,
+    required this.onSelectedValueChanged1,
+    required this.onSelectedValueChanged2,
+    required this.onSelectedValueChanged3,
+    required this.onSelectedValueChanged4,
+    // required this.fromDate,
+    // required this.toDate
+  }) : super(key: key);
 
   @override
   State<OrderByWidget> createState() => _OrderByWidgetState();
@@ -93,12 +93,12 @@ class _OrderByWidgetState extends State<OrderByWidget> {
 
   @override
   void initState() {
-    context
-        .read<PurchaseCriteraProvider>()
-        .setFromDate(DatesController().formatDate(widget.fromDate.text));
-    context
-        .read<PurchaseCriteraProvider>()
-        .setToDate(DatesController().formatDate(widget.toDate.text));
+    // context
+    //     .read<PurchaseCriteraProvider>()
+    //     .setFromDate(DatesController().formatDate(widget.fromDate.text));
+    // context
+    //     .read<PurchaseCriteraProvider>()
+    //     .setToDate(DatesController().formatDate(widget.toDate.text));
 
     super.initState();
   }

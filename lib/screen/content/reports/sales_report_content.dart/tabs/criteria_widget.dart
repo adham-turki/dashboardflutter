@@ -6,7 +6,6 @@ import '../../../../../components/card.dart';
 import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../provider/sales_search_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../utils/constants/styles.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/custom_date_picker.dart';
 import '../../../../../widget/custom_textfield.dart';
@@ -16,10 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class CriteriaWidget extends StatefulWidget {
-  TextEditingController fromDate;
-  TextEditingController toDate;
-  CriteriaWidget({Key? key, required this.fromDate, required this.toDate})
-      : super(key: key);
+  CriteriaWidget({Key? key}) : super(key: key);
 
   @override
   State<CriteriaWidget> createState() => _CriteriaWidgetState();
@@ -55,19 +51,19 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
       child: isMobile
           ? Column(
               children: [
-                LeftWidget(fromDate: widget.fromDate, toDate: widget.toDate),
+                LeftWidget(),
                 SizedBox(
                   height: height * .01,
                 ),
-                RightWidget(fromDate: widget.fromDate, toDate: widget.toDate),
+                RightWidget(),
               ],
             )
           : Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                LeftWidget(fromDate: widget.fromDate, toDate: widget.toDate),
-                RightWidget(fromDate: widget.fromDate, toDate: widget.toDate),
+                LeftWidget(),
+                RightWidget(),
               ],
             ),
     );
@@ -75,11 +71,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
 }
 
 class LeftWidget extends StatefulWidget {
-  final TextEditingController fromDate;
-  final TextEditingController toDate;
-
-  const LeftWidget({Key? key, required this.fromDate, required this.toDate})
-      : super(key: key);
+  LeftWidget({Key? key}) : super(key: key);
 
   @override
   State<LeftWidget> createState() => _LeftWidgetState();
@@ -121,7 +113,8 @@ class _LeftWidgetState extends State<LeftWidget> {
   bool valueSelectAllCustomer = false;
   bool valueSelectAllStock = false;
   late SalesCriteraProvider readProvider;
-
+  TextEditingController fromDate = TextEditingController();
+  TextEditingController toDate = TextEditingController();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
@@ -140,19 +133,23 @@ class _LeftWidgetState extends State<LeftWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
+
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
+    fromDate.text = readProvider.getFromDate!.isNotEmpty
         ? DatesController()
             .formatDateReverse(readProvider.getFromDate.toString())
         : todayDate;
 
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
+    toDate.text = readProvider.getToDate!.isNotEmpty
         ? DatesController().formatDateReverse(readProvider.getToDate.toString())
         : todayDate;
+
+    readProvider.setFromDate(DatesController().formatDate(fromDate.text));
+    readProvider.setToDate(DatesController().formatDate(toDate.text));
+    print("fromDateText ${fromDate.text}");
 
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
@@ -194,14 +191,26 @@ class _LeftWidgetState extends State<LeftWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomDatePicker(
-                      controller: widget.fromDate,
+                      controller: fromDate,
                       label: _locale.fromDate,
-                      date: DateTime.parse(widget.toDate.text),
+                      date: DateTime.parse(toDate.text),
+                      onChanged: (value) {
+                        setFromDateController();
+                      },
+                      onSelected: (value) {
+                        setFromDateController();
+                      },
                     ),
                     CustomDatePicker(
-                      controller: widget.toDate,
-                      date: DateTime.parse(widget.fromDate.text),
+                      controller: toDate,
+                      date: DateTime.parse(fromDate.text),
                       label: _locale.toDate,
+                      onChanged: (value) {
+                        setToDateController();
+                      },
+                      onSelected: (value) {
+                        setToDateController();
+                      },
                     )
                   ],
                 )
@@ -210,14 +219,26 @@ class _LeftWidgetState extends State<LeftWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomDatePicker(
-                      controller: widget.fromDate,
+                      controller: fromDate,
                       label: _locale.fromDate,
-                      date: DateTime.parse(widget.toDate.text),
+                      date: DateTime.parse(toDate.text),
+                      onChanged: (value) {
+                        setFromDateController();
+                      },
+                      onSelected: (value) {
+                        setFromDateController();
+                      },
                     ),
                     CustomDatePicker(
-                      controller: widget.toDate,
-                      date: DateTime.parse(widget.fromDate.text),
+                      controller: toDate,
+                      date: DateTime.parse(fromDate.text),
                       label: _locale.toDate,
+                      onChanged: (value) {
+                        setToDateController();
+                      },
+                      onSelected: (value) {
+                        setToDateController();
+                      },
                     )
                   ],
                 ),
@@ -615,19 +636,9 @@ class _LeftWidgetState extends State<LeftWidget> {
   }
 
   DropDownSearchCriteria getSearchCriteria(String text) {
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-        ? DatesController()
-            .formatDateReverse(readProvider.getFromDate.toString())
-        : todayDate;
-
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
-        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : todayDate;
     DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
-        fromDate: DatesController().formatDate(widget.fromDate.text),
-        toDate: DatesController().formatDate(widget.toDate.text),
+        fromDate: DatesController().formatDate(fromDate.text),
+        toDate: DatesController().formatDate(toDate.text),
         nameCode: text);
     return dropDownSearchCriteria;
   }
@@ -707,13 +718,29 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     return codesString;
   }
+
+  void setFromDateController() {
+    String fromDateValue = fromDate.text;
+    String startDate = DatesController().formatDate(fromDateValue);
+    readProvider.setFromDate(startDate);
+
+    setState(() {
+      print("fromProvider ${readProvider.getFromDate}");
+    });
+  }
+
+  void setToDateController() {
+    String toDateValue = toDate.text;
+    String endDate = DatesController().formatDate(toDateValue);
+    readProvider.setToDate(endDate);
+    setState(() {
+      print("toProvider ${readProvider.getToDate}");
+    });
+  }
 }
 
 class RightWidget extends StatefulWidget {
-  final TextEditingController fromDate;
-  final TextEditingController toDate;
-  const RightWidget({Key? key, required this.fromDate, required this.toDate})
-      : super(key: key);
+  RightWidget({Key? key}) : super(key: key);
 
   @override
   State<RightWidget> createState() => _RightWidgetState();
@@ -779,16 +806,16 @@ class _RightWidgetState extends State<RightWidget> {
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
     isMobile = Responsive.isMobile(context);
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-        ? DatesController()
-            .formatDateReverse(readProvider.getFromDate.toString())
-        : todayDate;
+    // String todayDate = DatesController().formatDateReverse(
+    //     DatesController().formatDate(DatesController().todayDate()));
+    // widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
+    //     ? DatesController()
+    //         .formatDateReverse(readProvider.getFromDate.toString())
+    //     : todayDate;
 
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
-        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : todayDate;
+    // widget.toDate.text = readProvider.getToDate!.isNotEmpty
+    //     ? DatesController().formatDateReverse(readProvider.getToDate.toString())
+    //     : todayDate;
 
     selectedFromStkCategory2 = readProvider.getFromCateg2!;
     selectedToStkCategory2 = readProvider.getToCateg2!;
@@ -1261,19 +1288,21 @@ class _RightWidgetState extends State<RightWidget> {
   }
 
   DropDownSearchCriteria getSearchCriteria(String text) {
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-        ? DatesController()
-            .formatDateReverse(readProvider.getFromDate.toString())
-        : todayDate;
+    // String todayDate = DatesController().formatDateReverse(
+    //     DatesController().formatDate(DatesController().todayDate()));
+    // widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
+    //     ? DatesController()
+    //         .formatDateReverse(readProvider.getFromDate.toString())
+    //     : todayDate;
 
-    widget.toDate.text = readProvider.getToDate!.isNotEmpty
-        ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-        : todayDate;
+    // widget.toDate.text = readProvider.getToDate!.isNotEmpty
+    //     ? DatesController().formatDateReverse(readProvider.getToDate.toString())
+    //     : todayDate;
     DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
-        fromDate: DatesController().formatDate(widget.fromDate.text),
-        toDate: DatesController().formatDate(widget.toDate.text),
+        fromDate: DatesController().formatDate(DatesController()
+            .formatDateReverse(readProvider.getFromDate.toString())),
+        toDate: DatesController().formatDate(DatesController()
+            .formatDateReverse(readProvider.getToDate.toString())),
         nameCode: text);
     return dropDownSearchCriteria;
   }

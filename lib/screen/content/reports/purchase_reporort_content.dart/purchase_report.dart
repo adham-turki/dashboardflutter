@@ -39,8 +39,8 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
   double height = 0;
   bool isDesktop = false;
   bool isMobile = false;
-  TextEditingController fromDate = TextEditingController();
-  TextEditingController toDate = TextEditingController();
+  // TextEditingController fromDate = TextEditingController();
+  // TextEditingController toDate = TextEditingController();
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
@@ -217,21 +217,21 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
         ),
         _currentIndex == 0
             ? CriteriaWidget(
-                fromDate: fromDate,
-                toDate: toDate,
-              )
+                // fromDate: fromDate,
+                // toDate: toDate,
+                )
             : _currentIndex == 1
                 ? OrderByWidget(
-                    fromDate: fromDate,
-                    toDate: toDate,
+                    // fromDate: fromDate,
+                    // toDate: toDate,
                     onSelectedValueChanged1: updateSelectedValue1,
                     onSelectedValueChanged2: updateSelectedValue2,
                     onSelectedValueChanged3: updateSelectedValue3,
                     onSelectedValueChanged4: updateSelectedValue4)
                 : SetupWidget(
-                    fromDate: fromDate,
-                    toDate: toDate,
-                  ),
+                    // fromDate: fromDate,
+                    // toDate: toDate,
+                    ),
         SizedBox(
           height: isMobile ? height * 0.05 : height * 0.05,
         ),
@@ -275,20 +275,17 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () async {
-                  context
-                      .read<PurchaseCriteraProvider>()
-                      .setFromDate(DatesController().formatDate(fromDate.text));
-                  context
-                      .read<PurchaseCriteraProvider>()
-                      .setToDate(DatesController().formatDate(toDate.text));
+                  // context
+                  //     .read<PurchaseCriteraProvider>()
+                  //     .setFromDate(DatesController().formatDate(fromDate.text));
+                  // context
+                  //     .read<PurchaseCriteraProvider>()
+                  //     .setToDate(DatesController().formatDate(toDate.text));
                   await generateColumns();
                   dynamic body = readProvider.toJson();
                   reportsResult =
                       await ReportController().getPurchaseResultMehtod(body);
-                  setState(() {
-                    // fetch(PlutoLazyPaginationRequest(
-                    //     page: readProvider.getPage!));
-                  });
+                  setState(() {});
                 },
                 fontSize: isDesktop ? height * .016 : height * .011,
               ),
@@ -378,7 +375,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
     print("finish");
     return PlutoLazyPaginationResponse(
       totalPage: limitPage,
-      rows: topList,
+      rows: reportsResult == null ? [] : topList,
     );
   }
 
