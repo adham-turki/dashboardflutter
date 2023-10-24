@@ -4,27 +4,27 @@ import 'package:flutter/material.dart';
 import '../../model/side_menu/side_tab_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-List<SideTabModel> getSubMenu(AppLocalizations local) {
+List<SideTabModel> getSubMenu(AppLocalizations locale) {
   List<SideTabModel> menuList = [
     SideTabModel(
       isParent: true,
-      text: local.salesAdminstration,
+      text: locale.salesAdminstration,
       icon: Icons.assignment_ind_outlined,
       subMenu: [
         SideSubTabModel(
-          text: local.salesByBranches,
+          text: locale.salesByBranches,
           value: 0,
         ),
         SideSubTabModel(
-          text: local.branchesSalesByCategories,
+          text: locale.branchesSalesByCategories,
           value: 1,
         ),
         SideSubTabModel(
-          text: local.dailySales,
+          text: locale.dailySales,
           value: 2,
         ),
         SideSubTabModel(
-          text: local.totalCollections,
+          text: locale.totalCollections,
           value: 3,
         ),
       ],
@@ -32,22 +32,22 @@ List<SideTabModel> getSubMenu(AppLocalizations local) {
     ),
     SideTabModel(
       isParent: true,
-      text: local.financialPerformance,
+      text: locale.financialPerformance,
       icon: Icons.monetization_on,
       subMenu: [
         SideSubTabModel(
-          text: local.cashFlows,
+          text: locale.cashFlows,
           value: 4,
         ),
         SideSubTabModel(
-          text: local.expenses,
+          text: locale.expenses,
           value: 5,
         ),
       ],
       value: -1,
     ),
     SideTabModel(
-      text: local.inventoryPerformance,
+      text: locale.inventoryPerformance,
       icon: Icons.inventory,
       isParent: false,
       subMenu: [],
@@ -55,15 +55,15 @@ List<SideTabModel> getSubMenu(AppLocalizations local) {
     ),
     SideTabModel(
       isParent: true,
-      text: local.receivableManagement,
+      text: locale.receivableManagement,
       icon: Icons.moving_outlined,
       subMenu: [
         SideSubTabModel(
-          text: local.monthlyComparsionOFReceivableAndPayables,
+          text: locale.monthlyComparsionOFReceivableAndPayables,
           value: 7,
         ),
         SideSubTabModel(
-          text: local.agingReceivable,
+          text: locale.agingReceivable,
           value: 8,
         ),
       ],
@@ -71,15 +71,15 @@ List<SideTabModel> getSubMenu(AppLocalizations local) {
     ),
     SideTabModel(
       isParent: true,
-      text: local.chequesManagement,
+      text: locale.chequesManagement,
       icon: Icons.read_more,
       subMenu: [
         SideSubTabModel(
-          text: local.chequesAndBank,
+          text: locale.chequesAndBank,
           value: 9,
         ),
         SideSubTabModel(
-          text: local.outStandingCheques,
+          text: locale.outStandingCheques,
           value: 10,
         ),
       ],
@@ -143,19 +143,19 @@ List<SideTabModel> getSubMenu(AppLocalizations local) {
     // ),
     SideTabModel(
       isParent: true,
-      text: local.reports,
+      text: locale.reports,
       icon: Icons.note_sharp,
       subMenu: [
         SideSubTabModel(
-          text: local.totalSales,
+          text: locale.totalSales,
           value: 11,
         ),
         SideSubTabModel(
-          text: local.salesreport,
+          text: locale.salesreport,
           value: 12,
         ),
         SideSubTabModel(
-          text: local.purchasesReport,
+          text: locale.purchasesReport,
           value: 13,
         ),
       ],
@@ -163,15 +163,15 @@ List<SideTabModel> getSubMenu(AppLocalizations local) {
     ),
     SideTabModel(
       isParent: true,
-      text: local.settings,
+      text: locale.settings,
       icon: Icons.settings,
       subMenu: [
         SideSubTabModel(
-          text: local.setup,
+          text: locale.setup,
           value: 14,
         ),
         SideSubTabModel(
-          text: local.changePassword,
+          text: locale.changePassword,
           value: 15,
         ),
       ],

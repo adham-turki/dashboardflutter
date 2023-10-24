@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../provider/local_provider.dart';
 import '../widget/language_widget.dart';
 import 'customCard.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ContentHeader extends StatefulWidget {
   const ContentHeader({super.key});
@@ -19,6 +20,15 @@ class _ContentHeaderState extends State<ContentHeader> {
   double width = 0;
   double height = 0;
   late ScreenContentProvider provider;
+  late AppLocalizations locale;
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    locale = AppLocalizations.of(context);
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -38,8 +48,9 @@ class _ContentHeaderState extends State<ContentHeader> {
                         builder: ((context, value, child) {
                       return Column(
                         children: [
-                          Text(
-                            provider.getTitle(),
+                          SelectableText(
+                            maxLines: 1,
+                            getPage(),
                             style: TextStyle(
                               fontSize: Responsive.isDesktop(context)
                                   ? width * 0.015
@@ -50,9 +61,10 @@ class _ContentHeaderState extends State<ContentHeader> {
                         ],
                       );
                     })),
-                    const Text(
-                      "Base Currency: ILS",
-                      style: TextStyle(
+                    SelectableText(
+                      maxLines: 1,
+                      "${locale.baseCurrency}: ${locale.ils}",
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -63,8 +75,9 @@ class _ContentHeaderState extends State<ContentHeader> {
                   children: [
                     Consumer<ScreenContentProvider>(
                         builder: ((context, value, child) {
-                      return Text(
-                        provider.getTitle(),
+                      return SelectableText(
+                        maxLines: 1,
+                        getPage(),
                         style: TextStyle(
                           fontSize: Responsive.isDesktop(context)
                               ? width * 0.015
@@ -73,9 +86,10 @@ class _ContentHeaderState extends State<ContentHeader> {
                         ),
                       );
                     })),
-                    const Text(
-                      "Base Currency: ILS",
-                      style: TextStyle(
+                    SelectableText(
+                      maxLines: 1,
+                      "${locale.baseCurrency}: ${locale.ils}",
+                      style: const TextStyle(
                         fontSize: 18,
                       ),
                     ),
@@ -160,5 +174,45 @@ class _ContentHeaderState extends State<ContentHeader> {
         ],
       ),
     );
+  }
+
+  String getPage() {
+    int index = context.read<ScreenContentProvider>().getPage();
+    switch (index) {
+      case 0:
+        return locale.salesByBranches;
+      case 1:
+        return locale.branchesSalesByCategories;
+      case 2:
+        return locale.dailySales;
+      case 3:
+        return locale.totalCollections;
+      case 4:
+        return locale.cashFlows;
+      case 5:
+        return locale.expenses;
+      case 6:
+        return locale.inventoryPerformance;
+      case 7:
+        return locale.monthlyComparsionOFReceivableAndPayables;
+      case 8:
+        return locale.agingReceivable;
+      case 9:
+        return locale.chequesAndBank;
+      case 10:
+        return locale.outStandingCheques;
+      case 11:
+        return locale.totalSales;
+      case 12:
+        return locale.salesreport;
+      case 13:
+        return locale.purchasesReport;
+      case 14:
+        return locale.setup;
+      case 15:
+        return locale.changePassword;
+      default:
+        return "";
+    }
   }
 }
