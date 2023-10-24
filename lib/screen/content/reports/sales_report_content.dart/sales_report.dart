@@ -413,7 +413,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     }
     return PlutoLazyPaginationResponse(
       totalPage: limitPage,
-      rows: topList,
+      rows: reportsResult == null ? [] : topList,
     );
   }
 }

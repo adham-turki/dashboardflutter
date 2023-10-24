@@ -19,6 +19,8 @@ class LoginController {
       const storage = FlutterSecureStorage();
 
       await storage.write(key: 'jwt', value: token);
+      await storage.write(key: 'user', value: userModel.userName);
+
       return true;
     } else {
       if (response.statusCode == 400 || response.statusCode == 406) {

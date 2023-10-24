@@ -51,13 +51,11 @@ class ApiService {
   Future<http.Response> postRequestForResetPassword(
       String api, dynamic toJson) async {
     String? token = await storage.read(key: 'jwt');
-    print("ttttttt: ${token}");
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
     var requestUrl = "${ApiURL.urlServer}/$api";
-    print(Uri.parse(requestUrl));
-    print(json.encode(toJson));
+
     var response = await http.post(
       Uri.parse(requestUrl),
       headers: {

@@ -124,6 +124,18 @@ class _LeftWidgetState extends State<LeftWidget> {
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
     readProvider = context.read<SalesCriteraProvider>();
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    // isMobile = Responsive.isMobile(context);
+    isMobile = Responsive.isMobile(context);
+
     String todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
@@ -136,23 +148,8 @@ class _LeftWidgetState extends State<LeftWidget> {
         ? DatesController().formatDateReverse(readProvider.getToDate.toString())
         : todayDate;
 
-    context
-        .read<SalesCriteraProvider>()
-        .setFromDate(DatesController().formatDate(fromDate.text));
-    context
-        .read<SalesCriteraProvider>()
-        .setToDate(DatesController().formatDate(toDate.text));
-    super.didChangeDependencies();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    isDesktop = Responsive.isDesktop(context);
-    // isMobile = Responsive.isMobile(context);
-    isMobile = Responsive.isMobile(context);
-
+    readProvider.setFromDate(DatesController().formatDate(fromDate.text));
+    readProvider.setToDate(DatesController().formatDate(toDate.text));
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
     selectedToStkCategory1 = readProvider.getToCateg1!;
@@ -196,6 +193,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                       controller: fromDate,
                       label: _locale.fromDate,
                       date: DateTime.parse(toDate.text),
+                      onChanged: (value) {
+                        setFromDateController();
+                      },
                       onSelected: (value) {
                         setFromDateController();
                       },
@@ -204,6 +204,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                       controller: toDate,
                       date: DateTime.parse(fromDate.text),
                       label: _locale.toDate,
+                      onChanged: (value) {
+                        setToDateController();
+                      },
                       onSelected: (value) {
                         setToDateController();
                       },
@@ -217,7 +220,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                     CustomDatePicker(
                       controller: fromDate,
                       label: _locale.fromDate,
-                      date: DateTime.now(),
+                      date: DateTime.parse(toDate.text),
+                      onChanged: (value) {
+                        setFromDateController();
+                      },
                       onSelected: (value) {
                         setFromDateController();
                       },
@@ -226,6 +232,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                       controller: toDate,
                       date: DateTime.parse(fromDate.text),
                       label: _locale.toDate,
+                      onChanged: (value) {
+                        setToDateController();
+                      },
                       onSelected: (value) {
                         setToDateController();
                       },
@@ -710,20 +719,21 @@ class _LeftWidgetState extends State<LeftWidget> {
   }
 
   void setFromDateController() {
+    String fromDateValue = fromDate.text;
+    String startDate = DatesController().formatDate(fromDateValue);
+    readProvider.setFromDate(startDate);
+
     setState(() {
-      String fromDateValue = fromDate.text;
-      String startDate = DatesController().formatDate(fromDateValue);
-      context.read<SalesCriteraProvider>().setFromDate(startDate);
-      print("fromProvider ${context.read<SalesCriteraProvider>().getFromDate}");
+      print("fromProvider ${readProvider.getFromDate}");
     });
   }
 
   void setToDateController() {
+    String toDateValue = toDate.text;
+    String endDate = DatesController().formatDate(toDateValue);
+    readProvider.setToDate(endDate);
     setState(() {
-      String toDateValue = toDate.text;
-      String endDate = DatesController().formatDate(toDateValue);
-      context.read<SalesCriteraProvider>().setToDate(endDate);
-      print("toProvider ${context.read<SalesCriteraProvider>().getToDate}");
+      print("toProvider ${readProvider.getToDate}");
     });
   }
 }
