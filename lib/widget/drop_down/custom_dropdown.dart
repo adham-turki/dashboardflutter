@@ -99,7 +99,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     // textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: isDesktop ? height * .02 : height * .015,
+                        fontSize: height * .025,
                         color: const Color.fromARGB(235, 158, 158, 158))),
               )
             : Padding(
@@ -108,9 +108,8 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   item.toString(),
                   // textAlign: TextAlign.start,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                      fontSize: isDesktop ? height * .02 : height * .015,
-                      color: Colors.black),
+                  style:
+                      TextStyle(fontSize: height * .025, color: Colors.black),
                 ),
               ));
   }
