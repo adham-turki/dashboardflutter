@@ -129,6 +129,8 @@ class _OrderByWidgetState extends State<OrderByWidget> {
             items: firstList,
             label: "",
             width: isDesktop ? null : width * .55,
+            hint: selectedValue1,
+            initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
             onChanged: (value) {
               setState(() {
                 selectedValue1 = value!;
