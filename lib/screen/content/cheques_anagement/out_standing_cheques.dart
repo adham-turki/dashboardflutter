@@ -235,7 +235,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                         saveExcelFile(value, "Cheques.xlsx");
                       });
                     },
-                                    )),
+                  )),
             ),
           ],
         ),
@@ -321,7 +321,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                       : MediaQuery.of(context).size.width * 0.16,
                   child: CustomButton(
                     text: _locale.exportToExcel,
-                    fontWeight: FontWeight.w400,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
@@ -339,7 +338,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                         saveExcelFile(value, "Cheques.xlsx");
                       });
                     },
-                    fontSize: width > 800 ? height * .016 : height * .0165,
                   )),
             ),
           ],
