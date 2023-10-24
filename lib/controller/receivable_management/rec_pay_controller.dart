@@ -13,7 +13,8 @@ class RecPayController {
 
     late RecPayModel recPayObj;
 
-    await ApiService.postRequest(api, searchCriteria.noToDatetoJson())
+    await ApiService()
+        .postRequest(api, searchCriteria.noToDatetoJson())
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

@@ -15,7 +15,9 @@ class TotalCollectionConroller {
     var api = getTotalCollection;
     List<TotalCollectionModel> totalCollectionList = [];
 
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var totalCollection in jsonData) {

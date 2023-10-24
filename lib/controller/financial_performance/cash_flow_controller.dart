@@ -13,7 +13,9 @@ class CashFlowController {
       SearchCriteria searchCriteria) async {
     var api = getCashFlows;
     List<CashFlowModel> cashFlowList = [];
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var cashFlow in jsonData) {

@@ -70,11 +70,12 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
   ];
   List<BarChartData> barData = [];
   List<BarChartData> barData2 = [];
+  String todayDate = "";
 
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
     _fromDateController.text = todayDate;
@@ -326,7 +327,16 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     dataMap.clear();
     barData = [];
     barData2 = [];
-
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    }
     int status = getVoucherStatus(_locale, selectedStatus);
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: DatesController().formatDate(_fromDateController.text),

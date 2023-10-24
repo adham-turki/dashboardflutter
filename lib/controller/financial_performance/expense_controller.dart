@@ -12,7 +12,9 @@ class ExpensesController {
   var api = getExpenses;
   Future<List<ExpensesModel>> getExpense(SearchCriteria searchCriteria) async {
     List<ExpensesModel> list = [];
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var elemant in jsonData) {

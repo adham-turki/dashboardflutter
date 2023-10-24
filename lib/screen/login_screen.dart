@@ -29,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController aliasName = TextEditingController();
+  bool loginTemp = false;
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +95,13 @@ class _LoginScreenState extends State<LoginScreen> {
                             ErrorController.openErrorDialog(
                                 406, "Missing Password!", context);
                           } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            );
                             loadApi();
                           }
 
@@ -147,6 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
           storage.write(key: 'api', value: value).then((value) {
             checkLogIn().then((value) {
               if (value) {
+                Navigator.pop(context); // for Circular
                 Navigator.push(context, MaterialPageRoute(
                   builder: (context) {
                     return const HomePage();

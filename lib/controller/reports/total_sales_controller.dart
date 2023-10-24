@@ -15,7 +15,9 @@ class TotalSalesController {
     var api = getTotalSales;
     List<TotalSalesModel> totalSalesList = [];
     int count = 0;
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         count = ((searchCriteria.page! - 1) * 10) + 1;
@@ -34,7 +36,9 @@ class TotalSalesController {
     late TotalSalesResult totalSalesList = TotalSalesResult();
     print("body ${searchCriteria.toJson()}");
 
-    await ApiService.postRequest(api, searchCriteria.toJson()).then((response) {
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson())
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -60,7 +64,7 @@ class TotalSalesController {
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    await ApiService.postRequest(eUrl, body).then((value) {
+    await ApiService().postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
     return excelByteData;

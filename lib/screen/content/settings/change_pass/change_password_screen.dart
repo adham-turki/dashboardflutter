@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +7,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
+import '../../../../Encryption/encryption.dart';
+import '../../../../controller/error_controller.dart';
+import '../../../../controller/settings/change_password_controller.dart';
+import '../../../../model/settings/change_password_model.dart';
+import '../../../../utils/constants/encrypt_key.dart';
 import '../../../../widget/text_field_custom.dart';
 import '../../../../utils/constants/styles.dart';
 
@@ -142,7 +149,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             width: width * 0.2,
                             //height: 40.0,
                             onPressed: () {
-                              // changePass();
+                              changePass();
                             },
                             text: _locale.changePassword,
                             borderRadius: 0.3,
@@ -162,5 +169,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         ),
       ),
     ]);
+  }
+
+  Future changePass() async {
+    final iv = [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
+    final byteArray =
+        Uint8List.fromList(iv.map((bit) => bit == 1 ? 0x01 : 0x00).toList());
+    String oldPassEncrypted =
+        Encryption.performAesEncryption(oldPass.text, keyEncrypt, byteArray);
+    String newPassEncrypted =
+        Encryption.performAesEncryption(newPass.text, keyEncrypt, byteArray);
+    ChangePasswordModel changePasswordModel =
+        ChangePasswordModel(oldPassEncrypted, newPassEncrypted);
+    // print()
+    ChangePasswordController()
+        .changePassword(changePasswordModel, context)
+        .then((value) {
+      if (value) {
+        ErrorController.openErrorDialog(200, "Done", context);
+      }
+    });
   }
 }

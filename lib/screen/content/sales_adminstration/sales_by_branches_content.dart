@@ -50,7 +50,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
-
+  String todayDate = "";
   List<String> periods = [];
   List<String> charts = [];
   var selectedPeriod = "";
@@ -63,7 +63,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    String todayDate = DatesController().formatDateReverse(
+    todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     _fromDateController.text = todayDate;
     _toDateController.text = todayDate;
@@ -166,42 +166,58 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   }
 
   Future getSalesByBranch() async {
-    SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: DatesController().formatDate(_fromDateController.text),
-        toDate: DatesController().formatDate(_toDateController.text),
-        voucherStatus: -100);
-    pieData = [];
-    dataMap.clear();
-    barData = [];
-    listOfBalances = [];
-    listOfPeriods = [];
-    salesBranchesController.getSalesByBranches(searchCriteria).then((value) {
-      for (var element in value) {
-        double a = (element.totalSales! + element.retSalesDis!) -
-            (element.salesDis! + element.totalReturnSales!);
-        a = Converters().formateDouble(a);
-        if (a != 0.0) {
-          temp = true;
-        } else if (a == 0.0) {
-          temp = false;
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
         }
-        setState(() {
-          listOfBalances.add(a);
-          listOfPeriods.add(element.namee!);
-          if (temp) {
-            dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
-            pieData.add(PieChartModel(
-                title: element.namee!,
-                value: formatDoubleToTwoDecimalPlaces(a),
-                color: getRandomColor(colorNewList)));
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    } else {
+      SearchCriteria searchCriteria = SearchCriteria(
+          fromDate: DatesController().formatDate(
+              _fromDateController.text.isEmpty
+                  ? todayDate
+                  : _fromDateController.text),
+          toDate: DatesController().formatDate(_toDateController.text.isEmpty
+              ? todayDate
+              : _toDateController.text),
+          voucherStatus: -100);
+      pieData = [];
+      dataMap.clear();
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
+      salesBranchesController.getSalesByBranches(searchCriteria).then((value) {
+        for (var element in value) {
+          double a = (element.totalSales! + element.retSalesDis!) -
+              (element.salesDis! + element.totalReturnSales!);
+          a = Converters().formateDouble(a);
+          if (a != 0.0) {
+            temp = true;
+          } else if (a == 0.0) {
+            temp = false;
           }
+          setState(() {
+            listOfBalances.add(a);
+            listOfPeriods.add(element.namee!);
+            if (temp) {
+              dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+              pieData.add(PieChartModel(
+                  title: element.namee!,
+                  value: formatDoubleToTwoDecimalPlaces(a),
+                  color: getRandomColor(colorNewList)));
+            }
 
-          barData.add(
-            BarChartData(element.namee!, a),
-          );
-        });
-      }
-    });
+            barData.add(
+              BarChartData(element.namee!, a),
+            );
+          });
+        }
+      });
+    }
   }
 
   void checkPeriods(value) {

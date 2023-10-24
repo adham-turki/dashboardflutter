@@ -10,10 +10,12 @@ class InventoryPerformanceController {
       SearchCriteria searchCriteria) async {
     List<InventoryPerformanceModel> inventoryPerformanceList = [];
 
-    await ApiService.postRequest(
+    await ApiService()
+        .postRequest(
       getTotalSellInc,
       searchCriteria.toJson(),
-    ).then((response) {
+    )
+        .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var elemant in jsonData) {
@@ -31,7 +33,8 @@ class InventoryPerformanceController {
       SearchCriteria searchCriteria) async {
     List<InventoryPerformanceModel> inventoryPerformanceList = [];
 
-    await ApiService.postRequest(getTotalSellDec, searchCriteria.toJson())
+    await ApiService()
+        .postRequest(getTotalSellDec, searchCriteria.toJson())
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

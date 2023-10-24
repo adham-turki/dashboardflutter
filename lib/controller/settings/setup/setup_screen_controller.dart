@@ -9,7 +9,7 @@ class SetupController {
   Future<List<AccountModel>> getAllAccounts() async {
     List<AccountModel> list = [];
     String pathUrl = getAccounts;
-    await ApiService.getRequest(pathUrl).then((response) {
+    await ApiService().getRequest(pathUrl).then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {
         //creditAmt - debitAmt
@@ -22,7 +22,7 @@ class SetupController {
   Future<List<BiAccountModel>> getBiAccounts() async {
     List<BiAccountModel> list = [];
     String biUrl = getBiAccount;
-    await ApiService.getRequest(biUrl).then((response) {
+    await ApiService().getRequest(biUrl).then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {
         list.add(BiAccountModel.fromJson(elemant));
@@ -33,7 +33,7 @@ class SetupController {
 
   Future<bool> addBiAccount(BiAccountModel account) async {
     String pURL = addAccount;
-    await ApiService.postRequest(pURL, account).then((value) {
+    await ApiService().postRequest(pURL, account).then((value) {
       if (value.statusCode == 200) {
         return true;
       }
@@ -48,7 +48,7 @@ class SetupController {
 
     List<AccountModel> accountModelList = [];
 
-    await ApiService.postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var ele in jsonData) {
@@ -62,7 +62,7 @@ class SetupController {
 
   Future<bool> deleteBiAccount(BiAccountModel accountModel) async {
     String dUrl = deleteAccount;
-    await ApiService.postRequest(dUrl, accountModel).then((value) {
+    await ApiService().postRequest(dUrl, accountModel).then((value) {
       if (value.statusCode == 200) {
         return true;
       }
