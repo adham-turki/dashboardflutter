@@ -13,7 +13,7 @@ class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged4;
   // final TextEditingController fromDate;
   // final TextEditingController toDate;
-  const OrderByWidget({
+  OrderByWidget({
     Key? key,
     required this.onSelectedValueChanged1,
     required this.onSelectedValueChanged2,

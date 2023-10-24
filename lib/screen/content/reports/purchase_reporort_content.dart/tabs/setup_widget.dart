@@ -11,7 +11,7 @@ import '../../../../../widget/drop_down/custom_dropdown.dart';
 class SetupWidget extends StatefulWidget {
   // final TextEditingController fromDate;
   // final TextEditingController toDate;
-  const SetupWidget({
+  SetupWidget({
     Key? key,
     // required this.fromDate, required this.toDate
   }) : super(key: key);

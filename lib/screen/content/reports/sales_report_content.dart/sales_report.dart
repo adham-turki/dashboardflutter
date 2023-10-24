@@ -230,7 +230,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
               ),
             ),
             _currentIndex == 0
-                ? const CriteriaWidget(
+                ? CriteriaWidget(
                     // fromDate: fromDate,
                     // toDate: toDate,
                     )

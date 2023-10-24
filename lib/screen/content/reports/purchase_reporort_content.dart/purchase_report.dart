@@ -228,7 +228,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                     onSelectedValueChanged2: updateSelectedValue2,
                     onSelectedValueChanged3: updateSelectedValue3,
                     onSelectedValueChanged4: updateSelectedValue4)
-                : const SetupWidget(
+                : SetupWidget(
                     // fromDate: fromDate,
                     // toDate: toDate,
                     ),
@@ -285,10 +285,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                   dynamic body = readProvider.toJson();
                   reportsResult =
                       await ReportController().getPurchaseResultMehtod(body);
-                  setState(() {
-                    // fetch(PlutoLazyPaginationRequest(
-                    //     page: readProvider.getPage!));
-                  });
+                  setState(() {});
                 },
                 fontSize: isDesktop ? height * .016 : height * .011,
               ),

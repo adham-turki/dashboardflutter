@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
@@ -24,8 +25,12 @@ class _LogoutTabState extends State<LogoutTab> {
     bool isDesktop = Responsive.isDesktop(context);
 
     return InkWell(
-      onTap: () {
-        Navigator.pushReplacementNamed(context, loginScreenRoute);
+      onTap: () async {
+        const storage = FlutterSecureStorage();
+
+        await storage.delete(key: "jwt").then((value) {
+          Navigator.pushReplacementNamed(context, loginScreenRoute);
+        });
       },
       child: MouseRegion(
         onEnter: (event) {

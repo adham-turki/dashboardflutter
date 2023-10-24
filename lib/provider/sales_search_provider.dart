@@ -251,6 +251,7 @@ class SalesCriteraProvider with ChangeNotifier {
   String? get getToDate => toDate;
   void setToDate(String? value) {
     toDate = value;
+    notifyListeners();
   }
 
   int? get getPage => page;

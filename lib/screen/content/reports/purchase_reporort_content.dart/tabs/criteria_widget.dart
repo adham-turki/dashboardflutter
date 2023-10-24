@@ -15,7 +15,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class CriteriaWidget extends StatefulWidget {
-  const CriteriaWidget({Key? key}) : super(key: key);
+  CriteriaWidget({Key? key}) : super(key: key);
 
   @override
   State<CriteriaWidget> createState() => _CriteriaWidgetState();
@@ -71,7 +71,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
 }
 
 class LeftWidget extends StatefulWidget {
-  const LeftWidget({Key? key}) : super(key: key);
+  LeftWidget({Key? key}) : super(key: key);
 
   @override
   State<LeftWidget> createState() => _LeftWidgetState();
@@ -147,6 +147,7 @@ class _LeftWidgetState extends State<LeftWidget> {
     readProvider.setFromDate(DatesController().formatDate(fromDate.text));
     readProvider.setToDate(DatesController().formatDate(toDate.text));
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
+    print("fromDateText ${fromDate.text}");
 
     selectedToStkCategory1 = readProvider.getToCateg1!;
 
@@ -686,27 +687,27 @@ class _LeftWidgetState extends State<LeftWidget> {
   }
 
   void setFromDateController() {
-    setState(() {
-      String fromDateValue = fromDate.text;
-      String startDate = DatesController().formatDate(fromDateValue);
-      readProvider.setFromDate(startDate);
+    String fromDateValue = fromDate.text;
+    String startDate = DatesController().formatDate(fromDateValue);
+    readProvider.setFromDate(startDate);
 
+    setState(() {
       print("fromProvider ${readProvider.getFromDate}");
     });
   }
 
   void setToDateController() {
+    String toDateValue = toDate.text;
+    String endDate = DatesController().formatDate(toDateValue);
+    readProvider.setToDate(endDate);
     setState(() {
-      String toDateValue = toDate.text;
-      String endDate = DatesController().formatDate(toDateValue);
-      readProvider.setToDate(endDate);
       print("toProvider ${readProvider.getToDate}");
     });
   }
 }
 
 class RightWidget extends StatefulWidget {
-  const RightWidget({Key? key}) : super(key: key);
+  RightWidget({Key? key}) : super(key: key);
 
   @override
   State<RightWidget> createState() => _RightWidgetState();
