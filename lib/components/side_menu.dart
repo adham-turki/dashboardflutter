@@ -11,6 +11,7 @@ import '../provider/local_provider.dart';
 import '../utils/constants/menu.dart';
 import '../widget/language_widget.dart';
 import '../widget/sidebar/logo_section.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SideMenu extends StatefulWidget {
   const SideMenu({super.key});
@@ -68,8 +69,14 @@ class _SideMenuState extends State<SideMenu> {
                       ),
                       Column(
                         children: [
-                          for (int i = 0; i < menuList.length; i++)
-                            TabMenu(sideTabModel: menuList[i]),
+                          for (int i = 0;
+                              i <
+                                  getSubMenu(AppLocalizations.of(context))
+                                      .length;
+                              i++)
+                            TabMenu(
+                                sideTabModel: getSubMenu(
+                                    AppLocalizations.of(context))[i]),
                         ],
                       ),
                       // Column(
