@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../provider/local_provider.dart';
+import '../widget/language_widget.dart';
 import 'customCard.dart';
 
 class ContentHeader extends StatefulWidget {
@@ -34,14 +36,18 @@ class _ContentHeaderState extends State<ContentHeader> {
                   children: [
                     Consumer<ScreenContentProvider>(
                         builder: ((context, value, child) {
-                      return Text(
-                        provider.getTitle(),
-                        style: TextStyle(
-                          fontSize: Responsive.isDesktop(context)
-                              ? width * 0.015
-                              : 18,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      return Column(
+                        children: [
+                          Text(
+                            provider.getTitle(),
+                            style: TextStyle(
+                              fontSize: Responsive.isDesktop(context)
+                                  ? width * 0.015
+                                  : 18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       );
                     })),
                     const Text(

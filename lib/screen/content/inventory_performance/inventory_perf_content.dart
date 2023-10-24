@@ -107,83 +107,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               Container(
                 width: width * 0.7,
                 decoration: borderDecoration,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDropDown(
-                          hint: periods[0],
-                          label: _locale.period,
-                          items: periods,
-                          initialValue:
-                              selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          label: _locale.status,
-                          hint: status[0],
-                          items: status,
-                          initialValue:
-                              selectedStatus.isNotEmpty ? selectedStatus : null,
-                          height: height * 0.18,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedStatus = value;
-                              int status =
-                                  getVoucherStatus(_locale, selectedStatus);
-                              criteria.voucherStatus = status;
-                            });
-                          },
-                        ),
-                        CustomTextField(
-                          controller: numberOfrow,
-                          initialValue: numberOfrow.text,
-                          label: _locale.itemsNumber,
-                          onChanged: (value) {
-                            setState(() {
-                              hintValue = value;
-                              criteria.rownum = int.parse(numberOfrow.text);
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDatePicker(
-                          label: _locale.fromDate,
-                          controller: fromDate,
-                          date: DateTime.parse(toDate.text),
-                          onChanged: (value) {
-                            setControllerFromDateText();
-                          },
-                          onSelected: (value) {
-                            setControllerFromDateText();
-                          },
-                        ),
-                        CustomDatePicker(
-                          label: _locale.toDate,
-                          date: DateTime.parse(fromDate.text),
-                          controller: toDate,
-                          onChanged: (value) {
-                            setControllertoDateText();
-                          },
-                          onSelected: (value) {
-                            setControllertoDateText();
-                          },
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                child: isDesktop ? desktopCritiria() : mobileCritiria(),
               )
             ],
           ),
@@ -260,7 +184,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
+                    Column(
                       children: [
                         SizedBox(
                           height: height * .03,
@@ -274,7 +198,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * .03,
                         ),
                         SizedBox(
-                          width: width * 0.37,
+                          width: width * 0.7,
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
@@ -288,7 +212,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         ),
                       ],
                     ),
-                    Row(
+                    Column(
                       children: [
                         SizedBox(
                           height: height * .03,
@@ -302,7 +226,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * .03,
                         ),
                         SizedBox(
-                          width: width * 0.37,
+                          width: width * 0.7,
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
@@ -319,6 +243,164 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   ],
                 ),
               ),
+      ],
+    );
+  }
+
+  Column desktopCritiria() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDropDown(
+              hint: periods[0],
+              label: _locale.period,
+              items: periods,
+              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+              onChanged: (value) {
+                setState(() {
+                  checkPeriods(value);
+                  selectedPeriod = value;
+                });
+              },
+            ),
+            CustomDropDown(
+              label: _locale.status,
+              hint: status[0],
+              items: status,
+              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+              height: height * 0.18,
+              onChanged: (value) {
+                setState(() {
+                  selectedStatus = value;
+                  int status = getVoucherStatus(_locale, selectedStatus);
+                  criteria.voucherStatus = status;
+                });
+              },
+            ),
+            CustomTextField(
+              controller: numberOfrow,
+              initialValue: numberOfrow.text,
+              label: _locale.itemsNumber,
+              onChanged: (value) {
+                setState(() {
+                  hintValue = value;
+                  criteria.rownum = int.parse(numberOfrow.text);
+                });
+              },
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDatePicker(
+              label: _locale.fromDate,
+              controller: fromDate,
+              date: DateTime.parse(toDate.text),
+              onChanged: (value) {
+                setControllerFromDateText();
+              },
+              onSelected: (value) {
+                setControllerFromDateText();
+              },
+            ),
+            CustomDatePicker(
+              label: _locale.toDate,
+              date: DateTime.parse(fromDate.text),
+              controller: toDate,
+              onChanged: (value) {
+                setControllertoDateText();
+              },
+              onSelected: (value) {
+                setControllertoDateText();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column mobileCritiria() {
+    double widthMobile = width;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDropDown(
+              hint: periods[0],
+              label: _locale.period,
+              width: widthMobile,
+              items: periods,
+              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+              onChanged: (value) {
+                setState(() {
+                  checkPeriods(value);
+                  selectedPeriod = value;
+                });
+              },
+            ),
+            CustomDropDown(
+              label: _locale.status,
+              hint: status[0],
+              items: status,
+              width: widthMobile,
+              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+              height: height * 0.18,
+              onChanged: (value) {
+                setState(() {
+                  selectedStatus = value;
+                  int status = getVoucherStatus(_locale, selectedStatus);
+                  criteria.voucherStatus = status;
+                });
+              },
+            ),
+            CustomTextField(
+              controller: numberOfrow,
+              width: widthMobile,
+              initialValue: numberOfrow.text,
+              label: _locale.itemsNumber,
+              onChanged: (value) {
+                setState(() {
+                  hintValue = value;
+                  criteria.rownum = int.parse(numberOfrow.text);
+                });
+              },
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDatePicker(
+              label: _locale.fromDate,
+              controller: fromDate,
+              date: DateTime.parse(toDate.text),
+              onChanged: (value) {
+                setControllerFromDateText();
+              },
+              onSelected: (value) {
+                setControllerFromDateText();
+              },
+            ),
+            CustomDatePicker(
+              label: _locale.toDate,
+              date: DateTime.parse(fromDate.text),
+              controller: toDate,
+              onChanged: (value) {
+                setControllertoDateText();
+              },
+              onSelected: (value) {
+                setControllertoDateText();
+              },
+            ),
+          ],
+        ),
       ],
     );
   }

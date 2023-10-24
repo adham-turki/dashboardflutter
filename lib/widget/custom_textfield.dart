@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/constants/responsive.dart';
 import 'custom_label.dart';
 
 // ignore: must_be_immutable
@@ -45,12 +46,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
     }
   }
 
+  bool isDesktop = false;
+  bool isMobile = false;
+
   @override
   Widget build(BuildContext context) {
     double width = widget.width ?? MediaQuery.of(context).size.width;
     String label = widget.label;
     double padding = widget.padding ?? 0.0;
     bool readOnly = widget.readOnly ?? false;
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
     Function(String value)? onSubmitted = widget.onSubmitted;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: padding, horizontal: 10),
@@ -61,7 +67,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             width: width * 0.2,
           ),
           SizedBox(
-            width: width * 0.2,
+            width: isDesktop ? width * 0.2 : width * 0.7,
             // decoration: BoxDecoration(
             //   color: Colors.white,
             //   borderRadius: BorderRadius.circular(5.0),

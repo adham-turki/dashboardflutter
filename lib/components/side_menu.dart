@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../provider/local_provider.dart';
 import '../utils/constants/menu.dart';
+import '../widget/language_widget.dart';
 import '../widget/sidebar/logo_section.dart';
 
 class SideMenu extends StatefulWidget {
@@ -25,6 +27,8 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
     return Container(
       width: Responsive.isDesktop(context) ? width * 0.165 : width * 0.65,
       height: height,
@@ -50,6 +54,18 @@ class _SideMenuState extends State<SideMenu> {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: LanguageWidget(
+                            color: Colors.white,
+                            onLocaleChanged: (locale) {
+                              localeProvider.setLocale(locale);
+                            },
+                          ),
+                        ),
+                      ),
                       Column(
                         children: [
                           for (int i = 0; i < menuList.length; i++)
