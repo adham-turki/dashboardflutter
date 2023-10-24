@@ -467,7 +467,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   void checkPeriods(value) {
     if (value == periods[0]) {
       _fromDateController.text = DatesController().todayDate().toString();
-      _toDateController.text = DatesController().today.toString();
+      _toDateController.text = DatesController().todayDate().toString();
     }
     if (value == periods[1]) {
       _fromDateController.text = DatesController().currentWeek().toString();

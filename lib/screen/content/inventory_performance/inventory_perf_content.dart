@@ -138,7 +138,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.37),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -166,7 +166,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.37),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);
@@ -203,7 +203,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.7),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -231,7 +231,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.7),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);
@@ -426,44 +426,28 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   void checkPeriods(value) {
     if (value == periods[0]) {
       // Daily
-      fromDate.text = DatesController()
-          .formatDate(DatesController().todayDate())
-          .toString();
+      fromDate.text = DatesController().todayDate().toString();
       DateTime.parse(fromDate.text);
-      toDate.text = DatesController()
-          .formatDate(DatesController().todayDate())
-          .toString();
+      toDate.text = DatesController().todayDate().toString();
     }
     if (value == periods[1]) {
       // Weekly
-      fromDate.text = DatesController()
-          .formatDate(DatesController().currentWeek())
-          .toString();
-      toDate.text = DatesController()
-          .formatDate(DatesController().todayDate())
-          .toString();
+      fromDate.text = DatesController().currentWeek().toString();
+      toDate.text = DatesController().todayDate().toString();
     }
     if (value == periods[2]) {
       // Monthly
-      fromDate.text = DatesController()
-          .formatDate(DatesController().currentMonth())
-          .toString();
-      toDate.text = DatesController()
-          .formatDate(DatesController().todayDate())
-          .toString();
+      fromDate.text = DatesController().currentMonth().toString();
+      toDate.text = DatesController().todayDate().toString();
     }
     if (value == periods[3]) {
       // Yearly
-      fromDate.text = DatesController()
-          .formatDate(DatesController().currentYear())
-          .toString();
-      toDate.text = DatesController()
-          .formatDate(DatesController().todayDate())
-          .toString();
+      fromDate.text = DatesController().currentYear().toString();
+      toDate.text = DatesController().todayDate().toString();
     }
 
-    criteria.fromDate = fromDate.text;
-    criteria.toDate = toDate.text;
+    criteria.fromDate = DatesController().formatDate(fromDate.text);
+    criteria.toDate = DatesController().formatDate(toDate.text);
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {

@@ -43,7 +43,7 @@ class CustomCard extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: gradientColor,
-          begin: Alignment.centerLeft,
+          begin: Alignment.center,
           end: Alignment.centerRight,
         ),
         boxShadow: [
