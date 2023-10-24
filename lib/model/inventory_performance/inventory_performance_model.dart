@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
+import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
 import '../criteria/search_criteria.dart';
 
@@ -40,38 +41,40 @@ class InventoryPerformanceModel {
     return PlutoRow(cells: inventoryPerformance);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations,
-      BuildContext context, double screenWidth) {
-    double totalWidth = MediaQuery.of(context).size.width * screenWidth;
-    int numberOfColumns = 4;
-    double columnWidth = totalWidth / numberOfColumns;
+  static List<PlutoColumn> getColumns(
+      AppLocalizations localizations, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    // int numberOfColumns = 4;
+    // double width *0.15 = totalWidth / numberOfColumns;
+    bool isDesktop = Responsive.isDesktop(context);
+    bool isMobile = Responsive.isMobile(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
         field: "stkCode",
         type: PlutoColumnType.text(),
-        width: columnWidth,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.name,
         field: "nameE",
         type: PlutoColumnType.text(),
-        width: columnWidth,
+        width: isDesktop ? width * 0.13 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.currentQty,
         field: "inQnty",
         type: PlutoColumnType.number(),
-        width: columnWidth,
+        width: isDesktop ? width * 0.13 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.soldQnty,
         field: "outQnty",
         type: PlutoColumnType.number(),
-        width: columnWidth,
+        width: isDesktop ? width * 0.13 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: (rendererContext) {
           return InventoryPerformanceModel.footerRenderer(
