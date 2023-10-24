@@ -7,16 +7,17 @@ class CustomButton extends StatefulWidget {
   final double? borderRadius;
   final String? text;
   final Color? textColor;
-  final double? fontSize;
-  final FontWeight? fontWeight;
-  const CustomButton(
-      {super.key,
-      this.onPressed,
-      this.borderRadius,
-      this.text,
-      this.textColor,
-      this.fontSize,
-      this.fontWeight});
+  // final double? fontSize;
+  // final FontWeight? fontWeight;
+  const CustomButton({
+    super.key,
+    this.onPressed,
+    this.borderRadius,
+    this.text,
+    this.textColor,
+    // this.fontSize,
+    // this.fontWeight
+  });
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -46,14 +47,15 @@ class _CustomButtonState extends State<CustomButton> {
         ),
         child: Container(
           alignment: Alignment.center,
-          padding: const EdgeInsets.all(10),
+          // padding: const EdgeInsets.all(3),
           child: Text(
             maxLines: 1,
             widget.text.toString(),
             style: TextStyle(
               color: widget.textColor ?? Colors.black,
-              fontSize: widget.fontSize ?? 13,
-              fontWeight: widget.fontWeight ?? FontWeight.bold,
+              fontSize:
+                  Responsive.isDesktop(context) ? height * .018 : height * .014,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),

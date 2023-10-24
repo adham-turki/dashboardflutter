@@ -81,7 +81,6 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
               ),
               CustomButton(
                 text: _locale.add,
-                fontWeight: FontWeight.w400,
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () {
@@ -89,7 +88,6 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
                     widget.addAccount(selectedAccount, widget.type!);
                   });
                 },
-                fontSize: isDesktop ? height * .016 : height * .011,
               ),
             ],
           ),

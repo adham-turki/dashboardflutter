@@ -12,6 +12,7 @@ import '../controller/error_controller.dart';
 import '../provider/local_provider.dart';
 import '../utils/constants/constants.dart';
 import '../utils/constants/encrypt_key.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/language_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -30,6 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController aliasName = TextEditingController();
   bool loginTemp = false;
   final focusNode = FocusNode();
+  late AppLocalizations _locale;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _locale = AppLocalizations.of(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,111 +45,118 @@ class _LoginScreenState extends State<LoginScreen> {
     final localeProvider = Provider.of<LocaleProvider>(context);
 
     return Scaffold(
-        body: Stack(
-      children: [
-        Container(
-          width: width,
-          height: height,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(
-                "assets/images/wallpaper_image.jpg",
-              ),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
-          ),
-        ),
-        Stack(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomPaint(
-                  size: Size(width * 0.12, height * 0.2),
-                  painter: MyPainter(context: context),
+        body: Directionality(
+      textDirection: TextDirection.ltr,
+      child: Stack(
+        children: [
+          Container(
+            width: width,
+            height: height,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  "assets/images/wallpaper_image.jpg",
                 ),
-              ],
+                fit: BoxFit.cover,
+              ),
             ),
-            Center(
-              child: Row(
+          ),
+          Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.3),
+            ),
+          ),
+          Stack(
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: LanguageWidget(
-                            color: Colors.black,
-                            onLocaleChanged: (locale) {
-                              localeProvider.setLocale(locale);
-                            },
-                          ),
-                        ),
-                      ),
-                      FormComponent(
-                        aliasName: aliasName,
-                        userController: userController,
-                        passwordController: passwordController,
-                        onPressed: () {
-                          if (aliasName.text.isEmpty) {
-                            // show dialog missing password
-                            ErrorController.openErrorDialog(
-                                406, "Missing Alias Name!", context);
-                          } else if (userController.text.isEmpty) {
-                            // show dialog missing email
-                            ErrorController.openErrorDialog(
-                                406, "Missing User Name!", context);
-                          } else if (passwordController.text.isEmpty) {
-                            // show dialog missing password
-                            ErrorController.openErrorDialog(
-                                406, "Missing Password!", context);
-                          } else {
-                            showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              },
-                            );
-                            loadApi();
-                          }
-
-                          // if (_keyForm.currentState!.validate()) {
-                          //   print("object 22");
-                          //   _savingData().then((value) {
-                          //     print("object 33");
-                          //   });
-                          // }
-                          // Navigator.push(context, MaterialPageRoute(
-                          //   builder: (context) {
-                          //     return const HomePage();
-                          //   },
-                          // ));
-                        },
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    width: width * 0.04,
+                  CustomPaint(
+                    size: Size(width * 0.12, height * 0.2),
+                    painter: MyPainter(context: context),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ],
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FormComponent(
+                          aliasName: aliasName,
+                          userController: userController,
+                          passwordController: passwordController,
+                          onPressed: () {
+                            if (aliasName.text.isEmpty) {
+                              // show dialog missing password
+                              ErrorController.openErrorDialog(
+                                  406, _locale.aliasReqField, context);
+                            } else if (userController.text.isEmpty) {
+                              // show dialog missing email
+                              ErrorController.openErrorDialog(
+                                  406, _locale.nameReqField, context);
+                            } else if (passwordController.text.isEmpty) {
+                              // show dialog missing password
+                              ErrorController.openErrorDialog(
+                                  406, _locale.passReqField, context);
+                            } else {
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                },
+                              );
+                              loadApi();
+                            }
+
+                            // if (_keyForm.currentState!.validate()) {
+                            //   print("object 22");
+                            //   _savingData().then((value) {
+                            //     print("object 33");
+                            //   });
+                            // }
+                            // Navigator.push(context, MaterialPageRoute(
+                            //   builder: (context) {
+                            //     return const HomePage();
+                            //   },
+                            // ));
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: width * 0.04,
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                top: 1,
+                right: 10,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: LanguageWidget(
+                      color: Colors.black,
+                      onLocaleChanged: (locale) {
+                        localeProvider.setLocale(locale);
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     ));
   }
 
@@ -163,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
       CentralApiController().getApi(url, aliasName.text).then((value) {
         if (value == "204") {
           Navigator.pop(context); // for Circular
-          ErrorController.openErrorDialog(406, "Wrong Alias Name!", context);
+          ErrorController.openErrorDialog(406, _locale.wrongAliasName, context);
         } else {
           const storage = FlutterSecureStorage();
 
@@ -180,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
               } else {
                 Navigator.pop(context); // for Circular
                 ErrorController.openErrorDialog(
-                    406, "Wrong Email or Password!", context);
+                    406, _locale.wronUserNameOrPass, context);
               }
             });
           });

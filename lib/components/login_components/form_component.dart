@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../provider/local_provider.dart';
 import '../../utils/constants/colors.dart';
+import '../../widget/language_widget.dart';
 import 'login_textfield.dart';
 
 class FormComponent extends StatefulWidget {
@@ -37,6 +40,7 @@ class _FormComponentState extends State<FormComponent> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return SizedBox(
       height: width * 0.4,
@@ -70,13 +74,25 @@ class _FormComponentState extends State<FormComponent> {
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      "BI",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: width * 0.03,
-                          fontWeight: FontWeight.bold),
+                    SizedBox(
+                      width: width * 0.2,
+                      child: Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              "BI",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: width * 0.03,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                     LoginTextField(
                       hint: _locale.aliasName,

@@ -11,7 +11,6 @@ import '../../../../model/reports/reports_result.dart';
 import '../../../../provider/purchase_provider.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
-import '../../../../utils/func/dates_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:html' as html;
 
@@ -242,7 +241,6 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
             children: [
               CustomButton(
                 text: _locale.reset,
-                fontWeight: FontWeight.w400,
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () {
@@ -267,11 +265,9 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                     ];
                   });
                 },
-                fontSize: isDesktop ? height * .016 : height * .011,
               ),
               CustomButton(
                 text: _locale.search,
-                fontWeight: FontWeight.w400,
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () async {
@@ -287,11 +283,9 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                       await ReportController().getPurchaseResultMehtod(body);
                   setState(() {});
                 },
-                fontSize: isDesktop ? height * .016 : height * .011,
               ),
               CustomButton(
                 text: _locale.exportToExcel,
-                fontWeight: FontWeight.w400,
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () {
@@ -311,7 +305,6 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                     saveExcelFile(value, "PurchasesReports.xlsx");
                   });
                 },
-                fontSize: isDesktop ? height * .016 : height * .011,
               ),
             ],
           ),
