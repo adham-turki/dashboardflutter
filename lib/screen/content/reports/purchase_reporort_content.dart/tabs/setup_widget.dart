@@ -1,20 +1,18 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../../../provider/purchase_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
 import '../../../../../utils/constants/styles.dart';
-import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 
 class SetupWidget extends StatefulWidget {
-  // final TextEditingController fromDate;
-  // final TextEditingController toDate;
   SetupWidget({
     Key? key,
-    // required this.fromDate, required this.toDate
   }) : super(key: key);
+  double unused = 0;
 
   @override
   State<SetupWidget> createState() => _SetupWidgetState();

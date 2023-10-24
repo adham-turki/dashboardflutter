@@ -1,8 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -11,16 +12,15 @@ class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged2;
   final Function(String) onSelectedValueChanged3;
   final Function(String) onSelectedValueChanged4;
-  // final TextEditingController fromDate;
-  // final TextEditingController toDate;
+
+  double unused = 0;
+
   OrderByWidget({
     Key? key,
     required this.onSelectedValueChanged1,
     required this.onSelectedValueChanged2,
     required this.onSelectedValueChanged3,
     required this.onSelectedValueChanged4,
-    // required this.fromDate,
-    // required this.toDate
   }) : super(key: key);
 
   @override

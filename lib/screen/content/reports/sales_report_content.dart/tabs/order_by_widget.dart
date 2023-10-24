@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../provider/sales_search_provider.dart';
@@ -13,6 +15,8 @@ class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged4;
   // final TextEditingController fromDate;
   // final TextEditingController toDate;
+  double unused = 0;
+
   OrderByWidget({
     Key? key,
     required this.onSelectedValueChanged1,

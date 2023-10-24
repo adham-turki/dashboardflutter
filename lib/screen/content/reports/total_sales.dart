@@ -221,7 +221,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                             : MediaQuery.of(context).size.width * 0.16,
                         child: CustomButton(
                           text: _locale.exportToExcel,
-                          fontWeight: FontWeight.w400,
                           textColor: Colors.white,
                           borderRadius: 5.0,
                           onPressed: () {
@@ -241,9 +240,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                               saveExcelFile(value, "TotalsSales.xlsx");
                             });
                           },
-                          fontSize: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .016
-                              : MediaQuery.of(context).size.height * .011,
                         )),
                   ),
                 ],
