@@ -40,34 +40,38 @@ class InventoryPerformanceModel {
     return PlutoRow(cells: inventoryPerformance);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations) {
+  static List<PlutoColumn> getColumns(AppLocalizations localizations,
+      BuildContext context, double screenWidth) {
+    double totalWidth = MediaQuery.of(context).size.width * screenWidth;
+    int numberOfColumns = 4;
+    double columnWidth = totalWidth / numberOfColumns;
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
         field: "stkCode",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: columnWidth,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.name,
         field: "nameE",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: columnWidth,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.currentQty,
         field: "inQnty",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: columnWidth,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.soldQnty,
         field: "outQnty",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: columnWidth,
         backgroundColor: colColor,
         footerRenderer: (rendererContext) {
           return InventoryPerformanceModel.footerRenderer(

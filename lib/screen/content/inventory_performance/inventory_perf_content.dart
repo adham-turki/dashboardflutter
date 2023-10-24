@@ -138,7 +138,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.37),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -166,7 +166,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.37),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);
@@ -203,7 +203,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.7),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -231,7 +231,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)),
+                                AppLocalizations.of(context), context, 0.7),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);
