@@ -1,4 +1,5 @@
 import 'package:bi_replicate/service/api_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../model/api_url.dart';
 import '../../model/login/users_model.dart';
@@ -6,9 +7,10 @@ import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 import '../error_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginController {
-  Future<bool> logInPost(UserModel userModel) async {
+  Future<bool> logInPost(UserModel userModel, AppLocalizations local) async {
     String api = logInApi;
     var response = await ApiService().postRequest(api, userModel.toJson());
     print("code: ${response.statusCode}");
@@ -24,8 +26,8 @@ class LoginController {
       return true;
     } else {
       if (response.statusCode == 400 || response.statusCode == 406) {
-        // ErrorController.dialogBasedonResponseStatus(Icons.warning,
-        //     local.wronUserNameOrPass, local.wrongInput, Colors.red, 400);
+        ErrorController.dialogBasedonResponseStatus(Icons.warning,
+            local.wronUserNameOrPass, local.wrongInput, Colors.red, 400);
       }
       ApiURL().setUrl("");
     }

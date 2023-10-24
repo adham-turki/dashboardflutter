@@ -141,13 +141,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void validateLogin(BuildContext context) {
     if (aliasName.text.isEmpty) {
       // show dialog missing password
-      ErrorController.openErrorDialog(406, _locale.aliasReqField, context);
+      ErrorController.openErrorDialog(406, _locale.aliasReqField);
     } else if (userController.text.isEmpty) {
       // show dialog missing email
-      ErrorController.openErrorDialog(406, _locale.nameReqField, context);
+      ErrorController.openErrorDialog(406, _locale.nameReqField);
     } else if (passwordController.text.isEmpty) {
       // show dialog missing password
-      ErrorController.openErrorDialog(406, _locale.passReqField, context);
+      ErrorController.openErrorDialog(406, _locale.passReqField);
     } else {
       showDialog(
         barrierDismissible: false,
@@ -174,27 +174,23 @@ class _LoginScreenState extends State<LoginScreen> {
         .loadString("assets/centralApi/central_api.properties")
         .then((value) {
       var url = value.trim();
-      CentralApiController().getApi(url, aliasName.text).then((value) {
-        if (value == "204") {
-          Navigator.pop(context); // for Circular
-          ErrorController.openErrorDialog(406, _locale.wrongAliasName, context);
+      CentralApiController().getApi(url, aliasName.text, _locale).then((value) {
+        if (value.isEmpty) {
+          // Navigator.pop(context); // for Circular
+          // ErrorController.openErrorDialog(406, _locale.wrongAliasName);
         } else {
           const storage = FlutterSecureStorage();
 
           storage.write(key: 'api', value: value).then((value) {
             checkLogIn().then((value) {
               if (value) {
-                Navigator.pop(context); // for Circular
+                // Navigator.pop(context); // for Circular
                 Navigator.pushReplacementNamed(context, mainScreenRoute);
                 // Navigator.push(context, MaterialPageRoute(
                 //   builder: (context) {
                 //     return const HomePage();
                 //   },
                 // ));
-              } else {
-                Navigator.pop(context); // for Circular
-                ErrorController.openErrorDialog(
-                    406, _locale.wronUserNameOrPass, context);
               }
             });
           });
@@ -210,6 +206,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String passEncrypted = Encryption.performAesEncryption(
         passwordController.text, keyEncrypt, byteArray);
     UserModel userModel = UserModel(userController.text, passEncrypted);
-    return LoginController().logInPost(userModel);
+    return LoginController().logInPost(userModel, _locale);
   }
 }

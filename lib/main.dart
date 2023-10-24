@@ -8,6 +8,7 @@ import 'package:bi_replicate/screen/login_screen.dart';
 import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,6 +33,8 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+  // BuildContext get context => null;
 
   // This widget is the root of your application.
   @override
@@ -70,6 +73,9 @@ class MyApp extends StatelessWidget {
             ],
             locale: provider.locale,
             supportedLocales: L10n.all,
+            theme: ThemeData.light().copyWith(
+              textTheme: getFontFamily(context),
+            ),
             // home: hasToken ? const HomePage() : const LoginScreen(),
             initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
             routes: {
@@ -103,6 +109,22 @@ class MyApp extends StatelessWidget {
     //     mainScreenRoute: (context) => const HomePage(),
     //   },
     // );
+  }
+
+  TextTheme getFontFamily(BuildContext context) {
+    // Determine the current locale
+    // print(_locale.active);
+    String lang = Provider.of<LocaleProvider>(context).locale.languageCode;
+    print("lang $lang");
+    // Use different fonts based on the language
+    if (lang == "ar") {
+      // Arabic font
+      return GoogleFonts.readexProTextTheme(Theme.of(context).textTheme);
+      // return GoogleFonts.cairoTextTheme(Theme.of(context).textTheme);
+    } else {
+      // English font
+      return GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme);
+    }
   }
 
   Future<String?> _getToken() async {

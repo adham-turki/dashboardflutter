@@ -185,9 +185,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     ChangePasswordController()
         .changePassword(changePasswordModel, context)
         .then((value) {
-      if (value) {
-        ErrorController.openErrorDialog(200, "Done", context);
-      }
+      // if (value) {
+      //   ErrorController.openErrorDialog(200, "Done", context);
+      // }
     });
   }
 }

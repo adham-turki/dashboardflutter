@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../controller/error_controller.dart';
 import '../model/api_url.dart';
+import '../utils/constants/api_constants.dart';
 
 class ApiService {
   // static String url = "https://bic.scopef.com:9002";
@@ -11,7 +13,6 @@ class ApiService {
 
   Future<http.Response> getRequest(String api) async {
     String? token = await storage.read(key: 'jwt');
-    print("ttttttt: ${token}");
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
@@ -24,6 +25,10 @@ class ApiService {
         "Authorization": "Bearer $token"
       },
     );
+
+    if (response.statusCode != 200) {
+      ErrorController.openErrorDialog(response.statusCode, response.body);
+    }
     return response;
   }
 
@@ -32,10 +37,8 @@ class ApiService {
       await ApiService().getUrl();
     }
     String? token = await storage.read(key: 'jwt');
-    print("ttttttt: ${token}");
     var requestUrl = "${ApiURL.urlServer}/$api";
-    print(Uri.parse(requestUrl));
-    print(json.encode(toJson));
+
     var response = await http.post(
       Uri.parse(requestUrl),
       headers: {
@@ -45,28 +48,37 @@ class ApiService {
       },
       body: json.encode(toJson),
     );
-    return response;
-  }
-
-  Future<http.Response> postRequestForResetPassword(
-      String api, dynamic toJson) async {
-    String? token = await storage.read(key: 'jwt');
-    if (ApiURL.urlServer == "") {
-      await ApiService().getUrl();
+    if (api == logInApi &&
+        (response.statusCode == 400 || response.statusCode == 406)) {
+      return response;
+    } else if (response.statusCode != 200) {
+      ErrorController.openErrorDialog(
+        response.statusCode,
+        response.body,
+      );
     }
-    var requestUrl = "${ApiURL.urlServer}/$api";
-
-    var response = await http.post(
-      Uri.parse(requestUrl),
-      headers: {
-        "Accept": "application/json",
-        "content-type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: json.encode(toJson),
-    );
     return response;
   }
+
+  // Future<http.Response> postRequestForResetPassworصd(
+  //     String api, dynamic toJson) async {
+  //   String? token = await storage.read(key: 'jwt');
+  //   if (ApiURL.urlServer == "") {
+  //     await ApiService().getUrl();
+  //   }
+  //   var requestUrl = "${ApiURL.urlServer}/$api";
+
+  //   var response = await http.post(
+  //     Uri.parse(requestUrl),
+  //     headers: {
+  //       "Accept": "application/json",
+  //       "content-type": "application/json",
+  //       "Authorization": "Bearer $token"
+  //     },
+  //     body: json.encode(toJson),
+  //   );
+  //   return response;
+  // }
 
   getUrl() async {
     await storage.read(key: 'api').then((value) {

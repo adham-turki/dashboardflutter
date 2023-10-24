@@ -9,13 +9,13 @@ class ChangePasswordController {
   Future<bool> changePassword(
       ChangePasswordModel body, BuildContext context) async {
     String api = changePasswordApi;
-    await ApiService().postRequestForResetPassword(api, body).then((value) {
+    await ApiService().postRequest(api, body).then((value) {
       print(value.body);
       print(value.statusCode);
-      if (value.statusCode == 200) {
-        ErrorController.openErrorDialog(200, value.body, context);
-        return true;
-      }
+      // if (value.statusCode == 200) {
+      //   ErrorController.openErrorDialog(200, value.body, context);
+      //   return true;
+      // }
     });
     return false;
   }
