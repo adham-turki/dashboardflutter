@@ -10,6 +10,7 @@ import '../../../components/table_component.dart';
 import '../../../controller/cheques_management/self_cheques_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../utils/constants/maps.dart';
+import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_btn.dart';
@@ -49,29 +50,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
-  final List<double> listOfBalances = [
-    100.0,
-    150.0,
-    120.0,
-    200.0,
-    180.0,
-    250.0
-  ];
-  final List<String> listOfPeriods = [
-    'Period 1',
-    'Period 2',
-    'Period 3',
-    'Period 4',
-    'Period 5',
-    'Period 6'
-  ];
   final storage = const FlutterSecureStorage();
-
-  final List<String> items = [
-    'Print',
-    'Save as JPEG',
-    'Save as PNG',
-  ];
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
@@ -97,24 +76,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       _locale.monthly,
       _locale.yearly,
     ];
-    columnsName = [
-      "#",
-      _locale.dueDate,
-      _locale.bankName,
-      _locale.supplier(""),
-      _locale.currency,
-      _locale.chequeNo,
-      _locale.chequeAmount
-    ];
 
-    columnsNameMap = [
-      'dueDate',
-      'bankName',
-      'custSupName',
-      'curName',
-      'chequeNum'
-          'amount'
-    ];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
     fromDate.text = todayDate;
@@ -131,16 +93,17 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   double width = 0;
   String? statusValue;
   String? voucherTypeValue;
-  String? fromJCodeValue;
-  String? toJCodeValue;
   String? periodValue;
   double height = 0;
   int count = 0;
+  bool isDesktop = false;
+  bool isMobile = false;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,112 +111,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         Container(
           width: width * 0.7,
           decoration: borderDecoration,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomDropDown(
-                    hint: periods[0],
-                    label: _locale.period,
-                    items: periods,
-                    initialValue:
-                        selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                    onChanged: (value) async {
-                      checkPeriods(value);
-                      selectedPeriod = value;
-                      reportsResult =
-                          await controller.getChequeResultMethod(criteria);
-
-                      setState(() {});
-                    },
-                  ),
-                  CustomDropDown(
-                    label: _locale.status,
-                    hint: status[0],
-                    items: status,
-                    initialValue:
-                        selectedStatus.isNotEmpty ? selectedStatus : null,
-                    height: height * 0.18,
-                    onChanged: (value) async {
-                      selectedStatus = value;
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      criteria.voucherStatus = status;
-                      selectedPeriod = value;
-                      reportsResult =
-                          await controller.getChequeResultMethod(criteria);
-
-                      setState(() {});
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  CustomDatePicker(
-                    label: _locale.fromDate,
-                    controller: fromDate,
-                    date: DateTime.parse(toDate.text),
-                    onChanged: (value) {
-                      setControllerFromDateText();
-                    },
-                    onSelected: (value) {
-                      setControllerFromDateText();
-                    },
-                  ),
-                  CustomDatePicker(
-                    label: _locale.toDate,
-                    controller: toDate,
-                    date: DateTime.parse(fromDate.text),
-                    onChanged: (value) {
-                      setControllertoDateText();
-                    },
-                    onSelected: (value) {
-                      setControllertoDateText();
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 8),
-                    child: SizedBox(
-                        width: MediaQuery.of(context).size.width < 800
-                            ? MediaQuery.of(context).size.width * 0.6
-                            : MediaQuery.of(context).size.width * 0.16,
-                        child: CustomButton(
-                          text: _locale.exportToExcel,
-                          fontWeight: FontWeight.w400,
-                          textColor: Colors.white,
-                          borderRadius: 5.0,
-                          onPressed: () {
-                            int status =
-                                getVoucherStatus(_locale, selectedStatus);
-                            SearchCriteria searchCriteria = SearchCriteria(
-                              fromDate:
-                                  DatesController().formatDate(fromDate.text),
-                              toDate: DatesController().formatDate(toDate.text),
-                              voucherStatus: status,
-                              columns: columnsNameMap,
-                              customColumns: columnsNameMap,
-                            );
-                            SelfChequesController()
-                                .exportToExcelApi(searchCriteria)
-                                .then((value) {
-                              saveExcelFile(value, "Cheques.xlsx");
-                            });
-                          },
-                          fontSize: MediaQuery.of(context).size.width > 800
-                              ? MediaQuery.of(context).size.height * .016
-                              : MediaQuery.of(context).size.height * .011,
-                        )),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -280,6 +138,215 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+
+  Column desktopCritiria(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDropDown(
+              hint: periods[0],
+              label: _locale.period,
+              items: periods,
+              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+              onChanged: (value) async {
+                checkPeriods(value);
+                selectedPeriod = value;
+                reportsResult =
+                    await controller.getChequeResultMethod(criteria);
+
+                setState(() {});
+              },
+            ),
+            CustomDropDown(
+              label: _locale.status,
+              hint: status[0],
+              items: status,
+              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+              height: height * 0.18,
+              onChanged: (value) async {
+                selectedStatus = value;
+                int status = getVoucherStatus(_locale, selectedStatus);
+                criteria.voucherStatus = status;
+                selectedPeriod = value;
+                reportsResult =
+                    await controller.getChequeResultMethod(criteria);
+
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CustomDatePicker(
+              label: _locale.fromDate,
+              controller: fromDate,
+              date: DateTime.parse(toDate.text),
+              onChanged: (value) {
+                setControllerFromDateText();
+              },
+              onSelected: (value) {
+                setControllerFromDateText();
+              },
+            ),
+            CustomDatePicker(
+              label: _locale.toDate,
+              controller: toDate,
+              date: DateTime.parse(fromDate.text),
+              onChanged: (value) {
+                setControllertoDateText();
+              },
+              onSelected: (value) {
+                setControllertoDateText();
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width < 800
+                      ? MediaQuery.of(context).size.width * 0.6
+                      : MediaQuery.of(context).size.width * 0.16,
+                  child: CustomButton(
+                    text: _locale.exportToExcel,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.white,
+                    borderRadius: 5.0,
+                    onPressed: () {
+                      int status = getVoucherStatus(_locale, selectedStatus);
+                      SearchCriteria searchCriteria = SearchCriteria(
+                        fromDate: DatesController().formatDate(fromDate.text),
+                        toDate: DatesController().formatDate(toDate.text),
+                        voucherStatus: status,
+                        columns: columnsNameMap,
+                        customColumns: columnsNameMap,
+                      );
+                      SelfChequesController()
+                          .exportToExcelApi(searchCriteria)
+                          .then((value) {
+                        saveExcelFile(value, "Cheques.xlsx");
+                      });
+                    },
+                    fontSize: MediaQuery.of(context).size.width > 800
+                        ? MediaQuery.of(context).size.height * .016
+                        : MediaQuery.of(context).size.height * .011,
+                  )),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column mobileCritiria(BuildContext context) {
+    double widthMobile = width;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomDropDown(
+              hint: periods[0],
+              label: _locale.period,
+              items: periods,
+              width: widthMobile,
+              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+              onChanged: (value) async {
+                checkPeriods(value);
+                selectedPeriod = value;
+                reportsResult =
+                    await controller.getChequeResultMethod(criteria);
+
+                setState(() {});
+              },
+            ),
+            CustomDropDown(
+              label: _locale.status,
+              hint: status[0],
+              items: status,
+              width: widthMobile,
+              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+              height: height * 0.18,
+              onChanged: (value) async {
+                selectedStatus = value;
+                int status = getVoucherStatus(_locale, selectedStatus);
+                criteria.voucherStatus = status;
+                selectedPeriod = value;
+                reportsResult =
+                    await controller.getChequeResultMethod(criteria);
+
+                setState(() {});
+              },
+            ),
+          ],
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CustomDatePicker(
+              label: _locale.fromDate,
+              controller: fromDate,
+              date: DateTime.parse(toDate.text),
+              onChanged: (value) {
+                setControllerFromDateText();
+              },
+              onSelected: (value) {
+                setControllerFromDateText();
+              },
+            ),
+            CustomDatePicker(
+              label: _locale.toDate,
+              controller: toDate,
+              date: DateTime.parse(fromDate.text),
+              onChanged: (value) {
+                setControllertoDateText();
+              },
+              onSelected: (value) {
+                setControllertoDateText();
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width < 800
+                      ? MediaQuery.of(context).size.width * 0.6
+                      : MediaQuery.of(context).size.width * 0.16,
+                  child: CustomButton(
+                    text: _locale.exportToExcel,
+                    fontWeight: FontWeight.w400,
+                    textColor: Colors.white,
+                    borderRadius: 5.0,
+                    onPressed: () {
+                      int status = getVoucherStatus(_locale, selectedStatus);
+                      SearchCriteria searchCriteria = SearchCriteria(
+                        fromDate: DatesController().formatDate(fromDate.text),
+                        toDate: DatesController().formatDate(toDate.text),
+                        voucherStatus: status,
+                        columns: columnsNameMap,
+                        customColumns: columnsNameMap,
+                      );
+                      SelfChequesController()
+                          .exportToExcelApi(searchCriteria)
+                          .then((value) {
+                        saveExcelFile(value, "Cheques.xlsx");
+                      });
+                    },
+                    fontSize: width > 800 ? height * .016 : height * .0165,
+                  )),
+            ),
+          ],
         ),
       ],
     );
@@ -316,7 +383,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       toDate.text = DatesController()
           .formatDate(DatesController().todayDate())
           .toString();
-      print("cjeck :${toDate.text}");
     }
     if (value == periods[1]) {
       // Weekly

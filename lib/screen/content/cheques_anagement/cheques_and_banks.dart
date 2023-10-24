@@ -1,5 +1,6 @@
 import 'package:bi_replicate/controller/cheques_management/cheques_payable_controller.dart';
 import 'package:bi_replicate/model/cheques_bank/cheques_payable_model.dart';
+import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -7,6 +8,7 @@ import '../../../components/table_component.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../utils/constants/maps.dart';
+import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
@@ -60,92 +62,126 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
 
   double width = 0;
   double height = 0;
-
+  bool isDesktop = false;
+  bool isMobile = false;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
+    isMobile = Responsive.isMobile(context);
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          child: CustomDropDown(
-            label: _locale.status,
-            hint: status[0],
-            items: status,
-            initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
-            height: height * 0.18,
-            onChanged: (value) {
-              setState(() {
-                selectedStatus = value;
-                int status = getVoucherStatus(_locale, selectedStatus);
-                criteria.voucherStatus = status;
-              });
-            },
-          ),
+          child: isDesktop ? statusDesktop() : statusMobile(),
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: height * .03,
-            ),
-            SizedBox(
-              height: height * 0.07,
-              child: SelectableText(
-                maxLines: 1,
-                _locale.chequesPayable,
-                style: twenty600TextStyle(Colors.blue[700]),
-              ),
-            ),
-            SizedBox(
-              width: width * 0.5,
-              height: height * 0.2,
-              child: TableComponent(
-                key: UniqueKey(),
-                plCols: ChequesPayableModel.getColumnsChequesPayable(
-                    AppLocalizations.of(context)),
-                polRows: [],
-                footerBuilder: (stateManager) {
-                  return lazyPaginationFooter(stateManager);
-                },
-              ),
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: height * .04,
-            ),
-            SizedBox(
-              height: height * 0.07,
-              child: SelectableText(
-                maxLines: 1,
-                _locale.bankSettlement,
-                style: twenty600TextStyle(Colors.blue[700]),
-              ),
-            ),
-            SizedBox(
-              width: width * 0.5,
-              height: height * 0.2,
-              child: TableComponent(
-                key: UniqueKey(),
-                plCols: ChequesPayableModel.getColumnsBankSettlement(
-                    AppLocalizations.of(context)),
-                polRows: [],
-                footerBuilder: (stateManager) {
-                  return lazyPaginationFooter(stateManager);
-                },
-              ),
-            ),
-          ],
-        ),
+        chequesPayableTable(context),
+        bankSettlementTable(context),
         SizedBox(
           height: height * .05,
         ),
       ],
+    );
+  }
+
+  Column bankSettlementTable(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: height * .04,
+        ),
+        SizedBox(
+          height: height * 0.07,
+          child: SelectableText(
+            maxLines: 1,
+            _locale.bankSettlement,
+            style: twenty600TextStyle(colorNewList[1]),
+          ),
+        ),
+        SizedBox(
+          width: isDesktop ? width * 0.5 : width,
+          height: height * 0.2,
+          child: TableComponent(
+            key: UniqueKey(),
+            plCols: ChequesPayableModel.getColumnsBankSettlement(
+                AppLocalizations.of(context)),
+            polRows: [],
+            footerBuilder: (stateManager) {
+              return lazyPaginationFooter(stateManager);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column chequesPayableTable(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          height: height * .03,
+        ),
+        SizedBox(
+          height: height * 0.07,
+          child: SelectableText(
+            maxLines: 1,
+            _locale.chequesPayable,
+            style: twenty600TextStyle(colorNewList[1]),
+          ),
+        ),
+        SizedBox(
+          width: isDesktop ? width * 0.5 : width,
+          height: height * 0.2,
+          child: TableComponent(
+            key: UniqueKey(),
+            plCols: ChequesPayableModel.getColumnsChequesPayable(
+                AppLocalizations.of(context)),
+            polRows: [],
+            footerBuilder: (stateManager) {
+              return lazyPaginationFooter(stateManager);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  CustomDropDown statusDesktop() {
+    return CustomDropDown(
+      label: _locale.status,
+      hint: status[0],
+      items: status,
+      initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+      height: height * 0.18,
+      onChanged: (value) {
+        setState(() {
+          selectedStatus = value;
+          int status = getVoucherStatus(_locale, selectedStatus);
+          criteria.voucherStatus = status;
+        });
+      },
+    );
+  }
+
+  CustomDropDown statusMobile() {
+    double widthMobile = width;
+    return CustomDropDown(
+      label: _locale.status,
+      hint: status[0],
+      items: status,
+      width: widthMobile,
+      initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+      height: height * 0.18,
+      onChanged: (value) {
+        setState(() {
+          selectedStatus = value;
+          int status = getVoucherStatus(_locale, selectedStatus);
+          criteria.voucherStatus = status;
+        });
+      },
     );
   }
 
