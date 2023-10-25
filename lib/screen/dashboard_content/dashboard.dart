@@ -1,5 +1,5 @@
 import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.dart';
-import 'package:bi_replicate/screen/dashboard_content/total_status_values.dart';
+import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants/constants.dart';
@@ -18,98 +18,96 @@ class _DashboardContentState extends State<DashboardContent> {
   Widget build(BuildContext context) {
     bool isDesktop = Responsive.isDesktop(context);
     bool isMobile = Responsive.isMobile(context);
-    return Expanded(
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(8),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            BalanceBarChartDashboard(),
-                          ],
-                        ),
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          BalanceBarChartDashboard(),
+                        ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Column(
-                          children: [
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: appPadding,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (!Responsive.isMobile(context))
+                                Expanded(
+                                  flex: 3,
+                                  child: CashFlowsDashboard(),
+                                ),
+                              if (!Responsive.isMobile(context))
+                                const SizedBox(
+                                  width: appPadding,
+                                ),
+                              Expanded(
+                                flex: 2,
+                                child: DailySalesDashboard(),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: appPadding,
+                          ),
+                          if (Responsive.isMobile(context))
                             const SizedBox(
                               height: appPadding,
                             ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (!Responsive.isMobile(context))
-                                  Expanded(
-                                    flex: 3,
-                                    child: CashFlowsDashboard(),
-                                  ),
-                                if (!Responsive.isMobile(context))
-                                  const SizedBox(
-                                    width: appPadding,
-                                  ),
-                                // Expanded(
-                                //   flex: 1,
-                                //   child: StatusChart(),
-                                // ),
-                              ],
-                            ),
+                          if (Responsive.isMobile(context))
+                            CashFlowsDashboard(),
+                          if (Responsive.isMobile(context))
                             const SizedBox(
                               height: appPadding,
                             ),
-                            if (Responsive.isMobile(context))
-                              const SizedBox(
-                                height: appPadding,
-                              ),
-                            if (Responsive.isMobile(context))
-                              CashFlowsDashboard(),
-                            if (Responsive.isMobile(context))
-                              const SizedBox(
-                                height: appPadding,
-                              ),
-                            // if (Responsive.isMobile(context)) StatusChart(),
-                          ],
-                        ),
+                          // if (Responsive.isMobile(context)) StatusChart(),
+                        ],
                       ),
-                    ],
-                  ),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.start,
-                  //   children: [
-                  //     Expanded(
-                  //       flex: 5,
-                  //       child: Column(
-                  //         children: [
-                  //           LicenseReportChart(),
-                  //           if (Responsive.isMobile(context))
-                  //             SizedBox(
-                  //               height: appPadding,
-                  //             ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
-            ],
-          ),
+                    ),
+                  ],
+                ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Expanded(
+                //       flex: 5,
+                //       child: Column(
+                //         children: [
+                //           LicenseReportChart(),
+                //           if (Responsive.isMobile(context))
+                //             SizedBox(
+                //               height: appPadding,
+                //             ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
+              ],
+            ),
+          ],
         ),
       ),
     );

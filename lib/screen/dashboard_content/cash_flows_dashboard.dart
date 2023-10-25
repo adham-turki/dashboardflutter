@@ -152,7 +152,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
                       ],
                     ),
                     isDesktop ? desktopCriteria() : mobileCriteria(),
-                    BalanceBarChart(data: barData, color: colorNewList[7])
+                    BalanceBarChart(data: barData, color: Colors.indigo)
                   ],
                 ),
               ),
