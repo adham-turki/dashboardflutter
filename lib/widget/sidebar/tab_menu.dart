@@ -146,7 +146,7 @@ class _TabMenuState extends State<TabMenu> {
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isDesktop ? width * 0.01 : width * 0.045,
+                      fontSize: isDesktop ? width * 0.0095 : width * 0.045,
                     ),
                   ),
                 ],
@@ -226,9 +226,9 @@ class _TabMenuState extends State<TabMenu> {
     int length = sideTabModel.subMenu.length;
     if (isSelected) {
       if (length == 4) {
-        return isDesktop ? 200 : height * 0.3;
+        return isDesktop ? 235 : height * 0.3;
       } else if (length == 2) {
-        return isDesktop ? 120 : height * 0.2;
+        return isDesktop ? 129 : height * 0.2;
       } else {
         return isDesktop ? 150 : height * 0.3;
       }
