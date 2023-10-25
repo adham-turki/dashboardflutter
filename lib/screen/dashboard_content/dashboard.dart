@@ -1,5 +1,5 @@
 import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.dart';
-import 'package:bi_replicate/screen/dashboard_content/total_status_values.dart';
+import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants/constants.dart';
