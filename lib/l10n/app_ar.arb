@@ -173,5 +173,7 @@
         "cashIn": "حركة النقد الداخلة",
         "cashOut": "حركة النقد الخارجة",
         "general": "عام",
-        "changeSuccessfully": "تم تغيير كلمة المرور بنجاح"
+        "changeSuccessfully": "تم تغيير كلمة المرور بنجاح",
+        "dashboard" :"الصفحة الرئيسية"
+
 }

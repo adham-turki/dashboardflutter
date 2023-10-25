@@ -197,6 +197,7 @@
     "cashIn": "Cash In",
     "cashOut": "Cash Out",
     "general": "General",
-    "changeSuccessfully": "Password Changed Succesfully"
+    "changeSuccessfully": "Password Changed Succesfully",
+    "dashboard" :"Dashboard"
 
 }

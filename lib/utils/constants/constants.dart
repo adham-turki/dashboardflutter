@@ -17,6 +17,9 @@ ButtonStyle customButtonStyle(Size size, double fontSize, Color color) {
       alignment: Alignment.center);
 }
 
+const appPadding = 16.0;
+const textColor = Colors.black;
+
 LinearGradient createGradient(Color endColor) {
   return LinearGradient(
     colors: [Colors.white, endColor],
@@ -46,3 +49,4 @@ const branchSalesByCategoriesScreenRoute =
     "/branchSalesByCategoriesScreenRoute";
 const purchseReportScreenRoute = "/purchasesReportScreenRoute";
 const mainScreenRoute = "/mainScreenRoute";
+const dashboard = "/dashboard";
