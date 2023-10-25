@@ -14,6 +14,9 @@ class ChangePasswordController {
       if (value.statusCode == 200) {
         ErrorController.openErrorDialog(200, locale.changeSuccessfully);
         return true;
+      } else if (value.body == "Wrong Credentials") {
+        ErrorController.openErrorDialog(406, locale.wrongInput);
+        return true;
       }
     });
     return false;
