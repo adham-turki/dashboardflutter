@@ -138,7 +138,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            _locale.cashFlows,
+                            _locale.dailySales,
                             style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
