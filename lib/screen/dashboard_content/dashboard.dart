@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
 import 'cash_flows_dashboard.dart';
+import 'monthly_dashboard.dart';
 
 class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
@@ -88,23 +89,23 @@ class _DashboardContentState extends State<DashboardContent> {
                     ),
                   ],
                 ),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     Expanded(
-                //       flex: 5,
-                //       child: Column(
-                //         children: [
-                //           LicenseReportChart(),
-                //           if (Responsive.isMobile(context))
-                //             SizedBox(
-                //               height: appPadding,
-                //             ),
-                //         ],
-                //       ),
-                //     ),
-                //   ],
-                // ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          MonthlyDashboard(),
+                          if (Responsive.isMobile(context))
+                            SizedBox(
+                              height: appPadding,
+                            ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ],
