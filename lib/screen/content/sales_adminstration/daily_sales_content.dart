@@ -145,7 +145,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                     children: [
                       SelectableText(
                         maxLines: 1,
-                        _locale.accounts,
+                        _locale.dailySales,
                         style: fourteen400TextStyle(Colors.white),
                       ),
                       const Icon(

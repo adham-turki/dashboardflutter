@@ -179,8 +179,8 @@ class _ContentHeaderState extends State<ContentHeader> {
   String getPage() {
     int index = context.read<ScreenContentProvider>().getPage();
     switch (index) {
-      case 0:
-        return locale.dashboard;
+      // case 0:
+      //   return locale.dashboard;
       case 1:
         return locale.salesByBranches;
       case 2:
