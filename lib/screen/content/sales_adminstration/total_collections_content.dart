@@ -40,6 +40,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<String> periods = [];
   List<String> status = [];
   List<String> charts = [];
+  List<Color> usedColors = [];
 
   var selectedStatus = "";
 
@@ -359,7 +360,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             dataMap[element.name!] =
                 formatDoubleToTwoDecimalPlaces(element.collection!);
             pieData.add(PieChartModel(
-                title: element.name!,
+                title:
+                    element.name! == "Cheque" ? _locale.cheques : _locale.cash,
                 value: formatDoubleToTwoDecimalPlaces(element.collection!),
                 color: getRandomColor(colorNewList)));
           }

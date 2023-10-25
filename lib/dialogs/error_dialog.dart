@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ErrorDialog extends StatefulWidget {
   final IconData icon;
@@ -22,9 +23,11 @@ class ErrorDialog extends StatefulWidget {
 class _ErrorDialogState extends State<ErrorDialog> {
   bool showDetails = false;
 
+  late AppLocalizations _locale;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _locale = AppLocalizations.of(context);
   }
 
   @override
@@ -73,7 +76,7 @@ class _ErrorDialogState extends State<ErrorDialog> {
                       Navigator.pop(context);
                     }
                   },
-                  child: const Text("ok"),
+                  child: Text(_locale.ok),
                 ),
                 const SizedBox(width: 10),
                 MaterialButton(
@@ -83,7 +86,7 @@ class _ErrorDialogState extends State<ErrorDialog> {
                     });
                   },
                   child: Text(
-                    "show Details",
+                    _locale.showDetails,
                     style: TextStyle(color: showDetails ? Colors.red : null),
                   ),
                 ),

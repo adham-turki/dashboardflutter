@@ -28,6 +28,7 @@ class CentralApiController {
       } else {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         serverUrl = jsonData['serverurl'];
+        print("serverURL:${serverUrl}");
       }
     });
 

@@ -65,6 +65,7 @@ class TotalSalesController {
       "customColumns": searchCriteria.customColumns
     };
     await ApiService().postRequest(eUrl, body).then((value) {
+      print(value.bodyBytes);
       excelByteData = value.bodyBytes;
     });
     return excelByteData;

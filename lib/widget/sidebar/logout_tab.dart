@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
@@ -18,6 +19,15 @@ class _LogoutTabState extends State<LogoutTab> {
   double width = 0;
   double height = 0;
   bool isHovered = false;
+  late AppLocalizations locale;
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    locale = AppLocalizations.of(context);
+
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -79,7 +89,7 @@ class _LogoutTabState extends State<LogoutTab> {
                   width: width * 0.005,
                 ),
                 Text(
-                  "Logout",
+                  locale.logout,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: isDesktop ? width * 0.01 : width * 0.045,

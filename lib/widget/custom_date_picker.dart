@@ -161,29 +161,33 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         builder: (builder) {
           print("hhhh ${date.toString()}");
           return AlertDialog(
-            title: const Text("Choose Date"),
+            title: Text(_locale.chooseDate),
             content: SizedBox(
-              width: Responsive.isDesktop(context) ? width * 0.2 : width,
+              width: Responsive.isDesktop(context) ? width * 0.25 : width,
               height: height * 0.15,
               child: ScrollConfiguration(
                 behavior: CustomScrollBehavior(),
-                child: CupertinoDatePicker(
-                  minimumDate: widget.label == _locale.fromDate
-                      ? DateTime(1900)
-                      : widget.date,
-                  minimumYear: widget.label == _locale.fromDate
-                      ? DateTime(1900).year
-                      : widget.date!.year,
-                  maximumDate:
-                      widget.label == _locale.fromDate ? widget.date : nowDate,
-                  maximumYear: widget.label == _locale.fromDate
-                      ? widget.date!.year
-                      : nowDate.year,
-                  initialDateTime: date ?? nowDate,
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime value) {
-                    date = value;
-                  },
+                child: SizedBox(
+                  width: width * 0.25,
+                  child: CupertinoDatePicker(
+                    minimumDate: widget.label == _locale.fromDate
+                        ? DateTime(1900)
+                        : widget.date,
+                    minimumYear: widget.label == _locale.fromDate
+                        ? DateTime(1900).year
+                        : widget.date!.year,
+                    maximumDate: widget.label == _locale.fromDate
+                        ? widget.date
+                        : nowDate,
+                    maximumYear: widget.label == _locale.fromDate
+                        ? widget.date!.year
+                        : nowDate.year,
+                    initialDateTime: date ?? nowDate,
+                    mode: CupertinoDatePickerMode.date,
+                    onDateTimeChanged: (DateTime value) {
+                      date = value;
+                    },
+                  ),
                 ),
               ),
             ),
@@ -195,7 +199,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    text: "Submit",
+                    text: _locale.submit,
                     textColor: Colors.white,
                     borderRadius: 5.0,
                   ),

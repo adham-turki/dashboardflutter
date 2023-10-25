@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import '../../../../components/table_component.dart';
+import '../../../../controller/error_controller.dart';
 import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/purchase_cost_report.dart';
 import '../../../../model/reports/reports_result.dart';
 import '../../../../provider/purchase_provider.dart';
+import '../../../../utils/constants/app_utils.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -284,26 +286,33 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                   setState(() {});
                 },
               ),
-              CustomButton(
+              Components().blueButton(
                 text: _locale.exportToExcel,
                 textColor: Colors.white,
                 borderRadius: 5.0,
+                height: isDesktop ? height * .05 : height * .06,
+                fontSize: isDesktop ? height * .016 : height * .011,
+                width: isDesktop ? width * 0.15 : width * 0.25,
                 onPressed: () {
-                  SearchCriteria searchCriteria = SearchCriteria(
-                    fromDate: readProvider.fromDate,
-                    toDate: readProvider.toDate,
-                    voucherStatus: -100,
-                    columns: getColumnsName(_locale, orderByColumns, false),
-                    customColumns:
-                        getColumnsName(_locale, orderByColumns, false),
-                  );
-                  Map<String, dynamic> body = readProvider.toJson();
+                  if (purchaseList.isEmpty) {
+                    ErrorController.openErrorDialog(406, _locale.error406);
+                  } else {
+                    SearchCriteria searchCriteria = SearchCriteria(
+                      fromDate: readProvider.fromDate,
+                      toDate: readProvider.toDate,
+                      voucherStatus: -100,
+                      columns: getColumnsName(_locale, orderByColumns, false),
+                      customColumns:
+                          getColumnsName(_locale, orderByColumns, false),
+                    );
+                    Map<String, dynamic> body = readProvider.toJson();
 
-                  ReportController()
-                      .exportPurchaseToExcelApi(searchCriteria, body)
-                      .then((value) {
-                    saveExcelFile(value, "PurchasesReports.xlsx");
-                  });
+                    ReportController()
+                        .exportPurchaseToExcelApi(searchCriteria, body)
+                        .then((value) {
+                      saveExcelFile(value, "PurchasesReports.xlsx");
+                    });
+                  }
                 },
               ),
             ],

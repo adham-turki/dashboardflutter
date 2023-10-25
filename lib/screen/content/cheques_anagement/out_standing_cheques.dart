@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/cheques_management/self_cheques_controller.dart';
+import '../../../controller/error_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
@@ -221,19 +222,23 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: DatesController().formatDate(fromDate.text),
-                        toDate: DatesController().formatDate(toDate.text),
-                        voucherStatus: status,
-                        columns: columnsNameMap,
-                        customColumns: columnsNameMap,
-                      );
-                      SelfChequesController()
-                          .exportToExcelApi(searchCriteria)
-                          .then((value) {
-                        saveExcelFile(value, "Cheques.xlsx");
-                      });
+                      if (reportsResult!.count == 0) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                      } else {
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: DatesController().formatDate(fromDate.text),
+                          toDate: DatesController().formatDate(toDate.text),
+                          voucherStatus: status,
+                          columns: columnsNameMap,
+                          customColumns: columnsNameMap,
+                        );
+                        SelfChequesController()
+                            .exportToExcelApi(searchCriteria)
+                            .then((value) {
+                          saveExcelFile(value, "Cheques.xlsx");
+                        });
+                      }
                     },
                   )),
             ),
@@ -324,19 +329,23 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: DatesController().formatDate(fromDate.text),
-                        toDate: DatesController().formatDate(toDate.text),
-                        voucherStatus: status,
-                        columns: columnsNameMap,
-                        customColumns: columnsNameMap,
-                      );
-                      SelfChequesController()
-                          .exportToExcelApi(searchCriteria)
-                          .then((value) {
-                        saveExcelFile(value, "Cheques.xlsx");
-                      });
+                      if (reportsResult!.count == 0) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                      } else {
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: DatesController().formatDate(fromDate.text),
+                          toDate: DatesController().formatDate(toDate.text),
+                          voucherStatus: status,
+                          columns: columnsNameMap,
+                          customColumns: columnsNameMap,
+                        );
+                        SelfChequesController()
+                            .exportToExcelApi(searchCriteria)
+                            .then((value) {
+                          saveExcelFile(value, "Cheques.xlsx");
+                        });
+                      }
                     },
                   )),
             ),
@@ -441,6 +450,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
     int totalPage =
         reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
+    print("total: ${totalPage}");
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }

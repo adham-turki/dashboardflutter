@@ -38,7 +38,9 @@ class ApiService {
     }
     String? token = await storage.read(key: 'jwt');
     var requestUrl = "${ApiURL.urlServer}/$api";
-
+    print(token);
+    print(Uri.parse(requestUrl));
+    print(json.encode(toJson));
     var response = await http.post(
       Uri.parse(requestUrl),
       headers: {
@@ -52,6 +54,9 @@ class ApiService {
         (response.statusCode == 400 || response.statusCode == 406)) {
       return response;
     } else if (response.statusCode != 200) {
+      if (response.body == "Wrong Credentials") {
+        return response;
+      }
       ErrorController.openErrorDialog(
         response.statusCode,
         response.body,
