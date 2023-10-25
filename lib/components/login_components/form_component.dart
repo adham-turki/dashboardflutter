@@ -13,12 +13,15 @@ class FormComponent extends StatefulWidget {
   final TextEditingController? aliasName;
   final TextEditingController? userController;
   final TextEditingController? passwordController;
-  const FormComponent(
-      {super.key,
-      this.onPressed,
-      this.aliasName,
-      this.userController,
-      this.passwordController});
+  final Function(String value)? onSubmit;
+  const FormComponent({
+    super.key,
+    this.onPressed,
+    this.aliasName,
+    this.userController,
+    this.passwordController,
+    this.onSubmit,
+  });
 
   @override
   State<FormComponent> createState() => _FormComponentState();
@@ -101,6 +104,11 @@ class _FormComponentState extends State<FormComponent> {
                       child: LoginTextField(
                         hint: _locale.aliasName,
                         controller: widget.aliasName,
+                        onSubmitted: (value) {
+                          if (widget.onSubmit != null) {
+                            widget.onSubmit!(value);
+                          }
+                        },
                       ),
                     ),
                     Directionality(
@@ -110,6 +118,11 @@ class _FormComponentState extends State<FormComponent> {
                       child: LoginTextField(
                         hint: _locale.userName,
                         controller: widget.userController,
+                        onSubmitted: (value) {
+                          if (widget.onSubmit != null) {
+                            widget.onSubmit!(value);
+                          }
+                        },
                       ),
                     ),
                     Directionality(
@@ -120,6 +133,11 @@ class _FormComponentState extends State<FormComponent> {
                         hint: _locale.password,
                         controller: widget.passwordController,
                         obscureText: obscure1,
+                        onSubmitted: (value) {
+                          if (widget.onSubmit != null) {
+                            widget.onSubmit!(value);
+                          }
+                        },
                         customIconSuffix: GestureDetector(
                           onTap: () {
                             obscure1 = !obscure1;

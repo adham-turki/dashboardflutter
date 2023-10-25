@@ -91,6 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           aliasName: aliasName,
                           userController: userController,
                           passwordController: passwordController,
+                          onSubmit: (value) {
+                            validateLogin(context);
+                          },
                           onPressed: () {
                             validateLogin(context);
 
