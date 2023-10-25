@@ -5,6 +5,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/maps.dart';
+import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
 
 class PurchaseCostReportModel {
@@ -137,9 +138,14 @@ class PurchaseCostReportModel {
     return PlutoRow(cells: purchaseReport);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations,
-      List<String> colsName, ReportsResult? reportsResult, double width) {
-    // print("reports ${reportsResult!.avgPrice}");
+  static List<PlutoColumn> getColumns(
+      AppLocalizations localizations,
+      List<String> colsName,
+      ReportsResult? reportsResult,
+      BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    bool isDesktop = Responsive.isDesktop(context);
     List<String> fieldsName = getColumnsName(localizations, colsName, false);
     List<PlutoColumn> list = [];
     for (int i = 0; i < colsName.length; i++) {

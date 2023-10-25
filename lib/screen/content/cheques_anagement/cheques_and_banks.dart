@@ -106,7 +106,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsBankSettlement(
-                AppLocalizations.of(context)),
+                AppLocalizations.of(context), context),
             polRows: [],
             footerBuilder: (stateManager) {
               return lazyPaginationFooter(stateManager);
@@ -138,7 +138,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsChequesPayable(
-                AppLocalizations.of(context)),
+                AppLocalizations.of(context), context),
             polRows: [],
             footerBuilder: (stateManager) {
               return lazyPaginationFooter(stateManager);

@@ -128,7 +128,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: ChequesModel.getColumns(
-                          AppLocalizations.of(context), reportsResult),
+                          AppLocalizations.of(context), reportsResult, context),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);

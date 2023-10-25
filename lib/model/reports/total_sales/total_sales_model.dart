@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 
 class TotalSalesModel {
@@ -62,28 +63,33 @@ class TotalSalesModel {
     return PlutoRow(cells: totalSales);
   }
 
-  static List<PlutoColumn> getColumns(
-      AppLocalizations localizations, TotalSalesResult? reportResult) {
+  static List<PlutoColumn> getColumns(AppLocalizations localizations,
+      TotalSalesResult? reportResult, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    // int numberOfColumns = 4;
+    // double width *0.15 = totalWidth / numberOfColumns;
+    bool isDesktop = Responsive.isDesktop(context);
+    bool isMobile = Responsive.isMobile(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
         field: "code",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: isDesktop ? width * 0.07 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.name,
         field: "name",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: isDesktop ? width * 0.14 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.returnQty,
         field: "inQnty",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: isDesktop ? width * 0.1 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -96,7 +102,7 @@ class TotalSalesModel {
         title: localizations.salesQty,
         field: "outQnty",
         type: PlutoColumnType.text(),
-        width: 150,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -109,7 +115,7 @@ class TotalSalesModel {
         title: localizations.netSalesQty,
         field: "netSold",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -122,7 +128,7 @@ class TotalSalesModel {
         title: localizations.returnAmount,
         field: "debit",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -135,7 +141,7 @@ class TotalSalesModel {
         title: localizations.salesAmount,
         field: "credit",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -148,7 +154,7 @@ class TotalSalesModel {
         title: localizations.netSalesAmount,
         field: "totalAmount",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: isDesktop ? width * 0.1 : width * 0.5,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
