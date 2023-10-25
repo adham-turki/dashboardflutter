@@ -180,36 +180,38 @@ class _ContentHeaderState extends State<ContentHeader> {
     int index = context.read<ScreenContentProvider>().getPage();
     switch (index) {
       case 0:
-        return locale.salesByBranches;
+        return locale.dashboard;
       case 1:
-        return locale.branchesSalesByCategories;
+        return locale.salesByBranches;
       case 2:
-        return locale.dailySales;
+        return locale.branchesSalesByCategories;
       case 3:
-        return locale.totalCollections;
+        return locale.dailySales;
       case 4:
-        return locale.cashFlows;
+        return locale.totalCollections;
       case 5:
-        return locale.expenses;
+        return locale.cashFlows;
       case 6:
-        return locale.inventoryPerformance;
+        return locale.expenses;
       case 7:
-        return locale.monthlyComparsionOFReceivableAndPayables;
+        return locale.inventoryPerformance;
       case 8:
-        return locale.agingReceivable;
+        return locale.monthlyComparsionOFReceivableAndPayables;
       case 9:
-        return locale.chequesAndBank;
+        return locale.agingReceivable;
       case 10:
-        return locale.outStandingCheques;
+        return locale.chequesAndBank;
       case 11:
-        return locale.totalSales;
+        return locale.outStandingCheques;
       case 12:
-        return locale.salesreport;
+        return locale.totalSales;
       case 13:
-        return locale.purchasesReport;
+        return locale.salesreport;
       case 14:
-        return locale.setup;
+        return locale.purchasesReport;
       case 15:
+        return locale.setup;
+      case 16:
         return locale.changePassword;
       default:
         return "";

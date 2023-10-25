@@ -13,7 +13,7 @@ class SalesBranchesController {
     await ApiService()
         .postRequest(api, searchCriteria.toJson())
         .then((response) {
-      print(response.statusCode);
+      print(response.body);
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var totalCollection in jsonData) {

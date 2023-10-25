@@ -17,7 +17,7 @@ class LoginController {
     print("body: ${response.body}");
     if (response.statusCode == statusOk) {
       String token = response.body.substring(13, response.body.length - 2);
-
+      print("tokeeeen : :${token}");
       const storage = FlutterSecureStorage();
 
       await storage.write(key: 'jwt', value: token);

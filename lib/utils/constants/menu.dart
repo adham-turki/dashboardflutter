@@ -7,25 +7,32 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 List<SideTabModel> getSubMenu(AppLocalizations locale) {
   List<SideTabModel> menuList = [
     SideTabModel(
+      text: locale.dashboard,
+      icon: Icons.dashboard,
+      isParent: false,
+      subMenu: [],
+      value: 0,
+    ),
+    SideTabModel(
       isParent: true,
       text: locale.salesAdminstration,
       icon: Icons.assignment_ind_outlined,
       subMenu: [
         SideSubTabModel(
           text: locale.salesByBranches,
-          value: 0,
-        ),
-        SideSubTabModel(
-          text: locale.branchesSalesByCategories,
           value: 1,
         ),
         SideSubTabModel(
-          text: locale.dailySales,
+          text: locale.branchesSalesByCategories,
           value: 2,
         ),
         SideSubTabModel(
-          text: locale.totalCollections,
+          text: locale.dailySales,
           value: 3,
+        ),
+        SideSubTabModel(
+          text: locale.totalCollections,
+          value: 4,
         ),
       ],
       value: -1,
@@ -37,11 +44,11 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(
           text: locale.cashFlows,
-          value: 4,
+          value: 5,
         ),
         SideSubTabModel(
           text: locale.expenses,
-          value: 5,
+          value: 6,
         ),
       ],
       value: -1,
@@ -51,7 +58,7 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       icon: Icons.inventory,
       isParent: false,
       subMenu: [],
-      value: 6,
+      value: 7,
     ),
     SideTabModel(
       isParent: true,
@@ -60,11 +67,11 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(
           text: locale.monthlyComparsionOFReceivableAndPayables,
-          value: 7,
+          value: 8,
         ),
         SideSubTabModel(
           text: locale.agingReceivable,
-          value: 8,
+          value: 9,
         ),
       ],
       value: -1,
@@ -76,11 +83,11 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(
           text: locale.chequesAndBank,
-          value: 9,
+          value: 10,
         ),
         SideSubTabModel(
           text: locale.outStandingCheques,
-          value: 10,
+          value: 11,
         ),
       ],
       value: -1,
@@ -148,15 +155,15 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(
           text: locale.totalSales,
-          value: 11,
-        ),
-        SideSubTabModel(
-          text: locale.salesreport,
           value: 12,
         ),
         SideSubTabModel(
-          text: locale.purchasesReport,
+          text: locale.salesreport,
           value: 13,
+        ),
+        SideSubTabModel(
+          text: locale.purchasesReport,
+          value: 14,
         ),
       ],
       value: -1,
@@ -168,11 +175,11 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(
           text: locale.setup,
-          value: 14,
+          value: 15,
         ),
         SideSubTabModel(
           text: locale.changePassword,
-          value: 15,
+          value: 16,
         ),
       ],
       value: -1,

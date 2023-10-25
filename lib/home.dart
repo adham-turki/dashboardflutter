@@ -21,6 +21,7 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
+import 'screen/dashboard_content/dashboard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -90,36 +91,38 @@ class _HomePageState extends State<HomePage> {
     index = context.read<ScreenContentProvider>().getPage();
     switch (index) {
       case 0:
-        return const SalesByBranchesContent();
+        return const DashboardContent();
       case 1:
-        return const BranchSalesByCatContent();
+        return const SalesByBranchesContent();
       case 2:
-        return const DailySalesContent();
+        return const BranchSalesByCatContent();
       case 3:
-        return const TotalCollectionsContent();
+        return const DailySalesContent();
       case 4:
-        return const CashFlowsContent();
+        return const TotalCollectionsContent();
       case 5:
-        return const ExpensesContent();
+        return const CashFlowsContent();
       case 6:
-        return const InventoryPerfContent();
+        return const ExpensesContent();
       case 7:
-        return const MonthCompOfRecPayContent();
+        return const InventoryPerfContent();
       case 8:
-        return const AgingReceivable();
+        return const MonthCompOfRecPayContent();
       case 9:
-        return const ChequesAndBankContent();
+        return const AgingReceivable();
       case 10:
-        return const OutStandingChequesContent();
+        return const ChequesAndBankContent();
       case 11:
-        return const TotalSalesContent();
+        return const OutStandingChequesContent();
       case 12:
-        return const SalesReportScreen();
+        return const TotalSalesContent();
       case 13:
-        return const PurchasesReportScreen();
+        return const SalesReportScreen();
       case 14:
-        return const SetupScreen();
+        return const PurchasesReportScreen();
       case 15:
+        return const SetupScreen();
+      case 16:
         return const ChangePasswordScreen();
       default:
         return Container();
