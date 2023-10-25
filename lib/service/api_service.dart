@@ -38,7 +38,9 @@ class ApiService {
     }
     String? token = await storage.read(key: 'jwt');
     var requestUrl = "${ApiURL.urlServer}/$api";
-
+    print(token);
+    print(Uri.parse(requestUrl));
+    print(json.encode(toJson));
     var response = await http.post(
       Uri.parse(requestUrl),
       headers: {

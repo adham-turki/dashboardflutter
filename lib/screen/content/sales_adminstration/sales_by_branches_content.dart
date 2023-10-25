@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bi_replicate/components/charts/pie_chart.dart';
+import 'package:bi_replicate/controller/error_controller.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
@@ -59,6 +60,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   List<PieChartModel> pieData = [];
 
   bool isDesktop = false;
+  List<Color> usedColors = [];
 
   @override
   void didChangeDependencies() {
@@ -167,6 +169,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
   Future getSalesByBranch() async {
     if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      ErrorController.openErrorDialog(406, _locale.dateFieldsRequired);
       setState(() {
         if (_fromDateController.text.isEmpty) {
           _fromDateController.text = todayDate;

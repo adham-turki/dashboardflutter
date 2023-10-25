@@ -7,8 +7,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/table_component.dart';
+import '../../../controller/error_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/reports/total_sales/total_sales_result.dart';
+import '../../../utils/constants/app_utils.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -216,24 +218,32 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   width: MediaQuery.of(context).size.width < 800
                       ? MediaQuery.of(context).size.width * 0.6
                       : MediaQuery.of(context).size.width * 0.16,
-                  child: CustomButton(
+                  child: Components().blueButton(
                     text: _locale.exportToExcel,
                     textColor: Colors.white,
                     borderRadius: 5.0,
+                    height: isDesktop ? height * .05 : height * .06,
+                    fontSize: isDesktop ? height * .016 : height * .011,
+                    width: isDesktop ? width * 0.15 : width * 0.25,
                     onPressed: () {
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: DatesController().formatDate(fromDate.text),
-                        toDate: DatesController().formatDate(toDate.text),
-                        voucherStatus: status,
-                        columns: [],
-                        customColumns: [],
-                      );
-                      TotalSalesController()
-                          .exportToExcelApi(searchCriteria)
-                          .then((value) {
-                        saveExcelFile(value, "TotalsSales.xlsx");
-                      });
+                      if (reportsResult!.count == 0) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                      } else {
+                        print("counts: ${reportsResult!.count}");
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: DatesController().formatDate(fromDate.text),
+                          toDate: DatesController().formatDate(toDate.text),
+                          voucherStatus: status,
+                          columns: [],
+                          customColumns: [],
+                        );
+                        TotalSalesController()
+                            .exportToExcelApi(searchCriteria)
+                            .then((value) {
+                          saveExcelFile(value, "TotalsSales.xlsx");
+                        });
+                      }
                     },
                   )),
             ),
@@ -317,24 +327,31 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   width: MediaQuery.of(context).size.width < 800
                       ? MediaQuery.of(context).size.width * 0.6
                       : MediaQuery.of(context).size.width * 0.16,
-                  child: CustomButton(
+                  child: Components().blueButton(
                     text: _locale.exportToExcel,
                     textColor: Colors.white,
                     borderRadius: 5.0,
+                    height: isDesktop ? height * .05 : height * .06,
+                    fontSize: isDesktop ? height * .016 : height * .011,
+                    width: isDesktop ? width * 0.15 : width * 0.25,
                     onPressed: () {
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: DatesController().formatDate(fromDate.text),
-                        toDate: DatesController().formatDate(toDate.text),
-                        voucherStatus: status,
-                        columns: [],
-                        customColumns: [],
-                      );
-                      TotalSalesController()
-                          .exportToExcelApi(searchCriteria)
-                          .then((value) {
-                        saveExcelFile(value, "TotalsSales.xlsx");
-                      });
+                      if (reportsResult!.count == 0) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                      } else {
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: DatesController().formatDate(fromDate.text),
+                          toDate: DatesController().formatDate(toDate.text),
+                          voucherStatus: status,
+                          columns: [],
+                          customColumns: [],
+                        );
+                        TotalSalesController()
+                            .exportToExcelApi(searchCriteria)
+                            .then((value) {
+                          saveExcelFile(value, "TotalsSales.xlsx");
+                        });
+                      }
                     },
                   )),
             ),

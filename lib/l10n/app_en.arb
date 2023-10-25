@@ -197,6 +197,23 @@
     "cashIn": "Cash In",
     "cashOut": "Cash Out",
     "general": "General",
-    "changeSuccessfully": "Password Changed Succesfully"
-
+    "changeSuccessfully": "Password Changed Succesfully",
+    "showDetails": "Show Details",
+    "error400": "There is something wrong",
+    "error401": "Unauthorized",
+    "error405": "This transaction cannot be completed due to an incorrect request",
+    "error500": "The process could not be completed due to a server error",
+    "error406": "No Data Available",
+    "error204": "No User Found",
+    "error404": "Not Found",
+    "error200": "Changes updated Successfully",
+    "error417": "Session Expired",
+    "submit": "Submit",
+    "newPassswordIsReq": "New Password Field is Required!",
+    "oldPassswordIsReq": "Old Password Field is Required!",
+    "dateFieldsRequired": "Date Field is Required, It has been restored to today's date.",
+    "cash": "Cash",
+    "chooseDate": "Choose Date",
+    "numOfCustomers": "Number Of Customers",
+    "totalReturnSal": "Total Return Sales"
 }

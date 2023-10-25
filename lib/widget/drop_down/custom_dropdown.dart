@@ -44,7 +44,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
   Widget build(BuildContext context) {
     double width = widget.width ?? MediaQuery.of(context).size.width * 0.15;
     Key? customKey = widget.customKey;
-    double height = widget.height ?? MediaQuery.of(context).size.height * 0.25;
+    double height = widget.height ?? MediaQuery.of(context).size.height * 0.15;
     double padding = widget.padding ?? 8.0;
     String label = widget.label;
     bool showSearchBox = widget.showSearchBox ?? false;

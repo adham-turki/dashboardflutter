@@ -1,3 +1,4 @@
+import 'package:bi_replicate/controller/error_controller.dart';
 import 'package:bi_replicate/model/reports/reports_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
+import '../../../../utils/constants/app_utils.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../widget/custom_btn.dart';
@@ -298,25 +300,33 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                       setState(() {});
                     },
                   ),
-                  CustomButton(
+                  Components().blueButton(
                     text: _locale.exportToExcel,
                     textColor: Colors.white,
                     borderRadius: 5.0,
+                    height: isDesktop ? height * .05 : height * .06,
+                    fontSize: isDesktop ? height * .016 : height * .011,
+                    width: isDesktop ? width * 0.15 : width * 0.25,
                     onPressed: () {
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: readProvider.fromDate,
-                        toDate: readProvider.toDate,
-                        voucherStatus: -100,
-                        columns: getColumnsName(_locale, orderByColumns, true),
-                        customColumns:
-                            getColumnsName(_locale, orderByColumns, true),
-                      );
-                      Map<String, dynamic> body = readProvider.toJson();
-                      ReportController()
-                          .exportToExcelApi(searchCriteria, body)
-                          .then((value) {
-                        saveExcelFile(value, "SalesReport.xlsx");
-                      });
+                      if (salesList.isEmpty) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                      } else {
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: readProvider.fromDate,
+                          toDate: readProvider.toDate,
+                          voucherStatus: -100,
+                          columns:
+                              getColumnsName(_locale, orderByColumns, true),
+                          customColumns:
+                              getColumnsName(_locale, orderByColumns, true),
+                        );
+                        Map<String, dynamic> body = readProvider.toJson();
+                        ReportController()
+                            .exportToExcelApi(searchCriteria, body)
+                            .then((value) {
+                          saveExcelFile(value, "SalesReport.xlsx");
+                        });
+                      }
                     },
                   ),
                   // SizedBox(

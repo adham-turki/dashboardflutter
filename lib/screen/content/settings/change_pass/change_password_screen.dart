@@ -142,14 +142,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           ),
 
                           Components().blueButton(
-                            height: width > 800 ? height * .05 : height * .04,
+                            height: width > 800 ? height * .05 : height * .06,
                             fontSize:
                                 width > 800 ? height * .016 : height * .011,
 
-                            width: width * 0.2,
+                            width: width * 0.25,
                             //height: 40.0,
                             onPressed: () {
-                              changePass();
+                              changePass().then((value) {
+                                setState(() {
+                                  oldPass.clear();
+                                  newPass.clear();
+                                });
+                              });
                             },
                             text: _locale.changePassword,
                             borderRadius: 0.3,
@@ -172,22 +177,31 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   Future changePass() async {
-    final iv = [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
-    final byteArray =
-        Uint8List.fromList(iv.map((bit) => bit == 1 ? 0x01 : 0x00).toList());
-    String oldPassEncrypted =
-        Encryption.performAesEncryption(oldPass.text, keyEncrypt, byteArray);
-    String newPassEncrypted =
-        Encryption.performAesEncryption(newPass.text, keyEncrypt, byteArray);
-    ChangePasswordModel changePasswordModel =
-        ChangePasswordModel(oldPassEncrypted, newPassEncrypted);
-    // print()
-    ChangePasswordController()
-        .changePassword(changePasswordModel, _locale)
-        .then((value) {
-      // if (value) {
-      //   ErrorController.openErrorDialog(200, _locale.changeSuccessfully);
-      // }
-    });
+    if (newPass.text.isEmpty) {
+      ErrorController.openErrorDialog(406, _locale.newPassswordIsReq);
+    } else if (oldPass.text.isEmpty) {
+      ErrorController.openErrorDialog(406, _locale.newPassswordIsReq);
+    } else {
+      final iv = [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
+      final byteArray =
+          Uint8List.fromList(iv.map((bit) => bit == 1 ? 0x01 : 0x00).toList());
+      String oldPassEncrypted =
+          Encryption.performAesEncryption(oldPass.text, keyEncrypt, byteArray);
+      String newPassEncrypted =
+          Encryption.performAesEncryption(newPass.text, keyEncrypt, byteArray);
+      ChangePasswordModel changePasswordModel =
+          ChangePasswordModel(oldPassEncrypted, newPassEncrypted);
+      // print()
+      ChangePasswordController()
+          .changePassword(changePasswordModel, _locale)
+          .then((value) {
+        if (value) {
+          setState(() {
+            oldPass.clear();
+            newPass.clear();
+          });
+        }
+      });
+    }
   }
 }

@@ -27,7 +27,8 @@ class Components {
         alignment: Alignment.center,
         padding: const EdgeInsets.all(10),
         child: Text(
-          maxLines: 1,
+          // maxLines: 2,
+          textAlign: TextAlign.center,
           text.toString(),
           style: TextStyle(
             color: textColor ?? Colors.black,
