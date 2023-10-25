@@ -12,8 +12,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/func/dates_controller.dart';
+import '../../components/charts.dart';
 import '../../utils/constants/constants.dart';
-import '../../utils/constants/styles.dart';
+import '../../utils/constants/responsive.dart';
 
 class BalanceBarChartDashboard extends StatefulWidget {
   BalanceBarChartDashboard({Key? key}) : super(key: key);
@@ -66,6 +67,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         DatesController().formatDate(DatesController().todayDate()));
     _fromDateController.text = todayDate;
     _toDateController.text = todayDate;
+    print("today date : ${todayDate}");
     periods = [
       _locale.daily,
       _locale.weekly,
@@ -80,8 +82,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
+    isDesktop = Responsive.isDesktop(context);
     return SingleChildScrollView(
       child: Container(
         // height: height * 1.7,
@@ -95,7 +98,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: 500,
+                height: isDesktop ? height * 0.75 : height * 1.1,
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(
@@ -117,23 +120,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                         ),
                       ],
                     ),
-                    desktopCriteria(),
-                    SfCartesianChart(
-                      isTransposed: true,
-                      primaryXAxis: CategoryAxis(),
-                      plotAreaBorderWidth: 0,
-                      series: <ChartSeries>[
-                        BarSeries<BarChartData, String>(
-                          dataSource: barData,
-                          xValueMapper: (BarChartData value, _) =>
-                              value.category,
-                          yValueMapper: (BarChartData value, _) => value.value,
-                          enableTooltip: true,
-                          animationDuration: 1000,
-                          color: colorNewList[10],
-                        ),
-                      ],
-                    ),
+                    isDesktop ? desktopCriteria() : mobileCriteria(),
+                    BalanceBarChart(
+                      data: barData,
+                      color: colorNewList[10],
+                    )
                   ],
                 ),
               ),

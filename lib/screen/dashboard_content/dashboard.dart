@@ -4,8 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
-import 'app_type_chart.dart';
-import 'license_report_chart.dart';
+import 'cash_flows_dashboard.dart';
 
 class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
@@ -58,29 +57,30 @@ class _DashboardContentState extends State<DashboardContent> {
                               children: [
                                 if (!Responsive.isMobile(context))
                                   Expanded(
-                                    flex: 2,
-                                    child: AppTypeChart(),
+                                    flex: 3,
+                                    child: CashFlowsDashboard(),
                                   ),
                                 if (!Responsive.isMobile(context))
                                   const SizedBox(
                                     width: appPadding,
                                   ),
-                                Expanded(
-                                  flex: 1,
-                                  child: StatusChart(),
-                                ),
+                                // Expanded(
+                                //   flex: 1,
+                                //   child: StatusChart(),
+                                // ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: appPadding,
                             ),
                             if (Responsive.isMobile(context))
-                              SizedBox(
+                              const SizedBox(
                                 height: appPadding,
                               ),
-                            if (Responsive.isMobile(context)) AppTypeChart(),
                             if (Responsive.isMobile(context))
-                              SizedBox(
+                              CashFlowsDashboard(),
+                            if (Responsive.isMobile(context))
+                              const SizedBox(
                                 height: appPadding,
                               ),
                             // if (Responsive.isMobile(context)) StatusChart(),
