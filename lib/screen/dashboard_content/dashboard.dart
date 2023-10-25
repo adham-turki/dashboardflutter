@@ -64,10 +64,10 @@ class _DashboardContentState extends State<DashboardContent> {
                                 const SizedBox(
                                   width: appPadding,
                                 ),
-                              Expanded(
-                                flex: 2,
-                                child: DailySalesDashboard(),
-                              ),
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: StatusChart(),
+                              // ),
                             ],
                           ),
                           const SizedBox(

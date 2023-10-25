@@ -1,9 +1,11 @@
+import 'package:bi_replicate/model/vouch_header_transiet_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 
+import '../controller/vouch_header_transiet_controller.dart';
 import '../provider/local_provider.dart';
 import '../widget/language_widget.dart';
 import 'customCard.dart';
@@ -21,11 +23,18 @@ class _ContentHeaderState extends State<ContentHeader> {
   double height = 0;
   late ScreenContentProvider provider;
   late AppLocalizations locale;
+  VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
+      paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     locale = AppLocalizations.of(context);
-
+    VouchHeaderTransietController().getBranch().then((value) {
+      setState(() {
+        vouchHeaderTransietModel = value!;
+        print("hhhhhhhhhhhhh: ${value.numOfCustomers}");
+      });
+    });
     super.didChangeDependencies();
   }
 
@@ -104,7 +113,7 @@ class _ContentHeaderState extends State<ContentHeader> {
                   children: [
                     CustomCard(
                       gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                      title: '42136',
+                      title: "${vouchHeaderTransietModel!.paidSales}",
                       subtitle: '',
                       label: locale.totalSales,
                       icon: Icons
@@ -115,17 +124,18 @@ class _ContentHeaderState extends State<ContentHeader> {
                     ),
                     CustomCard(
                       gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                      title: '1446',
+                      title: "${vouchHeaderTransietModel!.returnSales}",
                       subtitle: '',
                       label: locale.totalReturnSal,
-                      icon: Icons.abc, // Provide the actual path to the icon
+                      icon: Icons
+                          .assignment_return_outlined, // Provide the actual path to the icon
                     ),
                     const SizedBox(
                       width: 10,
                     ),
                     CustomCard(
                       gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                      title: '6145',
+                      title: "${vouchHeaderTransietModel!.numOfCustomers}",
                       subtitle: '',
                       label: locale.numOfCustomers,
                       icon: Icons
