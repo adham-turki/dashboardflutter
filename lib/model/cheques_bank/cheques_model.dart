@@ -4,6 +4,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../utils/constants/colors.dart';
+import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
 
 class ChequesModel {
@@ -93,42 +94,44 @@ class ChequesModel {
     return PlutoRow(cells: chequesModel);
   }
 
-  static List<PlutoColumn> getColumns(
-      AppLocalizations localizations, ChequesResult? reportResult) {
+  static List<PlutoColumn> getColumns(AppLocalizations localizations,
+      ChequesResult? reportResult, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    bool isDesktop = Responsive.isDesktop(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.dueDate,
         field: "dueDate",
         type: PlutoColumnType.text(),
-        width: 185,
+        width: isDesktop ? width * 0.11 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.bankName,
         field: "bankName",
         type: PlutoColumnType.text(),
-        width: 185,
+        width: isDesktop ? width * 0.13 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.supplier(""),
         field: "custSupName",
         type: PlutoColumnType.text(),
-        width: 185,
+        width: isDesktop ? width * 0.13 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.currency,
         field: "curName",
         type: PlutoColumnType.text(),
-        width: 185,
+        width: isDesktop ? width * 0.11 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.chequeNo,
         field: "chequeNum",
         type: PlutoColumnType.text(),
-        width: 185,
+        width: isDesktop ? width * 0.11 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(

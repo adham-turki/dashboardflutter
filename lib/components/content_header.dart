@@ -127,7 +127,8 @@ class _ContentHeaderState extends State<ContentHeader> {
                       title: "${vouchHeaderTransietModel!.returnSales}",
                       subtitle: '',
                       label: locale.totalReturnSal,
-                      icon: Icons.abc, // Provide the actual path to the icon
+                      icon: Icons
+                          .assignment_return_outlined, // Provide the actual path to the icon
                     ),
                     const SizedBox(
                       width: 10,

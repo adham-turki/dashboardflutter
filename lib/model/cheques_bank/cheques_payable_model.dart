@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
+import '../../utils/constants/responsive.dart';
 
 class ChequesPayableModel {
   double? outStandingCheques;
@@ -66,27 +68,32 @@ class ChequesPayableModel {
   }
 
   static List<PlutoColumn> getColumnsChequesPayable(
-      AppLocalizations localizations) {
+      AppLocalizations localizations, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    // int numberOfColumns = 4;
+    // double width *0.15 = totalWidth / numberOfColumns;
+    bool isDesktop = Responsive.isDesktop(context);
+    bool isMobile = Responsive.isMobile(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.outStandingCheques,
         field: "outStandingCheques",
         type: PlutoColumnType.number(),
-        width: 270,
+        width: isDesktop ? width * 0.13 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.uncollectableCheques,
         field: "unCollectableCheques",
         type: PlutoColumnType.number(),
-        width: 270,
+        width: isDesktop ? width * 0.21 : width * 0.7,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.underCollectionCheques,
         field: "underCollectionCheques",
         type: PlutoColumnType.number(),
-        width: 270,
+        width: isDesktop ? width * 0.25 : width * 0.8,
         backgroundColor: colColor,
       ),
     ];
@@ -94,34 +101,37 @@ class ChequesPayableModel {
   }
 
   static List<PlutoColumn> getColumnsBankSettlement(
-      AppLocalizations localizations) {
+      AppLocalizations localizations, BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    bool isDesktop = Responsive.isDesktop(context);
+
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.actualBankBalance,
         field: "actualBankBalance",
         type: PlutoColumnType.number(),
-        width: 200,
+        width: isDesktop ? width * 0.11 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.dueOutstandingCheques,
         field: "dueOutStandingCheques",
         type: PlutoColumnType.number(),
-        width: 230,
+        width: isDesktop ? width * 0.19 : width * 0.6,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.dueInstandingCheques,
         field: "dueInStandingCheques",
         type: PlutoColumnType.number(),
-        width: 220,
+        width: isDesktop ? width * 0.18 : width * 0.6,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.finalBalance,
         field: "finalBalance",
         type: PlutoColumnType.number(),
-        width: 150,
+        width: isDesktop ? width * 0.09 : width * 0.3,
         backgroundColor: colColor,
       ),
     ];

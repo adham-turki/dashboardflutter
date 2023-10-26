@@ -330,7 +330,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 AppLocalizations.of(context),
                 orderByColumns,
                 reportsResult,
-                width),
+                context),
             polRows: [],
             footerBuilder: (stateManager) {
               // print("stateManager ${stateManager.}");

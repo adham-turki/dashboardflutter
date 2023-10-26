@@ -16,6 +16,7 @@ import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
 import '../../components/charts/pie_chart.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
+import '../../controller/receivable_management/rec_pay_controller.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../model/settings/setup/bi_account_model.dart';
@@ -23,36 +24,35 @@ import '../../utils/constants/constants.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 
-class DailySalesDashboard extends StatefulWidget {
-  DailySalesDashboard({Key? key}) : super(key: key);
+class MonthlyDashboard extends StatefulWidget {
+  MonthlyDashboard({Key? key}) : super(key: key);
 
   @override
-  _DailySalesDashboardState createState() => _DailySalesDashboardState();
+  _MonthlyDashboardState createState() => _MonthlyDashboardState();
 }
 
-class _DailySalesDashboardState extends State<DailySalesDashboard> {
+class _MonthlyDashboardState extends State<MonthlyDashboard> {
   double width = 0;
   double height = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   bool isDesktop = false;
   final TextEditingController _fromDateController = TextEditingController();
-  final storage = const FlutterSecureStorage();
-  DailySalesController dailySalesController = DailySalesController();
-  late AppLocalizations _locale;
-
-  List<String> status = [];
-
-  List<String> charts = [];
-
+  final TextEditingController _toDateController = TextEditingController();
+  RecPayController recPayController = RecPayController();
   bool accountsActive = false;
-
+  late AppLocalizations _locale;
+  List<String> status = [];
+  List<String> charts = [];
   var selectedStatus = "";
+
   var selectedChart = "";
 
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
-  List<BiAccountModel> payableAccounts = [];
-
+  List<double> listOfBalances2 = [];
+  List<String> listOfPeriods2 = [];
+  List<BiAccountModel> payableRecAccounts = [];
+  String accountNameString = "";
   final List<String> items = [
     'Print',
     'Save as JPEG',
@@ -60,11 +60,25 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   ];
   final dataMap = <String, double>{};
 
-  List<PieChartModel> pieData = [];
-  String accountNameString = "";
+  final colorList = <Color>[
+    Colors.green,
+    Colors.blue,
+    Colors.red,
+    Colors.orange,
+    Colors.purple,
+    Colors.pink,
+    Colors.teal,
+    Colors.amber,
+    Colors.cyan,
+    Colors.deepPurple,
+    Colors.lime,
+    Colors.indigo,
+    Colors.lightBlue,
+    Colors.deepOrange,
+    Colors.brown,
+  ];
   List<BarChartData> barData = [];
-
-  bool boolTemp = false;
+  List<BarChartData> barData2 = [];
   String todayDate = "";
 
   @override
@@ -72,7 +86,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     _locale = AppLocalizations.of(context);
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
+
     _fromDateController.text = todayDate;
+    _toDateController.text = todayDate;
     status = [
       _locale.all,
       _locale.posted,
@@ -83,23 +99,25 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     charts = [
       _locale.lineChart,
       _locale.barChart,
-      _locale.pieChart,
     ];
-    selectedStatus = status[0];
     selectedChart = charts[0];
-    getDailySales();
+    selectedStatus = status[0];
+    getRecPayData();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     // getExpensesAccounts();
-
+    payableRecAccounts = [];
     getPayableAccounts().then((value) {
-      payableAccounts = value;
+      payableRecAccounts = value;
       setState(() {});
     });
-
+    getReceivableAccounts().then((value) {
+      payableRecAccounts.addAll(value);
+      setState(() {});
+    });
     super.initState();
   }
 
@@ -138,20 +156,18 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            _locale.dailySales,
+                            _locale.monthlyComparsionOFReceivableAndPayables,
                             style: TextStyle(fontSize: isDesktop ? 24 : 18),
                           ),
                         ),
                       ],
                     ),
                     isDesktop ? desktopCriteria() : mobileCriteria(),
-                    PieChartComponent(
-                      radiusNormal: isDesktop ? height * 0.17 : 70,
-                      radiusHover: isDesktop ? height * 0.17 : 80,
-                      width: isDesktop ? width * 0.42 : width * 0.1,
-                      height: isDesktop ? height * 0.42 : height * 0.4,
-                      dataList: pieData,
-                    ),
+                    BalanceLineChart(
+                        yAxisText: _locale.balances,
+                        xAxisText: _locale.periods,
+                        balances: listOfBalances,
+                        periods: listOfPeriods)
                   ],
                 ),
               ),
@@ -166,7 +182,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomDropDown(
@@ -177,18 +193,18 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 setState(() {
                   selectedStatus = value.toString();
 
-                  getDailySales();
+                  getRecPayData();
                 });
               },
             ),
             CustomDatePicker(
               label: _locale.fromDate,
-              controller: _fromDateController,
               date: DateTime.now(),
+              controller: _fromDateController,
               onSelected: (value) {
                 setState(() {
                   _fromDateController.text = value;
-                  getDailySales();
+                  getRecPayData();
                 });
               },
             ),
@@ -212,18 +228,18 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
             setState(() {
               selectedStatus = value.toString();
 
-              getDailySales();
+              getRecPayData();
             });
           },
         ),
         CustomDatePicker(
           label: _locale.fromDate,
-          controller: _fromDateController,
           date: DateTime.now(),
+          controller: _fromDateController,
           onSelected: (value) {
             setState(() {
               _fromDateController.text = value;
-              getDailySales();
+              getRecPayData();
             });
           },
         ),
@@ -231,87 +247,57 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     );
   }
 
-  double formatDoubleToTwoDecimalPlaces(double number) {
-    return double.parse(number.toStringAsFixed(2));
-  }
-
-  void getDailySales() {
+  getRecPayData() {
     listOfBalances = [];
+    listOfBalances2 = [];
+    listOfPeriods = [];
+    listOfPeriods2 = [];
     dataMap.clear();
-    pieData = [];
     barData = [];
-    int status = getVoucherStatus(_locale, selectedStatus);
-    if (_fromDateController.text.isEmpty) {
+    barData2 = [];
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
       setState(() {
         if (_fromDateController.text.isEmpty) {
           _fromDateController.text = todayDate;
         }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
       });
     }
-    String startDate = DatesController().formatDate(_fromDateController.text);
-    SearchCriteria searchCriteria =
-        SearchCriteria(fromDate: startDate, voucherStatus: status);
+    int status = getVoucherStatus(_locale, selectedStatus);
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: DatesController().formatDate(_fromDateController.text),
+        voucherStatus: status);
 
-    dailySalesController.getDailySale(searchCriteria).then((response) {
-      for (var elemant in response) {
-        String temp =
-            DatesController().formatDate(getNextDay(startDate).toString());
-        if (double.parse(elemant.dailySale.toString()) != 0.0) {
-          boolTemp = true;
-        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
-          boolTemp = false;
-        }
+    recPayController.getRecPayMethod(searchCriteria).then((value) {
+      int maxVal = value.payables.length > value.receivables.length
+          ? value.payables.length
+          : value.receivables.length;
+      for (int i = 0; i < maxVal; i++) {
         setState(() {
-          listOfBalances.add(double.parse(elemant.dailySale.toString()));
-          listOfPeriods.add(temp);
-          if (boolTemp) {
-            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-                double.parse(elemant.dailySale.toString()));
-            pieData.add(PieChartModel(
-                title: temp,
-                value: double.parse(elemant.dailySale.toString()) == 0.0
-                    ? 1.0
-                    : formatDoubleToTwoDecimalPlaces(
-                        double.parse(elemant.dailySale.toString())),
-                color: getRandomColor(colorNewList)));
-          }
+          listOfBalances.add(double.parse(value.payables[i].value!));
+          listOfBalances2.add(double.parse(value.receivables[i].value!));
+          listOfPeriods.add(value.payables[i].date!);
+          listOfPeriods2.add(value.receivables[i].date!);
 
           barData.add(
-            BarChartData(temp, double.parse(elemant.dailySale.toString())),
+            BarChartData(value.payables[i].date!,
+                double.parse(value.payables[i].value!)),
+          );
+          barData2.add(
+            BarChartData(value.receivables[i].date!,
+                double.parse(value.receivables[i].value!)),
           );
         });
       }
     });
   }
 
-  Color getRandomColor(List<Color> colorList) {
-    final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
-  }
-
-  int count = 0;
-  DateTime getNextDay(String inputDate) {
-    count++;
-    final List<String> dateParts = inputDate.split('-');
-    if (dateParts.length != 3) {
-      throw ArgumentError("Invalid date format. Expected dd-mm-yyyy.");
-    }
-
-    final int day = int.parse(dateParts[0]);
-    final int month = int.parse(dateParts[1]);
-    final int year = int.parse(dateParts[2]);
-
-    final DateTime currentDate = DateTime(year, month, day);
-    final DateTime nextDay = currentDate.add(Duration(days: count));
-
-    return nextDay;
-  }
-
   String accountName() {
     accountNameString = "";
-    for (int i = 0; i < payableAccounts.length; i++) {
-      accountNameString += "${payableAccounts[i].accountName},";
+    for (int i = 0; i < payableRecAccounts.length; i++) {
+      accountNameString += "${payableRecAccounts[i].accountName},";
     }
     return accountNameString;
   }

@@ -131,7 +131,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: TotalSalesModel.getColumns(
-                          AppLocalizations.of(context), reportsResult),
+                          AppLocalizations.of(context), reportsResult, context),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);
