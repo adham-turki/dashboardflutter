@@ -56,8 +56,14 @@ class _HomePageState extends State<HomePage> {
           Consumer<ScreenContentProvider>(builder: (context, value, build) {
             return Column(
               children: [
-                context.read<ScreenContentProvider>().getPage() == 15
-                    ? Container()
+                context.read<ScreenContentProvider>().getPage() == 15 ||
+                        context.read<ScreenContentProvider>().getPage() == 16
+                    ? context.read<ScreenContentProvider>().getPage() == 16
+                        ? SizedBox(
+                            width: isDesktop ? width * 0.835 : width,
+                            height: isDesktop ? height * 0.3 : height * 0.3,
+                          )
+                        : Container()
                     : SizedBox(
                         width: isDesktop ? width * 0.835 : width,
                         height: isDesktop ? height * 0.3 : height * 0.3,
@@ -65,11 +71,11 @@ class _HomePageState extends State<HomePage> {
                       ),
 
                 SizedBox(
-                  height: context.read<ScreenContentProvider>().getPage() != 14
+                  height: context.read<ScreenContentProvider>().getPage() != 15
                       ? isDesktop
                           ? height * .7
                           : height * 0.6
-                      : height * 0.7,
+                      : height,
                   width: width * 0.835,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(
@@ -89,6 +95,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget contentPage() {
     index = context.read<ScreenContentProvider>().getPage();
+    print("index: ${index}");
     switch (index) {
       case 0:
         return const DashboardContent();
