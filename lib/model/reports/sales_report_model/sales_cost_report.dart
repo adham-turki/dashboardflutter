@@ -138,7 +138,11 @@ class SalesCostReportModel {
       list.add(PlutoColumn(
         title: colsName[i],
         field: fieldsName[i],
-        type: PlutoColumnType.text(),
+        type: fieldsName[i] == 'averagePrice' ||
+                fieldsName[i] == 'quantity' ||
+                fieldsName[i] == 'total'
+            ? PlutoColumnType.number()
+            : PlutoColumnType.text(),
         width: isDesktop
             ? fieldsName[i] == 'dash'
                 ? width * .04
