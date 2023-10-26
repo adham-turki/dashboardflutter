@@ -180,7 +180,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     if (newPass.text.isEmpty) {
       ErrorController.openErrorDialog(406, _locale.newPassswordIsReq);
     } else if (oldPass.text.isEmpty) {
-      ErrorController.openErrorDialog(406, _locale.newPassswordIsReq);
+      ErrorController.openErrorDialog(406, _locale.oldPassswordIsReq);
     } else {
       final iv = [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1];
       final byteArray =

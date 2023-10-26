@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../utils/constants/constants.dart';
+
 class ErrorDialog extends StatefulWidget {
   final IconData icon;
   final Color color;
@@ -71,7 +73,7 @@ class _ErrorDialogState extends State<ErrorDialog> {
                 MaterialButton(
                   onPressed: () {
                     if (widget.statusCode == 401 || widget.statusCode == 417) {
-                      Navigator.pushNamed(context, "/");
+                      Navigator.pushReplacementNamed(context, loginScreenRoute);
                     } else {
                       Navigator.pop(context);
                     }
