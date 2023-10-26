@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                       ? isDesktop
                           ? height * .7
                           : height * 0.6
-                      : height,
+                      : height * 0.7,
                   width: width * 0.835,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(
