@@ -7,11 +7,12 @@ import '../../utils/constants/api_constants.dart';
 
 class SalesBranchesController {
   Future<List<SalesBranchesmodel>> getSalesByBranches(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = salesByBranches;
     List<SalesBranchesmodel> salesBranchesList = [];
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       print(response.body);
       if (response.statusCode == 200) {

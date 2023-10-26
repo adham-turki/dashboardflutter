@@ -10,11 +10,12 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class DailySalesController {
-  Future<List<DailySalesModel>> getDailySale(
-      SearchCriteria searchCriteria) async {
+  Future<List<DailySalesModel>> getDailySale(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     List<DailySalesModel> listDailySales = [];
     await ApiService()
-        .postRequest(getDailySales, searchCriteria.noToDatetoJson())
+        .postRequest(getDailySales, searchCriteria.noToDatetoJson(),
+            isStart: isStart)
         .then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
       for (var elemant in jsonData) {

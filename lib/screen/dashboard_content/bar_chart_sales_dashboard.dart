@@ -76,7 +76,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     ];
 
     selectedPeriod = periods[0];
-    getSalesByBranch();
+    getSalesByBranch(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -139,7 +139,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getSalesByBranch() async {
+  Future getSalesByBranch({bool? isStart}) async {
     if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
       setState(() {
         if (_fromDateController.text.isEmpty) {
@@ -164,7 +164,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       barData = [];
       listOfBalances = [];
       listOfPeriods = [];
-      salesBranchesController.getSalesByBranches(searchCriteria).then((value) {
+      salesBranchesController
+          .getSalesByBranches(searchCriteria, isStart: isStart)
+          .then((value) {
         for (var element in value) {
           double a = (element.totalSales! + element.retSalesDis!) -
               (element.salesDis! + element.totalReturnSales!);

@@ -102,7 +102,7 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
     ];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    getRecPayData();
+    getRecPayData(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -247,7 +247,7 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
     );
   }
 
-  getRecPayData() {
+  getRecPayData({bool? isStart}) {
     listOfBalances = [];
     listOfBalances2 = [];
     listOfPeriods = [];
@@ -270,7 +270,9 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
         fromDate: DatesController().formatDate(_fromDateController.text),
         voucherStatus: status);
 
-    recPayController.getRecPayMethod(searchCriteria).then((value) {
+    recPayController
+        .getRecPayMethod(searchCriteria, isStart: isStart)
+        .then((value) {
       int maxVal = value.payables.length > value.receivables.length
           ? value.payables.length
           : value.receivables.length;

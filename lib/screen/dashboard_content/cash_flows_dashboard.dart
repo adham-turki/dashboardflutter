@@ -93,7 +93,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
 
     selectedPeriod = periods[0];
     selectedStatus = status[0];
-    getCashFlows();
+    getCashFlows(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -299,7 +299,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  void getCashFlows() {
+  void getCashFlows({bool? isStart}) {
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -319,7 +319,9 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
     String endDate = DatesController().formatDate(_toDateController.text);
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate, toDate: endDate, voucherStatus: status);
-    cashFlowController.getChartCash(searchCriteria).then((value) {
+    cashFlowController
+        .getChartCash(searchCriteria, isStart: isStart)
+        .then((value) {
       setState(() {
         balance = value[0].value! - value[1].value!;
       });

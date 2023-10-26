@@ -9,12 +9,12 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class CashFlowController {
-  Future<List<CashFlowModel>> getChartCash(
-      SearchCriteria searchCriteria) async {
+  Future<List<CashFlowModel>> getChartCash(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getCashFlows;
     List<CashFlowModel> cashFlowList = [];
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
