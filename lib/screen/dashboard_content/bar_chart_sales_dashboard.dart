@@ -121,7 +121,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                       ],
                     ),
                     isDesktop ? desktopCriteria() : mobileCriteria(),
-                    BalanceBarChart(
+                    CustomBarChart(
                       data: barData,
                       color: Colors.indigo,
                     )

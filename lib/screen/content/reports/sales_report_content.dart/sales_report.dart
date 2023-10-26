@@ -347,7 +347,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     AppLocalizations.of(context),
                     orderByColumns,
                     reportsResult,
-                    width),
+                    context),
                 polRows: [],
                 footerBuilder: (stateManager) {
                   // print("stateManager ${stateManager.}");
