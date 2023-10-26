@@ -45,6 +45,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
+  FocusNode focusNode = FocusNode();
 
   @override
   void initState() {
@@ -55,6 +56,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     criteria.toDate = DatesController().formatDate(toDate.text);
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
+    focusNode.requestFocus();
 
     super.initState();
   }
@@ -62,7 +64,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-
     hintValue = numberOfrow.text == "" ? "0" : (numberOfrow.text);
     status = [
       _locale.all,
@@ -80,6 +81,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     selectedStatus = status[0];
     selectedPeriod = periods[0];
     numberOfrow.text = 10.toString();
+    focusNode.requestFocus();
 
     super.didChangeDependencies();
   }
@@ -89,6 +91,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   int count = 0;
   bool isDesktop = false;
   bool isMobile = false;
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +103,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
     isMobile = Responsive.isMobile(context);
-
+    focusNode.requestFocus();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -281,10 +288,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               },
             ),
             CustomTextField(
+              focusNode: focusNode,
               controller: numberOfrow,
               initialValue: numberOfrow.text,
               label: _locale.itemsNumber,
-              onChanged: (value) {
+              onSubmitted: (value) {
                 setState(() {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);
@@ -361,11 +369,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               },
             ),
             CustomTextField(
+              focusNode: focusNode,
               controller: numberOfrow,
               width: widthMobile,
               initialValue: numberOfrow.text,
               label: _locale.itemsNumber,
-              onChanged: (value) {
+              onSubmitted: (value) {
                 setState(() {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);

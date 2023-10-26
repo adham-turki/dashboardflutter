@@ -14,20 +14,25 @@ class CustomTextField extends StatefulWidget {
   Function(String)? onValidator;
   Key? customKey;
   bool? readOnly;
+  bool? autoFocus;
+
   Function(String value)? onChanged;
-  CustomTextField({
-    Key? key,
-    this.onValidator,
-    this.controller,
-    required this.label,
-    this.initialValue,
-    this.padding,
-    this.onSubmitted,
-    this.customKey,
-    this.width,
-    this.readOnly,
-    this.onChanged,
-  }) : super(key: key);
+  FocusNode? focusNode;
+  CustomTextField(
+      {Key? key,
+      this.onValidator,
+      this.controller,
+      required this.label,
+      this.initialValue,
+      this.padding,
+      this.onSubmitted,
+      this.customKey,
+      this.width,
+      this.readOnly,
+      this.autoFocus,
+      this.onChanged,
+      this.focusNode})
+      : super(key: key);
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -41,6 +46,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     super.initState();
     _textEditingController = widget.controller ?? TextEditingController();
     // Set the initial value if it's provided.
+
     if (widget.initialValue != null) {
       _textEditingController!.text = widget.initialValue!;
     }
@@ -74,6 +80,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
             //   border: Border.all(color: Colors.grey), // Border color
             // ),
             child: TextFormField(
+              focusNode: widget.focusNode,
+
               controller: _textEditingController,
               readOnly: readOnly,
               validator: (text) => widget.onValidator == null

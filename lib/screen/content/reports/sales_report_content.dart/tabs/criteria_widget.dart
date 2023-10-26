@@ -257,6 +257,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 : _locale.select,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -291,6 +292,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 getCategory1List();
               });
             },
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
@@ -369,6 +371,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               });
             },
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -383,6 +386,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ? selectedToStkCategory3
                 : _locale.select,
             label: _locale.to,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
@@ -464,6 +468,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
               },
               width: isDesktop ? width * .17 : width * .38,
+              height: isDesktop ? height * 0.25 : height * 0.25,
               hint: selectedFromCustomers.isNotEmpty
                   ? selectedFromCustomers
                   : _locale.select,
@@ -488,6 +493,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 return salesReportController
                     .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
               },
+              height: isDesktop ? height * 0.25 : height * 0.25,
               width: isDesktop ? width * .17 : width * .38,
               hint: selectedToCustomers.isNotEmpty
                   ? selectedToCustomers
@@ -563,6 +569,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   .getSalesStkMethod(dropDownSearchCriteria.toJson());
             },
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             hint: selectedFromStocks.isNotEmpty
                 ? selectedFromStocks
                 : _locale.select,
@@ -586,6 +593,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               return salesReportController
                   .getSalesStkMethod(dropDownSearchCriteria.toJson());
             },
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             hint:
                 selectedToStocks.isNotEmpty ? selectedToStocks : _locale.select,
@@ -861,6 +869,7 @@ class _RightWidgetState extends State<RightWidget> {
             showSearchBox: true,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             // items: branchesList,
             hint: selectedFromBranches.isNotEmpty
                 ? selectedFromBranches
@@ -884,6 +893,7 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             // items: branchesList,
             hint: selectedToBranches.isNotEmpty
@@ -959,6 +969,7 @@ class _RightWidgetState extends State<RightWidget> {
             showSearchBox: true,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             // items: stkCategory2List,
             hint: selectedFromStkCategory2.isNotEmpty
                 ? selectedFromStkCategory2
@@ -983,6 +994,7 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             hint: selectedToStkCategory2.isNotEmpty
                 ? selectedToStkCategory2
@@ -1060,6 +1072,7 @@ class _RightWidgetState extends State<RightWidget> {
               showSearchBox: true,
               label: _locale.from,
               width: isDesktop ? width * .17 : width * .38,
+              height: isDesktop ? height * 0.25 : height * 0.25,
               // items: suppliersList,
               hint: selectedFromSupplier.isNotEmpty
                   ? selectedFromSupplier
@@ -1083,6 +1096,7 @@ class _RightWidgetState extends State<RightWidget> {
             toDropDown: CustomDropDown(
               showSearchBox: true,
               label: _locale.to,
+              height: isDesktop ? height * 0.25 : height * 0.25,
               width: isDesktop ? width * .17 : width * .38,
               hint: selectedToSupplier.isNotEmpty
                   ? selectedToSupplier
@@ -1155,6 +1169,7 @@ class _RightWidgetState extends State<RightWidget> {
             showSearchBox: true,
             label: _locale.from,
             width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             hint: selectedFromCustomerCategory.isNotEmpty
                 ? selectedFromCustomerCategory
                 : _locale.select,
@@ -1178,6 +1193,7 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
+            height: isDesktop ? height * 0.25 : height * 0.25,
             width: isDesktop ? width * .17 : width * .38,
             hint: selectedToCustomerCategory.isNotEmpty
                 ? selectedToCustomerCategory
