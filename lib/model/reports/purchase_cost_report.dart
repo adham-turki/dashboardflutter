@@ -154,10 +154,10 @@ class PurchaseCostReportModel {
         field: fieldsName[i],
         type: PlutoColumnType.text(),
         width: isDesktop
-            ? fieldsName[i] == 'dash' || fieldsName[i] == "branch"
+            ? fieldsName[i] == 'dash'
                 ? width * .04
                 : width * .13
-            : 0.3,
+            : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
             ? (rendererContext) {

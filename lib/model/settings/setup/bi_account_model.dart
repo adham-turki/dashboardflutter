@@ -3,6 +3,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/responsive.dart';
 
 class BiAccountModel {
   String? account;
@@ -45,27 +46,28 @@ class BiAccountModel {
   static List<PlutoColumn> getColumns(
       BuildContext context, AppLocalizations localizations) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    bool isDesktop = Responsive.isDesktop(context);
+
     List<PlutoColumn> list = [
       PlutoColumn(
         title: "#",
         field: "dash",
         type: PlutoColumnType.number(),
-        width: width * 0.04,
+        width: isDesktop ? width * 0.04 : width * 0.1,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.accountCode,
         field: "account",
         type: PlutoColumnType.text(),
-        width: width * 0.13,
+        width: isDesktop ? width * 0.15 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.accountName,
         field: "accountName",
         type: PlutoColumnType.text(),
-        width: width * 0.18,
+        width: isDesktop ? width * 0.17 : width * 0.3,
         backgroundColor: colColor,
       ),
     ];

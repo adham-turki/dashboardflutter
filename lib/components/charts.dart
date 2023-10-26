@@ -4,6 +4,53 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+class CustomBarChart extends StatelessWidget {
+  final List<BarChartData> data;
+  final Color? color;
+
+  CustomBarChart({Key? key, required this.data, this.color}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
+    return Container(
+      height: height * 0.48,
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white, // Customize the chart background color
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: SfCartesianChart(
+        isTransposed: true,
+        primaryXAxis: CategoryAxis(),
+        plotAreaBorderWidth: 0,
+        series: <ChartSeries>[
+          BarSeries<BarChartData, String>(
+            dataSource: data,
+            xValueMapper: (BarChartData value, _) => value.category,
+            yValueMapper: (BarChartData value, _) => value.value,
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: color ?? const Color(0xff9AA0C5), // Customize the bar color
+          )
+        ],
+      ),
+    );
+  }
+}
 
 class BalanceLineChart extends StatelessWidget {
   final String xAxisText;

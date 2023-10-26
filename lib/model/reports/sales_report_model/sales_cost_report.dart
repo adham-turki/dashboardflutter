@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 
 class SalesCostReportModel {
@@ -123,9 +124,14 @@ class SalesCostReportModel {
     return PlutoRow(cells: salesReport);
   }
 
-  static List<PlutoColumn> getColumns(AppLocalizations localizations,
-      List<String> colsName, ReportsResult? reportsResult, double width) {
-    // print("reports ${reportsResult!.avgPrice}");
+  static List<PlutoColumn> getColumns(
+      AppLocalizations localizations,
+      List<String> colsName,
+      ReportsResult? reportsResult,
+      BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+
+    bool isDesktop = Responsive.isDesktop(context);
     List<String> fieldsName = getColumnsName(localizations, colsName, true);
     List<PlutoColumn> list = [];
     for (int i = 0; i < colsName.length; i++) {
@@ -133,7 +139,11 @@ class SalesCostReportModel {
         title: colsName[i],
         field: fieldsName[i],
         type: PlutoColumnType.text(),
-        width: fieldsName[i] == 'dash' ? width * .07 : width * .15,
+        width: isDesktop
+            ? fieldsName[i] == 'dash'
+                ? width * .04
+                : width * .13
+            : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'avgPrice' && reportsResult != null
             ? (rendererContext) {
