@@ -122,7 +122,7 @@ class _OrderByWidgetState extends State<OrderByWidget> {
         border: Border.all(color: Colors.grey),
       ),
       padding: const EdgeInsets.all(10.0),
-      width: width * 0.7,
+      width: width * 0.65,
       child: Column(
         children: [
           CustomDropDown(
