@@ -15,6 +15,7 @@ class CustomDatePicker extends StatefulWidget {
   Function(String value)? onSelected;
   Function(String value)? onChanged;
   TextEditingController controller;
+  double? width;
 
   final DateTime date;
   CustomDatePicker(
@@ -24,6 +25,7 @@ class CustomDatePicker extends StatefulWidget {
       this.onChanged,
       this.onSelected,
       required this.controller,
+      this.width,
       required this.date});
 
   @override
@@ -71,11 +73,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         children: [
           CustomLabel(
             label: label,
-            width: Responsive.isDesktop(context) ? width * 0.15 : width,
+            width: Responsive.isDesktop(context)
+                ? widget.width ?? width * 0.15
+                : width,
           ),
           Container(
             decoration: const BoxDecoration(color: Colors.white),
-            width: Responsive.isDesktop(context) ? width * 0.15 : width,
+            width: Responsive.isDesktop(context)
+                ? widget.width ?? width * 0.15
+                : width,
             child: TextFormField(
               controller: widget.controller,
               inputFormatters: [_maskTextInputFormatter],

@@ -46,8 +46,10 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
         color: Colors.white,
         border: Border.all(color: Colors.grey),
       ),
-      padding: const EdgeInsets.all(20.0),
-      width: width * 0.7,
+      padding: isDesktop
+          ? const EdgeInsets.only(top: 20.0, bottom: 20)
+          : const EdgeInsets.all(10),
+      width: width * 0.65,
       child: isMobile
           ? Column(
               children: [
@@ -179,7 +181,7 @@ class _LeftWidgetState extends State<LeftWidget> {
     return Column(
       children: [
         Container(
-          width: isMobile ? width * 0.9 : width * 0.65 / 2,
+          width: isMobile ? width * 0.9 : width * 0.6 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -195,6 +197,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                       controller: fromDate,
                       label: _locale.fromDate,
                       date: DateTime.parse(toDate.text),
+                      width: width * .135,
                       onChanged: (value) {
                         setFromDateController();
                       },
@@ -206,6 +209,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                       controller: toDate,
                       date: DateTime.parse(fromDate.text),
                       label: _locale.toDate,
+                      width: width * .135,
                       onChanged: (value) {
                         setToDateController();
                       },
@@ -256,7 +260,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ? selectedFromStkCategory1
                 : _locale.select,
             label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -291,7 +296,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 getCategory1List();
               });
             },
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -368,7 +374,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 getCategory3List();
               });
             },
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -383,7 +390,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ? selectedToStkCategory3
                 : _locale.select,
             label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             onSearch: (text) {
               DropDownSearchCriteria dropDownSearchCriteria =
                   getSearchCriteria(text);
@@ -463,7 +471,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 return salesReportController
                     .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
               },
-              width: isDesktop ? width * .17 : width * .38,
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop ? height * 0.4 : height * 0.35,
               hint: selectedFromCustomers.isNotEmpty
                   ? selectedFromCustomers
                   : _locale.select,
@@ -488,7 +497,8 @@ class _LeftWidgetState extends State<LeftWidget> {
                 return salesReportController
                     .getSalesCustomersMethod(dropDownSearchCriteria.toJson());
               },
-              width: isDesktop ? width * .17 : width * .38,
+              height: isDesktop ? height * 0.4 : height * 0.35,
+              width: isDesktop ? width * .14 : width * .35,
               hint: selectedToCustomers.isNotEmpty
                   ? selectedToCustomers
                   : _locale.select,
@@ -562,7 +572,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               return salesReportController
                   .getSalesStkMethod(dropDownSearchCriteria.toJson());
             },
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             hint: selectedFromStocks.isNotEmpty
                 ? selectedFromStocks
                 : _locale.select,
@@ -586,7 +597,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               return salesReportController
                   .getSalesStkMethod(dropDownSearchCriteria.toJson());
             },
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             hint:
                 selectedToStocks.isNotEmpty ? selectedToStocks : _locale.select,
             initialValue: selectedToStocks.isNotEmpty ? selectedToStocks : null,
@@ -852,7 +864,7 @@ class _RightWidgetState extends State<RightWidget> {
     modelNoController.text = readProvider.getModelNo!;
     campaignNoController.text = readProvider.getCampaignNo!;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CardComponent(
           title: _locale.branch,
@@ -860,7 +872,8 @@ class _RightWidgetState extends State<RightWidget> {
           fromDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             // items: branchesList,
             hint: selectedFromBranches.isNotEmpty
                 ? selectedFromBranches
@@ -884,7 +897,8 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             // items: branchesList,
             hint: selectedToBranches.isNotEmpty
                 ? selectedToBranches
@@ -958,7 +972,8 @@ class _RightWidgetState extends State<RightWidget> {
           fromDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             // items: stkCategory2List,
             hint: selectedFromStkCategory2.isNotEmpty
                 ? selectedFromStkCategory2
@@ -983,7 +998,8 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             hint: selectedToStkCategory2.isNotEmpty
                 ? selectedToStkCategory2
                 : _locale.select,
@@ -1059,7 +1075,8 @@ class _RightWidgetState extends State<RightWidget> {
             fromDropDown: CustomDropDown(
               showSearchBox: true,
               label: _locale.from,
-              width: isDesktop ? width * .17 : width * .38,
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop ? height * 0.4 : height * 0.35,
               // items: suppliersList,
               hint: selectedFromSupplier.isNotEmpty
                   ? selectedFromSupplier
@@ -1083,7 +1100,8 @@ class _RightWidgetState extends State<RightWidget> {
             toDropDown: CustomDropDown(
               showSearchBox: true,
               label: _locale.to,
-              width: isDesktop ? width * .17 : width * .38,
+              height: isDesktop ? height * 0.4 : height * 0.35,
+              width: isDesktop ? width * .14 : width * .35,
               hint: selectedToSupplier.isNotEmpty
                   ? selectedToSupplier
                   : _locale.select,
@@ -1154,7 +1172,8 @@ class _RightWidgetState extends State<RightWidget> {
           fromDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.from,
-            width: isDesktop ? width * .17 : width * .38,
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.4 : height * 0.35,
             hint: selectedFromCustomerCategory.isNotEmpty
                 ? selectedFromCustomerCategory
                 : _locale.select,
@@ -1178,7 +1197,8 @@ class _RightWidgetState extends State<RightWidget> {
           toDropDown: CustomDropDown(
             showSearchBox: true,
             label: _locale.to,
-            width: isDesktop ? width * .17 : width * .38,
+            height: isDesktop ? height * 0.4 : height * 0.35,
+            width: isDesktop ? width * .14 : width * .35,
             hint: selectedToCustomerCategory.isNotEmpty
                 ? selectedToCustomerCategory
                 : _locale.select,
@@ -1248,7 +1268,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: height * .01,
         ),
         Container(
-          width: isMobile ? width * 0.9 : width * 0.65 / 2,
+          width: isMobile ? width * 0.9 : width * 0.6 / 2,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1261,7 +1281,7 @@ class _RightWidgetState extends State<RightWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextField(
-                      width: width * 0.74,
+                      width: width * 0.67,
                       label: _locale.campaignNo,
                       controller: campaignNoController,
                       onSubmitted: (text) {
@@ -1269,7 +1289,7 @@ class _RightWidgetState extends State<RightWidget> {
                       },
                     ),
                     CustomTextField(
-                      width: width * 0.74,
+                      width: width * 0.67,
                       label: _locale.modelNo,
                       controller: modelNoController,
                       onSubmitted: (text) {

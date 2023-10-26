@@ -38,47 +38,24 @@ class _SimpleDropdownSearchState extends State<SimpleDropdownSearch> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height * 0.2;
+    double height = MediaQuery.of(context).size.height * 0.4;
     double width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
-    return Column(
-      // mainAxisAlignment: MainAxisAlignment.end,
-      // crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        SizedBox(
-          width: isDesktop ? width * .17 : width * .4,
-          // height: 100,
-          child: DropdownSearch<dynamic>.multiSelection(
-              enabled: widget.enabled,
-              // mode: Mode.MENU,
-              // selectedItems: false,
-              // showClearButton: false,
-              // items: items,
-              asyncItems: widget.onSearch,
-              // showSearchBox: true,
-              // filterFn: ,
-              popupProps: PopupPropsMultiSelection.menu(
-                showSearchBox: true,
-                isFilterOnline: true,
-                constraints: BoxConstraints.tightFor(height: height),
-              ),
-              selectedItems:
-                  widget.enabled == false ? ["0"] : widget.hintString,
-              // searchFieldProps: const TextFieldProps(
-              //   decoration: InputDecoration(
-              //       // suffixIcon: IconButton(
-              //       //   icon: const Icon(Icons.clear),
-              //       //   onPressed: () {
-              //       //     //   _userEditTextController.clear();
-              //       //   },
-              //       // ),
-              //       ),
-              // ),
-              onChanged: widget.onChanged),
-        ),
-      ],
+    return SizedBox(
+      width: isDesktop ? width * .14 : width * .35,
+      // height: 200,
+      child: DropdownSearch<dynamic>.multiSelection(
+          enabled: widget.enabled,
+          asyncItems: widget.onSearch,
+          popupProps: PopupPropsMultiSelection.menu(
+            showSearchBox: true,
+            isFilterOnline: true,
+            constraints: BoxConstraints.tightFor(height: height),
+          ),
+          selectedItems: widget.enabled == false ? ["0"] : widget.hintString,
+          onChanged: widget.onChanged),
     );
   }
 }

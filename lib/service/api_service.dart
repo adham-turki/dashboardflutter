@@ -32,7 +32,8 @@ class ApiService {
     return response;
   }
 
-  Future<http.Response> postRequest(String api, dynamic toJson) async {
+  Future<http.Response> postRequest(String api, dynamic toJson,
+      {bool? isStart}) async {
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
@@ -57,10 +58,14 @@ class ApiService {
       if (response.body == "Wrong Credentials") {
         return response;
       }
-      ErrorController.openErrorDialog(
-        response.statusCode,
-        response.body,
-      );
+      if (isStart != null) {
+        if (!isStart) {
+          ErrorController.openErrorDialog(
+            response.statusCode,
+            response.body,
+          );
+        }
+      }
     }
     return response;
   }
