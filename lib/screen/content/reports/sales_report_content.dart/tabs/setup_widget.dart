@@ -87,7 +87,7 @@ class _SetupWidgetState extends State<SetupWidget> {
       ),
       //
       padding: const EdgeInsets.all(10.0),
-      width: width * 0.7,
+      width: width * 0.65,
       height: height * 0.42,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -88,7 +88,7 @@ class TotalSalesModel {
       PlutoColumn(
         title: localizations.returnQty,
         field: "inQnty",
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.number(),
         width: isDesktop ? width * 0.1 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
@@ -101,7 +101,7 @@ class TotalSalesModel {
       PlutoColumn(
         title: localizations.salesQty,
         field: "outQnty",
-        type: PlutoColumnType.text(),
+        type: PlutoColumnType.number(),
         width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null

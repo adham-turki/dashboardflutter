@@ -51,7 +51,7 @@ class _CardComponentState extends State<CardComponent> {
     // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
     return Container(
-      width: isMobile ? width * 0.9 : width * 0.65 / 2,
+      width: isMobile ? width * 0.9 : width * 0.6 / 2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(
@@ -62,7 +62,7 @@ class _CardComponentState extends State<CardComponent> {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 widget.title,
@@ -72,39 +72,47 @@ class _CardComponentState extends State<CardComponent> {
           ),
           widget.multipleVal == false
               ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [widget.fromDropDown],
                 )
-              : Padding(
-                  padding:
-                      EdgeInsets.only(right: isDesktop ? 180 : 120, top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      widget.selectAll,
-                      SelectableText(
-                        maxLines: 1,
-                        _locale.selectAll,
-                        style: twelve400TextStyle(Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-          SizedBox(
-            height: height * .005,
-          ),
+              : Container(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              widget.multipleVal == false
+                  ? widget.toDropDown
+                  : Padding(
+                      padding:
+                          const EdgeInsets.only(top: 20.0, right: 8, bottom: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              widget.selectAll,
+                              SelectableText(
+                                maxLines: 1,
+                                _locale.selectAll,
+                                style: twelve400TextStyle(Colors.black),
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                          widget.multipleSearch,
+                        ],
+                      ),
+                    ),
+              SizedBox(
+                width: isDesktop ? width * .06 : width * .01,
+              ),
               Column(
                 children: [
                   SizedBox(
-                    height: widget.multipleVal == false
-                        ? height * .07
-                        : height * .02,
+                    height: height * .08,
                   ),
                   Row(
-                    // crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       widget.multipleCheckBox,
                       SelectableText(
@@ -114,13 +122,6 @@ class _CardComponentState extends State<CardComponent> {
                       ),
                     ],
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  widget.multipleVal == false
-                      ? widget.toDropDown
-                      : widget.multipleSearch
                 ],
               ),
             ],

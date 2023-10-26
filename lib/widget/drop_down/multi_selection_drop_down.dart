@@ -43,26 +43,19 @@ class _SimpleDropdownSearchState extends State<SimpleDropdownSearch> {
     isDesktop = Responsive.isDesktop(context);
     // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
-    return Column(
-      // mainAxisAlignment: MainAxisAlignment.end,
-      // crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        SizedBox(
-          width: isDesktop ? width * .17 : width * .4,
-          // height: 200,
-          child: DropdownSearch<dynamic>.multiSelection(
-              enabled: widget.enabled,
-              asyncItems: widget.onSearch,
-              popupProps: PopupPropsMultiSelection.menu(
-                showSearchBox: true,
-                isFilterOnline: true,
-                constraints: BoxConstraints.tightFor(height: height),
-              ),
-              selectedItems:
-                  widget.enabled == false ? ["0"] : widget.hintString,
-              onChanged: widget.onChanged),
-        ),
-      ],
+    return SizedBox(
+      width: isDesktop ? width * .14 : width * .35,
+      // height: 200,
+      child: DropdownSearch<dynamic>.multiSelection(
+          enabled: widget.enabled,
+          asyncItems: widget.onSearch,
+          popupProps: PopupPropsMultiSelection.menu(
+            showSearchBox: true,
+            isFilterOnline: true,
+            constraints: BoxConstraints.tightFor(height: height),
+          ),
+          selectedItems: widget.enabled == false ? ["0"] : widget.hintString,
+          onChanged: widget.onChanged),
     );
   }
 }
