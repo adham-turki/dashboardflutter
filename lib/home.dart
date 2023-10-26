@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
           Consumer<ScreenContentProvider>(builder: (context, value, build) {
             return Column(
               children: [
-                context.read<ScreenContentProvider>().getPage() == 14
+                context.read<ScreenContentProvider>().getPage() == 15
                     ? Container()
                     : SizedBox(
                         width: isDesktop ? width * 0.835 : width,
