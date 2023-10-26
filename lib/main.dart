@@ -5,6 +5,7 @@ import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 
 import 'package:bi_replicate/screen/login_screen.dart';
+import 'package:bi_replicate/screen/splash_screen.dart';
 import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -12,6 +13,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/key.dart';
 import 'l10n/l10n.dart';
@@ -39,28 +41,30 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<LocaleProvider>(context);
+    final provider = Provider.of<LocaleProvider>(context);
 
-    //    Future<void> loadStoredLocale() async {
-    //   SharedPreferences prefs = await SharedPreferences.getInstance();
-    //   String? storedLanguageCode = prefs.getString('selectedLanguage');
+    Future<void> loadStoredLocale() async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? storedLanguageCode = prefs.getString('selectedLanguage');
 
-    //   if (storedLanguageCode != null) {
-    //     Locale storedLocale = Locale(storedLanguageCode);
-    //     provider.setLocale(storedLocale);
-    //   }
-    // }
+      if (storedLanguageCode != null) {
+        Locale storedLocale = Locale(storedLanguageCode);
+        provider.setLocale(storedLocale);
+      }
+    }
 
-    // loadStoredLocale();
+    loadStoredLocale();
+
     return FutureBuilder<String?>(
       future: _getToken(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+        if (snapshot.connectionState == ConnectionState.waiting &&
+            provider.locale != provider.locale) {
+          return SplashScreen(
+            isVisible: snapshot.connectionState != ConnectionState.done,
+          );
         } else {
           final hasToken = snapshot.data != null;
-          final provider = Provider.of<LocaleProvider>(context);
-
           return MaterialApp(
             navigatorKey: navigatorKey,
             title: 'BI | Scope',
