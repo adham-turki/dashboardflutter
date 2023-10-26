@@ -93,7 +93,6 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
 
     selectedPeriod = periods[0];
     selectedStatus = status[0];
-    getCashFlows();
     super.didChangeDependencies();
   }
 
@@ -140,18 +139,15 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            _locale.cashFlows,
-                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
-                          ),
+                        Text(
+                          _locale.cashFlows,
+                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
                         ),
                       ],
                     ),
-                    isDesktop ? desktopCriteria() : mobileCriteria(),
+                    //    isDesktop ? desktopCriteria() : mobileCriteria(),
                     BalanceBarChart(data: barData, color: Colors.amber)
                   ],
                 ),
@@ -161,224 +157,6 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
         ),
       ),
     );
-  }
-
-  Row desktopCriteria() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomDropDown(
-                  items: periods,
-                  label: _locale.period,
-                  initialValue: selectedPeriod,
-                  onChanged: (value) {
-                    setState(() {
-                      checkPeriods(value);
-                      selectedPeriod = value!;
-                      getCashFlows();
-                    });
-                  },
-                ),
-                CustomDropDown(
-                  items: status,
-                  label: _locale.status,
-                  initialValue: selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedStatus = value!;
-                      getCashFlows();
-                    });
-                  },
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomDatePicker(
-                  label: _locale.fromDate,
-                  date: DateTime.parse(_toDateController.text),
-                  controller: _fromDateController,
-                  onSelected: (value) {
-                    setState(() {
-                      _fromDateController.text = value;
-                      getCashFlows();
-                    });
-                  },
-                ),
-                CustomDatePicker(
-                  label: _locale.toDate,
-                  controller: _toDateController,
-                  date: DateTime.parse(_fromDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _toDateController.text = value;
-                      getCashFlows();
-                    });
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Column mobileCriteria() {
-    double widthMobile = width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        CustomDropDown(
-          width: widthMobile,
-          items: periods,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getCashFlows();
-            });
-          },
-        ),
-        CustomDropDown(
-          width: widthMobile,
-          items: status,
-          label: _locale.byCategory,
-          initialValue: selectedStatus,
-          onChanged: (value) {
-            setState(() {
-              selectedStatus = value!;
-              getCashFlows();
-            });
-          },
-        ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getCashFlows();
-            });
-          },
-        ),
-        CustomDatePicker(
-          label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getCashFlows();
-            });
-          },
-        ),
-      ],
-    );
-  }
-
-  String accountName() {
-    accountNameString = "";
-    for (int i = 0; i < cashboxAccounts.length; i++) {
-      accountNameString += "${cashboxAccounts[i].accountName},";
-    }
-    return accountNameString;
-  }
-
-  double formatDoubleToTwoDecimalPlaces(double number) {
-    return double.parse(number.toStringAsFixed(2));
-  }
-
-  void getCashFlows() {
-    listOfBalances = [];
-    pieData = [];
-    barData = [];
-    dataMap.clear();
-    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
-      setState(() {
-        if (_fromDateController.text.isEmpty) {
-          _fromDateController.text = todayDate;
-        }
-        if (_toDateController.text.isEmpty) {
-          _toDateController.text = todayDate;
-        }
-      });
-    }
-    int status = getVoucherStatus(_locale, selectedStatus);
-    String startDate = DatesController().formatDate(_fromDateController.text);
-    String endDate = DatesController().formatDate(_toDateController.text);
-    SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: startDate, toDate: endDate, voucherStatus: status);
-    cashFlowController.getChartCash(searchCriteria).then((value) {
-      setState(() {
-        balance = value[0].value! - value[1].value!;
-      });
-      for (var element in value) {
-        if (element.value != 0.0) {
-          temp = true;
-        } else if (element.value == 0.0) {
-          temp = false;
-        }
-        if (element.title! == "debit") {
-          listOfBalances.add(element.value!);
-          listOfPeriods.add(_locale.cashIn);
-          if (temp) {
-            dataMap[_locale.cashIn] =
-                formatDoubleToTwoDecimalPlaces(element.value!);
-            pieData.add(PieChartModel(
-                title: _locale.cashIn,
-                value: formatDoubleToTwoDecimalPlaces(element.value!),
-                color: getRandomColor(colorNewList)));
-          }
-          barData.add(
-            BarChartData(_locale.cashIn, element.value!),
-          );
-        } else {
-          listOfBalances.add(element.value!);
-          listOfPeriods.add(_locale.cashOut);
-          if (temp) {
-            dataMap[_locale.cashOut] =
-                formatDoubleToTwoDecimalPlaces(element.value!);
-            pieData.add(PieChartModel(
-                title: _locale.cashOut,
-                value: element.value,
-                color: getRandomColor(colorNewList)));
-          }
-          barData.add(
-            BarChartData(_locale.cashOut, element.value!),
-          );
-        }
-      }
-    });
-  }
-
-  void checkPeriods(value) {
-    if (value == periods[0]) {
-      _fromDateController.text = DatesController().todayDate().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[1]) {
-      _fromDateController.text = DatesController().currentWeek().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[2]) {
-      _fromDateController.text = DatesController().currentMonth().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[3]) {
-      _fromDateController.text = DatesController().currentYear().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
   }
 
   Color getRandomColor(List<Color> colorList) {

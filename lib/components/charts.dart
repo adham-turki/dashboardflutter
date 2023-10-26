@@ -7,45 +7,39 @@ import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class CustomBarChart extends StatelessWidget {
-  final List<BarChartData> data;
-  final Color? color;
+class BarData {
+  final String? name;
+  final double? percent;
 
-  CustomBarChart({Key? key, required this.data, this.color}) : super(key: key);
+  BarData({required this.name, required this.percent});
+}
+
+class CustomBarChart extends StatelessWidget {
+  final List<BarData> data;
+
+  const CustomBarChart({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return Container(
-      height: height * 0.48,
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.white, // Customize the chart background color
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
       child: SfCartesianChart(
         isTransposed: true,
         primaryXAxis: CategoryAxis(),
         plotAreaBorderWidth: 0,
         series: <ChartSeries>[
-          BarSeries<BarChartData, String>(
-            dataSource: data,
-            xValueMapper: (BarChartData value, _) => value.category,
-            yValueMapper: (BarChartData value, _) => value.value,
-            enableTooltip: true,
-            animationDuration: 1000,
-            color: color ?? const Color(0xff9AA0C5), // Customize the bar color
-          )
+          BarSeries<BarData, String>(
+              dataSource: data,
+              xValueMapper: (BarData value, _) => value.name,
+              yValueMapper: (BarData value, _) => value.percent,
+              enableTooltip: true,
+              animationDuration: 1000,
+              color: Color(0xFFEE9322),
+              dataLabelSettings: DataLabelSettings(
+                isVisible: true,
+                textStyle: TextStyle(
+                    color: Color(0xFF219C90), fontWeight: FontWeight.w600),
+              ))
         ],
       ),
     );
