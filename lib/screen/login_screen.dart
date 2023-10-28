@@ -1,5 +1,6 @@
 import 'package:bi_replicate/controller/login/login_controller.dart';
 import 'package:bi_replicate/model/login/users_model.dart';
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -43,102 +44,109 @@ class _LoginScreenState extends State<LoginScreen> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     final localeProvider = Provider.of<LocaleProvider>(context);
+    bool isDesktop = Responsive.isDesktop(context);
 
     return Scaffold(
         body: Directionality(
       textDirection: TextDirection.ltr,
-      child: Stack(
-        children: [
-          Container(
-            width: width,
-            height: height,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/wallpaper_image.jpg",
-                ),
-                fit: BoxFit.cover,
+      child: isDesktop
+          ? desktopLogin(context, localeProvider)
+          : mobileLogin(context, localeProvider),
+    ));
+  }
+
+  Stack desktopLogin(BuildContext context, LocaleProvider localeProvider) {
+    return Stack(
+      children: [
+        Container(
+          width: width,
+          height: height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                "assets/images/wallpaper_image.jpg",
               ),
+              fit: BoxFit.cover,
             ),
           ),
-          Container(
-            width: width,
-            height: height,
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-            ),
+        ),
+        Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.3),
           ),
-          Stack(
-            children: [
-              Row(
+        ),
+        Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomPaint(
+                  size: Size(width * 0.12, height * 0.2),
+                  painter: MyPainter(context: context),
+                ),
+              ],
+            ),
+            Center(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomPaint(
-                    size: Size(width * 0.12, height * 0.2),
-                    painter: MyPainter(context: context),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FormComponent(
+                        aliasName: aliasName,
+                        userController: userController,
+                        passwordController: passwordController,
+                        onSubmit: (value) {
+                          validateLogin(context);
+                        },
+                        onPressed: () {
+                          validateLogin(context);
+
+                          // if (_keyForm.currentState!.validate()) {
+                          //   print("object 22");
+                          //   _savingData().then((value) {
+                          //     print("object 33");
+                          //   });
+                          // }
+                          // Navigator.push(context, MaterialPageRoute(
+                          //   builder: (context) {
+                          //     return const HomePage();
+                          //   },
+                          // ));
+                        },
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: width * 0.04,
                   ),
                 ],
               ),
-              Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        FormComponent(
-                          aliasName: aliasName,
-                          userController: userController,
-                          passwordController: passwordController,
-                          onSubmit: (value) {
-                            validateLogin(context);
-                          },
-                          onPressed: () {
-                            validateLogin(context);
-
-                            // if (_keyForm.currentState!.validate()) {
-                            //   print("object 22");
-                            //   _savingData().then((value) {
-                            //     print("object 33");
-                            //   });
-                            // }
-                            // Navigator.push(context, MaterialPageRoute(
-                            //   builder: (context) {
-                            //     return const HomePage();
-                            //   },
-                            // ));
-                          },
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 0.04,
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: 1,
-                right: 10,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: LanguageWidget(
-                      color: Colors.black,
-                      onLocaleChanged: (locale) {
-                        localeProvider.setLocale(locale);
-                      },
-                    ),
+            ),
+            Positioned(
+              top: 1,
+              right: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: LanguageWidget(
+                    color: Colors.black,
+                    onLocaleChanged: (locale) {
+                      localeProvider.setLocale(locale);
+                    },
                   ),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    ));
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   void validateLogin(BuildContext context) {
@@ -210,5 +218,33 @@ class _LoginScreenState extends State<LoginScreen> {
         passwordController.text, keyEncrypt, byteArray);
     UserModel userModel = UserModel(userController.text, passEncrypted);
     return LoginController().logInPost(userModel, _locale);
+  }
+
+  Widget mobileLogin(BuildContext context, LocaleProvider localeProvider) {
+    return Center(
+      child: FormComponent(
+        aliasName: aliasName,
+        userController: userController,
+        passwordController: passwordController,
+        onSubmit: (value) {
+          validateLogin(context);
+        },
+        onPressed: () {
+          validateLogin(context);
+
+          // if (_keyForm.currentState!.validate()) {
+          //   print("object 22");
+          //   _savingData().then((value) {
+          //     print("object 33");
+          //   });
+          // }
+          // Navigator.push(context, MaterialPageRoute(
+          //   builder: (context) {
+          //     return const HomePage();
+          //   },
+          // ));
+        },
+      ),
+    );
   }
 }

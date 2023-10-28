@@ -1,3 +1,4 @@
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -61,6 +62,8 @@ class _LoginTextFieldState extends State<LoginTextField> {
     bool readOnly = widget.readOnly ?? false;
     String hint = widget.hint ?? "";
     Function(String value)? onSubmitted = widget.onSubmitted;
+
+    bool isDesktop = Responsive.isDesktop(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: padding, horizontal: 10),
       child: Column(
@@ -70,7 +73,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
           //   width: width * 0.2,
           // ),
           Container(
-            width: width * 0.18,
+            width: isDesktop ? width * 0.18 : width * 0.5,
             // decoration: BoxDecoration(
             //   color: Colors.white,
             //   borderRadius: BorderRadius.circular(7.0),
