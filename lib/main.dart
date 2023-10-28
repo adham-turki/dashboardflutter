@@ -1,4 +1,5 @@
 import 'package:bi_replicate/home.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
@@ -27,6 +28,7 @@ void main() {
         ChangeNotifierProvider(create: (create) => LocaleProvider()),
         ChangeNotifierProvider(create: (create) => SalesCriteraProvider()),
         ChangeNotifierProvider(create: (create) => PurchaseCriteraProvider()),
+        ChangeNotifierProvider(create: (create) => DatesProvider()),
       ],
       child: const MyApp(),
     ),
