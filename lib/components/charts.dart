@@ -22,7 +22,10 @@ class CustomBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Container(
+      height: height * 0.45,
       padding: const EdgeInsets.all(16.0),
       child: SfCartesianChart(
         isTransposed: true,
@@ -35,8 +38,8 @@ class CustomBarChart extends StatelessWidget {
               yValueMapper: (BarData value, _) => value.percent,
               enableTooltip: true,
               animationDuration: 1000,
-              color: color ?? Color(0xFFEE9322),
-              dataLabelSettings: DataLabelSettings(
+              color: color ?? const Color(0xFFEE9322),
+              dataLabelSettings: const DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
                     color: Color(0xFF219C90), fontWeight: FontWeight.w600),

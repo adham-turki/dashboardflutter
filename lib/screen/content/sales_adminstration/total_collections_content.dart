@@ -363,7 +363,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                 title:
                     element.name! == "Cheque" ? _locale.cheques : _locale.cash,
                 value: formatDoubleToTwoDecimalPlaces(element.collection!),
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorNewList, usedColors)));
           }
 
           barData.add(
@@ -393,9 +393,20 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     }
   }
 
-  Color getRandomColor(List<Color> colorList) {
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
   }
 }
