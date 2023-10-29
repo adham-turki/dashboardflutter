@@ -210,12 +210,18 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                       ],
                     ),
                     selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
+                        ? BalanceDoubleLineChart(
+                            xAxisText: "",
                             yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
                             balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : BalanceBarChart(data: barData),
+                            periods: listOfPeriods,
+                            balances2: listOfBalances2,
+                            periods2: listOfPeriods2,
+                          )
+                        : BalanceDoubleBarChart(
+                            data: barData,
+                            data2: barData2,
+                          ),
                     const SizedBox(), //Footer
                   ],
                 ),

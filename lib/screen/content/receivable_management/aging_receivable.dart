@@ -129,7 +129,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
                                   : selectedChart == _locale.pieChart
                                       ? _locale.pieChart
                                       : _locale.barChart,
-                              style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                              style: TextStyle(fontSize: isDesktop ? 24 : 14),
                             ),
                           ),
                           SizedBox(
