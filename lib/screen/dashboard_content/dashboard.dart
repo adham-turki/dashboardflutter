@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:bi_replicate/model/bar_chart_data_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.dart';
 import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
+import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
 import '../../model/criteria/search_criteria.dart';
@@ -37,13 +39,18 @@ class _DashboardContentState extends State<DashboardContent> {
   TextEditingController toDateController = TextEditingController();
   var period = "";
   var status = "";
+  String todayDate = "";
 
   List<BarData> barData = [];
   List<BarData> barDataCashFlows = [];
+  List<PieChartModel> barDataDailySales = [];
+
   late AppLocalizations _locale;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
+    todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
 
     super.didChangeDependencies();
   }
@@ -92,6 +99,13 @@ class _DashboardContentState extends State<DashboardContent> {
                         print("valee :${value}");
                         print(
                             "bar cash inisde then:${barDataCashFlows.length}");
+
+                        setState(() {});
+                      });
+
+                      getDailySales().then((value) {
+                        print("valeedaily :${value}");
+                        print("daily inisde then:${barDataDailySales.length}");
 
                         setState(() {});
                       });
@@ -145,7 +159,8 @@ class _DashboardContentState extends State<DashboardContent> {
                                 ),
                               Expanded(
                                 flex: 2,
-                                child: DailySalesDashboard(),
+                                child: DailySalesDashboard(
+                                    pieData: barDataDailySales),
                               ),
                             ],
                           ),
@@ -223,7 +238,7 @@ class _DashboardContentState extends State<DashboardContent> {
           voucherStatus: -100);
       pieData = [];
       dataMap.clear();
-      barDataCashFlows = [];
+      barData = [];
       listOfBalances = [];
       listOfPeriods = [];
       await salesBranchesController
@@ -251,7 +266,6 @@ class _DashboardContentState extends State<DashboardContent> {
           barData.add(
             BarData(name: element.namee!, percent: a),
           );
-          print("barData length inide method:${barData.length}");
         }
       });
     }
@@ -287,7 +301,6 @@ class _DashboardContentState extends State<DashboardContent> {
     listOfBalances = [];
     List<PieChartModel> pieData = [];
     final dataMap = <String, double>{};
-    String todayDate = "";
     pieData = [];
     dataMap.clear();
     if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
@@ -343,9 +356,84 @@ class _DashboardContentState extends State<DashboardContent> {
           barDataCashFlows.add(
             BarData(name: _locale.cashOut, percent: element.value!),
           );
-          print("flowchart length inide method:${barData.length}");
         }
       }
     });
+  }
+
+  Future getDailySales({bool? isStart}) async {
+    List<double> listOfBalances = [];
+    List<String> listOfPeriods = [];
+    final dataMap = <String, double>{};
+    DailySalesController dailySalesController = DailySalesController();
+    bool boolTemp = false;
+    List<BarData> barData = [];
+
+    listOfBalances = [];
+    dataMap.clear();
+    barDataDailySales = [];
+    int stat = getVoucherStatus(_locale, status);
+    if (fromDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
+      }
+    }
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: fromDateController.text.isEmpty
+            ? todayDate
+            : fromDateController.text,
+        voucherStatus: stat);
+
+    await dailySalesController
+        .getDailySale(searchCriteria, isStart: isStart)
+        .then((response) {
+      for (var elemant in response) {
+        String temp = DatesController().formatDate(getNextDay(
+          fromDateController.text.isEmpty ? todayDate : fromDateController.text,
+        ).toString());
+        if (double.parse(elemant.dailySale.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+          boolTemp = false;
+        }
+
+        listOfBalances.add(double.parse(elemant.dailySale.toString()));
+        listOfPeriods.add(temp);
+        if (boolTemp) {
+          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+              double.parse(elemant.dailySale.toString()));
+          barDataDailySales.add(PieChartModel(
+              title: temp,
+              value: double.parse(elemant.dailySale.toString()) == 0.0
+                  ? 1.0
+                  : formatDoubleToTwoDecimalPlaces(
+                      double.parse(elemant.dailySale.toString())),
+              color: getRandomColor(colorNewList)));
+        }
+
+        barData.add(
+          BarData(
+              name: temp, percent: double.parse(elemant.dailySale.toString())),
+        );
+      }
+    });
+  }
+
+  int count = 0;
+  DateTime getNextDay(String inputDate) {
+    count++;
+    final List<String> dateParts = inputDate.split('-');
+    if (dateParts.length != 3) {
+      throw ArgumentError("Invalid date format. Expected dd-mm-yyyy.");
+    }
+
+    final int day = int.parse(dateParts[0]);
+    final int month = int.parse(dateParts[1]);
+    final int year = int.parse(dateParts[2]);
+
+    final DateTime currentDate = DateTime(year, month, day);
+    final DateTime nextDay = currentDate.add(Duration(days: count));
+
+    return nextDay;
   }
 }
