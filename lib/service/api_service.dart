@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
+import '../components/key.dart';
 import '../controller/error_controller.dart';
 import '../model/api_url.dart';
 import '../utils/constants/api_constants.dart';
+import '../utils/constants/constants.dart';
 
 class ApiService {
   // static String url = "https://bic.scopef.com:9002";
@@ -30,11 +33,14 @@ class ApiService {
       );
 
       if (response.statusCode != 200) {
-        if (response.statusCode == 401 || response.statusCode == 417) {
+        if (response.statusCode == 417) {
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
           );
+        } else if (response.statusCode == 401) {
+          final context = navigatorKey.currentState!.overlay!.context;
+          Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 
@@ -83,21 +89,15 @@ class ApiService {
         if (response.body == "Wrong Credentials") {
           return response;
         }
-        // if (isStart != null) {
-        //   if (!isStart) {
-        //     print("inside start response ${response.statusCode}");
 
-        //     ErrorController.openErrorDialog(
-        //       response.statusCode,
-        //       response.body,
-        //     );
-        //   }
-        // }
-        if (response.statusCode == 401 || response.statusCode == 417) {
+        if (response.statusCode == 417) {
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
           );
+        } else if (response.statusCode == 401) {
+          final context = navigatorKey.currentState!.overlay!.context;
+          Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 
