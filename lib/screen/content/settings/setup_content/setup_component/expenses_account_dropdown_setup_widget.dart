@@ -60,13 +60,13 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
             label: _locale.addAccount,
             showSearchBox: true,
             width: isDesktop ? width * .17 : width * .38,
+            height: height * 0.4,
             onSearch: (text) {
               return SetupController().getAccountSearch({"nameCode": text});
             },
             onChanged: (value) {
               setState(() {
                 selectedAccount = value.toString();
-                // getCategory1List();
               });
             },
             initialValue: selectedAccount.isNotEmpty ? selectedAccount : null,
@@ -86,6 +86,7 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
                 onPressed: () {
                   setState(() {
                     widget.addAccount(selectedAccount, widget.type!);
+                    selectedAccount = "";
                   });
                 },
               ),

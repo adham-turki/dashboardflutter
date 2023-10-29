@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../components/key.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../utils/constants/constants.dart';
 import '../utils/constants/error_constant.dart';
 
 class ErrorController {
@@ -15,8 +16,10 @@ class ErrorController {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error400,
           const Color.fromARGB(255, 232, 232, 23), 400);
     } else if (responseStatus == 401) {
-      dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
-          const Color.fromARGB(255, 232, 232, 23), 401);
+      Navigator.pushReplacementNamed(context, loginScreenRoute);
+
+      // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
+      //     const Color.fromARGB(255, 232, 232, 23), 401);
     } else if (responseStatus == 200) {
       dialogBasedonResponseStatus(Icons.done, errorDetails, locale.error200,
           const Color.fromARGB(255, 81, 237, 4), 200);
