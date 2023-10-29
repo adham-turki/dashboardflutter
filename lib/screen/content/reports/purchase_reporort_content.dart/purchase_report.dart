@@ -325,7 +325,11 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
           height: isMobile ? height * 0.05 : height * 0.05,
         ),
         SizedBox(
-          width: width * 0.7,
+          width: isDesktop
+              ? orderByColumns.length > 6
+                  ? width * 0.7
+                  : width * double.parse("0.${orderByColumns.length}6")
+              : width * 0.7,
           height: height * 0.7,
           child: TableComponent(
             key: UniqueKey(),

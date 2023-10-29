@@ -68,6 +68,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   List<BiAccountModel> cashboxAccounts = [];
 
   List<BarChartData> barData = [];
+  final usedColors = <Color>[];
 
   // String nextMonth = DatesController().formatDateReverse(DatesController()
   //     .formatDate(DateTime(DatesController().today.year,
@@ -440,7 +441,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             pieData.add(PieChartModel(
                 title: _locale.cashIn,
                 value: formatDoubleToTwoDecimalPlaces(element.value!),
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorNewList, usedColors)));
           }
           barData.add(
             BarChartData(_locale.cashIn, element.value!),
@@ -454,7 +455,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             pieData.add(PieChartModel(
                 title: _locale.cashOut,
                 value: element.value,
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorNewList, usedColors)));
           }
           barData.add(
             BarChartData(_locale.cashOut, element.value!),
@@ -483,9 +484,20 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     }
   }
 
-  Color getRandomColor(List<Color> colorList) {
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
   }
 }
