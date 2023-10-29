@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
+import '../../controller/receivable_management/rec_pay_controller.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
@@ -44,6 +45,8 @@ class _DashboardContentState extends State<DashboardContent> {
   List<BarData> barData = [];
   List<BarData> barDataCashFlows = [];
   List<PieChartModel> barDataDailySales = [];
+  List<BarChartData> barData1 = [];
+  List<BarChartData> barData2 = [];
 
   late AppLocalizations _locale;
   @override
@@ -88,8 +91,6 @@ class _DashboardContentState extends State<DashboardContent> {
                         );
                       },
                     ).then((value) async {
-                      // print("after dialog status: ${status}");
-                      // print("after fromDate : ${fromDateController.text}");
                       getSalesByBranch().then((value) {
                         print("bar Data inisde then:${barData.length}");
                         setState(() {});
@@ -106,6 +107,12 @@ class _DashboardContentState extends State<DashboardContent> {
                       getDailySales().then((value) {
                         print("valeedaily :${value}");
                         print("daily inisde then:${barDataDailySales.length}");
+
+                        setState(() {});
+                      });
+
+                      getRecPayData().then((value) {
+                        print("dataaa:${barData1.length}");
 
                         setState(() {});
                       });
@@ -192,7 +199,10 @@ class _DashboardContentState extends State<DashboardContent> {
                       flex: 5,
                       child: Column(
                         children: [
-                          MonthlyDashboard(),
+                          MonthlyDashboard(
+                            barData: barData1,
+                            barData2: barData2,
+                          ),
                           if (Responsive.isMobile(context))
                             SizedBox(
                               height: appPadding,
@@ -302,6 +312,7 @@ class _DashboardContentState extends State<DashboardContent> {
     List<PieChartModel> pieData = [];
     final dataMap = <String, double>{};
     pieData = [];
+    barDataCashFlows = [];
     dataMap.clear();
     if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
       if (fromDateController.text.isEmpty) {
@@ -435,5 +446,59 @@ class _DashboardContentState extends State<DashboardContent> {
     final DateTime nextDay = currentDate.add(Duration(days: count));
 
     return nextDay;
+  }
+
+  Future getRecPayData({bool? isStart}) async {
+    List<double> listOfBalances2 = [];
+    List<String> listOfPeriods2 = [];
+    final dataMap = <String, double>{};
+    List<double> listOfBalances = [];
+    List<String> listOfPeriods = [];
+    listOfBalances = [];
+    listOfBalances2 = [];
+    listOfPeriods = [];
+    listOfPeriods2 = [];
+    RecPayController recPayController = RecPayController();
+
+    dataMap.clear();
+    barData1 = [];
+    barData2 = [];
+    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
+      }
+      if (toDateController.text.isEmpty) {
+        toDateController.text = todayDate;
+      }
+    }
+    int stat = getVoucherStatus(_locale, status);
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: fromDateController.text.isEmpty
+            ? todayDate
+            : fromDateController.text,
+        voucherStatus: stat);
+
+    await recPayController
+        .getRecPayMethod(searchCriteria, isStart: isStart)
+        .then((value) {
+      int maxVal = value.payables.length > value.receivables.length
+          ? value.payables.length
+          : value.receivables.length;
+      for (int i = 0; i < maxVal; i++) {
+        listOfBalances.add(double.parse(value.payables[i].value!));
+        listOfBalances2.add(double.parse(value.receivables[i].value!));
+        listOfPeriods.add(value.payables[i].date!);
+        listOfPeriods2.add(value.receivables[i].date!);
+
+        barData1.add(
+          BarChartData(
+              value.payables[i].date!, double.parse(value.payables[i].value!)),
+        );
+        barData2.add(
+          BarChartData(value.receivables[i].date!,
+              double.parse(value.receivables[i].value!)),
+        );
+      }
+    });
   }
 }
