@@ -87,7 +87,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
-    reportsResult = await controller.getChequeResultMethod(criteria);
+    reportsResult =
+        await controller.getChequeResultMethod(criteria, isStart: true);
+    print("helloRes ${reportsResult}");
     super.didChangeDependencies();
   }
 
@@ -446,7 +448,13 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    List<ChequesModel> invList = await controller.getCheques(criteria);
+
+    List<ChequesModel> invList = [];
+    if (reportsResult != null && reportsResult!.count != 0) {
+      await controller.getCheques(criteria).then((value) {
+        invList = value;
+      });
+    }
 
     int totalPage =
         reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;

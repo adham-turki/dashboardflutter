@@ -7,14 +7,12 @@ import '../../utils/constants/api_constants.dart';
 
 class InventoryPerformanceController {
   Future<List<InventoryPerformanceModel>> totalSellInc(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     List<InventoryPerformanceModel> inventoryPerformanceList = [];
 
     await ApiService()
-        .postRequest(
-      getTotalSellInc,
-      searchCriteria.toJson(),
-    )
+        .postRequest(getTotalSellInc, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -30,11 +28,12 @@ class InventoryPerformanceController {
   }
 
   Future<List<InventoryPerformanceModel>> totalSellDic(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     List<InventoryPerformanceModel> inventoryPerformanceList = [];
 
     await ApiService()
-        .postRequest(getTotalSellDec, searchCriteria.toJson())
+        .postRequest(getTotalSellDec, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

@@ -110,11 +110,11 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
   void initState() {
     // getExpensesAccounts();
     payableRecAccounts = [];
-    getPayableAccounts().then((value) {
+    getPayableAccounts(isStart: true).then((value) {
       payableRecAccounts = value;
       setState(() {});
     });
-    getReceivableAccounts().then((value) {
+    getReceivableAccounts(isStart: true).then((value) {
       payableRecAccounts.addAll(value);
       setState(() {});
     });

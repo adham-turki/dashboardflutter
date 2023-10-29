@@ -13,12 +13,14 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class ReportController {
-  Future<List<BranchModel>> getSalesStkMethod(
-      dynamic salesSearchCriteria) async {
+  Future<List<BranchModel>> getSalesStkMethod(dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesStk;
     late SalesReportModel salesStkObj;
     List<BranchModel> salesStkList = [];
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkObj = SalesReportModel.fromJson(jsonData);
@@ -28,13 +30,15 @@ class ReportController {
     return salesStkList;
   }
 
-  Future<List<BranchModel>> getSalesCampMethod(
-      dynamic salesSearchCriteria) async {
+  Future<List<BranchModel>> getSalesCampMethod(dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesCamp;
 
     late SalesReportModel salesCampObj;
     List<BranchModel> salesCampList = [];
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCampObj = SalesReportModel.fromJson(jsonData);
@@ -44,12 +48,14 @@ class ReportController {
     return salesCampList;
   }
 
-  Future<List<BranchModel>> getSalesBranchesMethod(
-      dynamic salesSearchCriteria) async {
+  Future<List<BranchModel>> getSalesBranchesMethod(dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesBranches;
     late SalesReportModel salesBranchesObj;
     List<BranchModel> branchList = [];
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesBranchesObj = SalesReportModel.fromJson(jsonData);
@@ -59,14 +65,16 @@ class ReportController {
     return branchList;
   }
 
-  Future<List<BranchModel>> getSalesSuppliersMethod(
-      dynamic salesSearchCriteria) async {
+  Future<List<BranchModel>> getSalesSuppliersMethod(dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesSuppliers;
     late SalesReportModel salesSuppliersObj;
 
     List<BranchModel> salesSuppliersList = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesSuppliersObj = SalesReportModel.fromJson(jsonData);
@@ -76,14 +84,16 @@ class ReportController {
     return salesSuppliersList;
   }
 
-  Future<List<BranchModel>> getSalesCustomersMethod(
-      dynamic salesSearchCriteria) async {
+  Future<List<BranchModel>> getSalesCustomersMethod(dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesCustomers;
     late SalesReportModel salesCustomersObj;
 
     List<BranchModel> salesCustomersList = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCustomersObj = SalesReportModel.fromJson(jsonData);
@@ -94,13 +104,16 @@ class ReportController {
   }
 
   Future<List<BranchModel>> getSalesCustomersCategMethod(
-      dynamic salesSearchCriteria) async {
+      dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesCustomersCateg;
     late SalesReportModel salesCustomersCategObj;
 
     List<BranchModel> salesCustomersCategList = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesCustomersCategObj = SalesReportModel.fromJson(jsonData);
@@ -111,13 +124,16 @@ class ReportController {
   }
 
   Future<List<BranchModel>> getSalesSuppliersCategMethod(
-      dynamic salesSearchCriteria) async {
+      dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesSuppliersCateg;
     late SalesReportModel salesSuppliersCategObj;
 
     List<BranchModel> salesSuppliersCategList = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesSuppliersCategObj = SalesReportModel.fromJson(jsonData);
@@ -128,13 +144,16 @@ class ReportController {
   }
 
   Future<List<BranchModel>> getSalesStkCountCateg1Method(
-      dynamic salesSearchCriteria) async {
+      dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesStkCountCateg1;
     late SalesReportModel salesStkCountCateg1Obj;
 
     List<BranchModel> salesStkCountCateg1List = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg1Obj = SalesReportModel.fromJson(jsonData);
@@ -145,13 +164,16 @@ class ReportController {
   }
 
   Future<List<BranchModel>> getSalesStkCountCateg2Method(
-      dynamic salesSearchCriteria) async {
+      dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesStkCountCateg2;
     late SalesReportModel salesStkCountCateg2Obj;
 
     List<BranchModel> salesStkCountCateg2List = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg2Obj = SalesReportModel.fromJson(jsonData);
@@ -162,13 +184,16 @@ class ReportController {
   }
 
   Future<List<BranchModel>> getSalesStkCountCateg3Method(
-      dynamic salesSearchCriteria) async {
+      dynamic salesSearchCriteria,
+      {bool? isStart}) async {
     var api = getSalesStkCountCateg3;
     late SalesReportModel salesStkCountCateg3Obj;
 
     List<BranchModel> salesStkCountCateg3List = [];
 
-    await ApiService().postRequest(api, salesSearchCriteria).then((response) {
+    await ApiService()
+        .postRequest(api, salesSearchCriteria, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg3Obj = SalesReportModel.fromJson(jsonData);
@@ -179,11 +204,14 @@ class ReportController {
   }
 
   Future<List<SalesCostReportModel>> postSalesCostReportMethod(
-      dynamic salesProvider) async {
+      dynamic salesProvider,
+      {bool? isStart}) async {
     var api = postSalesCostReport;
     List<SalesCostReportModel> salesCostReportList = [];
 
-    await ApiService().postRequest(api, salesProvider).then((response) {
+    await ApiService()
+        .postRequest(api, salesProvider, isStart: isStart)
+        .then((response) {
       print("response ${response.statusCode}");
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -198,11 +226,14 @@ class ReportController {
   }
 
   Future<List<PurchaseCostReportModel>> postPurchaseCostReportMethod(
-      dynamic purchaseProvider) async {
+      dynamic purchaseProvider,
+      {bool? isStart}) async {
     var api = postPurchaseCostReport;
     List<PurchaseCostReportModel> purchaseCostReportList = [];
 
-    await ApiService().postRequest(api, purchaseProvider).then((response) {
+    await ApiService()
+        .postRequest(api, purchaseProvider, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -215,11 +246,14 @@ class ReportController {
     return purchaseCostReportList;
   }
 
-  Future<ReportsResult> getSalesResultMehtod(dynamic salesProvider) async {
+  Future<ReportsResult?> getSalesResultMehtod(dynamic salesProvider,
+      {bool? isStart}) async {
     var api = getSalesResult;
-    late ReportsResult salesResult = ReportsResult();
+    late ReportsResult? salesResult;
 
-    await ApiService().postRequest(api, salesProvider).then((response) {
+    await ApiService()
+        .postRequest(api, salesProvider, isStart: isStart)
+        .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesResult = ReportsResult.fromJson(jsonData);
@@ -230,11 +264,13 @@ class ReportController {
     return salesResult;
   }
 
-  Future<ReportsResult> getPurchaseResultMehtod(
-      dynamic purchaseProvider) async {
+  Future<ReportsResult?> getPurchaseResultMehtod(dynamic purchaseProvider,
+      {bool? isStart}) async {
     var api = getPurchaseResult;
-    ReportsResult purchaseResult = ReportsResult();
-    await ApiService().postRequest(api, purchaseProvider).then((response) {
+    ReportsResult? purchaseResult;
+    await ApiService()
+        .postRequest(api, purchaseProvider, isStart: isStart)
+        .then((response) {
       print("Response ${response.statusCode}");
       print("ResponseBody ${response.body}");
 

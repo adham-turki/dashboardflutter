@@ -91,7 +91,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     selectedPeriod = periods[0];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    getTotalCollections();
+    getTotalCollections(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -321,7 +321,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  getTotalCollections() {
+  getTotalCollections({bool? isStart}) {
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -345,7 +345,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         fromDate: startDate, toDate: endDate, voucherStatus: status);
 
     totalCollectionController
-        .getTotalCollectionMethod(searchCriteria)
+        .getTotalCollectionMethod(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {
         if (element.collection != 0.0) {

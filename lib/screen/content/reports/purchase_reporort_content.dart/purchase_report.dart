@@ -63,6 +63,9 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
       _locale.total
     ];
 
+    dynamic body = readProvider.toJson();
+    reportsResult =
+        await ReportController().getPurchaseResultMehtod(body, isStart: true);
     super.didChangeDependencies();
   }
 
@@ -364,13 +367,19 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
     // List<SalesCostReportModel> newList = salesList;
     readProvider.setPage(page);
     dynamic body = readProvider.toJson();
-    purchaseList =
-        await purchaseReportController.postPurchaseCostReportMethod(body);
+    purchaseList = [];
     // reportsResult = await salesReportController.getSalesResultMehtod(body);
     List<PlutoRow> topList = [];
 
     limitPage = reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
 
+    if (reportsResult != null && reportsResult!.count != 0) {
+      await purchaseReportController
+          .postPurchaseCostReportMethod(body)
+          .then((value) {
+        purchaseList = value;
+      });
+    }
     for (int i = 0; i < purchaseList.length; i++) {
       topList.add(purchaseList[i].toPluto());
     }

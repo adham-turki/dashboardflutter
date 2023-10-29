@@ -83,6 +83,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
     // search();
     selectedChart = charts[0];
     selectedStatus = status[0];
+    getAgingReceivable(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -245,7 +246,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  getAgingReceivable() {
+  getAgingReceivable({bool? isStart}) {
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -255,7 +256,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
     SearchCriteria searchCriteria = SearchCriteria(
       voucherStatus: status,
     );
-    AgingController().getAgingList(searchCriteria).then((value) {
+    AgingController()
+        .getAgingList(searchCriteria, isStart: isStart)
+        .then((value) {
       setState(() {
         for (int i = 0; i < value.length; i++) {
           balance += value[i].total!;

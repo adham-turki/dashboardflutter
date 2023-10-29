@@ -46,6 +46,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
   FocusNode focusNode = FocusNode();
+  int countInc = 0;
+  int countDec = 0;
 
   @override
   void initState() {
@@ -481,9 +483,20 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellDic(criteria);
-
+    List<InventoryPerformanceModel> invList = [];
+    if (countDec == 0) {
+      await inventoryPerformanceController
+          .totalSellDic(criteria, isStart: true)
+          .then((value) {
+        invList = value;
+      });
+      countDec = 1;
+    } else {
+      await inventoryPerformanceController.totalSellDic(criteria).then((value) {
+        invList = value;
+      });
+      countDec = 1;
+    }
     int totalPage = 1;
 
     for (int i = 0; i < invList.length; i++) {
@@ -520,9 +533,20 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     List<PlutoRow> topList = [];
 
-    List<InventoryPerformanceModel> invList =
-        await inventoryPerformanceController.totalSellInc(criteria);
-
+    List<InventoryPerformanceModel> invList = [];
+    if (countInc == 0) {
+      await inventoryPerformanceController
+          .totalSellInc(criteria, isStart: true)
+          .then((value) {
+        invList = value;
+      });
+      countInc = 1;
+    } else {
+      await inventoryPerformanceController.totalSellInc(criteria).then((value) {
+        invList = value;
+      });
+      countInc = 1;
+    }
     int totalPage = 1;
 
     for (int i = 0; i < invList.length; i++) {

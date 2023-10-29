@@ -85,8 +85,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
 
-    reportsResult =
-        await totalSalesController.getTotalSalesResultMehtod(criteria);
+    reportsResult = await totalSalesController
+        .getTotalSalesResultMehtod(criteria, isStart: true);
     super.didChangeDependencies();
   }
 
@@ -229,7 +229,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                       if (reportsResult!.count == 0) {
                         ErrorController.openErrorDialog(406, _locale.error406);
                       } else {
-                        print("counts: ${reportsResult!.count}");
                         int status = getVoucherStatus(_locale, selectedStatus);
                         SearchCriteria searchCriteria = SearchCriteria(
                           fromDate: DatesController().formatDate(fromDate.text),
@@ -446,12 +445,16 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     criteria.page = page;
 
     List<PlutoRow> topList = [];
-    List<TotalSalesModel> invList =
-        await totalSalesController.getTotalSalesMethod(criteria);
+    List<TotalSalesModel> invList = [];
 
     int totalPage =
         reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
 
+    if (reportsResult != null && reportsResult!.count != 0) {
+      await totalSalesController.getTotalSalesMethod(criteria).then((value) {
+        invList = value;
+      });
+    }
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }

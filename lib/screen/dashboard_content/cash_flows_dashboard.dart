@@ -101,7 +101,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
     _fromDateController.text = todayDate;
     _toDateController.text = todayDate;
 
-    getCashBoxAccount().then((value) {
+    getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
     });

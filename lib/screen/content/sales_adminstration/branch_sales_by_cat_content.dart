@@ -96,14 +96,14 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     selectedBranch = branches[0];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    getBranchByCat();
+    getBranchByCat(isStart: true);
 
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    getBranch();
+    getBranch(isStart: true);
     // fromDate.addListener(() {});
     // toDate.addListener(() {});
     super.initState();
@@ -180,8 +180,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     );
   }
 
-  void getBranch() async {
-    branchController.getBranch().then((value) {
+  void getBranch({bool? isStart}) async {
+    branchController.getBranch(isStart: isStart).then((value) {
       value.forEach((k, v) {
         if (mounted) {
           setState(() {
@@ -393,7 +393,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  void getBranchByCat() {
+  void getBranchByCat({bool? isStart}) {
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -429,7 +429,9 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     listOfPeriods = [];
 
     // print("ddddddddddd");
-    salesCategoryController.getSalesByCategory(searchCriteria).then((value) {
+    salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
       for (var element in value) {
         // creditAmt - debitAmt
         double bal = element.creditAmt! - element.debitAmt!;

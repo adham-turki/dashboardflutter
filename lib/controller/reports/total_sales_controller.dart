@@ -11,12 +11,13 @@ import '../../utils/constants/values.dart';
 
 class TotalSalesController {
   Future<List<TotalSalesModel>> getTotalSalesMethod(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getTotalSales;
     List<TotalSalesModel> totalSalesList = [];
     int count = 0;
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -30,14 +31,15 @@ class TotalSalesController {
     return totalSalesList;
   }
 
-  Future<TotalSalesResult> getTotalSalesResultMehtod(
-      SearchCriteria searchCriteria) async {
+  Future<TotalSalesResult?> getTotalSalesResultMehtod(
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getTotalSalesResult;
-    late TotalSalesResult totalSalesList = TotalSalesResult();
+    late TotalSalesResult? totalSalesList;
     print("body ${searchCriteria.toJson()}");
 
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

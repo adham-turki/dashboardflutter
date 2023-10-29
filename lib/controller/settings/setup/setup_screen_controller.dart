@@ -6,7 +6,7 @@ import '../../../model/settings/setup/bi_account_model.dart';
 import '../../../utils/constants/api_constants.dart';
 
 class SetupController {
-  Future<List<AccountModel>> getAllAccounts() async {
+  Future<List<AccountModel>> getAllAccounts({bool? isStart}) async {
     List<AccountModel> list = [];
     String pathUrl = getAccounts;
     await ApiService().getRequest(pathUrl).then((response) {
@@ -19,7 +19,7 @@ class SetupController {
     return list;
   }
 
-  Future<List<BiAccountModel>> getBiAccounts() async {
+  Future<List<BiAccountModel>> getBiAccounts({bool? isStart}) async {
     List<BiAccountModel> list = [];
     String biUrl = getBiAccount;
     await ApiService().getRequest(biUrl).then((response) {

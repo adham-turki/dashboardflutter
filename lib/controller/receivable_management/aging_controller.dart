@@ -9,11 +9,12 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class AgingController {
-  Future<List<AgingModel>> getAgingList(SearchCriteria searchCriteria) async {
+  Future<List<AgingModel>> getAgingList(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getAgingListApi;
     List<AgingModel> list = [];
     await ApiService()
-        .postRequest(api, searchCriteria.statusToJson())
+        .postRequest(api, searchCriteria.statusToJson(), isStart: isStart)
         .then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));

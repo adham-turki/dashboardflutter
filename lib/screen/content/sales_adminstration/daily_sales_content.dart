@@ -84,7 +84,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     ];
     selectedStatus = status[0];
     selectedChart = charts[0];
-    getDailySales();
+    getDailySales(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -92,7 +92,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
   void initState() {
     // getExpensesAccounts();
 
-    getPayableAccounts().then((value) {
+    getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
     });
@@ -322,7 +322,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  void getDailySales() {
+  void getDailySales({bool? isStart}) {
     listOfBalances = [];
     dataMap.clear();
     pieData = [];
@@ -339,7 +339,9 @@ class _DailySalesContentState extends State<DailySalesContent> {
     SearchCriteria searchCriteria =
         SearchCriteria(fromDate: startDate, voucherStatus: status);
 
-    dailySalesController.getDailySale(searchCriteria).then((response) {
+    dailySalesController
+        .getDailySale(searchCriteria, isStart: isStart)
+        .then((response) {
       for (var elemant in response) {
         String temp =
             DatesController().formatDate(getNextDay(startDate).toString());

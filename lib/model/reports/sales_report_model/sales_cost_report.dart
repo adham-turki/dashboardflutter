@@ -134,6 +134,9 @@ class SalesCostReportModel {
     bool isDesktop = Responsive.isDesktop(context);
     List<String> fieldsName = getColumnsName(localizations, colsName, true);
     List<PlutoColumn> list = [];
+    if (reportsResult == null) {
+      print("hi nulll");
+    }
     for (int i = 0; i < colsName.length; i++) {
       list.add(PlutoColumn(
         title: colsName[i],

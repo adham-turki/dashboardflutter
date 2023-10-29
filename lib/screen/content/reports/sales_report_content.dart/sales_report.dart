@@ -2,6 +2,7 @@ import 'package:bi_replicate/controller/error_controller.dart';
 import 'package:bi_replicate/model/reports/reports_result.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -66,13 +67,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.total
     ];
 
-    // reportsResult =
-    //     await ReportController().getSalesResultMehtod(readProvider.toJson());
+    reportsResult = await ReportController()
+        .getSalesResultMehtod(readProvider.toJson(), isStart: true);
     // await getResult().then(
     //   (value) {
     //     searchSalesCostReport(1);
     //   },
     //  );
+
     super.didChangeDependencies();
   }
 
@@ -404,12 +406,19 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     // List<SalesCostReportModel> newList = salesList;
     readProvider.setPage(page);
     dynamic body = readProvider.toJson();
-    salesList = await salesReportController.postSalesCostReportMethod(body);
+    salesList = [];
     // reportsResult = await salesReportController.getSalesResultMehtod(body);
     List<PlutoRow> topList = [];
 
     limitPage = reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
 
+    if (reportsResult != null && reportsResult!.count != 0) {
+      await await salesReportController
+          .postSalesCostReportMethod(body)
+          .then((value) {
+        salesList = value;
+      });
+    }
     for (int i = 0; i < salesList.length; i++) {
       topList.add(salesList[i].toPluto());
     }

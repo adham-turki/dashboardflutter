@@ -6,11 +6,11 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class BranchController {
-  Future<Map<String, dynamic>> getBranch() async {
+  Future<Map<String, dynamic>> getBranch({bool? isStart}) async {
     var api = getBranchs;
     Map<String, dynamic> branchesMapCurrent = {};
 
-    await ApiService().getRequest(api).then((value) {
+    await ApiService().getRequest(api, isStart: isStart).then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (int i = 0; i < jsonData.length; i++) {

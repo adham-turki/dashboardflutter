@@ -11,7 +11,7 @@ class ApiService {
   // static String url = "https://bic.scopef.com:9002";
   final storage = const FlutterSecureStorage();
 
-  Future<http.Response> getRequest(String api) async {
+  Future<http.Response> getRequest(String api, {bool? isStart}) async {
     String? token = await storage.read(key: 'jwt');
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
@@ -27,7 +27,21 @@ class ApiService {
     );
 
     if (response.statusCode != 200) {
-      ErrorController.openErrorDialog(response.statusCode, response.body);
+      if (response.statusCode == 401 || response.statusCode == 417) {
+        ErrorController.openErrorDialog(
+          response.statusCode,
+          response.body,
+        );
+      } else if (isStart == null) {
+        print("inside start response ${response.statusCode}");
+
+        ErrorController.openErrorDialog(
+          response.statusCode,
+          response.body,
+        );
+      }
+
+      // ErrorController.openErrorDialog(response.statusCode, response.body);
     }
     return response;
   }
@@ -55,16 +69,32 @@ class ApiService {
         (response.statusCode == 400 || response.statusCode == 406)) {
       return response;
     } else if (response.statusCode != 200) {
+      print("inside api response ${response.statusCode}");
       if (response.body == "Wrong Credentials") {
         return response;
       }
-      if (isStart != null) {
-        if (!isStart) {
-          ErrorController.openErrorDialog(
-            response.statusCode,
-            response.body,
-          );
-        }
+      // if (isStart != null) {
+      //   if (!isStart) {
+      //     print("inside start response ${response.statusCode}");
+
+      //     ErrorController.openErrorDialog(
+      //       response.statusCode,
+      //       response.body,
+      //     );
+      //   }
+      // }
+      if (response.statusCode == 401 || response.statusCode == 417) {
+        ErrorController.openErrorDialog(
+          response.statusCode,
+          response.body,
+        );
+      } else if (isStart == null) {
+        print("inside start response ${response.statusCode}");
+
+        ErrorController.openErrorDialog(
+          response.statusCode,
+          response.body,
+        );
       }
     }
     return response;

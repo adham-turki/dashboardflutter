@@ -78,7 +78,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     _fromDateController.text = todayDate;
     _toDateController.text = todayDate;
 
-    getCashBoxAccount().then((value) {
+    getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
     });
@@ -113,7 +113,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     selectedPeriod = periods[0];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    getCashFlows();
+    getCashFlows(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -401,7 +401,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  void getCashFlows() {
+  void getCashFlows({bool? isStart}) {
     listOfBalances = [];
     pieData = [];
     barData = [];
