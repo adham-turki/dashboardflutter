@@ -169,7 +169,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         child: Indicator(
           color: data.color!,
           isSquare: true,
-          text: data.title!,
+          text: "${data.title!} (${data.value})",
         ),
       );
     });

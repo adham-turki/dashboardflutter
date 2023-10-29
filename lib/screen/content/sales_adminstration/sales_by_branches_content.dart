@@ -10,6 +10,7 @@ import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pie_chart/pie_chart.dart';
+import '../../../components/custom_date.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
@@ -266,28 +267,51 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             });
           },
         ),
-        CustomDatePicker(
+        CustomDate(
           label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getSalesByBranch();
-            });
+          minYear: 2000,
+          onValue: (isValid, value) {
+            if (isValid) {
+              setState(() {
+                _fromDateController.text = value;
+                getSalesByBranch();
+              });
+            }
           },
         ),
-        CustomDatePicker(
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   controller: _fromDateController,
+        //   date: DateTime.parse(_toDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
+        CustomDate(
           label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getSalesByBranch();
-            });
+          onValue: (isValid, value) {
+            if (isValid) {
+              setState(() {
+                _toDateController.text = value;
+                getSalesByBranch();
+              });
+            }
           },
         ),
+        // CustomDatePicker(
+        //   label: _locale.toDate,
+        //   controller: _toDateController,
+        //   date: DateTime.parse(_fromDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _toDateController.text = value;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
         CustomDropDown(
           items: charts,
           hint: "",
@@ -339,28 +363,57 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getSalesByBranch();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getSalesByBranch();
+                });
+              }
+            },
+          ),
         ),
-        CustomDatePicker(
-          label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getSalesByBranch();
-            });
-          },
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   controller: _fromDateController,
+        //   date: DateTime.parse(_toDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.toDate,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _toDateController.text = value;
+                  getSalesByBranch();
+                });
+              }
+            },
+          ),
         ),
+        // CustomDatePicker(
+        //   label: _locale.toDate,
+        //   controller: _toDateController,
+        //   date: DateTime.parse(_fromDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _toDateController.text = value;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
         CustomDropDown(
           items: charts,
           width: widthMobile,

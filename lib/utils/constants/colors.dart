@@ -9,7 +9,7 @@ final darkBlueColor = const Color(0xFF2b4381);
 
 final colorNewList = <Color>[
   Colors.green,
-  Color(0xFF2196F3),
+  const Color(0xFF2196F3),
   Colors.red,
   Colors.orange,
   Colors.purple,
@@ -17,8 +17,15 @@ final colorNewList = <Color>[
   Colors.deepPurple,
   Colors.lime,
   Colors.indigo,
-  Colors.purpleAccent,
+  Colors.purpleAccent, Colors.redAccent,
+  Colors.blueAccent,
+  Colors.greenAccent,
+  Colors.orangeAccent,
+  Colors.tealAccent,
   Colors.pinkAccent,
+  Colors.amberAccent,
+  Colors.cyanAccent,
+  Colors.brown,
   const Color(0xFF1A237E), // Dark Blue
   const Color(0xFF880E4F), // Dark Pink
   const Color(0xFF3E2723), // Dark Brown
@@ -27,7 +34,27 @@ final colorNewList = <Color>[
   const Color(0xFF263238), // Dark Blue Grey
   const Color(0xFF880E4F), // Dark Pink
   const Color(0xFF5D4037), // Dark Brown
+  const Color(0xFFFF5722), // Deep Orange
+  const Color(0xFF673AB7), // Deep Purple
+  const Color(0xFF795548), // Brown
+  const Color(0xFF00BCD4), // Cyan
+  const Color(0xFF827717), // Lime
+  const Color(0xFF3F51B5), // Indigo
+  const Color(0xFFFBC02D), // Yellow
+  const Color(0xFF4A148C), // Indigo
+  const Color(0xFF006064), // Cyan
+  const Color(0xFFD84315), // Deep Orange
+  const Color(0xFF311B92), // Indigo
+  const Color(0xFF558B2F), // Light Green
+  const Color(0xFF1B5E20), // Green
+  const Color(0xFFBF360C), // Deep Orange
+  const Color(0xFF01579B), // Light Blue
+  const Color(0xFF33691E), // Green
+  const Color(0xFF1976D2), // Blue
+  const Color(0xFF827717), // Lime
+  const Color(0xFFD81B60), // Pink
+  const Color(0xFF827717), // Lime
 ];
+
 Color hoverColor = const Color.fromRGBO(30, 36, 48, 1);
 // Make sure you have a total of 50 unique colors
-
