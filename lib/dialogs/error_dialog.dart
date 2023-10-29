@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
+import '../model/routes.dart';
 import '../utils/constants/constants.dart';
 
 class ErrorDialog extends StatefulWidget {
@@ -73,7 +75,8 @@ class _ErrorDialogState extends State<ErrorDialog> {
                 MaterialButton(
                   onPressed: () {
                     if (widget.statusCode == 401 || widget.statusCode == 417) {
-                      Navigator.pushReplacementNamed(context, loginScreenRoute);
+                      GoRouter.of(context).go(AppRoutes.loginRoute);
+                      // Navigator.pushReplacementNamed(context, mainScreenRoute);
                     } else {
                       Navigator.pop(context);
                     }

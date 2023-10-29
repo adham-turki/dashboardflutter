@@ -51,22 +51,22 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
           ? const EdgeInsets.only(top: 20.0, bottom: 20)
           : const EdgeInsets.all(10),
       width: width * 0.65,
-      child: isMobile
-          ? Column(
+      child: isDesktop
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                LeftWidget(),
+                RightWidget(),
+              ],
+            )
+          : Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 LeftWidget(),
                 SizedBox(
                   height: height * .01,
                 ),
-                RightWidget(),
-              ],
-            )
-          : Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                LeftWidget(),
                 RightWidget(),
               ],
             ),
@@ -173,7 +173,7 @@ class _LeftWidgetState extends State<LeftWidget> {
       // crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: isMobile ? width * 0.9 : width * 0.6 / 2,
+          width: isDesktop ? width * 0.6 / 2 : width * 0.9,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -557,7 +557,7 @@ class _LeftWidgetState extends State<LeftWidget> {
           height: height * .01,
         ),
         Container(
-          width: isMobile ? width * 0.9 : width * 0.6 / 2,
+          width: isDesktop ? width * 0.6 / 2 : width * 0.9,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(

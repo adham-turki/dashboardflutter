@@ -87,8 +87,8 @@ class _SetupWidgetState extends State<SetupWidget> {
       ),
       //
       padding: const EdgeInsets.all(10.0),
-      width: width * 0.65,
-      height: height * 0.42,
+      width: isDesktop ? width * 0.65 : width * 0.9,
+      height: height * 0.45,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -126,9 +126,9 @@ class _SetupWidgetState extends State<SetupWidget> {
                             setState(() {});
                           }),
                       Text(
-                        isMobile
-                            ? _locale.appearBasicUnitEquivalenceMobile
-                            : _locale.appearBasicUnitEquivalence,
+                        isDesktop
+                            ? _locale.appearBasicUnitEquivalence
+                            : _locale.appearBasicUnitEquivalenceMobile,
                         style: twelve400TextStyle(Colors.black),
                       ),
                     ],
@@ -145,9 +145,9 @@ class _SetupWidgetState extends State<SetupWidget> {
                             setState(() {});
                           }),
                       Text(
-                        isMobile
-                            ? _locale.appearInactiveStocksForPurchaseMobile
-                            : _locale.appearInactiveStocksForPurchase,
+                        isDesktop
+                            ? _locale.appearInactiveStocksForPurchase
+                            : _locale.appearInactiveStocksForPurchaseMobile,
                         style: twelve400TextStyle(Colors.black),
                       ),
                     ],
@@ -239,8 +239,8 @@ class _SetupWidgetState extends State<SetupWidget> {
                           }),
                       Text(
                         isMobile
-                            ? _locale.appearInactiveStocksMobile
-                            : _locale.appearInactiveStocks,
+                            ? _locale.appearInactiveStocks
+                            : _locale.appearInactiveStocksMobile,
                         style: twelve400TextStyle(Colors.black),
                       ),
                     ],

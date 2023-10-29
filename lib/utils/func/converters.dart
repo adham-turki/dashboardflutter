@@ -7,4 +7,9 @@ class Converters {
         NumberFormat('0.00'); // Format with two digits after point
     return double.parse(formatter.format(formattedValue));
   }
+
+  static formatNumber(double num) {
+    NumberFormat myFormat = NumberFormat.decimalPattern('ar');
+    return myFormat.format(num);
+  }
 }

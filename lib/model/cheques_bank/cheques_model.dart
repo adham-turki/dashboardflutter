@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
+import '../../utils/func/converters.dart';
 
 class ChequesModel {
   String? jCode1;
@@ -160,7 +161,7 @@ class ChequesModel {
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: valueAll.toStringAsFixed(2),
+            text: Converters.formatNumber(valueAll),
             style: gridFooterStyle,
           ),
         ];

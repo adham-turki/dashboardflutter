@@ -10,6 +10,7 @@ import 'package:bi_replicate/screen/splash_screen.dart';
 import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -18,6 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/key.dart';
 import 'l10n/l10n.dart';
+import 'model/routes.dart';
 
 void main() {
   runApp(
@@ -35,12 +37,14 @@ void main() {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // BuildContext get context => null;
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  // This widget is the root of your application.
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocaleProvider>(context);
@@ -58,62 +62,55 @@ class MyApp extends StatelessWidget {
 
     loadStoredLocale();
 
-    return FutureBuilder<String?>(
-      future: _getToken(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting &&
-            provider.locale != provider.locale) {
-          return SplashScreen(
-            isVisible: snapshot.connectionState != ConnectionState.done,
-          );
-        } else {
-          final hasToken = snapshot.data != null;
-          return MaterialApp(
-            navigatorKey: navigatorKey,
-            title: 'BI | Scope',
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            locale: provider.locale,
-            supportedLocales: L10n.all,
-            theme: ThemeData.light().copyWith(
-              textTheme: getFontFamily(context),
-            ),
-            // home: hasToken ? const HomePage() : const LoginScreen(),
-            initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
-            routes: {
-              loginScreenRoute: (context) => const LoginScreen(),
-              mainScreenRoute: (context) => const HomePage(),
-            },
-          );
-        }
-      },
+    return MaterialApp.router(
+      title: 'BI | Scope',
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      locale: provider.locale,
+      supportedLocales: L10n.all,
+      theme: ThemeData.light().copyWith(
+        textTheme: getFontFamily(context),
+      ),
+      routerConfig: AppRoutes.routes,
     );
-
-    // return MaterialApp(
-    //   navigatorKey: navigatorKey,
-    //   title: 'Bi',
-    //   //  navigatorKey: navigatorKey,
-    //   localizationsDelegates: const [
-    //     AppLocalizations.delegate,
-    //     GlobalMaterialLocalizations.delegate,
-    //     GlobalCupertinoLocalizations.delegate,
-    //     GlobalWidgetsLocalizations.delegate,
-    //   ],
-    //   locale: provider.locale,
-    //   supportedLocales: L10n.all,
-    //   debugShowCheckedModeBanner: false,
-    //   theme: ThemeData(
-    //     primarySwatch: Colors.blue,
-    //   ),
-    //   initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
-    //   routes: {
-    //     loginScreenRoute: (context) => const LoginScreen(),
-    //     mainScreenRoute: (context) => const HomePage(),
+    // FutureBuilder<String?>(
+    //   future: _getToken(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting &&
+    //         provider.locale != provider.locale) {
+    //       return SplashScreen(
+    //         isVisible: snapshot.connectionState != ConnectionState.done,
+    //       );
+    //     } else {
+    //       final hasToken = snapshot.data != null;
+    //       return MaterialApp(
+    //         navigatorKey: navigatorKey,
+    //         title: 'BI | Scope',
+    //         debugShowCheckedModeBanner: false,
+    //         localizationsDelegates: const [
+    //           AppLocalizations.delegate,
+    //           GlobalMaterialLocalizations.delegate,
+    //           GlobalCupertinoLocalizations.delegate,
+    //           GlobalWidgetsLocalizations.delegate,
+    //         ],
+    //         locale: provider.locale,
+    //         supportedLocales: L10n.all,
+    //         theme: ThemeData.light().copyWith(
+    //           textTheme: getFontFamily(context),
+    //         ),
+    //         // home: hasToken ? const HomePage() : const LoginScreen(),
+    //         initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
+    //         routes: {
+    //           loginScreenRoute: (context) => const LoginScreen(),
+    //           mainScreenRoute: (context) => const HomePage(),
+    //         },
+    //       );
+    //     }
     //   },
     // );
   }
@@ -139,3 +136,87 @@ class MyApp extends StatelessWidget {
     return await storage.read(key: 'jwt');
   }
 }
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
+
+
+//   // BuildContext get context => null;
+
+//   // This widget is the root of your application.
+//   @override
+//   Widget build(BuildContext context) {
+//     final provider = Provider.of<LocaleProvider>(context);
+//     // Locale newLocal = provider.locale;
+//     Future<void> loadStoredLocale() async {
+//       SharedPreferences prefs = await SharedPreferences.getInstance();
+//       String? storedLanguageCode = prefs.getString('selectedLanguage');
+
+//       if (storedLanguageCode != null) {
+//         Locale storedLocale = Locale(storedLanguageCode);
+//         provider.setLocale(storedLocale);
+//         // newLocal = storedLocale;
+//       }
+//     }
+
+//     loadStoredLocale();
+
+//     return FutureBuilder<String?>(
+//       future: _getToken(),
+//       builder: (context, snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting &&
+//             provider.locale != provider.locale) {
+//           return SplashScreen(
+//             isVisible: snapshot.connectionState != ConnectionState.done,
+//           );
+//         } else {
+//           final hasToken = snapshot.data != null;
+//           return MaterialApp(
+//             navigatorKey: navigatorKey,
+//             title: 'BI | Scope',
+//             debugShowCheckedModeBanner: false,
+//             localizationsDelegates: const [
+//               AppLocalizations.delegate,
+//               GlobalMaterialLocalizations.delegate,
+//               GlobalCupertinoLocalizations.delegate,
+//               GlobalWidgetsLocalizations.delegate,
+//             ],
+//             locale: provider.locale,
+//             supportedLocales: L10n.all,
+//             theme: ThemeData.light().copyWith(
+//               textTheme: getFontFamily(context),
+//             ),
+//             // home: hasToken ? const HomePage() : const LoginScreen(),
+//             initialRoute: hasToken ? mainScreenRoute : loginScreenRoute,
+//             routes: {
+//               loginScreenRoute: (context) => const LoginScreen(),
+//               mainScreenRoute: (context) => const HomePage(),
+//             },
+//           );
+//         }
+//       },
+//     );
+
+   
+//   }
+
+//   TextTheme getFontFamily(BuildContext context) {
+//     // Determine the current locale
+//     // print(_locale.active);
+//     String lang = Provider.of<LocaleProvider>(context).locale.languageCode;
+//     print("lang $lang");
+//     // Use different fonts based on the language
+//     if (lang == "ar") {
+//       // Arabic font
+//       return GoogleFonts.readexProTextTheme(Theme.of(context).textTheme);
+//       // return GoogleFonts.cairoTextTheme(Theme.of(context).textTheme);
+//     } else {
+//       // English font
+//       return GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme);
+//     }
+//   }
+
+//   Future<String?> _getToken() async {
+//     const storage = FlutterSecureStorage();
+//     return await storage.read(key: 'jwt');
+//   }
+// }

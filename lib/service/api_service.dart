@@ -3,11 +3,13 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
 import '../components/key.dart';
 import '../controller/error_controller.dart';
 import '../model/api_url.dart';
+import '../model/routes.dart';
 import '../utils/constants/api_constants.dart';
 import '../utils/constants/constants.dart';
 
@@ -40,7 +42,8 @@ class ApiService {
           );
         } else if (response.statusCode == 401) {
           final context = navigatorKey.currentState!.overlay!.context;
-          Navigator.pushReplacementNamed(context, loginScreenRoute);
+          GoRouter.of(context).go(AppRoutes.loginRoute);
+          // Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 
@@ -97,7 +100,8 @@ class ApiService {
           );
         } else if (response.statusCode == 401) {
           final context = navigatorKey.currentState!.overlay!.context;
-          Navigator.pushReplacementNamed(context, loginScreenRoute);
+          GoRouter.of(context).go(AppRoutes.loginRoute);
+          // Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 

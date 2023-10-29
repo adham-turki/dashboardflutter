@@ -7,6 +7,7 @@ import '../../utils/constants/colors.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
+import '../../utils/func/converters.dart';
 
 class PurchaseCostReportModel {
   String? dash;
@@ -201,12 +202,7 @@ class PurchaseCostReportModel {
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: valueAll.toStringAsFixed(2),
-            // children: [
-            //   TextSpan(
-            //     text: valueAll.toStringAsFixed(2),
-            //   ),
-            // ],
+            text: Converters.formatNumber(valueAll),
             style: gridFooterStyle,
           ),
         ];

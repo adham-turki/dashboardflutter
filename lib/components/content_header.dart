@@ -1,7 +1,9 @@
 import 'package:bi_replicate/model/vouch_header_transiet_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'package:provider/provider.dart';
 
@@ -112,8 +114,13 @@ class _ContentHeaderState extends State<ContentHeader> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomCard(
-                      gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                      title: "${vouchHeaderTransietModel!.paidSales}",
+                      gradientColor: const [
+                        Color(0xff1cacff),
+                        Color(0xff30c4ff)
+                      ],
+                      title: Converters.formatNumber(
+                              vouchHeaderTransietModel.paidSales.toDouble())
+                          .toString(),
                       subtitle: '',
                       label: locale.totalSales,
                       icon: Icons
@@ -123,8 +130,13 @@ class _ContentHeaderState extends State<ContentHeader> {
                       width: 10,
                     ),
                     CustomCard(
-                      gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                      title: "${vouchHeaderTransietModel!.returnSales}",
+                      gradientColor: const [
+                        Color(0xfffd8236),
+                        Color(0xffffce6c)
+                      ],
+                      title: Converters.formatNumber(
+                              vouchHeaderTransietModel.returnSales.toDouble())
+                          .toString(),
                       subtitle: '',
                       label: locale.totalReturnSal,
                       icon: Icons
@@ -134,8 +146,14 @@ class _ContentHeaderState extends State<ContentHeader> {
                       width: 10,
                     ),
                     CustomCard(
-                      gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
-                      title: "${vouchHeaderTransietModel!.numOfCustomers}",
+                      gradientColor: const [
+                        Color(0xff4741c1),
+                        Color(0xff7e4fe4)
+                      ],
+                      title: Converters.formatNumber(vouchHeaderTransietModel
+                              .numOfCustomers
+                              .toDouble())
+                          .toString(),
                       subtitle: '',
                       label: locale.numOfCustomers,
                       icon: Icons
@@ -145,32 +163,38 @@ class _ContentHeaderState extends State<ContentHeader> {
                 )
               : SizedBox(
                   width: width * 0.8,
-                  height: height * 0.18,
+                  height: height * 0.16,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
-                    children: const [
+                    children: [
                       CustomCard(
-                        gradientColor: [Color(0xff1cacff), Color(0xff30c4ff)],
-                        title: '42136',
+                        gradientColor: const [
+                          Color(0xff1cacff),
+                          Color(0xff30c4ff)
+                        ],
+                        title: Converters.formatNumber(42136).toString(),
                         subtitle: 'Mon-Fri',
                         label: 'Overall Sale',
                         icon: Icons
                             .attach_money, // Provide the actual path to the icon
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       CustomCard(
-                        gradientColor: [Color(0xfffd8236), Color(0xffffce6c)],
-                        title: '1446',
+                        gradientColor: const [
+                          Color(0xfffd8236),
+                          Color(0xffffce6c)
+                        ],
+                        title: Converters.formatNumber(1446).toString(),
                         subtitle: 'Mon-Fri',
                         label: 'Total Visited',
                         icon: Icons.abc, // Provide the actual path to the icon
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
-                      CustomCard(
+                      const CustomCard(
                         gradientColor: [Color(0xff4741c1), Color(0xff7e4fe4)],
                         title: '61%',
                         subtitle: 'Mon-Fri',

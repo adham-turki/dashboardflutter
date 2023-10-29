@@ -31,7 +31,11 @@ class _SideMenuState extends State<SideMenu> {
     final localeProvider = Provider.of<LocaleProvider>(context);
 
     return Container(
-      width: Responsive.isDesktop(context) ? width * 0.165 : width * 0.65,
+      width: Responsive.isDesktop(context)
+          ? width * 0.165
+          : Responsive.isTablet(context)
+              ? width * 0.3
+              : width * 0.45,
       height: height,
       decoration: BoxDecoration(
         color: primary,

@@ -84,6 +84,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
     // search();
     selectedChart = charts[0];
     selectedStatus = status[0];
+
     getAgingReceivable(isStart: true);
     super.didChangeDependencies();
   }

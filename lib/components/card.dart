@@ -51,7 +51,7 @@ class _CardComponentState extends State<CardComponent> {
     // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
     return Container(
-      width: isMobile ? width * 0.9 : width * 0.6 / 2,
+      width: isDesktop ? width * 0.6 / 2 : width * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(5.0),
         border: Border.all(

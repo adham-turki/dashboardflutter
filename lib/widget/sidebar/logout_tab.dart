@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
+import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
@@ -34,13 +36,16 @@ class _LogoutTabState extends State<LogoutTab> {
     height = MediaQuery.of(context).size.height;
     bool isDesktop = Responsive.isDesktop(context);
 
+    bool isTablet = Responsive.isTablet(context);
+    bool isMobile = Responsive.isMobile(context);
+
     return InkWell(
       onTap: () async {
         const storage = FlutterSecureStorage();
 
-        await storage.delete(key: "jwt").then((value) {
-          Navigator.pushReplacementNamed(context, loginScreenRoute);
-        });
+        await storage.delete(key: "jwt");
+
+        GoRouter.of(context).go(AppRoutes.loginRoute);
       },
       child: MouseRegion(
         onEnter: (event) {
@@ -53,12 +58,12 @@ class _LogoutTabState extends State<LogoutTab> {
             isHovered = false;
           });
         },
-        child: logoutTab(isDesktop),
+        child: logoutTab(isDesktop, isTablet),
       ),
     );
   }
 
-  Container logoutTab(bool isDesktop) {
+  Container logoutTab(bool isDesktop, bool isTablet) {
     return Container(
       decoration: BoxDecoration(
         color: getActiveColor(),
@@ -83,7 +88,11 @@ class _LogoutTabState extends State<LogoutTab> {
                 Icon(
                   Icons.logout,
                   color: Colors.white,
-                  size: isDesktop ? width * 0.014 : width * 0.05,
+                  size: isDesktop
+                      ? width * 0.014
+                      : isTablet
+                          ? width * 0.015
+                          : width * 0.02,
                 ),
                 SizedBox(
                   width: width * 0.005,
@@ -92,7 +101,11 @@ class _LogoutTabState extends State<LogoutTab> {
                   locale.logout,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: isDesktop ? width * 0.01 : width * 0.045,
+                    fontSize: isDesktop
+                        ? width * 0.01
+                        : isTablet
+                            ? width * 0.015
+                            : width * 0.02,
                   ),
                 ),
               ],

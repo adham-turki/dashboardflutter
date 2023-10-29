@@ -25,11 +25,11 @@ class LogoSection extends StatelessWidget {
           children: [
             Image.asset(
               "assets/images/scope_logo.png",
-              width: Responsive.isDesktop(context) ? width * 0.1 : width * 0.4,
+              width: Responsive.isDesktop(context) ? width * 0.1 : width * 0.2,
             ),
             Icon(
               Icons.dashboard,
-              size: Responsive.isDesktop(context) ? width * 0.02 : width * 0.08,
+              size: Responsive.isDesktop(context) ? width * 0.02 : width * 0.04,
               color: primary,
             ),
           ],

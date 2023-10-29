@@ -4,12 +4,14 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../Encryption/encryption.dart';
 import '../components/login_components/custom_painter.dart';
 import '../components/login_components/form_component.dart';
 import '../controller/central_api_controller.dart';
 import '../controller/error_controller.dart';
+import '../model/routes.dart';
 import '../provider/local_provider.dart';
 import '../utils/constants/constants.dart';
 import '../utils/constants/encrypt_key.dart';
@@ -196,7 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
             checkLogIn().then((value) {
               if (value) {
                 // Navigator.pop(context); // for Circular
-                Navigator.pushReplacementNamed(context, mainScreenRoute);
+                GoRouter.of(context).go(AppRoutes.homeScreenRoute);
+
+                // Navigator.pushReplacementNamed(context, mainScreenRoute);
                 // Navigator.push(context, MaterialPageRoute(
                 //   builder: (context) {
                 //     return const HomePage();

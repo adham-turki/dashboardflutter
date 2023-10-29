@@ -1,4 +1,5 @@
 // ignore: file_names
+import 'package:bi_replicate/screen/dashboard_content/dashboard.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -38,7 +39,7 @@ class CustomCard extends StatelessWidget {
 
     return Container(
       width: isDesktop ? cardsWidth : width * 0.5,
-      height: isDesktop ? cardsHeight : height * 0.22,
+      height: isDesktop ? cardsHeight : height * 0.14,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -76,28 +77,30 @@ class CustomCard extends StatelessWidget {
                   label,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 22,
+                      fontSize: height * .025,
                       fontWeight: FontWeight.w700),
                 ),
               ],
             ),
             Icon(
-              size: MediaQuery.of(context).size.width * 0.05,
+              size: MediaQuery.of(context).size.width * 0.04,
               icon,
               color: Colors.white,
             ),
           ],
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
+          height: MediaQuery.of(context).size.height * 0.008,
         ),
         Text(
           subtitle,
           style: TextStyle(
-              color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400),
+              color: Colors.white,
+              fontSize: height * .02,
+              fontWeight: FontWeight.w400),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.01,
+          height: MediaQuery.of(context).size.height * 0.008,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +109,7 @@ class CustomCard extends StatelessWidget {
               title,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: height * .025,
                   fontWeight: FontWeight.w700),
             ),
           ],

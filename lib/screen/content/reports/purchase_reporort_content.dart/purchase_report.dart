@@ -195,8 +195,8 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
           child: Column(children: [
         Center(
           child: SizedBox(
-            width: isMobile ? width * 0.9 : width * 0.7,
-            height: isMobile ? height * 0.1 : height * 0.1,
+            width: isDesktop ? width * 0.7 : width * 0.9,
+            height: isDesktop ? height * 0.1 : height * 0.1,
             child: TabBar(
               unselectedLabelColor: Colors.grey,
               labelColor: Colors.black,
@@ -237,7 +237,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                     // toDate: toDate,
                     ),
         SizedBox(
-          height: isMobile ? height * 0.05 : height * 0.05,
+          height: isDesktop ? height * 0.05 : height * 0.05,
         ),
         SizedBox(
           width: isDesktop ? width * 0.5 : width * .7,
@@ -322,7 +322,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
           ),
         ),
         SizedBox(
-          height: isMobile ? height * 0.05 : height * 0.05,
+          height: isDesktop ? height * 0.05 : height * 0.05,
         ),
         SizedBox(
           width: isDesktop

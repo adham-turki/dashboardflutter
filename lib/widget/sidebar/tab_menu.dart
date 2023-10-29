@@ -39,6 +39,8 @@ class _TabMenuState extends State<TabMenu> {
   late ScreenContentProvider provider;
 
   bool isDesktop = false;
+  bool isMobile = false;
+  bool isTablet = false;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,8 @@ class _TabMenuState extends State<TabMenu> {
 
     provider = context.read<ScreenContentProvider>();
     isDesktop = Responsive.isDesktop(context);
+    isTablet = Responsive.isTablet(context);
+    isMobile = Responsive.isMobile(context);
     return InkWell(
       onTap: () {
         setState(() {
@@ -123,7 +127,7 @@ class _TabMenuState extends State<TabMenu> {
         });
       },
       child: SizedBox(
-        height: height * 0.06,
+        height: isTablet ? height * 0.08 : height * .06,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -137,7 +141,11 @@ class _TabMenuState extends State<TabMenu> {
                   Icon(
                     icon,
                     color: Colors.white,
-                    size: isDesktop ? width * 0.014 : width * 0.05,
+                    size: isDesktop
+                        ? width * 0.014
+                        : isTablet
+                            ? width * 0.015
+                            : width * 0.02,
                   ),
                   SizedBox(
                     width: width * 0.005,
@@ -146,7 +154,11 @@ class _TabMenuState extends State<TabMenu> {
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: isDesktop ? width * 0.0095 : width * 0.045,
+                      fontSize: isDesktop
+                          ? width * 0.0095
+                          : isTablet
+                              ? width * 0.015
+                              : width * 0.02,
                     ),
                   ),
                 ],
@@ -199,7 +211,11 @@ class _TabMenuState extends State<TabMenu> {
               ">  $text",
               style: TextStyle(
                 color: activeSubColor(index),
-                fontSize: isDesktop ? width * 0.009 : width * 0.045,
+                fontSize: isDesktop
+                    ? width * 0.009
+                    : isTablet
+                        ? width * 0.015
+                        : width * 0.02,
               ),
             ),
           ),
@@ -226,11 +242,11 @@ class _TabMenuState extends State<TabMenu> {
     int length = sideTabModel.subMenu.length;
     if (isSelected) {
       if (length == 4) {
-        return isDesktop ? 235 : height * 0.3;
+        return isDesktop ? 235 : height * 0.35;
       } else if (length == 2) {
         return isDesktop ? 129 : height * 0.2;
       } else {
-        return isDesktop ? 150 : height * 0.3;
+        return isDesktop ? 160 : height * 0.3;
       }
       // if (length >= 3 && length < 5) {
       //   return isDesktop ? height * 0.23 : height * 0.3;

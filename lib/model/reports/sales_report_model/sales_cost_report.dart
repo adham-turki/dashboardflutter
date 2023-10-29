@@ -7,6 +7,7 @@ import 'package:pluto_grid/pluto_grid.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
+import '../../../utils/func/converters.dart';
 
 class SalesCostReportModel {
   String? dash;
@@ -183,7 +184,7 @@ class SalesCostReportModel {
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: valueAll.toStringAsFixed(2),
+            text: Converters.formatNumber(valueAll),
             style: gridFooterStyle,
           ),
         ];

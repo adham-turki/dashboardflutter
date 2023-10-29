@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../components/key.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../model/routes.dart';
 import '../utils/constants/constants.dart';
 import '../utils/constants/error_constant.dart';
 
@@ -16,7 +18,7 @@ class ErrorController {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error400,
           const Color.fromARGB(255, 232, 232, 23), 400);
     } else if (responseStatus == 401) {
-      Navigator.pushReplacementNamed(context, loginScreenRoute);
+      GoRouter.of(context).go(AppRoutes.homeScreenRoute);
 
       // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
       //     const Color.fromARGB(255, 232, 232, 23), 401);
