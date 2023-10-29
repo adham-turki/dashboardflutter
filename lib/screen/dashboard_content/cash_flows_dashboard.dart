@@ -1,17 +1,20 @@
+import 'dart:math';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'dart:math';
+
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
+
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
-import '../../../utils/constants/colors.dart';
-import '../../../widget/drop_down/custom_dropdown.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
+import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
@@ -21,7 +24,12 @@ import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 
 class CashFlowsDashboard extends StatefulWidget {
-  CashFlowsDashboard({Key? key}) : super(key: key);
+  List<BarData> barData;
+
+  CashFlowsDashboard({
+    Key? key,
+    required this.barData,
+  }) : super(key: key);
 
   @override
   _CashFlowsDashboardState createState() => _CashFlowsDashboardState();
@@ -35,8 +43,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
   bool temp = false;
   late AppLocalizations _locale;
   SalesBranchesController salesBranchesController = SalesBranchesController();
-  final TextEditingController _fromDateController = TextEditingController();
-  final TextEditingController _toDateController = TextEditingController();
+
   final dataMap = <String, double>{};
   List<PieChartModel> list = [
     PieChartModel(value: 10, title: "1", color: Colors.blue),
@@ -53,11 +60,10 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
     'Save as JPEG',
     'Save as PNG',
   ];
-  String todayDate = "";
+  String todayDate1 = "";
   List<String> periods = [];
   var selectedPeriod = "";
 
-  List<BarChartData> barData = [];
   List<PieChartModel> pieData = [];
 
   CashFlowController cashFlowController = CashFlowController();
@@ -76,8 +82,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
+
     status = [
       _locale.all,
       _locale.posted,
@@ -98,9 +103,6 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
 
   @override
   void initState() {
-    _fromDateController.text = todayDate;
-    _toDateController.text = todayDate;
-
     getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
@@ -148,7 +150,10 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
                       ],
                     ),
                     //    isDesktop ? desktopCriteria() : mobileCriteria(),
-                    BalanceBarChart(data: barData, color: Colors.amber)
+                    CustomBarChart(
+                      data: widget.barData,
+                      color: Colors.orange,
+                    )
                   ],
                 ),
               ),

@@ -110,7 +110,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -123,6 +122,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                     ),
                     CustomBarChart(
                       data: widget.barData,
+                      color: Colors.indigo,
                     )
                   ],
                 ),
