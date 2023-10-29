@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocaleProvider>(context);
-
+    // Locale newLocal = provider.locale;
     Future<void> loadStoredLocale() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? storedLanguageCode = prefs.getString('selectedLanguage');
@@ -52,6 +52,7 @@ class MyApp extends StatelessWidget {
       if (storedLanguageCode != null) {
         Locale storedLocale = Locale(storedLanguageCode);
         provider.setLocale(storedLocale);
+        // newLocal = storedLocale;
       }
     }
 

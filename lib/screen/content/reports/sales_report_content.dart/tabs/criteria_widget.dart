@@ -84,10 +84,6 @@ class _LeftWidgetState extends State<LeftWidget> {
   ReportController salesReportController = ReportController();
 
   late AppLocalizations _locale;
-  // List<BranchModel> stkCategory1List = [];
-  // List<BranchModel> stkCategory3List = [];
-  // List<BranchModel> customersList = [];
-  // List<BranchModel> stocksList = [];
 
   var selectedFromStkCategory1 = "";
   var selectedToStkCategory1 = "";

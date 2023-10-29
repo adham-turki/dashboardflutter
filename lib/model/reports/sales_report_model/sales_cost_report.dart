@@ -138,7 +138,7 @@ class SalesCostReportModel {
       list.add(PlutoColumn(
         title: colsName[i],
         field: fieldsName[i],
-        type: fieldsName[i] == 'averagePrice' ||
+        type: fieldsName[i] == 'avgPrice' ||
                 fieldsName[i] == 'quantity' ||
                 fieldsName[i] == 'total'
             ? PlutoColumnType.number()
