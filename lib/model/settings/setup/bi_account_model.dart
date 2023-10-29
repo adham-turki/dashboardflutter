@@ -67,7 +67,7 @@ class BiAccountModel {
         title: localizations.accountName,
         field: "accountName",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.17 : width * 0.3,
+        width: isDesktop ? width * 0.18 : width * 0.3,
         backgroundColor: colColor,
       ),
     ];

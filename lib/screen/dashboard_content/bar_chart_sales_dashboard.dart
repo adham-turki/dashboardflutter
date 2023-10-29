@@ -102,7 +102,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: isDesktop ? height * 0.75 : height * 1.1,
+                height: isDesktop ? height * 0.55 : height * 1.1,
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(

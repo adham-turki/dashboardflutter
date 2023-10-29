@@ -294,7 +294,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               controller: numberOfrow,
               initialValue: numberOfrow.text,
               label: _locale.itemsNumber,
-              onSubmitted: (value) {
+              onChanged: (value) {
                 setState(() {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);
