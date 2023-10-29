@@ -8,6 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
+import '../../../components/custom_date.dart';
 import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../controller/sales_adminstration/sales_category_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,7 +50,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   var selectedChart = "";
 
   var selectedPeriod = "";
-  var selectedCategories = "Brands";
+  var selectedCategories = "";
   var selectedBranchCode = "";
 
   List<double> listOfBalances = [];
@@ -60,12 +61,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
-  final List<String> categories = [
-    "Brands",
-    "Categorie1",
-    "Categorie2",
-    "Classification"
-  ];
+  List<String> categories = [];
   final dataMap = <String, double>{};
 
   List<PieChartModel> pieData = [];
@@ -93,10 +89,17 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
       _locale.barChart,
       _locale.pieChart,
     ];
+    categories = [
+      _locale.brands,
+      _locale.categories("1"),
+      _locale.categories("2"),
+      _locale.classifications
+    ];
     branches = [_locale.all];
     selectedBranch = branches[0];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
+    selectedCategories = categories[0];
     getBranchByCat(isStart: true);
 
     super.didChangeDependencies();
@@ -273,28 +276,47 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomDatePicker(
+                CustomDate(
                   label: _locale.fromDate,
-                  controller: _fromDateController,
-                  date: DateTime.parse(_toDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _fromDateController.text = value;
-                      getBranchByCat();
-                    });
+                  minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _fromDateController.text = value;
+                        getBranchByCat();
+                      });
+                    }
                   },
                 ),
-                CustomDatePicker(
+                // CustomDatePicker(
+                //   label: _locale.fromDate,
+                //   controller: _fromDateController,
+                //   date: DateTime.parse(_toDateController.text),
+                //   onSelected: (value) {},
+                // ),
+                CustomDate(
                   label: _locale.toDate,
-                  controller: _toDateController,
-                  date: DateTime.parse(_fromDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _toDateController.text = value;
-                      getBranchByCat();
-                    });
+                  // minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _toDateController.text = value;
+                        getBranchByCat();
+                      });
+                    }
                   },
                 ),
+                // CustomDatePicker(
+                //   label: _locale.toDate,
+                //   controller: _toDateController,
+                //   date: DateTime.parse(_fromDateController.text),
+                //   onSelected: (value) {
+                //     setState(() {
+                //       _toDateController.text = value;
+                //       getBranchByCat();
+                //     });
+                //   },
+                // ),
               ],
             ),
           ],
@@ -358,27 +380,41 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getBranchByCat();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getBranchByCat();
+                });
+              }
+            },
+          ),
         ),
-        CustomDatePicker(
-          label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getBranchByCat();
-            });
-          },
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   controller: _fromDateController,
+        //   date: DateTime.parse(_toDateController.text),
+        //   onSelected: (value) {},
+        // ),
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.toDate,
+            // minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _toDateController.text = value;
+                  getBranchByCat();
+                });
+              }
+            },
+          ),
         ),
       ],
     );
@@ -410,14 +446,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     pieData = [];
     barData = [];
     dataMap.clear();
-    int cat = byCategoryMap[selectedCategories]!;
-    // selectedCategories == "Brands"
-    //     ? 1
-    //     : selectedCategories == "Categorie1"
-    //         ? 2
-    //         : selectedCategories == "Categorie2"
-    //             ? 3
-    //             : 4;
+    int cat = getCategoryNum(selectedCategories, _locale);
     if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
       setState(() {
         if (_fromDateController.text.isEmpty) {
@@ -464,7 +493,9 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 formatDoubleToTwoDecimalPlaces(bal);
 
             pieData.add(PieChartModel(
-                title: element.categoryName!,
+                title: element.categoryName! == ""
+                    ? _locale.general
+                    : "${element.categoryName!}",
                 value: formatDoubleToTwoDecimalPlaces(bal),
                 color: randomColor)); // Set random color
             // print("asdasd: ${pieData.length}");
@@ -472,7 +503,9 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
           barData.add(
             BarChartData(
-              element.categoryName!,
+              element.categoryName! == ""
+                  ? _locale.general
+                  : element.categoryName!,
               bal,
             ), // Set random color
           );

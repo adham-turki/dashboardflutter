@@ -19,12 +19,15 @@ int getVoucherStatus(AppLocalizations local, String status) {
   return voucherStatusMap[status]!;
 }
 
-Map<String, int> byCategoryMap = {
-  'Brands': 1,
-  'Categorie1': 2,
-  'Categorie2': 3,
-  'Classification': 4
-};
+getCategoryNum(String selectedCategories, AppLocalizations locale) {
+  Map<String, int> byCategoryMap = {
+    locale.brands: 1,
+    locale.categories("1"): 2,
+    locale.categories("2"): 3,
+    locale.classifications: 4
+  };
+  return byCategoryMap[selectedCategories];
+}
 
 List<String> getColumnsName(
     AppLocalizations locale, List<String> columns, bool sales) {

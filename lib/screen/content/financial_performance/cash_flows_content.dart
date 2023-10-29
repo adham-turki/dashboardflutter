@@ -11,6 +11,7 @@ import 'package:pie_chart/pie_chart.dart';
 
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
+import '../../../components/custom_date.dart';
 import '../../../controller/financial_performance/cash_flow_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -292,28 +293,52 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomDatePicker(
+                CustomDate(
                   label: _locale.fromDate,
-                  date: DateTime.parse(_toDateController.text),
-                  controller: _fromDateController,
-                  onSelected: (value) {
-                    setState(() {
-                      _fromDateController.text = value;
-                      getCashFlows();
-                    });
+                  minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _fromDateController.text = value;
+                        getCashFlows();
+                      });
+                    }
                   },
                 ),
-                CustomDatePicker(
+                // CustomDatePicker(
+                //   label: _locale.fromDate,
+                //   date: DateTime.parse(_toDateController.text),
+                //   controller: _fromDateController,
+                //   onSelected: (value) {
+                //     setState(() {
+                //       _fromDateController.text = value;
+                //       getCashFlows();
+                //     });
+                //   },
+                // ),
+                CustomDate(
                   label: _locale.toDate,
-                  controller: _toDateController,
-                  date: DateTime.parse(_fromDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _toDateController.text = value;
-                      getCashFlows();
-                    });
+                  // minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _toDateController.text = value;
+                        getCashFlows();
+                      });
+                    }
                   },
                 ),
+                // CustomDatePicker(
+                //   label: _locale.toDate,
+                //   controller: _toDateController,
+                //   date: DateTime.parse(_fromDateController.text),
+                //   onSelected: (value) {
+                //     setState(() {
+                //       _toDateController.text = value;
+                //       getCashFlows();
+                //     });
+                //   },
+                // ),
               ],
             ),
           ],
@@ -364,28 +389,58 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getCashFlows();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getCashFlows();
+                });
+              }
+            },
+          ),
         ),
-        CustomDatePicker(
-          label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getCashFlows();
-            });
-          },
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   date: DateTime.parse(_toDateController.text),
+        //   controller: _fromDateController,
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getCashFlows();
+        //     });
+        //   },
+        // ),
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.toDate,
+            // minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _toDateController.text = value;
+                  getCashFlows();
+                });
+              }
+            },
+          ),
         ),
+        // CustomDatePicker(
+        //   label: _locale.toDate,
+        //   controller: _toDateController,
+        //   date: DateTime.parse(_fromDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _toDateController.text = value;
+        //       getCashFlows();
+        //     });
+        //   },
+        // ),
       ],
     );
   }

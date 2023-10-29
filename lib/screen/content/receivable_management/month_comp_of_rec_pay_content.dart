@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import '../../../components/charts.dart';
+import '../../../components/custom_date.dart';
 import '../../../controller/receivable_management/rec_pay_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -263,17 +264,29 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                 });
               },
             ),
-            CustomDatePicker(
+            CustomDate(
               label: _locale.fromDate,
-              date: DateTime.now(),
-              controller: _fromDateController,
-              onSelected: (value) {
-                setState(() {
-                  _fromDateController.text = value;
-                  getRecPayData();
-                });
+              // minYear: 2000,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    _fromDateController.text = value;
+                    getRecPayData();
+                  });
+                }
               },
             ),
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   date: DateTime.now(),
+            //   controller: _fromDateController,
+            //   onSelected: (value) {
+            //     setState(() {
+            //       _fromDateController.text = value;
+            //       getRecPayData();
+            //     });
+            //   },
+            // ),
           ],
         ),
       ],
@@ -310,17 +323,32 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          date: DateTime.now(),
-          controller: _fromDateController,
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getRecPayData();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            // minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getRecPayData();
+                });
+              }
+            },
+          ),
         ),
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   date: DateTime.now(),
+        //   controller: _fromDateController,
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getRecPayData();
+        //     });
+        //   },
+        // ),
       ],
     );
   }

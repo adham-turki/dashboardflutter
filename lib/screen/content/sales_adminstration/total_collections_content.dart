@@ -6,6 +6,7 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
+import '../../../components/custom_date.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -219,28 +220,53 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomDatePicker(
-                  label: _locale.fromDate,
-                  controller: _fromDateController,
-                  date: DateTime.parse(_toDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _fromDateController.text = value;
-                      getTotalCollections();
-                    });
-                  },
+                SizedBox(
+                  child: CustomDate(
+                    label: _locale.fromDate,
+                    minYear: 2000,
+                    onValue: (isValid, value) {
+                      if (isValid) {
+                        setState(() {
+                          _fromDateController.text = value;
+                          getTotalCollections();
+                        });
+                      }
+                    },
+                  ),
                 ),
-                CustomDatePicker(
+                // CustomDatePicker(
+                //   label: _locale.fromDate,
+                //   controller: _fromDateController,
+                //   date: DateTime.parse(_toDateController.text),
+                //   onSelected: (value) {
+                //     setState(() {
+                //       _fromDateController.text = value;
+                //       getTotalCollections();
+                //     });
+                //   },
+                // ),
+                CustomDate(
                   label: _locale.toDate,
-                  controller: _toDateController,
-                  date: DateTime.parse(_fromDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _toDateController.text = value;
-                      getTotalCollections();
-                    });
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _toDateController.text = value;
+                        getTotalCollections();
+                      });
+                    }
                   },
                 ),
+                // CustomDatePicker(
+                //   label: _locale.toDate,
+                //   controller: _toDateController,
+                //   date: DateTime.parse(_fromDateController.text),
+                //   onSelected: (value) {
+                //     setState(() {
+                //       _toDateController.text = value;
+                //       getTotalCollections();
+                //     });
+                //   },
+                // ),
               ],
             ),
           ],
@@ -291,28 +317,57 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.parse(_toDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getTotalCollections();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getTotalCollections();
+                });
+              }
+            },
+          ),
         ),
-        CustomDatePicker(
-          label: _locale.toDate,
-          controller: _toDateController,
-          date: DateTime.parse(_fromDateController.text),
-          onSelected: (value) {
-            setState(() {
-              _toDateController.text = value;
-              getTotalCollections();
-            });
-          },
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   controller: _fromDateController,
+        //   date: DateTime.parse(_toDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getTotalCollections();
+        //     });
+        //   },
+        // ),
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.toDate,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _toDateController.text = value;
+                  getTotalCollections();
+                });
+              }
+            },
+          ),
         ),
+        // CustomDatePicker(
+        //   label: _locale.toDate,
+        //   controller: _toDateController,
+        //   date: DateTime.parse(_fromDateController.text),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _toDateController.text = value;
+        //       getTotalCollections();
+        //     });
+        //   },
+        // ),
       ],
     );
   }

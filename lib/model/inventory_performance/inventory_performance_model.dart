@@ -113,6 +113,10 @@ class InventoryPerformanceModel {
             ],
             style: gridFooterStyle,
           ),
+          // TextSpan(
+          //   text: valueAll.toStringAsFixed(2),
+          //   style: gridFooterStyle,
+          // ),
         ];
       },
     );

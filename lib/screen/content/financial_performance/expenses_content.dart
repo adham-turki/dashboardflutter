@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
+import '../../../components/custom_date.dart';
 import '../../../controller/financial_performance/expense_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -307,17 +308,32 @@ class _ExpensesContentState extends State<ExpensesContent> {
             });
           },
         ),
-        CustomDatePicker(
-          label: _locale.fromDate,
-          controller: _fromDateController,
-          date: DateTime.now(),
-          onSelected: (value) {
-            setState(() {
-              _fromDateController.text = value;
-              getExpenses();
-            });
-          },
+        SizedBox(
+          width: widthMobile,
+          child: CustomDate(
+            label: _locale.fromDate,
+            minYear: 2000,
+            onValue: (isValid, value) {
+              if (isValid) {
+                setState(() {
+                  _fromDateController.text = value;
+                  getExpenses();
+                });
+              }
+            },
+          ),
         ),
+        // CustomDatePicker(
+        //   label: _locale.fromDate,
+        //   controller: _fromDateController,
+        //   date: DateTime.now(),
+        //   onSelected: (value) {
+        //     setState(() {
+        //       _fromDateController.text = value;
+        //       getExpenses();
+        //     });
+        //   },
+        // ),
       ],
     );
   }
@@ -360,8 +376,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
           listOfBalances.add(elemant.expense!);
           listOfPeriods.add(temp);
           if (boolTemp) {
-            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-                double.parse(elemant.expense.toString()));
             pieData.add(PieChartModel(
                 title: temp,
                 value: double.parse(elemant.expense.toString()) == 0.0
