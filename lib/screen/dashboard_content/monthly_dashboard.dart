@@ -170,6 +170,7 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
                     BalanceDoubleBarChart(
                       data: widget.barData,
                       data2: widget.barData2,
+                      color: Colors.amber,
                     ),
                   ],
                 ),

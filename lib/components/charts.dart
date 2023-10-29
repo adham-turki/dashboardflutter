@@ -282,9 +282,10 @@ class BalanceBarChart extends StatelessWidget {
 class BalanceDoubleBarChart extends StatelessWidget {
   final List<BarChartData> data;
   final List<BarChartData> data2;
+  final Color? color;
 
   const BalanceDoubleBarChart(
-      {Key? key, required this.data, required this.data2})
+      {Key? key, required this.data, required this.data2, this.color})
       : super(key: key);
 
   @override
@@ -317,7 +318,7 @@ class BalanceDoubleBarChart extends StatelessWidget {
             yValueMapper: (BarChartData value, _) => value.value,
             enableTooltip: true,
             animationDuration: 1000,
-            color: Colors.red,
+            color: color ?? Colors.red,
             //  dataLabelSettings: const DataLabelSettings(isVisible: true),
           ),
         ],
