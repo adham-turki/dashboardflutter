@@ -16,8 +16,9 @@ class BarData {
 
 class CustomBarChart extends StatelessWidget {
   final List<BarData> data;
+  final Color? color;
 
-  const CustomBarChart({required this.data});
+  const CustomBarChart({required this.data, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class CustomBarChart extends StatelessWidget {
               yValueMapper: (BarData value, _) => value.percent,
               enableTooltip: true,
               animationDuration: 1000,
-              color: Color(0xFFEE9322),
+              color: color ?? Color(0xFFEE9322),
               dataLabelSettings: DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
