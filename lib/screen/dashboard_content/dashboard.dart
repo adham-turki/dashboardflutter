@@ -5,17 +5,22 @@ import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../components/charts.dart';
+import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
 import '../../model/criteria/search_criteria.dart';
+import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
+import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/func/converters.dart';
+import '../../utils/func/dates_controller.dart';
 import 'cash_flows_dashboard.dart';
 import 'filter_dialog.dart';
 import 'monthly_dashboard.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
@@ -34,6 +39,15 @@ class _DashboardContentState extends State<DashboardContent> {
   var status = "";
 
   List<BarData> barData = [];
+  List<BarData> barDataCashFlows = [];
+  late AppLocalizations _locale;
+  @override
+  void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
+
+    super.didChangeDependencies();
+  }
+
   //
   @override
   Widget build(BuildContext context) {
@@ -73,6 +87,14 @@ class _DashboardContentState extends State<DashboardContent> {
                         print("bar Data inisde then:${barData.length}");
                         setState(() {});
                       });
+
+                      getCashFlows().then((value) {
+                        print("valee :${value}");
+                        print(
+                            "bar cash inisde then:${barDataCashFlows.length}");
+
+                        setState(() {});
+                      });
                     });
                   },
                   text: "Filter",
@@ -90,8 +112,6 @@ class _DashboardContentState extends State<DashboardContent> {
                             height: 8,
                           ),
                           BalanceBarChartDashboard(
-                            // key: UniqueKey(),
-
                             barData: barData,
                           ),
                         ],
@@ -115,7 +135,9 @@ class _DashboardContentState extends State<DashboardContent> {
                               if (!Responsive.isMobile(context))
                                 Expanded(
                                   flex: 3,
-                                  child: CashFlowsDashboard(),
+                                  child: CashFlowsDashboard(
+                                    barData: barDataCashFlows,
+                                  ),
                                 ),
                               if (!Responsive.isMobile(context))
                                 const SizedBox(
@@ -135,7 +157,9 @@ class _DashboardContentState extends State<DashboardContent> {
                               height: appPadding,
                             ),
                           if (Responsive.isMobile(context))
-                            CashFlowsDashboard(),
+                            CashFlowsDashboard(
+                              barData: barDataCashFlows,
+                            ),
                           if (Responsive.isMobile(context))
                             const SizedBox(
                               height: appPadding,
@@ -199,7 +223,7 @@ class _DashboardContentState extends State<DashboardContent> {
           voucherStatus: -100);
       pieData = [];
       dataMap.clear();
-      barData = [];
+      barDataCashFlows = [];
       listOfBalances = [];
       listOfPeriods = [];
       await salesBranchesController
@@ -229,7 +253,6 @@ class _DashboardContentState extends State<DashboardContent> {
           );
           print("barData length inide method:${barData.length}");
         }
-        // setState(() {});
       });
     }
   }
@@ -244,78 +267,85 @@ class _DashboardContentState extends State<DashboardContent> {
     return colorList[index];
   }
 
-  // String accountName() {
-  //   accountNameString = "";
-  //   for (int i = 0; i < cashboxAccounts.length; i++) {
-  //     accountNameString += "${cashboxAccounts[i].accountName},";
-  //   }
-  //   return accountNameString;
-  // }
+  String accountName() {
+    String accountNameString = "";
+    List<BiAccountModel> cashboxAccounts = [];
 
-  // double formatDoubleToTwoDecimalPlaces(double number) {
-  //   return double.parse(number.toStringAsFixed(2));
-  // }
+    accountNameString = "";
+    for (int i = 0; i < cashboxAccounts.length; i++) {
+      accountNameString += "${cashboxAccounts[i].accountName},";
+    }
+    return accountNameString;
+  }
 
-  // void getCashFlows() {
-  //   listOfBalances = [];
-  //   pieData = [];
-  //   barData = [];
-  //   dataMap.clear();
-  //   if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
-  //     setState(() {
-  //       if (_fromDateController.text.isEmpty) {
-  //         _fromDateController.text = todayDate;
-  //       }
-  //       if (_toDateController.text.isEmpty) {
-  //         _toDateController.text = todayDate;
-  //       }
-  //     });
-  //   }
-  //   int status = getVoucherStatus(_locale, selectedStatus);
-  //   String startDate = DatesController().formatDate(_fromDateController.text);
-  //   String endDate = DatesController().formatDate(_toDateController.text);
-  //   SearchCriteria searchCriteria = SearchCriteria(
-  //       fromDate: startDate, toDate: endDate, voucherStatus: status);
-  //   cashFlowController.getChartCash(searchCriteria).then((value) {
-  //     setState(() {
-  //       balance = value[0].value! - value[1].value!;
-  //     });
-  //     for (var element in value) {
-  //       if (element.value != 0.0) {
-  //         temp = true;
-  //       } else if (element.value == 0.0) {
-  //         temp = false;
-  //       }
-  //       if (element.title! == "debit") {
-  //         listOfBalances.add(element.value!);
-  //         listOfPeriods.add(_locale.cashIn);
-  //         if (temp) {
-  //           dataMap[_locale.cashIn] =
-  //               formatDoubleToTwoDecimalPlaces(element.value!);
-  //           pieData.add(PieChartModel(
-  //               title: _locale.cashIn,
-  //               value: formatDoubleToTwoDecimalPlaces(element.value!),
-  //               color: getRandomColor(colorNewList)));
-  //         }
-  //         barData.add(
-  //           BarChartData(_locale.cashIn, element.value!),
-  //         );
-  //       } else {
-  //         listOfBalances.add(element.value!);
-  //         listOfPeriods.add(_locale.cashOut);
-  //         if (temp) {
-  //           dataMap[_locale.cashOut] =
-  //               formatDoubleToTwoDecimalPlaces(element.value!);
-  //           pieData.add(PieChartModel(
-  //               title: _locale.cashOut,
-  //               value: element.value,
-  //               color: getRandomColor(colorNewList)));
-  //         }
-  //         barData.add(
-  //           BarChartData(_locale.cashOut, element.value!),
-  //         );
-  //       }
-  //     }
-  //   });
-  // }
+  Future getCashFlows() async {
+    List<double> listOfBalances = [];
+    List<String> listOfPeriods = [];
+    CashFlowController cashFlowController = CashFlowController();
+    bool temp = false;
+
+    listOfBalances = [];
+    List<PieChartModel> pieData = [];
+    final dataMap = <String, double>{};
+    String todayDate = "";
+    pieData = [];
+    dataMap.clear();
+    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
+      }
+      if (toDateController.text.isEmpty) {
+        toDateController.text = todayDate;
+      }
+    }
+    int stat = getVoucherStatus(_locale, status);
+    String startDate = DatesController().formatDate(fromDateController.text);
+    String endDate = DatesController().formatDate(toDateController.text);
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: fromDateController.text.isEmpty
+            ? todayDate
+            : fromDateController.text,
+        toDate:
+            toDateController.text.isEmpty ? todayDate : toDateController.text,
+        voucherStatus: stat);
+    await cashFlowController.getChartCash(searchCriteria).then((value) {
+      for (var element in value) {
+        if (element.value != 0.0) {
+          temp = true;
+        } else if (element.value == 0.0) {
+          temp = false;
+        }
+        if (element.title! == "debit") {
+          listOfBalances.add(element.value!);
+          listOfPeriods.add(_locale.cashIn);
+          if (temp) {
+            dataMap[_locale.cashIn] =
+                formatDoubleToTwoDecimalPlaces(element.value!);
+            pieData.add(PieChartModel(
+                title: _locale.cashIn,
+                value: formatDoubleToTwoDecimalPlaces(element.value!),
+                color: getRandomColor(colorNewList)));
+          }
+          barDataCashFlows.add(
+            BarData(name: _locale.cashIn, percent: element.value!),
+          );
+        } else {
+          listOfBalances.add(element.value!);
+          listOfPeriods.add(_locale.cashOut);
+          if (temp) {
+            dataMap[_locale.cashOut] =
+                formatDoubleToTwoDecimalPlaces(element.value!);
+            pieData.add(PieChartModel(
+                title: _locale.cashOut,
+                value: element.value,
+                color: getRandomColor(colorNewList)));
+          }
+          barDataCashFlows.add(
+            BarData(name: _locale.cashOut, percent: element.value!),
+          );
+          print("flowchart length inide method:${barData.length}");
+        }
+      }
+    });
+  }
 }
