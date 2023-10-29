@@ -105,14 +105,18 @@ class InventoryPerformanceModel {
       titleSpanBuilder: (text) {
         return [
           TextSpan(
-            text: valueAll.toStringAsFixed(2),
-            // children: [
-            //   TextSpan(
-            //     text: valueAll.toStringAsFixed(2),
-            //   ),
-            // ],
+            text: text.replaceAll("\$", ""),
+            children: [
+              TextSpan(
+                text: valueAll.toStringAsFixed(2),
+              ),
+            ],
             style: gridFooterStyle,
           ),
+          // TextSpan(
+          //   text: valueAll.toStringAsFixed(2),
+          //   style: gridFooterStyle,
+          // ),
         ];
       },
     );

@@ -129,12 +129,14 @@ class _DashboardContentState extends State<DashboardContent> {
                       flex: 5,
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 8,
+                          MonthlyDashboard(
+                            barData: barData1,
+                            barData2: barData2,
                           ),
-                          BalanceBarChartDashboard(
-                            barData: barData,
-                          ),
+                          if (Responsive.isMobile(context))
+                            SizedBox(
+                              height: appPadding,
+                            ),
                         ],
                       ),
                     ),
@@ -199,14 +201,12 @@ class _DashboardContentState extends State<DashboardContent> {
                       flex: 5,
                       child: Column(
                         children: [
-                          MonthlyDashboard(
-                            barData: barData1,
-                            barData2: barData2,
+                          const SizedBox(
+                            height: 8,
                           ),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: appPadding,
-                            ),
+                          BalanceBarChartDashboard(
+                            barData: barData,
+                          ),
                         ],
                       ),
                     ),
