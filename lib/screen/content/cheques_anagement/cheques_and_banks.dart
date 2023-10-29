@@ -3,6 +3,7 @@ import 'package:bi_replicate/model/cheques_bank/cheques_payable_model.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
@@ -36,7 +37,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
   ChequesPayableController controller = ChequesPayableController();
 
   List<PlutoRow> polRows = [];
-
+  int countApi = 0;
   @override
   void initState() {
     criteria = SearchCriteria(
@@ -46,7 +47,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
 
     status = [
@@ -57,6 +58,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
     ];
 
     selectedStatus = status[0];
+
     super.didChangeDependencies();
   }
 
@@ -202,11 +204,25 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
     int page = request.page;
-
     // To send the number of page to the JSON Object
     criteria.page = page;
     List<PlutoRow> topList = [];
-    ChequesPayableModel result = await controller.getchequesAndBanks(criteria);
+    ChequesPayableModel result = ChequesPayableModel(0, 0, 0, 0, 0, 0, 0);
+
+    if (countApi == 0) {
+      await controller
+          .getchequesAndBanks(criteria, isStart: true)
+          .then((value) {
+        result = value;
+      });
+      countApi = 1;
+    } else {
+      await controller.getchequesAndBanks(criteria).then((value) {
+        result = value;
+      });
+      countApi = 1;
+    }
+
     topList.add(result.toPluto());
 
     return PlutoLazyPaginationResponse(

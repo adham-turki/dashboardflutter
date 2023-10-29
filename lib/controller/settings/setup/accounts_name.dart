@@ -1,10 +1,10 @@
 import '../../../model/settings/setup/bi_account_model.dart';
 import 'setup_screen_controller.dart';
 
-Future<List<BiAccountModel>> getPayableAccounts() async {
+Future<List<BiAccountModel>> getPayableAccounts({bool? isStart}) async {
   List<BiAccountModel> payableAccounts = [];
 
-  await SetupController().getBiAccounts().then((value) {
+  await SetupController().getBiAccounts(isStart: isStart).then((value) {
     for (var elemant in value) {
       if (elemant.accountType == 4) {
         payableAccounts.add(elemant);
@@ -14,10 +14,10 @@ Future<List<BiAccountModel>> getPayableAccounts() async {
   return payableAccounts;
 }
 
-Future<List<BiAccountModel>> getCashBoxAccount() async {
+Future<List<BiAccountModel>> getCashBoxAccount({bool? isStart}) async {
   List<BiAccountModel> cashboxAccounts = [];
 
-  await SetupController().getBiAccounts().then((value) {
+  await SetupController().getBiAccounts(isStart: isStart).then((value) {
     for (var elemant in value) {
       if (elemant.accountType == 2) {
         cashboxAccounts.add(elemant);
@@ -28,10 +28,10 @@ Future<List<BiAccountModel>> getCashBoxAccount() async {
   return cashboxAccounts;
 }
 
-Future<List<BiAccountModel>> getExpensesAccounts() async {
+Future<List<BiAccountModel>> getExpensesAccounts({bool? isStart}) async {
   List<BiAccountModel> expensesAccounts = [];
 
-  await SetupController().getBiAccounts().then((value) {
+  await SetupController().getBiAccounts(isStart: isStart).then((value) {
     for (var elemant in value) {
       if (elemant.accountType == 1) {
         expensesAccounts.add(elemant);
@@ -41,10 +41,10 @@ Future<List<BiAccountModel>> getExpensesAccounts() async {
   return expensesAccounts;
 }
 
-Future getReceivableAccounts() async {
+Future getReceivableAccounts({bool? isStart}) async {
   List<BiAccountModel> receivableAccounts = [];
 
-  await SetupController().getBiAccounts().then((value) {
+  await SetupController().getBiAccounts(isStart: isStart).then((value) {
     for (var elemant in value) {
       if (elemant.accountType == 3) {
         receivableAccounts.add(elemant);

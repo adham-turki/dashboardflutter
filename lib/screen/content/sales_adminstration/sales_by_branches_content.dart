@@ -8,6 +8,7 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../utils/constants/colors.dart';
@@ -63,7 +64,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   List<Color> usedColors = [];
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
@@ -78,7 +79,11 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    getSalesByBranch();
+    // const storage = FlutterSecureStorage();
+
+    // await storage.delete(key: "jwt");
+    getSalesByBranch(isStart: true);
+
     super.didChangeDependencies();
   }
 
@@ -167,7 +172,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getSalesByBranch() async {
+  Future getSalesByBranch({bool? isStart}) async {
     if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
       ErrorController.openErrorDialog(406, _locale.dateFieldsRequired);
       setState(() {
@@ -193,7 +198,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       barData = [];
       listOfBalances = [];
       listOfPeriods = [];
-      salesBranchesController.getSalesByBranches(searchCriteria).then((value) {
+      salesBranchesController
+          .getSalesByBranches(searchCriteria, isStart: isStart)
+          .then((value) {
         for (var element in value) {
           double a = (element.totalSales! + element.retSalesDis!) -
               (element.salesDis! + element.totalReturnSales!);

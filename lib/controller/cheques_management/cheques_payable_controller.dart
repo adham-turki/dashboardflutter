@@ -7,12 +7,13 @@ import '../../model/criteria/search_criteria.dart';
 import '../../utils/constants/api_constants.dart';
 
 class ChequesPayableController {
-  Future<ChequesPayableModel> getchequesAndBanks(
-      SearchCriteria searchCriteria) async {
+  Future<ChequesPayableModel> getchequesAndBanks(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     ChequesPayableModel chequesPayableModel =
         ChequesPayableModel(0, 0, 0, 0, 0, 0, 0);
     await ApiService()
-        .postRequest(getChequesPayable, searchCriteria.statusToJson())
+        .postRequest(getChequesPayable, searchCriteria.statusToJson(),
+            isStart: isStart)
         .then((response) {
       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 

@@ -103,7 +103,7 @@ class _CashFlowsDashboardState extends State<CashFlowsDashboard> {
 
   @override
   void initState() {
-    getCashBoxAccount().then((value) {
+    getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
     });

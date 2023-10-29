@@ -101,7 +101,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   void initState() {
     // getExpensesAccounts();
 
-    getPayableAccounts().then((value) {
+    getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
     });

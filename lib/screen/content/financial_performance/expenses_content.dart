@@ -60,7 +60,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   List<BarChartData> barData = [];
   @override
   void initState() {
-    getExpensesAccounts().then((value) {
+    getExpensesAccounts(isStart: true).then((value) {
       expensesAccounts = value;
       setState(() {});
     });
@@ -99,7 +99,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
     selectedChart = charts[0];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
-    getExpenses();
+    getExpenses(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -326,7 +326,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   }
 
   int count = 0;
-  getExpenses() {
+  getExpenses({bool? isStart}) {
     listOfBalances = [];
     listOfPeriods = [];
     pieData = [];
@@ -345,7 +345,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
     SearchCriteria searchCriteria =
         SearchCriteria(fromDate: date, toDate: date, voucherStatus: status);
 
-    expensesController.getExpense(searchCriteria).then((value) {
+    expensesController
+        .getExpense(searchCriteria, isStart: isStart)
+        .then((value) {
       for (var elemant in value) {
         String temp = DatesController().formatDate(getNextDay(date).toString());
         if (double.parse(elemant.expense.toString()) != 0.0) {

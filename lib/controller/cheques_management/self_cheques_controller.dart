@@ -11,14 +11,15 @@ import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
 class SelfChequesController {
-  Future<List<ChequesModel>> getCheques(SearchCriteria searchCriteria) async {
+  Future<List<ChequesModel>> getCheques(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     List<ChequesModel> chequesList = [];
 
     String pathUrl = getAllCheques;
     int count = 0;
 
     await ApiService()
-        .postRequest(pathUrl, searchCriteria.chequesToJson())
+        .postRequest(pathUrl, searchCriteria.chequesToJson(), isStart: isStart)
         .then((response) {
       print("response.body ${response.body}"); // Print the response
 
@@ -36,12 +37,12 @@ class SelfChequesController {
     return chequesList;
   }
 
-  Future<ChequesResult> getChequeResultMethod(
-      SearchCriteria searchCriteria) async {
+  Future<ChequesResult?> getChequeResultMethod(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getChequesResult;
-    late ChequesResult chequesResult = ChequesResult();
+    ChequesResult? chequesResult;
     await ApiService()
-        .postRequest(api, searchCriteria.chequesToJson())
+        .postRequest(api, searchCriteria.chequesToJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

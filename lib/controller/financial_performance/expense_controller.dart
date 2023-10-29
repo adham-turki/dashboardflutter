@@ -10,10 +10,11 @@ import '../../utils/constants/values.dart';
 
 class ExpensesController {
   var api = getExpenses;
-  Future<List<ExpensesModel>> getExpense(SearchCriteria searchCriteria) async {
+  Future<List<ExpensesModel>> getExpense(SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     List<ExpensesModel> list = [];
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

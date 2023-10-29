@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/constants/error_constant.dart';
 
 class ErrorController {
+  static bool temp = false;
   static openErrorDialog(int responseStatus, String errorDetails) {
     final context = navigatorKey.currentState!.overlay!.context;
     AppLocalizations locale = AppLocalizations.of(context);
@@ -37,6 +38,10 @@ class ErrorController {
     } else if (responseStatus == 417) {
       dialogBasedonResponseStatus(
           Icons.warning, errorDetails, locale.error417, Colors.red, 417);
+    } else if (responseStatus == 0 && !ErrorController.temp) {
+      ErrorController.temp = true;
+      dialogBasedonResponseStatus(
+          Icons.warning, errorDetails, locale.networkError, Colors.red, 0);
     }
   }
 
@@ -57,6 +62,8 @@ class ErrorController {
           statusCode: statusCode,
         );
       },
-    );
+    ).then((value) {
+      ErrorController.temp = false;
+    });
   }
 }

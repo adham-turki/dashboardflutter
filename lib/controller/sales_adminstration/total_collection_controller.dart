@@ -11,12 +11,13 @@ import '../../utils/constants/values.dart';
 
 class TotalCollectionConroller {
   Future<List<TotalCollectionModel>> getTotalCollectionMethod(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getTotalCollection;
     List<TotalCollectionModel> totalCollectionList = [];
 
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

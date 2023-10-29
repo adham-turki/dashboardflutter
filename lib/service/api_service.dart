@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -11,29 +12,52 @@ class ApiService {
   // static String url = "https://bic.scopef.com:9002";
   final storage = const FlutterSecureStorage();
 
-  Future<http.Response> getRequest(String api) async {
+  Future<http.Response> getRequest(String api, {bool? isStart}) async {
     String? token = await storage.read(key: 'jwt');
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
     var requestUrl = "${ApiURL.urlServer}/$api";
-    var response = await http.get(
-      Uri.parse(requestUrl),
-      headers: {
-        "Accept": "application/json",
-        "content-type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-    );
 
-    if (response.statusCode != 200) {
-      ErrorController.openErrorDialog(response.statusCode, response.body);
+    try {
+      var response = await http.get(
+        Uri.parse(requestUrl),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+
+      if (response.statusCode != 200) {
+        if (response.statusCode == 401 || response.statusCode == 417) {
+                ErrorController.openErrorDialog(
+                  response.statusCode,
+                  response.body,
+                );
+              } else if (isStart == null) {
+                print("inside start response ${response.statusCode}");
+
+                ErrorController.openErrorDialog(
+                  response.statusCode,
+                  response.body,
+                );
+              }
+      }
+      return response;
+    } catch (e) {
+      // Handle network-related exceptions (e.g., no internet connection)
+      // You can show an error message to the user or log the error.
+      print("Network error: $e");
+      ErrorController.openErrorDialog(0, e.toString());
+
+      // Handle other types of exceptions (e.g., server not reachable)
+      print("Other error: $e");
+      // ErrorController.openErrorDialog(404, e);
     }
-    return response;
   }
 
-  Future<http.Response> postRequest(String api, dynamic toJson,
-      {bool? isStart}) async {
+  Future postRequest(String api, dynamic toJson, {bool? isStart}) async {
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
@@ -42,32 +66,58 @@ class ApiService {
     print(token);
     print(Uri.parse(requestUrl));
     print(json.encode(toJson));
-    var response = await http.post(
-      Uri.parse(requestUrl),
-      headers: {
-        "Accept": "application/json",
-        "content-type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: json.encode(toJson),
-    );
-    if (api == logInApi &&
-        (response.statusCode == 400 || response.statusCode == 406)) {
-      return response;
-    } else if (response.statusCode != 200) {
-      if (response.body == "Wrong Credentials") {
+    try {
+      var response = await http.post(
+        Uri.parse(requestUrl),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode(toJson),
+      );
+      if (api == logInApi &&
+          (response.statusCode == 400 || response.statusCode == 406)) {
         return response;
-      }
-      if (isStart != null) {
-        if (!isStart) {
-          ErrorController.openErrorDialog(
-            response.statusCode,
-            response.body,
-          );
+      } else if (response.statusCode != 200) {
+        if (response.body == "Wrong Credentials") {
+          return response;
         }
+        // if (isStart != null) {
+              //   if (!isStart) {
+              //     print("inside start response ${response.statusCode}");
+
+              //     ErrorController.openErrorDialog(
+              //       response.statusCode,
+              //       response.body,
+              //     );
+              //   }
+              // }
+              if (response.statusCode == 401 || response.statusCode == 417) {
+                ErrorController.openErrorDialog(
+                  response.statusCode,
+                  response.body,
+                );
+              } else if (isStart == null) {
+                print("inside start response ${response.statusCode}");
+
+                ErrorController.openErrorDialog(
+                  response.statusCode,
+                  response.body,
+                );
+              }
       }
+      return response;
+    } catch (e) {
+      // Handle network-related exceptions (e.g., no internet connection)
+      // You can show an error message to the user or log the error.
+      print("Network error: $e");
+      ErrorController.openErrorDialog(0, e.toString());
+
+      // Handle other types of exceptions (e.g., server not reachable)
+      print("Other error: $e");
+      // ErrorController.openErrorDialog(404, e);
     }
-    return response;
   }
 
   // Future<http.Response> postRequestForResetPassworصd(

@@ -93,7 +93,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     ];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    getRecPayData();
+    getRecPayData(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -101,11 +101,11 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
   void initState() {
     // getExpensesAccounts();
     payableRecAccounts = [];
-    getPayableAccounts().then((value) {
+    getPayableAccounts(isStart: true).then((value) {
       payableRecAccounts = value;
       setState(() {});
     });
-    getReceivableAccounts().then((value) {
+    getReceivableAccounts(isStart: true).then((value) {
       payableRecAccounts.addAll(value);
       setState(() {});
     });
@@ -210,12 +210,18 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                       ],
                     ),
                     selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
+                        ? BalanceDoubleLineChart(
+                            xAxisText: "",
                             yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
                             balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : BalanceBarChart(data: barData),
+                            periods: listOfPeriods,
+                            balances2: listOfBalances2,
+                            periods2: listOfPeriods2,
+                          )
+                        : BalanceDoubleBarChart(
+                            data: barData,
+                            data2: barData2,
+                          ),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -319,7 +325,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     );
   }
 
-  getRecPayData() {
+  getRecPayData({bool? isStart}) {
     listOfBalances = [];
     listOfBalances2 = [];
     listOfPeriods = [];
@@ -342,7 +348,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
         fromDate: DatesController().formatDate(_fromDateController.text),
         voucherStatus: status);
 
-    recPayController.getRecPayMethod(searchCriteria).then((value) {
+    recPayController
+        .getRecPayMethod(searchCriteria, isStart: isStart)
+        .then((value) {
       int maxVal = value.payables.length > value.receivables.length
           ? value.payables.length
           : value.receivables.length;

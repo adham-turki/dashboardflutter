@@ -10,12 +10,13 @@ import '../../utils/constants/values.dart';
 
 class SalesCategoryController {
   Future<List<SalesCategoryModel>> getSalesByCategory(
-      SearchCriteria searchCriteria) async {
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
     var api = getSalesApi;
     List<SalesCategoryModel> salesCategoryList = [];
 
     await ApiService()
-        .postRequest(api, searchCriteria.toJson())
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
