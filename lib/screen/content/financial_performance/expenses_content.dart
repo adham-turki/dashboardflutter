@@ -58,6 +58,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   List<PieChartModel> pieData = [];
 
   List<BarChartData> barData = [];
+  final usedColors = <Color>[];
   @override
   void initState() {
     getExpensesAccounts(isStart: true).then((value) {
@@ -367,7 +368,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
                         double.parse(elemant.expense.toString())),
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorNewList, usedColors)));
           }
 
           barData.add(
@@ -407,9 +408,20 @@ class _ExpensesContentState extends State<ExpensesContent> {
     return accountNameString;
   }
 
-  Color getRandomColor(List<Color> colorList) {
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
   }
 }

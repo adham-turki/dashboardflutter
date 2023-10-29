@@ -63,6 +63,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
   List<BarChartData> barData = [];
 
   bool boolTemp = false;
+  final usedColors = <Color>[];
   String todayDate = "";
   @override
   void didChangeDependencies() {
@@ -362,7 +363,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
                         double.parse(elemant.dailySale.toString())),
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorNewList, usedColors)));
           }
 
           barData.add(
@@ -373,10 +374,21 @@ class _DailySalesContentState extends State<DailySalesContent> {
     });
   }
 
-  Color getRandomColor(List<Color> colorList) {
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
   }
 
   int count = 0;

@@ -74,6 +74,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   String todayDate = "";
 
   bool temp = false;
+  final usedColors = <Color>[];
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -383,10 +384,21 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     );
   }
 
-  Color getRandomColor(List<Color> colorList) {
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {
@@ -437,8 +449,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         double bal = element.creditAmt! - element.debitAmt!;
 
         // Generate a random color
-        Color randomColor =
-            getRandomColor(colorNewList); // Use the getRandomColor function
+        Color randomColor = getRandomColor(
+            colorNewList, usedColors); // Use the getRandomColor function
         if (bal != 0.0) {
           temp = true;
         } else if (bal == 0.0) {
