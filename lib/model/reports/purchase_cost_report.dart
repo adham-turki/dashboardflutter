@@ -162,7 +162,7 @@ class PurchaseCostReportModel {
             ? fieldsName[i] == 'dash'
                 ? width * .04
                 : width * .13
-            : width * 0.3,
+            : width * 0.36,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
             ? (rendererContext) {

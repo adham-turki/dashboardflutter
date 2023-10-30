@@ -151,7 +151,7 @@ class SalesCostReportModel {
             ? fieldsName[i] == 'dash'
                 ? width * .04
                 : width * .13
-            : width * 0.3,
+            : width * 0.32,
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'avgPrice' && reportsResult != null
             ? (rendererContext) {
