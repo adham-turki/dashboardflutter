@@ -76,7 +76,6 @@ class _MyAppState extends State<MyApp> {
     // Determine the current locale
     // print(_locale.active);
     String lang = Provider.of<LocaleProvider>(context).locale.languageCode;
-    print("lang $lang");
     // Use different fonts based on the language
     if (lang == "ar") {
       // Arabic font

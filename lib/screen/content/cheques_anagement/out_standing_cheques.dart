@@ -533,7 +533,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     }
 
     return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
+      totalPage: 0,
       rows: reportsResult == null ? [] : topList,
     );
   }

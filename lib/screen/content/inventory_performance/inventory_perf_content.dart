@@ -562,7 +562,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     }
 
     return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
+      totalPage: 0,
       rows: topList,
     );
   }
@@ -612,7 +612,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     }
 
     return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
+      totalPage: 0,
       rows: topList,
     );
   }
