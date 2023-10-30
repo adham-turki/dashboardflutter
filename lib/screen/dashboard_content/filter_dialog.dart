@@ -79,36 +79,65 @@ class _FilterDialogState extends State<FilterDialog> {
     return AlertDialog(
       title: SelectableText("Filter Dialog"),
       content: SizedBox(
-        width: width * 0.5,
-        height: isDesktop ? height * 0.35 : height * 0.4,
+        width: isDesktop ? width * 0.5 : width * 0.7,
+        height: isDesktop ? height * 0.35 : height * 0.6,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomDropDown(
-                  items: periods,
-                  label: _locale.period,
-                  initialValue: selectedPeriod,
-                  onChanged: (value) {
-                    setState(() {
-                      checkPeriods(value);
-                      selectedPeriod = value!;
-                    });
-                  },
-                ),
-                CustomDropDown(
-                  items: status,
-                  label: _locale.status,
-                  initialValue: selectedStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedStatus = value!;
-                    });
-                  },
-                ),
-              ],
-            ),
+            isDesktop
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomDropDown(
+                        items: periods,
+                        label: _locale.period,
+                        initialValue: selectedPeriod,
+                        onChanged: (value) {
+                          setState(() {
+                            checkPeriods(value);
+                            selectedPeriod = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: status,
+                        label: _locale.status,
+                        initialValue: selectedStatus,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedStatus = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomDropDown(
+                        items: periods,
+                        label: _locale.period,
+                        initialValue: selectedPeriod,
+                        width: width,
+                        onChanged: (value) {
+                          setState(() {
+                            checkPeriods(value);
+                            selectedPeriod = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: status,
+                        label: _locale.status,
+                        initialValue: selectedStatus,
+                        width: width,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedStatus = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
             isDesktop
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
