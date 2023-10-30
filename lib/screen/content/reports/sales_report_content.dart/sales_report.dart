@@ -350,7 +350,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           ReportController()
                               .exportToExcelApi(searchCriteria, body)
                               .then((value) {
-                            saveExcelFile(value, "SalesReport.xlsx");
+                          saveExcelFile(value, "${_locale.salesreport}.xlsx");
                           });
                         }
                       }

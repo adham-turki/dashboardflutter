@@ -60,7 +60,7 @@ class BiAccountModel {
         title: localizations.accountCode,
         field: "account",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.15 : width * 0.3,
+        width: isDesktop ? width * 0.14 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(

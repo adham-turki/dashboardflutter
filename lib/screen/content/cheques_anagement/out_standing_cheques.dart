@@ -414,7 +414,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                         SelfChequesController()
                             .exportToExcelApi(searchCriteria)
                             .then((value) {
-                          saveExcelFile(value, "Cheques.xlsx");
+                          saveExcelFile(value, "${_locale.cheques}.xlsx");
                         });
                       }
                     },
