@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../model/routes.dart';
@@ -73,8 +74,12 @@ class _ErrorDialogState extends State<ErrorDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (widget.statusCode == 401 || widget.statusCode == 417) {
+                      const storage = FlutterSecureStorage();
+
+                      await storage.delete(key: "jwt");
+
                       GoRouter.of(context).go(AppRoutes.loginRoute);
                       // Navigator.pushReplacementNamed(context, mainScreenRoute);
                     } else {

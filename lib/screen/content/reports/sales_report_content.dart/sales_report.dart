@@ -343,14 +343,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                             voucherStatus: -100,
                             columns:
                                 getColumnsName(_locale, orderByColumns, true),
-                            customColumns:
-                                getColumnsName(_locale, orderByColumns, true),
+                            customColumns: getCustomColumnsName(
+                                _locale, orderByColumns, true),
                           );
                           Map<String, dynamic> body = readProvider.toJson();
                           ReportController()
                               .exportToExcelApi(searchCriteria, body)
                               .then((value) {
-                          saveExcelFile(value, "${_locale.salesreport}.xlsx");
+                            saveExcelFile(value, "${_locale.salesreport}.xlsx");
                           });
                         }
                       }

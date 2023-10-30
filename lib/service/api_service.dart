@@ -41,6 +41,10 @@ class ApiService {
             response.body,
           );
         } else if (response.statusCode == 401) {
+          const storage = FlutterSecureStorage();
+
+          await storage.delete(key: "jwt");
+
           final context = navigatorKey.currentState!.overlay!.context;
           GoRouter.of(context).go(AppRoutes.loginRoute);
           // Navigator.pushReplacementNamed(context, loginScreenRoute);
@@ -85,6 +89,7 @@ class ApiService {
         },
         body: json.encode(toJson),
       );
+      print("resssssssss ${response.statusCode}");
       if (api == logInApi &&
           (response.statusCode == 400 || response.statusCode == 406)) {
         return response;
@@ -99,6 +104,11 @@ class ApiService {
             response.body,
           );
         } else if (response.statusCode == 401) {
+          const storage = FlutterSecureStorage();
+
+          await storage.delete(key: "jwt");
+
+          print("Iam hereeeeeee");
           final context = navigatorKey.currentState!.overlay!.context;
           GoRouter.of(context).go(AppRoutes.loginRoute);
           // Navigator.pushReplacementNamed(context, loginScreenRoute);
