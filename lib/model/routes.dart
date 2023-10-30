@@ -8,11 +8,17 @@ import 'package:go_router/go_router.dart';
 import '../components/key.dart';
 
 class AppRoutes {
+  static const initialRoute = "/";
   static const loginRoute = "/login";
   static const homeScreenRoute = "/mainScreenRoute";
 
   static final GoRouter routes =
       GoRouter(navigatorKey: navigatorKey, routes: <GoRoute>[
+    GoRoute(
+      path: initialRoute,
+      builder: (BuildContext context, state) => const LoginScreen(),
+      redirect: (context, state) => _redirect2(context),
+    ),
     GoRoute(
       path: loginRoute,
       builder: (BuildContext context, state) => const LoginScreen(),
