@@ -5,6 +5,7 @@ import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.
 import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/receivable_management/rec_pay_controller.dart';
@@ -50,11 +51,13 @@ class _DashboardContentState extends State<DashboardContent> {
 
   late AppLocalizations _locale;
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
+    // const storage = FlutterSecureStorage();
 
+    // await storage.delete(key: "jwt");
     super.didChangeDependencies();
   }
 

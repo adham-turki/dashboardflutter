@@ -233,9 +233,13 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                   if (isValid) {
                     setState(() {
                       toDate.text = value;
+
                       setControllertoDateText();
                     });
                   }
+                  print("toDateeeeeIs $isValid");
+
+                  print("toDateeeee $value");
                 },
               ),
             ),
