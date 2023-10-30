@@ -80,9 +80,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    // const storage = FlutterSecureStorage();
 
-    // await storage.delete(key: "jwt");
     getSalesByBranch(isStart: true);
 
     super.didChangeDependencies();

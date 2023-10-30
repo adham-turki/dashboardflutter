@@ -12,6 +12,7 @@ import '../model/api_url.dart';
 import '../model/routes.dart';
 import '../utils/constants/api_constants.dart';
 import '../utils/constants/constants.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
   // static String url = "https://bic.scopef.com:9002";
@@ -46,7 +47,11 @@ class ApiService {
           await storage.delete(key: "jwt");
 
           final context = navigatorKey.currentState!.overlay!.context;
-          GoRouter.of(context).go(AppRoutes.loginRoute);
+          if (kIsWeb) {
+            GoRouter.of(context).go(AppRoutes.loginRoute);
+          } else {
+            Navigator.pushReplacementNamed(context, loginScreenRoute);
+          }
           // Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");
@@ -110,7 +115,11 @@ class ApiService {
 
           print("Iam hereeeeeee");
           final context = navigatorKey.currentState!.overlay!.context;
-          GoRouter.of(context).go(AppRoutes.loginRoute);
+          if (kIsWeb) {
+            GoRouter.of(context).go(AppRoutes.loginRoute);
+          } else {
+            Navigator.pushReplacementNamed(context, loginScreenRoute);
+          }
           // Navigator.pushReplacementNamed(context, loginScreenRoute);
         } else if (isStart == null) {
           print("inside start response ${response.statusCode}");

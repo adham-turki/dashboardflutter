@@ -12,7 +12,6 @@ import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class MonthCompOfRecPayContent extends StatefulWidget {
@@ -190,7 +189,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.5 : height * 0.6,
+                height: isDesktop ? height * 0.56 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [

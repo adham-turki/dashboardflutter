@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../model/routes.dart';
 import '../utils/constants/constants.dart';
+import 'package:flutter/foundation.dart';
 
 class ErrorDialog extends StatefulWidget {
   final IconData icon;
@@ -80,8 +81,12 @@ class _ErrorDialogState extends State<ErrorDialog> {
 
                       await storage.delete(key: "jwt");
 
-                      GoRouter.of(context).go(AppRoutes.loginRoute);
-                      // Navigator.pushReplacementNamed(context, mainScreenRoute);
+                      if (kIsWeb) {
+                        GoRouter.of(context).go(AppRoutes.loginRoute);
+                      } else {
+                        Navigator.pushReplacementNamed(
+                            context, loginScreenRoute);
+                      }
                     } else {
                       Navigator.pop(context);
                     }
