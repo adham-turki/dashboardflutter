@@ -27,6 +27,24 @@ class DatesController {
     return dateFormatter.format(firstDayOfYear);
   }
 
+  String todayYear() {
+    DateTime todayDate = DateTime(today.year, today.month, today.day);
+    final DateFormat dateFormatter = DateFormat("yyyy");
+    return dateFormatter.format(todayDate);
+  }
+
+  String todayMonth() {
+    DateTime todayDate = DateTime(today.year, today.month, today.day);
+    final DateFormat dateFormatter = DateFormat("MM");
+    return dateFormatter.format(todayDate);
+  }
+
+  String todayDay() {
+    DateTime todayDate = DateTime(today.year, today.month, today.day);
+    final DateFormat dateFormatter = DateFormat("dd");
+    return dateFormatter.format(todayDate);
+  }
+
   formatDate(String date) {
     if (date == "null") {
       return "";

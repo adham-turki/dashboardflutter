@@ -172,7 +172,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                     child: SelectableText(
                       maxLines: 10,
                       accountName(),
-                      style: twelve400TextStyle(Colors.black),
+                      style: sixteen600TextStyle(Colors.black),
                     ))
                 : Container(),
             Padding(

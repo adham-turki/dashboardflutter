@@ -183,14 +183,14 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                     child: SelectableText(
                       maxLines: 10,
                       accountName(),
-                      style: twelve400TextStyle(Colors.black),
+                      style: sixteen600TextStyle(Colors.black),
                     ))
                 : Container(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: width * 0.7,
-                height: isDesktop ? height * 0.6 : height * 0.6,
+                height: isDesktop ? height * 0.5 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
