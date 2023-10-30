@@ -427,7 +427,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     return PlutoLazyPagination(
       initialPage: 1,
       initialFetch: true,
-      pageSizeToMove: null,
+      pageSizeToMove: 1,
       fetchWithSorting: false,
       fetchWithFiltering: false,
       fetch: (request) {

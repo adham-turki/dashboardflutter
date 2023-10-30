@@ -226,7 +226,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
     topList.add(result.toPluto());
 
     return PlutoLazyPaginationResponse(
-      totalPage: 1,
+      totalPage: 0,
       rows: topList,
     );
   }
