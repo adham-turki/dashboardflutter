@@ -12,24 +12,28 @@ class AppRoutes {
   static const loginRoute = "/login";
   static const homeScreenRoute = "/mainScreenRoute";
 
-  static final GoRouter routes =
-      GoRouter(navigatorKey: navigatorKey, routes: <GoRoute>[
-    GoRoute(
-      path: initialRoute,
-      builder: (BuildContext context, state) => const LoginScreen(),
-      redirect: (context, state) => _redirect2(context),
-    ),
-    GoRoute(
-      path: loginRoute,
-      builder: (BuildContext context, state) => const LoginScreen(),
-      redirect: (context, state) => _redirect2(context),
-    ),
-    GoRoute(
-      path: homeScreenRoute,
-      builder: (_, state) => const HomePage(),
-      redirect: (context, state) => _redirect(context),
-    ),
-  ]);
+  static final GoRouter routes = GoRouter(
+      onException: (BuildContext context, state, goRouter) =>
+          const LoginScreen(),
+      navigatorKey: navigatorKey,
+      initialLocation: loginRoute,
+      routes: <GoRoute>[
+        GoRoute(
+          path: initialRoute,
+          builder: (BuildContext context, state) => const LoginScreen(),
+          redirect: (context, state) => _redirect2(context),
+        ),
+        GoRoute(
+          path: loginRoute,
+          builder: (BuildContext context, state) => const LoginScreen(),
+          redirect: (context, state) => _redirect2(context),
+        ),
+        GoRoute(
+          path: homeScreenRoute,
+          builder: (_, state) => const HomePage(),
+          redirect: (context, state) => _redirect(context),
+        ),
+      ]);
 
   static Future<String?> _redirect(BuildContext context) async {
     const storage = FlutterSecureStorage();
