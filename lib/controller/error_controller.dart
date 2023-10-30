@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../components/key.dart';
@@ -7,10 +8,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/routes.dart';
 import '../utils/constants/constants.dart';
 import '../utils/constants/error_constant.dart';
+import 'package:flutter/foundation.dart';
 
 class ErrorController {
   static bool temp = false;
-  static openErrorDialog(int responseStatus, String errorDetails) {
+  static openErrorDialog(int responseStatus, String errorDetails) async {
     final context = navigatorKey.currentState!.overlay!.context;
     AppLocalizations locale = AppLocalizations.of(context);
     //details for each response status from the api
@@ -18,8 +20,14 @@ class ErrorController {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error400,
           const Color.fromARGB(255, 232, 232, 23), 400);
     } else if (responseStatus == 401) {
-      GoRouter.of(context).go(AppRoutes.homeScreenRoute);
+      const storage = FlutterSecureStorage();
 
+      await storage.delete(key: "jwt");
+      if (kIsWeb) {
+        GoRouter.of(context).go(AppRoutes.loginRoute);
+      } else {
+        Navigator.pushReplacementNamed(context, loginScreenRoute);
+      }
       // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
       //     const Color.fromARGB(255, 232, 232, 23), 401);
     } else if (responseStatus == 200) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
 import '../model/routes.dart';
 import '../utils/constants/constants.dart';
+import 'package:flutter/foundation.dart';
 
 class ErrorDialog extends StatefulWidget {
   final IconData icon;
@@ -73,10 +75,18 @@ class _ErrorDialogState extends State<ErrorDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 MaterialButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (widget.statusCode == 401 || widget.statusCode == 417) {
-                      GoRouter.of(context).go(AppRoutes.loginRoute);
-                      // Navigator.pushReplacementNamed(context, mainScreenRoute);
+                      const storage = FlutterSecureStorage();
+
+                      await storage.delete(key: "jwt");
+
+                      if (kIsWeb) {
+                        GoRouter.of(context).go(AppRoutes.loginRoute);
+                      } else {
+                        Navigator.pushReplacementNamed(
+                            context, loginScreenRoute);
+                      }
                     } else {
                       Navigator.pop(context);
                     }

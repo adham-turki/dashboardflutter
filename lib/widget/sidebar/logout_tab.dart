@@ -9,6 +9,7 @@ import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
+import 'package:flutter/foundation.dart';
 
 class LogoutTab extends StatefulWidget {
   const LogoutTab({super.key});
@@ -44,8 +45,11 @@ class _LogoutTabState extends State<LogoutTab> {
         const storage = FlutterSecureStorage();
 
         await storage.delete(key: "jwt");
-
-        GoRouter.of(context).go(AppRoutes.loginRoute);
+        if (kIsWeb) {
+          GoRouter.of(context).go(AppRoutes.loginRoute);
+        } else {
+          Navigator.pushReplacementNamed(context, loginScreenRoute);
+        }
       },
       child: MouseRegion(
         onEnter: (event) {
