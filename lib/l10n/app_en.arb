@@ -218,5 +218,8 @@
     "chooseDate": "Choose Date",
     "numOfCustomers": "Number Of Customers",
     "totalReturnSal": "Total Return Sales",
-    "filter" : "Filter"
+    "startDateAfterEndDate":"End Date should be after Start Date",
+    "dateConflict":"Date Conflict",
+        "filter" : "Filter"
+
 }

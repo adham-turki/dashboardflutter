@@ -271,6 +271,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                 if (isValid) {
                   setState(() {
                     _fromDateController.text = value;
+
                     getRecPayData();
                   });
                 }

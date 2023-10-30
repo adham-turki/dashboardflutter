@@ -429,21 +429,38 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   void setControllerFromDateText() async {
     fromDateValue = fromDate.text;
     String startDate = DatesController().formatDate(fromDateValue!);
+    String endDate = DatesController().formatDate(toDate.text);
+
     criteria.fromDate = startDate;
     reportsResult = await controller.getChequeResultMethod(criteria);
     return setState(() {
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 
   void setControllertoDateText() async {
     toDateValue = toDate.text;
     String endDate = DatesController().formatDate(toDateValue!);
+
     criteria.toDate = endDate;
     reportsResult = await controller.getChequeResultMethod(criteria);
 
     return setState(() {
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 

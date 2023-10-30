@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../components/custom_date.dart';
+import '../../controller/error_controller.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/func/dates_controller.dart';
@@ -122,6 +123,15 @@ class _FilterDialogState extends State<FilterDialog> {
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
                               });
                             }
                           },
@@ -150,6 +160,15 @@ class _FilterDialogState extends State<FilterDialog> {
                             if (isValid) {
                               setState(() {
                                 _toDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
                               });
                             }
                           },
@@ -180,6 +199,15 @@ class _FilterDialogState extends State<FilterDialog> {
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
                               });
                             }
                           },
@@ -205,6 +233,15 @@ class _FilterDialogState extends State<FilterDialog> {
                             if (isValid) {
                               setState(() {
                                 _toDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
                               });
                             }
                           },
@@ -234,17 +271,25 @@ class _FilterDialogState extends State<FilterDialog> {
               fontSize: width > 800 ? height * .016 : height * .011,
               width: width * 0.09,
               onPressed: () {
-                widget.onFilter(
-                    selectedPeriod,
-                    DatesController().formatDate(_fromDateController.text),
-                    DatesController().formatDate(_toDateController.text),
-                    selectedStatus);
-                print("_fromDateController.text :${_fromDateController.text}");
-                print("periodd :${selectedPeriod}");
-                context
-                    .read<DatesProvider>()
-                    .setDatesController(_fromDateController, _toDateController);
-                Navigator.of(context).pop();
+                DateTime from = DateTime.parse(_fromDateController.text);
+                DateTime to = DateTime.parse(_toDateController.text);
+
+                if (from.isAfter(to)) {
+                  ErrorController.openErrorDialog(
+                      1, _locale.startDateAfterEndDate);
+                } else {
+                  widget.onFilter(
+                      selectedPeriod,
+                      DatesController().formatDate(_fromDateController.text),
+                      DatesController().formatDate(_toDateController.text),
+                      selectedStatus);
+                  print(
+                      "_fromDateController.text :${_fromDateController.text}");
+                  print("periodd :${selectedPeriod}");
+                  context.read<DatesProvider>().setDatesController(
+                      _fromDateController, _toDateController);
+                  Navigator.of(context).pop();
+                }
               },
               text: "Filter",
               borderRadius: 0.3,

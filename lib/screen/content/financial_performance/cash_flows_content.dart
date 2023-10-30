@@ -12,6 +12,7 @@ import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../components/custom_date.dart';
+import '../../../controller/error_controller.dart';
 import '../../../controller/financial_performance/cash_flow_controller.dart';
 import '../../../controller/settings/setup/accounts_name.dart';
 import '../../../model/bar_chart_data_model.dart';
@@ -300,7 +301,16 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     if (isValid) {
                       setState(() {
                         _fromDateController.text = value;
-                        getCashFlows();
+                        DateTime from =
+                            DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          getCashFlows();
+                        }
                       });
                     }
                   },
@@ -326,7 +336,16 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     if (isValid) {
                       setState(() {
                         _toDateController.text = value;
-                        getCashFlows();
+                        DateTime from =
+                            DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          getCashFlows();
+                        }
                       });
                     }
                   },
@@ -401,7 +420,15 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  getCashFlows();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getCashFlows();
+                  }
                 });
               }
             },
@@ -427,7 +454,15 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  getCashFlows();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getCashFlows();
+                  }
                 });
               }
             },

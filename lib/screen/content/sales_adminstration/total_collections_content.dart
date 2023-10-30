@@ -7,6 +7,7 @@ import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:pie_chart/pie_chart.dart';
 import '../../../components/custom_date.dart';
+import '../../../controller/error_controller.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -228,7 +229,16 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                       if (isValid) {
                         setState(() {
                           _fromDateController.text = value;
-                          getTotalCollections();
+                          DateTime from =
+                              DateTime.parse(_fromDateController.text);
+                          DateTime to = DateTime.parse(_toDateController.text);
+
+                          if (from.isAfter(to)) {
+                            ErrorController.openErrorDialog(
+                                1, _locale.startDateAfterEndDate);
+                          } else {
+                            getTotalCollections();
+                          }
                         });
                       }
                     },
@@ -254,7 +264,16 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     if (isValid) {
                       setState(() {
                         _toDateController.text = value;
-                        getTotalCollections();
+                        DateTime from =
+                            DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          getTotalCollections();
+                        }
                       });
                     }
                   },
@@ -329,7 +348,15 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  getTotalCollections();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getTotalCollections();
+                  }
                 });
               }
             },
@@ -354,7 +381,15 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  getTotalCollections();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getTotalCollections();
+                  }
                 });
               }
             },

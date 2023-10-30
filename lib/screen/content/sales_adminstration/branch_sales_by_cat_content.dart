@@ -9,6 +9,7 @@ import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../components/custom_date.dart';
+import '../../../controller/error_controller.dart';
 import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../controller/sales_adminstration/sales_category_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -283,7 +284,16 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     if (isValid) {
                       setState(() {
                         _fromDateController.text = value;
-                        getBranchByCat();
+                        DateTime from =
+                            DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          getBranchByCat();
+                        }
                       });
                     }
                   },
@@ -304,7 +314,16 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     if (isValid) {
                       setState(() {
                         _toDateController.text = value;
-                        getBranchByCat();
+                        DateTime from =
+                            DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          getBranchByCat();
+                        }
                       });
                     }
                   },
@@ -392,7 +411,15 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  getBranchByCat();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getBranchByCat();
+                  }
                 });
               }
             },
@@ -413,7 +440,15 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  getBranchByCat();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getBranchByCat();
+                  }
                 });
               }
             },

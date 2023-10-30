@@ -274,7 +274,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             if (isValid) {
               setState(() {
                 _fromDateController.text = value;
-                getSalesByBranch();
+                DateTime from = DateTime.parse(_fromDateController.text);
+                DateTime to = DateTime.parse(_toDateController.text);
+
+                if (from.isAfter(to)) {
+                  ErrorController.openErrorDialog(
+                      1, _locale.startDateAfterEndDate);
+                } else {
+                  getSalesByBranch();
+                }
               });
             }
           },
@@ -299,7 +307,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             if (isValid) {
               setState(() {
                 _toDateController.text = value;
-                getSalesByBranch();
+                DateTime from = DateTime.parse(_fromDateController.text);
+                DateTime to = DateTime.parse(_toDateController.text);
+
+                if (from.isAfter(to)) {
+                  ErrorController.openErrorDialog(
+                      1, _locale.startDateAfterEndDate);
+                } else {
+                  getSalesByBranch();
+                }
               });
             }
           },
@@ -375,7 +391,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  getSalesByBranch();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getSalesByBranch();
+                  }
                 });
               }
             },
@@ -400,7 +424,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  getSalesByBranch();
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    getSalesByBranch();
+                  }
                 });
               }
             },

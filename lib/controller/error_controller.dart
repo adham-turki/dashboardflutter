@@ -47,6 +47,10 @@ class ErrorController {
       ErrorController.temp = true;
       dialogBasedonResponseStatus(
           Icons.warning, errorDetails, locale.networkError, Colors.red, 0);
+    } else if (responseStatus == 1) {
+      print("object");
+      dialogBasedonResponseStatus(
+          Icons.warning, errorDetails, locale.dateConflict, Colors.red, 0);
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/criteria/drop_down_search_criteria.dart';
 import 'package:flutter/material.dart';
 import '../../../../../components/card.dart';
 import '../../../../../components/custom_date.dart';
+import '../../../../../controller/error_controller.dart';
 import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../provider/purchase_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
@@ -784,18 +785,33 @@ class _LeftWidgetState extends State<LeftWidget> {
   void setFromDateController() {
     String fromDateValue = fromDate.text;
     String startDate = DatesController().formatDate(fromDateValue);
-    readProvider.setFromDate(startDate);
 
     setState(() {
-      print("fromProvider ${readProvider.getFromDate}");
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      }
+      readProvider.setFromDate(startDate);
+
+      print("fromProvider ${DatesController().formatDateReverse(startDate)}");
     });
   }
 
   void setToDateController() {
     String toDateValue = toDate.text;
     String endDate = DatesController().formatDate(toDateValue);
-    readProvider.setToDate(endDate);
+
     setState(() {
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      }
+      readProvider.setToDate(endDate);
+
       print("toProvider ${readProvider.getToDate}");
     });
   }
