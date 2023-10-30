@@ -328,15 +328,15 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                         toDate: readProvider.toDate,
                         voucherStatus: -100,
                         columns: getColumnsName(_locale, orderByColumns, false),
-                        customColumns:
-                            getColumnsName(_locale, orderByColumns, false),
+                        customColumns: getCustomColumnsName(
+                            _locale, orderByColumns, false),
                       );
                       Map<String, dynamic> body = readProvider.toJson();
 
                       ReportController()
                           .exportPurchaseToExcelApi(searchCriteria, body)
                           .then((value) {
-                      saveExcelFile(value, "${_locale.purchasesReport}.xlsx");
+                        saveExcelFile(value, "${_locale.purchasesReport}.xlsx");
                       });
                     }
                   }
