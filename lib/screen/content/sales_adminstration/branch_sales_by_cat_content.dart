@@ -288,6 +288,9 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     }
                   },
                 ),
+                SizedBox(
+                  width: width * 0.01,
+                ),
                 // CustomDatePicker(
                 //   label: _locale.fromDate,
                 //   controller: _fromDateController,

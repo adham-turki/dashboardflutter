@@ -234,6 +234,9 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                     },
                   ),
                 ),
+                SizedBox(
+                  width: width * 0.01,
+                ),
                 // CustomDatePicker(
                 //   label: _locale.fromDate,
                 //   controller: _fromDateController,

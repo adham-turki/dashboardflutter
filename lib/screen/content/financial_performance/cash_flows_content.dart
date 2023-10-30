@@ -305,6 +305,9 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     }
                   },
                 ),
+                SizedBox(
+                  width: width * 0.01,
+                ),
                 // CustomDatePicker(
                 //   label: _locale.fromDate,
                 //   date: DateTime.parse(_toDateController.text),

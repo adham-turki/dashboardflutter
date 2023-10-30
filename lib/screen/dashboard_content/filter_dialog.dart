@@ -79,7 +79,7 @@ class _FilterDialogState extends State<FilterDialog> {
       title: SelectableText("Filter Dialog"),
       content: SizedBox(
         width: width * 0.5,
-        height: isDesktop ? height * 0.3 : height * 0.4,
+        height: isDesktop ? height * 0.35 : height * 0.4,
         child: Column(
           children: [
             Row(
@@ -113,7 +113,7 @@ class _FilterDialogState extends State<FilterDialog> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
-                        height: height * 0.1,
+                        // height: height * 0.1,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
                           label: _locale.fromDate,
@@ -127,6 +127,9 @@ class _FilterDialogState extends State<FilterDialog> {
                           },
                         ),
                       ),
+                      SizedBox(
+                        width: width * 0.01,
+                      ),
                       // CustomDatePicker(
                       //   label: _locale.fromDate,
                       //   date: DateTime.parse(_toDateController.text),
@@ -138,7 +141,7 @@ class _FilterDialogState extends State<FilterDialog> {
                       //   },
                       // ),
                       SizedBox(
-                        height: height * 0.1,
+                        // height: height * 0.1,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
                           label: _locale.toDate,
