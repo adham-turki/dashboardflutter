@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
+import '../../utils/func/converters.dart';
 import '../criteria/search_criteria.dart';
 
 class InventoryPerformanceModel {
@@ -86,31 +87,30 @@ class InventoryPerformanceModel {
     return list;
   }
 
-  double soldQntyVal() {
-    // print("ListString ${widget.dataInc.length}");
-
-    for (int i = 0; i < dataInc!.length; i++) {
-      allOutQty += double.parse(dataInc![i]['outQnty'].toString());
-    }
-    return allOutQty;
-  }
+  // double soldQntyVal() {
+  //   for (int i = 0; i < dataInc!.length; i++) {
+  //     allOutQty += double.parse(dataInc![i]['outQnty'].toString());
+  //     print("allout Q :${allOutQty}");
+  //   }
+  //   return allOutQty;
+  // }
 
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    print("before return :${valueAll}");
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
       formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
       alignment: Alignment.center,
       titleSpanBuilder: (text) {
+        print("text :${text}");
         return [
           TextSpan(
-            text: text.replaceAll("\$", ""),
-            children: [
-              TextSpan(
-                text: valueAll.toStringAsFixed(2),
-              ),
-            ],
+            text: text,
+            // children: [
+            //   TextSpan(text: text),
+            // ],
             style: gridFooterStyle,
           ),
           // TextSpan(

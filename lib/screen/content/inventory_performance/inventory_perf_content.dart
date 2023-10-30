@@ -550,11 +550,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
-    int page = request.page;
-
-    //To send the number of page to the JSON Object
-    criteria.page = page;
-
     List<PlutoRow> topList = [];
     List<InventoryPerformanceModel> invList = [];
     if (countDec == 0) {
@@ -570,8 +565,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       });
       countDec = 1;
     }
-    int totalPage = 1;
-
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }
