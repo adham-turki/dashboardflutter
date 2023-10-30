@@ -181,26 +181,26 @@ class _DashboardContentState extends State<DashboardContent> {
                     ),
                   ],
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: [
-                          MonthlyDashboard(
-                            barData: barData1,
-                            barData2: barData2,
-                          ),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: appPadding,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     Expanded(
+                //       flex: 5,
+                //       child: Column(
+                //         children: [
+                //           MonthlyDashboard(
+                //             barData: barData1,
+                //             barData2: barData2,
+                //           ),
+                //           if (Responsive.isMobile(context))
+                //             SizedBox(
+                //               height: appPadding,
+                //             ),
+                //         ],
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

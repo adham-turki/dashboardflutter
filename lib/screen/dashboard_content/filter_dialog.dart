@@ -298,7 +298,7 @@ class _FilterDialogState extends State<FilterDialog> {
             Components().blueButton(
               height: width > 800 ? height * .05 : height * .06,
               fontSize: width > 800 ? height * .016 : height * .011,
-              width: width * 0.09,
+              width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
                 DateTime to = DateTime.parse(_toDateController.text);
