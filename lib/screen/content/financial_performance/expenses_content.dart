@@ -261,17 +261,32 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 });
               },
             ),
-            CustomDatePicker(
-              label: _locale.fromDate,
-              controller: _fromDateController,
-              date: DateTime.now(),
-              onSelected: (value) {
-                setState(() {
-                  _fromDateController.text = value;
-                  getExpenses();
-                });
-              },
+            SizedBox(
+              width: width * 0.135,
+              child: CustomDate(
+                label: _locale.fromDate,
+                minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      _fromDateController.text = value;
+                      getExpenses();
+                    });
+                  }
+                },
+              ),
             ),
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   controller: _fromDateController,
+            //   date: DateTime.now(),
+            //   onSelected: (value) {
+            //     setState(() {
+            //       _fromDateController.text = value;
+            //       getExpenses();
+            //     });
+            //   },
+            // ),
           ],
         ),
       ],
