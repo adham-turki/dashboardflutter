@@ -60,3 +60,36 @@ List<String> getColumnsName(
   }
   return columnsName;
 }
+
+List<String> getCustomColumnsName(
+    AppLocalizations locale, List<String> columns, bool sales) {
+  Map<String, String> columnsMap = {
+    '#': "dash",
+    locale.branch: locale.branch,
+    locale.stockCategoryLevel("1"): locale.stockCategoryLevel("1"),
+    locale.stockCategoryLevel("2"): locale.stockCategoryLevel("2"),
+    locale.stockCategoryLevel("3"): locale.stockCategoryLevel("3"),
+    locale.supplier("1"): locale.supplier("1"),
+    locale.supplier("2"): locale.supplier("2"),
+    locale.supplier("3"): locale.supplier("3"),
+    locale.customer: locale.customer,
+    locale.stock: locale.stock,
+    locale.modelNo: locale.modelNo,
+    locale.qty: locale.qty,
+    locale.averagePrice:
+        sales == true ? locale.averagePrice : locale.averagePrice,
+    locale.total: locale.total,
+    locale.daily: locale.daily,
+    locale.monthly: locale.monthly,
+    locale.yearly: locale.yearly,
+    locale.brand: locale.brand,
+    locale.invoice: locale.invoice
+  };
+
+  List<String> columnsName = [];
+  for (int i = 0; i < columns.length; i++) {
+    columnsName.add(columnsMap[columns[i]]!);
+    print(columnsName[i]);
+  }
+  return columnsName;
+}
