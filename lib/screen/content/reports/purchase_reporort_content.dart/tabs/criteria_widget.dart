@@ -3,6 +3,7 @@
 import 'package:bi_replicate/model/criteria/drop_down_search_criteria.dart';
 import 'package:flutter/material.dart';
 import '../../../../../components/card.dart';
+import '../../../../../components/custom_date.dart';
 import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../provider/purchase_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
@@ -185,62 +186,137 @@ class _LeftWidgetState extends State<LeftWidget> {
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomDatePicker(
-                      controller: fromDate,
-                      label: _locale.fromDate,
-                      date: DateTime.parse(toDate.text),
+                    SizedBox(
                       width: width * .135,
-                      onChanged: (value) {
-                        print("hello");
-
-                        setFromDateController();
-                      },
-                      onSelected: (value) {
-                        print("hello");
-
-                        setFromDateController();
-                      },
+                      child: CustomDate(
+                        label: _locale.fromDate,
+                        minYear: 2000,
+                        onValue: (isValid, value) {
+                          if (isValid) {
+                            setState(() {
+                              fromDate.text = value;
+                              setFromDateController();
+                            });
+                          }
+                        },
+                      ),
                     ),
-                    CustomDatePicker(
-                      controller: toDate,
-                      date: DateTime.parse(fromDate.text),
-                      label: _locale.toDate,
+                    // CustomDatePicker(
+                    //   controller: fromDate,
+                    //   label: _locale.fromDate,
+                    //   date: DateTime.parse(toDate.text),
+                    //   width: width * .135,
+                    //   onChanged: (value) {
+                    //     print("hello");
+
+                    //     setFromDateController();
+                    //   },
+                    //   onSelected: (value) {
+                    //     print("hello");
+
+                    //     setFromDateController();
+                    //   },
+                    // ),
+                    SizedBox(
                       width: width * .135,
-                      onChanged: (value) {
-                        setToDateController();
-                      },
-                      onSelected: (value) {
-                        setToDateController();
-                      },
-                    )
+                      child: CustomDate(
+                        label: _locale.toDate,
+                        // minYear: 2000,
+                        onValue: (isValid, value) {
+                          if (isValid) {
+                            setState(() {
+                              toDate.text = value;
+                              setToDateController();
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    // CustomDatePicker(
+                    //   controller: toDate,
+                    //   date: DateTime.parse(fromDate.text),
+                    //   label: _locale.toDate,
+                    //   width: width * .135,
+                    //   onChanged: (value) {
+                    //     setToDateController();
+                    //   },
+                    //   onSelected: (value) {
+                    //     setToDateController();
+                    //   },
+                    // )
                   ],
                 )
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CustomDatePicker(
-                      controller: fromDate,
-                      label: _locale.fromDate,
-                      date: DateTime.parse(toDate.text),
-                      onChanged: (value) {
-                        setFromDateController();
-                      },
-                      onSelected: (value) {
-                        setFromDateController();
-                      },
+                    SizedBox(
+                      width: width,
+                      child: CustomDate(
+                        label: _locale.fromDate,
+                        minYear: 2000,
+                        onValue: (isValid, value) {
+                          if (isValid) {
+                            setState(() {
+                              fromDate.text = value;
+                              setFromDateController();
+                            });
+                          }
+                        },
+                      ),
                     ),
-                    CustomDatePicker(
-                      controller: toDate,
-                      date: DateTime.parse(fromDate.text),
-                      label: _locale.toDate,
-                      onChanged: (value) {
-                        setToDateController();
-                      },
-                      onSelected: (value) {
-                        setToDateController();
-                      },
-                    )
+                    // CustomDatePicker(
+                    //   controller: fromDate,
+                    //   label: _locale.fromDate,
+                    //   date: DateTime.parse(toDate.text),
+                    //   onChanged: (value) {
+                    //     setFromDateController();
+                    //   },
+                    //   onSelected: (value) {
+                    //     setFromDateController();
+                    //   },
+                    // ),
+                    // SizedBox(
+                    //   width: width,
+                    //   child: CustomDate(
+                    //     label: _locale.toDate,
+                    //     // minYear: 2000,
+                    //     onValue: (isValid, value) {
+                    //       if (isValid) {
+                    //         setState(() {
+                    //           toDate.text = value;
+                    //           setToDateController();
+                    //         });
+                    //       }
+                    //     },
+                    //   ),
+                    // ),
+                    SizedBox(
+                      width: width,
+                      child: CustomDate(
+                        label: _locale.toDate,
+                        // minYear: 2000,
+                        onValue: (isValid, value) {
+                          if (isValid) {
+                            setState(() {
+                              toDate.text = value;
+                              setToDateController();
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    // CustomDatePicker(
+                    //   controller: toDate,
+                    //   date: DateTime.parse(fromDate.text),
+                    //   label: _locale.toDate,
+                    //   onChanged: (value) {
+                    //     setToDateController();
+                    //   },
+                    //   onSelected: (value) {
+                    //     setToDateController();
+                    //   },
+                    // )
                   ],
                 ),
         ),

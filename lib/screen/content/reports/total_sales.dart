@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import '../../../components/custom_date.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
@@ -190,28 +191,58 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            CustomDatePicker(
-              label: _locale.fromDate,
-              controller: fromDate,
-              date: DateTime.parse(toDate.text),
-              onChanged: (value) {
-                setControllerFromDateText();
-              },
-              onSelected: (value) {
-                setControllerFromDateText();
-              },
+            SizedBox(
+              width: width * .135,
+              child: CustomDate(
+                label: _locale.fromDate,
+                minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      fromDate.text = value;
+                      setControllerFromDateText();
+                    });
+                  }
+                },
+              ),
             ),
-            CustomDatePicker(
-              label: _locale.toDate,
-              controller: toDate,
-              date: DateTime.parse(fromDate.text),
-              onChanged: (value) {
-                setControllertoDateText();
-              },
-              onSelected: (value) {
-                setControllertoDateText();
-              },
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   controller: fromDate,
+            //   date: DateTime.parse(toDate.text),
+            //   onChanged: (value) {
+            //     setControllerFromDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllerFromDateText();
+            //   },
+            // ),
+            SizedBox(
+              width: width * .135,
+              child: CustomDate(
+                label: _locale.toDate,
+                // minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      toDate.text = value;
+                      setControllertoDateText();
+                    });
+                  }
+                },
+              ),
             ),
+            // CustomDatePicker(
+            //   label: _locale.toDate,
+            //   controller: toDate,
+            //   date: DateTime.parse(fromDate.text),
+            //   onChanged: (value) {
+            //     setControllertoDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllertoDateText();
+            //   },
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: SizedBox(
@@ -298,28 +329,58 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            CustomDatePicker(
-              label: _locale.fromDate,
-              controller: fromDate,
-              date: DateTime.parse(toDate.text),
-              onChanged: (value) {
-                setControllerFromDateText();
-              },
-              onSelected: (value) {
-                setControllerFromDateText();
-              },
+            SizedBox(
+              width: width,
+              child: CustomDate(
+                label: _locale.fromDate,
+                minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      fromDate.text = value;
+                      setControllerFromDateText();
+                    });
+                  }
+                },
+              ),
             ),
-            CustomDatePicker(
-              label: _locale.toDate,
-              controller: toDate,
-              date: DateTime.parse(fromDate.text),
-              onChanged: (value) {
-                setControllertoDateText();
-              },
-              onSelected: (value) {
-                setControllertoDateText();
-              },
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   controller: fromDate,
+            //   date: DateTime.parse(toDate.text),
+            //   onChanged: (value) {
+            //     setControllerFromDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllerFromDateText();
+            //   },
+            // ),
+            SizedBox(
+              width: width,
+              child: CustomDate(
+                label: _locale.toDate,
+                // minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      toDate.text = value;
+                      setControllertoDateText();
+                    });
+                  }
+                },
+              ),
             ),
+            // CustomDatePicker(
+            //   label: _locale.toDate,
+            //   controller: toDate,
+            //   date: DateTime.parse(fromDate.text),
+            //   onChanged: (value) {
+            //     setControllertoDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllertoDateText();
+            //   },
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: SizedBox(

@@ -1,3 +1,4 @@
+import 'package:bi_replicate/utils/func/dates_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -55,6 +56,9 @@ class _CustomDateState extends State<CustomDate> {
   @override
   void initState() {
     setListeners();
+    yearController.text = DatesController().todayYear();
+    monthController.text = DatesController().todayMonth();
+    dayController.text = DatesController().todayDay();
     super.initState();
   }
 
@@ -63,6 +67,7 @@ class _CustomDateState extends State<CustomDate> {
     yearFocusNode.dispose();
     monthFocusNode.dispose();
     dayFocusNode.dispose();
+
     super.dispose();
   }
 
@@ -93,7 +98,7 @@ class _CustomDateState extends State<CustomDate> {
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 getSuffixIcon(),
                 Row(
@@ -133,7 +138,7 @@ class _CustomDateState extends State<CustomDate> {
   Widget createDateField(MaskTextInputFormatter mask,
       TextEditingController controller, String hint, FocusNode focusNode) {
     return SizedBox(
-      width: Responsive.isDesktop(context) ? width * 0.035 : width * 0.1,
+      width: Responsive.isDesktop(context) ? width * 0.025 : width * 0.1,
       child: TextFormField(
         focusNode: focusNode,
         controller: controller,

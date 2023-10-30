@@ -3,6 +3,7 @@ import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import '../../components/custom_date.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/func/dates_controller.dart';
@@ -78,7 +79,7 @@ class _FilterDialogState extends State<FilterDialog> {
       title: SelectableText("Filter Dialog"),
       content: SizedBox(
         width: width * 0.5,
-        height: height * 0.3,
+        height: isDesktop ? height * 0.3 : height * 0.4,
         child: Column(
           children: [
             Row(
@@ -107,31 +108,117 @@ class _FilterDialogState extends State<FilterDialog> {
                 ),
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomDatePicker(
-                  label: _locale.fromDate,
-                  date: DateTime.parse(_toDateController.text),
-                  controller: _fromDateController,
-                  onSelected: (value) {
-                    setState(() {
-                      _fromDateController.text = value;
-                    });
-                  },
-                ),
-                CustomDatePicker(
-                  label: _locale.toDate,
-                  controller: _toDateController,
-                  date: DateTime.parse(_fromDateController.text),
-                  onSelected: (value) {
-                    setState(() {
-                      _toDateController.text = value;
-                    });
-                  },
-                ),
-              ],
-            ),
+            isDesktop
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: height * 0.1,
+                        width: isDesktop ? width * 0.135 : width * 0.9,
+                        child: CustomDate(
+                          label: _locale.fromDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _fromDateController.text = value;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      // CustomDatePicker(
+                      //   label: _locale.fromDate,
+                      //   date: DateTime.parse(_toDateController.text),
+                      //   controller: _fromDateController,
+                      //   onSelected: (value) {
+                      //     setState(() {
+                      //       _fromDateController.text = value;
+                      //     });
+                      //   },
+                      // ),
+                      SizedBox(
+                        height: height * 0.1,
+                        width: isDesktop ? width * 0.135 : width * 0.9,
+                        child: CustomDate(
+                          label: _locale.toDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _toDateController.text = value;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      // CustomDatePicker(
+                      //   label: _locale.toDate,
+                      //   controller: _toDateController,
+                      //   date: DateTime.parse(_fromDateController.text),
+                      //   onSelected: (value) {
+                      //     setState(() {
+                      //       _toDateController.text = value;
+                      //     });
+                      //   },
+                      // ),
+                    ],
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: height * 0.12,
+                        width: isDesktop ? width * 0.135 : width * 0.9,
+                        child: CustomDate(
+                          label: _locale.fromDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _fromDateController.text = value;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      // CustomDatePicker(
+                      //   label: _locale.fromDate,
+                      //   date: DateTime.parse(_toDateController.text),
+                      //   controller: _fromDateController,
+                      //   onSelected: (value) {
+                      //     setState(() {
+                      //       _fromDateController.text = value;
+                      //     });
+                      //   },
+                      // ),
+                      SizedBox(
+                        height: height * 0.12,
+                        width: isDesktop ? width * 0.135 : width * 0.9,
+                        child: CustomDate(
+                          label: _locale.toDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _toDateController.text = value;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                      // CustomDatePicker(
+                      //   label: _locale.toDate,
+                      //   controller: _toDateController,
+                      //   date: DateTime.parse(_fromDateController.text),
+                      //   onSelected: (value) {
+                      //     setState(() {
+                      //       _toDateController.text = value;
+                      //     });
+                      //   },
+                      // ),
+                    ],
+                  ),
           ],
         ),
       ),

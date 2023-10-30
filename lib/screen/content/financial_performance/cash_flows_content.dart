@@ -189,7 +189,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     child: SelectableText(
                       maxLines: 10,
                       accountName(),
-                      style: twelve400TextStyle(Colors.black),
+                      style: sixteen600TextStyle(Colors.black),
                     ))
                 : Container(),
             Padding(

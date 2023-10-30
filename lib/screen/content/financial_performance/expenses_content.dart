@@ -175,7 +175,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                     child: SelectableText(
                       maxLines: 10,
                       accountName(),
-                      style: twelve400TextStyle(Colors.black),
+                      style: sixteen600TextStyle(Colors.black),
                     ))
                 : Container(),
             Padding(

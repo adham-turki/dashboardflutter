@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import '../../../components/custom_date.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
@@ -306,28 +307,52 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomDatePicker(
+            CustomDate(
               label: _locale.fromDate,
-              controller: fromDate,
-              date: DateTime.parse(toDate.text),
-              onChanged: (value) {
-                setControllerFromDateText();
-              },
-              onSelected: (value) {
-                setControllerFromDateText();
+              minYear: 2000,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    fromDate.text = value;
+                    setControllerFromDateText();
+                  });
+                }
               },
             ),
-            CustomDatePicker(
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   controller: fromDate,
+            //   date: DateTime.parse(toDate.text),
+            //   onChanged: (value) {
+            //     setControllerFromDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllerFromDateText();
+            //   },
+            // ),
+            CustomDate(
               label: _locale.toDate,
-              date: DateTime.parse(fromDate.text),
-              controller: toDate,
-              onChanged: (value) {
-                setControllertoDateText();
-              },
-              onSelected: (value) {
-                setControllertoDateText();
+              // minYear: 2000,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    toDate.text = value;
+                    setControllertoDateText();
+                  });
+                }
               },
             ),
+            // CustomDatePicker(
+            //   label: _locale.toDate,
+            //   date: DateTime.parse(fromDate.text),
+            //   controller: toDate,
+            //   onChanged: (value) {
+            //     setControllertoDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllertoDateText();
+            //   },
+            // ),
           ],
         ),
       ],
@@ -388,28 +413,58 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomDatePicker(
-              label: _locale.fromDate,
-              controller: fromDate,
-              date: DateTime.parse(toDate.text),
-              onChanged: (value) {
-                setControllerFromDateText();
-              },
-              onSelected: (value) {
-                setControllerFromDateText();
-              },
+            SizedBox(
+              width: widthMobile,
+              child: CustomDate(
+                label: _locale.fromDate,
+                minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      fromDate.text = value;
+                      setControllerFromDateText();
+                    });
+                  }
+                },
+              ),
             ),
-            CustomDatePicker(
-              label: _locale.toDate,
-              date: DateTime.parse(fromDate.text),
-              controller: toDate,
-              onChanged: (value) {
-                setControllertoDateText();
-              },
-              onSelected: (value) {
-                setControllertoDateText();
-              },
+            // CustomDatePicker(
+            //   label: _locale.fromDate,
+            //   controller: fromDate,
+            //   date: DateTime.parse(toDate.text),
+            //   onChanged: (value) {
+            //     setControllerFromDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllerFromDateText();
+            //   },
+            // ),
+            SizedBox(
+              width: widthMobile,
+              child: CustomDate(
+                label: _locale.toDate,
+                // minYear: 2000,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      toDate.text = value;
+                      setControllerFromDateText();
+                    });
+                  }
+                },
+              ),
             ),
+            // CustomDatePicker(
+            //   label: _locale.toDate,
+            //   date: DateTime.parse(fromDate.text),
+            //   controller: toDate,
+            //   onChanged: (value) {
+            //     setControllertoDateText();
+            //   },
+            //   onSelected: (value) {
+            //     setControllertoDateText();
+            //   },
+            // ),
           ],
         ),
       ],
