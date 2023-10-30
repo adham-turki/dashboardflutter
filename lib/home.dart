@@ -56,26 +56,28 @@ class _HomePageState extends State<HomePage> {
           Consumer<ScreenContentProvider>(builder: (context, value, build) {
             return Column(
               children: [
-                context.read<ScreenContentProvider>().getPage() == 15 ||
-                        context.read<ScreenContentProvider>().getPage() == 16
-                    ? context.read<ScreenContentProvider>().getPage() == 16
-                        ? SizedBox(
-                            width: isDesktop ? width * 0.835 : width,
-                            height: isDesktop ? height * 0.3 : height * 0.3,
-                          )
-                        : Container()
-                    : SizedBox(
-                        width: isDesktop ? width * 0.835 : width,
-                        height: isDesktop ? height * 0.3 : height * 0.3,
-                        child: const ContentHeader(),
-                      ),
+                // context.read<ScreenContentProvider>().getPage() == 0
+                //     ?
+                SizedBox(
+                  width: isDesktop ? width * 0.835 : width,
+                  height: context.read<ScreenContentProvider>().getPage() == 0
+                      ? isDesktop
+                          ? height * 0.3
+                          : height * 0.3
+                      : height * 0.12,
+                  child: ContentHeader(
+                      page: context.read<ScreenContentProvider>().getPage()),
+                ),
+                // : SizedBox(
+                //     height: isDesktop ? height * 0.05 : height * 0.1,
+                //   ),
 
                 SizedBox(
-                  height: context.read<ScreenContentProvider>().getPage() != 15
+                  height: context.read<ScreenContentProvider>().getPage() == 0
                       ? isDesktop
                           ? height * .7
                           : height * 0.6
-                      : height,
+                      : height * 0.8,
                   width: width * 0.835,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(
