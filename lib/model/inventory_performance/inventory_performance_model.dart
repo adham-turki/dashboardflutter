@@ -67,14 +67,14 @@ class InventoryPerformanceModel {
         title: localizations.currentQty,
         field: "inQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.085 : width * 0.3,
+        width: isDesktop ? width * 0.09 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.soldQnty,
         field: "outQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.08 : width * 0.3,
+        width: isDesktop ? width * 0.089 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: (rendererContext) {
           return InventoryPerformanceModel.footerRenderer(
