@@ -197,6 +197,6 @@
         "startDateAfterEndDate":"تاريخ النهاية يجب أن يكون بعد تاريخ البداية",
             "dateConflict":"تعارض التاريخ",
 
-            "filter" : "Filter"
+            "filter" : "محددات"
 
 }

@@ -75,19 +75,23 @@ class _DashboardContentState extends State<DashboardContent> {
               children: [
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
                   child: SizedBox(
                       width: MediaQuery.of(context).size.width < 800
                           ? MediaQuery.of(context).size.width * 0.6
-                          : MediaQuery.of(context).size.width * 0.16,
-                      child: Components().blueButton(
-                        icon: Icon(Icons.filter),
+                          : MediaQuery.of(context).size.width * 0.13,
+                      child: blueButton1(
+                        icon: Icon(
+                          Icons.filter_list_sharp,
+                          color: whiteColor,
+                          size: isDesktop ? height * 0.04 : height * 0.03,
+                        ),
                         text: _locale.filter,
-                        textColor: Colors.white,
-                        borderRadius: 5.0,
-                        height: isDesktop ? height * .05 : height * .06,
-                        fontSize: isDesktop ? height * .016 : height * .011,
-                        width: isDesktop ? width * 0.15 : width * 0.25,
+                        textColor: Color.fromARGB(255, 255, 255, 255),
+                        //   borderRadius: 5.0,
+                        height: isDesktop ? height * .07 : height * .06,
+                        fontSize: isDesktop ? height * .018 : height * .017,
+                        width: isDesktop ? width * 0.13 : width * 0.25,
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -121,26 +125,6 @@ class _DashboardContentState extends State<DashboardContent> {
                           });
                         },
                       )),
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 5,
-                      child: Column(
-                        children: [
-                          MonthlyDashboard(
-                            barData: barData1,
-                            barData2: barData2,
-                          ),
-                          if (Responsive.isMobile(context))
-                            SizedBox(
-                              height: appPadding,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,6 +173,26 @@ class _DashboardContentState extends State<DashboardContent> {
                               height: appPadding,
                             ),
 // if (Responsive.isMobile(context)) StatusChart(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 5,
+                      child: Column(
+                        children: [
+                          MonthlyDashboard(
+                            barData: barData1,
+                            barData2: barData2,
+                          ),
+                          if (Responsive.isMobile(context))
+                            SizedBox(
+                              height: appPadding,
+                            ),
                         ],
                       ),
                     ),
