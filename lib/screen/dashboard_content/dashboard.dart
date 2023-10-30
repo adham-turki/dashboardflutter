@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bi_replicate/components/login_components/custom_btn.dart';
 import 'package:bi_replicate/model/bar_chart_data_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.dart';
 import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
@@ -72,55 +73,54 @@ class _DashboardContentState extends State<DashboardContent> {
           children: [
             Column(
               children: [
-                Components().blueButton(
-                  height: width > 800 ? height * .05 : height * .06,
-                  fontSize: width > 800 ? height * .016 : height * .011,
-                  width: width * 0.25,
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return FilterDialog(
-                          onFilter: (selectedPeriod, fromDate, toDate,
-                              selectedStatus) {
-                            fromDateController.text = fromDate;
-                            toDateController.text = toDate;
-                            period = selectedPeriod;
-                            status = selectedStatus;
-                          },
-                        );
-                      },
-                    ).then((value) async {
-                      getSalesByBranch().then((value) {
-                        print("bar Data inisde then:${barData.length}");
-                        setState(() {});
-                      });
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width < 800
+                          ? MediaQuery.of(context).size.width * 0.6
+                          : MediaQuery.of(context).size.width * 0.16,
+                      child: Components().blueButton(
+                        icon: Icon(Icons.filter),
+                        text: _locale.filter,
+                        textColor: Colors.white,
+                        borderRadius: 5.0,
+                        height: isDesktop ? height * .05 : height * .06,
+                        fontSize: isDesktop ? height * .016 : height * .011,
+                        width: isDesktop ? width * 0.15 : width * 0.25,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return FilterDialog(
+                                onFilter: (selectedPeriod, fromDate, toDate,
+                                    selectedStatus) {
+                                  fromDateController.text = fromDate;
+                                  toDateController.text = toDate;
+                                  period = selectedPeriod;
+                                  status = selectedStatus;
+                                },
+                              );
+                            },
+                          ).then((value) async {
+                            getSalesByBranch().then((value) {
+                              setState(() {});
+                            });
 
-                      getCashFlows().then((value) {
-                        print("valee :${value}");
-                        print(
-                            "bar cash inisde then:${barDataCashFlows.length}");
+                            getCashFlows().then((value) {
+                              setState(() {});
+                            });
 
-                        setState(() {});
-                      });
+                            getDailySales().then((value) {
+                              setState(() {});
+                            });
 
-                      getDailySales().then((value) {
-                        print("valeedaily :${value}");
-                        print("daily inisde then:${barDataDailySales.length}");
-
-                        setState(() {});
-                      });
-
-                      getRecPayData().then((value) {
-                        print("dataaa:${barData1.length}");
-
-                        setState(() {});
-                      });
-                    });
-                  },
-                  text: "Filter",
-                  borderRadius: 0.3,
-                  textColor: Colors.white,
+                            getRecPayData().then((value) {
+                              setState(() {});
+                            });
+                          });
+                        },
+                      )),
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -217,5 +217,6 @@
     "cash": "Cash",
     "chooseDate": "Choose Date",
     "numOfCustomers": "Number Of Customers",
-    "totalReturnSal": "Total Return Sales"
+    "totalReturnSal": "Total Return Sales",
+    "filter" : "Filter"
 }

@@ -193,5 +193,7 @@
         "cash": "كاش",
         "chooseDate": "اختر التاريخ",
         "numOfCustomers": "عدد الزبائن",
-        "totalReturnSal": "عدد الفواتير المردودة"
+        "totalReturnSal": "عدد الفواتير المردودة",
+            "filter" : "Filter"
+
 }
