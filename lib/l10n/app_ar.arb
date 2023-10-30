@@ -195,7 +195,8 @@
         "numOfCustomers": "عدد الزبائن",
         "totalReturnSal": "عدد الفواتير المردودة",
         "startDateAfterEndDate":"تاريخ النهاية يجب أن يكون بعد تاريخ البداية",
-            "dateConflict":"تعارض التاريخ"
+            "dateConflict":"تعارض التاريخ",
 
+            "filter" : "محددات"
 
 }
