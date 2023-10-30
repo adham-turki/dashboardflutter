@@ -113,6 +113,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
+          height: height * 0.35,
           width: width * 0.7,
           decoration: borderDecoration,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
@@ -193,7 +194,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-              height: height * 0.1,
+              // height: height * 0.11,
               width: width * 0.135,
               child: CustomDate(
                 label: _locale.fromDate,
@@ -208,6 +209,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 },
               ),
             ),
+            SizedBox(
+              width: width * 0.01,
+            ),
             // CustomDatePicker(
             //   label: _locale.fromDate,
             //   controller: fromDate,
@@ -220,7 +224,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             //   },
             // ),
             SizedBox(
-              height: height * 0.1,
+              // height: height * 0.11,
               width: width * 0.135,
               child: CustomDate(
                 label: _locale.toDate,

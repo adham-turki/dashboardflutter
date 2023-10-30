@@ -319,6 +319,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 }
               },
             ),
+            SizedBox(
+              width: width * 0.01,
+            ),
             // CustomDatePicker(
             //   label: _locale.fromDate,
             //   controller: fromDate,

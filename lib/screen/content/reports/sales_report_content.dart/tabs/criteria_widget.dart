@@ -204,6 +204,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                         },
                       ),
                     ),
+                    SizedBox(
+                      width: width * 0.01,
+                    ),
                     // CustomDatePicker(
                     //   controller: fromDate,
                     //   label: _locale.fromDate,
