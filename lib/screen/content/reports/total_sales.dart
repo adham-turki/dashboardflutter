@@ -431,7 +431,14 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     reportsResult =
         await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 
@@ -442,7 +449,14 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     reportsResult =
         await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 

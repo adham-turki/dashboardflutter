@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/custom_date.dart';
 import '../../../components/table_component.dart';
+import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/inventory_performance/inventory_performance_model.dart';
@@ -479,7 +480,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       fromDateValue = fromDate.text;
       String startDate = DatesController().formatDate(fromDateValue!);
       criteria.fromDate = startDate;
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 
@@ -488,7 +496,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       toDateValue = toDate.text;
       String endDate = DatesController().formatDate(toDateValue!);
       criteria.toDate = endDate;
-      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      DateTime from = DateTime.parse(fromDate.text);
+      DateTime to = DateTime.parse(toDate.text);
+
+      if (from.isAfter(to)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+      } else {
+        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      }
     });
   }
 

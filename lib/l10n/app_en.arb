@@ -217,5 +217,7 @@
     "cash": "Cash",
     "chooseDate": "Choose Date",
     "numOfCustomers": "Number Of Customers",
-    "totalReturnSal": "Total Return Sales"
+    "totalReturnSal": "Total Return Sales",
+    "startDateAfterEndDate":"End Date should be after Start Date",
+    "dateConflict":"Date Conflict"
 }

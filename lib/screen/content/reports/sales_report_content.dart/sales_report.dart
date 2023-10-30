@@ -15,6 +15,7 @@ import '../../../../provider/sales_search_provider.dart';
 import '../../../../utils/constants/app_utils.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
+import '../../../../utils/func/dates_controller.dart';
 import '../../../../widget/custom_btn.dart';
 import 'tabs/criteria_widget.dart';
 import 'tabs/order_by_widget.dart';
@@ -294,12 +295,22 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                       // context
                       //     .read<SalesCriteraProvider>()
                       //     .setToDate(DatesController().formatDate(toDate.text));
-                      await generateColumns();
+                      DateTime from = DateTime.parse(DatesController()
+                          .formatDateReverse(readProvider.getFromDate!));
+                      DateTime to = DateTime.parse(DatesController()
+                          .formatDateReverse(readProvider.getToDate!));
 
-                      dynamic body = readProvider.toJson();
-                      reportsResult =
-                          await ReportController().getSalesResultMehtod(body);
-                      setState(() {});
+                      if (from.isAfter(to)) {
+                        ErrorController.openErrorDialog(
+                            1, _locale.startDateAfterEndDate);
+                      } else {
+                        await generateColumns();
+
+                        dynamic body = readProvider.toJson();
+                        reportsResult =
+                            await ReportController().getSalesResultMehtod(body);
+                        setState(() {});
+                      }
                     },
                   ),
                   Components().blueButton(
@@ -310,24 +321,38 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     fontSize: isDesktop ? height * .016 : height * .011,
                     width: isDesktop ? width * 0.15 : width * 0.25,
                     onPressed: () {
-                      if (salesList.isEmpty) {
-                        ErrorController.openErrorDialog(406, _locale.error406);
+                      DateTime from = DateTime.parse(DatesController()
+                          .formatDateReverse(readProvider.getFromDate!));
+                      DateTime to = DateTime.parse(DatesController()
+                          .formatDateReverse(readProvider.getToDate!));
+
+                      if (from.isAfter(to)) {
+                        print("formmmm $from");
+                        print("to $to");
+                        print("hellllllllo");
+                        ErrorController.openErrorDialog(
+                            1, _locale.startDateAfterEndDate);
                       } else {
-                        SearchCriteria searchCriteria = SearchCriteria(
-                          fromDate: readProvider.fromDate,
-                          toDate: readProvider.toDate,
-                          voucherStatus: -100,
-                          columns:
-                              getColumnsName(_locale, orderByColumns, true),
-                          customColumns:
-                              getColumnsName(_locale, orderByColumns, true),
-                        );
-                        Map<String, dynamic> body = readProvider.toJson();
-                        ReportController()
-                            .exportToExcelApi(searchCriteria, body)
-                            .then((value) {
-                          saveExcelFile(value, "SalesReport.xlsx");
-                        });
+                        if (salesList.isEmpty) {
+                          ErrorController.openErrorDialog(
+                              406, _locale.error406);
+                        } else {
+                          SearchCriteria searchCriteria = SearchCriteria(
+                            fromDate: readProvider.fromDate,
+                            toDate: readProvider.toDate,
+                            voucherStatus: -100,
+                            columns:
+                                getColumnsName(_locale, orderByColumns, true),
+                            customColumns:
+                                getColumnsName(_locale, orderByColumns, true),
+                          );
+                          Map<String, dynamic> body = readProvider.toJson();
+                          ReportController()
+                              .exportToExcelApi(searchCriteria, body)
+                              .then((value) {
+                            saveExcelFile(value, "SalesReport.xlsx");
+                          });
+                        }
                       }
                     },
                   ),

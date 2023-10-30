@@ -270,6 +270,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                   if (isValid) {
                     setState(() {
                       _fromDateController.text = value;
+
                       getExpenses();
                     });
                   }

@@ -16,6 +16,7 @@ import '../../../../utils/constants/responsive.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:html' as html;
 
+import '../../../../utils/func/dates_controller.dart';
 import 'tabs/criteria_widget.dart';
 import 'tabs/order_by_widget.dart';
 import 'tabs/setup_widget.dart';
@@ -276,17 +277,30 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () async {
+                  DateTime from = DateTime.parse(DatesController()
+                      .formatDateReverse(readProvider.getFromDate!));
+                  DateTime to = DateTime.parse(DatesController()
+                      .formatDateReverse(readProvider.getToDate!));
+
+                  if (from.isAfter(to)) {
+                    print("formmmm $from");
+                    print("to $to");
+                    print("hellllllllo");
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    await generateColumns();
+                    dynamic body = readProvider.toJson();
+                    reportsResult =
+                        await ReportController().getPurchaseResultMehtod(body);
+                    setState(() {});
+                  }
                   // context
                   //     .read<PurchaseCriteraProvider>()
                   //     .setFromDate(DatesController().formatDate(fromDate.text));
                   // context
                   //     .read<PurchaseCriteraProvider>()
                   //     .setToDate(DatesController().formatDate(toDate.text));
-                  await generateColumns();
-                  dynamic body = readProvider.toJson();
-                  reportsResult =
-                      await ReportController().getPurchaseResultMehtod(body);
-                  setState(() {});
                 },
               ),
               Components().blueButton(
@@ -297,24 +311,34 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 fontSize: isDesktop ? height * .016 : height * .011,
                 width: isDesktop ? width * 0.15 : width * 0.25,
                 onPressed: () {
-                  if (purchaseList.isEmpty) {
-                    ErrorController.openErrorDialog(406, _locale.error406);
-                  } else {
-                    SearchCriteria searchCriteria = SearchCriteria(
-                      fromDate: readProvider.fromDate,
-                      toDate: readProvider.toDate,
-                      voucherStatus: -100,
-                      columns: getColumnsName(_locale, orderByColumns, false),
-                      customColumns:
-                          getColumnsName(_locale, orderByColumns, false),
-                    );
-                    Map<String, dynamic> body = readProvider.toJson();
+                  DateTime from = DateTime.parse(DatesController()
+                      .formatDateReverse(readProvider.getFromDate!));
+                  DateTime to = DateTime.parse(DatesController()
+                      .formatDateReverse(readProvider.getToDate!));
 
-                    ReportController()
-                        .exportPurchaseToExcelApi(searchCriteria, body)
-                        .then((value) {
-                      saveExcelFile(value, "PurchasesReports.xlsx");
-                    });
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    if (purchaseList.isEmpty) {
+                      ErrorController.openErrorDialog(406, _locale.error406);
+                    } else {
+                      SearchCriteria searchCriteria = SearchCriteria(
+                        fromDate: readProvider.fromDate,
+                        toDate: readProvider.toDate,
+                        voucherStatus: -100,
+                        columns: getColumnsName(_locale, orderByColumns, false),
+                        customColumns:
+                            getColumnsName(_locale, orderByColumns, false),
+                      );
+                      Map<String, dynamic> body = readProvider.toJson();
+
+                      ReportController()
+                          .exportPurchaseToExcelApi(searchCriteria, body)
+                          .then((value) {
+                        saveExcelFile(value, "PurchasesReports.xlsx");
+                      });
+                    }
                   }
                 },
               ),
