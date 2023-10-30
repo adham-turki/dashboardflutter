@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/routes.dart';
 import '../utils/constants/constants.dart';
 import '../utils/constants/error_constant.dart';
+import 'package:flutter/foundation.dart';
 
 class ErrorController {
   static bool temp = false;
@@ -22,9 +23,11 @@ class ErrorController {
       const storage = FlutterSecureStorage();
 
       await storage.delete(key: "jwt");
-
-      GoRouter.of(context).go(AppRoutes.loginRoute);
-
+      if (kIsWeb) {
+        GoRouter.of(context).go(AppRoutes.loginRoute);
+      } else {
+        Navigator.pushReplacementNamed(context, loginScreenRoute);
+      }
       // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
       //     const Color.fromARGB(255, 232, 232, 23), 401);
     } else if (responseStatus == 200) {

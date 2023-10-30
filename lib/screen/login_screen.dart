@@ -17,6 +17,7 @@ import '../utils/constants/constants.dart';
 import '../utils/constants/encrypt_key.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/language_widget.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -197,8 +198,12 @@ class _LoginScreenState extends State<LoginScreen> {
           storage.write(key: 'api', value: value).then((value) {
             checkLogIn().then((value) {
               if (value) {
+                if (kIsWeb) {
+                  GoRouter.of(context).go(AppRoutes.homeScreenRoute);
+                } else {
+                  Navigator.pushReplacementNamed(context, mainScreenRoute);
+                }
                 // Navigator.pop(context); // for Circular
-                GoRouter.of(context).go(AppRoutes.homeScreenRoute);
 
                 // Navigator.pushReplacementNamed(context, mainScreenRoute);
                 // Navigator.push(context, MaterialPageRoute(
