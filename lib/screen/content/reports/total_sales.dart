@@ -274,7 +274,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                         TotalSalesController()
                             .exportToExcelApi(searchCriteria)
                             .then((value) {
-                          saveExcelFile(value, "TotalsSales.xlsx");
+                          saveExcelFile(value, "${_locale.totalSales}.xlsx");
                         });
                       }
                     },
@@ -412,7 +412,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                         TotalSalesController()
                             .exportToExcelApi(searchCriteria)
                             .then((value) {
-                          saveExcelFile(value, "TotalsSales.xlsx");
+                          saveExcelFile(value, "${_locale.totalSales}.xlsx");
                         });
                       }
                     },

@@ -313,7 +313,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                     ReportController()
                         .exportPurchaseToExcelApi(searchCriteria, body)
                         .then((value) {
-                      saveExcelFile(value, "PurchasesReports.xlsx");
+                      saveExcelFile(value, "${_locale.purchasesReport}.xlsx");
                     });
                   }
                 },
