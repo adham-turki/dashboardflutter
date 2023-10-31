@@ -89,13 +89,9 @@ class _CustomDateState extends State<CustomDate> {
 
     String label = widget.label;
     if (widget.dateController!.text.isNotEmpty) {
-      print("controller: ${widget.dateController!.text}");
       yearController.text = splitDate()[0];
       monthController.text = splitDate()[1];
       dayController.text = splitDate()[2];
-      print("split1 ${yearController.text}");
-      print("split2 ${monthController.text}");
-      print("split3 ${dayController.text}");
     }
 
     return SizedBox(
@@ -515,8 +511,6 @@ class _CustomDateState extends State<CustomDate> {
         }
       });
     });
-
-    print("object");
   }
 
   void checkDates() {
