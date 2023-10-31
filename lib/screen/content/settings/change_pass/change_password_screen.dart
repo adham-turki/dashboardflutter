@@ -54,9 +54,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       SingleChildScrollView(
         child: Column(
           children: [
-            // const SizedBox(
-            //   height: 40,
-            // ),
+            SizedBox(
+              height: height * 0.17,
+            ),
             SizedBox(
               width: width < 800 ? width * 0.9 : width * 0.7,
               child: Center(
