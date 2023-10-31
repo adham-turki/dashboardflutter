@@ -10,10 +10,12 @@ class CustomDate extends StatefulWidget {
   int? minYear;
   Function(bool isValid, String value)? onValue;
   bool? ddmmyyyy;
+  final TextEditingController? controller;
   CustomDate({
     super.key,
     required this.label,
     this.onValue,
+    this.controller,
     this.minYear,
     this.ddmmyyyy,
   });

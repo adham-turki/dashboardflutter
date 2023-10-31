@@ -93,7 +93,7 @@ class _FilterDialogSalesByCategoryState
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      title: SelectableText("Filter Dialog"),
+      title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.5 : width * 0.7,
         height: isDesktop ? height * 0.35 : height * 0.6,
@@ -328,7 +328,7 @@ class _FilterDialogSalesByCategoryState
                   Navigator.of(context).pop();
                 }
               },
-              text: "Filter",
+              text: _locale.filter,
               borderRadius: 0.3,
               textColor: Colors.white,
             ),
