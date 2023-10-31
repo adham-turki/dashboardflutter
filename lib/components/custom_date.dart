@@ -114,7 +114,6 @@ class _CustomDateState extends State<CustomDate> {
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 getSuffixIcon(),
                 Row(
