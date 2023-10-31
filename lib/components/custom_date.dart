@@ -10,17 +10,13 @@ class CustomDate extends StatefulWidget {
   int? minYear;
   Function(bool isValid, String value)? onValue;
   bool? ddmmyyyy;
-  final TextEditingController? todayController;
-  final TextEditingController? monthController;
-  final TextEditingController? yearController;
+  final TextEditingController? dateController;
 
   CustomDate({
     super.key,
     required this.label,
     this.onValue,
-    this.todayController,
-    this.monthController,
-    this.yearController,
+    this.dateController,
     this.minYear,
     this.ddmmyyyy,
   });
@@ -55,6 +51,7 @@ class _CustomDateState extends State<CustomDate> {
   String yearIsGreater = "Year is Wrong";
   String monthIsGreater = "Month is Wrong";
   String dayIsGreater = "Day is Wrong";
+  TextEditingController controller = TextEditingController();
 
   FocusNode yearFocusNode = FocusNode();
   FocusNode monthFocusNode = FocusNode();
@@ -63,10 +60,17 @@ class _CustomDateState extends State<CustomDate> {
   @override
   void initState() {
     setListeners();
-    yearController.text = DatesController().todayYear();
-    monthController.text = DatesController().todayMonth();
-    dayController.text = DatesController().todayDay();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  splitDate() {
+    controller = widget.dateController!;
+    return controller.text.split("-");
   }
 
   @override
@@ -84,6 +88,15 @@ class _CustomDateState extends State<CustomDate> {
     height = MediaQuery.of(context).size.height;
 
     String label = widget.label;
+    if (widget.dateController!.text.isNotEmpty) {
+      print("controller: ${widget.dateController!.text}");
+      yearController.text = splitDate()[0];
+      monthController.text = splitDate()[1];
+      dayController.text = splitDate()[2];
+      print("split1 ${yearController.text}");
+      print("split2 ${monthController.text}");
+      print("split3 ${dayController.text}");
+    }
 
     return SizedBox(
       width: width * 0.163,

@@ -162,6 +162,7 @@ class _FilterDialogSalesByCategoryState
                         // height: height * 0.1,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
+                          dateController: _fromDateController,
                           label: _locale.fromDate,
                           minYear: 2000,
                           onValue: (isValid, value) {
@@ -189,6 +190,7 @@ class _FilterDialogSalesByCategoryState
                         // height: height * 0.1,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
+                          dateController: _toDateController,
                           label: _locale.toDate,
                           minYear: 2000,
                           onValue: (isValid, value) {
@@ -230,6 +232,7 @@ class _FilterDialogSalesByCategoryState
                         height: height * 0.12,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
+                          dateController: _fromDateController,
                           label: _locale.fromDate,
                           minYear: 2000,
                           onValue: (isValid, value) {
@@ -264,6 +267,7 @@ class _FilterDialogSalesByCategoryState
                         height: height * 0.12,
                         width: isDesktop ? width * 0.135 : width * 0.9,
                         child: CustomDate(
+                          dateController: _toDateController,
                           label: _locale.toDate,
                           minYear: 2000,
                           onValue: (isValid, value) {

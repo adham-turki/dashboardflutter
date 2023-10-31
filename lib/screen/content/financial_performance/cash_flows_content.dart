@@ -295,6 +295,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomDate(
+                  dateController: _fromDateController,
                   label: _locale.fromDate,
                   minYear: 2000,
                   onValue: (isValid, value) {
@@ -330,6 +331,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 //   },
                 // ),
                 CustomDate(
+                  dateController: _toDateController,
                   label: _locale.toDate,
                   // minYear: 2000,
                   onValue: (isValid, value) {
@@ -414,6 +416,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
             onValue: (isValid, value) {
@@ -448,6 +451,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _toDateController,
             label: _locale.toDate,
             // minYear: 2000,
             onValue: (isValid, value) {

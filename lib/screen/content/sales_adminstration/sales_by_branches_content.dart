@@ -266,6 +266,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           },
         ),
         CustomDate(
+          dateController: _fromDateController,
           label: _locale.fromDate,
           minYear: 2000,
           onValue: (isValid, value) {
@@ -300,6 +301,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         //   },
         // ),
         CustomDate(
+          dateController: _toDateController,
           label: _locale.toDate,
           onValue: (isValid, value) {
             if (isValid) {
@@ -383,6 +385,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
             onValue: (isValid, value) {
@@ -417,6 +420,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _toDateController,
             label: _locale.toDate,
             onValue: (isValid, value) {
               if (isValid) {

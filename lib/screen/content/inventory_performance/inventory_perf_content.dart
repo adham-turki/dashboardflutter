@@ -309,6 +309,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomDate(
+              dateController: fromDate,
               label: _locale.fromDate,
               minYear: 2000,
               onValue: (isValid, value) {
@@ -335,6 +336,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             //   },
             // ),
             CustomDate(
+              dateController: toDate,
               label: _locale.toDate,
               // minYear: 2000,
               onValue: (isValid, value) {
@@ -420,6 +422,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             SizedBox(
               width: widthMobile,
               child: CustomDate(
+                dateController: fromDate,
                 label: _locale.fromDate,
                 minYear: 2000,
                 onValue: (isValid, value) {
@@ -446,6 +449,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             SizedBox(
               width: widthMobile,
               child: CustomDate(
+                dateController: toDate,
                 label: _locale.toDate,
                 // minYear: 2000,
                 onValue: (isValid, value) {

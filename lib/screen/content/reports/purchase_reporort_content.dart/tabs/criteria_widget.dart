@@ -190,6 +190,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     SizedBox(
                       width: width * .135,
                       child: CustomDate(
+                        dateController: fromDate,
                         label: _locale.fromDate,
                         minYear: 2000,
                         onValue: (isValid, value) {
@@ -224,6 +225,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     SizedBox(
                       width: width * .135,
                       child: CustomDate(
+                        dateController: toDate,
                         label: _locale.toDate,
                         // minYear: 2000,
                         onValue: (isValid, value) {
@@ -257,6 +259,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     SizedBox(
                       width: width,
                       child: CustomDate(
+                        dateController: fromDate,
                         label: _locale.fromDate,
                         minYear: 2000,
                         onValue: (isValid, value) {
@@ -298,6 +301,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     SizedBox(
                       width: width,
                       child: CustomDate(
+                        dateController: toDate,
                         label: _locale.toDate,
                         // minYear: 2000,
                         onValue: (isValid, value) {

@@ -37,6 +37,13 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   final storage = const FlutterSecureStorage();
   final dropdownKey = GlobalKey<DropdownButton2State>();
 
+  // final TextEditingController _fromDateDayController = TextEditingController();
+  // final TextEditingController _fromDateMonthController =
+  //     TextEditingController();
+  // final TextEditingController _fromDateYearController = TextEditingController();
+  // final TextEditingController _toDateDayController = TextEditingController();
+  // final TextEditingController _toDateMonthController = TextEditingController();
+  // final TextEditingController _toDateYearController = TextEditingController();
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   SalesCategoryController salesCategoryController = SalesCategoryController();
@@ -108,8 +115,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   @override
   void initState() {
     getBranch(isStart: true);
-    // fromDate.addListener(() {});
-    // toDate.addListener(() {});
+    // _fromDateController.addListener(() {});
+    // _toDateController.addListener(() {});
     super.initState();
   }
 
@@ -277,6 +284,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomDate(
+                  dateController: _fromDateController,
                   label: _locale.fromDate,
                   minYear: 2000,
                   onValue: (isValid, value) {
@@ -307,6 +315,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 //   onSelected: (value) {},
                 // ),
                 CustomDate(
+                  dateController: _toDateController,
                   label: _locale.toDate,
                   // minYear: 2000,
                   onValue: (isValid, value) {
@@ -404,6 +413,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
             onValue: (isValid, value) {
@@ -433,6 +443,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _toDateController,
             label: _locale.toDate,
             // minYear: 2000,
             onValue: (isValid, value) {
