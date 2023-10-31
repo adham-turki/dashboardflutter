@@ -197,63 +197,113 @@ class _DashboardContentState extends State<DashboardContent> {
                         ),
                       ],
                     )
-                  : SizedBox(
-                      width: width * 0.8,
-                      height: height * 0.14,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        children: [
-                          CustomCard(
-                            gradientColor: const [
-                              Color(0xff1cacff),
-                              Color(0xff30c4ff)
-                            ],
-                            title: Converters.formatNumber(
-                                    vouchHeaderTransietModel.paidSales
-                                        .toDouble())
-                                .toString(),
-                            subtitle: '',
-                            label: locale.totalSales,
-                            icon: Icons
-                                .attach_money, // Provide the actual path to the icon
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          CustomCard(
-                            gradientColor: const [
-                              Color(0xfffd8236),
-                              Color(0xffffce6c)
-                            ],
-                            title: Converters.formatNumber(
-                                    vouchHeaderTransietModel.returnSales
-                                        .toDouble())
-                                .toString(),
-                            subtitle: '',
-                            label: locale.totalReturnSal,
-                            icon: Icons
-                                .assignment_return_outlined, // Provide the actual path to the icon
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          CustomCard(
-                            gradientColor: const [
-                              Color(0xff4741c1),
-                              Color(0xff7e4fe4)
-                            ],
-                            title: Converters.formatNumber(
-                                    vouchHeaderTransietModel.numOfCustomers
-                                        .toDouble())
-                                .toString(),
-                            subtitle: '',
-                            label: locale.numOfCustomers,
-                            icon: Icons
-                                .bar_chart, // Provide the actual path to the icon
-                          ),
-                        ],
-                      ),
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xff1cacff),
+                            Color(0xff30c4ff)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.paidSales.toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.totalSales,
+                          icon: Icons
+                              .attach_money, // Provide the actual path to the icon
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xfffd8236),
+                            Color(0xffffce6c)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.returnSales
+                                      .toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.totalReturnSal,
+                          icon: Icons
+                              .assignment_return_outlined, // Provide the actual path to the icon
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xff4741c1),
+                            Color(0xff7e4fe4)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.numOfCustomers
+                                      .toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.numOfCustomers,
+                          icon: Icons
+                              .bar_chart, // Provide the actual path to the icon
+                        ),
+                      ],
                     )
+              // : SizedBox(
+              //     width: width * 0.8,
+              //     height: height * 0.14,
+              //     child: ListView(
+              //       scrollDirection: Axis.horizontal,
+              //       children: [
+              //         CustomCard(
+              //           gradientColor: const [
+              //             Color(0xff1cacff),
+              //             Color(0xff30c4ff)
+              //           ],
+              //           title: Converters.formatNumber(
+              //                   vouchHeaderTransietModel.paidSales
+              //                       .toDouble())
+              //               .toString(),
+              //           subtitle: '',
+              //           label: locale.totalSales,
+              //           icon: Icons
+              //               .attach_money, // Provide the actual path to the icon
+              //         ),
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+              //         CustomCard(
+              //           gradientColor: const [
+              //             Color(0xfffd8236),
+              //             Color(0xffffce6c)
+              //           ],
+              //           title: Converters.formatNumber(
+              //                   vouchHeaderTransietModel.returnSales
+              //                       .toDouble())
+              //               .toString(),
+              //           subtitle: '',
+              //           label: locale.totalReturnSal,
+              //           icon: Icons.assignment_return_outlined,
+              //         ),
+              //         const SizedBox(
+              //           width: 10,
+              //         ),
+              //         CustomCard(
+              //           gradientColor: const [
+              //             Color(0xff4741c1),
+              //             Color(0xff7e4fe4)
+              //           ],
+              //           title: Converters.formatNumber(
+              //                   vouchHeaderTransietModel.numOfCustomers
+              //                       .toDouble())
+              //               .toString(),
+              //           subtitle: '',
+              //           label: locale.numOfCustomers,
+              //           icon: Icons.bar_chart,
+              //         ),
+              //       ],
+              //     ),
+              //   )
             ],
           ),
         ],

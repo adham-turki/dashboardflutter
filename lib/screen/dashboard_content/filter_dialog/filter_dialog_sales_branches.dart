@@ -36,6 +36,7 @@ class _FilterDialogSalesByBranchesState
   double width = 0;
   double height = 0;
   String todayDate = "";
+  String currentMonth = "";
   List<String> periods = [];
   var selectedPeriod = "";
   List<String> status = [];
@@ -69,8 +70,12 @@ class _FilterDialogSalesByBranchesState
   void initState() {
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-    _fromDateController.text = todayDate;
+
+    currentMonth = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().currentMonth()));
     _toDateController.text = todayDate;
+
+    _fromDateController.text = currentMonth;
     print("fromDate: ${_fromDateController.text}");
     print("periodd :${selectedPeriod}");
     super.initState();

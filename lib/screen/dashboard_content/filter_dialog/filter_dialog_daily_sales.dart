@@ -35,6 +35,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   List<String> status = [];
 
   var selectedStatus = "";
+  String currentMonth = "";
 
   @override
   void didChangeDependencies() {
@@ -63,7 +64,9 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   void initState() {
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-    _fromDateController.text = todayDate;
+    currentMonth = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().currentMonth()));
+    _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
     print("fromDate: ${_fromDateController.text}");
     print("periodd :${selectedPeriod}");
