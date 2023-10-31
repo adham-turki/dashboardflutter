@@ -89,13 +89,13 @@ class CustomCard extends StatelessWidget {
           ],
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.008,
+          height: MediaQuery.of(context).size.height * 0.006,
         ),
         Text(
           subtitle,
           style: TextStyle(
               color: Colors.white,
-              fontSize: height * .02,
+              fontSize: height * .015,
               fontWeight: FontWeight.w400),
         ),
         SizedBox(
@@ -108,7 +108,7 @@ class CustomCard extends StatelessWidget {
               title,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: height * .02,
+                  fontSize: height * .015,
                   fontWeight: FontWeight.w700),
             ),
           ],
