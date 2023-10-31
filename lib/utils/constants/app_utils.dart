@@ -52,7 +52,6 @@ Widget blueButton1({
   width,
   onPressed,
   height,
-  text,
   textColor,
   fontSize,
   fontWeight,
@@ -80,27 +79,23 @@ Widget blueButton1({
           end: Alignment.centerRight,
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            if (icon != null) icon,
-            SizedBox(width: 15),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              child: Text(
-                text.toString(),
-                style: TextStyle(
-                  color: textColor ?? whiteColor,
-                  fontSize: fontSize ?? 13,
-                  fontWeight: fontWeight ?? FontWeight.bold,
-                ),
-              ),
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (icon != null) icon,
+          // Container(
+          //   alignment: Alignment.center,
+          //   padding: const EdgeInsets.all(10),
+          //   // child: Text(
+          //   //   "" ?? text.toString(),
+          //   //   style: TextStyle(
+          //   //     color: textColor ?? whiteColor,
+          //   //     fontSize: fontSize ?? 13,
+          //   //     fontWeight: fontWeight ?? FontWeight.bold,
+          //   //   ),
+          //   // ),
+          // ),
+        ],
       ),
     ),
   );

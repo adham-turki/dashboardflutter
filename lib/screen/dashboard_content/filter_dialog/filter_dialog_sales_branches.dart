@@ -3,26 +3,28 @@ import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import '../../components/custom_date.dart';
-import '../../controller/error_controller.dart';
-import '../../utils/constants/app_utils.dart';
-import '../../utils/constants/responsive.dart';
-import '../../utils/func/dates_controller.dart';
-import '../../widget/custom_date_picker.dart';
+import '../../../components/custom_date.dart';
+import '../../../controller/error_controller.dart';
+import '../../../utils/constants/app_utils.dart';
+import '../../../utils/constants/responsive.dart';
+import '../../../utils/func/dates_controller.dart';
+import '../../../widget/custom_date_picker.dart';
 
-class FilterDialog extends StatefulWidget {
+class FilterDialogSalesByBranches extends StatefulWidget {
   final Function(String selectedPeriod, String fromDate, String toDate,
       String selectedStatus) onFilter;
 
-  FilterDialog({
+  FilterDialogSalesByBranches({
     required this.onFilter,
   });
 
   @override
-  _FilterDialogState createState() => _FilterDialogState();
+  _FilterDialogSalesByBranchesState createState() =>
+      _FilterDialogSalesByBranchesState();
 }
 
-class _FilterDialogState extends State<FilterDialog> {
+class _FilterDialogSalesByBranchesState
+    extends State<FilterDialogSalesByBranches> {
   late AppLocalizations _locale;
   bool isDesktop = false;
   final TextEditingController _fromDateController =

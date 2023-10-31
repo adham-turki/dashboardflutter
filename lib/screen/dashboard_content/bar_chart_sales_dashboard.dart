@@ -12,21 +12,15 @@ import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
+import '../../components/charts/pie_chart.dart';
+import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
+import 'filter_dialog/filter_dialog_sales_branches.dart';
 
 class BalanceBarChartDashboard extends StatefulWidget {
-  // TextEditingController fromDateController;
-  // TextEditingController toDateController;
-  // String selectedPeriod;
-  List<BarData> barData;
-
   BalanceBarChartDashboard({
     Key? key,
-    // required this.fromDateController,
-    // required this.toDateController,
-    // required this.selectedPeriod,
-    required this.barData,
   }) : super(key: key);
 
   @override
@@ -42,6 +36,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   bool temp = false;
   SalesBranchesController salesBranchesController = SalesBranchesController();
 
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+  var period = "";
+  var statusVar = "";
+  String todayDate = "";
+
   late AppLocalizations _locale;
   TextEditingController fromCont = TextEditingController();
   TextEditingController toCont = TextEditingController();
@@ -51,10 +51,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
 
-  String todayDate = "";
   // var selectedPeriod = "";
 
-  // List<BarData> barData = [];
+  List<BarData> barData = [];
   List<PieChartModel> pieData = [];
 
   bool isDesktop = false;
@@ -89,7 +88,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    print("bardata build :${widget.barData.length}");
     // getSalesByBranch();
     print("******************************");
     return SingleChildScrollView(
@@ -102,7 +100,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: isDesktop ? height * 0.55 : height * 1.1,
+                height: isDesktop ? height * 0.59 : height * 1.1,
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(
@@ -113,18 +111,66 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           _locale.salesByBranches,
                           style: TextStyle(fontSize: isDesktop ? 24 : 18),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 0),
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width < 800
+                                  ? MediaQuery.of(context).size.width * 0.06
+                                  : MediaQuery.of(context).size.width * 0.03,
+                              child: blueButton1(
+                                icon: Icon(
+                                  Icons.filter_list_sharp,
+                                  color: whiteColor,
+                                  size: isDesktop
+                                      ? height * 0.039
+                                      : height * 0.03,
+                                ),
+                                // text: _locale.filter,
+                                textColor: Color.fromARGB(255, 255, 255, 255),
+                                //   borderRadius: 5.0,
+                                height:
+                                    isDesktop ? height * .015 : height * .03,
+                                fontSize:
+                                    isDesktop ? height * .018 : height * .017,
+                                width: isDesktop ? width * 0.13 : width * 0.25,
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return FilterDialogSalesByBranches(
+                                        onFilter: (selectedPeriod, fromDate,
+                                            toDate, selectedStatus) {
+                                          fromDateController.text = fromDate;
+                                          toDateController.text = toDate;
+                                          period = selectedPeriod;
+                                          statusVar = selectedStatus;
+                                        },
+                                      );
+                                    },
+                                  ).then((value) async {
+                                    getSalesByBranch().then((value) {
+                                      setState(() {});
+                                    });
+                                  });
+                                },
+                              )),
+                        ),
                       ],
                     ),
-                    CustomBarChart(
-                      data: widget.barData,
-                      color: Colors.indigo,
-                    )
+                    PieChartComponent(
+                      radiusNormal: isDesktop ? height * 0.17 : 70,
+                      radiusHover: isDesktop ? height * 0.17 : 80,
+                      width: isDesktop ? width * 0.42 : width * 0.05,
+                      height: isDesktop ? height * 0.42 : height * 0.4,
+                      dataList: pieData,
+                    ),
                   ],
                 ),
               ),
@@ -143,5 +189,56 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     final random = Random();
     final index = random.nextInt(colorList.length);
     return colorList[index];
+  }
+
+  Future getSalesByBranch() async {
+    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
+      }
+      if (toDateController.text.isEmpty) {
+        toDateController.text = todayDate;
+      }
+    } else {
+      SearchCriteria searchCriteria = SearchCriteria(
+          fromDate: fromDateController.text.isEmpty
+              ? todayDate
+              : fromDateController.text,
+          toDate:
+              toDateController.text.isEmpty ? todayDate : toDateController.text,
+          voucherStatus: -100);
+      pieData = [];
+      dataMap.clear();
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
+      await salesBranchesController
+          .getSalesByBranches(searchCriteria)
+          .then((value) {
+        for (var element in value) {
+          double a = (element.totalSales! + element.retSalesDis!) -
+              (element.salesDis! + element.totalReturnSales!);
+          a = Converters().formateDouble(a);
+          if (a != 0.0) {
+            temp = true;
+          } else if (a == 0.0) {
+            temp = false;
+          }
+          listOfBalances.add(a);
+          listOfPeriods.add(element.namee!);
+          if (temp) {
+            dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+            pieData.add(PieChartModel(
+                title: element.namee!,
+                value: formatDoubleToTwoDecimalPlaces(a),
+                color: getRandomColor(colorNewList)));
+          }
+
+          barData.add(
+            BarData(name: element.namee!, percent: a),
+          );
+        }
+      });
+    }
   }
 }

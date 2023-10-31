@@ -1,12 +1,14 @@
 import 'dart:math';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:bi_replicate/widget/custom_date_picker.dart';
+
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
@@ -14,99 +16,98 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
-import '../../components/charts/pie_chart.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
-import '../../controller/sales_adminstration/daily_sales_controller.dart';
+import '../../controller/sales_adminstration/sales_category_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
-import 'filter_dialog/filter_dialog_daily_sales.dart';
-import 'filter_dialog/filter_dialog_sales_branches.dart';
+import 'filter_dialog/filter_dialog_sales_by_cat.dart';
 
-class DailySalesDashboard extends StatefulWidget {
-  DailySalesDashboard({
+class BranchesSalesByCatDashboard extends StatefulWidget {
+  BranchesSalesByCatDashboard({
     Key? key,
   }) : super(key: key);
 
   @override
-  _DailySalesDashboardState createState() => _DailySalesDashboardState();
+  _BranchesSalesByCatDashboardState createState() =>
+      _BranchesSalesByCatDashboardState();
 }
 
-class _DailySalesDashboardState extends State<DailySalesDashboard> {
+class _BranchesSalesByCatDashboardState
+    extends State<BranchesSalesByCatDashboard> {
+  List<BarChartData> data = [];
   double width = 0;
-  double height = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
-  bool isDesktop = false;
-  final TextEditingController _fromDateController = TextEditingController();
-  final storage = const FlutterSecureStorage();
-  DailySalesController dailySalesController = DailySalesController();
+  double height = 0;
+  bool temp = false;
   late AppLocalizations _locale;
+  SalesBranchesController salesBranchesController = SalesBranchesController();
 
-  List<String> status = [];
+  final dataMap = <String, double>{};
+  List<PieChartModel> list = [
+    PieChartModel(value: 10, title: "1", color: Colors.blue),
+    PieChartModel(value: 20, title: "2", color: Colors.red),
+    PieChartModel(value: 30, title: "3", color: Colors.green),
+    PieChartModel(value: 40, title: "4", color: Colors.purple),
+  ];
 
-  List<String> charts = [];
-
-  bool accountsActive = false;
-
-  TextEditingController fromDateController = TextEditingController();
-  TextEditingController toDateController = TextEditingController();
-  var period = "";
-  var statusVar = "";
-  String todayDate = "";
-
-  var selectedStatus = "";
-  var selectedChart = "";
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
-  final dataMap = <String, double>{};
-  bool boolTemp = false;
-  List<BarData> barData = [];
-
-  List<PieChartModel> barDataDailySales = [];
-
-  List<BiAccountModel> payableAccounts = [];
 
   final List<String> items = [
     'Print',
     'Save as JPEG',
     'Save as PNG',
   ];
+  String todayDate1 = "";
+  List<String> periods = [];
+  var selectedPeriod = "";
+  List<BarData> barData = [];
 
-  // List<PieChartModel> pieData = [];
+  List<PieChartModel> pieData = [];
+
+  CashFlowController cashFlowController = CashFlowController();
+
+  //List<String> status = [];
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+  var period = "";
+  var statusVar = ""; //not required
+  String todayDate = "";
+  var selectedCategories = "";
+  var selectedBranchCode = "";
+
+  double balance = 0;
+  bool accountsActive = false;
   String accountNameString = "";
+  final usedColors = <Color>[];
 
+  List<BiAccountModel> cashboxAccounts = [];
+  SalesCategoryController salesCategoryController = SalesCategoryController();
+
+  bool isDesktop = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    _fromDateController.text = todayDate;
-    status = [
-      _locale.all,
-      _locale.posted,
-      _locale.draft,
-      _locale.canceled,
+
+    periods = [
+      _locale.daily,
+      _locale.weekly,
+      _locale.monthly,
+      _locale.yearly,
     ];
 
-    charts = [
-      _locale.lineChart,
-      _locale.barChart,
-      _locale.pieChart,
-    ];
-    selectedStatus = status[0];
-    selectedChart = charts[0];
+    selectedPeriod = periods[0];
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    // getExpensesAccounts();
-
-    getPayableAccounts(isStart: true).then((value) {
-      payableAccounts = value;
+    getCashBoxAccount(isStart: true).then((value) {
+      cashboxAccounts = value;
       setState(() {});
     });
 
@@ -131,7 +132,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.59 : height * 1.1,
+                height: isDesktop ? height * 0.65 : height * 1.2,
 
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
@@ -146,7 +147,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          _locale.dailySales,
+                          _locale.branchesSalesByCategories,
                           style: TextStyle(fontSize: isDesktop ? 24 : 18),
                         ),
                         Padding(
@@ -176,15 +177,24 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      return FilterDialogDailySales(
-                                        onFilter: (fromDate, selectedStatus) {
+                                      return FilterDialogSalesByCategory(
+                                        onFilter: (selectedPeriodF,
+                                            fromDate,
+                                            toDate,
+                                            selectedCategoriesF,
+                                            selectedBranchCodeF) {
                                           fromDateController.text = fromDate;
-                                          statusVar = selectedStatus;
+                                          toDateController.text = toDate;
+                                          selectedCategories =
+                                              selectedCategoriesF;
+                                          selectedBranchCode =
+                                              selectedBranchCodeF;
+                                          selectedPeriod = selectedPeriodF;
                                         },
                                       );
                                     },
                                   ).then((value) async {
-                                    getDailySales().then((value) {
+                                    getBranchByCat().then((value) {
                                       setState(() {});
                                     });
                                   });
@@ -193,11 +203,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         ),
                       ],
                     ),
-                    BalanceLineChart(
-                        yAxisText: _locale.balances,
-                        xAxisText: _locale.periods,
-                        balances: listOfBalances,
-                        periods: listOfPeriods)
+                    //    isDesktop ? desktopCriteria() : mobileCriteria(),
+                    CustomBarChart(
+                      data: barData,
+                      color: Colors.orange,
+                    )
                   ],
                 ),
               ),
@@ -208,79 +218,96 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     );
   }
 
+  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+    if (usedColors.length == colorList.length) {
+      // If all colors have been used, clear the used colors list
+      usedColors.clear();
+    }
+
+    final random = Random();
+    Color color;
+    do {
+      final index = random.nextInt(colorList.length);
+      color = colorList[index];
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
+  }
+
   double formatDoubleToTwoDecimalPlaces(double number) {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getDailySales({bool? isStart}) async {
-    int stat = getVoucherStatus(_locale, statusVar);
-    if (fromDateController.text.isEmpty) {
+  Future getBranchByCat({bool? isStart}) async {
+    listOfBalances = [];
+    pieData = [];
+    barData = [];
+    dataMap.clear();
+    int cat = getCategoryNum(selectedCategories, _locale);
+    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
       if (fromDateController.text.isEmpty) {
         fromDateController.text = todayDate;
       }
+      if (toDateController.text.isEmpty) {
+        toDateController.text = todayDate;
+      }
     }
+
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: fromDateController.text.isEmpty
             ? todayDate
             : fromDateController.text,
-        voucherStatus: stat);
+        toDate:
+            toDateController.text.isEmpty ? todayDate : toDateController.text,
+        byCategory: cat,
+        branch: selectedBranchCode);
+    pieData = [];
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
 
-    await dailySalesController
-        .getDailySale(searchCriteria, isStart: isStart)
-        .then((response) {
-      for (var elemant in response) {
-        String temp = DatesController().formatDate(getNextDay(
-          fromDateController.text.isEmpty ? todayDate : fromDateController.text,
-        ).toString());
-        if (double.parse(elemant.dailySale.toString()) != 0.0) {
-          boolTemp = true;
-        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
-          boolTemp = false;
+    // print("ddddddddddd");
+    await salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
+      for (var element in value) {
+        // creditAmt - debitAmt
+        double bal = element.creditAmt! - element.debitAmt!;
+
+        // Generate a random color
+        Color randomColor = getRandomColor(
+            colorNewList, usedColors); // Use the getRandomColor function
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
         }
+        listOfBalances.add(bal);
+        listOfPeriods.add(element.categoryName!);
+        if (temp) {
+          dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
 
-        listOfBalances.add(double.parse(elemant.dailySale.toString()));
-        listOfPeriods.add(temp);
-        if (boolTemp) {
-          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-              double.parse(elemant.dailySale.toString()));
-          barDataDailySales.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.dailySale.toString()) == 0.0
-                  ? 1.0
-                  : formatDoubleToTwoDecimalPlaces(
-                      double.parse(elemant.dailySale.toString())),
-              color: getRandomColor(colorNewList)));
+          pieData.add(PieChartModel(
+              title: element.categoryName! == ""
+                  ? _locale.general
+                  : "${element.categoryName!}",
+              value: formatDoubleToTwoDecimalPlaces(bal),
+              color: randomColor)); // Set random color
+          // print("asdasd: ${pieData.length}");
         }
 
         barData.add(
           BarData(
-              name: temp, percent: double.parse(elemant.dailySale.toString())),
+            name: element.categoryName! == ""
+                ? _locale.general
+                : element.categoryName!,
+            percent: bal,
+          ), // Set random color
         );
+
+        print("bardata Length :${barData.length}");
       }
     });
-  }
-
-  Color getRandomColor(List<Color> colorList) {
-    final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
-  }
-
-  int count = 0;
-  DateTime getNextDay(String inputDate) {
-    count++;
-    final List<String> dateParts = inputDate.split('-');
-    if (dateParts.length != 3) {
-      throw ArgumentError("Invalid date format. Expected dd-mm-yyyy.");
-    }
-
-    final int day = int.parse(dateParts[0]);
-    final int month = int.parse(dateParts[1]);
-    final int year = int.parse(dateParts[2]);
-
-    final DateTime currentDate = DateTime(year, month, day);
-    final DateTime nextDay = currentDate.add(Duration(days: count));
-
-    return nextDay;
   }
 }
