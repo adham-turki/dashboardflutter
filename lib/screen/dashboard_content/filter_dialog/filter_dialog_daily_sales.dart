@@ -78,25 +78,14 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     return AlertDialog(
       title: SelectableText(_locale.filter),
       content: SizedBox(
-        width: isDesktop ? width * 0.5 : width * 0.7,
-        height: isDesktop ? height * 0.35 : height * 0.6,
+        width: isDesktop ? width * 0.3 : width * 0.7,
+        height: isDesktop ? height * 0.35 : height * 0.3,
         child: Column(
           children: [
             isDesktop
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // CustomDropDown(
-                      //   items: periods,
-                      //   label: _locale.period,
-                      //   initialValue: selectedPeriod,
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       checkPeriods(value);
-                      //       selectedPeriod = value!;
-                      //     });
-                      //   },
-                      // ),
                       CustomDropDown(
                         items: status,
                         label: _locale.status,
@@ -112,18 +101,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // CustomDropDown(
-                      //   items: periods,
-                      //   label: _locale.period,
-                      //   initialValue: selectedPeriod,
-                      //   width: width,
-                      //   onChanged: (value) {
-                      //     setState(() {
-                      //       checkPeriods(value);
-                      //       selectedPeriod = value!;
-                      //     });
-                      //   },
-                      // ),
                       CustomDropDown(
                         items: status,
                         label: _locale.status,
@@ -143,7 +120,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                     children: [
                       SizedBox(
                         // height: height * 0.1,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
+                        width: isDesktop ? width * 0.135 : width,
                         child: CustomDate(
                           label: _locale.fromDate,
                           minYear: 2000,
@@ -165,52 +142,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           },
                         ),
                       ),
-                      SizedBox(
-                        width: width * 0.01,
-                      ),
-                      // CustomDatePicker(
-                      //   label: _locale.fromDate,
-                      //   date: DateTime.parse(_toDateController.text),
-                      //   controller: _fromDateController,
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _fromDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
                       // SizedBox(
-                      //   // height: height * 0.1,
-                      //   width: isDesktop ? width * 0.135 : width * 0.9,
-                      //   child: CustomDate(
-                      //     label: _locale.toDate,
-                      //     minYear: 2000,
-                      //     onValue: (isValid, value) {
-                      //       if (isValid) {
-                      //         setState(() {
-                      //           _toDateController.text = value;
-                      //           DateTime from =
-                      //               DateTime.parse(_fromDateController.text);
-                      //           DateTime to =
-                      //               DateTime.parse(_toDateController.text);
-
-                      //           if (from.isAfter(to)) {
-                      //             ErrorController.openErrorDialog(
-                      //                 1, _locale.startDateAfterEndDate);
-                      //           }
-                      //         });
-                      //       }
-                      //     },
-                      //   ),
-                      // ),
-                      // CustomDatePicker(
-                      //   label: _locale.toDate,
-                      //   controller: _toDateController,
-                      //   date: DateTime.parse(_fromDateController.text),
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _toDateController.text = value;
-                      //     });
-                      //   },
+                      //   width: width * 0.01,
                       // ),
                     ],
                   )
@@ -241,50 +174,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           },
                         ),
                       ),
-                      // CustomDatePicker(
-                      //   label: _locale.fromDate,
-                      //   date: DateTime.parse(_toDateController.text),
-                      //   controller: _fromDateController,
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _fromDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
-                      // SizedBox(
-                      //   height: height * 0.12,
-                      //   width: isDesktop ? width * 0.135 : width * 0.9,
-                      //   child: CustomDate(
-                      //     label: _locale.toDate,
-                      //     minYear: 2000,
-                      //     onValue: (isValid, value) {
-                      //       if (isValid) {
-                      //         setState(() {
-                      //           _toDateController.text = value;
-                      //           DateTime from =
-                      //               DateTime.parse(_fromDateController.text);
-                      //           DateTime to =
-                      //               DateTime.parse(_toDateController.text);
-
-                      //           if (from.isAfter(to)) {
-                      //             ErrorController.openErrorDialog(
-                      //                 1, _locale.startDateAfterEndDate);
-                      //           }
-                      //         });
-                      //       }
-                      //     },
-                      //   ),
-                      // ),
-                      // CustomDatePicker(
-                      //   label: _locale.toDate,
-                      //   controller: _toDateController,
-                      //   date: DateTime.parse(_fromDateController.text),
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _toDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
                     ],
                   ),
           ],
@@ -296,7 +185,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
           children: [
             Components().blueButton(
               height: width > 800 ? height * .05 : height * .06,
-              fontSize: width > 800 ? height * .016 : height * .011,
+              fontSize: width > 800 ? height * .016 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);

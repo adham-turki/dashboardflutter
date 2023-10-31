@@ -131,7 +131,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.59 : height * 1.1,
+                height: isDesktop ? height * 0.59 : height * 0.67,
 
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
@@ -168,10 +168,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 textColor: Color.fromARGB(255, 255, 255, 255),
                                 //   borderRadius: 5.0,
                                 height:
-                                    isDesktop ? height * .015 : height * .03,
+                                    isDesktop ? height * .015 : height * .039,
                                 fontSize:
                                     isDesktop ? height * .018 : height * .017,
-                                width: isDesktop ? width * 0.13 : width * 0.25,
+                                width: isDesktop ? width * 0.13 : width * 0.27,
                                 onPressed: () {
                                   showDialog(
                                     context: context,

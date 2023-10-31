@@ -132,7 +132,7 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.65 : height * 1.2,
+                height: isDesktop ? height * 0.65 : height * 0.69,
 
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
