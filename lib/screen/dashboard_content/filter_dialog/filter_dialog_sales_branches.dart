@@ -11,8 +11,11 @@ import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogSalesByBranches extends StatefulWidget {
-  final Function(String selectedPeriod, String fromDate, String toDate,
-      String selectedStatus) onFilter;
+  final Function(
+    String selectedPeriod,
+    String fromDate,
+    String toDate,
+  ) onFilter;
 
   FilterDialogSalesByBranches({
     required this.onFilter,
@@ -100,16 +103,16 @@ class _FilterDialogSalesByBranchesState
                           });
                         },
                       ),
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
+                      // CustomDropDown(
+                      //   items: status,
+                      //   label: _locale.status,
+                      //   initialValue: selectedStatus,
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       selectedStatus = value!;
+                      //     });
+                      //   },
+                      // ),
                     ],
                   )
                 : Column(
@@ -127,17 +130,17 @@ class _FilterDialogSalesByBranchesState
                           });
                         },
                       ),
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        width: width,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
+                      // CustomDropDown(
+                      //   items: status,
+                      //   label: _locale.status,
+                      //   initialValue: selectedStatus,
+                      //   width: width,
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       selectedStatus = value!;
+                      //     });
+                      //   },
+                      // ),
                     ],
                   ),
             isDesktop
@@ -310,10 +313,10 @@ class _FilterDialogSalesByBranchesState
                       1, _locale.startDateAfterEndDate);
                 } else {
                   widget.onFilter(
-                      selectedPeriod,
-                      DatesController().formatDate(_fromDateController.text),
-                      DatesController().formatDate(_toDateController.text),
-                      selectedStatus);
+                    selectedPeriod,
+                    DatesController().formatDate(_fromDateController.text),
+                    DatesController().formatDate(_toDateController.text),
+                  );
                   print(
                       "_fromDateController.text :${_fromDateController.text}");
                   print("periodd :${selectedPeriod}");

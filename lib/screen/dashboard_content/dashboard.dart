@@ -8,13 +8,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/charts.dart';
+import '../../components/customCard.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/receivable_management/rec_pay_controller.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/sales_adminstration/sales_branches_controller.dart';
+import '../../controller/vouch_header_transiet_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../model/settings/setup/bi_account_model.dart';
+import '../../model/vouch_header_transiet_model.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/constants.dart';
@@ -50,13 +53,19 @@ class _DashboardContentState extends State<DashboardContent> {
   List<PieChartModel> barDataDailySales = [];
   List<BarChartData> barData1 = [];
   List<BarChartData> barData2 = [];
+  VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
+      paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
 
-  late AppLocalizations _locale;
+  late AppLocalizations locale;
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
+    locale = AppLocalizations.of(context);
+    VouchHeaderTransietController().getBranch().then((value) {
+      setState(() {
+        vouchHeaderTransietModel = value!;
+        print("hhhhhhhhhhhhh: ${value.numOfCustomers}");
+      });
+    });
 
     super.didChangeDependencies();
   }
@@ -135,6 +144,116 @@ class _DashboardContentState extends State<DashboardContent> {
                   ),
                 ],
               ),
+              Responsive.isDesktop(context)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xff1cacff),
+                            Color(0xff30c4ff)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.paidSales.toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.totalSales,
+                          icon: Icons
+                              .attach_money, // Provide the actual path to the icon
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xfffd8236),
+                            Color(0xffffce6c)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.returnSales
+                                      .toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.totalReturnSal,
+                          icon: Icons
+                              .assignment_return_outlined, // Provide the actual path to the icon
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        CustomCard(
+                          gradientColor: const [
+                            Color(0xff4741c1),
+                            Color(0xff7e4fe4)
+                          ],
+                          title: Converters.formatNumber(
+                                  vouchHeaderTransietModel.numOfCustomers
+                                      .toDouble())
+                              .toString(),
+                          subtitle: '',
+                          label: locale.numOfCustomers,
+                          icon: Icons
+                              .bar_chart, // Provide the actual path to the icon
+                        ),
+                      ],
+                    )
+                  : SizedBox(
+                      width: width * 0.8,
+                      height: height * 0.16,
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: [
+                          CustomCard(
+                            gradientColor: const [
+                              Color(0xff1cacff),
+                              Color(0xff30c4ff)
+                            ],
+                            title: Converters.formatNumber(
+                                    vouchHeaderTransietModel.paidSales
+                                        .toDouble())
+                                .toString(),
+                            subtitle: '',
+                            label: locale.totalSales,
+                            icon: Icons
+                                .attach_money, // Provide the actual path to the icon
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          CustomCard(
+                            gradientColor: const [
+                              Color(0xfffd8236),
+                              Color(0xffffce6c)
+                            ],
+                            title: Converters.formatNumber(
+                                    vouchHeaderTransietModel.returnSales
+                                        .toDouble())
+                                .toString(),
+                            subtitle: '',
+                            label: locale.totalReturnSal,
+                            icon: Icons
+                                .assignment_return_outlined, // Provide the actual path to the icon
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          CustomCard(
+                            gradientColor: const [
+                              Color(0xff4741c1),
+                              Color(0xff7e4fe4)
+                            ],
+                            title: Converters.formatNumber(
+                                    vouchHeaderTransietModel.numOfCustomers
+                                        .toDouble())
+                                .toString(),
+                            subtitle: '',
+                            label: locale.numOfCustomers,
+                            icon: Icons
+                                .bar_chart, // Provide the actual path to the icon
+                          ),
+                        ],
+                      ),
+                    )
             ],
           ),
         ],

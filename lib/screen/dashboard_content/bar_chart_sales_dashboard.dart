@@ -145,12 +145,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     context: context,
                                     builder: (context) {
                                       return FilterDialogSalesByBranches(
-                                        onFilter: (selectedPeriod, fromDate,
-                                            toDate, selectedStatus) {
+                                        onFilter:
+                                            (selectedPeriod, fromDate, toDate) {
                                           fromDateController.text = fromDate;
                                           toDateController.text = toDate;
                                           period = selectedPeriod;
-                                          statusVar = selectedStatus;
                                         },
                                       );
                                     },
