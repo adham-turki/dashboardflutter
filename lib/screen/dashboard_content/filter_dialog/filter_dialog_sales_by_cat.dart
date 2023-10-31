@@ -143,6 +143,7 @@ class _FilterDialogSalesByCategoryState
                       ),
                       CustomDropDown(
                         items: categories,
+                        width: width,
                         label: _locale.byCategory,
                         initialValue: selectedCategories,
                         onChanged: (value) {

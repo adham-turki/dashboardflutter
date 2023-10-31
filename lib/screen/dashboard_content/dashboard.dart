@@ -199,7 +199,7 @@ class _DashboardContentState extends State<DashboardContent> {
                     )
                   : SizedBox(
                       width: width * 0.8,
-                      height: height * 0.16,
+                      height: height * 0.14,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
                         children: [

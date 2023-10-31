@@ -29,13 +29,12 @@ class CustomCard extends StatelessWidget {
     var cardsHeight;
     var cardsWidth;
     bool isDesktop = Responsive.isDesktop(context);
-    print("asdasdasd ${isDesktop}");
     width > 600
-        ? cardsHeight = height * 0.16 //max size
-        : cardsWidth = width * 0.3; //min size
+        ? cardsHeight = height * 0.14 //max size
+        : cardsWidth = width * 0.165; //min size
     MediaQuery.of(context).size.width < 600
         ? cardsHeight = MediaQuery.of(context).size.height * 0.16 //min size
-        : cardsWidth = MediaQuery.of(context).size.width * 0.22; //max size
+        : cardsWidth = MediaQuery.of(context).size.width * 0.16; //max size
 
     return Container(
       width: isDesktop ? cardsWidth : width * 0.5,
@@ -77,7 +76,7 @@ class CustomCard extends StatelessWidget {
                   label,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: height * .025,
+                      fontSize: height * .02,
                       fontWeight: FontWeight.w700),
                 ),
               ],
@@ -109,7 +108,7 @@ class CustomCard extends StatelessWidget {
               title,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: height * .025,
+                  fontSize: height * .02,
                   fontWeight: FontWeight.w700),
             ),
           ],
@@ -132,7 +131,7 @@ class CustomCard extends StatelessWidget {
                   label,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: isDesktop ? cardsWidth * 0.06 : 24,
+                      fontSize: isDesktop ? cardsWidth * 0.062 : 24,
                       fontWeight: FontWeight.w700),
                 ),
               ],
@@ -148,17 +147,17 @@ class CustomCard extends StatelessWidget {
           subtitle,
           style: TextStyle(
               color: Colors.white,
-              fontSize: cardsWidth * 0.04,
+              fontSize: cardsWidth * 0.07,
               fontWeight: FontWeight.w400),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(
               title,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: cardsWidth * 0.06,
+                  fontSize: cardsWidth * 0.05,
                   fontWeight: FontWeight.w700),
             ),
           ],

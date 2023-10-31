@@ -100,7 +100,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: isDesktop ? height * 0.59 : height * 1.1,
+                height: isDesktop ? height * 0.59 : height * 0.67,
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(
@@ -136,10 +136,10 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 textColor: Color.fromARGB(255, 255, 255, 255),
                                 //   borderRadius: 5.0,
                                 height:
-                                    isDesktop ? height * .015 : height * .03,
+                                    isDesktop ? height * .015 : height * .039,
                                 fontSize:
                                     isDesktop ? height * .018 : height * .017,
-                                width: isDesktop ? width * 0.13 : width * 0.25,
+                                width: isDesktop ? width * 0.13 : width * 0.27,
                                 onPressed: () {
                                   showDialog(
                                     context: context,
@@ -164,7 +164,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                       ],
                     ),
                     PieChartComponent(
-                      radiusNormal: isDesktop ? height * 0.17 : 70,
+                      radiusNormal: isDesktop ? height * 0.17 : 120,
                       radiusHover: isDesktop ? height * 0.17 : 80,
                       width: isDesktop ? width * 0.42 : width * 0.05,
                       height: isDesktop ? height * 0.42 : height * 0.4,
