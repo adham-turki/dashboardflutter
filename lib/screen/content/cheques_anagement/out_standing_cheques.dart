@@ -197,6 +197,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               // height: height * 0.11,
               width: width * 0.135,
               child: CustomDate(
+                dateController: fromDate,
                 label: _locale.fromDate,
                 minYear: 2000,
                 onValue: (isValid, value) {
@@ -227,6 +228,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               // height: height * 0.11,
               width: width * 0.135,
               child: CustomDate(
+                dateController: toDate,
                 label: _locale.toDate,
                 // minYear: 2000,
                 onValue: (isValid, value) {
@@ -354,6 +356,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               height: height * 0.12,
               width: widthMobile * 0.9,
               child: CustomDate(
+                dateController: fromDate,
                 label: _locale.fromDate,
                 minYear: 2000,
                 onValue: (isValid, value) {
@@ -381,6 +384,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               height: height * 0.12,
               width: widthMobile * 0.9,
               child: CustomDate(
+                dateController: toDate,
                 label: _locale.toDate,
                 // minYear: 2000,
                 onValue: (isValid, value) {

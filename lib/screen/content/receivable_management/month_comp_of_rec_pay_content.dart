@@ -264,6 +264,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
               },
             ),
             CustomDate(
+              dateController: _fromDateController,
               label: _locale.fromDate,
               // minYear: 2000,
               onValue: (isValid, value) {
@@ -326,6 +327,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             // minYear: 2000,
             onValue: (isValid, value) {

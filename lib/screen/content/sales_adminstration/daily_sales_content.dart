@@ -259,6 +259,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
               },
             ),
             CustomDate(
+              dateController: _fromDateController,
               label: _locale.fromDate,
               minYear: 2000,
               onValue: (isValid, value) {
@@ -320,6 +321,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
             onValue: (isValid, value) {

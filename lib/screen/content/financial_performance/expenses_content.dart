@@ -264,6 +264,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
             SizedBox(
               width: width * 0.135,
               child: CustomDate(
+                dateController: _fromDateController,
                 label: _locale.fromDate,
                 minYear: 2000,
                 onValue: (isValid, value) {
@@ -327,6 +328,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
             onValue: (isValid, value) {
