@@ -138,7 +138,7 @@ class _CustomDateState extends State<CustomDate> {
   Widget createDateField(MaskTextInputFormatter mask,
       TextEditingController controller, String hint, FocusNode focusNode) {
     return SizedBox(
-      width: Responsive.isDesktop(context) ? width * 0.025 : width * 0.1,
+      width: Responsive.isDesktop(context) ? width * 0.028 : width * 0.1,
       child: TextFormField(
         focusNode: focusNode,
         controller: controller,
