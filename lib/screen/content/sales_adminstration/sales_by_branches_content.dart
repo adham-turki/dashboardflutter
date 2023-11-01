@@ -271,6 +271,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           minYear: 2000,
           onValue: (isValid, value) {
             if (isValid) {
+              print("valueeeeeeeeeeeeeee ${value}");
               setState(() {
                 _fromDateController.text = value;
                 DateTime from = DateTime.parse(_fromDateController.text);
