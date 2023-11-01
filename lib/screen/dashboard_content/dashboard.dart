@@ -110,9 +110,9 @@ class _DashboardContentState extends State<DashboardContent> {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: appPadding,
-                        ),
+                        // const SizedBox(
+                        //   height: appPadding,
+                        // ),
                         if (Responsive.isMobile(context))
                           const SizedBox(
                             height: appPadding,
@@ -135,9 +135,9 @@ class _DashboardContentState extends State<DashboardContent> {
                     flex: 5,
                     child: Column(
                       children: [
-                        const SizedBox(
-                          height: 8,
-                        ),
+                        // const SizedBox(
+                        //   height: 8,
+                        // ),
                         BranchesSalesByCatDashboard(),
                       ],
                     ),
@@ -235,7 +235,7 @@ class _DashboardContentState extends State<DashboardContent> {
                         ),
                         CustomCard(
                           gradientColor: const [
-                            Color(0xff4741c1),
+                            Color.fromRGBO(71, 65, 193, 1),
                             Color(0xff7e4fe4)
                           ],
                           title: Converters.formatNumber(

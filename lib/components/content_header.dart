@@ -48,184 +48,181 @@ class _ContentHeaderState extends State<ContentHeader> {
 
     provider = context.read<ScreenContentProvider>();
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Column(
-        children: [
-          Responsive.isDesktop(context)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Consumer<ScreenContentProvider>(
-                        builder: ((context, value, child) {
-                      return Column(
-                        children: [
-                          SelectableText(
-                            maxLines: 1,
-                            getPage(),
-                            style: TextStyle(
-                              fontSize: Responsive.isDesktop(context)
-                                  ? width * 0.015
-                                  : 18,
-                              fontWeight: FontWeight.w500,
-                            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Responsive.isDesktop(context)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Consumer<ScreenContentProvider>(
+                      builder: ((context, value, child) {
+                    return Column(
+                      children: [
+                        SelectableText(
+                          maxLines: 1,
+                          getPage(),
+                          style: TextStyle(
+                            fontSize: Responsive.isDesktop(context)
+                                ? width * 0.015
+                                : 18,
+                            fontWeight: FontWeight.w500,
                           ),
-                        ],
-                      );
-                    })),
-                    SelectableText(
-                      maxLines: 1,
-                      "${locale.baseCurrency}: ${locale.ils}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Consumer<ScreenContentProvider>(
-                        builder: ((context, value, child) {
-                      return SelectableText(
-                        maxLines: 1,
-                        getPage(),
-                        style: TextStyle(
-                          fontSize: Responsive.isDesktop(context)
-                              ? width * 0.015
-                              : 18,
-                          fontWeight: FontWeight.w500,
                         ),
-                      );
-                    })),
-                    SelectableText(
-                      maxLines: 1,
-                      "${locale.baseCurrency}: ${locale.ils}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
+                      ],
+                    );
+                  })),
+                  SelectableText(
+                    maxLines: 1,
+                    "${locale.baseCurrency}: ${locale.ils}",
+                    style: const TextStyle(
+                      fontSize: 18,
                     ),
-                  ],
-                ),
-          SizedBox(
-            height: height * 0.04,
-          ),
-          // widget.page == 0
-          //     ? Responsive.isDesktop(context)
-          //         ? Row(
-          //             mainAxisAlignment: MainAxisAlignment.center,
-          //             children: [
-          //               CustomCard(
-          //                 gradientColor: const [
-          //                   Color(0xff1cacff),
-          //                   Color(0xff30c4ff)
-          //                 ],
-          //                 title: Converters.formatNumber(
-          //                         vouchHeaderTransietModel.paidSales.toDouble())
-          //                     .toString(),
-          //                 subtitle: '',
-          //                 label: locale.totalSales,
-          //                 icon: Icons
-          //                     .attach_money, // Provide the actual path to the icon
-          //               ),
-          //               const SizedBox(
-          //                 width: 10,
-          //               ),
-          //               CustomCard(
-          //                 gradientColor: const [
-          //                   Color(0xfffd8236),
-          //                   Color(0xffffce6c)
-          //                 ],
-          //                 title: Converters.formatNumber(
-          //                         vouchHeaderTransietModel.returnSales
-          //                             .toDouble())
-          //                     .toString(),
-          //                 subtitle: '',
-          //                 label: locale.totalReturnSal,
-          //                 icon: Icons
-          //                     .assignment_return_outlined, // Provide the actual path to the icon
-          //               ),
-          //               const SizedBox(
-          //                 width: 10,
-          //               ),
-          //               CustomCard(
-          //                 gradientColor: const [
-          //                   Color(0xff4741c1),
-          //                   Color(0xff7e4fe4)
-          //                 ],
-          //                 title: Converters.formatNumber(
-          //                         vouchHeaderTransietModel.numOfCustomers
-          //                             .toDouble())
-          //                     .toString(),
-          //                 subtitle: '',
-          //                 label: locale.numOfCustomers,
-          //                 icon: Icons
-          //                     .bar_chart, // Provide the actual path to the icon
-          //               ),
-          //             ],
-          //           )
-          //         : SizedBox(
-          //             width: width * 0.8,
-          //             height: height * 0.16,
-          //             child: ListView(
-          //               scrollDirection: Axis.horizontal,
-          //               children: [
-          //                 CustomCard(
-          //                   gradientColor: const [
-          //                     Color(0xff1cacff),
-          //                     Color(0xff30c4ff)
-          //                   ],
-          //                   title: Converters.formatNumber(
-          //                           vouchHeaderTransietModel.paidSales
-          //                               .toDouble())
-          //                       .toString(),
-          //                   subtitle: '',
-          //                   label: locale.totalSales,
-          //                   icon: Icons
-          //                       .attach_money, // Provide the actual path to the icon
-          //                 ),
-          //                 const SizedBox(
-          //                   width: 10,
-          //                 ),
-          //                 CustomCard(
-          //                   gradientColor: const [
-          //                     Color(0xfffd8236),
-          //                     Color(0xffffce6c)
-          //                   ],
-          //                   title: Converters.formatNumber(
-          //                           vouchHeaderTransietModel.returnSales
-          //                               .toDouble())
-          //                       .toString(),
-          //                   subtitle: '',
-          //                   label: locale.totalReturnSal,
-          //                   icon: Icons
-          //                       .assignment_return_outlined, // Provide the actual path to the icon
-          //                 ),
-          //                 const SizedBox(
-          //                   width: 10,
-          //                 ),
-          //                 CustomCard(
-          //                   gradientColor: const [
-          //                     Color(0xff4741c1),
-          //                     Color(0xff7e4fe4)
-          //                   ],
-          //                   title: Converters.formatNumber(
-          //                           vouchHeaderTransietModel.numOfCustomers
-          //                               .toDouble())
-          //                       .toString(),
-          //                   subtitle: '',
-          //                   label: locale.numOfCustomers,
-          //                   icon: Icons
-          //                       .bar_chart, // Provide the actual path to the icon
-          //                 ),
-          //               ],
-          //             ),
-          //           )
-          //:
+                  ),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Consumer<ScreenContentProvider>(
+                      builder: ((context, value, child) {
+                    return SelectableText(
+                      maxLines: 1,
+                      getPage(),
+                      style: TextStyle(
+                        fontSize:
+                            Responsive.isDesktop(context) ? width * 0.015 : 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  })),
+                  SelectableText(
+                    maxLines: 1,
+                    "${locale.baseCurrency}: ${locale.ils}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+        // SizedBox(
+        //   height: height * 0.04,
+        // ),
+        // widget.page == 0
+        //     ? Responsive.isDesktop(context)
+        //         ? Row(
+        //             mainAxisAlignment: MainAxisAlignment.center,
+        //             children: [
+        //               CustomCard(
+        //                 gradientColor: const [
+        //                   Color(0xff1cacff),
+        //                   Color(0xff30c4ff)
+        //                 ],
+        //                 title: Converters.formatNumber(
+        //                         vouchHeaderTransietModel.paidSales.toDouble())
+        //                     .toString(),
+        //                 subtitle: '',
+        //                 label: locale.totalSales,
+        //                 icon: Icons
+        //                     .attach_money, // Provide the actual path to the icon
+        //               ),
+        //               const SizedBox(
+        //                 width: 10,
+        //               ),
+        //               CustomCard(
+        //                 gradientColor: const [
+        //                   Color(0xfffd8236),
+        //                   Color(0xffffce6c)
+        //                 ],
+        //                 title: Converters.formatNumber(
+        //                         vouchHeaderTransietModel.returnSales
+        //                             .toDouble())
+        //                     .toString(),
+        //                 subtitle: '',
+        //                 label: locale.totalReturnSal,
+        //                 icon: Icons
+        //                     .assignment_return_outlined, // Provide the actual path to the icon
+        //               ),
+        //               const SizedBox(
+        //                 width: 10,
+        //               ),
+        //               CustomCard(
+        //                 gradientColor: const [
+        //                   Color(0xff4741c1),
+        //                   Color(0xff7e4fe4)
+        //                 ],
+        //                 title: Converters.formatNumber(
+        //                         vouchHeaderTransietModel.numOfCustomers
+        //                             .toDouble())
+        //                     .toString(),
+        //                 subtitle: '',
+        //                 label: locale.numOfCustomers,
+        //                 icon: Icons
+        //                     .bar_chart, // Provide the actual path to the icon
+        //               ),
+        //             ],
+        //           )
+        //         : SizedBox(
+        //             width: width * 0.8,
+        //             height: height * 0.16,
+        //             child: ListView(
+        //               scrollDirection: Axis.horizontal,
+        //               children: [
+        //                 CustomCard(
+        //                   gradientColor: const [
+        //                     Color(0xff1cacff),
+        //                     Color(0xff30c4ff)
+        //                   ],
+        //                   title: Converters.formatNumber(
+        //                           vouchHeaderTransietModel.paidSales
+        //                               .toDouble())
+        //                       .toString(),
+        //                   subtitle: '',
+        //                   label: locale.totalSales,
+        //                   icon: Icons
+        //                       .attach_money, // Provide the actual path to the icon
+        //                 ),
+        //                 const SizedBox(
+        //                   width: 10,
+        //                 ),
+        //                 CustomCard(
+        //                   gradientColor: const [
+        //                     Color(0xfffd8236),
+        //                     Color(0xffffce6c)
+        //                   ],
+        //                   title: Converters.formatNumber(
+        //                           vouchHeaderTransietModel.returnSales
+        //                               .toDouble())
+        //                       .toString(),
+        //                   subtitle: '',
+        //                   label: locale.totalReturnSal,
+        //                   icon: Icons
+        //                       .assignment_return_outlined, // Provide the actual path to the icon
+        //                 ),
+        //                 const SizedBox(
+        //                   width: 10,
+        //                 ),
+        //                 CustomCard(
+        //                   gradientColor: const [
+        //                     Color(0xff4741c1),
+        //                     Color(0xff7e4fe4)
+        //                   ],
+        //                   title: Converters.formatNumber(
+        //                           vouchHeaderTransietModel.numOfCustomers
+        //                               .toDouble())
+        //                       .toString(),
+        //                   subtitle: '',
+        //                   label: locale.numOfCustomers,
+        //                   icon: Icons
+        //                       .bar_chart, // Provide the actual path to the icon
+        //                 ),
+        //               ],
+        //             ),
+        //           )
+        //:
 
-          Container(),
-        ],
-      ),
+        Container(),
+      ],
     );
   }
 

@@ -96,6 +96,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       _locale.barChart,
       _locale.pieChart,
     ];
+
     selectedStatus = status[0];
     selectedChart = charts[0];
     super.didChangeDependencies();
@@ -103,13 +104,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void initState() {
-    // getExpensesAccounts();
-
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
     });
-
     super.initState();
   }
 
@@ -131,7 +129,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.59 : height * 0.67,
+                height: isDesktop ? height * 0.53 : height * 0.67,
 
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
@@ -147,7 +145,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                       children: [
                         Text(
                           _locale.dailySales,
-                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -193,11 +191,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         ),
                       ],
                     ),
-                    BalanceLineChart(
-                        yAxisText: _locale.balances,
-                        xAxisText: _locale.periods,
-                        balances: listOfBalances,
-                        periods: listOfPeriods)
+                    CustomBarChart(
+                      data: barData,
+                      color: Colors.amber,
+                    )
                   ],
                 ),
               ),
@@ -256,6 +253,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           BarData(
               name: temp, percent: double.parse(elemant.dailySale.toString())),
         );
+
+        print("bardatalength ${barData.length}");
       }
     });
   }

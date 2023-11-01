@@ -132,7 +132,7 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.65 : height * 0.69,
+                height: isDesktop ? height * 0.62 : height * 0.69,
 
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
@@ -148,7 +148,7 @@ class _BranchesSalesByCatDashboardState
                       children: [
                         Text(
                           _locale.branchesSalesByCategories,
-                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -206,7 +206,8 @@ class _BranchesSalesByCatDashboardState
                     //    isDesktop ? desktopCriteria() : mobileCriteria(),
                     CustomBarChart(
                       data: barData,
-                      color: Colors.orange,
+                      color: Color(0xff4741c1),
+                      textColor: Color(0xff7e4fe4),
                     )
                   ],
                 ),
