@@ -33,6 +33,8 @@ class BalanceBarChartDashboard extends StatefulWidget {
 }
 
 class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
+  int colorIndex = 0;
+
   List<CustomBarChart> data = [];
   double width = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
@@ -46,6 +48,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   var statusVar = "";
   String todayDate = "";
   String currentMonth = "";
+
+  String lastFromDate = "";
+  String lastToDate = "";
 
   late AppLocalizations _locale;
   // TextEditingController fromCont = TextEditingController();
@@ -85,6 +90,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
+      lastFromDate = fromDateController.text;
+      lastToDate = toDateController.text;
       getSalesData().then((value) {
         setState(() {});
       });
@@ -195,22 +202,17 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     return colorList[index];
   }
 
-  Future getSalesByBranch() async {
-    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
-      if (fromDateController.text.isEmpty) {
-        fromDateController.text = todayDate;
-      }
-      if (toDateController.text.isEmpty) {
-        toDateController.text = todayDate;
-      }
-    } else {
+  Future<void> getSalesByBranch() async {
+    final selectedFromDate = fromDateController.text;
+    final selectedToDate = toDateController.text;
+
+    if (selectedFromDate != lastFromDate || selectedToDate != lastToDate) {
+      print("boll");
       SearchCriteria searchCriteria = SearchCriteria(
-          fromDate: fromDateController.text.isEmpty
-              ? todayDate
-              : fromDateController.text,
-          toDate:
-              toDateController.text.isEmpty ? todayDate : toDateController.text,
-          voucherStatus: -100);
+        fromDate: selectedFromDate,
+        toDate: selectedToDate,
+        voucherStatus: -100,
+      );
       pieData = [];
       dataMap.clear();
       barData = [];
@@ -233,16 +235,26 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           if (temp) {
             dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
             pieData.add(PieChartModel(
-                title: element.namee!,
-                value: formatDoubleToTwoDecimalPlaces(a),
-                color: getRandomColor(colorListDashboard)));
+              title: element.namee!,
+              value: formatDoubleToTwoDecimalPlaces(a),
+              color: getNextColor(),
+            ));
           }
 
           barData.add(
             BarData(name: element.namee!, percent: a),
           );
         }
+
+        lastFromDate = selectedFromDate;
+        lastToDate = selectedToDate;
       });
     }
+  }
+
+  Color getNextColor() {
+    final color = colorListDashboard[colorIndex];
+    colorIndex = (colorIndex + 1) % colorListDashboard.length;
+    return color;
   }
 }
