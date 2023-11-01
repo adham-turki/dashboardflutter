@@ -76,6 +76,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   // List<PieChartModel> pieData = [];
   String accountNameString = "";
+  String lastFromDate = "";
+  String lastStatus = "";
 
   @override
   void didChangeDependencies() {
@@ -107,6 +109,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       setState(() {});
     });
     Future.delayed(Duration.zero, () {
+      lastFromDate = fromDateController.text;
+      lastStatus = selectedStatus;
       getPayableAccountsData().then((value) {
         setState(() {});
       });
@@ -203,8 +207,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                     ),
                     CustomBarChart(
                       data: barData,
-                      color: const Color.fromRGBO(48, 66, 125, 1),
-                      textColor: const Color(0xfffF99417),
+                      color: const Color(0xfffF99417),
+                      textColor: const Color.fromRGBO(48, 66, 125, 1),
                     )
                   ],
                 ),
@@ -220,54 +224,60 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getDailySales({bool? isStart}) async {
+  Future<void> getDailySales({bool? isStart}) async {
     int stat = getVoucherStatus(_locale, statusVar);
-    if (fromDateController.text.isEmpty) {
-      if (fromDateController.text.isEmpty) {
-        fromDateController.text = todayDate;
+    var selectedFromDate = fromDateController.text;
+    final selectedStatus = statusVar;
+
+    if (selectedFromDate != lastFromDate || selectedStatus != lastStatus) {
+      lastFromDate = selectedFromDate;
+      lastStatus = selectedStatus;
+
+      if (selectedFromDate.isEmpty) {
+        selectedFromDate = todayDate;
       }
+      SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: selectedFromDate,
+        voucherStatus: stat,
+      );
+
+      await dailySalesController
+          .getDailySale(searchCriteria, isStart: isStart)
+          .then((response) {
+        for (var elemant in response) {
+          String temp = DatesController().formatDate(getNextDay(
+            selectedFromDate,
+          ).toString());
+          if (double.parse(elemant.dailySale.toString()) != 0.0) {
+            boolTemp = true;
+          } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+            boolTemp = false;
+          }
+
+          listOfBalances.add(double.parse(elemant.dailySale.toString()));
+          listOfPeriods.add(temp);
+          if (boolTemp) {
+            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+                double.parse(elemant.dailySale.toString()));
+            barDataDailySales.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.dailySale.toString()) == 0.0
+                    ? 1.0
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.dailySale.toString())),
+                color: getRandomColor(colorNewList)));
+          }
+
+          barData.add(
+            BarData(
+                name: temp,
+                percent: double.parse(elemant.dailySale.toString())),
+          );
+
+          print("bardatalength ${barData.length}");
+        }
+      });
     }
-    SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: fromDateController.text.isEmpty
-            ? todayDate
-            : fromDateController.text,
-        voucherStatus: stat);
-
-    await dailySalesController
-        .getDailySale(searchCriteria, isStart: isStart)
-        .then((response) {
-      for (var elemant in response) {
-        String temp = DatesController().formatDate(getNextDay(
-          fromDateController.text.isEmpty ? todayDate : fromDateController.text,
-        ).toString());
-        if (double.parse(elemant.dailySale.toString()) != 0.0) {
-          boolTemp = true;
-        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
-          boolTemp = false;
-        }
-
-        listOfBalances.add(double.parse(elemant.dailySale.toString()));
-        listOfPeriods.add(temp);
-        if (boolTemp) {
-          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-              double.parse(elemant.dailySale.toString()));
-          barDataDailySales.add(PieChartModel(
-              title: temp,
-              value: double.parse(elemant.dailySale.toString()) == 0.0
-                  ? 1.0
-                  : formatDoubleToTwoDecimalPlaces(
-                      double.parse(elemant.dailySale.toString())),
-              color: getRandomColor(colorNewList)));
-        }
-
-        barData.add(
-          BarData(
-              name: temp, percent: double.parse(elemant.dailySale.toString())),
-        );
-
-        print("bardatalength ${barData.length}");
-      }
-    });
   }
 
   Color getRandomColor(List<Color> colorList) {
