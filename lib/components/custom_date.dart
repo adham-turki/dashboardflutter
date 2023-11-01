@@ -470,9 +470,19 @@ class _CustomDateState extends State<CustomDate> {
     String year = yearController.text;
     String month = monthController.text;
     String day = dayController.text;
-    String yyyymmddd = "$year-$month-$day";
+    String yyyymmddd = "";
+    String mmddyyyy = "";
+    if (day.length == 1) {
+      yyyymmddd = "$year-$month-0$day";
+      mmddyyyy = "0$day-$month-$year";
+    } else if (month.length == 1) {
+      yyyymmddd = "$year-0$month-$day";
+      mmddyyyy = "$day-0$month-$year";
+    }
+    if (day.length == 2 && month.length == 2) {
+      yyyymmddd = "$year-$month-$day";
+    }
 
-    String mmddyyyy = "$day-$month-$year";
     if (widget.ddmmyyyy != null) {
       if (widget.ddmmyyyy!) {
         return mmddyyyy;
@@ -490,6 +500,7 @@ class _CustomDateState extends State<CustomDate> {
       firstDate: firstDate,
       lastDate: dateTime,
     ).then((dateResult) {
+      print("dateResult: ${dateResult}");
       setState(() {
         if (dateResult != null && widget.onValue != null) {
           yearController.text = dateResult.year.toString();
@@ -504,6 +515,7 @@ class _CustomDateState extends State<CustomDate> {
           }
 
           bool isValid = dateValidation();
+          print("dateValue: ${getDateValue()}");
           if (isValid) {
             widget.onValue!(isValid, getDateValue());
           }
