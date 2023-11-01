@@ -71,8 +71,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().currentMonth()));
 
-    fromDateController.text = "11-11-2019";
-    toDateController.text = "01-11-2023";
+    fromDateController.text = currentMonth;
+    toDateController.text = todayDate;
 
     super.didChangeDependencies();
   }
