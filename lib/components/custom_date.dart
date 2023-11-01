@@ -181,8 +181,8 @@ class _CustomDateState extends State<CustomDate> {
       focusNode.requestFocus();
     } else {
       if (widget.onValue != null) {
-        String dateValue = getDateValue();
-        widget.onValue!(isValid, dateValue);
+        // String dateValue = getDateValue();
+        widget.onValue!(isValid, getDateValue());
       }
     }
   }
@@ -232,7 +232,10 @@ class _CustomDateState extends State<CustomDate> {
 
     if (monthStr.isNotEmpty && monthStr.length == 2) {
       int month = int.parse(monthStr);
+      print("outtttttttttttttt ${monthController.text}");
+
       if (month > monthNow) {
+        print("innnnnnnnnnnnnnn ${monthController.text}");
         monthController.text = monthNow.toString();
         return true;
       }
@@ -250,8 +253,10 @@ class _CustomDateState extends State<CustomDate> {
       if (year <= yearNow && yearStr.length == 4) {
         if (month <= 12 && month <= monthNow) {
           if (dayStr.length == 2) {
-            if (day > dayNow && month == monthNow) {
+            if (day > dayNow && month == monthNow && year == yearNow) {
+              print("innnnnnnnnnnnnnn1 ${dayController.text}");
               dayController.text = dayNow.toString();
+              print("innnnnnnnnnnnnnn2 ${dayController.text}");
             }
             if ((month == 4 || month == 6 || month == 9 || month == 11) &&
                 day <= 30) {
@@ -467,6 +472,9 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   String getDateValue() {
+    print("yearController3: ${yearController.text}");
+    print("monthController3: ${monthController.text}");
+    print("dayController3: ${dayController.text}");
     String year = yearController.text;
     String month = monthController.text;
     String day = dayController.text;
@@ -503,9 +511,14 @@ class _CustomDateState extends State<CustomDate> {
       print("dateResult: ${dateResult}");
       setState(() {
         if (dateResult != null && widget.onValue != null) {
+          print("dateResult2: ${dateResult}");
+
           yearController.text = dateResult.year.toString();
           monthController.text = dateResult.month.toString();
           dayController.text = dateResult.day.toString();
+          print("yearController: ${yearController.text}");
+          print("monthController: ${monthController.text}");
+          print("dayController: ${dayController.text}");
           if (monthController.text.length == 1) {
             monthController.text = "0${monthController.text}";
           }
@@ -513,11 +526,13 @@ class _CustomDateState extends State<CustomDate> {
           if (dayController.text.length == 1) {
             dayController.text = "0${dayController.text}";
           }
-
+          print("yearController2: ${yearController.text}");
+          print("monthController2: ${monthController.text}");
+          print("dayController2: ${dayController.text}");
           bool isValid = dateValidation();
-          print("dateValue: ${getDateValue()}");
           if (isValid) {
-            widget.onValue!(isValid, getDateValue());
+            print("dateValue isValid: ${getDateValue()}");
+            widget.onValue!(true, getDateValue());
           }
         }
       });
