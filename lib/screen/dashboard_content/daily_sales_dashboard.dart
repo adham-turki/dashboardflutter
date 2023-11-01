@@ -40,7 +40,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   double height = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   bool isDesktop = false;
-  final TextEditingController _fromDateController = TextEditingController();
+  //final TextEditingController _fromDateController = TextEditingController();
   final storage = const FlutterSecureStorage();
   DailySalesController dailySalesController = DailySalesController();
   late AppLocalizations _locale;
@@ -52,7 +52,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   bool accountsActive = false;
 
   TextEditingController fromDateController = TextEditingController();
-  TextEditingController toDateController = TextEditingController();
   var period = "";
   var statusVar = "";
   String todayDate = "";
@@ -81,9 +80,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    _fromDateController.text = todayDate;
+    todayDate = DatesController().formatDate(DatesController().currentMonth());
+    fromDateController.text = todayDate;
     status = [
       _locale.all,
       _locale.posted,
@@ -108,16 +106,16 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       payableAccounts = value;
       setState(() {});
     });
-    // Future.delayed(Duration.zero, () {
-    //   getPayableAccountsData().then((value) {
-    //     setState(() {});
-    //   });
-    // });
+    Future.delayed(Duration.zero, () {
+      getPayableAccountsData().then((value) {
+        setState(() {});
+      });
+    });
     super.initState();
   }
 
   Future<void> getPayableAccountsData() async {
-    await getPayableAccounts().then((value) {
+    await getDailySales().then((value) {
       setState(() {});
     });
   }
@@ -127,6 +125,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
+    print("in build daily ${fromDateController.text}");
     return SingleChildScrollView(
       child: Container(
         // height: height * 1.7,
