@@ -296,11 +296,15 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               controller: numberOfrow,
               initialValue: numberOfrow.text,
               label: _locale.itemsNumber,
-              onChanged: (value) {
+              onSubmitted: (value) {
                 setState(() {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);
                 });
+              },
+              onChanged: (value) {
+                hintValue = value;
+                criteria.rownum = int.parse(numberOfrow.text);
               },
             ),
           ],
@@ -412,6 +416,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);
                 });
+              },
+              onChanged: (value) {
+                hintValue = value;
+                criteria.rownum = int.parse(numberOfrow.text);
               },
             ),
           ],
