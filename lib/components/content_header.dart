@@ -53,7 +53,7 @@ class _ContentHeaderState extends State<ContentHeader> {
       children: [
         Responsive.isDesktop(context)
             ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Consumer<ScreenContentProvider>(
                       builder: ((context, value, child) {
@@ -63,9 +63,16 @@ class _ContentHeaderState extends State<ContentHeader> {
                           maxLines: 1,
                           getPage(),
                           style: TextStyle(
-                            fontSize: Responsive.isDesktop(context)
-                                ? width * 0.015
-                                : 18,
+                            fontSize: context
+                                        .read<ScreenContentProvider>()
+                                        .getPage() ==
+                                    0
+                                ? (Responsive.isDesktop(context)
+                                    ? width * 0.01
+                                    : 15)
+                                : (Responsive.isDesktop(context)
+                                    ? width * 0.015
+                                    : 18),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -75,8 +82,15 @@ class _ContentHeaderState extends State<ContentHeader> {
                   SelectableText(
                     maxLines: 1,
                     "${locale.baseCurrency}: ${locale.ils}",
-                    style: const TextStyle(
-                      fontSize: 18,
+                    style: TextStyle(
+                      fontSize:
+                          context.read<ScreenContentProvider>().getPage() == 0
+                              ? (Responsive.isDesktop(context)
+                                  ? width * 0.01
+                                  : 15)
+                              : (Responsive.isDesktop(context)
+                                  ? width * 0.015
+                                  : 18),
                     ),
                   ),
                 ],

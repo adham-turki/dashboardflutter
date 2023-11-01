@@ -108,7 +108,18 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       payableAccounts = value;
       setState(() {});
     });
+    // Future.delayed(Duration.zero, () {
+    //   getPayableAccountsData().then((value) {
+    //     setState(() {});
+    //   });
+    // });
     super.initState();
+  }
+
+  Future<void> getPayableAccountsData() async {
+    await getPayableAccounts().then((value) {
+      setState(() {});
+    });
   }
 
   @override
@@ -124,15 +135,15 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: Container(
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.53 : height * 0.67,
+                height: isDesktop ? height * 0.475 : height * 0.67,
 
-                width: double.infinity,
-                padding: EdgeInsets.all(appPadding),
+                // width: double.infinity,
+                padding: EdgeInsets.only(left: 6, right: 6),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -145,7 +156,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                       children: [
                         Text(
                           _locale.dailySales,
-                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 19 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -193,7 +204,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                     ),
                     CustomBarChart(
                       data: barData,
-                      color: Colors.amber,
+                      color: const Color.fromRGBO(48, 66, 125, 1),
+                      textColor: const Color(0xfffF99417),
                     )
                   ],
                 ),

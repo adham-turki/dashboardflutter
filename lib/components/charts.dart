@@ -26,7 +26,7 @@ class CustomBarChart extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      height: height * 0.45,
+      height: height * 0.40,
       padding: const EdgeInsets.all(16.0),
       child: SfCartesianChart(
         isTransposed: true,

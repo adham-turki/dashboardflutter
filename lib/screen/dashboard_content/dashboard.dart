@@ -144,6 +144,9 @@ class _DashboardContentState extends State<DashboardContent> {
                   ),
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               Responsive.isDesktop(context)
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,

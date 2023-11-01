@@ -66,10 +66,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
-    currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().currentMonth()));
+    todayDate = DatesController().formatDate(DatesController().todayDate());
+    currentMonth =
+        DatesController().formatDate(DatesController().currentMonth());
 
     fromDateController.text = currentMonth;
     toDateController.text = todayDate;
@@ -110,11 +109,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(5.0),
               child: Container(
-                height: isDesktop ? height * 0.53 : height * 0.67,
-                width: double.infinity,
-                padding: EdgeInsets.all(appPadding),
+                height: isDesktop ? height * 0.475 : height * 0.67,
+                //  width: double.infinity,
+                padding: EdgeInsets.only(left: 5, right: 5),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -127,7 +126,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                       children: [
                         Text(
                           _locale.salesByBranches,
-                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 19 : 18),
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width < 800
@@ -172,8 +171,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                     PieChartDashboard(
                       radiusNormal: isDesktop ? height * 0.15 : 120,
                       radiusHover: isDesktop ? height * 0.15 : 80,
-                      width: isDesktop ? width * 0.35 : width * 0.05,
-                      height: isDesktop ? height * 0.35 : height * 0.4,
+                      width: isDesktop ? width * 0.33 : width * 0.05,
+                      height: isDesktop ? height * 0.33 : height * 0.4,
                       dataList: pieData,
                     ),
                   ],

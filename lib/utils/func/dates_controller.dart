@@ -27,6 +27,13 @@ class DatesController {
     return dateFormatter.format(firstDayOfYear);
   }
 
+  String twoYearsAgo() {
+    DateTime now = DateTime.now();
+    DateTime firstDayOfYearTwoYearsAgo = DateTime(now.year - 3, 1, 1);
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(firstDayOfYearTwoYearsAgo);
+  }
+
   String todayYear() {
     DateTime todayDate = DateTime(today.year, today.month, today.day);
     final DateFormat dateFormatter = DateFormat("yyyy");

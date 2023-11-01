@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   width: isDesktop ? width * 0.835 : width,
                   height: context.read<ScreenContentProvider>().getPage() == 0
-                      ? height * 0.048
+                      ? height * 0.035
                       : height * 0.145,
                   child: ContentHeader(
                       page: context.read<ScreenContentProvider>().getPage()),

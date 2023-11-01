@@ -64,6 +64,7 @@ class _BranchesSalesByCatDashboardState
   ];
   String todayDate1 = "";
   List<String> periods = [];
+  List<String> categories = [];
   var selectedPeriod = "";
   List<BarData> barData = [];
 
@@ -77,6 +78,7 @@ class _BranchesSalesByCatDashboardState
   var period = "";
   var statusVar = ""; //not required
   String todayDate = "";
+  String currentYear = "";
   var selectedCategories = "";
   var selectedBranchCode = "";
 
@@ -100,6 +102,19 @@ class _BranchesSalesByCatDashboardState
       _locale.yearly,
     ];
 
+    categories = [
+      _locale.brands,
+      _locale.categories("1"),
+      _locale.categories("2"),
+      _locale.classifications
+    ];
+    todayDate = DatesController().formatDate(DatesController().todayDate());
+    currentYear =
+        DatesController().formatDate(DatesController().currentMonth());
+
+    fromDateController.text = currentYear;
+    toDateController.text = todayDate;
+    selectedCategories = categories[1];
     selectedPeriod = periods[0];
     super.didChangeDependencies();
   }
@@ -110,8 +125,18 @@ class _BranchesSalesByCatDashboardState
       cashboxAccounts = value;
       setState(() {});
     });
-
+    Future.delayed(Duration.zero, () {
+      getBranchByCatData().then((value) {
+        setState(() {});
+      });
+    });
     super.initState();
+  }
+
+  Future<void> getBranchByCatData() async {
+    await getBranchByCat().then((value) {
+      setState(() {});
+    });
   }
 
   @override
@@ -127,15 +152,15 @@ class _BranchesSalesByCatDashboardState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               child: Container(
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.62 : height * 0.69,
+                height: isDesktop ? height * 0.48 : height * 0.69,
 
                 width: double.infinity,
-                padding: EdgeInsets.all(appPadding),
+                padding: EdgeInsets.only(left: 5, right: 5),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -206,8 +231,8 @@ class _BranchesSalesByCatDashboardState
                     //    isDesktop ? desktopCriteria() : mobileCriteria(),
                     CustomBarChart(
                       data: barData,
-                      color: Color(0xff4741c1),
-                      textColor: Color(0xff7e4fe4),
+                      color: const Color.fromRGBO(48, 66, 125, 1),
+                      textColor: const Color(0xfffF99417),
                     )
                   ],
                 ),
