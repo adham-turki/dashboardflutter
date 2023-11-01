@@ -11,15 +11,16 @@ class CustomDate extends StatefulWidget {
   Function(bool isValid, String value)? onValue;
   bool? ddmmyyyy;
   final TextEditingController? dateController;
+  String? date;
 
-  CustomDate({
-    super.key,
-    required this.label,
-    this.onValue,
-    this.dateController,
-    this.minYear,
-    this.ddmmyyyy,
-  });
+  CustomDate(
+      {super.key,
+      required this.label,
+      this.onValue,
+      this.dateController,
+      this.minYear,
+      this.ddmmyyyy,
+      this.date});
 
   @override
   State<CustomDate> createState() => _CustomDateState();
@@ -88,6 +89,7 @@ class _CustomDateState extends State<CustomDate> {
     height = MediaQuery.of(context).size.height;
 
     String label = widget.label;
+
     if (widget.dateController!.text.isNotEmpty) {
       yearController.text = splitDate()[0];
       monthController.text = splitDate()[1];
@@ -164,9 +166,7 @@ class _CustomDateState extends State<CustomDate> {
           hintText: hint,
         ),
         onChanged: (value) {
-          setState(() {
-            setRequestNodes(hint);
-          });
+          setRequestNodes(hint);
         },
         onFieldSubmitted: (value) {
           submitValueDate(focusNode);
@@ -361,8 +361,6 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   void setListeners() {
-    // String year = yearController.text;
-
     yearFocusNode.addListener(() {
       String year = yearController.text;
       if (!yearFocusNode.hasFocus) {
