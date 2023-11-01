@@ -36,24 +36,31 @@ class ApiService {
       );
 
       if (response.statusCode != 200) {
-        if (response.statusCode == 417) {
+        if (response.statusCode == 417 || response.statusCode == 401) {
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
           );
-        } else if (response.statusCode == 401) {
-          const storage = FlutterSecureStorage();
+        }
+        // else if (response.statusCode == 401) {
+        //   const storage = FlutterSecureStorage();
 
-          await storage.delete(key: "jwt");
+        //   await storage.delete(key: "jwt");
 
-          final context = navigatorKey.currentState!.overlay!.context;
-          if (kIsWeb) {
-            GoRouter.of(context).go(AppRoutes.loginRoute);
-          } else {
-            Navigator.pushReplacementNamed(context, loginScreenRoute);
-          }
-          // Navigator.pushReplacementNamed(context, loginScreenRoute);
-        } else if (isStart == null) {
+        //   final context = navigatorKey.currentState!.overlay!.context;
+        //   if (kIsWeb) {
+        //     print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
+        //     ErrorController.openErrorDialog(
+        //       401,
+        //       response.body,
+        //     );
+        //     GoRouter.of(context).go(AppRoutes.loginRoute);
+        //   } else {
+        //     Navigator.pushReplacementNamed(context, loginScreenRoute);
+        //   }
+        //   // Navigator.pushReplacementNamed(context, loginScreenRoute);
+        // }
+        else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 
           ErrorController.openErrorDialog(
@@ -103,25 +110,27 @@ class ApiService {
           return response;
         }
 
-        if (response.statusCode == 417) {
+        if (response.statusCode == 417 || response.statusCode == 401) {
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
           );
-        } else if (response.statusCode == 401) {
-          const storage = FlutterSecureStorage();
+        }
+        // else if (response.statusCode == 401) {
+        //   const storage = FlutterSecureStorage();
 
-          await storage.delete(key: "jwt");
+        //   await storage.delete(key: "jwt");
 
-          print("Iam hereeeeeee");
-          final context = navigatorKey.currentState!.overlay!.context;
-          if (kIsWeb) {
-            GoRouter.of(context).go(AppRoutes.loginRoute);
-          } else {
-            Navigator.pushReplacementNamed(context, loginScreenRoute);
-          }
-          // Navigator.pushReplacementNamed(context, loginScreenRoute);
-        } else if (isStart == null) {
+        //   print("Iam hereeeeeee");
+        //   final context = navigatorKey.currentState!.overlay!.context;
+        //   if (kIsWeb) {
+        //     GoRouter.of(context).go(AppRoutes.loginRoute);
+        //   } else {
+        //     Navigator.pushReplacementNamed(context, loginScreenRoute);
+        //   }
+        //   // Navigator.pushReplacementNamed(context, loginScreenRoute);
+        // }
+        else if (isStart == null) {
           print("inside start response ${response.statusCode}");
 
           ErrorController.openErrorDialog(

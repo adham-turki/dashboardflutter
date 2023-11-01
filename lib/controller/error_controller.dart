@@ -19,18 +19,20 @@ class ErrorController {
     if (responseStatus == 400) {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error400,
           const Color.fromARGB(255, 232, 232, 23), 400);
-    } else if (responseStatus == 401) {
-      const storage = FlutterSecureStorage();
+    }
+    // else if (responseStatus == 401) {
+    //   const storage = FlutterSecureStorage();
 
-      await storage.delete(key: "jwt");
-      if (kIsWeb) {
-        GoRouter.of(context).go(AppRoutes.loginRoute);
-      } else {
-        Navigator.pushReplacementNamed(context, loginScreenRoute);
-      }
-      // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
-      //     const Color.fromARGB(255, 232, 232, 23), 401);
-    } else if (responseStatus == 200) {
+    //   await storage.delete(key: "jwt");
+    //   if (kIsWeb) {
+    //     GoRouter.of(context).go(AppRoutes.loginRoute);
+    //   } else {
+    //     Navigator.pushReplacementNamed(context, loginScreenRoute);
+    //   }
+    //   // dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error401,
+    //   //     const Color.fromARGB(255, 232, 232, 23), 401);
+    // }
+    else if (responseStatus == 200) {
       dialogBasedonResponseStatus(Icons.done, errorDetails, locale.error200,
           const Color.fromARGB(255, 81, 237, 4), 200);
     } else if (responseStatus == 405) {
@@ -48,7 +50,10 @@ class ErrorController {
     } else if (responseStatus == 404) {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error404,
           const Color.fromARGB(255, 232, 232, 23), 404);
-    } else if (responseStatus == 417) {
+    } else if (responseStatus == 417 || responseStatus == 401) {
+      dialogBasedonResponseStatus(
+          Icons.warning, errorDetails, locale.error417, Colors.red, 417);
+    } else if (responseStatus == 401) {
       dialogBasedonResponseStatus(
           Icons.warning, errorDetails, locale.error417, Colors.red, 417);
     } else if (responseStatus == 0 && !ErrorController.temp) {
