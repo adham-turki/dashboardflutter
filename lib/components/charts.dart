@@ -17,8 +17,9 @@ class BarData {
 class CustomBarChart extends StatelessWidget {
   final List<BarData> data;
   final Color? color;
+  final Color? textColor;
 
-  const CustomBarChart({required this.data, this.color});
+  const CustomBarChart({required this.data, this.color, this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +40,11 @@ class CustomBarChart extends StatelessWidget {
               enableTooltip: true,
               animationDuration: 1000,
               color: color ?? const Color(0xFFEE9322),
-              dataLabelSettings: const DataLabelSettings(
+              dataLabelSettings: DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
-                    color: Color(0xFF219C90), fontWeight: FontWeight.w600),
+                    color: textColor ?? Color(0xFF219C90),
+                    fontWeight: FontWeight.w600),
               ))
         ],
       ),

@@ -24,8 +24,7 @@ class FilterDialogDailySales extends StatefulWidget {
 class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   late AppLocalizations _locale;
   bool isDesktop = false;
-  final TextEditingController _fromDateController =
-      TextEditingController(text: "29-10-2021");
+  final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   double width = 0;
   double height = 0;

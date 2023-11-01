@@ -290,16 +290,6 @@ class _FilterDialogSalesByBranchesState
                           },
                         ),
                       ),
-                      // CustomDatePicker(
-                      //   label: _locale.toDate,
-                      //   controller: _toDateController,
-                      //   date: DateTime.parse(_fromDateController.text),
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _toDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
                     ],
                   ),
           ],
@@ -326,9 +316,7 @@ class _FilterDialogSalesByBranchesState
                     DatesController().formatDate(_fromDateController.text),
                     DatesController().formatDate(_toDateController.text),
                   );
-                  print(
-                      "_fromDateController.text :${_fromDateController.text}");
-                  print("periodd :${selectedPeriod}");
+
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);
                   Navigator.of(context).pop();

@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
+import 'package:provider/provider.dart';
 
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/chart/pie_chart_model.dart';
@@ -13,6 +14,9 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
 import '../../components/charts/pie_chart.dart';
+import '../../components/charts/pie_chart_dashboard.dart';
+import '../../controller/error_controller.dart';
+import '../../provider/dates_provider.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
@@ -41,10 +45,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   var period = "";
   var statusVar = "";
   String todayDate = "";
+  String currentMonth = "";
 
   late AppLocalizations _locale;
-  TextEditingController fromCont = TextEditingController();
-  TextEditingController toCont = TextEditingController();
+  // TextEditingController fromCont = TextEditingController();
+  // TextEditingController toCont = TextEditingController();
 
   final dataMap = <String, double>{};
 
@@ -63,32 +68,39 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     _locale = AppLocalizations.of(context);
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-    // fromCont.text = todayDate;
-    // toCont.text = todayDate;
+    currentMonth = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().currentMonth()));
 
-    print("in bar :${fromCont.text}");
+    fromDateController.text = currentMonth;
+    toDateController.text = todayDate;
 
-    //  getSalesByBranch();
     super.didChangeDependencies();
+  }
+
+  Future<void> getSalesData() async {
+    await getSalesByBranch().then((value) {
+      setState(() {});
+    });
   }
 
   @override
   void initState() {
-    print("inistiate fromDate :${fromCont.text}");
-
+    Future.delayed(Duration.zero, () {
+      getSalesData().then((value) {
+        setState(() {});
+      });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("inBuild fromcot :${fromCont.text}");
-    // fromCont = widget.fromDateController;
-    // toCont = widget.toDateController;
+    print("inBuild fromcot :${fromDateController.text}");
 
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    // getSalesByBranch();
+
     print("******************************");
     return SingleChildScrollView(
       child: Container(
@@ -100,7 +112,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                height: isDesktop ? height * 0.59 : height * 0.67,
+                height: isDesktop ? height * 0.53 : height * 0.67,
                 width: double.infinity,
                 padding: EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(
@@ -115,59 +127,53 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                       children: [
                         Text(
                           _locale.salesByBranches,
-                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0.0, vertical: 0),
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width < 800
-                                  ? MediaQuery.of(context).size.width * 0.06
-                                  : MediaQuery.of(context).size.width * 0.03,
-                              child: blueButton1(
-                                icon: Icon(
-                                  Icons.filter_list_sharp,
-                                  color: whiteColor,
-                                  size: isDesktop
-                                      ? height * 0.039
-                                      : height * 0.03,
-                                ),
-                                // text: _locale.filter,
-                                textColor: Color.fromARGB(255, 255, 255, 255),
-                                //   borderRadius: 5.0,
-                                height:
-                                    isDesktop ? height * .015 : height * .039,
-                                fontSize:
-                                    isDesktop ? height * .018 : height * .017,
-                                width: isDesktop ? width * 0.13 : width * 0.27,
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return FilterDialogSalesByBranches(
-                                        onFilter:
-                                            (selectedPeriod, fromDate, toDate) {
-                                          fromDateController.text = fromDate;
-                                          toDateController.text = toDate;
-                                          period = selectedPeriod;
-                                        },
-                                      );
-                                    },
-                                  ).then((value) async {
-                                    getSalesByBranch().then((value) {
-                                      setState(() {});
-                                    });
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width < 800
+                                ? MediaQuery.of(context).size.width * 0.06
+                                : MediaQuery.of(context).size.width * 0.03,
+                            child: blueButton1(
+                              icon: Icon(
+                                Icons.filter_list_sharp,
+                                color: whiteColor,
+                                size:
+                                    isDesktop ? height * 0.039 : height * 0.03,
+                              ),
+                              // text: _locale.filter,
+                              textColor: Color.fromARGB(255, 255, 255, 255),
+                              //   borderRadius: 5.0,
+                              height: isDesktop ? height * .015 : height * .039,
+                              fontSize:
+                                  isDesktop ? height * .018 : height * .017,
+                              width: isDesktop ? width * 0.13 : width * 0.27,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FilterDialogSalesByBranches(
+                                      onFilter:
+                                          (selectedPeriod, fromDate, toDate) {
+                                        fromDateController.text = fromDate;
+                                        toDateController.text = toDate;
+                                        period = selectedPeriod;
+                                      },
+                                    );
+                                  },
+                                ).then((value) async {
+                                  getSalesByBranch().then((value) {
+                                    setState(() {});
                                   });
-                                },
-                              )),
-                        ),
+                                });
+                              },
+                            )),
                       ],
                     ),
-                    PieChartComponent(
-                      radiusNormal: isDesktop ? height * 0.17 : 120,
-                      radiusHover: isDesktop ? height * 0.17 : 80,
-                      width: isDesktop ? width * 0.42 : width * 0.05,
-                      height: isDesktop ? height * 0.42 : height * 0.4,
+                    PieChartDashboard(
+                      radiusNormal: isDesktop ? height * 0.15 : 120,
+                      radiusHover: isDesktop ? height * 0.15 : 80,
+                      width: isDesktop ? width * 0.35 : width * 0.05,
+                      height: isDesktop ? height * 0.35 : height * 0.4,
                       dataList: pieData,
                     ),
                   ],
@@ -230,7 +236,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             pieData.add(PieChartModel(
                 title: element.namee!,
                 value: formatDoubleToTwoDecimalPlaces(a),
-                color: getRandomColor(colorNewList)));
+                color: getRandomColor(colorListDashboard)));
           }
 
           barData.add(

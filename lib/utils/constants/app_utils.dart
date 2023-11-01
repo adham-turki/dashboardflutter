@@ -72,9 +72,9 @@ Widget blueButton1({
       // Remove the primary color from styleFrom since it's set in the gradient
     ),
     child: Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xfff0174BE), Color(0xfff00A9FF)],
+          colors: [Color(0xff4741c1), Color(0xff7e4fe4)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),

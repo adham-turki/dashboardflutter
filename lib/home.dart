@@ -58,12 +58,22 @@ class _HomePageState extends State<HomePage> {
               children: [
                 SizedBox(
                   width: isDesktop ? width * 0.835 : width,
-                  height: height * 0.145,
+                  height: context.read<ScreenContentProvider>().getPage() == 0
+                      ? height * 0.048
+                      : height * 0.145,
                   child: ContentHeader(
                       page: context.read<ScreenContentProvider>().getPage()),
                 ),
                 SizedBox(
-                  height: isDesktop ? height * 0.85 : height * 0.7,
+                  //  height: isDesktop ? height * 0.85 : height * 0.7,
+                  height: context.read<ScreenContentProvider>().getPage() == 0
+                      ? isDesktop
+                          ? height * 0.95
+                          : height * 0.7
+                      : isDesktop
+                          ? height * 0.85
+                          : height * 0.7,
+
                   width: width * 0.835,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(

@@ -56,5 +56,15 @@ final colorNewList = <Color>[
   const Color(0xFF827717), // Lime
 ];
 
+final colorListDashboard = <Color>[
+  Color(0xff7e4fe4),
+  // const Color(0xFF2196F3),
+  Colors.teal,
+  Color(0xfffd8236),
+  Color(0xff1cacff),
+  // Color(0xffffce6c),
+  Color.fromRGBO(71, 65, 193, 1),
+  Color(0xff30c4ff)
+];
 Color hoverColor = const Color.fromRGBO(30, 36, 48, 1);
 // Make sure you have a total of 50 unique colors
