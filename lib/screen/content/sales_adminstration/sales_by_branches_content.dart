@@ -63,7 +63,8 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
   bool isDesktop = false;
   List<Color> usedColors = [];
-
+  String fromDate = "";
+  String toDate = "";
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
@@ -232,19 +233,27 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   void checkPeriods(value) {
     if (value == periods[0]) {
       _fromDateController.text = DatesController().todayDate().toString();
+      fromDate = DatesController().todayDate().toString();
       _toDateController.text = DatesController().todayDate().toString();
+      toDate = DatesController().todayDate().toString();
     }
     if (value == periods[1]) {
       _fromDateController.text = DatesController().currentWeek().toString();
+      fromDate = DatesController().currentWeek().toString();
       _toDateController.text = DatesController().todayDate().toString();
+      toDate = DatesController().todayDate().toString();
     }
     if (value == periods[2]) {
       _fromDateController.text = DatesController().currentMonth().toString();
+      fromDate = DatesController().currentMonth().toString();
       _toDateController.text = DatesController().todayDate().toString();
+      toDate = DatesController().todayDate().toString();
     }
     if (value == periods[3]) {
       _fromDateController.text = DatesController().currentYear().toString();
+      fromDate = DatesController().currentYear().toString();
       _toDateController.text = DatesController().todayDate().toString();
+      toDate = DatesController().todayDate().toString();
     }
   }
 
@@ -266,6 +275,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           },
         ),
         CustomDate(
+          date: fromDate,
           dateController: _fromDateController,
           label: _locale.fromDate,
           minYear: 2000,
@@ -303,6 +313,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         // ),
         CustomDate(
           dateController: _toDateController,
+          date: toDate,
           label: _locale.toDate,
           onValue: (isValid, value) {
             if (isValid) {
@@ -386,6 +397,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            date: fromDate,
             dateController: _fromDateController,
             label: _locale.fromDate,
             minYear: 2000,
@@ -421,6 +433,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         SizedBox(
           width: widthMobile,
           child: CustomDate(
+            date: toDate,
             dateController: _toDateController,
             label: _locale.toDate,
             onValue: (isValid, value) {
