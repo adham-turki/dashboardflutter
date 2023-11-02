@@ -3,25 +3,18 @@ import 'dart:math';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
-import 'package:bi_replicate/utils/func/converters.dart';
-import 'package:bi_replicate/widget/custom_date_picker.dart';
-
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/sales_category_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_sales_by_cat.dart';

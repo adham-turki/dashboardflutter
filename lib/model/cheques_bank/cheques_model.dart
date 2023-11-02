@@ -104,14 +104,14 @@ class ChequesModel {
         title: localizations.dueDate,
         field: "dueDate",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.08 : width * 0.4,
+        width: isDesktop ? width * 0.1 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.bankName,
         field: "bankName",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.15 : width * 0.4,
+        width: isDesktop ? width * 0.14 : width * 0.4,
         backgroundColor: colColor,
       ),
       PlutoColumn(
