@@ -3,18 +3,25 @@ import 'dart:math';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
+import 'package:bi_replicate/widget/custom_date_picker.dart';
+
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
+import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/sales_category_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
+import '../../utils/constants/constants.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_sales_by_cat.dart';
@@ -59,6 +66,8 @@ class _BranchesSalesByCatDashboardState
   List<String> periods = [];
   List<String> categories = [];
   var selectedPeriod = "";
+
+  var selectedChart = "";
   List<BarData> barData = [];
 
   List<PieChartModel> pieData = [];
@@ -74,9 +83,7 @@ class _BranchesSalesByCatDashboardState
   String currentYear = "";
   var selectedCategories = "";
   var selectedBranchCode = "";
-  String lastFromDate = "";
-  String lastCategories = "";
-  String lastBranchCode = "";
+
   double balance = 0;
   bool accountsActive = false;
   String accountNameString = "";
@@ -104,8 +111,7 @@ class _BranchesSalesByCatDashboardState
       _locale.classifications
     ];
     todayDate = DatesController().formatDate(DatesController().todayDate());
-    currentYear =
-        DatesController().formatDate(DatesController().currentMonth());
+    currentYear = DatesController().formatDate(DatesController().twoYearsAgo());
 
     fromDateController.text = currentYear;
     toDateController.text = todayDate;
@@ -121,9 +127,6 @@ class _BranchesSalesByCatDashboardState
       setState(() {});
     });
     Future.delayed(Duration.zero, () {
-      lastFromDate = fromDateController.text;
-      lastCategories = selectedCategories;
-      lastBranchCode = selectedBranchCode;
       getBranchByCatData().then((value) {
         setState(() {});
       });
@@ -155,7 +158,7 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.48 : height * 0.6,
+                height: isDesktop ? height * 0.48 : height * 0.69,
 
                 width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5),
@@ -205,7 +208,8 @@ class _BranchesSalesByCatDashboardState
                                             fromDate,
                                             toDate,
                                             selectedCategoriesF,
-                                            selectedBranchCodeF) {
+                                            selectedBranchCodeF,
+                                            chart) {
                                           fromDateController.text = fromDate;
                                           toDateController.text = toDate;
                                           selectedCategories =
@@ -213,6 +217,7 @@ class _BranchesSalesByCatDashboardState
                                           selectedBranchCode =
                                               selectedBranchCodeF;
                                           selectedPeriod = selectedPeriodF;
+                                          selectedChart = chart;
                                         },
                                       );
                                     },
@@ -263,85 +268,75 @@ class _BranchesSalesByCatDashboardState
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future<void> getBranchByCat({bool? isStart}) async {
-    var selectedFromDate = fromDateController.text;
-    final selectedCategoriesValue = selectedCategories;
-    final selectedBranchCodeValue = selectedBranchCode;
-
-    if (selectedFromDate != lastFromDate ||
-        selectedCategoriesValue != lastCategories ||
-        selectedBranchCodeValue != lastBranchCode) {
-      lastFromDate = selectedFromDate;
-      lastCategories = selectedCategories;
-      lastBranchCode = selectedBranchCode;
-
-      if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
-        if (selectedFromDate.isEmpty) {
-          selectedFromDate = todayDate;
-        }
-        if (toDateController.text.isEmpty) {
-          toDateController.text = todayDate;
-        }
+  Future getBranchByCat({bool? isStart}) async {
+    listOfBalances = [];
+    pieData = [];
+    barData = [];
+    dataMap.clear();
+    int cat = getCategoryNum(selectedCategories, _locale);
+    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
       }
+      if (toDateController.text.isEmpty) {
+        toDateController.text = todayDate;
+      }
+    }
 
-      SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: selectedFromDate,
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: fromDateController.text.isEmpty
+            ? todayDate
+            : fromDateController.text,
         toDate:
             toDateController.text.isEmpty ? todayDate : toDateController.text,
-        byCategory: getCategoryNum(selectedCategories, _locale),
-        branch: selectedBranchCode,
-      );
+        byCategory: cat,
+        branch: selectedBranchCode);
+    pieData = [];
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
 
-      pieData = [];
-      barData = [];
-      listOfBalances = [];
-      listOfPeriods = [];
+    // print("ddddddddddd");
+    await salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
+      for (var element in value) {
+        // creditAmt - debitAmt
+        double bal = element.creditAmt! - element.debitAmt!;
 
-      await salesCategoryController
-          .getSalesByCategory(searchCriteria, isStart: isStart)
-          .then((value) {
-        for (var element in value) {
-          double bal = element.creditAmt! - element.debitAmt!;
-
-          Color randomColor = getRandomColor(colorNewList, usedColors);
-          if (bal != 0.0) {
-            temp = true;
-          } else if (bal == 0.0) {
-            temp = false;
-          }
-          listOfBalances.add(bal);
-          listOfPeriods.add(
-            element.categoryName!.isNotEmpty
-                ? element.categoryName!
-                : _locale.general,
-          );
-          if (temp) {
-            dataMap[element.categoryName!] =
-                formatDoubleToTwoDecimalPlaces(bal);
-
-            pieData.add(
-              PieChartModel(
-                title: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                value: formatDoubleToTwoDecimalPlaces(bal),
-                color: randomColor,
-              ),
-            );
-
-            barData.add(
-              BarData(
-                name: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                percent: bal,
-              ),
-            );
-          }
-
-          print("bardata Length :${barData.length}");
+        // Generate a random color
+        Color randomColor = getRandomColor(
+            colorNewList, usedColors); // Use the getRandomColor function
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
         }
-      });
-    }
+        listOfBalances.add(bal);
+        listOfPeriods.add(element.categoryName!);
+        if (temp) {
+          dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
+
+          pieData.add(PieChartModel(
+              title: element.categoryName! == ""
+                  ? _locale.general
+                  : "${element.categoryName!}",
+              value: formatDoubleToTwoDecimalPlaces(bal),
+              color: randomColor)); // Set random color
+          // print("asdasd: ${pieData.length}");
+        }
+
+        barData.add(
+          BarData(
+            name: element.categoryName! == ""
+                ? _locale.general
+                : element.categoryName!,
+            percent: bal,
+          ), // Set random color
+        );
+
+        print("bardata Length :${barData.length}");
+      }
+    });
   }
 }

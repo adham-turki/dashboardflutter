@@ -13,8 +13,13 @@ import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogSalesByCategory extends StatefulWidget {
-  final Function(String selectedPeriod, String fromDate, String toDate,
-      String selectedCategoriesF, String selectedBranchCodeF) onFilter;
+  final Function(
+      String selectedPeriod,
+      String fromDate,
+      String toDate,
+      String selectedCategoriesF,
+      String selectedBranchCodeF,
+      String chart) onFilter;
 
   FilterDialogSalesByCategory({
     required this.onFilter,
@@ -40,6 +45,8 @@ class _FilterDialogSalesByCategoryState
   var selectedPeriod = "";
   // List<String> status = [];
   List<String> categories = [];
+  List<String> charts = [];
+  var selectedChart = "";
 
   // var selectedStatus = "";
   var selectedCategories = "";
@@ -64,6 +71,9 @@ class _FilterDialogSalesByCategoryState
       _locale.categories("2"),
       _locale.classifications
     ];
+    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    selectedChart = charts[2];
+
     selectedCategories = categories[0];
     branches = [_locale.all];
     selectedBranch = branches[0];
@@ -77,7 +87,7 @@ class _FilterDialogSalesByCategoryState
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().currentMonth()));
+        DatesController().formatDate(DatesController().currentYear()));
 
     _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
@@ -121,6 +131,17 @@ class _FilterDialogSalesByCategoryState
                         onChanged: (value) {
                           setState(() {
                             selectedCategories = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: charts,
+                        hint: "",
+                        label: _locale.chartType,
+                        initialValue: selectedChart,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChart = value!;
                           });
                         },
                       ),
@@ -324,7 +345,8 @@ class _FilterDialogSalesByCategoryState
                       DatesController().formatDate(_fromDateController.text),
                       DatesController().formatDate(_toDateController.text),
                       selectedCategories,
-                      selectedBranchCode);
+                      selectedBranchCode,
+                      selectedChart);
                   print(
                       "_fromDateController.text :${_fromDateController.text}");
                   print("periodd :${selectedPeriod}");

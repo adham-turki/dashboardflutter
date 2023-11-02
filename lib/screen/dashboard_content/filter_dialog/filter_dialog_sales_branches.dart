@@ -12,10 +12,8 @@ import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogSalesByBranches extends StatefulWidget {
   final Function(
-    String selectedPeriod,
-    String fromDate,
-    String toDate,
-  ) onFilter;
+          String selectedPeriod, String fromDate, String toDate, String chart)
+      onFilter;
 
   FilterDialogSalesByBranches({
     required this.onFilter,
@@ -40,6 +38,8 @@ class _FilterDialogSalesByBranchesState
   List<String> periods = [];
   var selectedPeriod = "";
   List<String> status = [];
+  List<String> charts = [];
+  var selectedChart = "";
 
   var selectedStatus = "";
 
@@ -59,7 +59,8 @@ class _FilterDialogSalesByBranchesState
       _locale.monthly,
       _locale.yearly,
     ];
-
+    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    selectedChart = charts[2];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     print("todayDate: $todayDate");
@@ -105,6 +106,17 @@ class _FilterDialogSalesByBranchesState
                           setState(() {
                             checkPeriods(value);
                             selectedPeriod = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: charts,
+                        hint: "",
+                        label: _locale.chartType,
+                        initialValue: selectedChart,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChart = value!;
                           });
                         },
                       ),
@@ -180,16 +192,7 @@ class _FilterDialogSalesByBranchesState
                       SizedBox(
                         width: width * 0.01,
                       ),
-                      // CustomDatePicker(
-                      //   label: _locale.fromDate,
-                      //   date: DateTime.parse(_toDateController.text),
-                      //   controller: _fromDateController,
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _fromDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
+
                       SizedBox(
                         // height: height * 0.1,
                         width: isDesktop ? width * 0.135 : width * 0.9,
@@ -215,6 +218,7 @@ class _FilterDialogSalesByBranchesState
                           },
                         ),
                       ),
+
                       // CustomDatePicker(
                       //   label: _locale.toDate,
                       //   controller: _toDateController,
@@ -312,10 +316,10 @@ class _FilterDialogSalesByBranchesState
                       1, _locale.startDateAfterEndDate);
                 } else {
                   widget.onFilter(
-                    selectedPeriod,
-                    DatesController().formatDate(_fromDateController.text),
-                    DatesController().formatDate(_toDateController.text),
-                  );
+                      selectedPeriod,
+                      DatesController().formatDate(_fromDateController.text),
+                      DatesController().formatDate(_toDateController.text),
+                      selectedChart);
 
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);
