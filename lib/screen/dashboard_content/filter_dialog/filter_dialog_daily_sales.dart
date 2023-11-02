@@ -11,7 +11,7 @@ import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogDailySales extends StatefulWidget {
-  final Function(String fromDate, String selectedStatus) onFilter;
+  final Function(String fromDate, String selectedStatus, String chart) onFilter;
 
   FilterDialogDailySales({
     required this.onFilter,
@@ -32,9 +32,10 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   List<String> periods = [];
   var selectedPeriod = "";
   List<String> status = [];
-
+  List<String> charts = [];
   var selectedStatus = "";
   String currentMonth = "";
+  var selectedChart = "";
 
   @override
   void didChangeDependencies() {
@@ -52,7 +53,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       _locale.monthly,
       _locale.yearly,
     ];
-
+    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    selectedChart = charts[2];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     print("todayDate: $todayDate");
@@ -117,7 +119,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                     ],
                   ),
             isDesktop
-                ? Row(
+                ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -144,6 +146,17 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             }
                           },
                         ),
+                      ),
+                      CustomDropDown(
+                        items: charts,
+                        hint: "",
+                        label: _locale.chartType,
+                        initialValue: selectedChart,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChart = value!;
+                          });
+                        },
                       ),
                       // SizedBox(
                       //   width: width * 0.01,
@@ -203,7 +216,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       // selectedPeriod,
                       DatesController().formatDate(_fromDateController.text),
                       // DatesController().formatDate(_toDateController.text),
-                      selectedStatus);
+                      selectedStatus,
+                      selectedChart);
 
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);

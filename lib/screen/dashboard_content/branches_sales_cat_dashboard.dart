@@ -16,6 +16,7 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
+import '../../components/charts/pie_chart.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/sales_category_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
@@ -158,7 +159,7 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.48 : height * 0.69,
+                height: isDesktop ? height * 0.5 : height * 0.69,
 
                 width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5),
@@ -231,12 +232,28 @@ class _BranchesSalesByCatDashboardState
                         ),
                       ],
                     ),
-                    //    isDesktop ? desktopCriteria() : mobileCriteria(),
-                    CustomBarChart(
-                      data: barData,
-                      color: const Color.fromRGBO(48, 66, 125, 1),
-                      textColor: const Color(0xfffF99417),
-                    )
+                    selectedChart == _locale.lineChart
+                        ? BalanceLineChart(
+                            yAxisText: _locale.balances,
+                            xAxisText: _locale.periods,
+                            balances: listOfBalances,
+                            periods: listOfPeriods)
+                        : selectedChart == _locale.pieChart
+                            ? Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.3,
+                                  dataList: pieData,
+                                ),
+                              )
+                            : CustomBarChart(
+                                data: barData,
+                                color: const Color.fromRGBO(48, 66, 125, 1),
+                                textColor: const Color(0xfffF99417),
+                              ) //    isDesktop ? desktopCriteria() : mobileCriteria(),
                   ],
                 ),
               ),

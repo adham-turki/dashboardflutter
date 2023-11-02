@@ -54,6 +54,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   TextEditingController fromDateController = TextEditingController();
   var period = "";
   var statusVar = "";
+
   String todayDate = "";
 
   var selectedStatus = "";
@@ -143,7 +144,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.475 : height * 0.6,
+                height: isDesktop ? height * 0.53 : height * 0.6,
 
                 // width: double.infinity,
                 padding: EdgeInsets.only(left: 6, right: 6),
@@ -189,9 +190,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                     context: context,
                                     builder: (context) {
                                       return FilterDialogDailySales(
-                                        onFilter: (fromDate, selectedStatus) {
+                                        onFilter:
+                                            (fromDate, selectedStatus, chart) {
                                           fromDateController.text = fromDate;
                                           statusVar = selectedStatus;
+                                          selectedChart = chart;
                                         },
                                       );
                                     },
