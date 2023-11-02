@@ -53,7 +53,7 @@ class _ContentHeaderState extends State<ContentHeader> {
       children: [
         Responsive.isDesktop(context)
             ? Row(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Consumer<ScreenContentProvider>(
                       builder: ((context, value, child) {
