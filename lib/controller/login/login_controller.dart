@@ -13,6 +13,7 @@ class LoginController {
   Future<bool> logInPost(UserModel userModel, AppLocalizations local) async {
     String api = logInApi;
     var response = await ApiService().postRequest(api, userModel.toJson());
+
     print("code: ${response.statusCode}");
     print("body: ${response.body}");
     if (response.statusCode == statusOk) {
