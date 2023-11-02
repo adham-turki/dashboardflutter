@@ -71,10 +71,10 @@ class _HomePageState extends State<HomePage> {
                   height: context.read<ScreenContentProvider>().getPage() == 0
                       ? isDesktop
                           ? height * 0.95
-                          : height * 0.7
+                          : height * 0.75
                       : isDesktop
                           ? height * 0.85
-                          : height * 0.7,
+                          : height * 0.75,
 
                   width: width * 0.835,
                   child: SingleChildScrollView(
