@@ -149,8 +149,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                 child: PieChartComponent(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width:
-                                      isDesktop ? width * 0.42 : width * 0.05,
+                                  width: isDesktop ? width * 0.42 : width * 0.4,
                                   height:
                                       isDesktop ? height * 0.42 : height * 0.4,
                                   dataList: pieData,
