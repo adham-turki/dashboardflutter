@@ -167,9 +167,7 @@ class _CustomDateState extends State<CustomDate> {
           hintText: hint,
         ),
         onTap: () {
-          yearController.clear();
-          monthController.clear();
-          dayController.clear();
+          emptyDateControllers();
         },
         onChanged: (value) {
           setRequestNodes(hint);
@@ -184,6 +182,12 @@ class _CustomDateState extends State<CustomDate> {
         },
       ),
     );
+  }
+
+  emptyDateControllers() {
+    yearController.clear();
+    monthController.clear();
+    dayController.clear();
   }
 
   void submitValueDate(FocusNode focusNode) {
