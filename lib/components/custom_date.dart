@@ -166,12 +166,21 @@ class _CustomDateState extends State<CustomDate> {
           border: InputBorder.none,
           hintText: hint,
         ),
+        onTap: () {
+          if (hint == dayHint) {
+            emptyDateControllers();
+          } else if (hint == monthHint) {
+            monthController.clear();
+          } else if (hint == yearHint) {
+            yearController.clear();
+          }
+        },
         onChanged: (value) {
           setRequestNodes(hint);
           if (dayController.text.length == 2 &&
               monthController.text.length == 2 &&
               yearController.text.length == 4) {
-            submitValueDate(focusNode);
+            // submitValueDate(focusNode);
           }
         },
         onFieldSubmitted: (value) {
@@ -181,6 +190,12 @@ class _CustomDateState extends State<CustomDate> {
     );
   }
 
+  emptyDateControllers() {
+    yearController.clear();
+    monthController.clear();
+    dayController.clear();
+  }
+
   void submitValueDate(FocusNode focusNode) {
     checkDates();
     if (!isValid) {
@@ -188,6 +203,8 @@ class _CustomDateState extends State<CustomDate> {
     } else {
       if (widget.onValue != null) {
         // String dateValue = getDateValue();
+        print("dayController.text 3333 :${dayController.text}");
+
         widget.onValue!(isValid, getDateValue());
       }
     }
@@ -238,12 +255,13 @@ class _CustomDateState extends State<CustomDate> {
 
     if (monthStr.isNotEmpty && monthStr.length == 2) {
       int month = int.parse(monthStr);
+      int year = int.parse(yearController.text);
       print("outtttttttttttttt ${dayController.text}");
 
-      if (month > monthNow) {
+      if (month > monthNow && year == yearNow) {
         print("innnnnnnnnnnnnnn ${dayController.text}");
         monthController.text = monthNow.toString();
-        dayController.text = monthNow.toString();
+        dayController.text = dayNow.toString();
         return true;
       }
     }
@@ -278,8 +296,12 @@ class _CustomDateState extends State<CustomDate> {
               return true;
             } else if (month == 2 && day <= 29) {
               return true;
-            } else if (month == 2 && day <= 29) {
+            } else if (month == 2 && day > 29) {
+              print("dayController.text 11111 :${dayController.text}");
+
               dayController.text = 29.toString();
+              print("dayController.text 22222 :${dayController.text}");
+
               return true;
             } else if (day <= 31) {
               return true;
@@ -335,13 +357,24 @@ class _CustomDateState extends State<CustomDate> {
     String month = monthController.text;
     String day = dayController.text;
     if (hint.compareTo(dayHint) == 0 && day.length == 2) {
+      print("dayController.text 1 :${dayController.text}");
+      dayController.text = dayController.text;
+      if (int.parse(dayController.text) > 31) {}
+      print("dayController.text 2 :${dayController.text}");
       monthFocusNode.requestFocus();
     } else if (hint.compareTo(monthHint) == 0 && day.isNotEmpty) {
       if (month.length == 2) {
+        print("monthController.text 1 :${monthController.text}");
+        monthController.text = monthController.text;
+        print("monthController.text 2 :${monthController.text}");
+
         yearFocusNode.requestFocus();
       }
     } else {
       if (year.length == 4) {
+        print("yearController.text 1 :${yearController.text}");
+        yearController.text = yearController.text;
+        print("yearController.text 2 :${yearController.text}");
         // yearFocusNode.unfocus();
         isValid = dateValidation();
         // if (isValid && textNotEmpty()) {

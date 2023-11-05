@@ -145,7 +145,7 @@ class _TabMenuState extends State<TabMenu> {
                         ? width * 0.014
                         : isTablet
                             ? width * 0.015
-                            : width * 0.02,
+                            : width * 0.035,
                   ),
                   SizedBox(
                     width: width * 0.005,
@@ -158,7 +158,7 @@ class _TabMenuState extends State<TabMenu> {
                           ? width * 0.0095
                           : isTablet
                               ? width * 0.015
-                              : width * 0.02,
+                              : width * 0.035,
                     ),
                   ),
                 ],
@@ -215,7 +215,7 @@ class _TabMenuState extends State<TabMenu> {
                     ? width * 0.009
                     : isTablet
                         ? width * 0.015
-                        : width * 0.02,
+                        : width * 0.03,
               ),
             ),
           ),
@@ -242,11 +242,11 @@ class _TabMenuState extends State<TabMenu> {
     int length = sideTabModel.subMenu.length;
     if (isSelected) {
       if (length == 4) {
-        return isDesktop ? 235 : height * 0.35;
+        return isDesktop ? height * 0.26 : height * 0.26;
       } else if (length == 2) {
-        return isDesktop ? 129 : height * 0.2;
-      } else {
-        return isDesktop ? 160 : height * 0.3;
+        return isDesktop ? height * 0.15 : height * 0.15;
+      } else if (length == 3) {
+        return isDesktop ? height * 0.2 : height * 0.2;
       }
       // if (length >= 3 && length < 5) {
       //   return isDesktop ? height * 0.23 : height * 0.3;

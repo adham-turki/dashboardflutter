@@ -220,6 +220,7 @@
     "totalReturnSal": "Total Return Sales",
     "startDateAfterEndDate":"End Date should be after Start Date",
     "dateConflict":"Date Conflict",
-        "filter" : "Filter"
+        "filter" : "Filter",
+        "dailySalesCount":"Daily Sales Count"
 
 }

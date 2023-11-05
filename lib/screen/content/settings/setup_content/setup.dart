@@ -65,7 +65,7 @@ class _SetupScreenState extends State<SetupScreen> {
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Container(
         margin: const EdgeInsets.only(left: 4, right: 3),
         child: SizedBox(
@@ -116,6 +116,13 @@ class _SetupScreenState extends State<SetupScreen> {
                         color: const Color(0xffe7b84e).withOpacity(0.7),
                       ),
                       text: _locale.bankAccounts, // Custom tab label
+                    ),
+                    Tab(
+                      icon: Icon(
+                        Icons.account_balance,
+                        color: const Color(0xffe7b84e).withOpacity(0.7),
+                      ),
+                      text: _locale.dailySalesCount, // Custom tab label
                     ),
                   ],
 
@@ -183,6 +190,13 @@ class _SetupScreenState extends State<SetupScreen> {
                       // setState: _setState,
                       // addAccount: addAccount,
                       type: 5,
+                    ),
+                    ExpensesAccountSetupWidget(
+                      // list: bankAccounts,
+                      // dropDownData: accountsNameList,
+                      // setState: _setState,
+                      // addAccount: addAccount,
+                      type: 6,
                     )
 
                     // Add your custom icons and content here
