@@ -167,7 +167,13 @@ class _CustomDateState extends State<CustomDate> {
           hintText: hint,
         ),
         onTap: () {
-          emptyDateControllers();
+          if (hint == dayHint) {
+            emptyDateControllers();
+          } else if (hint == monthHint) {
+            monthController.clear();
+          } else if (hint == yearHint) {
+            yearController.clear();
+          }
         },
         onChanged: (value) {
           setRequestNodes(hint);
@@ -352,8 +358,8 @@ class _CustomDateState extends State<CustomDate> {
     String day = dayController.text;
     if (hint.compareTo(dayHint) == 0 && day.length == 2) {
       print("dayController.text 1 :${dayController.text}");
-
       dayController.text = dayController.text;
+      if (int.parse(dayController.text) > 31) {}
       print("dayController.text 2 :${dayController.text}");
       monthFocusNode.requestFocus();
     } else if (hint.compareTo(monthHint) == 0 && day.isNotEmpty) {
