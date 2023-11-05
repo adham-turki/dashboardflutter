@@ -255,8 +255,10 @@ class _CustomDateState extends State<CustomDate> {
 
     if (monthStr.isNotEmpty && monthStr.length == 2) {
       int month = int.parse(monthStr);
-      int year = int.parse(yearController.text);
-      print("outtttttttttttttt ${dayController.text}");
+      int year = int.parse(yearStr);
+      print("outtttttttttttttt 2 ${monthController.text}");
+      print(year);
+      print("outtttttttttttttt 2 ${yearController.text}");
 
       if (month > monthNow && year == yearNow) {
         print("innnnnnnnnnnnnnn ${dayController.text}");
@@ -523,6 +525,11 @@ class _CustomDateState extends State<CustomDate> {
     String year = yearController.text;
     String month = monthController.text;
     String day = dayController.text;
+    print("--------------------");
+    print(year);
+    print(month);
+    print(day);
+    print("--------------------");
     String yyyymmddd = "";
     String mmddyyyy = "";
     if (day.length == 1) {

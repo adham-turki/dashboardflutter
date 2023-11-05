@@ -231,28 +231,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget mobileLogin(BuildContext context, LocaleProvider localeProvider) {
     return Center(
-      child: FormComponent(
-        aliasName: aliasName,
-        userController: userController,
-        passwordController: passwordController,
-        onSubmit: (value) {
-          validateLogin(context);
-        },
-        onPressed: () {
-          validateLogin(context);
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Align(
+            // alignment: Alignment.bottomCenter,
+            child: LanguageWidget(
+              color: Colors.black,
+              onLocaleChanged: (locale) {
+                localeProvider.setLocale(locale);
+              },
+            ),
+          ),
+          FormComponent(
+            aliasName: aliasName,
+            userController: userController,
+            passwordController: passwordController,
+            onSubmit: (value) {
+              validateLogin(context);
+            },
+            onPressed: () {
+              validateLogin(context);
 
-          // if (_keyForm.currentState!.validate()) {
-          //   print("object 22");
-          //   _savingData().then((value) {
-          //     print("object 33");
-          //   });
-          // }
-          // Navigator.push(context, MaterialPageRoute(
-          //   builder: (context) {
-          //     return const HomePage();
-          //   },
-          // ));
-        },
+              // if (_keyForm.currentState!.validate()) {
+              //   print("object 22");
+              //   _savingData().then((value) {
+              //     print("object 33");
+              //   });
+              // }
+              // Navigator.push(context, MaterialPageRoute(
+              //   builder: (context) {
+              //     return const HomePage();
+              //   },
+              // ));
+            },
+          ),
+        ],
       ),
     );
   }
