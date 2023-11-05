@@ -300,30 +300,65 @@ class BalanceBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      height: height * 0.48,
-      padding: const EdgeInsets.all(16.0),
-      child: SfCartesianChart(
-        isTransposed: true,
-        primaryXAxis: CategoryAxis(),
-        // primaryYAxis: NumericAxis(
-        //   minimum: 0,
-        //   maximum: double.infinity,
-        //   interval: 100,
-        // ),
-        plotAreaBorderWidth: 0,
-        series: <ChartSeries>[
-          BarSeries<BarChartData, String>(
-            dataSource: data,
-            xValueMapper: (BarChartData value, _) => value.category,
-            yValueMapper: (BarChartData value, _) => value.value,
-            enableTooltip: true,
-            animationDuration: 1000,
-            color: color ?? const Color(0xff9AA0C5),
+    ScrollController scrollController = ScrollController();
+    return data.length > 10
+        ? Scrollbar(
+            isAlwaysShown: true,
+            controller: scrollController,
+            child: SingleChildScrollView(
+              controller: scrollController,
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                height: height * 0.48,
+                width: data.length * 200.0,
+                padding: const EdgeInsets.all(16.0),
+                child: SfCartesianChart(
+                  isTransposed: true,
+                  primaryXAxis: CategoryAxis(),
+                  // primaryYAxis: NumericAxis(
+                  //   minimum: 0,
+                  //   maximum: double.infinity,
+                  //   interval: 100,
+                  // ),
+                  plotAreaBorderWidth: 0,
+                  series: <ChartSeries>[
+                    BarSeries<BarChartData, String>(
+                      dataSource: data,
+                      xValueMapper: (BarChartData value, _) => value.category,
+                      yValueMapper: (BarChartData value, _) => value.value,
+                      enableTooltip: true,
+                      animationDuration: 1000,
+                      color: color ?? const Color(0xff9AA0C5),
+                    )
+                  ],
+                ),
+              ),
+            ),
           )
-        ],
-      ),
-    );
+        : Container(
+            height: height * 0.48,
+            padding: const EdgeInsets.all(16.0),
+            child: SfCartesianChart(
+              isTransposed: true,
+              primaryXAxis: CategoryAxis(),
+              // primaryYAxis: NumericAxis(
+              //   minimum: 0,
+              //   maximum: double.infinity,
+              //   interval: 100,
+              // ),
+              plotAreaBorderWidth: 0,
+              series: <ChartSeries>[
+                BarSeries<BarChartData, String>(
+                  dataSource: data,
+                  xValueMapper: (BarChartData value, _) => value.category,
+                  yValueMapper: (BarChartData value, _) => value.value,
+                  enableTooltip: true,
+                  animationDuration: 1000,
+                  color: color ?? const Color(0xff9AA0C5),
+                )
+              ],
+            ),
+          );
   }
 }
 
