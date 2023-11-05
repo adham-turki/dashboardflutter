@@ -153,7 +153,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.9
+                      ? MediaQuery.of(context).size.width * 0.7
                       : MediaQuery.of(context).size.width * 0.7,
                   decoration: const BoxDecoration(
                     color: Colors.blue,
@@ -180,7 +180,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             accountsActive
                 ? Container(
                     width: MediaQuery.of(context).size.width < 800
-                        ? MediaQuery.of(context).size.width * 0.9
+                        ? MediaQuery.of(context).size.width * 0.7
                         : MediaQuery.of(context).size.width * 0.7,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],

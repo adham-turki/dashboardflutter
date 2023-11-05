@@ -76,7 +76,7 @@ class CustomCard extends StatelessWidget {
                   label,
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: height * .02,
+                      fontSize: height * .018,
                       fontWeight: FontWeight.w700),
                 ),
               ],
