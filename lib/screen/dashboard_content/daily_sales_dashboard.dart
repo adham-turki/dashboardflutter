@@ -217,11 +217,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         ),
                       ],
                     ),
-                    selectedChart == _locale.barChart
-                        ? SizedBox(
-                            height: 15,
-                          )
-                        : Container(),
+                    // selectedChart == _locale.barChart
+                    //     ? SizedBox(
+                    //         height: 15,
+                    //       )
+                    //     : Container(),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
                             yAxisText: _locale.balances,

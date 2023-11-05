@@ -37,7 +37,7 @@ class CustomBarChart extends StatelessWidget {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: height * 0.43,
+                height: height * 0.46,
                 width: data.length * 100.0,
                 padding: const EdgeInsets.all(16.0),
                 child: SfCartesianChart(
@@ -67,7 +67,7 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : Container(
-            height: height * 0.43,
+            height: height * 0.46,
             padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
               isTransposed: true,
