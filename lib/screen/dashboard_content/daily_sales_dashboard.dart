@@ -15,6 +15,7 @@ import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../components/charts.dart';
 import '../../components/charts/pie_chart.dart';
+import '../../components/charts/pie_chart_dashboard.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
@@ -74,11 +75,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     'Save as JPEG',
     'Save as PNG',
   ];
+  List<BarData> barDataTest = [];
 
-  // List<PieChartModel> pieData = [];
+  List<PieChartModel> pieData = [];
   String accountNameString = "";
-  // String lastFromDate = "";
-  // String lastStatus = "";
+  String lastFromDate = "";
+  String lastStatus = "";
 
   @override
   void didChangeDependencies() {
@@ -99,19 +101,27 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     ];
 
     selectedStatus = status[0];
-    selectedChart = charts[0];
+    selectedChart = charts[1];
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
+    // Generate 100 BarData items
+    for (int i = 0; i < 100; i++) {
+      barDataTest.add(BarData(
+        name: 'Bar $i',
+        percent:
+            Random().nextDouble() * 100, // Random percent between 0 and 100
+      ));
+    }
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
     });
     Future.delayed(Duration.zero, () {
-      // lastFromDate = fromDateController.text;
-      // lastStatus = selectedStatus;
+      lastFromDate = fromDateController.text;
+      lastStatus = selectedStatus;
       getPayableAccountsData().then((value) {
         setState(() {});
       });
@@ -120,7 +130,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   }
 
   Future<void> getPayableAccountsData() async {
-    await getDailySales().then((value) {
+    await getDailySales1().then((value) {
       setState(() {});
     });
   }
@@ -139,28 +149,29 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding:
+                  const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 0),
               child: Container(
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.53 : height * 0.6,
+                height: isDesktop ? height * 0.51 : height * 0.6,
 
                 // width: double.infinity,
-                padding: EdgeInsets.only(left: 6, right: 6),
+                padding: EdgeInsets.only(left: 5, right: 5, top: 2),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           _locale.dailySales,
-                          style: TextStyle(fontSize: isDesktop ? 19 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 16 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -208,11 +219,33 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         ),
                       ],
                     ),
-                    CustomBarChart(
-                      data: barData,
-                      color: const Color(0xfffF99417),
-                      textColor: const Color.fromRGBO(48, 66, 125, 1),
-                    )
+                    selectedChart == _locale.barChart
+                        ? SizedBox(
+                            height: 15,
+                          )
+                        : Container(),
+                    selectedChart == _locale.lineChart
+                        ? BalanceLineChart(
+                            yAxisText: _locale.balances,
+                            xAxisText: _locale.periods,
+                            balances: listOfBalances,
+                            periods: listOfPeriods)
+                        : selectedChart == _locale.pieChart
+                            ? Center(
+                                child: PieChartDashboard(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.4 : width * 0.05,
+                                  height:
+                                      isDesktop ? height * 0.4 : height * 0.4,
+                                  dataList: barDataDailySales,
+                                ),
+                              )
+                            : CustomBarChart(
+                                data: barDataTest,
+                                color: const Color(0xfffF99417),
+                                textColor: const Color.fromRGBO(48, 66, 125, 1),
+                              )
                   ],
                 ),
               ),
@@ -227,7 +260,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future<void> getDailySales({bool? isStart}) async {
+  Future<void> getDailySales1({bool? isStart}) async {
     int stat = getVoucherStatus(_locale, statusVar);
     var selectedFromDate = fromDateController.text;
     final selectedStatus = statusVar;
@@ -279,7 +312,63 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         print("bardatalength ${barData.length}");
       }
     });
-    // }
+  }
+  // }
+
+  Future<void> getDailySales({bool? isStart}) async {
+    int stat = getVoucherStatus(_locale, statusVar);
+    var selectedFromDate = fromDateController.text;
+    final selectedStatus = statusVar;
+
+    if (selectedFromDate != lastFromDate || selectedStatus != lastStatus) {
+      lastFromDate = selectedFromDate;
+      lastStatus = selectedStatus;
+
+      if (selectedFromDate.isEmpty) {
+        selectedFromDate = todayDate;
+      }
+      SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: selectedFromDate,
+        voucherStatus: stat,
+      );
+
+      await dailySalesController
+          .getDailySale(searchCriteria, isStart: isStart)
+          .then((response) {
+        for (var elemant in response) {
+          String temp = DatesController().formatDate(getNextDay(
+            selectedFromDate,
+          ).toString());
+          if (double.parse(elemant.dailySale.toString()) != 0.0) {
+            boolTemp = true;
+          } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+            boolTemp = false;
+          }
+
+          listOfBalances.add(double.parse(elemant.dailySale.toString()));
+          listOfPeriods.add(temp);
+          if (boolTemp) {
+            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+                double.parse(elemant.dailySale.toString()));
+            barDataDailySales.add(PieChartModel(
+                title: temp,
+                value: double.parse(elemant.dailySale.toString()) == 0.0
+                    ? 1.0
+                    : formatDoubleToTwoDecimalPlaces(
+                        double.parse(elemant.dailySale.toString())),
+                color: getRandomColor(colorNewList)));
+          }
+
+          barData.add(
+            BarData(
+                name: temp,
+                percent: double.parse(elemant.dailySale.toString())),
+          );
+
+          print("bardatalength ${barData.length}");
+        }
+      });
+    }
   }
 
   Color getRandomColor(List<Color> colorList) {

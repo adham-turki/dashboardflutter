@@ -101,13 +101,13 @@ class _DashboardContentState extends State<DashboardContent> {
                                 child: BalanceBarChartDashboard(),
                               ),
                             if (!Responsive.isMobile(context))
-                              const SizedBox(
-                                width: appPadding,
+                              // const SizedBox(
+                              //   width: appPadding,
+                              // ),
+                              Expanded(
+                                flex: 2,
+                                child: DailySalesDashboard(),
                               ),
-                            Expanded(
-                              flex: 2,
-                              child: DailySalesDashboard(),
-                            ),
                           ],
                         ),
                         // const SizedBox(

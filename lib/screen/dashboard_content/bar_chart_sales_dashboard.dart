@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:provider/provider.dart';
@@ -44,14 +42,15 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
-  var period = "";
-  var selectedChart = "";
-  var statusVar = "";
   String todayDate = "";
   String currentMonth = "";
 
-  // String lastFromDate = "";
-  // String lastToDate = "";
+  var period = "";
+  var selectedChart = "";
+  var statusVar = "";
+
+  String lastFromDate = "";
+  String lastToDate = "";
 
   late AppLocalizations _locale;
 
@@ -79,20 +78,27 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   }
 
   Future<void> getSalesData() async {
-    await getSalesByBranch().then((value) {
+    await getSalesByBranch1().then((value) {
       setState(() {});
     });
   }
 
+  bool dataLoaded = false;
+
   @override
   void initState() {
     Future.delayed(Duration.zero, () {
-      // lastFromDate = fromDateController.text;
-      // lastToDate = toDateController.text;
+      lastFromDate = fromDateController.text;
+      lastToDate = toDateController.text;
       selectedChart = _locale.barChart;
-      getSalesData().then((value) {
-        setState(() {});
-      });
+
+      if (!dataLoaded) {
+        // Load data when the screen is first opened
+        dataLoaded = true; // Set the flag to true
+        getSalesData().then((value) {
+          setState(() {});
+        });
+      }
     });
     super.initState();
   }
@@ -114,24 +120,25 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding:
+                  const EdgeInsets.only(left: 5, right: 5, bottom: 5, top: 0),
               child: Container(
-                height: isDesktop ? height * 0.53 : height * 0.67,
+                height: isDesktop ? height * 0.51 : height * 0.67,
                 //  width: double.infinity,
-                padding: EdgeInsets.only(left: 5, right: 5),
+                padding: EdgeInsets.only(left: 5, right: 5, top: 2),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           _locale.salesByBranches,
-                          style: TextStyle(fontSize: isDesktop ? 19 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 16 : 18),
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width < 800
@@ -174,6 +181,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                             )),
                       ],
                     ),
+                    selectedChart == _locale.barChart
+                        ? SizedBox(
+                            height: 15,
+                          )
+                        : Container(),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
                             yAxisText: _locale.balances,
@@ -182,13 +194,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
                             ? Center(
-                                child: PieChartComponent(
+                                child: PieChartDashboard(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width:
-                                      isDesktop ? width * 0.42 : width * 0.05,
+                                  width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
+                                      isDesktop ? height * 0.4 : height * 0.4,
                                   dataList: pieData,
                                 ),
                               )
@@ -221,12 +232,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     return colorList[index];
   }
 
-  Future<void> getSalesByBranch() async {
+  Future<void> getSalesByBranch1() async {
     final selectedFromDate = fromDateController.text;
     final selectedToDate = toDateController.text;
 
-    // if (selectedFromDate != lastFromDate || selectedToDate != lastToDate) {
-    print("boll");
+    // Load data when selected dates change
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
       toDate: selectedToDate,
@@ -240,6 +250,10 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     await salesBranchesController
         .getSalesByBranches(searchCriteria)
         .then((value) {
+      // Update lastFromDate and lastToDate
+      lastFromDate = selectedFromDate;
+      lastToDate = selectedToDate;
+      // Update the data
       for (var element in value) {
         double a = (element.totalSales! + element.retSalesDis!) -
             (element.salesDis! + element.totalReturnSales!);
@@ -259,17 +273,64 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             color: getNextColor(),
           ));
         }
-
         barData.add(
           BarData(name: element.namee!, percent: a),
         );
       }
-
-      // lastFromDate = selectedFromDate;
-      // lastToDate = selectedToDate;
     });
   }
-  // }
+
+  Future<void> getSalesByBranch() async {
+    final selectedFromDate = fromDateController.text;
+    final selectedToDate = toDateController.text;
+
+    if (dataLoaded) {
+      if (selectedFromDate != lastFromDate || selectedToDate != lastToDate) {
+        // Load data when selected dates change
+        SearchCriteria searchCriteria = SearchCriteria(
+          fromDate: selectedFromDate,
+          toDate: selectedToDate,
+          voucherStatus: -100,
+        );
+        pieData = [];
+        dataMap.clear();
+        barData = [];
+        listOfBalances = [];
+        listOfPeriods = [];
+        await salesBranchesController
+            .getSalesByBranches(searchCriteria)
+            .then((value) {
+          // Update lastFromDate and lastToDate
+          lastFromDate = selectedFromDate;
+          lastToDate = selectedToDate;
+          // Update the data
+          for (var element in value) {
+            double a = (element.totalSales! + element.retSalesDis!) -
+                (element.salesDis! + element.totalReturnSales!);
+            a = Converters().formateDouble(a);
+            if (a != 0.0) {
+              temp = true;
+            } else if (a == 0.0) {
+              temp = false;
+            }
+            listOfBalances.add(a);
+            listOfPeriods.add(element.namee!);
+            if (temp) {
+              dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+              pieData.add(PieChartModel(
+                title: element.namee!,
+                value: formatDoubleToTwoDecimalPlaces(a),
+                color: getNextColor(),
+              ));
+            }
+            barData.add(
+              BarData(name: element.namee!, percent: a),
+            );
+          }
+        });
+      }
+    }
+  }
 
   Color getNextColor() {
     final color = colorListDashboard[colorIndex];

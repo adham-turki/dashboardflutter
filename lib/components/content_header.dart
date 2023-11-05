@@ -6,6 +6,8 @@ import 'package:provider/provider.dart';
 import '../controller/vouch_header_transiet_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../utils/func/dates_controller.dart';
+
 class ContentHeader extends StatefulWidget {
   int page;
   ContentHeader({super.key, required this.page});
@@ -19,6 +21,10 @@ class _ContentHeaderState extends State<ContentHeader> {
   double height = 0;
   late ScreenContentProvider provider;
   late AppLocalizations locale;
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
+  String todayDate = "";
+  String currentMonth = "";
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
   @override
@@ -31,6 +37,13 @@ class _ContentHeaderState extends State<ContentHeader> {
         print("hhhhhhhhhhhhh: ${value.numOfCustomers}");
       });
     });
+    todayDate = DatesController().formatDate(DatesController().todayDate());
+    currentMonth =
+        DatesController().formatDate(DatesController().twoYearsAgo());
+
+    fromDateController.text = currentMonth;
+    toDateController.text = todayDate;
+
     super.didChangeDependencies();
   }
 
@@ -72,6 +85,24 @@ class _ContentHeaderState extends State<ContentHeader> {
                       ],
                     );
                   })),
+                  context.read<ScreenContentProvider>().getPage() == 0
+                      ? SelectableText(
+                          maxLines: 1,
+                          "${currentMonth} / ${todayDate}",
+                          style: TextStyle(
+                            fontSize: context
+                                        .read<ScreenContentProvider>()
+                                        .getPage() ==
+                                    0
+                                ? (Responsive.isDesktop(context)
+                                    ? width * 0.01
+                                    : 15)
+                                : (Responsive.isDesktop(context)
+                                    ? width * 0.015
+                                    : 18),
+                          ),
+                        )
+                      : Container(),
                   SelectableText(
                     maxLines: 1,
                     "${locale.baseCurrency}: ${locale.ils}",
