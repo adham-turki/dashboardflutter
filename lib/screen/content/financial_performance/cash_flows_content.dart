@@ -182,6 +182,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                     width: MediaQuery.of(context).size.width < 800
                         ? MediaQuery.of(context).size.width * 0.7
                         : MediaQuery.of(context).size.width * 0.7,
+                    height: isDesktop ? height * 0.08 : height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                     ),

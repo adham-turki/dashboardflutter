@@ -135,7 +135,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.9
+                      ? MediaQuery.of(context).size.width * 0.7
                       : MediaQuery.of(context).size.width * 0.7,
                   decoration: const BoxDecoration(
                     color: Colors.blue,
@@ -162,8 +162,9 @@ class _DailySalesContentState extends State<DailySalesContent> {
             accountsActive
                 ? Container(
                     width: MediaQuery.of(context).size.width < 800
-                        ? MediaQuery.of(context).size.width * 0.9
+                        ? MediaQuery.of(context).size.width * 0.7
                         : MediaQuery.of(context).size.width * 0.7,
+                    height: isDesktop ? height * 0.08 : height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                     ),

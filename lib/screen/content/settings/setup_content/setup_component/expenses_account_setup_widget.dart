@@ -325,7 +325,7 @@ class _ExpensesAccountSetupWidgetState
   Future getDailySalesCount() async {
     setState(() {
       isFinised = false;
-      bankAccounts = [];
+      dailySalesCount = [];
     });
     await SetupController().getBiAccounts().then((value) {
       for (var elemant in value) {

@@ -145,7 +145,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.9
+                      ? MediaQuery.of(context).size.width * 0.7
                       : MediaQuery.of(context).size.width * 0.7,
                   decoration: const BoxDecoration(
                     color: Colors.blue,
@@ -172,8 +172,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             accountsActive
                 ? Container(
                     width: MediaQuery.of(context).size.width < 800
-                        ? MediaQuery.of(context).size.width * 0.9
+                        ? MediaQuery.of(context).size.width * 0.7
                         : MediaQuery.of(context).size.width * 0.7,
+                    height: isDesktop ? height * 0.08 : height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                     ),
