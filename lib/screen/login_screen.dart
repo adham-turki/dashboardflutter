@@ -232,16 +232,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget mobileLogin(BuildContext context, LocaleProvider localeProvider) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Align(
-            // alignment: Alignment.bottomCenter,
-            child: LanguageWidget(
-              color: Colors.black,
-              onLocaleChanged: (locale) {
-                localeProvider.setLocale(locale);
-              },
-            ),
+          LanguageWidget(
+            color: Colors.black,
+            onLocaleChanged: (locale) {
+              localeProvider.setLocale(locale);
+            },
           ),
           FormComponent(
             aliasName: aliasName,

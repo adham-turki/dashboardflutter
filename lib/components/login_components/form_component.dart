@@ -49,7 +49,7 @@ class _FormComponentState extends State<FormComponent> {
 
     Size loginBtn = Size(width * 0.1, width * 0.1);
     return SizedBox(
-      height: isDesktop ? height * 0.4 : height * 0.8,
+      height: isDesktop ? width * 0.4 : height * 0.8,
       child: Center(
         child: Stack(
           alignment: Alignment.bottomCenter,
