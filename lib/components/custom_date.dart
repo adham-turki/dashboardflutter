@@ -174,7 +174,7 @@ class _CustomDateState extends State<CustomDate> {
           if (dayController.text.length == 2 &&
               monthController.text.length == 2 &&
               yearController.text.length == 4) {
-            submitValueDate(focusNode);
+            // submitValueDate(focusNode);
           }
         },
         onFieldSubmitted: (value) {
