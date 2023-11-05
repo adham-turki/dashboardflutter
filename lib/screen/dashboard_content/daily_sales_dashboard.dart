@@ -85,7 +85,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDate(DatesController().currentMonth());
+    todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
     fromDateController.text = todayDate;
     status = [
       _locale.all,
@@ -107,12 +107,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void initState() {
-    // Generate 100 BarData items
     for (int i = 0; i < 100; i++) {
       barDataTest.add(BarData(
         name: 'Bar $i',
-        percent:
-            Random().nextDouble() * 100, // Random percent between 0 and 100
+        percent: Random().nextDouble() * 100,
       ));
     }
     getPayableAccounts(isStart: true).then((value) {

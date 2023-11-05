@@ -47,7 +47,8 @@ class CustomBarChart extends StatelessWidget {
               BarSeries<BarData, String>(
                 dataSource: data,
                 xValueMapper: (BarData value, _) => value.name,
-                yValueMapper: (BarData value, _) => value.percent,
+                yValueMapper: (BarData value, _) =>
+                    double.parse(value.percent!.toStringAsFixed(2)),
                 enableTooltip: true,
                 animationDuration: 1000,
                 color: color ?? const Color(0xFFEE9322),

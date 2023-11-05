@@ -181,11 +181,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                             )),
                       ],
                     ),
-                    selectedChart == _locale.barChart
-                        ? SizedBox(
-                            height: 15,
-                          )
-                        : Container(),
+                    // selectedChart == _locale.barChart
+                    //     ? SizedBox(
+                    //         height: 15,
+                    //       )
+                    //     : Container(),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
                             yAxisText: _locale.balances,

@@ -62,7 +62,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
   List<PieChartModel> pieData = [];
   String accountNameString = "";
   List<BarChartData> barData = [];
-
+  List<BarChartData> barDataTest = [];
   bool boolTemp = false;
   final usedColors = <Color>[];
   String todayDate = "";
@@ -93,7 +93,12 @@ class _DailySalesContentState extends State<DailySalesContent> {
   @override
   void initState() {
     // getExpensesAccounts();
-
+    for (int i = 0; i < 100; i++) {
+      barDataTest.add(BarChartData(
+        'Bar $i',
+        Random().nextDouble() * 100, // Random percent between 0 and 100
+      ));
+    }
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});

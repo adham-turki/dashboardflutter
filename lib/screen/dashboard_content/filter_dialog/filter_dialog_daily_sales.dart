@@ -66,7 +66,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().currentMonth()));
+        DatesController().formatDate(DatesController().twoYearsAgo()));
     _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
     print("fromDate: ${_fromDateController.text}");

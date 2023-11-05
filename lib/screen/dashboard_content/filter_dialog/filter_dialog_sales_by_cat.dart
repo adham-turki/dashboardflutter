@@ -87,7 +87,7 @@ class _FilterDialogSalesByCategoryState
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().currentYear()));
+        DatesController().formatDate(DatesController().twoYearsAgo()));
 
     _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
