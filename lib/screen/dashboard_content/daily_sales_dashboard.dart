@@ -242,7 +242,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 ),
                               )
                             : CustomBarChart(
-                                data: barDataTest,
+                                data: barData,
                                 color: const Color(0xfffF99417),
                                 textColor: const Color.fromRGBO(48, 66, 125, 1),
                               )
