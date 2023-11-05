@@ -125,8 +125,16 @@ class _BranchesSalesByCatDashboardState
     super.didChangeDependencies();
   }
 
+  List<BarData> barDataTest = [];
+
   @override
   void initState() {
+    for (int i = 0; i < 100; i++) {
+      barDataTest.add(BarData(
+        name: 'Bar $i',
+        percent: Random().nextDouble() * 100,
+      ));
+    }
     getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
@@ -257,7 +265,8 @@ class _BranchesSalesByCatDashboardState
                                 ),
                               )
                             : CustomBarChart(
-                                data: barData,
+                                // data: barData,
+                                data: barDataTest,
                                 color: const Color.fromRGBO(48, 66, 125, 1),
                                 textColor: const Color(0xfffF99417),
                               ) //    isDesktop ? desktopCriteria() : mobileCriteria(),

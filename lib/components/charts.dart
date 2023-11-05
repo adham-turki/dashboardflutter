@@ -23,21 +23,28 @@ class CustomBarChart extends StatelessWidget {
   final Color? textColor;
 
   const CustomBarChart({required this.data, this.color, this.textColor});
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    ScrollController scrollController = ScrollController();
 
-    return Container(
-      height: height * 0.43,
-      padding: const EdgeInsets.all(16.0),
+    return Scrollbar(
+      controller: scrollController,
+      isAlwaysShown: true,
       child: SingleChildScrollView(
-        child: SfCartesianChart(
-          isTransposed: true,
-          primaryXAxis: CategoryAxis(),
-          plotAreaBorderWidth: 0,
-          series: <ChartSeries>[
-            BarSeries<BarData, String>(
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          height: height * 0.43,
+          width: data.length * 100.0,
+          padding: const EdgeInsets.all(16.0),
+          child: SfCartesianChart(
+            isTransposed: true,
+            primaryXAxis: CategoryAxis(),
+            plotAreaBorderWidth: 0,
+            series: <ChartSeries>[
+              BarSeries<BarData, String>(
                 dataSource: data,
                 xValueMapper: (BarData value, _) => value.name,
                 yValueMapper: (BarData value, _) => value.percent,
@@ -47,10 +54,13 @@ class CustomBarChart extends StatelessWidget {
                 dataLabelSettings: DataLabelSettings(
                   isVisible: true,
                   textStyle: TextStyle(
-                      color: textColor ?? Color(0xFF219C90),
-                      fontWeight: FontWeight.w600),
-                ))
-          ],
+                    color: textColor ?? Color(0xFF219C90),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
