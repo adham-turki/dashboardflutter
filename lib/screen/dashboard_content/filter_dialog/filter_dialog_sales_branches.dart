@@ -28,8 +28,7 @@ class _FilterDialogSalesByBranchesState
     extends State<FilterDialogSalesByBranches> {
   late AppLocalizations _locale;
   bool isDesktop = false;
-  final TextEditingController _fromDateController =
-      TextEditingController(text: "29-10-2021");
+  final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   double width = 0;
   double height = 0;
@@ -73,7 +72,7 @@ class _FilterDialogSalesByBranchesState
         DatesController().formatDate(DatesController().todayDate()));
 
     currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().currentMonth()));
+        DatesController().formatDate(DatesController().twoYearsAgo()));
     _toDateController.text = todayDate;
 
     _fromDateController.text = currentMonth;
