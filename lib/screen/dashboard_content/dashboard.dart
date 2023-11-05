@@ -89,9 +89,9 @@ class _DashboardContentState extends State<DashboardContent> {
                     flex: 5,
                     child: Column(
                       children: [
-                        const SizedBox(
-                          height: appPadding,
-                        ),
+                        // const SizedBox(
+                        //   height: appPadding,
+                        // ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
