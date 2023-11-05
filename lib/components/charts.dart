@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../model/bar_chart_data_model.dart';
@@ -6,6 +7,8 @@ import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../provider/screen_content_provider.dart';
 
 class BarData {
   final String? name;
@@ -26,27 +29,29 @@ class CustomBarChart extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      height: height * 0.40,
+      height: height * 0.43,
       padding: const EdgeInsets.all(16.0),
-      child: SfCartesianChart(
-        isTransposed: true,
-        primaryXAxis: CategoryAxis(),
-        plotAreaBorderWidth: 0,
-        series: <ChartSeries>[
-          BarSeries<BarData, String>(
-              dataSource: data,
-              xValueMapper: (BarData value, _) => value.name,
-              yValueMapper: (BarData value, _) => value.percent,
-              enableTooltip: true,
-              animationDuration: 1000,
-              color: color ?? const Color(0xFFEE9322),
-              dataLabelSettings: DataLabelSettings(
-                isVisible: true,
-                textStyle: TextStyle(
-                    color: textColor ?? Color(0xFF219C90),
-                    fontWeight: FontWeight.w600),
-              ))
-        ],
+      child: SingleChildScrollView(
+        child: SfCartesianChart(
+          isTransposed: true,
+          primaryXAxis: CategoryAxis(),
+          plotAreaBorderWidth: 0,
+          series: <ChartSeries>[
+            BarSeries<BarData, String>(
+                dataSource: data,
+                xValueMapper: (BarData value, _) => value.name,
+                yValueMapper: (BarData value, _) => value.percent,
+                enableTooltip: true,
+                animationDuration: 1000,
+                color: color ?? const Color(0xFFEE9322),
+                dataLabelSettings: DataLabelSettings(
+                  isVisible: true,
+                  textStyle: TextStyle(
+                      color: textColor ?? Color(0xFF219C90),
+                      fontWeight: FontWeight.w600),
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -72,7 +77,9 @@ class BalanceLineChart extends StatelessWidget {
     List<ChartData> data = _getChartData();
 
     return SizedBox(
-      height: height * 0.48,
+      height: context.read<ScreenContentProvider>().getPage() == 0
+          ? height * 0.43
+          : height * 0.48,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
         primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),

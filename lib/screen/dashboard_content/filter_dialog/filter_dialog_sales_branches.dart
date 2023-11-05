@@ -60,7 +60,7 @@ class _FilterDialogSalesByBranchesState
       _locale.yearly,
     ];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = charts[2];
+    selectedChart = charts[1];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     print("todayDate: $todayDate");

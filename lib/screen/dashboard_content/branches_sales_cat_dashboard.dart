@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bi_replicate/components/charts/pie_chart_dashboard.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,6 +56,9 @@ class _BranchesSalesByCatDashboardState
     PieChartModel(value: 40, title: "4", color: Colors.purple),
   ];
 
+  String lastFromDate = "";
+  String lastCategories = "";
+  String lastBranchCode = "";
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
 
@@ -128,6 +132,9 @@ class _BranchesSalesByCatDashboardState
       setState(() {});
     });
     Future.delayed(Duration.zero, () {
+      lastFromDate = fromDateController.text;
+      lastCategories = selectedCategories;
+      lastBranchCode = selectedBranchCode;
       getBranchByCatData().then((value) {
         setState(() {});
       });
@@ -136,7 +143,7 @@ class _BranchesSalesByCatDashboardState
   }
 
   Future<void> getBranchByCatData() async {
-    await getBranchByCat().then((value) {
+    await getBranchByCat1().then((value) {
       setState(() {});
     });
   }
@@ -162,7 +169,7 @@ class _BranchesSalesByCatDashboardState
                 height: isDesktop ? height * 0.5 : height * 0.69,
 
                 width: double.infinity,
-                padding: EdgeInsets.only(left: 5, right: 5),
+                padding: EdgeInsets.only(left: 5, right: 5, top: 2),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -175,7 +182,7 @@ class _BranchesSalesByCatDashboardState
                       children: [
                         Text(
                           _locale.branchesSalesByCategories,
-                          style: TextStyle(fontSize: isDesktop ? 20 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 16 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
@@ -240,12 +247,12 @@ class _BranchesSalesByCatDashboardState
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
                             ? Center(
-                                child: PieChartComponent(
+                                child: PieChartDashboard(
                                   radiusNormal: isDesktop ? height * 0.17 : 70,
                                   radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  width: isDesktop ? width * 0.39 : width * 0.1,
                                   height:
-                                      isDesktop ? height * 0.42 : height * 0.3,
+                                      isDesktop ? height * 0.39 : height * 0.3,
                                   dataList: pieData,
                                 ),
                               )
@@ -285,7 +292,89 @@ class _BranchesSalesByCatDashboardState
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getBranchByCat({bool? isStart}) async {
+  Future<void> getBranchByCat({bool? isStart}) async {
+    var selectedFromDate = fromDateController.text;
+    final selectedCategoriesValue = selectedCategories;
+    final selectedBranchCodeValue = selectedBranchCode;
+
+    if (selectedFromDate != lastFromDate ||
+        selectedCategoriesValue != lastCategories ||
+        selectedBranchCodeValue != lastBranchCode) {
+      lastFromDate = selectedFromDate;
+      lastCategories = selectedCategories;
+      lastBranchCode = selectedBranchCode;
+
+      if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
+        if (selectedFromDate.isEmpty) {
+          selectedFromDate = todayDate;
+        }
+        if (toDateController.text.isEmpty) {
+          toDateController.text = todayDate;
+        }
+      }
+
+      SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: selectedFromDate,
+        toDate:
+            toDateController.text.isEmpty ? todayDate : toDateController.text,
+        byCategory: getCategoryNum(selectedCategories, _locale),
+        branch: selectedBranchCode,
+      );
+
+      pieData = [];
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
+
+      await salesCategoryController
+          .getSalesByCategory(searchCriteria, isStart: isStart)
+          .then((value) {
+        for (var element in value) {
+          double bal = element.creditAmt! - element.debitAmt!;
+
+          Color randomColor = getRandomColor(colorNewList, usedColors);
+          if (bal != 0.0) {
+            temp = true;
+          } else if (bal == 0.0) {
+            temp = false;
+          }
+          listOfBalances.add(bal);
+          listOfPeriods.add(
+            element.categoryName!.isNotEmpty
+                ? element.categoryName!
+                : _locale.general,
+          );
+          if (temp) {
+            dataMap[element.categoryName!] =
+                formatDoubleToTwoDecimalPlaces(bal);
+
+            pieData.add(
+              PieChartModel(
+                title: element.categoryName!.isNotEmpty
+                    ? element.categoryName!
+                    : _locale.general,
+                value: formatDoubleToTwoDecimalPlaces(bal),
+                color: randomColor,
+              ),
+            );
+
+            barData.add(
+              BarData(
+                name: element.categoryName!.isNotEmpty
+                    ? element.categoryName!
+                    : _locale.general,
+                percent: bal,
+              ),
+            );
+          }
+
+          print("bardata Length :${barData.length}");
+        }
+      });
+    }
+  }
+
+  Future getBranchByCat1({bool? isStart}) async {
     listOfBalances = [];
     pieData = [];
     barData = [];

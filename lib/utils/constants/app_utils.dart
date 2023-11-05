@@ -61,7 +61,7 @@ Widget blueButton1({
     onPressed: onPressed,
     style: ElevatedButton.styleFrom(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(2.0), // Make it circular
+        borderRadius: BorderRadius.circular(10.0), // Make it circular
         // side: BorderSide(
         //   color: primary,
         //   width: 1.0,
@@ -72,7 +72,8 @@ Widget blueButton1({
       // Remove the primary color from styleFrom since it's set in the gradient
     ),
     child: Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
         gradient: LinearGradient(
           colors: [Color(0xff4741c1), Color(0xff7e4fe4)],
           begin: Alignment.centerLeft,

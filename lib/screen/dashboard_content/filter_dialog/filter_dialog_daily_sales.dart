@@ -82,13 +82,13 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     return AlertDialog(
       title: SelectableText(_locale.filter),
       content: SizedBox(
-        width: isDesktop ? width * 0.3 : width * 0.7,
-        height: isDesktop ? height * 0.35 : height * 0.3,
+        width: isDesktop ? width * 0.35 : width * 0.75,
+        height: isDesktop ? height * 0.28 : height * 0.35,
         child: Column(
           children: [
             isDesktop
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CustomDropDown(
                         items: status,
@@ -99,27 +99,35 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             selectedStatus = value!;
                           });
                         },
+                      ),
+                      SizedBox(
+                        // height: height * 0.1,
+                        width: isDesktop ? width * 0.135 : width,
+                        child: CustomDate(
+                          dateController: _fromDateController,
+                          label: _locale.fromDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _fromDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
+                              });
+                            }
+                          },
+                        ),
                       ),
                     ],
                   )
                 : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        width: width,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-            isDesktop
-                ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(
@@ -148,6 +156,23 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                         ),
                       ),
                       CustomDropDown(
+                        items: status,
+                        label: _locale.status,
+                        initialValue: selectedStatus,
+                        width: width,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedStatus = value!;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+            isDesktop
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomDropDown(
                         items: charts,
                         hint: "",
                         label: _locale.chartType,
@@ -166,31 +191,31 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                        height: height * 0.12,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
+                      // SizedBox(
+                      //   height: height * 0.12,
+                      //   width: isDesktop ? width * 0.135 : width * 0.9,
+                      //   child: CustomDate(
+                      //     dateController: _fromDateController,
+                      //     label: _locale.fromDate,
+                      //     minYear: 2000,
+                      //     onValue: (isValid, value) {
+                      //       if (isValid) {
+                      //         setState(() {
+                      //           _fromDateController.text = value;
+                      //           DateTime from =
+                      //               DateTime.parse(_fromDateController.text);
+                      //           DateTime to =
+                      //               DateTime.parse(_toDateController.text);
 
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
-                          },
-                        ),
-                      ),
+                      //           if (from.isAfter(to)) {
+                      //             ErrorController.openErrorDialog(
+                      //                 1, _locale.startDateAfterEndDate);
+                      //           }
+                      //         });
+                      //       }
+                      //     },
+                      //   ),
+                      // ),
                     ],
                   ),
           ],
