@@ -29,6 +29,7 @@ class _ExpensesAccountSetupWidgetState
   List<BiAccountModel> receivableAccounts = [];
   List<BiAccountModel> bankAccounts = [];
   List<BiAccountModel> payableAccounts = [];
+  List<BiAccountModel> dailySalesCount = [];
   List<BiAccountModel> tempList = [];
   List<String> accountsNameList = [];
   Map<String, dynamic>? accountToAdd;
@@ -67,7 +68,9 @@ class _ExpensesAccountSetupWidgetState
       case 5:
         getBankAccounts();
         break;
-
+      case 6:
+        getDailySalesCount();
+        break;
       // Add cases for other tabs as needed
     }
     super.didChangeDependencies();
@@ -319,6 +322,24 @@ class _ExpensesAccountSetupWidgetState
     setState(() {});
   }
 
+  Future getDailySalesCount() async {
+    setState(() {
+      isFinised = false;
+      bankAccounts = [];
+    });
+    await SetupController().getBiAccounts().then((value) {
+      for (var elemant in value) {
+        if (elemant.accountType == 6) {
+          dailySalesCount.add(elemant);
+        }
+      }
+    });
+    isFinised = true;
+
+    tempList = dailySalesCount;
+    setState(() {});
+  }
+
   void _setState(value) {
     isFinised = false;
     if (value == 1) {
@@ -347,6 +368,12 @@ class _ExpensesAccountSetupWidgetState
       });
     } else if (value == 5) {
       getBankAccounts().then((value) {
+        getAccountList().then((value) {
+          isFinised = true;
+        });
+      });
+    } else if (value == 6) {
+      getDailySalesCount().then((value) {
         getAccountList().then((value) {
           isFinised = true;
         });
