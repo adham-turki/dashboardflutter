@@ -201,7 +201,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (kIsWeb) {
                   GoRouter.of(context).go(AppRoutes.homeScreenRoute);
                 } else {
-                  Navigator.pushReplacementNamed(context, mainScreenRoute);
+                  // Navigator.pushReplacementNamed(context, mainScreenRoute);
+                  GoRouter.of(context).go(AppRoutes.homeScreenRoute);
                 }
                 // Navigator.pop(context); // for Circular
 

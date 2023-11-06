@@ -66,31 +66,35 @@ class CustomBarChart extends StatelessWidget {
               ),
             ),
           )
-        : Container(
-            height: height * 0.46,
-            padding: const EdgeInsets.all(16.0),
-            child: SfCartesianChart(
-              isTransposed: true,
-              primaryXAxis: CategoryAxis(),
-              plotAreaBorderWidth: 0,
-              series: <ChartSeries>[
-                BarSeries<BarData, String>(
-                  dataSource: data,
-                  xValueMapper: (BarData value, _) => value.name,
-                  yValueMapper: (BarData value, _) =>
-                      double.parse(value.percent!.toStringAsFixed(2)),
-                  enableTooltip: true,
-                  animationDuration: 1000,
-                  color: color ?? const Color(0xFFEE9322),
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    textStyle: TextStyle(
-                      color: textColor ?? Color(0xFF219C90),
-                      fontWeight: FontWeight.w600,
+        : SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: height * 0.46,
+              padding: const EdgeInsets.all(16.0),
+              child: SfCartesianChart(
+                isTransposed: true,
+                primaryXAxis: CategoryAxis(),
+                plotAreaBorderWidth: 0,
+                series: <ChartSeries>[
+                  BarSeries<BarData, String>(
+                    dataSource: data,
+                    xValueMapper: (BarData value, _) => value.name,
+                    yValueMapper: (BarData value, _) =>
+                        double.parse(value.percent!.toStringAsFixed(2)),
+                    enableTooltip: true,
+                    animationDuration: 1000,
+                    color: color ?? const Color(0xFFEE9322),
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      textStyle: TextStyle(
+                        color: textColor ?? Color(0xFF219C90),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }
@@ -335,28 +339,32 @@ class BalanceBarChart extends StatelessWidget {
               ),
             ),
           )
-        : Container(
-            height: height * 0.48,
-            padding: const EdgeInsets.all(16.0),
-            child: SfCartesianChart(
-              isTransposed: true,
-              primaryXAxis: CategoryAxis(),
-              // primaryYAxis: NumericAxis(
-              //   minimum: 0,
-              //   maximum: double.infinity,
-              //   interval: 100,
-              // ),
-              plotAreaBorderWidth: 0,
-              series: <ChartSeries>[
-                BarSeries<BarChartData, String>(
-                  dataSource: data,
-                  xValueMapper: (BarChartData value, _) => value.category,
-                  yValueMapper: (BarChartData value, _) => value.value,
-                  enableTooltip: true,
-                  animationDuration: 1000,
-                  color: color ?? const Color(0xff9AA0C5),
-                )
-              ],
+        : SingleChildScrollView(
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: height * 0.48,
+              padding: const EdgeInsets.all(16.0),
+              child: SfCartesianChart(
+                isTransposed: true,
+                primaryXAxis: CategoryAxis(),
+                // primaryYAxis: NumericAxis(
+                //   minimum: 0,
+                //   maximum: double.infinity,
+                //   interval: 100,
+                // ),
+                plotAreaBorderWidth: 0,
+                series: <ChartSeries>[
+                  BarSeries<BarChartData, String>(
+                    dataSource: data,
+                    xValueMapper: (BarChartData value, _) => value.category,
+                    yValueMapper: (BarChartData value, _) => value.value,
+                    enableTooltip: true,
+                    animationDuration: 1000,
+                    color: color ?? const Color(0xff9AA0C5),
+                  )
+                ],
+              ),
             ),
           );
   }

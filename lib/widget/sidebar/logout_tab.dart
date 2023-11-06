@@ -48,7 +48,8 @@ class _LogoutTabState extends State<LogoutTab> {
         if (kIsWeb) {
           GoRouter.of(context).go(AppRoutes.loginRoute);
         } else {
-          Navigator.pushReplacementNamed(context, loginScreenRoute);
+          // Navigator.pushReplacementNamed(context, loginScreenRoute);
+          GoRouter.of(context).go(AppRoutes.loginRoute);
         }
       },
       child: MouseRegion(
@@ -96,7 +97,7 @@ class _LogoutTabState extends State<LogoutTab> {
                       ? width * 0.014
                       : isTablet
                           ? width * 0.015
-                          : width * 0.02,
+                          : width * 0.028,
                 ),
                 SizedBox(
                   width: width * 0.005,
@@ -109,7 +110,7 @@ class _LogoutTabState extends State<LogoutTab> {
                         ? width * 0.01
                         : isTablet
                             ? width * 0.015
-                            : width * 0.02,
+                            : width * 0.028,
                   ),
                 ),
               ],
