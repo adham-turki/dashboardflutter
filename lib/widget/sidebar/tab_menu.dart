@@ -145,7 +145,7 @@ class _TabMenuState extends State<TabMenu> {
                         ? width * 0.014
                         : isTablet
                             ? width * 0.015
-                            : width * 0.035,
+                            : width * 0.032,
                   ),
                   SizedBox(
                     width: width * 0.005,
@@ -158,7 +158,7 @@ class _TabMenuState extends State<TabMenu> {
                           ? width * 0.0095
                           : isTablet
                               ? width * 0.015
-                              : width * 0.035,
+                              : width * 0.028,
                     ),
                   ),
                 ],
