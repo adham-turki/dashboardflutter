@@ -28,6 +28,8 @@ class CustomBarChart extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     ScrollController scrollController = ScrollController();
+    bool isDesktop = false;
+    isDesktop = Responsive.isDesktop(context);
 
     return data.length > 10
         ? Scrollbar(
@@ -37,9 +39,9 @@ class CustomBarChart extends StatelessWidget {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: height * 0.46,
+                height: isDesktop ? height * 0.423 : height * 0.5,
                 width: data.length * 100.0,
-                padding: const EdgeInsets.all(16.0),
+                //    padding: const EdgeInsets.all(16.0),
                 child: SfCartesianChart(
                   isTransposed: true,
                   primaryXAxis: CategoryAxis(),
@@ -67,33 +69,33 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : SingleChildScrollView(
-            controller: scrollController,
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              height: height * 0.46,
-              padding: const EdgeInsets.all(16.0),
-              child: SfCartesianChart(
-                isTransposed: true,
-                primaryXAxis: CategoryAxis(),
-                plotAreaBorderWidth: 0,
-                series: <ChartSeries>[
-                  BarSeries<BarData, String>(
-                    dataSource: data,
-                    xValueMapper: (BarData value, _) => value.name,
-                    yValueMapper: (BarData value, _) =>
-                        double.parse(value.percent!.toStringAsFixed(2)),
-                    enableTooltip: true,
-                    animationDuration: 1000,
-                    color: color ?? const Color(0xFFEE9322),
-                    dataLabelSettings: DataLabelSettings(
-                      isVisible: true,
-                      textStyle: TextStyle(
-                        color: textColor ?? Color(0xFF219C90),
-                        fontWeight: FontWeight.w600,
-                      ),
+                      controller: scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+            height: isDesktop ? height * 0.423 : height * 0.5,
+            // padding: const EdgeInsets.all(16.0),
+            child: SfCartesianChart(
+              isTransposed: true,
+              primaryXAxis: CategoryAxis(),
+              plotAreaBorderWidth: 0,
+              series: <ChartSeries>[
+                BarSeries<BarData, String>(
+                  dataSource: data,
+                  xValueMapper: (BarData value, _) => value.name,
+                  yValueMapper: (BarData value, _) =>
+                      double.parse(value.percent!.toStringAsFixed(2)),
+                  enableTooltip: true,
+                  animationDuration: 1000,
+                  color: color ?? const Color(0xFFEE9322),
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    textStyle: TextStyle(
+                      color: textColor ?? Color(0xFF219C90),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ],
+                ),
+              ],
               ),
             ),
           );

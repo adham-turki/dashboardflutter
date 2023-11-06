@@ -141,6 +141,24 @@ class _ContentHeaderState extends State<ContentHeader> {
                       fontSize: 18,
                     ),
                   ),
+                  context.read<ScreenContentProvider>().getPage() == 0
+                      ? SelectableText(
+                          maxLines: 1,
+                          "${currentMonth} / ${todayDate}",
+                          style: TextStyle(
+                            fontSize: context
+                                        .read<ScreenContentProvider>()
+                                        .getPage() ==
+                                    0
+                                ? (Responsive.isDesktop(context)
+                                    ? width * 0.01
+                                    : 15)
+                                : (Responsive.isDesktop(context)
+                                    ? width * 0.01
+                                    : 18),
+                          ),
+                        )
+                      : Container(),
                 ],
               ),
         Container(),
