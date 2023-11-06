@@ -25,7 +25,6 @@ import 'screen/dashboard_content/dashboard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -38,7 +37,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     isDesktop = Responsive.isDesktop(context);
-
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -61,7 +59,7 @@ class _HomePageState extends State<HomePage> {
                   height: isDesktop
                       ? context.read<ScreenContentProvider>().getPage() == 0
                           ? height * 0.031
-                          : height * 0.025
+                          : height * 0.145
                       : height * 0.145,
                   child: ContentHeader(
                       page: context.read<ScreenContentProvider>().getPage()),
@@ -75,7 +73,6 @@ class _HomePageState extends State<HomePage> {
                       : isDesktop
                           ? height * 0.85
                           : height * 0.75,
-
                   width: width * 0.835,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(

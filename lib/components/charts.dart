@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../provider/screen_content_provider.dart';
+import '../utils/constants/responsive.dart';
 
 class BarData {
   final String? name;
@@ -69,33 +70,33 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : SingleChildScrollView(
-                      controller: scrollController,
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-            height: isDesktop ? height * 0.423 : height * 0.5,
-            // padding: const EdgeInsets.all(16.0),
-            child: SfCartesianChart(
-              isTransposed: true,
-              primaryXAxis: CategoryAxis(),
-              plotAreaBorderWidth: 0,
-              series: <ChartSeries>[
-                BarSeries<BarData, String>(
-                  dataSource: data,
-                  xValueMapper: (BarData value, _) => value.name,
-                  yValueMapper: (BarData value, _) =>
-                      double.parse(value.percent!.toStringAsFixed(2)),
-                  enableTooltip: true,
-                  animationDuration: 1000,
-                  color: color ?? const Color(0xFFEE9322),
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    textStyle: TextStyle(
-                      color: textColor ?? Color(0xFF219C90),
-                      fontWeight: FontWeight.w600,
+            controller: scrollController,
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              height: isDesktop ? height * 0.423 : height * 0.5,
+              // padding: const EdgeInsets.all(16.0),
+              child: SfCartesianChart(
+                isTransposed: true,
+                primaryXAxis: CategoryAxis(),
+                plotAreaBorderWidth: 0,
+                series: <ChartSeries>[
+                  BarSeries<BarData, String>(
+                    dataSource: data,
+                    xValueMapper: (BarData value, _) => value.name,
+                    yValueMapper: (BarData value, _) =>
+                        double.parse(value.percent!.toStringAsFixed(2)),
+                    enableTooltip: true,
+                    animationDuration: 1000,
+                    color: color ?? const Color(0xFFEE9322),
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      textStyle: TextStyle(
+                        color: textColor ?? Color(0xFF219C90),
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
               ),
             ),
           );
