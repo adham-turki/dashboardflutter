@@ -66,18 +66,24 @@ class _CustomDateState extends State<CustomDate> {
   @override
   void initState() {
     setListeners();
+    clearDateProvider();
     super.initState();
   }
 
   clearDateProvider() {
-    context.read<DatesProvider>().setDayTemp(true);
-    context.read<DatesProvider>().setMonthTemp(true);
-    context.read<DatesProvider>().setYearTemp(true);
+    print("ddddddddddddddddddddddddddddddddddddddd");
+    if (!context.read<DatesProvider>().dayTemp) {
+      context.read<DatesProvider>().setDayTemp(true);
+    } else if (!context.read<DatesProvider>().monthTemp) {
+      context.read<DatesProvider>().setMonthTemp(true);
+    } else if (!context.read<DatesProvider>().yearTemp) {
+      context.read<DatesProvider>().setYearTemp(true);
+    }
+    print("fffffffffffffffffffffffffffffffffffffffff");
   }
 
   @override
   void didChangeDependencies() {
-    clearDateProvider();
     super.didChangeDependencies();
   }
 
@@ -190,9 +196,13 @@ class _CustomDateState extends State<CustomDate> {
           if (hint == dayHint) {
             emptyDateControllers();
           } else if (hint == monthHint) {
-            monthController.clear();
+            if (monthController.text.isNotEmpty) {
+              monthController.clear();
+            }
           } else if (hint == yearHint) {
-            yearController.clear();
+            if (yearController.text.isNotEmpty) {
+              yearController.clear();
+            }
           }
         },
         onChanged: (value) {
@@ -211,9 +221,13 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   emptyDateControllers() {
-    yearController.clear();
-    monthController.clear();
-    dayController.clear();
+    if (yearController.text.isNotEmpty) {
+      yearController.clear();
+    } else if (dayController.text.isNotEmpty) {
+      dayController.clear();
+    } else if (monthController.text.isNotEmpty) {
+      monthController.clear();
+    }
   }
 
   void submitValueDate(FocusNode focusNode) {
@@ -444,9 +458,9 @@ class _CustomDateState extends State<CustomDate> {
           context.read<DatesProvider>().setYearTemp(true);
         }
         // yearFocusNode.unfocus();
-        if (yearTemp) {
-          isValid = dateValidation();
-        }
+
+        isValid = dateValidation();
+
         // if (isValid && textNotEmpty()) {
         //   if (widget.onValue != null) {
         //     String dateValue = getDateValue();
