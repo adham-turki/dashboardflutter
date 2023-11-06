@@ -2,7 +2,9 @@ import 'package:bi_replicate/utils/func/dates_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/dates_provider.dart';
 import '../utils/constants/responsive.dart';
 
 class CustomDate extends StatefulWidget {
@@ -48,7 +50,7 @@ class _CustomDateState extends State<CustomDate> {
 
   bool isValid = false;
 
-  String activeDateErrorMessage = "Fields are Empty ";
+  String activeDateErrorMessage = "Check Your Input Format!";
   String yearIsGreater = "Year is Wrong";
   String monthIsGreater = "Month is Wrong";
   String dayIsGreater = "Day is Wrong";
@@ -58,6 +60,9 @@ class _CustomDateState extends State<CustomDate> {
   FocusNode monthFocusNode = FocusNode();
   FocusNode dayFocusNode = FocusNode();
 
+  bool dayTemp = true;
+  bool monthTemp = true;
+  bool yearTemp = true;
   @override
   void initState() {
     setListeners();
@@ -100,12 +105,20 @@ class _CustomDateState extends State<CustomDate> {
       width: width * 0.163,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              labelMessage(label),
-              // !isValid ? errorMessage(activeDateErrorMessage) : Container(),
-            ],
+          Consumer<DatesProvider>(
+            builder: (context, value, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  labelMessage(label),
+                  !value.getDayTemp() ||
+                          !value.getMonthTemp() ||
+                          !value.getYearTemp()
+                      ? errorMessage(activeDateErrorMessage)
+                      : Container(),
+                ],
+              );
+            },
           ),
           Container(
             decoration: BoxDecoration(
@@ -365,10 +378,19 @@ class _CustomDateState extends State<CustomDate> {
       dayController.text = dayController.text;
       if (int.parse(dayController.text) > 31 && dayController.text[0] != "0") {
         print("asdasdasd: ${dayController.text}");
-        dayController.text = dateTime.day.toString();
+        context.read<DatesProvider>().setDayTemp(false);
+        // dayTemp = false;
+        // setState(() {});
+      } else {
+        // dayController.text = dateTime.day.toString();
+        context.read<DatesProvider>().setDayTemp(true);
+
+        // dayTemp = true;
       }
       print("dayController.text 2 :${dayController.text}");
-      monthFocusNode.requestFocus();
+      if (dayTemp) {
+        monthFocusNode.requestFocus();
+      }
     } else if (hint.compareTo(monthHint) == 0 && day.isNotEmpty) {
       if (month.length == 2) {
         print("monthController.text 1 :${monthController.text}");
@@ -376,10 +398,21 @@ class _CustomDateState extends State<CustomDate> {
         print("monthController.text 2 :${monthController.text}");
         if (int.parse(monthController.text) > 12 &&
             monthController.text[0] != "0") {
-          print("asdasdasd: ${monthController.text}");
-          monthController.text = dateTime.month.toString();
+          // monthTemp = false;
+          context.read<DatesProvider>().setMonthTemp(false);
+          // setState(() {});
+
+          // print("asdasdasd: ${monthController.text}");
+          // monthController.text = dateTime.month.toString();
+        } else {
+          // dayController.text = dateTime.day.toString();
+          context.read<DatesProvider>().setMonthTemp(true);
+
+          // monthTemp = true;
         }
-        yearFocusNode.requestFocus();
+        if (monthTemp) {
+          yearFocusNode.requestFocus();
+        }
       }
     } else {
       if (year.length == 4) {
@@ -388,11 +421,24 @@ class _CustomDateState extends State<CustomDate> {
         print("yearController.text 2 :${yearController.text}");
         if (int.parse(yearController.text) > dateTime.year &&
             yearController.text[0] != "0") {
-          print("asdasdasd: ${yearController.text}");
-          yearController.text = dateTime.year.toString();
+          // print("asdasdasd: ${yearController.text}");
+          // yearController.text = dateTime.year.toString();
+          // yearTemp = false;
+          context.read<DatesProvider>().setYearTemp(false);
+
+          // setState(() {});
+
+          // print("asdasdasd: ${monthController.text}");
+          // monthController.text = dateTime.month.toString();
+        } else {
+          // dayController.text = dateTime.day.toString();
+          // yearTemp = true;
+          context.read<DatesProvider>().setYearTemp(true);
         }
         // yearFocusNode.unfocus();
-        isValid = dateValidation();
+        if (yearTemp) {
+          isValid = dateValidation();
+        }
         // if (isValid && textNotEmpty()) {
         //   if (widget.onValue != null) {
         //     String dateValue = getDateValue();

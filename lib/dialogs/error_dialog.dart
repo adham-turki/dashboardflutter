@@ -84,8 +84,9 @@ class _ErrorDialogState extends State<ErrorDialog> {
                       if (kIsWeb) {
                         GoRouter.of(context).go(AppRoutes.loginRoute);
                       } else {
-                        Navigator.pushReplacementNamed(
-                            context, loginScreenRoute);
+                        GoRouter.of(context).go(AppRoutes.loginRoute);
+                        // Navigator.pushReplacementNamed(
+                        //     context, loginScreenRoute);
                       }
                     } else {
                       Navigator.pop(context);
