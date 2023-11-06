@@ -104,224 +104,240 @@ class _FilterDialogSalesByCategoryState
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
       title: SelectableText(_locale.filter),
-      content: SizedBox(
-        width: isDesktop ? width * 0.5 : width * 0.7,
-        height: isDesktop ? height * 0.35 : height * 0.6,
-        child: Column(
-          children: [
-            isDesktop
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomDropDown(
-                        items: periods,
-                        label: _locale.period,
-                        initialValue: selectedPeriod,
-                        onChanged: (value) {
-                          setState(() {
-                            checkPeriods(value);
-                            selectedPeriod = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        items: categories,
-                        label: _locale.byCategory,
-                        initialValue: selectedCategories,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedCategories = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        items: charts,
-                        hint: "",
-                        label: _locale.chartType,
-                        initialValue: selectedChart,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedChart = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomDropDown(
-                        items: periods,
-                        label: _locale.period,
-                        initialValue: selectedPeriod,
-                        width: width,
-                        onChanged: (value) {
-                          setState(() {
-                            checkPeriods(value);
-                            selectedPeriod = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        items: categories,
-                        width: width,
-                        label: _locale.byCategory,
-                        initialValue: selectedCategories,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedCategories = value!;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-            isDesktop
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        // height: height * 0.1,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+      content: SingleChildScrollView(
+        child: SizedBox(
+          width: isDesktop ? width * 0.5 : width * 0.7,
+          height: isDesktop ? height * 0.35 : null,
+          child: Column(
+            children: [
+              isDesktop
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomDropDown(
+                          items: periods,
+                          label: _locale.period,
+                          initialValue: selectedPeriod,
+                          onChanged: (value) {
+                            setState(() {
+                              checkPeriods(value);
+                              selectedPeriod = value!;
+                            });
                           },
                         ),
-                      ),
-                      SizedBox(
-                        width: width * 0.01,
-                      ),
-                      SizedBox(
-                        // height: height * 0.1,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _toDateController,
-                          label: _locale.toDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _toDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+                        CustomDropDown(
+                          items: categories,
+                          label: _locale.byCategory,
+                          initialValue: selectedCategories,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCategories = value!;
+                            });
                           },
                         ),
-                      ),
-                      CustomDropDown(
-                        // width: widthMobile,
-                        items: branches,
-                        label: _locale.branch,
-                        initialValue: selectedBranch,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedBranch = value.toString();
-                            selectedBranchCode = branchesMap[value.toString()]!;
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: height * 0.12,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+                        CustomDropDown(
+                          items: charts,
+                          hint: "",
+                          label: _locale.chartType,
+                          initialValue: selectedChart,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedChart = value!;
+                            });
                           },
                         ),
-                      ),
-                      // CustomDatePicker(
-                      //   label: _locale.fromDate,
-                      //   date: DateTime.parse(_toDateController.text),
-                      //   controller: _fromDateController,
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _fromDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
-                      SizedBox(
-                        height: height * 0.12,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _toDateController,
-                          label: _locale.toDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _toDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomDropDown(
+                          items: periods,
+                          label: _locale.period,
+                          initialValue: selectedPeriod,
+                          width: width,
+                          onChanged: (value) {
+                            setState(() {
+                              checkPeriods(value);
+                              selectedPeriod = value!;
+                            });
                           },
                         ),
-                      ),
-                      // CustomDatePicker(
-                      //   label: _locale.toDate,
-                      //   controller: _toDateController,
-                      //   date: DateTime.parse(_fromDateController.text),
-                      //   onSelected: (value) {
-                      //     setState(() {
-                      //       _toDateController.text = value;
-                      //     });
-                      //   },
-                      // ),
-                    ],
-                  ),
-          ],
+                        CustomDropDown(
+                          items: categories,
+                          width: width,
+                          label: _locale.byCategory,
+                          initialValue: selectedCategories,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedCategories = value!;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+              isDesktop
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          // height: height * 0.1,
+                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          child: CustomDate(
+                            dateController: _fromDateController,
+                            label: _locale.fromDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _fromDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: width * 0.01,
+                        ),
+                        SizedBox(
+                          // height: height * 0.1,
+                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          child: CustomDate(
+                            dateController: _toDateController,
+                            label: _locale.toDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _toDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: height * 0.12,
+                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          child: CustomDate(
+                            dateController: _fromDateController,
+                            label: _locale.fromDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _fromDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        // CustomDatePicker(
+                        //   label: _locale.fromDate,
+                        //   date: DateTime.parse(_toDateController.text),
+                        //   controller: _fromDateController,
+                        //   onSelected: (value) {
+                        //     setState(() {
+                        //       _fromDateController.text = value;
+                        //     });
+                        //   },
+                        // ),
+                        SizedBox(
+                          height: height * 0.12,
+                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          child: CustomDate(
+                            dateController: _toDateController,
+                            label: _locale.toDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _toDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        CustomDropDown(
+                          items: charts,
+                          hint: "",
+                          width: width,
+                          label: _locale.chartType,
+                          initialValue: selectedChart,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedChart = value!;
+                            });
+                          },
+                        ),
+                        CustomDropDown(
+                          width: width,
+                          items: branches,
+                          label: _locale.branch,
+                          initialValue: selectedBranch,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedBranch = value.toString();
+                              selectedBranchCode =
+                                  branchesMap[value.toString()]!;
+                            });
+                          },
+                        ),
+
+                        // CustomDatePicker(
+                        //   label: _locale.toDate,
+                        //   controller: _toDateController,
+                        //   date: DateTime.parse(_fromDateController.text),
+                        //   onSelected: (value) {
+                        //     setState(() {
+                        //       _toDateController.text = value;
+                        //     });
+                        //   },
+                        // ),
+                      ],
+                    ),
+            ],
+          ),
         ),
       ),
       actions: [

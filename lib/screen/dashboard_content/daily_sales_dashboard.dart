@@ -153,7 +153,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.51 : height * 0.6,
+                height: isDesktop ? height * 0.51 : height * 0.52,
 
                 // width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5, top: 2),
@@ -231,8 +231,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  radiusNormal:
+                                      isDesktop ? height * 0.17 : height * 0.17,
+                                  radiusHover: isDesktop ? height * 0.17 : 1,
                                   width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.4 : height * 0.4,
