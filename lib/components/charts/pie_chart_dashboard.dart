@@ -47,7 +47,6 @@ class _PieChartDashboardState extends State<PieChartDashboard> {
   Widget build(BuildContext context) {
     List<PieChartModel> dataList = widget.dataList;
     bool isEmpty = dataList.isEmpty ? true : false;
-
     return Column(
       children: [
         SizedBox(
