@@ -202,7 +202,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                       : height * 0.015,
                                   width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
-                                      isDesktop ? height * 0.36 : height * 0.33,
+                                      isDesktop ? height * 0.36 : height * 0.37,
                                   dataList: pieData,
                                 ),
                               )
