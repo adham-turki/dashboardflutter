@@ -346,7 +346,7 @@ class _FilterDialogSalesByCategoryState
           children: [
             Components().blueButton(
               height: width > 800 ? height * .05 : height * .06,
-              fontSize: width > 800 ? height * .016 : height * .011,
+              fontSize: width > 800 ? height * .016 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
