@@ -242,11 +242,11 @@ class _TabMenuState extends State<TabMenu> {
     int length = sideTabModel.subMenu.length;
     if (isSelected) {
       if (length == 4) {
-        return isDesktop ? height * 0.26 : height * 0.26;
+        return isDesktop ? 250 : height * 0.26;
       } else if (length == 2) {
-        return isDesktop ? height * 0.15 : height * 0.15;
+        return isDesktop ? 140 : height * 0.15;
       } else if (length == 3) {
-        return isDesktop ? height * 0.2 : height * 0.2;
+        return isDesktop ? 190 : height * 0.2;
       }
       // if (length >= 3 && length < 5) {
       //   return isDesktop ? height * 0.23 : height * 0.3;
