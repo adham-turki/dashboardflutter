@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../provider/screen_content_provider.dart';
+import '../utils/constants/responsive.dart';
 
 class BarData {
   final String? name;
@@ -28,6 +29,8 @@ class CustomBarChart extends StatelessWidget {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     ScrollController scrollController = ScrollController();
+    bool isDesktop = false;
+    isDesktop = Responsive.isDesktop(context);
 
     return data.length > 10
         ? Scrollbar(
@@ -37,9 +40,9 @@ class CustomBarChart extends StatelessWidget {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: height * 0.46,
+                height: isDesktop ? height * 0.423 : height * 0.5,
                 width: data.length * 100.0,
-                padding: const EdgeInsets.all(16.0),
+                //    padding: const EdgeInsets.all(16.0),
                 child: SfCartesianChart(
                   isTransposed: true,
                   primaryXAxis: CategoryAxis(),
@@ -67,8 +70,8 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : Container(
-            height: height * 0.46,
-            padding: const EdgeInsets.all(16.0),
+            height: isDesktop ? height * 0.423 : height * 0.5,
+            // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
               isTransposed: true,
               primaryXAxis: CategoryAxis(),

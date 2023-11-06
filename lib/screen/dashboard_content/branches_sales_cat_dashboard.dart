@@ -174,10 +174,12 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.53 : height * 0.55,
+                height: isDesktop ? height * 0.49 : height * 0.56,
 
                 width: double.infinity,
-                padding: EdgeInsets.only(left: 5, right: 5, top: 2),
+                padding:
+                    const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 0),
+
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -257,11 +259,13 @@ class _BranchesSalesByCatDashboardState
                             ? Center(
                                 child: PieChartDashboard(
                                   radiusNormal:
-                                      isDesktop ? height * 0.17 : height * 0.17,
-                                  radiusHover: isDesktop ? height * 0.17 : 1,
+                                      isDesktop ? height * 0.15 : height * 0.15,
+                                  radiusHover: isDesktop
+                                      ? height * 0.15
+                                      : height * 0.015,
                                   width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
-                                      isDesktop ? height * 0.4 : height * 0.4,
+                                      isDesktop ? height * 0.36 : height * 0.36,
                                   dataList: pieData,
                                 ),
                               )
