@@ -197,7 +197,7 @@
         "startDateAfterEndDate":"تاريخ النهاية يجب أن يكون بعد تاريخ البداية",
             "dateConflict":"تعارض التاريخ",
 
-            "filter" : "محددات",
+            "filter" : "تأكيد",
         "dailySalesCount":"حسابات المبيعات اليومية"
 
 

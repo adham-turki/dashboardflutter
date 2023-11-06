@@ -266,7 +266,7 @@ class _BranchesSalesByCatDashboardState
                               )
                             : CustomBarChart(
                                 // data: barData,
-                                data: barDataTest,
+                                data: barData,
                                 color: const Color.fromRGBO(48, 66, 125, 1),
                                 textColor: const Color(0xfffF99417),
                               ) //    isDesktop ? desktopCriteria() : mobileCriteria(),

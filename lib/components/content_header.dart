@@ -55,7 +55,7 @@ class _ContentHeaderState extends State<ContentHeader> {
     provider = context.read<ScreenContentProvider>();
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Responsive.isDesktop(context)
             ? Row(
@@ -77,7 +77,7 @@ class _ContentHeaderState extends State<ContentHeader> {
                                     ? width * 0.01
                                     : 15)
                                 : (Responsive.isDesktop(context)
-                                    ? width * 0.01
+                                    ? width * 0.012
                                     : 18),
                             fontWeight: FontWeight.w500,
                           ),
@@ -107,12 +107,14 @@ class _ContentHeaderState extends State<ContentHeader> {
                     maxLines: 1,
                     "${locale.baseCurrency}: ${locale.ils}",
                     style: TextStyle(
-                      fontSize: context
-                                  .read<ScreenContentProvider>()
-                                  .getPage() ==
-                              0
-                          ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                          : (Responsive.isDesktop(context) ? width * 0.01 : 18),
+                      fontSize:
+                          context.read<ScreenContentProvider>().getPage() == 0
+                              ? (Responsive.isDesktop(context)
+                                  ? width * 0.01
+                                  : 15)
+                              : (Responsive.isDesktop(context)
+                                  ? width * 0.012
+                                  : 18),
                     ),
                   ),
                 ],
