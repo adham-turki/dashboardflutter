@@ -83,7 +83,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
-        height: isDesktop ? height * 0.28 : height * 0.35,
+        height: isDesktop ? height * 0.28 : height * 0.53,
         child: Column(
           children: [
             isDesktop
@@ -155,17 +155,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           },
                         ),
                       ),
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        width: width,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
                     ],
                   ),
             isDesktop
@@ -215,6 +204,29 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             }
                           },
                         ),
+                      ),
+                      CustomDropDown(
+                        items: charts,
+                        hint: "",
+                        width: width,
+                        label: _locale.chartType,
+                        initialValue: selectedChart,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChart = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: status,
+                        label: _locale.status,
+                        initialValue: selectedStatus,
+                        width: width,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedStatus = value!;
+                          });
+                        },
                       ),
                     ],
                   ),

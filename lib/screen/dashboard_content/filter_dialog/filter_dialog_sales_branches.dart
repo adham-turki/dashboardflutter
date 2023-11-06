@@ -59,7 +59,7 @@ class _FilterDialogSalesByBranchesState
       _locale.yearly,
     ];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = charts[1];
+    selectedChart = charts[2];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     print("todayDate: $todayDate");
@@ -90,7 +90,7 @@ class _FilterDialogSalesByBranchesState
       title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.37 : width * 0.7,
-        height: isDesktop ? height * 0.35 : height * 0.45,
+        height: isDesktop ? height * 0.35 : height * 0.55,
         child: Column(
           children: [
             isDesktop
@@ -143,6 +143,18 @@ class _FilterDialogSalesByBranchesState
                           setState(() {
                             checkPeriods(value);
                             selectedPeriod = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: charts,
+                        hint: "",
+                        width: width,
+                        label: _locale.chartType,
+                        initialValue: selectedChart,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChart = value!;
                           });
                         },
                       ),
@@ -217,6 +229,18 @@ class _FilterDialogSalesByBranchesState
                           },
                         ),
                       ),
+                      // CustomDropDown(
+                      //   items: charts,
+                      //   hint: "",
+                      //   width: width,
+                      //   label: _locale.chartType,
+                      //   initialValue: selectedChart,
+                      //   onChanged: (value) {
+                      //     setState(() {
+                      //       selectedChart = value!;
+                      //     });
+                      //   },
+                      // ),
 
                       // CustomDatePicker(
                       //   label: _locale.toDate,
