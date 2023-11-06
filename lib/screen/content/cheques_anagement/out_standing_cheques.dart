@@ -114,7 +114,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       children: [
         Container(
           height: isDesktop ? height * 0.35 : height * 0.6,
-          width: width * 0.7,
+          width: isDesktop ? width * 0.7 : width * 0.9,
           decoration: borderDecoration,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
         ),
@@ -127,7 +127,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               Column(
                 children: [
                   SizedBox(
-                    width: width * 0.7,
+                    width: isDesktop ? width * 0.7 : width * 0.9,
                     height: height * 0.7,
                     child: TableComponent(
                       key: UniqueKey(),

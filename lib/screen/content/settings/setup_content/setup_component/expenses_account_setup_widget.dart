@@ -5,8 +5,10 @@ import 'package:bi_replicate/model/settings/setup/account_model.dart';
 import 'package:bi_replicate/model/settings/setup/bi_account_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../../../../../utils/constants/responsive.dart';
 import 'expenses_account_dropdown_setup_widget.dart';
 
 class ExpensesAccountSetupWidget extends StatefulWidget {
@@ -124,7 +126,9 @@ class _ExpensesAccountSetupWidgetState
                     height: height * .05,
                   ),
                   SizedBox(
-                    width: width * 0.35,
+                    width: Responsive.isDesktop(context)
+                        ? width * 0.35
+                        : width * 0.9,
                     height: height * 0.7,
                     child: isFinised
                         ? TableComponent(

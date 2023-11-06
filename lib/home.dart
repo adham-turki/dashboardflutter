@@ -60,7 +60,9 @@ class _HomePageState extends State<HomePage> {
                       ? context.read<ScreenContentProvider>().getPage() == 0
                           ? height * 0.031
                           : height * 0.145
-                      : height * 0.145,
+                      : context.read<ScreenContentProvider>().getPage() == 0
+                          ? height * 0.1
+                          : height * 0.07,
                   child: ContentHeader(
                       page: context.read<ScreenContentProvider>().getPage()),
                 ),
@@ -69,11 +71,11 @@ class _HomePageState extends State<HomePage> {
                   height: context.read<ScreenContentProvider>().getPage() == 0
                       ? isDesktop
                           ? height * 0.95
-                          : height * 0.75
+                          : height * 0.82
                       : isDesktop
                           ? height * 0.85
-                          : height * 0.75,
-                  width: width * 0.835,
+                          : height * 0.85,
+                  width: isDesktop ? width * 0.835 : width * 0.95,
                   child: SingleChildScrollView(
                     child: Consumer<ScreenContentProvider>(
                         builder: (context, value, build) {

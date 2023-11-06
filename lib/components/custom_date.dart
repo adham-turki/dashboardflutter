@@ -69,8 +69,15 @@ class _CustomDateState extends State<CustomDate> {
     super.initState();
   }
 
+  clearDateProvider() {
+    context.read<DatesProvider>().setDayTemp(true);
+    context.read<DatesProvider>().setMonthTemp(true);
+    context.read<DatesProvider>().setYearTemp(true);
+  }
+
   @override
   void didChangeDependencies() {
+    clearDateProvider();
     super.didChangeDependencies();
   }
 
@@ -379,6 +386,7 @@ class _CustomDateState extends State<CustomDate> {
       if (int.parse(dayController.text) > 31 && dayController.text[0] != "0") {
         print("asdasdasd: ${dayController.text}");
         context.read<DatesProvider>().setDayTemp(false);
+        dayController.text = dateTime.day.toString();
         // dayTemp = false;
         // setState(() {});
       } else {
@@ -403,7 +411,7 @@ class _CustomDateState extends State<CustomDate> {
           // setState(() {});
 
           // print("asdasdasd: ${monthController.text}");
-          // monthController.text = dateTime.month.toString();
+          monthController.text = dateTime.month.toString();
         } else {
           // dayController.text = dateTime.day.toString();
           context.read<DatesProvider>().setMonthTemp(true);
@@ -429,9 +437,9 @@ class _CustomDateState extends State<CustomDate> {
           // setState(() {});
 
           // print("asdasdasd: ${monthController.text}");
-          // monthController.text = dateTime.month.toString();
+          yearController.text = dateTime.year.toString();
         } else {
-          // dayController.text = dateTime.day.toString();
+          // yearController.text = dateTime.year.toString();
           // yearTemp = true;
           context.read<DatesProvider>().setYearTemp(true);
         }

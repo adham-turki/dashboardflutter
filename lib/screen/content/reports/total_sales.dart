@@ -114,7 +114,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: width * 0.7,
+          width: isDesktop ? width * 0.7 : width * 0.9,
           decoration: borderDecoration,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
         ),
@@ -127,7 +127,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               Column(
                 children: [
                   SizedBox(
-                    width: width * 0.7,
+                    width: isDesktop ? width * 0.7 : width * 0.9,
                     height: height * 0.7,
                     child: TableComponent(
                       key: UniqueKey(),
@@ -311,7 +311,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             CustomDropDown(
               hint: periods[0],
               label: _locale.period,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               items: periods,
               initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
               onChanged: (value) async {
@@ -326,7 +326,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               label: _locale.status,
               hint: status[0],
               items: status,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
               height: height * 0.18,
               onChanged: (value) async {

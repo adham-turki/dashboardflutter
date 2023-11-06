@@ -120,7 +120,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -137,9 +137,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
                   setState(() {});
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.7
-                      : MediaQuery.of(context).size.width * 0.7,
+                  width: isDesktop ? width * 0.7 : width * 0.9,
                   decoration: const BoxDecoration(
                     color: Colors.blue,
                   ),
@@ -164,9 +162,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
             ),
             accountsActive
                 ? Container(
-                    width: MediaQuery.of(context).size.width < 800
-                        ? MediaQuery.of(context).size.width * 0.7
-                        : MediaQuery.of(context).size.width * 0.7,
+                    width: isDesktop ? width * 0.7 : width * 0.9,
                     height: isDesktop ? height * 0.08 : height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -182,7 +178,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -302,7 +298,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: charts,
           label: _locale.chartType,
           initialValue: selectedChart,
@@ -314,7 +310,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: status,
           label: _locale.status,
           initialValue: selectedStatus,
@@ -327,7 +323,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
           },
         ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,

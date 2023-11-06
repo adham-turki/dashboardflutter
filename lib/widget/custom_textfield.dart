@@ -70,10 +70,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         children: [
           CustomLabel(
             label: label,
-            width: width * 0.2,
+            width: width * 0.3,
           ),
           SizedBox(
-            width: isDesktop ? width * 0.2 : width * 0.7,
+            width: isDesktop ? width * 0.2 : widget.width,
             // decoration: BoxDecoration(
             //   color: Colors.white,
             //   borderRadius: BorderRadius.circular(5.0),

@@ -107,7 +107,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -117,7 +117,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -381,7 +381,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       children: [
         CustomDropDown(
           items: periods,
-          width: widthMobile,
+          width: widthMobile * 0.81,
           label: _locale.period,
           initialValue: selectedPeriod,
           hint: "",
@@ -394,7 +394,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           },
         ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             date: fromDate,
             dateController: _fromDateController,
@@ -430,7 +430,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         //   },
         // ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             date: toDate,
             dateController: _toDateController,
@@ -466,7 +466,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         // ),
         CustomDropDown(
           items: charts,
-          width: widthMobile,
+          width: widthMobile * 0.81,
           label: _locale.chartType,
           initialValue: selectedChart,
           hint: "",

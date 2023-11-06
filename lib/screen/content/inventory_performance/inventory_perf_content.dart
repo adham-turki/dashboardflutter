@@ -111,17 +111,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        SizedBox(
-          width: width * 0.76,
-          child: Column(
-            children: [
-              Container(
-                width: width * 0.7,
-                decoration: borderDecoration,
-                child: isDesktop ? desktopCritiria() : mobileCritiria(),
-              )
-            ],
-          ),
+        Column(
+          children: [
+            Container(
+              width: isDesktop ? width * 0.7 : width * 0.9,
+              decoration: borderDecoration,
+              child: isDesktop ? desktopCritiria() : mobileCritiria(),
+            )
+          ],
         ),
         isDesktop
             ? Padding(
@@ -209,7 +206,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * .03,
                         ),
                         SizedBox(
-                          width: width * 0.7,
+                          width: isDesktop ? width * 0.7 : width * 0.9,
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
@@ -237,7 +234,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * .03,
                         ),
                         SizedBox(
-                          width: width * 0.7,
+                          width: isDesktop ? width * 0.7 : width * 0.9,
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
@@ -380,7 +377,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             CustomDropDown(
               hint: periods[0],
               label: _locale.period,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               items: periods,
               initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
               onChanged: (value) {
@@ -394,7 +391,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               label: _locale.status,
               hint: status[0],
               items: status,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
               height: height * 0.18,
               onChanged: (value) {
@@ -408,7 +405,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             CustomTextField(
               focusNode: focusNode,
               controller: numberOfrow,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               initialValue: numberOfrow.text,
               label: _locale.itemsNumber,
               onSubmitted: (value) {
@@ -428,7 +425,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
-              width: widthMobile,
+              width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: fromDate,
                 label: _locale.fromDate,
@@ -455,7 +452,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             //   },
             // ),
             SizedBox(
-              width: widthMobile,
+              width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: toDate,
                 label: _locale.toDate,

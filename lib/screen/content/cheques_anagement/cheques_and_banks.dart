@@ -174,7 +174,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
       label: _locale.status,
       hint: status[0],
       items: status,
-      width: widthMobile,
+      width: widthMobile * 0.81,
       initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
       height: height * 0.18,
       onChanged: (value) {
