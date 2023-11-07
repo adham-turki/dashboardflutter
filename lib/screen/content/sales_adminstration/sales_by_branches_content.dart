@@ -6,10 +6,7 @@ import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
-import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pie_chart/pie_chart.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../utils/constants/colors.dart';
@@ -280,7 +277,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           minYear: 2000,
           onValue: (isValid, value) {
             if (isValid) {
-              print("valueeeeeeeeeeeeeee ${value}");
               setState(() {
                 _fromDateController.text = value;
                 DateTime from = DateTime.parse(_fromDateController.text);

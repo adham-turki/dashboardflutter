@@ -1,12 +1,3 @@
-import 'package:bi_replicate/controller/general_ledger/journal_report_controller.dart';
-import 'package:bi_replicate/utils/constants/colors.dart';
-import 'package:bi_replicate/utils/constants/styles.dart';
-import 'package:bi_replicate/utils/constants/values.dart';
-import 'package:flutter/material.dart';
-import 'package:pluto_grid/pluto_grid.dart';
-
-import '../../criteria/journal_report_criteria.dart';
-
 class GeneralLedgerStruct {
   String? jCode;
   String? accCode;

@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
       color: Colors.black,
       child: AnimatedOpacity(
           opacity: widget.isVisible! ? 1.0 : 0,
-          duration: Duration(milliseconds: 1200),
+          duration: const Duration(milliseconds: 1200),
           child: SizedBox(
             height: 300,
             width: 300,

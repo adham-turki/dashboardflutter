@@ -2,11 +2,7 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../provider/local_provider.dart';
 import '../../utils/constants/colors.dart';
-import '../../widget/language_widget.dart';
 import 'login_textfield.dart';
 
 class FormComponent extends StatefulWidget {
@@ -44,7 +40,6 @@ class _FormComponentState extends State<FormComponent> {
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
-    final localeProvider = Provider.of<LocaleProvider>(context);
     bool isDesktop = Responsive.isDesktop(context);
 
     Size loginBtn = Size(width * 0.1, width * 0.1);
@@ -209,132 +204,127 @@ class _FormComponentState extends State<FormComponent> {
   }
 
   Widget rectangleForm() {
-    return Container(
-      // decoration: const BoxDecoration(
-      //   color: Color.fromARGB(255, 225, 239, 253),
-      // ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: height * 0.6,
-              width: width * 0.7,
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color.fromARGB(255, 2, 50, 89),
-                    Color.fromARGB(255, 6, 88, 155),
-                  ],
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
-                    spreadRadius: 1,
-                    blurRadius: 20,
-                    // offset: Offset(0, 10),
-                  ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: height * 0.6,
+            width: width * 0.7,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color.fromARGB(255, 2, 50, 89),
+                  Color.fromARGB(255, 6, 88, 155),
                 ],
-                borderRadius: BorderRadius.circular(7),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    "BI",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: width * 0.1,
-                        fontWeight: FontWeight.bold),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  spreadRadius: 1,
+                  blurRadius: 20,
+                  // offset: Offset(0, 10),
+                ),
+              ],
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(
+                  "BI",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: width * 0.1,
+                      fontWeight: FontWeight.bold),
+                ),
+                Directionality(
+                  textDirection: _locale.localeName == "ar"
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: LoginTextField(
+                    hint: _locale.aliasName,
+                    controller: widget.aliasName,
+                    onSubmitted: (value) {
+                      if (widget.onSubmit != null) {
+                        widget.onSubmit!(value);
+                      }
+                    },
                   ),
-                  Directionality(
-                    textDirection: _locale.localeName == "ar"
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: LoginTextField(
-                      hint: _locale.aliasName,
-                      controller: widget.aliasName,
-                      onSubmitted: (value) {
-                        if (widget.onSubmit != null) {
-                          widget.onSubmit!(value);
-                        }
-                      },
-                    ),
+                ),
+                Directionality(
+                  textDirection: _locale.localeName == "ar"
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: LoginTextField(
+                    hint: _locale.userName,
+                    controller: widget.userController,
+                    onSubmitted: (value) {
+                      if (widget.onSubmit != null) {
+                        widget.onSubmit!(value);
+                      }
+                    },
                   ),
-                  Directionality(
-                    textDirection: _locale.localeName == "ar"
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: LoginTextField(
-                      hint: _locale.userName,
-                      controller: widget.userController,
-                      onSubmitted: (value) {
-                        if (widget.onSubmit != null) {
-                          widget.onSubmit!(value);
-                        }
+                ),
+                Directionality(
+                  textDirection: _locale.localeName == "ar"
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  child: LoginTextField(
+                    hint: _locale.password,
+                    controller: widget.passwordController,
+                    obscureText: obscure1,
+                    onSubmitted: (value) {
+                      if (widget.onSubmit != null) {
+                        widget.onSubmit!(value);
+                      }
+                    },
+                    customIconSuffix: GestureDetector(
+                      onTap: () {
+                        obscure1 = !obscure1;
+                        setState(() {});
                       },
-                    ),
-                  ),
-                  Directionality(
-                    textDirection: _locale.localeName == "ar"
-                        ? TextDirection.rtl
-                        : TextDirection.ltr,
-                    child: LoginTextField(
-                      hint: _locale.password,
-                      controller: widget.passwordController,
-                      obscureText: obscure1,
-                      onSubmitted: (value) {
-                        if (widget.onSubmit != null) {
-                          widget.onSubmit!(value);
-                        }
-                      },
-                      customIconSuffix: GestureDetector(
-                        onTap: () {
-                          obscure1 = !obscure1;
-                          setState(() {});
-                        },
-                        child: Icon(
-                          obscure1
-                              ? CupertinoIcons.eye_slash_fill
-                              : CupertinoIcons.eye,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
+                      child: Icon(
+                        obscure1
+                            ? CupertinoIcons.eye_slash_fill
+                            : CupertinoIcons.eye,
+                        color: Colors.grey,
+                        size: 20,
                       ),
                     ),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+              clipBehavior: Clip.hardEdge,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                fixedSize: Size(width * 0.7, height * 0.1),
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                // elevation: 0,
+              ),
+              onPressed: widget.onPressed,
+              child: Text(
+                _locale.login,
+                style: TextStyle(
+                  color: primary,
+                  fontSize: width * 0.05,
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ElevatedButton(
-                clipBehavior: Clip.hardEdge,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  fixedSize: Size(width * 0.7, height * 0.1),
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(
-                      color: Colors.grey.withOpacity(0.5),
-                    ),
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  // elevation: 0,
-                ),
-                onPressed: widget.onPressed,
-                child: Text(
-                  _locale.login,
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: width * 0.05,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

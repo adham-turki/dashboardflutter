@@ -4,19 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
-import 'package:provider/provider.dart';
-
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
-import '../../components/charts/pie_chart.dart';
 import '../../components/charts/pie_chart_dashboard.dart';
-import '../../controller/error_controller.dart';
-import '../../provider/dates_provider.dart';
 import '../../utils/constants/app_utils.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_sales_branches.dart';
 
@@ -105,13 +99,10 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    print("inBuild fromcot :${fromDateController.text}");
-
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
 
-    print("******************************");
     return SingleChildScrollView(
       child: Container(
         // height: height * 1.7,
@@ -125,7 +116,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
               child: Container(
                 height: isDesktop ? height * 0.473 : height * 0.56,
                 //  width: double.infinity,
-                padding: EdgeInsets.only(left: 5, right: 5, top: 0),
+                padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -152,7 +143,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     isDesktop ? height * 0.039 : height * 0.03,
                               ),
                               // text: _locale.filter,
-                              textColor: Color.fromARGB(255, 255, 255, 255),
+                              textColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
                               //   borderRadius: 5.0,
                               height: isDesktop ? height * .015 : height * .039,
                               fontSize:

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:bi_replicate/model/criteria/journal_report_criteria.dart';
 import 'package:bi_replicate/model/db/general_ledger/journal_report/journal_report_transiet_mode.dart';
-import 'package:bi_replicate/model/db/general_ledger/gl_structure_model.dart';
 import 'package:bi_replicate/service/api_service.dart';
 import 'package:bi_replicate/utils/constants/paths.dart';
 import 'package:http/http.dart' as http;

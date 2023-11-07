@@ -94,7 +94,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget contentPage() {
     index = context.read<ScreenContentProvider>().getPage();
-    print("index: ${index}");
     switch (index) {
       case 0:
         return const DashboardContent();

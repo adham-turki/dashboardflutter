@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../controller/receivable_management/aging_controller.dart';

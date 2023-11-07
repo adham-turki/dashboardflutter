@@ -12,9 +12,6 @@ class VouchHeaderTransietController {
     await ApiService().getRequest(api).then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
-        print("paidSales: ${jsonData['paidSales']}");
-        print("returnSales: ${jsonData['returnSales']}");
-        print("numOfCustomers: ${jsonData['numOfCustomers']}");
         vouchHeaderTransietModel = VouchHeaderTransietModel(
             paidSales: jsonData['paidSales'],
             returnSales: jsonData['returnSales'],

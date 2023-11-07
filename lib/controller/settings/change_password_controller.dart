@@ -9,8 +9,6 @@ class ChangePasswordController {
       ChangePasswordModel body, AppLocalizations locale) async {
     String api = changePasswordApi;
     await ApiService().postRequest(api, body).then((value) {
-      print(value.body);
-      print(value.statusCode);
       if (value.statusCode == 200) {
         ErrorController.openErrorDialog(200, locale.changeSuccessfully);
         return true;

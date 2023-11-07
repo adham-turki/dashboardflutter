@@ -165,7 +165,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         barrierDismissible: false,
         context: context,
         builder: (builder) {
-          print("hhhh ${date.toString()}");
           return AlertDialog(
             title: Text(_locale.chooseDate),
             content: SizedBox(

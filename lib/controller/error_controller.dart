@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
-
 import '../components/key.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../model/routes.dart';
-import '../utils/constants/constants.dart';
-import '../utils/constants/error_constant.dart';
-import 'package:flutter/foundation.dart';
 
 class ErrorController {
   static bool temp = false;
@@ -61,7 +54,6 @@ class ErrorController {
       dialogBasedonResponseStatus(
           Icons.warning, errorDetails, locale.networkError, Colors.red, 0);
     } else if (responseStatus == 1) {
-      print("object");
       dialogBasedonResponseStatus(
           Icons.warning, errorDetails, locale.dateConflict, Colors.red, 0);
     }

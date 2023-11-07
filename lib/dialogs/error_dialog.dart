@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
-
 import '../model/routes.dart';
-import '../utils/constants/constants.dart';
 import 'package:flutter/foundation.dart';
 
 class ErrorDialog extends StatefulWidget {

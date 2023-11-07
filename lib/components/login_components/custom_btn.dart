@@ -41,7 +41,7 @@ class _CustomButtonState extends State<CustomButton> {
           const CircleBorder(),
         ),
         fixedSize:
-            MaterialStateProperty.resolveWith((states) => Size(200, 200)),
+            MaterialStateProperty.resolveWith((states) => const Size(200, 200)),
         backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState> states) {
             return Colors.white;

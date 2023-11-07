@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../model/api_url.dart';
 import '../../model/login/users_model.dart';
-import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 import '../error_controller.dart';
@@ -18,7 +17,7 @@ class LoginController {
     print("body: ${response.body}");
     if (response.statusCode == statusOk) {
       String token = response.body.substring(13, response.body.length - 2);
-      print("tokeeeen : :${token}");
+      print("tokeeeen : :$token");
       const storage = FlutterSecureStorage();
 
       await storage.write(key: 'jwt', value: token);

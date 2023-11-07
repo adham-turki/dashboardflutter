@@ -10,7 +10,6 @@ import '../../../utils/constants/app_utils.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogSalesByCategory extends StatefulWidget {
   final Function(
@@ -78,7 +77,6 @@ class _FilterDialogSalesByCategoryState
     branches = [_locale.all];
     selectedBranch = branches[0];
     selectedPeriod = periods[0];
-    print("todayDate: $todayDate");
     super.didChangeDependencies();
   }
 
@@ -363,9 +361,7 @@ class _FilterDialogSalesByCategoryState
                       selectedCategories,
                       selectedBranchCode,
                       selectedChart);
-                  print(
-                      "_fromDateController.text :${_fromDateController.text}");
-                  print("periodd :${selectedPeriod}");
+
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);
                   Navigator.of(context).pop();

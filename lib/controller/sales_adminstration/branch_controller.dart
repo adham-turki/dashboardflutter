@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:bi_replicate/service/api_service.dart';
-
-import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 

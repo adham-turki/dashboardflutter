@@ -56,7 +56,6 @@ List<String> getColumnsName(
   List<String> columnsName = [];
   for (int i = 0; i < columns.length; i++) {
     columnsName.add(columnsMap[columns[i]]!);
-    print(columnsName[i]);
   }
   return columnsName;
 }
@@ -89,7 +88,6 @@ List<String> getCustomColumnsName(
   List<String> columnsName = [];
   for (int i = 0; i < columns.length; i++) {
     columnsName.add(columnsMap[columns[i]]!);
-    print(columnsName[i]);
   }
   return columnsName;
 }

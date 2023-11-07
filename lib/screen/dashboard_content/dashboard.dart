@@ -1,33 +1,15 @@
-import 'dart:math';
-
-import 'package:bi_replicate/components/login_components/custom_btn.dart';
 import 'package:bi_replicate/model/bar_chart_data_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.dart';
 import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/charts.dart';
 import '../../components/customCard.dart';
-import '../../controller/financial_performance/cash_flow_controller.dart';
-import '../../controller/receivable_management/rec_pay_controller.dart';
-import '../../controller/sales_adminstration/daily_sales_controller.dart';
-import '../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../controller/vouch_header_transiet_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
-import '../../model/criteria/search_criteria.dart';
-import '../../model/settings/setup/bi_account_model.dart';
 import '../../model/vouch_header_transiet_model.dart';
-import '../../utils/constants/app_utils.dart';
-import '../../utils/constants/colors.dart';
-import '../../utils/constants/constants.dart';
-import '../../utils/constants/maps.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/func/converters.dart';
-import '../../utils/func/dates_controller.dart';
 import 'branches_sales_cat_dashboard.dart';
-import 'filter_dialog/filter_dialog_sales_branches.dart';
-import 'monthly_dashboard.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardContent extends StatefulWidget {
@@ -63,7 +45,6 @@ class _DashboardContentState extends State<DashboardContent> {
     VouchHeaderTransietController().getBranch().then((value) {
       setState(() {
         vouchHeaderTransietModel = value!;
-        print("hhhhhhhhhhhhh: ${value.numOfCustomers}");
       });
     });
 
@@ -142,7 +123,7 @@ class _DashboardContentState extends State<DashboardContent> {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Responsive.isDesktop(context)

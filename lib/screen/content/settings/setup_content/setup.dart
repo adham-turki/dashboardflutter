@@ -1,12 +1,7 @@
 import 'package:bi_replicate/screen/content/settings/setup_content/setup_component/expenses_account_setup_widget.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:lottie/lottie.dart';
-import '../../../../controller/settings/setup/setup_screen_controller.dart';
-import '../../../../model/settings/setup/account_model.dart';
-import '../../../../model/settings/setup/bi_account_model.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/responsive.dart';
 

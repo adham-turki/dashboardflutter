@@ -2,7 +2,7 @@
 import 'package:bi_replicate/screen/dashboard_content/dashboard.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+// import 'package:http/http.dart';
 
 class CustomCard extends StatelessWidget {
   final List<Color> gradientColor;
