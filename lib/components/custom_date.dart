@@ -221,6 +221,13 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   emptyDateControllers() {
+    if (yearController.text.isNotEmpty &&
+        monthController.text.isNotEmpty &&
+        dayController.text.isNotEmpty) {
+      yearController.clear();
+      dayController.clear();
+      monthController.clear();
+    }
     if (yearController.text.isNotEmpty) {
       yearController.clear();
     } else if (dayController.text.isNotEmpty) {
