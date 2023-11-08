@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../provider/dates_provider.dart';
 import '../utils/constants/responsive.dart';
 
@@ -28,6 +28,7 @@ class CustomDate extends StatefulWidget {
 }
 
 class _CustomDateState extends State<CustomDate> {
+  late AppLocalizations _locale;
   double width = 0;
   double height = 0;
   final MaskTextInputFormatter _maskYear =
@@ -81,6 +82,7 @@ class _CustomDateState extends State<CustomDate> {
 
   @override
   void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
     super.didChangeDependencies();
   }
 
@@ -124,7 +126,7 @@ class _CustomDateState extends State<CustomDate> {
                   !value.getDayTemp() ||
                           !value.getMonthTemp() ||
                           !value.getYearTemp()
-                      ? errorMessage(activeDateErrorMessage)
+                      ? errorMessage(_locale.checkDates)
                       : Container(),
                 ],
               );

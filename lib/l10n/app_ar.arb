@@ -198,7 +198,9 @@
             "dateConflict":"تعارض التاريخ",
 
         "filter" : "تأكيد",
-        "dailySalesCount":"حسابات المبيعات اليومية"
+        "dailySalesCount":"حسابات المبيعات اليومية",
+        "checkDates":"تحقق من التاريخ!"
+
 
 
 }
