@@ -75,7 +75,7 @@ Widget blueButton1({
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         gradient: LinearGradient(
-          colors: [Color(0xff4741c1), Color(0xff7e4fe4)],
+          colors: [Color.fromARGB(255, 65, 114, 193), primary],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),

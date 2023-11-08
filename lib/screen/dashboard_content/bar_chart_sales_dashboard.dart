@@ -84,7 +84,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     Future.delayed(Duration.zero, () {
       lastFromDate = fromDateController.text;
       lastToDate = toDateController.text;
-      selectedChart = _locale.barChart;
+      selectedChart = _locale.lineChart;
 
       if (!dataLoaded) {
         // Load data when the screen is first opened

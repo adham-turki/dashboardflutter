@@ -265,9 +265,7 @@ class _BranchesSalesByCatDashboardState
                             : CustomBarChart(
                                 // data: barData,
                                 data: barData,
-                                color: const Color.fromRGBO(48, 66, 125, 1),
-                                textColor: const Color(0xfff99417),
-                              ) //    isDesktop ? desktopCriteria() : mobileCriteria(),
+                              )
                   ],
                 ),
               ),
@@ -374,6 +372,8 @@ class _BranchesSalesByCatDashboardState
               ),
             );
           }
+
+          print("bardata Length :${barData.length}");
         }
       });
     }
@@ -407,6 +407,7 @@ class _BranchesSalesByCatDashboardState
     listOfBalances = [];
     listOfPeriods = [];
 
+    // print("ddddddddddd");
     await salesCategoryController
         .getSalesByCategory(searchCriteria, isStart: isStart)
         .then((value) {
@@ -433,6 +434,7 @@ class _BranchesSalesByCatDashboardState
                   : element.categoryName!,
               value: formatDoubleToTwoDecimalPlaces(bal),
               color: randomColor)); // Set random color
+          // print("asdasd: ${pieData.length}");
         }
 
         barData.add(
@@ -443,6 +445,8 @@ class _BranchesSalesByCatDashboardState
             percent: bal,
           ), // Set random color
         );
+
+        print("bardata Length :${barData.length}");
       }
     });
   }

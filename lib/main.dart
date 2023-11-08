@@ -3,6 +3,7 @@ import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
+import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -65,8 +66,10 @@ class _MyAppState extends State<MyApp> {
       locale: provider.locale,
       supportedLocales: L10n.all,
       theme: ThemeData.light().copyWith(
-        textTheme: getFontFamily(context),
-      ),
+          textTheme: getFontFamily(context),
+          scrollbarTheme: ScrollbarThemeData().copyWith(
+            thumbColor: MaterialStateProperty.all(Colors.grey[600]),
+          )),
       routerConfig: AppRoutes.routes,
     );
   }
