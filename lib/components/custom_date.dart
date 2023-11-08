@@ -447,12 +447,12 @@ class _CustomDateState extends State<CustomDate> {
 
         isValid = dateValidation();
 
-        // if (isValid && textNotEmpty()) {
-        //   if (widget.onValue != null) {
-        //     String dateValue = getDateValue();
-        //     widget.onValue!(isValid, dateValue);
-        //   }
-        // }
+        if (isValid && textNotEmpty()) {
+          if (widget.onValue != null) {
+            String dateValue = getDateValue();
+            widget.onValue!(isValid, dateValue);
+          }
+        }
       }
     }
     //Goes to month after finishing year
