@@ -179,9 +179,12 @@ class _FilterDialogSalesByBranchesState
                           label: _locale.fromDate,
                           minYear: 2000,
                           onValue: (isValid, value) {
+                            print("frommmmmmmmmmmm: ${_fromDateController}");
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
+                                print(
+                                    "frommmmmmmmmmmm: ${_fromDateController}");
                                 DateTime from =
                                     DateTime.parse(_fromDateController.text);
                                 DateTime to =
@@ -206,7 +209,7 @@ class _FilterDialogSalesByBranchesState
                         child: CustomDate(
                           dateController: _toDateController,
                           label: _locale.toDate,
-                          minYear: 2000,
+                          // minYear: 2000,
                           onValue: (isValid, value) {
                             if (isValid) {
                               setState(() {
@@ -264,6 +267,7 @@ class _FilterDialogSalesByBranchesState
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
+
                                 DateTime from =
                                     DateTime.parse(_fromDateController.text);
                                 DateTime to =

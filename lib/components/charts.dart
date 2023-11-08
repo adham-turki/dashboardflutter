@@ -133,11 +133,11 @@ class BalanceLineChart extends StatelessWidget {
             xValueMapper: (ChartData value, _) => value.period,
             yValueMapper: (ChartData value, _) => value.balance,
             markerSettings: const MarkerSettings(
-                color: Color.fromARGB(255, 0, 0, 0),
-                borderColor: Color.fromARGB(255, 0, 0, 0),
+                color: Color(0xFF5297b0),
+                borderColor: Color.fromRGBO(82, 151, 176, 1),
                 isVisible: true),
-            dataLabelSettings: const DataLabelSettings(
-                isVisible: true, color: Color.fromARGB(255, 0, 0, 0)),
+            dataLabelSettings:
+                const DataLabelSettings(isVisible: true, color: Colors.white),
             enableTooltip: true,
             animationDuration: 1000,
           ),

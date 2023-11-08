@@ -88,6 +88,7 @@ class _CustomDateState extends State<CustomDate> {
 
   splitDate() {
     controller = widget.dateController!;
+    print("contttttttttt: ${controller.text}");
     return controller.text.split("-");
   }
 

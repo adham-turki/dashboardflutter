@@ -289,6 +289,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     if (isValid) {
                       setState(() {
                         _fromDateController.text = value;
+                        print("frommmmmmmmmmmm: ${_fromDateController}");
                         DateTime from =
                             DateTime.parse(_fromDateController.text);
                         DateTime to = DateTime.parse(_toDateController.text);
