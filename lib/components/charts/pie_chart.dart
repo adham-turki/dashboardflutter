@@ -2,6 +2,7 @@ import 'package:bi_replicate/model/custom_scroll_behavior.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../model/chart/pie_chart_model.dart';
+import '../../utils/func/converters.dart';
 import 'indicator.dart';
 
 class PieChartComponent extends StatefulWidget {
@@ -101,7 +102,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
       PieChartModel data = dataList[i];
       return PieChartSectionData(
         value: data.value,
-        title: "${data.title}\n${data.value}",
+        title: "${data.title}\n${Converters.formatNumber(data.value!)}",
         color: data.color,
         radius: radius,
         titleStyle: const TextStyle(color: Colors.white),
@@ -168,7 +169,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         child: Indicator(
           color: data.color!,
           isSquare: true,
-          text: "${data.title!} (${data.value})",
+          text: "${data.title!} (${Converters.formatNumber(data.value!)})",
         ),
       );
     });

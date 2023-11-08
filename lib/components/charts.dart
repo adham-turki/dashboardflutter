@@ -1,3 +1,4 @@
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -332,7 +333,8 @@ class BalanceBarChart extends StatelessWidget {
                   series: <ChartSeries>[
                     BarSeries<BarChartData, String>(
                       dataSource: data,
-                      xValueMapper: (BarChartData value, _) => value.category,
+                      xValueMapper: (BarChartData value, _) =>
+                          "${value.category} (${Converters.formatNumber(value.value)})",
                       yValueMapper: (BarChartData value, _) => value.value,
                       enableTooltip: true,
                       animationDuration: 1000,
@@ -358,7 +360,8 @@ class BalanceBarChart extends StatelessWidget {
               series: <ChartSeries>[
                 BarSeries<BarChartData, String>(
                   dataSource: data,
-                  xValueMapper: (BarChartData value, _) => value.category,
+                  xValueMapper: (BarChartData value, _) =>
+                      "${value.category} (${Converters.formatNumber(value.value)})",
                   yValueMapper: (BarChartData value, _) => value.value,
                   enableTooltip: true,
                   animationDuration: 1000,
