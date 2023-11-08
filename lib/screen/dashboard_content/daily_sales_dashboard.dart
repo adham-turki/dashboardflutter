@@ -91,7 +91,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     ];
 
     selectedStatus = status[0];
-    selectedChart = charts[1];
+    selectedChart = charts[0];
     super.didChangeDependencies();
   }
 
@@ -213,8 +213,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                     //     : Container(),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
-                            yAxisText: "",
-                            xAxisText: "",
+                            yAxisText: _locale.balances,
+                            xAxisText: _locale.periods,
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart

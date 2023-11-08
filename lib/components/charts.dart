@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
 import '../provider/screen_content_provider.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
@@ -36,7 +40,7 @@ class CustomBarChart extends StatelessWidget {
             child: SingleChildScrollView(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
-              child: SizedBox(
+              child: Container(
                 height: isDesktop ? height * 0.423 : height * 0.5,
                 width: data.length * 100.0,
                 //    padding: const EdgeInsets.all(16.0),
@@ -55,7 +59,7 @@ class CustomBarChart extends StatelessWidget {
                       dataLabelSettings: DataLabelSettings(
                         isVisible: true,
                         textStyle: TextStyle(
-                          color: textColor ?? const Color(0xFF219C90),
+                          color: textColor ?? Color(0xFF219C90),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -68,7 +72,7 @@ class CustomBarChart extends StatelessWidget {
               ),
             ),
           )
-        : SizedBox(
+        : Container(
             height: isDesktop ? height * 0.423 : height * 0.5,
             // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
@@ -86,7 +90,7 @@ class CustomBarChart extends StatelessWidget {
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     textStyle: TextStyle(
-                      color: textColor ?? const Color(0xFF219C90),
+                      color: textColor ?? Color(0xFF219C90),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -105,20 +109,17 @@ class BalanceLineChart extends StatelessWidget {
   final String yAxisText;
   final List<double> balances;
   final List<String> periods;
-
   const BalanceLineChart(
       {super.key,
       required this.balances,
       required this.periods,
       required this.xAxisText,
       required this.yAxisText});
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     List<ChartData> data = _getChartData();
-
     return SizedBox(
       height: context.read<ScreenContentProvider>().getPage() == 0
           ? height * 0.43
@@ -138,11 +139,11 @@ class BalanceLineChart extends StatelessWidget {
             xValueMapper: (ChartData value, _) => value.period,
             yValueMapper: (ChartData value, _) => value.balance,
             markerSettings: const MarkerSettings(
-                color: Color.fromARGB(255, 0, 0, 0),
-                borderColor: Color.fromARGB(255, 0, 0, 0),
+                color: Color(0xFF5297b0),
+                borderColor: Color.fromRGBO(82, 151, 176, 1),
                 isVisible: true),
-            dataLabelSettings: const DataLabelSettings(
-                isVisible: true, color: Color.fromARGB(255, 0, 0, 0)),
+            dataLabelSettings:
+                const DataLabelSettings(isVisible: true, color: Colors.white),
             enableTooltip: true,
             animationDuration: 1000,
           ),
