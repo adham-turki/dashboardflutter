@@ -4,7 +4,6 @@ import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -87,8 +86,8 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<String?> _getToken() async {
-    const storage = FlutterSecureStorage();
-    return await storage.read(key: 'jwt');
-  }
+  // Future<String?> _getToken() async {
+  //   const storage = FlutterSecureStorage();
+  //   return await storage.read(key: 'jwt');
+  // }
 }

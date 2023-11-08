@@ -166,21 +166,15 @@ class PurchaseCostReportModel {
         backgroundColor: colColor,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
             ? (rendererContext) {
-                print("avgPrice ${reportsResult.avgPrice}");
-
                 return footerRenderer(rendererContext, reportsResult.avgPrice!);
               }
             : fieldsName[i] == 'quantity' && reportsResult != null
                 ? (rendererContext) {
-                    print("quantity ${reportsResult.quantity}");
-
                     return footerRenderer(
                         rendererContext, reportsResult.quantity!);
                   }
                 : fieldsName[i] == 'total' && reportsResult != null
                     ? (rendererContext) {
-                        print("total ${reportsResult.total}");
-
                         return footerRenderer(
                             rendererContext, reportsResult.total!);
                       }
@@ -193,7 +187,6 @@ class PurchaseCostReportModel {
 
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
-    print("allll $valueAll");
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
       formatAsCurrency: false,

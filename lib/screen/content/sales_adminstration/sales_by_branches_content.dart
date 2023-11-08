@@ -6,10 +6,7 @@ import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
-import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pie_chart/pie_chart.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../utils/constants/colors.dart';
@@ -107,7 +104,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -117,7 +114,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -280,7 +277,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           minYear: 2000,
           onValue: (isValid, value) {
             if (isValid) {
-              print("valueeeeeeeeeeeeeee ${value}");
               setState(() {
                 _fromDateController.text = value;
                 DateTime from = DateTime.parse(_fromDateController.text);
@@ -381,7 +377,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       children: [
         CustomDropDown(
           items: periods,
-          width: widthMobile,
+          width: widthMobile * 0.81,
           label: _locale.period,
           initialValue: selectedPeriod,
           hint: "",
@@ -394,7 +390,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           },
         ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             date: fromDate,
             dateController: _fromDateController,
@@ -430,7 +426,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         //   },
         // ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             date: toDate,
             dateController: _toDateController,
@@ -466,7 +462,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         // ),
         CustomDropDown(
           items: charts,
-          width: widthMobile,
+          width: widthMobile * 0.81,
           label: _locale.chartType,
           initialValue: selectedChart,
           hint: "",

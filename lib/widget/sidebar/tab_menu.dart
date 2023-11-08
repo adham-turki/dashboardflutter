@@ -4,8 +4,6 @@ import 'package:bi_replicate/model/side_menu/side_tab_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:provider/provider.dart';
 
 class TabMenu extends StatefulWidget {

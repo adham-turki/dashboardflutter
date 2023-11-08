@@ -3,9 +3,7 @@ import 'package:bi_replicate/components/charts/pie_chart.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
-import 'package:bi_replicate/widget/custom_date_picker.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:pie_chart/pie_chart.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/error_controller.dart';
 import '../../../utils/constants/colors.dart';
@@ -112,7 +110,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -122,7 +120,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -305,7 +303,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: charts,
           label: _locale.chartType,
           initialValue: selectedChart,
@@ -317,7 +315,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: periods,
           label: _locale.period,
           initialValue: selectedPeriod,
@@ -330,7 +328,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: status,
           label: _locale.byCategory,
           initialValue: selectedStatus,
@@ -342,7 +340,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           },
         ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
@@ -377,7 +375,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         //   },
         // ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _toDateController,
             label: _locale.toDate,

@@ -1,5 +1,4 @@
 import 'package:bi_replicate/model/custom_scroll_behavior.dart';
-import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../model/chart/pie_chart_model.dart';
@@ -144,7 +143,7 @@ class _PieChartDashboardState extends State<PieChartDashboard> {
     PieChartModel data = PieChartModel(
       value: 100,
       title: "NO DATA",
-      color: Color(0xff4741c1),
+      color: const Color(0xff4741c1),
     );
 
     List<PieChartSectionData> noData = [
@@ -168,7 +167,7 @@ class _PieChartDashboardState extends State<PieChartDashboard> {
         child: Indicator(
           color: data.color!,
           isSquare: true,
-          text: "${data.title!}",
+          text: data.title!,
         ),
       );
     });

@@ -12,7 +12,6 @@ class CentralApiController {
   Future<String> getApi(
       String pathUrl, String server, AppLocalizations local) async {
     var api = "$pathUrl/$apiUrl/$server";
-    print("center $api");
     String serverUrl = "";
 
     await http.get(Uri.parse(api)).then((value) {
@@ -28,7 +27,6 @@ class CentralApiController {
       } else {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         serverUrl = jsonData['serverurl'];
-        print("serverURL:${serverUrl}");
       }
     });
 

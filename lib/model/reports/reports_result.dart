@@ -5,7 +5,6 @@ class ReportsResult {
   int? count;
   ReportsResult();
   ReportsResult.fromJson(Map<String, dynamic> reportsResult) {
-    print(" mmm ${reportsResult['avgPrice']}");
     quantity = reportsResult['quantity'].toString() == 'null'
         ? 0.0
         : reportsResult['quantity'];

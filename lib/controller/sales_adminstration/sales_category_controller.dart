@@ -4,7 +4,6 @@ import 'package:bi_replicate/service/api_service.dart';
 
 import '../../model/criteria/search_criteria.dart';
 import '../../model/sales_adminstration/sales_category_model.dart';
-import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 

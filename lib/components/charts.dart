@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../provider/screen_content_provider.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
@@ -40,7 +36,7 @@ class CustomBarChart extends StatelessWidget {
             child: SingleChildScrollView(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
-              child: Container(
+              child: SizedBox(
                 height: isDesktop ? height * 0.423 : height * 0.5,
                 width: data.length * 100.0,
                 //    padding: const EdgeInsets.all(16.0),
@@ -59,7 +55,7 @@ class CustomBarChart extends StatelessWidget {
                       dataLabelSettings: DataLabelSettings(
                         isVisible: true,
                         textStyle: TextStyle(
-                          color: textColor ?? Color(0xFF219C90),
+                          color: textColor ?? const Color(0xFF219C90),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -72,7 +68,7 @@ class CustomBarChart extends StatelessWidget {
               ),
             ),
           )
-        : Container(
+        : SizedBox(
             height: isDesktop ? height * 0.423 : height * 0.5,
             // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
@@ -90,7 +86,7 @@ class CustomBarChart extends StatelessWidget {
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     textStyle: TextStyle(
-                      color: textColor ?? Color(0xFF219C90),
+                      color: textColor ?? const Color(0xFF219C90),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -141,9 +137,12 @@ class BalanceLineChart extends StatelessWidget {
             dataSource: data,
             xValueMapper: (ChartData value, _) => value.period,
             yValueMapper: (ChartData value, _) => value.balance,
-            markerSettings:
-                const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
-            dataLabelSettings: const DataLabelSettings(isVisible: false),
+            markerSettings: const MarkerSettings(
+                color: Color.fromARGB(255, 0, 0, 0),
+                borderColor: Color.fromARGB(255, 0, 0, 0),
+                isVisible: true),
+            dataLabelSettings: const DataLabelSettings(
+                isVisible: true, color: Color.fromARGB(255, 0, 0, 0)),
             enableTooltip: true,
             animationDuration: 1000,
           ),

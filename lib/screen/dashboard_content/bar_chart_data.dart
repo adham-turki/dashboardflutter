@@ -28,8 +28,8 @@ class BalanceBarChart extends StatelessWidget {
               yValueMapper: (BarData value, _) => value.percent,
               enableTooltip: true,
               animationDuration: 1000,
-              color: Color(0xFFEE9322),
-              dataLabelSettings: DataLabelSettings(
+              color: const Color(0xFFEE9322),
+              dataLabelSettings: const DataLabelSettings(
                 isVisible: true,
                 textStyle: TextStyle(
                     color: Color(0xFF219C90), fontWeight: FontWeight.w600),

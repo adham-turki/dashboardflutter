@@ -1,9 +1,5 @@
-import 'dart:math';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class TableComponent extends StatefulWidget {
@@ -36,7 +32,7 @@ class _TableComponentState extends State<TableComponent> {
   double scrollThickness = 20;
   double scrollRadius = 10;
   late final PlutoGridStateManager stateManager;
-  var _preventContextMenu;
+  // var _preventContextMenu;
   @override
   void initState() {
     // _preventContextMenu = (html.Event event) => {
@@ -58,7 +54,6 @@ class _TableComponentState extends State<TableComponent> {
     height = MediaQuery.of(context).size.height;
     List<PlutoColumn> polCols = widget.plCols;
     List<PlutoRow> polRows = widget.polRows;
-    print("INSIDE TABLE COMP ROWS: ${polRows.length}");
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
         scrollbar: PlutoGridScrollbarConfig(
@@ -99,8 +94,6 @@ class _TableComponentState extends State<TableComponent> {
         // print(event);
       },
       onSelected: (event) {
-        print(event.row);
-        print("on selected");
         if (widget.onSelected != null) {
           widget.onSelected!(event);
         }

@@ -7,7 +7,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pie_chart/pie_chart.dart';
 
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
@@ -24,7 +23,6 @@ import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class CashFlowsContent extends StatefulWidget {
@@ -135,7 +133,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -152,9 +150,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                   setState(() {});
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.7
-                      : MediaQuery.of(context).size.width * 0.7,
+                  width: isDesktop ? width * 0.7 : width * 0.9,
                   decoration: const BoxDecoration(
                     color: Colors.blue,
                   ),
@@ -179,9 +175,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             ),
             accountsActive
                 ? Container(
-                    width: MediaQuery.of(context).size.width < 800
-                        ? MediaQuery.of(context).size.width * 0.7
-                        : MediaQuery.of(context).size.width * 0.7,
+                    width: isDesktop ? width * 0.7 : width * 0.9,
                     height: isDesktop ? height * 0.08 : height * 0.12,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
@@ -197,7 +191,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -378,7 +372,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: charts,
           label: _locale.chartType,
           initialValue: selectedChart,
@@ -390,7 +384,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: periods,
           label: _locale.period,
           initialValue: selectedPeriod,
@@ -403,7 +397,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: status,
           label: _locale.byCategory,
           initialValue: selectedStatus,
@@ -415,7 +409,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           },
         ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
@@ -450,7 +444,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         //   },
         // ),
         SizedBox(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _toDateController,
             label: _locale.toDate,

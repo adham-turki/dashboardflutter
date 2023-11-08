@@ -29,12 +29,10 @@ class _ContentHeaderState extends State<ContentHeader> {
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     locale = AppLocalizations.of(context);
     VouchHeaderTransietController().getBranch().then((value) {
       setState(() {
         vouchHeaderTransietModel = value!;
-        print("hhhhhhhhhhhhh: ${value.numOfCustomers}");
       });
     });
     todayDate = DatesController().formatDate(DatesController().todayDate());
@@ -88,7 +86,7 @@ class _ContentHeaderState extends State<ContentHeader> {
                   context.read<ScreenContentProvider>().getPage() == 0
                       ? SelectableText(
                           maxLines: 1,
-                          "${currentMonth} / ${todayDate}",
+                          "$currentMonth / $todayDate",
                           style: TextStyle(
                             fontSize: context
                                         .read<ScreenContentProvider>()
@@ -144,7 +142,7 @@ class _ContentHeaderState extends State<ContentHeader> {
                   context.read<ScreenContentProvider>().getPage() == 0
                       ? SelectableText(
                           maxLines: 1,
-                          "${currentMonth} / ${todayDate}",
+                          "$currentMonth / $todayDate",
                           style: TextStyle(
                             fontSize: context
                                         .read<ScreenContentProvider>()

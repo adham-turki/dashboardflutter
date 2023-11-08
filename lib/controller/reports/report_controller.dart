@@ -212,7 +212,6 @@ class ReportController {
     await ApiService()
         .postRequest(api, salesProvider, isStart: isStart)
         .then((response) {
-      print("response ${response.statusCode}");
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -258,7 +257,6 @@ class ReportController {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesResult = ReportsResult.fromJson(jsonData);
       }
-      print("responseBody ${response.body}");
     });
 
     return salesResult;
@@ -271,9 +269,6 @@ class ReportController {
     await ApiService()
         .postRequest(api, purchaseProvider, isStart: isStart)
         .then((response) {
-      print("Response ${response.statusCode}");
-      print("ResponseBody ${response.body}");
-
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
@@ -296,7 +291,6 @@ class ReportController {
       "columns": searchCriteria.columns,
       "customColumns": searchCriteria.customColumns
     };
-    print("search ${body}");
     await ApiService().postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
     });
@@ -318,7 +312,6 @@ class ReportController {
     };
     await ApiService().postRequest(eUrl, body).then((value) {
       excelByteData = value.bodyBytes;
-      print("ressss ${value.statusCode}");
     });
     return excelByteData;
   }

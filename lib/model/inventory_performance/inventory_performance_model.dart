@@ -1,12 +1,9 @@
-import 'package:bi_replicate/controller/inventory_performance/inventory_performance_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/constants/styles.dart';
-import '../../utils/func/converters.dart';
-import '../criteria/search_criteria.dart';
 
 class InventoryPerformanceModel {
   String? code;
@@ -48,7 +45,6 @@ class InventoryPerformanceModel {
     // int numberOfColumns = 4;
     // double width *0.15 = totalWidth / numberOfColumns;
     bool isDesktop = Responsive.isDesktop(context);
-    bool isMobile = Responsive.isMobile(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,
@@ -97,14 +93,12 @@ class InventoryPerformanceModel {
 
   static PlutoAggregateColumnFooter footerRenderer(
       PlutoColumnFooterRendererContext rendererContext, double valueAll) {
-    print("before return :${valueAll}");
     return PlutoAggregateColumnFooter(
       rendererContext: rendererContext,
       formatAsCurrency: false,
       type: PlutoAggregateColumnType.sum,
       alignment: Alignment.center,
       titleSpanBuilder: (text) {
-        print("text :${text}");
         return [
           TextSpan(
             text: text,

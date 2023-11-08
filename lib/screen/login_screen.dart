@@ -13,7 +13,6 @@ import '../controller/central_api_controller.dart';
 import '../controller/error_controller.dart';
 import '../model/routes.dart';
 import '../provider/local_provider.dart';
-import '../utils/constants/constants.dart';
 import '../utils/constants/encrypt_key.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../widget/language_widget.dart';
@@ -29,7 +28,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   double height = 0;
   double width = 0;
-  final _keyForm = GlobalKey<FormState>();
+  // final _keyForm = GlobalKey<FormState>();
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController aliasName = TextEditingController();
@@ -174,14 +173,14 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _savingData() async {
-    final validation = _keyForm.currentState!.validate();
-    if (validation) {
-      _keyForm.currentState!.save();
-    } else {
-      return;
-    }
-  }
+  // Future<void> _savingData() async {
+  //   final validation = _keyForm.currentState!.validate();
+  //   if (validation) {
+  //     _keyForm.currentState!.save();
+  //   } else {
+  //     return;
+  //   }
+  // }
 
   Future loadApi() async {
     await rootBundle

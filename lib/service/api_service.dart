@@ -1,18 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
-
-import '../components/key.dart';
 import '../controller/error_controller.dart';
 import '../model/api_url.dart';
-import '../model/routes.dart';
 import '../utils/constants/api_constants.dart';
-import '../utils/constants/constants.dart';
-import 'package:flutter/foundation.dart';
 
 class ApiService {
   // static String url = "https://bic.scopef.com:9002";
@@ -73,11 +64,9 @@ class ApiService {
     } catch (e) {
       // Handle network-related exceptions (e.g., no internet connection)
       // You can show an error message to the user or log the error.
-      print("Network error: $e");
       ErrorController.openErrorDialog(0, e.toString());
 
       // Handle other types of exceptions (e.g., server not reachable)
-      print("Other error: $e");
       // ErrorController.openErrorDialog(404, e);
     }
   }
@@ -132,8 +121,6 @@ class ApiService {
         //   // Navigator.pushReplacementNamed(context, loginScreenRoute);
         // }
         else if (isStart == null) {
-          print("inside start response ${response.statusCode}");
-
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
@@ -144,11 +131,9 @@ class ApiService {
     } catch (e) {
       // Handle network-related exceptions (e.g., no internet connection)
       // You can show an error message to the user or log the error.
-      print("Network error: $e");
       ErrorController.openErrorDialog(0, e.toString());
 
       // Handle other types of exceptions (e.g., server not reachable)
-      print("Other error: $e");
       // ErrorController.openErrorDialog(404, e);
     }
   }

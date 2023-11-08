@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import '../../model/cheques_bank/cheques_model.dart';
 import '../../model/cheques_bank/cheques_result.dart';
 import '../../model/criteria/search_criteria.dart';
-import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
@@ -21,8 +20,6 @@ class SelfChequesController {
     await ApiService()
         .postRequest(pathUrl, searchCriteria.chequesToJson(), isStart: isStart)
         .then((response) {
-      print("response.body ${response.body}"); // Print the response
-
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 

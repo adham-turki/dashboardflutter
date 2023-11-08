@@ -5,7 +5,6 @@ import 'package:bi_replicate/service/api_service.dart';
 
 import '../../model/criteria/search_criteria.dart';
 import '../../model/reports/total_sales/total_sales_model.dart';
-import '../../service/Api.dart';
 import '../../utils/constants/api_constants.dart';
 import '../../utils/constants/values.dart';
 
@@ -36,7 +35,6 @@ class TotalSalesController {
       {bool? isStart}) async {
     var api = getTotalSalesResult;
     late TotalSalesResult? totalSalesList;
-    print("body ${searchCriteria.toJson()}");
 
     await ApiService()
         .postRequest(api, searchCriteria.toJson(), isStart: isStart)
@@ -67,7 +65,6 @@ class TotalSalesController {
       "customColumns": searchCriteria.customColumns
     };
     await ApiService().postRequest(eUrl, body).then((value) {
-      print(value.bodyBytes);
       excelByteData = value.bodyBytes;
     });
     return excelByteData;

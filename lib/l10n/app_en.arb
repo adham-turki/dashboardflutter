@@ -221,6 +221,7 @@
     "startDateAfterEndDate":"End Date should be after Start Date",
     "dateConflict":"Date Conflict",
         "filter" : "Filter",
-        "dailySalesCount":"Daily Sales Count"
+        "dailySalesCount":"Daily Sales Count",
+        "checkDates":"Check Date Format"
 
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class CustomLoading extends StatelessWidget {
   CustomLoading({super.key});
@@ -20,6 +18,5 @@ class CustomLoading extends StatelessWidget {
         child: CircularProgressIndicator(),
       ),
     );
-    ;
   }
 }

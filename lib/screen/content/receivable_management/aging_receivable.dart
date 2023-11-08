@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:pie_chart/pie_chart.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../controller/receivable_management/aging_controller.dart';
@@ -104,7 +103,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: width * 0.7,
+              width: isDesktop ? width * 0.7 : width * 0.9,
               decoration: borderDecoration,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -114,7 +113,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                width: width * 0.7,
+                width: isDesktop ? width * 0.7 : width * 0.9,
                 height: isDesktop ? height * 0.6 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
@@ -216,7 +215,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: charts,
           label: _locale.chartType,
           initialValue: selectedChart,
@@ -228,7 +227,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
           },
         ),
         CustomDropDown(
-          width: widthMobile,
+          width: widthMobile * 0.81,
           items: status,
           label: _locale.status,
           initialValue: selectedStatus,

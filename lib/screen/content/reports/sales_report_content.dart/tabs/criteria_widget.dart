@@ -9,7 +9,6 @@ import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../provider/sales_search_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
 import '../../../../../utils/func/dates_controller.dart';
-import '../../../../../widget/custom_date_picker.dart';
 import '../../../../../widget/custom_textfield.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 import '../../../../../widget/drop_down/multi_selection_drop_down.dart';
@@ -149,7 +148,6 @@ class _LeftWidgetState extends State<LeftWidget> {
 
     readProvider.setFromDate(DatesController().formatDate(fromDate.text));
     readProvider.setToDate(DatesController().formatDate(toDate.text));
-    print("fromDateText ${fromDate.text}");
 
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
@@ -788,7 +786,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     List<String> codesString = [];
     for (int i = 0; i < val.length; i++) {
       String newString = (val[i].toString().trim()).replaceAll(" ", "");
-      print(newString);
       codesString.add(newString.substring(0, newString.indexOf("-")));
     }
     return codesString;
@@ -798,7 +795,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     List<String> codesString = [];
     for (int i = 0; i < val.length; i++) {
       String newString = (val[i].toString().trim()).replaceAll(" ", "");
-      print(newString);
       codesString.add(newString);
     }
     return codesString;
@@ -816,8 +812,6 @@ class _LeftWidgetState extends State<LeftWidget> {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
       }
       readProvider.setFromDate(startDate);
-
-      print("fromProvider ${readProvider.getFromDate}");
     });
   }
 
@@ -832,8 +826,6 @@ class _LeftWidgetState extends State<LeftWidget> {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
       }
       readProvider.setToDate(endDate);
-
-      print("fromProvider ${readProvider.getFromDate}");
     });
   }
 }
@@ -1493,7 +1485,6 @@ class _RightWidgetState extends State<RightWidget> {
     List<String> codesString = [];
     for (int i = 0; i < val.length; i++) {
       String newString = (val[i].toString().trim()).replaceAll(" ", "");
-      print(newString);
       codesString.add(newString);
     }
     return codesString;

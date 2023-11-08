@@ -57,7 +57,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
   @override
   Widget build(BuildContext context) {
     double width = widget.width ?? MediaQuery.of(context).size.width;
-    String label = widget.label ?? "";
+    // String label = widget.label ?? "";
     double padding = widget.padding ?? 0.0;
     bool readOnly = widget.readOnly ?? false;
     String hint = widget.hint ?? "";
@@ -72,7 +72,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
           //   label: label,
           //   width: width * 0.2,
           // ),
-          Container(
+          SizedBox(
             width: isDesktop ? width * 0.18 : width * 0.5,
             // decoration: BoxDecoration(
             //   color: Colors.white,
@@ -87,7 +87,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
             // ),
             child: TextFormField(
               obscureText: widget.obscureText ?? false,
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               controller: _textEditingController,
               readOnly: readOnly,
               validator: (text) => widget.onValidator == null
@@ -100,7 +100,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
                     widget.showText == true ? null : widget.customIconSuffix,
                 fillColor: Colors.white,
                 hintText: hint,
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                   color: Colors.white,
                 ),
                 // labelText: label,

@@ -3,9 +3,7 @@ import 'dart:typed_data';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../../../../Encryption/encryption.dart';
 import '../../../../controller/error_controller.dart';
@@ -191,7 +189,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           Encryption.performAesEncryption(newPass.text, keyEncrypt, byteArray);
       ChangePasswordModel changePasswordModel =
           ChangePasswordModel(oldPassEncrypted, newPassEncrypted);
-      // print()
       ChangePasswordController()
           .changePassword(changePasswordModel, _locale)
           .then((value) {

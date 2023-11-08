@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../provider/sales_search_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -96,8 +95,6 @@ class _OrderByWidgetState extends State<OrderByWidget> {
     ordersMap2[10] = _locale.yearly;
     ordersMap2[11] = _locale.brand;
     ordersMap2[12] = _locale.invoice;
-
-    print("length  ${ordersList.length}");
   }
 
   @override
@@ -124,7 +121,6 @@ class _OrderByWidgetState extends State<OrderByWidget> {
     selectedValue4 = readProvider.getVal4!;
     ordersList = readProvider.getOrders == null ? [] : readProvider.getOrders!;
 
-    print("helllllo");
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,

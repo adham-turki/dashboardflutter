@@ -70,7 +70,6 @@ class TotalSalesModel {
     // int numberOfColumns = 4;
     // double width *0.15 = totalWidth / numberOfColumns;
     bool isDesktop = Responsive.isDesktop(context);
-    bool isMobile = Responsive.isMobile(context);
     List<PlutoColumn> list = [
       PlutoColumn(
         title: localizations.code,

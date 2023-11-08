@@ -8,7 +8,6 @@ import '../../../controller/error_controller.dart';
 import '../../../utils/constants/app_utils.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_date_picker.dart';
 
 class FilterDialogSalesByBranches extends StatefulWidget {
   final Function(
@@ -62,7 +61,6 @@ class _FilterDialogSalesByBranchesState
     selectedChart = charts[2];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
-    print("todayDate: $todayDate");
     super.didChangeDependencies();
   }
 
@@ -76,8 +74,6 @@ class _FilterDialogSalesByBranchesState
     _toDateController.text = todayDate;
 
     _fromDateController.text = currentMonth;
-    print("fromDate: ${_fromDateController.text}");
-    print("periodd :${selectedPeriod}");
     super.initState();
   }
 

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
-import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
 import 'package:flutter/foundation.dart';
 
@@ -25,7 +21,6 @@ class _LogoutTabState extends State<LogoutTab> {
   late AppLocalizations locale;
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     locale = AppLocalizations.of(context);
 
     super.didChangeDependencies();
@@ -38,7 +33,6 @@ class _LogoutTabState extends State<LogoutTab> {
     bool isDesktop = Responsive.isDesktop(context);
 
     bool isTablet = Responsive.isTablet(context);
-    bool isMobile = Responsive.isMobile(context);
 
     return InkWell(
       onTap: () async {
