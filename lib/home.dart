@@ -1,5 +1,4 @@
 import 'package:bi_replicate/components/content_header.dart';
-import 'package:bi_replicate/components/side_menu.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/out_standing_cheques.dart';
@@ -22,6 +21,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
 import 'screen/dashboard_content/dashboard.dart';
+import 'widget/new_sideMenue/side_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

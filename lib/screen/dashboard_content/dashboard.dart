@@ -60,6 +60,7 @@ class _DashboardContentState extends State<DashboardContent> {
     height = MediaQuery.of(context).size.height;
     return SafeArea(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             children: [
