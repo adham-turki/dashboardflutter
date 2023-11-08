@@ -310,9 +310,9 @@ class _CustomDateState extends State<CustomDate> {
       int day = int.parse(dayStr);
 
       if (year <= yearNow && yearStr.length == 4) {
-        if (month <= 12 && month <= monthNow) {
+        if (month <= 12) {
           if (dayStr.length == 2) {
-            if (day > dayNow && month == monthNow && year >= yearNow) {
+            if (day > dayNow && month >= monthNow && year >= yearNow) {
               dayController.text = dayNow.toString();
             }
             if ((month == 4 || month == 6 || month == 9 || month == 11) &&
