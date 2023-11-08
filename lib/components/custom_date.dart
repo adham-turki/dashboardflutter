@@ -367,6 +367,7 @@ class _CustomDateState extends State<CustomDate> {
       child: Text(
         msg,
         style: TextStyle(
+          fontSize: 10,
           color: borderErrorColor,
         ),
       ),
@@ -625,6 +626,9 @@ class _CustomDateState extends State<CustomDate> {
           }
           bool isValid = dateValidation();
           if (isValid) {
+            context.read<DatesProvider>().setDayTemp(true);
+            context.read<DatesProvider>().setMonthTemp(true);
+            context.read<DatesProvider>().setYearTemp(true);
             widget.onValue!(true, getDateValue());
           }
         }
