@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../provider/screen_content_provider.dart';
+import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
 
 class BarData {
@@ -55,7 +56,6 @@ class CustomBarChart extends StatelessWidget {
                           double.parse(value.percent!.toStringAsFixed(2)),
                       enableTooltip: true,
                       animationDuration: 1000,
-                      color: color ?? const Color(0xFFEE9322),
                       dataLabelSettings: DataLabelSettings(
                         isVisible: true,
                         textStyle: TextStyle(
@@ -63,6 +63,9 @@ class CustomBarChart extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
+                      pointColorMapper: (BarData value, int index) {
+                        return index.isEven ? primary : secondary;
+                      },
                     ),
                   ],
                 ),
@@ -84,7 +87,6 @@ class CustomBarChart extends StatelessWidget {
                       double.parse(value.percent!.toStringAsFixed(2)),
                   enableTooltip: true,
                   animationDuration: 1000,
-                  color: color ?? const Color(0xFFEE9322),
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     textStyle: TextStyle(
@@ -92,6 +94,9 @@ class CustomBarChart extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                  pointColorMapper: (BarData value, int index) {
+                    return index.isEven ? primary : secondary;
+                  },
                 ),
               ],
             ),

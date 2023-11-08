@@ -251,8 +251,8 @@ class _BranchesSalesByCatDashboardState
                     ),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
+                            yAxisText: "",
+                            xAxisText: "",
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
@@ -272,9 +272,7 @@ class _BranchesSalesByCatDashboardState
                             : CustomBarChart(
                                 // data: barData,
                                 data: barData,
-                                color: const Color.fromRGBO(48, 66, 125, 1),
-                                textColor: const Color(0xfffF99417),
-                              ) //    isDesktop ? desktopCriteria() : mobileCriteria(),
+                              )
                   ],
                 ),
               ),
