@@ -143,8 +143,7 @@ class BalanceLineChart extends StatelessWidget {
                 color: Color(0xFF5297b0),
                 borderColor: Color.fromRGBO(82, 151, 176, 1),
                 isVisible: true),
-            dataLabelSettings:
-                const DataLabelSettings(isVisible: true, color: Colors.white),
+            dataLabelSettings: const DataLabelSettings(isVisible: true),
             enableTooltip: true,
             animationDuration: 1000,
           ),
