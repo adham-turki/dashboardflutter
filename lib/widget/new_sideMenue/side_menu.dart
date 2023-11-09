@@ -84,6 +84,7 @@ class _SideMenuState extends State<SideMenu> {
               height: height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // CustomSearchField(
                     //   onChanged: (value) {},
@@ -158,16 +159,13 @@ class _SideMenuState extends State<SideMenu> {
                   : Container(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.center,
-              child: LanguageWidget(
-                color: Colors.white,
-                onLocaleChanged: (locale) {
-                  localeProvider.setLocale(locale);
-                },
-              ),
+          Align(
+            alignment: Alignment.center,
+            child: LanguageWidget(
+              color: Colors.white,
+              onLocaleChanged: (locale) {
+                localeProvider.setLocale(locale);
+              },
             ),
           ),
         ],
@@ -181,7 +179,7 @@ class _SideMenuState extends State<SideMenu> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           selectedMenu == index
               ? createSelecter(radius)
@@ -381,7 +379,7 @@ class _SideMenuState extends State<SideMenu> {
 
   double drawerWidth() {
     if (isDesktop) {
-      return !isCollapsed ? width * 0.149 : 50;
+      return !isCollapsed ? width * 0.149 : width * 0.045;
     } else {
       return width * 0.6;
     }
@@ -389,7 +387,7 @@ class _SideMenuState extends State<SideMenu> {
 
   double menuWidth() {
     if (isDesktop) {
-      return !isCollapsed ? width * 0.132 : 35;
+      return !isCollapsed ? width * 0.132 : width * 0.02;
     } else {
       return width * 0.55;
     }
