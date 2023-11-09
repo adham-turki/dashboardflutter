@@ -270,7 +270,7 @@ class _SideMenuState extends State<SideMenu> {
                                   title,
                                   style: TextStyle(
                                       fontSize:
-                                          isDesktop ? fontSize : width * 0.04,
+                                          isDesktop ? fontSize : width * 0.03,
                                       color: Colors.white),
                                 )
                               : Container(),
