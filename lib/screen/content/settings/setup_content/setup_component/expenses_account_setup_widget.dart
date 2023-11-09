@@ -128,7 +128,7 @@ class _ExpensesAccountSetupWidgetState
                     width: Responsive.isDesktop(context)
                         ? width * 0.35
                         : width * 0.9,
-                    height: height * 0.7,
+                    height: height * 0.6,
                     child: isFinised
                         ? TableComponent(
                             key: UniqueKey(),

@@ -128,7 +128,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                 children: [
                   SizedBox(
                     width: isDesktop ? width * 0.7 : width * 0.9,
-                    height: height * 0.7,
+                    height: height * 0.63,
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: TotalSalesModel.getColumns(

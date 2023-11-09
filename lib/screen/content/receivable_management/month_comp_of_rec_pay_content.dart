@@ -8,6 +8,7 @@ import '../../../model/bar_chart_data_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
+import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
@@ -120,112 +121,102 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     isDesktop = Responsive.isDesktop(context);
 
     return SingleChildScrollView(
-      child: Container(
-        // height: height,
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: isDesktop ? width * 0.7 : width * 0.9,
-              decoration: borderDecoration,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: isDesktop ? desktopCriteria() : mobileCriteria(),
-              ),
-            ),
-            SizedBox(
-              height: height * 0.01,
-            ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  accountsActive = !accountsActive;
-                  setState(() {});
-                },
-                child: Container(
-                  width: isDesktop ? width * 0.7 : width * 0.9,
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SelectableText(
-                        maxLines: 1,
-                        _locale.accounts,
-                        style: fourteen400TextStyle(Colors.white),
-                      ),
-                      const Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            accountsActive
-                ? Container(
-                    width: isDesktop ? width * 0.7 : width * 0.9,
-                    height: isDesktop ? height * 0.08 : height * 0.12,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 5),
-                    child: SelectableText(
-                      maxLines: 10,
-                      accountName(),
-                      style: sixteen600TextStyle(Colors.black),
-                    ))
-                : Container(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            width: isDesktop ? width * 0.7 : width * 0.9,
+            decoration: borderDecoration,
+            child: isDesktop ? desktopCriteria() : mobileCriteria(),
+          ),
+          Center(
+            child: GestureDetector(
+              onTap: () {
+                accountsActive = !accountsActive;
+                setState(() {});
+              },
               child: Container(
                 width: isDesktop ? width * 0.7 : width * 0.9,
-                height: isDesktop ? height * 0.55 : height * 0.6,
-                decoration: borderDecoration,
-                child: Column(
+                decoration: const BoxDecoration(
+                  color: primary,
+                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            selectedChart == _locale.lineChart
-                                ? _locale.lineChart
-                                : selectedChart == _locale.pieChart
-                                    ? _locale.pieChart
-                                    : _locale.barChart,
-                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
-                          ),
-                        ),
-                      ],
+                    SelectableText(
+                      maxLines: 1,
+                      _locale.accounts,
+                      style: fourteen400TextStyle(Colors.white),
                     ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceDoubleLineChart(
-                            xAxisText: "",
-                            yAxisText: _locale.balances,
-                            balances: listOfBalances,
-                            periods: listOfPeriods,
-                            balances2: listOfBalances2,
-                            periods2: listOfPeriods2,
-                          )
-                        : BalanceDoubleBarChart(
-                            data: barData,
-                            data2: barData2,
-                          ),
-                    const SizedBox(), //Footer
+                    const Icon(
+                      Icons.add,
+                      color: Colors.white,
+                    ),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          accountsActive
+              ? Container(
+                  width: isDesktop ? width * 0.7 : width * 0.9,
+                  height: isDesktop ? height * 0.08 : height * 0.12,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
+                  child: SelectableText(
+                    maxLines: 10,
+                    accountName(),
+                    style: sixteen600TextStyle(Colors.black),
+                  ))
+              : Container(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: isDesktop ? width * 0.7 : width * 0.9,
+              height: isDesktop ? height * 0.55 : height * 0.6,
+              decoration: borderDecoration,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          selectedChart == _locale.lineChart
+                              ? _locale.lineChart
+                              : selectedChart == _locale.pieChart
+                                  ? _locale.pieChart
+                                  : _locale.barChart,
+                          style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                        ),
+                      ),
+                    ],
+                  ),
+                  selectedChart == _locale.lineChart
+                      ? BalanceDoubleLineChart(
+                          xAxisText: "",
+                          yAxisText: _locale.balances,
+                          balances: listOfBalances,
+                          periods: listOfPeriods,
+                          balances2: listOfBalances2,
+                          periods2: listOfPeriods2,
+                        )
+                      : BalanceDoubleBarChart(
+                          data: barData,
+                          data2: barData2,
+                        ),
+                  const SizedBox(), //Footer
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

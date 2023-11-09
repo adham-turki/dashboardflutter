@@ -139,7 +139,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 child: Container(
                   width: isDesktop ? width * 0.7 : width * 0.9,
                   decoration: const BoxDecoration(
-                    color: Colors.blue,
+                    color: primary,
                   ),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),

@@ -142,7 +142,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         ),
                         SizedBox(
                           width: width * 0.37,
-                          height: height * 0.53,
+                          height: height * 0.57,
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
@@ -170,7 +170,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         ),
                         SizedBox(
                           width: width * 0.37,
-                          height: height * 0.53,
+                          height: height * 0.57,
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(

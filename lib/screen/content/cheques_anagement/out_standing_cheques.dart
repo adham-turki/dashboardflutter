@@ -113,7 +113,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          height: isDesktop ? height * 0.35 : height * 0.6,
+          // height: isDesktop ? height * 0.35 : height * 0.6,
           width: isDesktop ? width * 0.7 : width * 0.9,
           decoration: borderDecoration,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
@@ -128,7 +128,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 children: [
                   SizedBox(
                     width: isDesktop ? width * 0.7 : width * 0.9,
-                    height: height * 0.7,
+                    height: height * 0.53,
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: ChequesModel.getColumns(
@@ -150,8 +150,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
   Column desktopCritiria(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -191,24 +190,19 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            SizedBox(
-              // height: height * 0.11,
-              width: width * 0.135,
-              child: CustomDate(
-                dateController: fromDate,
-                label: _locale.fromDate,
-                minYear: 2000,
-                onValue: (isValid, value) {
-                  if (isValid) {
-                    setState(() {
-                      fromDate.text = value;
-                      setControllerFromDateText();
-                    });
-                  }
-                },
-              ),
+            CustomDate(
+              dateController: fromDate,
+              label: _locale.fromDate,
+              minYear: 2000,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    fromDate.text = value;
+                    setControllerFromDateText();
+                  });
+                }
+              },
             ),
             SizedBox(
               width: width * 0.01,
@@ -224,26 +218,22 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             //     setControllerFromDateText();
             //   },
             // ),
-            SizedBox(
-              // height: height * 0.11,
-              width: width * 0.135,
-              child: CustomDate(
-                dateController: toDate,
-                label: _locale.toDate,
-                // minYear: 2000,
-                onValue: (isValid, value) {
-                  if (isValid) {
-                    setState(() {
-                      toDate.text = value;
+            CustomDate(
+              dateController: toDate,
+              label: _locale.toDate,
+              // minYear: 2000,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    toDate.text = value;
 
-                      setControllertoDateText();
-                    });
-                  }
-                  print("toDateeeeeIs $isValid");
+                    setControllertoDateText();
+                  });
+                }
+                print("toDateeeeeIs $isValid");
 
-                  print("toDateeeee $value");
-                },
-              ),
+                print("toDateeeee $value");
+              },
             ),
             // CustomDatePicker(
             //   label: _locale.toDate,
@@ -317,7 +307,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               hint: periods[0],
               label: _locale.period,
               items: periods,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
               onChanged: (value) async {
                 checkPeriods(value);
@@ -332,7 +322,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               label: _locale.status,
               hint: status[0],
               items: status,
-              width: widthMobile,
+              width: widthMobile * 0.81,
               initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
               height: height * 0.18,
               onChanged: (value) async {
@@ -353,8 +343,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-              height: height * 0.12,
-              width: widthMobile * 0.9,
+              // height: height * 0.12,
+              width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: fromDate,
                 label: _locale.fromDate,
@@ -381,8 +371,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             //   },
             // ),
             SizedBox(
-              height: height * 0.12,
-              width: widthMobile * 0.9,
+              // height: height * 0.12,
+              width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: toDate,
                 label: _locale.toDate,
