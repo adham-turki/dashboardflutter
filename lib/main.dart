@@ -37,6 +37,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  bool temp = true;
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<LocaleProvider>(context);
@@ -52,7 +53,10 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    loadStoredLocale();
+    if (temp) {
+      loadStoredLocale();
+      temp = false;
+    }
 
     return MaterialApp.router(
       title: 'BI | Scope',
@@ -66,24 +70,27 @@ class _MyAppState extends State<MyApp> {
       locale: provider.locale,
       supportedLocales: L10n.all,
       theme: ThemeData.light().copyWith(
-          textTheme: getFontFamily(context),
+          // textTheme: getFontFamily(context),
           scrollbarTheme: ScrollbarThemeData().copyWith(
-            thumbColor: MaterialStateProperty.all(Colors.grey[600]),
-          )),
+        thumbColor: MaterialStateProperty.all(Colors.grey[600]),
+      )),
       routerConfig: AppRoutes.routes,
     );
   }
 
   TextTheme getFontFamily(BuildContext context) {
     // Determine the current locale
-    // print(_locale.active);
     String lang = Provider.of<LocaleProvider>(context).locale.languageCode;
     // Use different fonts based on the language
     if (lang == "ar") {
+      print("arrrrrrrrrrrrrrrrr");
+
       // Arabic font
       return GoogleFonts.readexProTextTheme(Theme.of(context).textTheme);
       // return GoogleFonts.cairoTextTheme(Theme.of(context).textTheme);
     } else {
+      print("engggggggggggg");
+
       // English font
       return GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme);
     }

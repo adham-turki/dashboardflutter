@@ -53,6 +53,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
       underline: Container(),
 
       onChanged: (value) async {
+        print("ddddddddddddddddd");
         Locale newLocale = Locale(value!);
         widget.onLocaleChanged!(newLocale);
 
