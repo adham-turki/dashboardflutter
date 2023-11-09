@@ -96,12 +96,12 @@ class _SideMenuState extends State<SideMenu> {
                     // ),
                     for (int i = 0; i < menuList.length; i++)
                       createMenuItem(menuList[i], i),
+                    LogoutTab(isCollapsed: isCollapsed),
                   ],
                 ),
               ),
             ),
           ),
-          LogoutTab(isCollapsed: isCollapsed),
         ],
       ),
     );
@@ -180,19 +180,23 @@ class _SideMenuState extends State<SideMenu> {
     Radius radius = const Radius.circular(100);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
         children: [
-          selectedMenu == index
-              ? createSelecter(radius)
-              : Container(
-                  width: isDesktop ? width * 0.002 : width * 0.004,
-                ),
-          const SizedBox(
-            width: 6,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              selectedMenu == index
+                  ? createSelecter(radius)
+                  : Container(
+                      width: isDesktop ? width * 0.002 : width * 0.004,
+                    ),
+              const SizedBox(
+                width: 6,
+              ),
+              menuWidget(index, menu),
+            ],
           ),
-          menuWidget(index, menu),
         ],
       ),
     );
