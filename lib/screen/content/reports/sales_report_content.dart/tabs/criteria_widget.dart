@@ -1338,7 +1338,7 @@ class _RightWidgetState extends State<RightWidget> {
           height: height * .01,
         ),
         Container(
-          width: isDesktop ? width * 0.6 / 2 : width * 0.9,
+          width: isDesktop ? width * 0.3 : width * 0.9,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             border: Border.all(
@@ -1351,7 +1351,7 @@ class _RightWidgetState extends State<RightWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomTextField(
-                      width: width * 0.67,
+                      width: width * 0.45,
                       label: _locale.campaignNo,
                       controller: campaignNoController,
                       onSubmitted: (text) {
@@ -1359,7 +1359,7 @@ class _RightWidgetState extends State<RightWidget> {
                       },
                     ),
                     CustomTextField(
-                      width: width * 0.67,
+                      width: width * 0.45,
                       label: _locale.modelNo,
                       controller: modelNoController,
                       onSubmitted: (text) {
