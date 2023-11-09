@@ -20,6 +20,8 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
+  late ScreenContentProvider provider;
+
   double width = 0;
   double height = 0;
 
@@ -57,7 +59,7 @@ class _SideMenuState extends State<SideMenu> {
     height = MediaQuery.of(context).size.height;
     fontSize = width * 0.008;
     isDesktop = Responsive.isDesktop(context);
-
+    provider = context.read<ScreenContentProvider>();
     List<MenuModel> menuList = getMenu(_locale);
 
     screenProvider = context.read<ScreenContentProvider>();
@@ -194,6 +196,16 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 
+  // Color activeSubColor(int index) {
+  //   int currentPage = provider.getPage();
+  //   if (subHovered == index) {
+  //     return secondary;
+  //   } else if (subSelected == index && subSelected == currentPage) {
+  //     return secondary;
+  //   }
+  //   return Colors.white;
+  // }
+
   Container createSelecter(Radius radius) {
     return Container(
       width: isDesktop ? width * 0.002 : width * 0.004,
@@ -314,6 +326,16 @@ class _SideMenuState extends State<SideMenu> {
     );
   }
 
+  Color activeSubColor(int index) {
+    int currentPage = provider.getPage();
+    if (selectedSubMenuHover == index) {
+      return secondary;
+    } else if (selectedSubMenu == index && selectedSubMenu == currentPage) {
+      return secondary;
+    }
+    return Colors.white;
+  }
+
   Widget createSubMenu(SubMenuModel subMenu, int parentNumber) {
     String title = subMenu.title;
     int page = subMenu.pageNumber;
@@ -342,7 +364,7 @@ class _SideMenuState extends State<SideMenu> {
           child: Row(
             children: [
               Icon(
-                color: Colors.white,
+                color: activeSubColor(page),
                 Icons.circle_rounded,
                 size: isDesktop ? width * 0.005 : width * 0.02,
               ),
@@ -354,7 +376,7 @@ class _SideMenuState extends State<SideMenu> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: getActiveSubColor(page, parentNumber),
+                    color: activeSubColor(page),
                     fontSize: isDesktop ? fontSize : width * 0.03,
                   ),
                 ),
