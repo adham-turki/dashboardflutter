@@ -123,7 +123,7 @@ class BalanceLineChart extends StatelessWidget {
     List<ChartData> data = _getChartData();
     return SizedBox(
       height: context.read<ScreenContentProvider>().getPage() == 0
-          ? height * 0.43
+          ? height * 0.41
           : height * 0.48,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),

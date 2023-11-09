@@ -142,7 +142,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.5 : height * 0.56,
+                height: isDesktop ? height * 0.48 : height * 0.56,
 
                 // width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5, top: 0),
@@ -158,7 +158,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                       children: [
                         Text(
                           _locale.dailySales,
-                          style: TextStyle(fontSize: isDesktop ? 16 : 18),
+                          style: TextStyle(fontSize: isDesktop ? 15 : 18),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(
