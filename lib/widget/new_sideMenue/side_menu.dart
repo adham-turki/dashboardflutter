@@ -84,7 +84,7 @@ class _SideMenuState extends State<SideMenu> {
               height: height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // CustomSearchField(
                     //   onChanged: (value) {},
@@ -159,16 +159,13 @@ class _SideMenuState extends State<SideMenu> {
                   : Container(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Align(
-              alignment: Alignment.center,
-              child: LanguageWidget(
-                color: Colors.white,
-                onLocaleChanged: (locale) {
-                  localeProvider.setLocale(locale);
-                },
-              ),
+          Align(
+            alignment: Alignment.center,
+            child: LanguageWidget(
+              color: Colors.white,
+              onLocaleChanged: (locale) {
+                localeProvider.setLocale(locale);
+              },
             ),
           ),
         ],
