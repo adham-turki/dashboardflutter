@@ -55,7 +55,6 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    print("langgggggg: ${LocaleProvider().locale.languageCode}");
     fontSize = width * 0.008;
     isDesktop = Responsive.isDesktop(context);
 
