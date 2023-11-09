@@ -55,7 +55,7 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-
+    print("langgggggg: ${LocaleProvider().locale.languageCode}");
     fontSize = width * 0.008;
     isDesktop = Responsive.isDesktop(context);
 
@@ -258,7 +258,11 @@ class _SideMenuState extends State<SideMenu> {
                           Icon(
                             icon,
                             color: Colors.white,
-                            size: isDesktop ? width * 0.011 : width * 0.05,
+                            size: isDesktop
+                                ? !isCollapsed
+                                    ? width * 0.01
+                                    : width * 0.0138
+                                : width * 0.05,
                           ),
                           !isCollapsed
                               ? const SizedBox(
