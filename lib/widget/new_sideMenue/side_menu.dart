@@ -387,7 +387,7 @@ class _SideMenuState extends State<SideMenu> {
 
   double menuWidth() {
     if (isDesktop) {
-      return !isCollapsed ? width * 0.132 : width * 0.02;
+      return !isCollapsed ? width * 0.132 : width * 0.03;
     } else {
       return width * 0.55;
     }
