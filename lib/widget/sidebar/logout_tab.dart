@@ -8,7 +8,8 @@ import '../../utils/constants/responsive.dart';
 import 'package:flutter/foundation.dart';
 
 class LogoutTab extends StatefulWidget {
-  const LogoutTab({super.key});
+  final bool isCollapsed;
+  const LogoutTab({super.key, required this.isCollapsed});
 
   @override
   State<LogoutTab> createState() => _LogoutTabState();
@@ -96,17 +97,19 @@ class _LogoutTabState extends State<LogoutTab> {
                 SizedBox(
                   width: width * 0.005,
                 ),
-                Text(
-                  locale.logout,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: isDesktop
-                        ? width * 0.01
-                        : isTablet
-                            ? width * 0.015
-                            : width * 0.028,
-                  ),
-                ),
+                !widget.isCollapsed
+                    ? Text(
+                        locale.logout,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isDesktop
+                              ? width * 0.01
+                              : isTablet
+                                  ? width * 0.015
+                                  : width * 0.028,
+                        ),
+                      )
+                    : Container(),
               ],
             ),
             const SizedBox(),

@@ -99,7 +99,7 @@ class _SideMenuState extends State<SideMenu> {
               ),
             ),
           ),
-          const LogoutTab(),
+          // const LogoutTab(),
         ],
       ),
     );
