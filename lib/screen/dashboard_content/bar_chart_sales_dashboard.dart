@@ -178,12 +178,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                     //         height: 15,
                     //       )
                     //     : Container(),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: "",
-                            xAxisText: "",
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
+                    selectedChart == _locale.barChart
+                        ? CustomBarChart(data: barData)
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(
@@ -198,7 +194,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                   dataList: pieData,
                                 ),
                               )
-                            : CustomBarChart(data: barData)
+                            : BalanceLineChart(
+                                yAxisText: "",
+                                xAxisText: "",
+                                balances: listOfBalances,
+                                periods: listOfPeriods)
 
                     // PieChartDashboard(
                     //   radiusNormal: isDesktop ? height * 0.15 : 120,

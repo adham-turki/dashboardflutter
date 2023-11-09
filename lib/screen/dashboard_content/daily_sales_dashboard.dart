@@ -211,12 +211,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                     //         height: 15,
                     //       )
                     //     : Container(),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: "",
-                            xAxisText: "",
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
+                    selectedChart == _locale.barChart
+                        ? CustomBarChart(
+                            data: barData,
+                          )
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(
@@ -231,11 +229,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   dataList: barDataDailySales,
                                 ),
                               )
-                            : CustomBarChart(
-                                data: barData,
-                                color: const Color(0xfffF99417),
-                                textColor: const Color.fromRGBO(48, 66, 125, 1),
-                              )
+                            : BalanceLineChart(
+                                yAxisText: "",
+                                xAxisText: "",
+                                balances: listOfBalances,
+                                periods: listOfPeriods)
                   ],
                 ),
               ),

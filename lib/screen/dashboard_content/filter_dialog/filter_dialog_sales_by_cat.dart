@@ -73,7 +73,7 @@ class _FilterDialogSalesByCategoryState
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[2];
 
-    selectedCategories = categories[0];
+    selectedCategories = categories[1];
     branches = [_locale.all];
     selectedBranch = branches[0];
     selectedPeriod = periods[0];
