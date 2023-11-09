@@ -23,12 +23,14 @@ class SideMenu extends StatefulWidget {
 class _SideMenuState extends State<SideMenu> {
   double width = 0;
   double height = 0;
+  late ScreenContentProvider provider;
 
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     final localeProvider = Provider.of<LocaleProvider>(context);
+    provider = context.read<ScreenContentProvider>();
 
     return Container(
       width: Responsive.isDesktop(context)

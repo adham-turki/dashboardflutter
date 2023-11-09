@@ -221,7 +221,7 @@ class _SideMenuState extends State<SideMenu> {
   }
 
   Widget menuWidget(int index, MenuModel menu) {
-    Color activeColor = getActiveColor(index);
+    // Color activeColor = getActiveColor(index);
     String title = menu.title;
     bool isParent = menu.isParent;
     IconData icon = menu.icon;
@@ -239,7 +239,7 @@ class _SideMenuState extends State<SideMenu> {
       child: Container(
         width: menuWidth(),
         decoration: BoxDecoration(
-          color: activeColor,
+          color: primary,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
@@ -376,7 +376,7 @@ class _SideMenuState extends State<SideMenu> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: getActiveSubColor(page, parentNumber),
+                    color: activeSubColor(page),
                     fontSize: isDesktop ? fontSize : width * 0.03,
                   ),
                 ),
@@ -389,10 +389,10 @@ class _SideMenuState extends State<SideMenu> {
   }
 
   Color getActiveColor(int index) {
-    if (selectedMenuHover == index || selectedMenu == index) {
-      return primary;
+    if (selectedSubMenuHover == index || selectedSubMenuHover == index) {
+      return gridActiveColor;
     }
-    return primary;
+    return whiteColor;
   }
 
   Color? getActiveSubColor(int page, int parentNumber) {
