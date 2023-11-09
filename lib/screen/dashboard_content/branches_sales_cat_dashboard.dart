@@ -244,8 +244,8 @@ class _BranchesSalesByCatDashboardState
                     ),
                     selectedChart == _locale.lineChart
                         ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
+                            yAxisText: "",
+                            xAxisText: "",
                             balances: listOfBalances,
                             periods: listOfPeriods)
                         : selectedChart == _locale.pieChart

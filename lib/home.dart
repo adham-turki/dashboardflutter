@@ -58,8 +58,8 @@ class _HomePageState extends State<HomePage> {
                   width: isDesktop ? width * 0.835 : width,
                   height: isDesktop
                       ? context.read<ScreenContentProvider>().getPage() == 0
-                          ? height * 0.031
-                          : height * 0.05
+                          ? height * 0.045
+                          : height * 0.055
                       : context.read<ScreenContentProvider>().getPage() == 0
                           ? height * 0.1
                           : height * 0.07,
