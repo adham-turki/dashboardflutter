@@ -347,7 +347,7 @@ class _SideMenuState extends State<SideMenu> {
                 width: 10,
               ),
               SizedBox(
-                width: isDesktop ? width * 0.05 : width * 0.3,
+                width: isDesktop ? width * 0.08 : width * 0.3,
                 child: Text(
                   title,
                   style: TextStyle(

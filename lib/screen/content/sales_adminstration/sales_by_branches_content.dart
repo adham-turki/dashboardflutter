@@ -135,12 +135,8 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                         ),
                       ],
                     ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
+                    selectedChart == _locale.barChart
+                        ? BalanceBarChart(data: barData)
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartComponent(
@@ -152,7 +148,11 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                                   dataList: pieData,
                                 ),
                               )
-                            : BalanceBarChart(data: barData),
+                            : BalanceLineChart(
+                                yAxisText: _locale.balances,
+                                xAxisText: _locale.periods,
+                                balances: listOfBalances,
+                                periods: listOfPeriods),
                     const SizedBox(), //Footer
                   ],
                 ),
