@@ -128,7 +128,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 children: [
                   SizedBox(
                     width: isDesktop ? width * 0.7 : width * 0.9,
-                    height: height * 0.53,
+                    height: height * 0.65,
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: ChequesModel.getColumns(
