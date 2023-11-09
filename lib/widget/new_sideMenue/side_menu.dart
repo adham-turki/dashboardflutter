@@ -9,6 +9,7 @@ import '../../provider/screen_content_provider.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
 import '../language_widget.dart';
+import '../sidebar/logout_tab.dart';
 import 'menu.dart';
 import 'menu_model.dart';
 
@@ -100,6 +101,7 @@ class _SideMenuState extends State<SideMenu> {
               ),
             ),
           ),
+          const LogoutTab(),
         ],
       ),
     );
