@@ -64,89 +64,177 @@ class _SetupScreenState extends State<SetupScreen> {
       child: Container(
         margin: const EdgeInsets.only(left: 4, right: 3),
         child: SizedBox(
-          width: width * 0.7,
+          // width: width * 0.7,
           child: Column(
             children: [
-              Container(
-                color: darkBlueColor,
-                height: height * 0.1,
-                child: TabBar(
-                  // isScrollable: true,
-                  labelStyle: TextStyle(
-                    fontSize: isDesktop ? height * .016 : height * .008,
-                  ),
-                  // labelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.expensesAccounts, // Custom tab label
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.cachBoxAccounts, // Custom tab label
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.receivableAccounts, // Custom tab label
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.payableAccounts, // Custom tab label
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.bankAccounts, // Custom tab label
-                    ),
-                    Tab(
-                      icon: Icon(
-                        Icons.account_balance,
-                        color: const Color(0xffe7b84e).withOpacity(0.7),
-                      ),
-                      text: _locale.dailySalesCount, // Custom tab label
-                    ),
-                  ],
+              isDesktop
+                  ? Container(
+                      color: primary,
+                      height: height * 0.1,
+                      child: TabBar(
+                        // isScrollable: true,
+                        labelStyle: TextStyle(
+                          fontSize: isDesktop ? height * .016 : height * .008,
+                        ),
+                        // labelColor: Colors.black,
+                        tabs: [
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text: _locale.expensesAccounts, // Custom tab label
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text: _locale.cachBoxAccounts, // Custom tab label
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text:
+                                _locale.receivableAccounts, // Custom tab label
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text: _locale.payableAccounts, // Custom tab label
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text: _locale.bankAccounts, // Custom tab label
+                          ),
+                          Tab(
+                            icon: Icon(
+                              Icons.account_balance,
+                              color: const Color(0xffe7b84e).withOpacity(0.7),
+                            ),
+                            text: _locale.dailySalesCount, // Custom tab label
+                          ),
+                        ],
 
-                  // onTap: (int index) {
-                  //   switch (index) {
-                  //     case 0:
-                  //       getExpensesAccounts();
-                  //       // Handle the first tab press
-                  //       break;
-                  //     case 1:
-                  //       getCashBoxAccount();
-                  //       // Handle the second tab press
-                  //       break;
-                  //     case 2:
-                  //       getReceivableAccounts();
-                  //       break;
-                  //     case 3:
-                  //       getPayableAccounts();
+                        // onTap: (int index) {
+                        //   switch (index) {
+                        //     case 0:
+                        //       getExpensesAccounts();
+                        //       // Handle the first tab press
+                        //       break;
+                        //     case 1:
+                        //       getCashBoxAccount();
+                        //       // Handle the second tab press
+                        //       break;
+                        //     case 2:
+                        //       getReceivableAccounts();
+                        //       break;
+                        //     case 3:
+                        //       getPayableAccounts();
 
-                  //       break;
-                  //     case 4:
-                  //       getBankAccounts();
-                  //       break;
+                        //       break;
+                        //     case 4:
+                        //       getBankAccounts();
+                        //       break;
 
-                  //     // Add cases for other tabs as needed
-                  //   }
-                  // },
-                ),
-              ),
+                        //     // Add cases for other tabs as needed
+                        //   }
+                        // },
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        width: width * 1.5,
+                        color: primary,
+                        height: height * 0.1,
+                        child: TabBar(
+                          // isScrollable: true,
+                          labelStyle: TextStyle(
+                            fontSize: isDesktop ? height * .016 : height * .012,
+                          ),
+                          // labelColor: Colors.black,
+                          tabs: [
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text:
+                                  _locale.expensesAccounts, // Custom tab label
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text: _locale.cachBoxAccounts, // Custom tab label
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text: _locale
+                                  .receivableAccounts, // Custom tab label
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text: _locale.payableAccounts, // Custom tab label
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text: _locale.bankAccounts, // Custom tab label
+                            ),
+                            Tab(
+                              icon: Icon(
+                                Icons.account_balance,
+                                color: const Color(0xffe7b84e).withOpacity(0.7),
+                              ),
+                              text: _locale.dailySalesCount, // Custom tab label
+                            ),
+                          ],
+
+                          // onTap: (int index) {
+                          //   switch (index) {
+                          //     case 0:
+                          //       getExpensesAccounts();
+                          //       // Handle the first tab press
+                          //       break;
+                          //     case 1:
+                          //       getCashBoxAccount();
+                          //       // Handle the second tab press
+                          //       break;
+                          //     case 2:
+                          //       getReceivableAccounts();
+                          //       break;
+                          //     case 3:
+                          //       getPayableAccounts();
+
+                          //       break;
+                          //     case 4:
+                          //       getBankAccounts();
+                          //       break;
+
+                          //     // Add cases for other tabs as needed
+                          //   }
+                          // },
+                        ),
+                      ),
+                    ),
               SizedBox(
                 height: height * 0.85,
                 child: TabBarView(
