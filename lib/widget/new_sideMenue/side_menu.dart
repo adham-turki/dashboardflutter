@@ -364,7 +364,7 @@ class _SideMenuState extends State<SideMenu> {
           child: Row(
             children: [
               Icon(
-                color: Colors.white,
+                color: activeSubColor(page),
                 Icons.circle_rounded,
                 size: isDesktop ? width * 0.005 : width * 0.02,
               ),
