@@ -137,12 +137,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           children: [
             Padding(
               padding:
-                  const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 3),
+                  const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 0),
               child: Container(
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.5 : height * 0.56,
+                height: isDesktop ? height * 0.48 : height * 0.56,
 
                 // width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5, top: 0),
