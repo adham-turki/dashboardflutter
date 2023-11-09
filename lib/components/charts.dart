@@ -246,39 +246,43 @@ class BalanceDoubleLineChart extends StatelessWidget {
     List<ChartData> data = _getChartData();
     List<ChartData> data2 = _getChartData2();
 
-    return SfCartesianChart(
-      primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
-      primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
-      plotAreaBorderColor: Colors.transparent,
-      plotAreaBackgroundColor: Colors.transparent,
-      borderColor: Colors.transparent,
-      borderWidth: 0,
-      plotAreaBorderWidth: 0,
-      tooltipBehavior: TooltipBehavior(enable: true),
-      series: <ChartSeries>[
-        LineSeries<ChartData, String>(
-          dataSource: data,
-          xValueMapper: (ChartData value, _) => value.period,
-          yValueMapper: (ChartData value, _) => value.balance,
-          markerSettings:
-              const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
-          dataLabelSettings: const DataLabelSettings(isVisible: false),
-          enableTooltip: true,
-          animationDuration: 1000,
-          color: Colors.red,
-        ),
-        LineSeries<ChartData, String>(
-          dataSource: data2,
-          xValueMapper: (ChartData value, _) => value.period,
-          yValueMapper: (ChartData value, _) => value.balance,
-          markerSettings:
-              const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
-          dataLabelSettings: const DataLabelSettings(isVisible: false),
-          enableTooltip: true,
-          animationDuration: 1000,
-          color: Colors.green,
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
+        primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
+        plotAreaBorderColor: Colors.transparent,
+        plotAreaBackgroundColor: Colors.transparent,
+        borderColor: Colors.transparent,
+        borderWidth: 0,
+        plotAreaBorderWidth: 0,
+        tooltipBehavior: TooltipBehavior(enable: true),
+        series: <ChartSeries>[
+          LineSeries<ChartData, String>(
+            dataSource: data,
+            xValueMapper: (ChartData value, _) => value.period,
+            yValueMapper: (ChartData value, _) => value.balance,
+            markerSettings:
+                const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
+            dataLabelSettings: const DataLabelSettings(isVisible: false),
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: Colors.red,
+          ),
+          LineSeries<ChartData, String>(
+            dataSource: data2,
+            xValueMapper: (ChartData value, _) => value.period,
+            yValueMapper: (ChartData value, _) => value.balance,
+            markerSettings:
+                const MarkerSettings(color: Color(0xff9AA0C5), isVisible: true),
+            dataLabelSettings: const DataLabelSettings(isVisible: false),
+            enableTooltip: true,
+            animationDuration: 1000,
+            color: Colors.green,
+          ),
+        ],
+      ),
     );
   }
 
@@ -386,6 +390,7 @@ class BalanceDoubleBarChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
+      height: MediaQuery.of(context).size.height * 0.4,
       child: SfCartesianChart(
         isTransposed: true,
         primaryXAxis: CategoryAxis(),

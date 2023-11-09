@@ -186,7 +186,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
               padding: const EdgeInsets.all(8.0),
               child: Container(
                 width: isDesktop ? width * 0.7 : width * 0.9,
-                height: isDesktop ? height * 0.56 : height * 0.6,
+                height: isDesktop ? height * 0.55 : height * 0.6,
                 decoration: borderDecoration,
                 child: Column(
                   children: [
