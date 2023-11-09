@@ -57,7 +57,7 @@ class _SideMenuState extends State<SideMenu> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    fontSize = width * 0.008;
+    fontSize = width * 0.01;
     isDesktop = Responsive.isDesktop(context);
     provider = context.read<ScreenContentProvider>();
     List<MenuModel> menuList = getMenu(_locale);
@@ -364,7 +364,7 @@ class _SideMenuState extends State<SideMenu> {
           child: Row(
             children: [
               Icon(
-                color: activeSubColor(page),
+                color: Colors.white,
                 Icons.circle_rounded,
                 size: isDesktop ? width * 0.005 : width * 0.02,
               ),
@@ -376,7 +376,7 @@ class _SideMenuState extends State<SideMenu> {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: activeSubColor(page),
+                    color: getActiveSubColor(page, parentNumber),
                     fontSize: isDesktop ? fontSize : width * 0.03,
                   ),
                 ),
@@ -404,7 +404,7 @@ class _SideMenuState extends State<SideMenu> {
 
   double drawerWidth() {
     if (isDesktop) {
-      return !isCollapsed ? width * 0.149 : width * 0.045;
+      return !isCollapsed ? width * 0.16 : width * 0.045;
     } else {
       return width * 0.6;
     }
@@ -412,7 +412,7 @@ class _SideMenuState extends State<SideMenu> {
 
   double menuWidth() {
     if (isDesktop) {
-      return !isCollapsed ? width * 0.132 : width * 0.03;
+      return !isCollapsed ? width * 0.15 : width * 0.03;
     } else {
       return width * 0.55;
     }
