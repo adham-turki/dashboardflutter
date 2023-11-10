@@ -51,42 +51,45 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           isDesktop ? const SideMenu() : Container(),
-          Consumer<ScreenContentProvider>(builder: (context, value, build) {
-            return Column(
-              children: [
-                SizedBox(
-                  width: isDesktop ? width * 0.835 : width,
-                  height: isDesktop
-                      ? context.read<ScreenContentProvider>().getPage() == 0
-                          ? height * 0.045
-                          : height * 0.055
-                      : context.read<ScreenContentProvider>().getPage() == 0
-                          ? height * 0.11
-                          : height * 0.085,
-                  child: ContentHeader(
-                      page: context.read<ScreenContentProvider>().getPage()),
-                ),
-                SizedBox(
-                  //  height: isDesktop ? height * 0.85 : height * 0.7,
-                  height: context.read<ScreenContentProvider>().getPage() == 0
-                      ? isDesktop
-                          ? height * 0.95
-                          : height * 0.82
-                      : isDesktop
-                          ? height * 0.92
-                          : height * 0.85,
-                  width: isDesktop ? width * 0.835 : width * 0.95,
-                  child: SingleChildScrollView(
-                    child: Consumer<ScreenContentProvider>(
-                        builder: (context, value, build) {
-                      return contentPage();
-                    }),
+          Expanded(
+            child: Consumer<ScreenContentProvider>(
+                builder: (context, value, build) {
+              return Column(
+                children: [
+                  SizedBox(
+                    // width: isDesktop ? width * 0.835 : width,
+                    height: isDesktop
+                        ? context.read<ScreenContentProvider>().getPage() == 0
+                            ? height * 0.045
+                            : height * 0.055
+                        : context.read<ScreenContentProvider>().getPage() == 0
+                            ? height * 0.11
+                            : height * 0.085,
+                    child: ContentHeader(
+                        page: context.read<ScreenContentProvider>().getPage()),
                   ),
-                )
-                // const Text("footer"),
-              ],
-            );
-          }),
+                  SizedBox(
+                    //  height: isDesktop ? height * 0.85 : height * 0.7,
+                    height: context.read<ScreenContentProvider>().getPage() == 0
+                        ? isDesktop
+                            ? height * 0.95
+                            : height * 0.82
+                        : isDesktop
+                            ? height * 0.92
+                            : height * 0.85,
+                    // width: isDesktop ? width * 0.835 : width * 0.95,
+                    child: SingleChildScrollView(
+                      child: Consumer<ScreenContentProvider>(
+                          builder: (context, value, build) {
+                        return contentPage();
+                      }),
+                    ),
+                  ),
+                  // const Text("footer"),
+                ],
+              );
+            }),
+          ),
         ],
       ),
     );
