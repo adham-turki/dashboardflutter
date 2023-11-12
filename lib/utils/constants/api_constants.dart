@@ -44,3 +44,8 @@ const exportToExeclCheques = "exportExcel/chequesExcel";
 const exportToExeclTotalSales = "exportExcel/totalSalesExcel";
 const exportToExeclSalesReport = "exportExcel/salesReportExcel";
 const exportToExeclPurchaseReport = "exportExcel/purchasesExcel";
+// User Settings
+const getUserSettings = "userSettings/getAll";
+const addUserSettings = "userSettings/add";
+const deleteUserSettings = "userSettings/delete";
+const editUserSettings = "userSettings/update";

@@ -222,6 +222,7 @@
     "dateConflict":"Date Conflict",
         "filter" : "Filter",
         "dailySalesCount":"Daily Sales Count",
-        "checkDates":"Check Date Format"
+        "checkDates":"Check Date Format",
+        "users":"Users Settings"
 
 }
