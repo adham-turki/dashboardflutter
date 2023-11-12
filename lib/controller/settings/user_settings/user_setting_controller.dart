@@ -6,15 +6,15 @@ import 'package:bi_replicate/utils/constants/api_constants.dart';
 import '../../../service/api_service.dart';
 import '../../../utils/constants/values.dart';
 
-class UserSettingsController {
-  List<UserSettingsModel> userSettingsList = [];
+class UsersController {
+  List<UsersModel> userSettingsList = [];
   Future getUsersSettings({bool? isStart}) async {
-    String api = getUserSettings;
+    String api = getUsers;
     await ApiService().getRequest(api, isStart: isStart).then((value) {
       if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (var elemant in jsonData) {
-          userSettingsList.add(UserSettingsModel.fromJson(elemant));
+          userSettingsList.add(UsersModel.fromJson(elemant));
           // userSettingsList[i] = jsonData[i];
         }
       }
@@ -22,8 +22,8 @@ class UserSettingsController {
     return userSettingsList;
   }
 
-  Future addUserSetting(UserSettingsModel userSettingsModel) async {
-    String api = addUserSettings;
+  Future addUserSetting(UsersModel userSettingsModel) async {
+    String api = addUser;
     await ApiService()
         .postRequest(api, userSettingsModel.toJson())
         .then((value) {
@@ -34,8 +34,8 @@ class UserSettingsController {
     return false;
   }
 
-  Future updateUserSettings(UserSettingsModel userSettingsModel) async {
-    String api = editUserSettings;
+  Future updateUserSettings(UsersModel userSettingsModel) async {
+    String api = editUser;
     await ApiService()
         .postRequest(api, userSettingsModel.toJson())
         .then((value) {
@@ -46,8 +46,8 @@ class UserSettingsController {
     return false;
   }
 
-  Future deleteUserSetting(UserSettingsModel userSettingsModel) async {
-    String api = deleteUserSettings;
+  Future deleteUserSetting(UsersModel userSettingsModel) async {
+    String api = deleteUser;
     await ApiService()
         .postRequest(api, userSettingsModel.toJson())
         .then((value) {

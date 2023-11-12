@@ -223,6 +223,7 @@
         "filter" : "Filter",
         "dailySalesCount":"Daily Sales Count",
         "checkDates":"Check Date Format",
-        "users":"Users Settings"
+        "users":"Users",
+        "role":"Role"
 
 }
