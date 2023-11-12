@@ -184,6 +184,8 @@ class _SideMenuState extends State<SideMenu> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,6 +254,7 @@ class _SideMenuState extends State<SideMenu> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
               onTap: () {
@@ -269,11 +272,13 @@ class _SideMenuState extends State<SideMenu> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             icon,
@@ -295,6 +300,7 @@ class _SideMenuState extends State<SideMenu> {
                                   style: TextStyle(
                                       fontSize:
                                           isDesktop ? fontSize : width * 0.03,
+                                      fontWeight: FontWeight.w500,
                                       color: activeColor),
                                 )
                               : Container(),
