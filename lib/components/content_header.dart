@@ -83,7 +83,11 @@ class _ContentHeaderState extends State<ContentHeader> {
             ],
           );
         })),
-        Responsive.isDesktop(context) ? cardsDesktopView() : cardsMobileView(),
+        provider.getPage() == 0
+            ? Responsive.isDesktop(context)
+                ? cardsDesktopView()
+                : cardsMobileView()
+            : Container(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -119,7 +123,7 @@ class _ContentHeaderState extends State<ContentHeader> {
 
   Column mobileView(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Consumer<ScreenContentProvider>(builder: ((context, value, child) {
           return SelectableText(
