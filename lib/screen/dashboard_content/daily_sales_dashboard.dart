@@ -172,7 +172,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   Icons.filter_list_sharp,
                                   color: whiteColor,
                                   size: isDesktop
-                                      ? height * 0.039
+                                      ? height * 0.035
                                       : height * 0.03,
                                 ),
                                 // text: _locale.filter,
