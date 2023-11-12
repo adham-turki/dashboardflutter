@@ -140,16 +140,16 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 Icons.filter_list_sharp,
                                 color: whiteColor,
                                 size:
-                                    isDesktop ? height * 0.039 : height * 0.03,
+                                    isDesktop ? height * 0.035 : height * 0.03,
                               ),
                               // text: _locale.filter,
                               textColor:
                                   const Color.fromARGB(255, 255, 255, 255),
                               //   borderRadius: 5.0,
-                              height: isDesktop ? height * .015 : height * .039,
+                              height: isDesktop ? height * .01 : height * .039,
                               fontSize:
                                   isDesktop ? height * .018 : height * .017,
-                              width: isDesktop ? width * 0.13 : width * 0.27,
+                              width: isDesktop ? width * 0.08 : width * 0.27,
                               onPressed: () {
                                 showDialog(
                                   context: context,

@@ -167,7 +167,7 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.47 : height * 0.56,
+                height: isDesktop ? height * 0.48 : height * 0.56,
 
                 width: double.infinity,
                 padding:
@@ -199,7 +199,7 @@ class _BranchesSalesByCatDashboardState
                                   Icons.filter_list_sharp,
                                   color: whiteColor,
                                   size: isDesktop
-                                      ? height * 0.039
+                                      ? height * 0.035
                                       : height * 0.03,
                                 ),
                                 // text: _locale.filter,

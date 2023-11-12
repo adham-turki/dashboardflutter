@@ -68,7 +68,7 @@ Widget blueButton1({
         // ),
       ),
       padding: EdgeInsets.all(0),
-      minimumSize: Size(width ?? 60.0, height ?? 60.0),
+      minimumSize: Size(width ?? 50.0, height ?? 50.0),
       // Remove the primary color from styleFrom since it's set in the gradient
     ),
     child: Container(
