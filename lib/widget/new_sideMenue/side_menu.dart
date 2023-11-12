@@ -38,7 +38,7 @@ class _SideMenuState extends State<SideMenu> {
   int selectedMenuHover = -1;
   int selectedSubMenuHover = -1;
 
-  bool isCollapsed = false;
+  bool isCollapsed = true;
 
   bool isDesktop = false;
 
