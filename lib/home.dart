@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                             ? height * 0.07
                             : height * 0.055
                         : context.read<ScreenContentProvider>().getPage() == 0
-                            ? height * 0.5
+                            ? height * 0.26
                             : height * 0.085,
                     child: ContentHeader(
                         page: context.read<ScreenContentProvider>().getPage()),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                     height: context.read<ScreenContentProvider>().getPage() == 0
                         ? isDesktop
                             ? height * 0.9
-                            : height * 0.82
+                            : height * 0.67
                         : isDesktop
                             ? height * 0.92
                             : height * 0.85,

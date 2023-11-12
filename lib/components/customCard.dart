@@ -37,8 +37,8 @@ class CustomCard extends StatelessWidget {
         : cardsWidth = MediaQuery.of(context).size.width * 0.16; //max size
 
     return Container(
-      width: isDesktop ? width * 0.143 : width * 0.5,
-      height: isDesktop ? height * 0.05 : height * 0.14,
+      width: isDesktop ? width * 0.14 : width * 0.6,
+      height: isDesktop ? height * 0.05 : height * 0.05,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -58,61 +58,60 @@ class CustomCard extends StatelessWidget {
       ),
       child: isDesktop
           ? cardDesktop(cardsWidth, isDesktop, context)
-          : cardMobile(cardsWidth, context),
+          : cardMobile(
+              cardsWidth,
+              isDesktop,
+              context,
+            ),
     );
   }
 
-  Column cardMobile(cardsWidth, BuildContext context) {
+  Column cardMobile(cardsWidth, bool isDesktop, BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Icon(
+              size: 18,
+              icon,
+              color: Colors.white,
+            ),
             Row(
               children: <Widget>[
                 SizedBox(width: cardsWidth * 0.01),
                 Text(
-                  label,
+                  "${label} : ",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: height * .018,
+                      fontSize: isDesktop ? cardsWidth * 0.02 : 16,
                       fontWeight: FontWeight.w700),
                 ),
               ],
             ),
-            Icon(
-              size: MediaQuery.of(context).size.width * 0.04,
-              icon,
-              color: Colors.white,
+            Row(
+              children: <Widget>[
+                Text(
+                  title,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
           ],
         ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.006,
-        ),
-        Text(
-          subtitle,
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: height * .015,
-              fontWeight: FontWeight.w400),
-        ),
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.008,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(
-              title,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: height * .015,
-                  fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
+        // Text(
+        //   subtitle,
+        //   style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: cardsWidth * 0.07,
+        //       fontWeight: FontWeight.w400),
+        // ),
       ],
     );
   }

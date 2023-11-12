@@ -161,7 +161,8 @@ class _BranchesSalesByCatDashboardState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding:
+                  const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
               child: Container(
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,

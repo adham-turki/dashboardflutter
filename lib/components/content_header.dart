@@ -153,6 +153,11 @@ class _ContentHeaderState extends State<ContentHeader> {
                 ),
               )
             : Container(),
+        provider.getPage() == 0
+            ? Responsive.isDesktop(context)
+                ? cardsDesktopView()
+                : cardsMobileView()
+            : Container(),
       ],
     );
   }
