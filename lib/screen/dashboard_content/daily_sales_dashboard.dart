@@ -142,7 +142,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.44 : height * 0.56,
+                height: isDesktop ? height * 0.44 : height * 0.53,
 
                 // width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5, top: 0),
