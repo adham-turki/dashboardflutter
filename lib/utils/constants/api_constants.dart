@@ -48,4 +48,4 @@ const exportToExeclPurchaseReport = "exportExcel/purchasesExcel";
 const getUsers = "user/getAll";
 const addUser = "user/addUser";
 const deleteUser = "user/deleteUser";
-const editUser = "user/update";
+const editUser = "user/updateUser";
