@@ -22,15 +22,39 @@ class UserSettingsController {
     return userSettingsList;
   }
 
-  Future addUserSettings() {
-    return Future.delayed(Duration.zero);
+  Future addUserSetting(UserSettingsModel userSettingsModel) async {
+    String api = addUserSettings;
+    await ApiService()
+        .postRequest(api, userSettingsModel.toJson())
+        .then((value) {
+      if (value.statusCode == 200) {
+        return true;
+      }
+    });
+    return false;
   }
 
-  Future updateUserSettings() {
-    return Future.delayed(Duration.zero);
+  Future updateUserSettings(UserSettingsModel userSettingsModel) async {
+    String api = editUserSettings;
+    await ApiService()
+        .postRequest(api, userSettingsModel.toJson())
+        .then((value) {
+      if (value.statusCode == 200) {
+        return true;
+      }
+    });
+    return false;
   }
 
-  Future deleteUserSettings() {
-    return Future.delayed(Duration.zero);
+  Future deleteUserSetting(UserSettingsModel userSettingsModel) async {
+    String api = deleteUserSettings;
+    await ApiService()
+        .postRequest(api, userSettingsModel.toJson())
+        .then((value) {
+      if (value.statusCode == 200) {
+        return true;
+      }
+    });
+    return false;
   }
 }
