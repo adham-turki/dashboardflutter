@@ -124,10 +124,12 @@ class BalanceLineChart extends StatelessWidget {
     isDesktop = Responsive.isDesktop(context);
     List<ChartData> data = _getChartData();
     return SizedBox(
+      //  height: isDesktop ? height * 0.423 : height * 0.5,
+
       height: isDesktop
           ? context.read<ScreenContentProvider>().getPage() == 0
               ? height * 0.38
-              : height * 0.5
+              : height * 0.423
           : height * 0.43,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),

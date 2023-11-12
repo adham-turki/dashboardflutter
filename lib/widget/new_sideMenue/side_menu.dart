@@ -128,7 +128,7 @@ class _SideMenuState extends State<SideMenu> {
                           horizontal: 8.0, vertical: 15),
                       child: Image.asset(
                         "assets/images/scope_logo1.png",
-                        width: isDesktop ? width * 0.085 : width * 0.5,
+                        width: isDesktop ? width * 0.063 : width * 0.5,
                         // height: 100,
                       ),
                     )
