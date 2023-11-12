@@ -78,6 +78,8 @@ class _SideMenuState extends State<SideMenu> {
         ],
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           titleSection(),
           Padding(
@@ -86,7 +88,8 @@ class _SideMenuState extends State<SideMenu> {
               height: height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // CustomSearchField(
                     //   onChanged: (value) {},
@@ -124,8 +127,8 @@ class _SideMenuState extends State<SideMenu> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8.0, vertical: 15),
                       child: Image.asset(
-                        "assets/images/scope_logo.png",
-                        width: isDesktop ? width * 0.063 : width * 0.5,
+                        "assets/images/scope_logo1.png",
+                        width: isDesktop ? width * 0.085 : width * 0.5,
                         // height: 100,
                       ),
                     )

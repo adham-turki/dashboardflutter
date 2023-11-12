@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import '../controller/vouch_header_transiet_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../utils/func/converters.dart';
 import '../utils/func/dates_controller.dart';
+import 'customCard.dart';
 
 class ContentHeader extends StatefulWidget {
   int page;
@@ -61,9 +63,12 @@ class _ContentHeaderState extends State<ContentHeader> {
   Widget desktopView(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Consumer<ScreenContentProvider>(builder: ((context, value, child) {
           return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SelectableText(
                 maxLines: 1,
@@ -78,25 +83,35 @@ class _ContentHeaderState extends State<ContentHeader> {
             ],
           );
         })),
-        provider.getPage() == 0
-            ? SelectableText(
-                maxLines: 1,
-                "$currentMonth / $todayDate",
-                style: TextStyle(
-                  fontSize: context.read<ScreenContentProvider>().getPage() == 0
-                      ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                      : (Responsive.isDesktop(context) ? width * 0.01 : 18),
-                ),
-              )
-            : Container(),
-        SelectableText(
-          maxLines: 1,
-          "${locale.baseCurrency}: ${locale.ils}",
-          style: TextStyle(
-            fontSize: provider.getPage() == 0
-                ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                : (Responsive.isDesktop(context) ? width * 0.012 : 18),
-          ),
+        Responsive.isDesktop(context) ? cardsDesktopView() : cardsMobileView(),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SelectableText(
+              maxLines: 1,
+              "${locale.baseCurrency}: ${locale.ils}",
+              style: TextStyle(
+                fontSize: provider.getPage() == 0
+                    ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
+                    : (Responsive.isDesktop(context) ? width * 0.012 : 18),
+              ),
+            ),
+            provider.getPage() == 0
+                ? SelectableText(
+                    maxLines: 1,
+                    "$currentMonth / $todayDate",
+                    style: TextStyle(
+                      fontSize: context
+                                  .read<ScreenContentProvider>()
+                                  .getPage() ==
+                              0
+                          ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
+                          : (Responsive.isDesktop(context) ? width * 0.01 : 18),
+                    ),
+                  )
+                : Container(),
+          ],
         ),
       ],
     );
@@ -134,6 +149,93 @@ class _ContentHeaderState extends State<ContentHeader> {
                 ),
               )
             : Container(),
+      ],
+    );
+  }
+
+  Column cardsMobileView() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CustomCard(
+          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.paidSales.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.totalSales,
+          icon: Icons.attach_money, // Provide the actual path to the icon
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CustomCard(
+          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.returnSales.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.totalReturnSal,
+          icon: Icons
+              .assignment_return_outlined, // Provide the actual path to the icon
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        CustomCard(
+          gradientColor: const [
+            Color.fromRGBO(71, 65, 193, 1),
+            Color(0xff7e4fe4)
+          ],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.numOfCustomers.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.numOfCustomers,
+          icon: Icons.bar_chart, // Provide the actual path to the icon
+        ),
+      ],
+    );
+  }
+
+  Row cardsDesktopView() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        CustomCard(
+          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.paidSales.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.totalSales,
+          icon: Icons.attach_money, // Provide the actual path to the icon
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CustomCard(
+          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.returnSales.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.totalReturnSal,
+          icon: Icons
+              .assignment_return_outlined, // Provide the actual path to the icon
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CustomCard(
+          gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
+          title: Converters.formatNumber(
+                  vouchHeaderTransietModel.numOfCustomers.toDouble())
+              .toString(),
+          subtitle: '',
+          label: locale.numOfCustomers,
+          icon: Icons.bar_chart, // Provide the actual path to the icon
+        ),
       ],
     );
   }

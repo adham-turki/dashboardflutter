@@ -104,7 +104,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
         ),
         SizedBox(
           width: isDesktop ? width * 0.5 : width,
-          height: height * 0.25,
+          height: height * 0.19,
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsBankSettlement(
@@ -136,7 +136,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
         ),
         SizedBox(
           width: isDesktop ? width * 0.5 : width,
-          height: height * 0.25,
+          height: height * 0.19,
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsChequesPayable(

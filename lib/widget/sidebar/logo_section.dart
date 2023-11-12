@@ -24,7 +24,7 @@ class LogoSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset(
-              "assets/images/scope_logo.png",
+              "assets/images/scope_logo1.png",
               width: Responsive.isDesktop(context) ? width * 0.1 : width * 0.2,
             ),
             Icon(

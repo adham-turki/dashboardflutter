@@ -166,11 +166,11 @@ class _BranchesSalesByCatDashboardState
                 // width: width * 0.7,
                 // height: isDesktop ? height * 0.6 : height * 0.6,
                 // decoration: borderDecoration,
-                height: isDesktop ? height * 0.49 : height * 0.56,
+                height: isDesktop ? height * 0.47 : height * 0.56,
 
                 width: double.infinity,
                 padding:
-                    const EdgeInsets.only(left: 3, right: 3, bottom: 3, top: 0),
+                    const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
 
                 decoration: BoxDecoration(
                   color: whiteColor,

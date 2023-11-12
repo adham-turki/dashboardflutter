@@ -42,7 +42,7 @@ class CustomBarChart extends StatelessWidget {
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               child: Container(
-                height: isDesktop ? height * 0.423 : height * 0.5,
+                height: isDesktop ? height * 0.383 : height * 0.5,
                 width: data.length * 100,
                 //    padding: const EdgeInsets.all(16.0),
                 child: SfCartesianChart(
@@ -74,7 +74,7 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : Container(
-            height: isDesktop ? height * 0.423 : height * 0.5,
+            height: isDesktop ? height * 0.383 : height * 0.5,
             // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
               isTransposed: true,
@@ -123,7 +123,7 @@ class BalanceLineChart extends StatelessWidget {
     List<ChartData> data = _getChartData();
     return SizedBox(
       height: context.read<ScreenContentProvider>().getPage() == 0
-          ? height * 0.41
+          ? height * 0.38
           : height * 0.48,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
