@@ -274,8 +274,10 @@ class _ContentHeaderState extends State<ContentHeader> {
       case 14:
         return locale.purchasesReport;
       case 15:
-        return locale.setup;
+        return locale.users;
       case 16:
+        return locale.setup;
+      case 17:
         return locale.changePassword;
       default:
         return "";

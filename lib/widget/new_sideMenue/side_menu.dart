@@ -230,7 +230,7 @@ class _SideMenuState extends State<SideMenu> {
   }
 
   Widget menuWidget(int index, MenuModel menu) {
-    // Color activeColor = getActiveColor(index);
+    Color activeColor = getActiveColor(index);
     String title = menu.title;
     bool isParent = menu.isParent;
     IconData icon = menu.icon;
@@ -277,7 +277,7 @@ class _SideMenuState extends State<SideMenu> {
                         children: [
                           Icon(
                             icon,
-                            color: Colors.white,
+                            color: activeColor,
                             size: isDesktop
                                 ? !isCollapsed
                                     ? width * 0.01
@@ -295,7 +295,7 @@ class _SideMenuState extends State<SideMenu> {
                                   style: TextStyle(
                                       fontSize:
                                           isDesktop ? fontSize : width * 0.03,
-                                      color: Colors.white),
+                                      color: activeColor),
                                 )
                               : Container(),
                         ],
@@ -304,7 +304,7 @@ class _SideMenuState extends State<SideMenu> {
                     !isCollapsed
                         ? isParent
                             ? Icon(
-                                color: Colors.white,
+                                color: activeColor,
                                 selectedMenu == index
                                     ? Icons.arrow_drop_down_rounded
                                     : Icons.arrow_right_rounded,
@@ -338,9 +338,9 @@ class _SideMenuState extends State<SideMenu> {
   Color activeSubColor(int index) {
     int currentPage = provider.getPage();
     if (selectedSubMenuHover == index) {
-      return secondary;
+      return gridActiveColor;
     } else if (selectedSubMenu == index && selectedSubMenu == currentPage) {
-      return secondary;
+      return gridActiveColor;
     }
     return Colors.white;
   }
@@ -398,7 +398,7 @@ class _SideMenuState extends State<SideMenu> {
   }
 
   Color getActiveColor(int index) {
-    if (selectedSubMenuHover == index || selectedSubMenuHover == index) {
+    if (selectedMenuHover == index || selectedMenuHover == index) {
       return gridActiveColor;
     }
     return whiteColor;
