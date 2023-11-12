@@ -57,14 +57,14 @@ class UsersModel {
         title: localizations.userName,
         field: "username",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.3 : width * 0.45,
+        width: isDesktop ? width * 0.2 : width * 0.45,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.role,
         field: "role",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.3 : width * 0.45,
+        width: isDesktop ? width * 0.2 : width * 0.45,
         backgroundColor: colColor,
       ),
     ];

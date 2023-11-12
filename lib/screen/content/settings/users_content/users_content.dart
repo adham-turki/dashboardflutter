@@ -31,8 +31,8 @@ class _UsersContentState extends State<UsersContent> {
     return Column(
       children: [
         SizedBox(
-          width: Responsive.isDesktop(context) ? width * 0.6 : width * 0.9,
-          height: height * 0.6,
+          width: Responsive.isDesktop(context) ? width * 0.4 : width * 0.9,
+          height: Responsive.isDesktop(context) ? height * 0.7 : height * 0.3,
           child: TableComponent(
             key: UniqueKey(),
             plCols:
