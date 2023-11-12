@@ -46,6 +46,6 @@ const exportToExeclSalesReport = "exportExcel/salesReportExcel";
 const exportToExeclPurchaseReport = "exportExcel/purchasesExcel";
 // User Settings
 const getUsers = "user/getAll";
-const addUser = "user/add";
-const deleteUser = "user/delete";
+const addUser = "user/addUser";
+const deleteUser = "user/deleteUser";
 const editUser = "user/update";
