@@ -301,7 +301,7 @@ class _SideMenuState extends State<SideMenu> {
                     !isCollapsed
                         ? isParent
                             ? Icon(
-                                color: Colors.white,
+                                color: activeColor,
                                 selectedMenu == index
                                     ? Icons.arrow_drop_down_rounded
                                     : Icons.arrow_right_rounded,
