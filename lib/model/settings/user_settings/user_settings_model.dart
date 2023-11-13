@@ -22,11 +22,11 @@ class UsersModel {
 
   factory UsersModel.fromJson(Map<String, dynamic> json) {
     return UsersModel(
-      code: json['code'],
-      username: json['username'],
-      password: json['password'],
-      activeToken: json['activeToken'],
-      role: json['role'],
+      code: json['code'] ?? "",
+      username: json['username'] ?? "",
+      password: json['password'] ?? "",
+      activeToken: json['activeToken'] ?? "",
+      role: json['role'] ?? "",
     );
   }
 

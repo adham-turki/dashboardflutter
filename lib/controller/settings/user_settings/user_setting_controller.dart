@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bi_replicate/model/settings/user_settings/user_settings_model.dart';
 import 'package:bi_replicate/utils/constants/api_constants.dart';
+import 'package:http/http.dart';
 
 import '../../../service/api_service.dart';
 import '../../../utils/constants/values.dart';
@@ -24,37 +25,22 @@ class UsersController {
 
   Future addUserSetting(UsersModel userSettingsModel) async {
     String api = addUser;
-    await ApiService()
-        .postRequest(api, userSettingsModel.toJson())
-        .then((value) {
-      if (value.statusCode == 200) {
-        return true;
-      }
-    });
-    return false;
+    Response response =
+        await ApiService().postRequest(api, userSettingsModel.toJson());
+    return response;
   }
 
   Future updateUserSettings(UsersModel userSettingsModel) async {
     String api = editUser;
-    await ApiService()
-        .postRequest(api, userSettingsModel.toJson())
-        .then((value) {
-      if (value.statusCode == 200) {
-        return true;
-      }
-    });
-    return false;
+    Response response =
+        await ApiService().postRequest(api, userSettingsModel.toJson());
+    return response;
   }
 
   Future deleteUserSetting(UsersModel userSettingsModel) async {
     String api = deleteUser;
-    await ApiService()
-        .postRequest(api, userSettingsModel.toJson())
-        .then((value) {
-      if (value.statusCode == 200) {
-        return true;
-      }
-    });
-    return false;
+    Response response =
+        await ApiService().postRequest(api, userSettingsModel.toJson());
+    return response;
   }
 }

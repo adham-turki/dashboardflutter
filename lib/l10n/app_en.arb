@@ -218,12 +218,17 @@
     "chooseDate": "Choose Date",
     "numOfCustomers": "Number Of Customers",
     "totalReturnSal": "Total Return Sales",
-    "startDateAfterEndDate":"End Date should be after Start Date",
-    "dateConflict":"Date Conflict",
-        "filter" : "Filter",
-        "dailySalesCount":"Daily Sales Count",
-        "checkDates":"Check Date Format",
-        "users":"Users",
-        "role":"Role"
-
+    "startDateAfterEndDate": "End Date should be after Start Date",
+    "dateConflict": "Date Conflict",
+    "filter": "Filter",
+    "dailySalesCount": "Daily Sales Count",
+    "checkDates": "Check Date Format",
+    "users": "Users",
+    "role": "Role",
+    "addUser": "Add User",
+    "allFieldsAreReq": "All Fields Are Required!",
+    "addedSuccess": "Added Successfully!",
+    "editUser": "Edit User",
+    "edit": "Edit",
+    "editedSuccess": "Edited Successfully!"
 }
