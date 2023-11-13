@@ -67,6 +67,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: padding, horizontal: 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           CustomLabel(
             label: label,
@@ -74,11 +76,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           SizedBox(
             width: isDesktop ? width * 0.2 : widget.width,
-            // decoration: BoxDecoration(
-            //   color: Colors.white,
-            //   borderRadius: BorderRadius.circular(5.0),
-            //   border: Border.all(color: Colors.grey), // Border color
-            // ),
             child: TextFormField(
               focusNode: widget.focusNode,
 
@@ -90,13 +87,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
               onFieldSubmitted: onSubmitted,
 
               decoration: const InputDecoration(
-                // label: Text(
-                //   hint == '' || hint == null ? "" : hint,
-                //   style: TextStyle(
-                //     fontSize: MediaQuery.of(context).size.height * 0.017,
-                //     color: const Color.fromARGB(255, 69, 67, 67),
-                //   ),
-                // ),
                 floatingLabelAlignment: FloatingLabelAlignment.start,
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(

@@ -261,6 +261,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomDropDown(
               hint: periods[0],
@@ -440,17 +441,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 },
               ),
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
             SizedBox(
               width: widthMobile * 0.81,
               child: CustomDate(
@@ -467,17 +457,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 },
               ),
             ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   controller: toDate,
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
           ],
         ),
       ],

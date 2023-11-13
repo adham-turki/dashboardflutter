@@ -18,6 +18,8 @@ class CustomLabel extends StatelessWidget {
       child: SizedBox(
         width: rowWidth,
         child: Row(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               label,
