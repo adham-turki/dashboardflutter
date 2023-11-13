@@ -123,7 +123,7 @@ class _ContentHeaderState extends State<ContentHeader> {
 
   Column mobileView(BuildContext context) {
     return Column(
-      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Consumer<ScreenContentProvider>(builder: ((context, value, child) {
           return SelectableText(
@@ -153,6 +153,9 @@ class _ContentHeaderState extends State<ContentHeader> {
                 ),
               )
             : Container(),
+        SizedBox(
+          height: 5,
+        ),
         provider.getPage() == 0
             ? Responsive.isDesktop(context)
                 ? cardsDesktopView()
@@ -162,10 +165,14 @@ class _ContentHeaderState extends State<ContentHeader> {
     );
   }
 
-  Column cardsMobileView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+  Row cardsMobileView() {
+    return Row(
+      // crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const SizedBox(
+          width: 2,
+        ),
         CustomCard(
           gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
           title: Converters.formatNumber(
@@ -176,7 +183,7 @@ class _ContentHeaderState extends State<ContentHeader> {
           icon: Icons.attach_money, // Provide the actual path to the icon
         ),
         const SizedBox(
-          height: 10,
+          width: 2,
         ),
         CustomCard(
           gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
@@ -189,7 +196,7 @@ class _ContentHeaderState extends State<ContentHeader> {
               .assignment_return_outlined, // Provide the actual path to the icon
         ),
         const SizedBox(
-          height: 10,
+          width: 2,
         ),
         CustomCard(
           gradientColor: const [
@@ -202,6 +209,9 @@ class _ContentHeaderState extends State<ContentHeader> {
           subtitle: '',
           label: locale.numOfCustomers,
           icon: Icons.bar_chart, // Provide the actual path to the icon
+        ),
+        const SizedBox(
+          width: 2,
         ),
       ],
     );

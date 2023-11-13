@@ -37,8 +37,8 @@ class CustomCard extends StatelessWidget {
         : cardsWidth = MediaQuery.of(context).size.width * 0.16; //max size
 
     return Container(
-      width: isDesktop ? width * 0.14 : width * 0.6,
-      height: isDesktop ? height * 0.05 : height * 0.05,
+      width: isDesktop ? width * 0.14 : width * 0.32,
+      height: isDesktop ? height * 0.05 : height * 0.1,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -72,7 +72,7 @@ class CustomCard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Icon(
@@ -81,27 +81,30 @@ class CustomCard extends StatelessWidget {
               color: Colors.white,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                SizedBox(width: cardsWidth * 0.01),
+                //  SizedBox(width: cardsWidth * 0.01),
                 Text(
-                  "${label} : ",
+                  "${label}",
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: isDesktop ? cardsWidth * 0.02 : 16,
+                      fontSize: height * 0.015,
                       fontWeight: FontWeight.w700),
                 ),
               ],
             ),
-            Row(
-              children: <Widget>[
-                Text(
-                  title,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700),
-                ),
-              ],
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
             ),
           ],
         ),
