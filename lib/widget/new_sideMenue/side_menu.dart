@@ -1,9 +1,7 @@
 import 'package:bi_replicate/widget/new_sideMenue/sub_menu_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../provider/local_provider.dart';
 import '../../provider/screen_content_provider.dart';
 import '../../utils/constants/colors.dart';
