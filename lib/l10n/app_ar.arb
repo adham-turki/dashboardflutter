@@ -206,5 +206,6 @@
     "addedSuccess": "تمت الاضافة بنجاح!",
     "editUser": "تعديل المستخدم",
     "edit": "تعديل",
-    "editedSuccess": "تم التعديل بنجاح!"
+    "editedSuccess": "تم التعديل بنجاح!",
+    "userPermit": "صلاحيات المستخدم"
 }

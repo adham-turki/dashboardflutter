@@ -230,5 +230,6 @@
     "addedSuccess": "Added Successfully!",
     "editUser": "Edit User",
     "edit": "Edit",
-    "editedSuccess": "Edited Successfully!"
+    "editedSuccess": "Edited Successfully!",
+    "userPermit": "User Permissions"
 }
