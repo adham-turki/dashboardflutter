@@ -63,7 +63,7 @@ class _SideMenuState extends State<SideMenu> {
 
     screenProvider = context.read<ScreenContentProvider>();
     return Container(
-      height: height,
+      //   height: height,
       width: drawerWidth(),
       decoration: BoxDecoration(
         color: primary,
@@ -76,8 +76,8 @@ class _SideMenuState extends State<SideMenu> {
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           titleSection(),
           Padding(
@@ -116,6 +116,7 @@ class _SideMenuState extends State<SideMenu> {
       child: Column(
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: !isCollapsed
                 ? MainAxisAlignment.spaceBetween
                 : MainAxisAlignment.center,
@@ -123,7 +124,7 @@ class _SideMenuState extends State<SideMenu> {
               !isCollapsed
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 15),
+                          horizontal: 8.0, vertical: 10),
                       child: Image.asset(
                         "assets/images/scope_logo1.png",
                         width: isDesktop ? width * 0.063 : width * 0.5,
@@ -204,16 +205,6 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
-
-  // Color activeSubColor(int index) {
-  //   int currentPage = provider.getPage();
-  //   if (subHovered == index) {
-  //     return secondary;
-  //   } else if (subSelected == index && subSelected == currentPage) {
-  //     return secondary;
-  //   }
-  //   return Colors.white;
-  // }
 
   Container createSelecter(Radius radius) {
     return Container(
