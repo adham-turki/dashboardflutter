@@ -38,37 +38,40 @@ class CustomBarChart extends StatelessWidget {
         ? Scrollbar(
             controller: scrollController,
             isAlwaysShown: true,
-            child: SingleChildScrollView(
-              controller: scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Container(
-                height: isDesktop ? height * 0.423 : height * 0.5,
-                width: data.length * 100,
-                //    padding: const EdgeInsets.all(16.0),
-                child: SfCartesianChart(
-                  isTransposed: true,
-                  primaryXAxis: CategoryAxis(),
-                  plotAreaBorderWidth: 0,
-                  series: <ChartSeries>[
-                    BarSeries<BarData, String>(
-                      dataSource: data,
-                      xValueMapper: (BarData value, _) => value.name,
-                      yValueMapper: (BarData value, _) =>
-                          double.parse(value.percent!.toStringAsFixed(2)),
-                      enableTooltip: true,
-                      animationDuration: 1000,
-                      dataLabelSettings: DataLabelSettings(
-                        isVisible: true,
-                        textStyle: TextStyle(
-                          color: textColor ?? Color(0xFF219C90),
-                          fontWeight: FontWeight.w600,
+            child: Directionality(
+              textDirection: TextDirection.ltr,
+              child: SingleChildScrollView(
+                controller: scrollController,
+                scrollDirection: Axis.horizontal,
+                child: Container(
+                  height: isDesktop ? height * 0.423 : height * 0.5,
+                  width: data.length * 100,
+                  //    padding: const EdgeInsets.all(16.0),
+                  child: SfCartesianChart(
+                    isTransposed: true,
+                    primaryXAxis: CategoryAxis(),
+                    plotAreaBorderWidth: 0,
+                    series: <ChartSeries>[
+                      BarSeries<BarData, String>(
+                        dataSource: data,
+                        xValueMapper: (BarData value, _) => value.name,
+                        yValueMapper: (BarData value, _) =>
+                            double.parse(value.percent!.toStringAsFixed(2)),
+                        enableTooltip: true,
+                        animationDuration: 1000,
+                        dataLabelSettings: DataLabelSettings(
+                          isVisible: true,
+                          textStyle: TextStyle(
+                            color: textColor ?? Color(0xFF219C90),
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
+                        pointColorMapper: (BarData value, int index) {
+                          return index.isEven ? primary : secondary;
+                        },
                       ),
-                      pointColorMapper: (BarData value, int index) {
-                        return index.isEven ? primary : secondary;
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
