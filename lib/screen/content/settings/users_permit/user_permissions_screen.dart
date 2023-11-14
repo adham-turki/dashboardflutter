@@ -184,6 +184,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
                   userPermitModel ?? userPermitsList[0];
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) {
                   return editDialog(permitModel);
                 },
@@ -257,6 +258,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
               if (value.statusCode == 200) {
                 showDialog(
                   context: context,
+                  barrierDismissible: false,
                   builder: (context) {
                     return showSuccessDialog(_locale.editedSuccess);
                   },
@@ -284,6 +286,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
     print("userPermitCriteria: ${userPermitCriteria.toJson()}");
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return CustomConfirmDialog(
             confirmMessage: AppLocalizations.of(context).areYouSure,
@@ -296,6 +299,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
           if (value1.statusCode == 200) {
             showDialog(
               context: context,
+              barrierDismissible: false,
               builder: (context) {
                 return showSuccessDialog(_locale.deletedSuccesfully);
               },

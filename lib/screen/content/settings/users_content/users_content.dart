@@ -96,6 +96,7 @@ class _UsersContentState extends State<UsersContent> {
     UsersModel usersModel = userModel ?? tempList[0];
     showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return CustomConfirmDialog(
             confirmMessage: AppLocalizations.of(context).areYouSure,
@@ -106,6 +107,7 @@ class _UsersContentState extends State<UsersContent> {
           if (value1.statusCode == 200) {
             showDialog(
               context: context,
+              barrierDismissible: false,
               builder: (context) {
                 return showSuccessDialog(locale.deletedSuccesfully);
               },
@@ -187,6 +189,7 @@ class _UsersContentState extends State<UsersContent> {
                 if (value.statusCode == 200) {
                   showDialog(
                     context: context,
+                    barrierDismissible: false,
                     builder: (context) {
                       return showSuccessDialog(locale.addedSuccess);
                     },
@@ -294,6 +297,7 @@ class _UsersContentState extends State<UsersContent> {
                 if (value.statusCode == 200) {
                   showDialog(
                     context: context,
+                    barrierDismissible: false,
                     builder: (context) {
                       return showSuccessDialog(locale.editedSuccess);
                     },
@@ -334,6 +338,7 @@ class _UsersContentState extends State<UsersContent> {
             onPressed: () {
               UsersModel usersModel = userModel ?? tempList[0];
               showDialog(
+                barrierDismissible: false,
                 context: context,
                 builder: (context) {
                   return editDialog(usersModel);
