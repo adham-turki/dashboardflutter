@@ -1,11 +1,14 @@
 import 'package:bi_replicate/controller/settings/user_settings/user_setting_controller.dart';
+import 'package:bi_replicate/model/settings/user_permissions/user_permissions_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../components/table_component.dart';
+import '../../../../controller/settings/user_permissions/user_permissions_controller.dart';
 import '../../../../model/settings/user_settings/user_settings_model.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../widget/drop_down/custom_dropdown.dart';
@@ -25,6 +28,9 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
   bool isDesktop = false;
   double height = 0;
   List<UsersModel> usersList = [];
+  List<UserPermitModel> userPermitsList = [];
+  List<PlutoRow> topList = [];
+  UserPermitModel? userPermitModel;
 
   List<UsersModel> searchResults = [];
   @override
@@ -59,40 +65,63 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
             return onSearch(text);
           },
           onChanged: (value) {
-            setState(() {
-              selectedFromUsers = value.toString();
-              selectedFromUsersCode = value.codeToString();
-              print(selectedFromUsers);
-              print(selectedFromUsersCode);
-              // getCategory1List();
+            selectedFromUsers = value.toString();
+            selectedFromUsersCode = value.codeToString();
+            UserPermissionsController()
+                .getPermitReportsByCode(selectedFromUsersCode)
+                .then((value) {
+              setState(() {
+                userPermitsList = value;
+                topList = getRows();
+                print("lennnnnnnn: ${userPermitsList.length}");
+              });
             });
+            print(selectedFromUsers);
+            print(selectedFromUsersCode);
+            // getCategory1List();
           },
           initialValue: selectedFromUsers.isNotEmpty ? selectedFromUsers : null,
         ),
         SizedBox(
-          width: Responsive.isDesktop(context) ? width * 0.4 : width * 0.9,
+          width: Responsive.isDesktop(context) ? width * 0.7 : width * 0.9,
           height: Responsive.isDesktop(context) ? height * 0.7 : height * 0.7,
           child: TableComponent(
             key: UniqueKey(),
-            plCols:
-                UsersModel.getColumns(context, AppLocalizations.of(context)),
-            polRows: [],
-            // footerBuilder: (PlutoGridStateManager stateManager) {
-            //   return tableFooter();
-            // },
+            plCols: UserPermitModel.getColumns(
+                context, AppLocalizations.of(context)),
+            polRows: getRows(),
+            footerBuilder: (PlutoGridStateManager stateManager) {
+              return tableFooter();
+            },
             onSelected: (event) {
               PlutoRow row = event.row!;
-              // userModel = UsersModel.fromJson(row.toJson());
-              // for (var i = 0; i < tempList.length; i++) {
-              //   if (tempList[i].username == userModel!.username) {
-              //     userModel = tempList[i];
-              //   }
-              // }
+              print("row.toJson(): ${row.toJson()}");
+              userPermitModel =
+                  UserPermitModel.fromJson2(row.toJson(), _locale);
+              for (var i = 0; i < userPermitsList.length; i++) {
+                if (userPermitsList[i].reportCode ==
+                    userPermitModel!.reportCode) {
+                  userPermitModel = userPermitsList[i];
+                }
+              }
+              print("codeeee: ${userPermitModel!.reportNamee}");
             },
           ),
         )
       ],
     );
+  }
+
+  List<PlutoRow> getRows() {
+    List<UserPermitModel> accountList = userPermitsList;
+
+    List<PlutoRow> topList = [];
+
+    for (int i = 0; i < accountList.length; i++) {
+      topList.add(accountList[i].toPluto(i + 1, _locale));
+    }
+
+    return topList;
   }
 
   Future<List<UsersModel>> onSearch(String query) async {
@@ -116,6 +145,43 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
               user.username.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+  Widget tableFooter() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        IconButton(
+            onPressed: () async {
+              // showDialog(
+              //   barrierDismissible: false,
+              //   context: context,
+              //   builder: (context) {
+              //     return addDialog();
+              //   },
+              // );
+            },
+            icon: const Icon(Icons.add)),
+        IconButton(
+            onPressed: () {
+              UserPermitModel permitModel =
+                  userPermitModel ?? userPermitsList[0];
+              // showDialog(
+              //   context: context,
+              //   builder: (context) {
+              //     return editDialog(usersModel);
+              //   },
+              // );
+              // deleteMethod();
+            },
+            icon: const Icon(Icons.edit)),
+        IconButton(
+            onPressed: () {
+              // deleteMethod();
+            },
+            icon: const Icon(Icons.delete)),
+      ],
+    );
   }
 
   getAllUsers() {

@@ -231,5 +231,10 @@
     "editUser": "Edit User",
     "edit": "Edit",
     "editedSuccess": "Edited Successfully!",
-    "userPermit": "User Permissions"
+    "userPermit": "User Permissions",
+    "reportCode": "Report Code",
+    "reportNamee": "Report Name English",
+    "reportNamea": "Report Name Arabic",
+    "allowed": "Allowed",
+    "notAllowed": "Not Allowed"
 }

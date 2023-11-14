@@ -47,6 +47,12 @@ class UsersModel {
     };
   }
 
+  Map<String, dynamic> permitToJson() {
+    return {
+      'nameCode': code,
+    };
+  }
+
   static List<PlutoColumn> getColumns(
       BuildContext context, AppLocalizations localizations) {
     double width = MediaQuery.of(context).size.width;
