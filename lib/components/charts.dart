@@ -78,7 +78,7 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : Container(
-            height: isDesktop ? height * 0.383 : height * 0.45,
+            height: isDesktop ? height * 0.38 : height * 0.45,
             // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
               isTransposed: true,
