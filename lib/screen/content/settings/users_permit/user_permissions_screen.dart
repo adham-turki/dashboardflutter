@@ -83,6 +83,9 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
           initialValue: selectedFromUsers.isNotEmpty ? selectedFromUsers : null,
         ),
         SizedBox(
+          height: height * 0.02,
+        ),
+        SizedBox(
           width: Responsive.isDesktop(context) ? width * 0.7 : width * 0.9,
           height: Responsive.isDesktop(context) ? height * 0.7 : height * 0.7,
           child: TableComponent(
