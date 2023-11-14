@@ -118,14 +118,14 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       title: locale.settings,
       icon: Icons.settings,
       subMenuList: [
-        SubMenuModel(
-          title: locale.users,
-          pageNumber: 15,
-        ),
-        SubMenuModel(
-          title: locale.userPermit,
-          pageNumber: 16,
-        ),
+        // SubMenuModel(
+        //   title: locale.users,
+        //   pageNumber: 15,
+        // ),
+        // SubMenuModel(
+        //   title: locale.userPermit,
+        //   pageNumber: 16,
+        // ),
         SubMenuModel(
           title: locale.setup,
           pageNumber: 17,
