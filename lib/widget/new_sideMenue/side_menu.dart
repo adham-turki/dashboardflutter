@@ -1,7 +1,9 @@
 import 'package:bi_replicate/widget/new_sideMenue/sub_menu_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../../provider/local_provider.dart';
 import '../../provider/screen_content_provider.dart';
 import '../../utils/constants/colors.dart';
@@ -36,7 +38,7 @@ class _SideMenuState extends State<SideMenu> {
   int selectedMenuHover = -1;
   int selectedSubMenuHover = -1;
 
-  bool isCollapsed = true;
+  bool isCollapsed = false;
 
   bool isDesktop = false;
 
@@ -48,8 +50,14 @@ class _SideMenuState extends State<SideMenu> {
   void didChangeDependencies() {
     // provider = context.read<ScreenContentProvider>();
     _locale = AppLocalizations.of(context)!;
-
+    isDesktop = Responsive.isDesktop(context);
+    isCollapsed = isDesktop ? true : false;
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -63,7 +71,7 @@ class _SideMenuState extends State<SideMenu> {
 
     screenProvider = context.read<ScreenContentProvider>();
     return Container(
-      //   height: height,
+      height: height,
       width: drawerWidth(),
       decoration: BoxDecoration(
         color: primary,
@@ -76,8 +84,6 @@ class _SideMenuState extends State<SideMenu> {
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           titleSection(),
           Padding(
@@ -86,8 +92,7 @@ class _SideMenuState extends State<SideMenu> {
               height: height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  // mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // CustomSearchField(
                     //   onChanged: (value) {},
@@ -116,7 +121,138 @@ class _SideMenuState extends State<SideMenu> {
       child: Column(
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: isDesktop
+                ? (!isCollapsed
+                    ? MainAxisAlignment.spaceBetween
+                    : MainAxisAlignment.center)
+                : MainAxisAlignment.spaceBetween, // Center for mobile view
+            children: [
+              isDesktop
+                  ? !isCollapsed
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 15),
+                          child: Image.asset(
+                            "assets/images/scope_logo1.png",
+                            width: isDesktop ? width * 0.063 : width * 0.5,
+                          ),
+                        )
+                      : Container()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 15),
+                          child: Image.asset(
+                            "assets/images/scope_logo1.png",
+                            width: isDesktop ? width * 0.063 : width * 0.1,
+                          ),
+                        ),
+                      ],
+                    ),
+              isDesktop
+                  ? MouseRegion(
+                      onEnter: (event) {
+                        setState(() {
+                          isEnteredCollapseIcon = true;
+                        });
+                      },
+                      onExit: (event) {
+                        setState(() {
+                          isEnteredCollapseIcon = false;
+                        });
+                      },
+                      child: IconButton(
+                        color: Colors.white,
+                        splashRadius: 1,
+                        iconSize: width * 0.015,
+                        onPressed: () {
+                          setState(() {
+                            isCollapsed
+                                ? isCollapsed = false
+                                : isCollapsed = true;
+                          });
+                        },
+                        icon: Icon(
+                          Icons.flip_to_back_rounded,
+                          color: isEnteredCollapseIcon ? Colors.white : null,
+                        ),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+          isDesktop
+              ? Align(
+                  alignment: Alignment.center,
+                  child: LanguageWidget(
+                    color: Colors.white,
+                    onLocaleChanged: (locale) {
+                      localeProvider.setLocale(locale);
+                    },
+                  ),
+                )
+              : Align(
+                  alignment: Alignment.centerRight,
+                  child: LanguageWidget(
+                    color: Colors.white,
+                    onLocaleChanged: (locale) {
+                      localeProvider.setLocale(locale);
+                    },
+                  ),
+                )
+        ],
+      ),
+    );
+  }
+
+  Container titleSection1() {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
+    return Container(
+      decoration: const BoxDecoration(),
+      child: Column(
+        children: [
+          !isCollapsed
+              ? Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center, // Centered for mobile view
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, vertical: 15),
+                      child: Image.asset(
+                        "assets/images/scope_logo1.png",
+                        width: isDesktop ? width * 0.063 : width * 0.15,
+                      ),
+                    ),
+                    isDesktop
+                        ? Container() // Spacer for desktop view
+                        : Spacer(),
+                    LanguageWidget(
+                      color: Colors.white,
+                      onLocaleChanged: (locale) {
+                        localeProvider.setLocale(locale);
+                      },
+                    ),
+                  ],
+                )
+              : Container()
+        ],
+      ),
+    );
+  }
+
+  Container titleSection2() {
+    final localeProvider = Provider.of<LocaleProvider>(context);
+
+    return Container(
+      decoration: const BoxDecoration(),
+      child: Column(
+        children: [
+          Row(
             mainAxisAlignment: !isCollapsed
                 ? MainAxisAlignment.spaceBetween
                 : MainAxisAlignment.center,
@@ -124,10 +260,10 @@ class _SideMenuState extends State<SideMenu> {
               !isCollapsed
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, vertical: 10),
+                          horizontal: 8.0, vertical: 15),
                       child: Image.asset(
                         "assets/images/scope_logo1.png",
-                        width: isDesktop ? width * 0.063 : width * 0.5,
+                        width: isDesktop ? width * 0.063 : width * 0.2,
                         // height: 100,
                       ),
                     )
@@ -183,11 +319,9 @@ class _SideMenuState extends State<SideMenu> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               selectedMenu == index
@@ -205,6 +339,16 @@ class _SideMenuState extends State<SideMenu> {
       ),
     );
   }
+
+  // Color activeSubColor(int index) {
+  //   int currentPage = provider.getPage();
+  //   if (subHovered == index) {
+  //     return secondary;
+  //   } else if (subSelected == index && subSelected == currentPage) {
+  //     return secondary;
+  //   }
+  //   return Colors.white;
+  // }
 
   Container createSelecter(Radius radius) {
     return Container(
@@ -243,7 +387,6 @@ class _SideMenuState extends State<SideMenu> {
           borderRadius: BorderRadius.circular(5),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             InkWell(
               onTap: () {
@@ -261,13 +404,11 @@ class _SideMenuState extends State<SideMenu> {
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             icon,
@@ -276,7 +417,7 @@ class _SideMenuState extends State<SideMenu> {
                                 ? !isCollapsed
                                     ? width * 0.01
                                     : width * 0.0138
-                                : width * 0.05,
+                                : width * 0.02,
                           ),
                           !isCollapsed
                               ? const SizedBox(
@@ -288,7 +429,7 @@ class _SideMenuState extends State<SideMenu> {
                                   title,
                                   style: TextStyle(
                                       fontSize:
-                                          isDesktop ? fontSize : width * 0.03,
+                                          isDesktop ? fontSize : width * 0.016,
                                       fontWeight: FontWeight.w500,
                                       color: activeColor),
                                 )
@@ -406,12 +547,18 @@ class _SideMenuState extends State<SideMenu> {
     return Colors.white;
   }
 
-  double drawerWidth() {
+  double drawerWidth1() {
     if (isDesktop) {
       return !isCollapsed ? width * 0.16 : width * 0.045;
     } else {
-      return width * 0.6;
+      return width * 0.5;
     }
+  }
+
+  double drawerWidth() {
+    return isDesktop
+        ? (!isCollapsed ? width * 0.16 : width * 0.045)
+        : width * 0.6;
   }
 
   double menuWidth() {

@@ -231,6 +231,18 @@ class _FilterDialogSalesByCategoryState
                             },
                           ),
                         ),
+                        CustomDropDown(
+                          items: branches,
+                          label: _locale.branch,
+                          initialValue: selectedBranch,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedBranch = value.toString();
+                              selectedBranchCode =
+                                  branchesMap[value.toString()]!;
+                            });
+                          },
+                        ),
                       ],
                     )
                   : Column(
