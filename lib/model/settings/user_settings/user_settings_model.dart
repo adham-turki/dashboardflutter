@@ -19,6 +19,13 @@ class UsersModel {
     required this.activeToken,
     required this.role,
   });
+  String codeToString() {
+    return "$code";
+  }
+
+  String toString() {
+    return "$username";
+  }
 
   factory UsersModel.fromJson(Map<String, dynamic> json) {
     return UsersModel(
@@ -37,6 +44,12 @@ class UsersModel {
       'password': password,
       'activeToken': activeToken,
       'role': role,
+    };
+  }
+
+  Map<String, dynamic> permitToJson() {
+    return {
+      'nameCode': code,
     };
   }
 

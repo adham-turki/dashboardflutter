@@ -1,0 +1,30 @@
+import 'dart:convert';
+
+import 'package:bi_replicate/model/settings/user_permissions/user_permissions_model.dart';
+import 'package:bi_replicate/model/settings/user_settings/user_settings_model.dart';
+import 'package:bi_replicate/utils/constants/api_constants.dart';
+import 'package:http/http.dart';
+
+import '../../../service/api_service.dart';
+
+class UserPermissionsController {
+  List<UserPermitModel> permitList = [];
+
+  Future<List<UserPermitModel>> getPermitReportsByCode(String userCode) async {
+    UsersModel usersModel = UsersModel(
+        code: userCode, username: "", password: "", activeToken: "", role: "");
+    String api = getPermitByUser;
+
+    await ApiService()
+        .postRequest(api, usersModel.permitToJson())
+        .then((value) {
+      if (value.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
+        for (var permit in jsonData) {
+          permitList.add(UserPermitModel.fromJson(permit));
+        }
+      }
+    });
+    return permitList;
+  }
+}

@@ -123,12 +123,16 @@ List<MenuModel> getMenu(AppLocalizations locale) {
           pageNumber: 15,
         ),
         SubMenuModel(
-          title: locale.setup,
+          title: locale.userPermit,
           pageNumber: 16,
         ),
         SubMenuModel(
-          title: locale.changePassword,
+          title: locale.setup,
           pageNumber: 17,
+        ),
+        SubMenuModel(
+          title: locale.changePassword,
+          pageNumber: 18,
         ),
       ],
       pageNumber: -1,

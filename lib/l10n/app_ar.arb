@@ -206,5 +206,11 @@
     "addedSuccess": "تمت الاضافة بنجاح!",
     "editUser": "تعديل المستخدم",
     "edit": "تعديل",
-    "editedSuccess": "تم التعديل بنجاح!"
+    "editedSuccess": "تم التعديل بنجاح!",
+    "userPermit": "صلاحيات المستخدم",
+    "reportCode": "كود التقرير",
+    "reportNamee": "اسم التقرير بالانجليزية",
+    "reportNamea": "اسم التقرير بالعربية",
+    "allowed": "مسموح به",
+    "notAllowed": "غير مسموح به"
 }

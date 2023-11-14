@@ -49,3 +49,9 @@ const getUsers = "user/getAll";
 const addUser = "user/addUser";
 const deleteUser = "user/deleteUser";
 const editUser = "user/updateUser";
+// User Permits
+const getPermits = "userPermit/getAll";
+const addPermit = "userPermit/add";
+const updatePermit = "userPermit/update";
+const deletePermit = "userPermit/delete";
+const getPermitByUser = "userPermit/reportByUserPermit";
