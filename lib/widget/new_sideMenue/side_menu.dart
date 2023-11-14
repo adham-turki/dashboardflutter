@@ -125,7 +125,8 @@ class _SideMenuState extends State<SideMenu> {
                 ? (!isCollapsed
                     ? MainAxisAlignment.spaceBetween
                     : MainAxisAlignment.center)
-                : MainAxisAlignment.spaceBetween, // Center for mobile view
+                : MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               isDesktop
                   ? !isCollapsed
@@ -139,17 +140,26 @@ class _SideMenuState extends State<SideMenu> {
                         )
                       : Container()
                   : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8.0, vertical: 15),
                           child: Image.asset(
                             "assets/images/scope_logo1.png",
-                            width: isDesktop ? width * 0.063 : width * 0.1,
+                            width: isDesktop ? width * 0.063 : width * 0.13,
                           ),
                         ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: LanguageWidget(
+                            color: Colors.white,
+                            onLocaleChanged: (locale) {
+                              localeProvider.setLocale(locale);
+                            },
+                          ),
+                        )
                       ],
                     ),
               isDesktop
@@ -194,15 +204,7 @@ class _SideMenuState extends State<SideMenu> {
                     },
                   ),
                 )
-              : Align(
-                  alignment: Alignment.centerRight,
-                  child: LanguageWidget(
-                    color: Colors.white,
-                    onLocaleChanged: (locale) {
-                      localeProvider.setLocale(locale);
-                    },
-                  ),
-                )
+              : Container()
         ],
       ),
     );
@@ -300,15 +302,17 @@ class _SideMenuState extends State<SideMenu> {
                   : Container(),
             ],
           ),
-          Align(
-            alignment: Alignment.center,
-            child: LanguageWidget(
-              color: Colors.white,
-              onLocaleChanged: (locale) {
-                localeProvider.setLocale(locale);
-              },
-            ),
-          ),
+          isDesktop
+              ? Align(
+                  alignment: Alignment.center,
+                  child: LanguageWidget(
+                    color: Colors.white,
+                    onLocaleChanged: (locale) {
+                      localeProvider.setLocale(locale);
+                    },
+                  ),
+                )
+              : Container()
         ],
       ),
     );
@@ -417,7 +421,7 @@ class _SideMenuState extends State<SideMenu> {
                                 ? !isCollapsed
                                     ? width * 0.01
                                     : width * 0.0138
-                                : width * 0.02,
+                                : width * 0.022,
                           ),
                           !isCollapsed
                               ? const SizedBox(
@@ -429,7 +433,7 @@ class _SideMenuState extends State<SideMenu> {
                                   title,
                                   style: TextStyle(
                                       fontSize:
-                                          isDesktop ? fontSize : width * 0.016,
+                                          isDesktop ? fontSize : width * 0.019,
                                       fontWeight: FontWeight.w500,
                                       color: activeColor),
                                 )
@@ -444,7 +448,7 @@ class _SideMenuState extends State<SideMenu> {
                                 selectedMenu == index
                                     ? Icons.arrow_drop_down_rounded
                                     : Icons.arrow_right_rounded,
-                                size: isDesktop ? width * 0.011 : width * 0.05,
+                                size: isDesktop ? width * 0.011 : width * 0.02,
                               )
                             : Container()
                         : Container(),
@@ -517,12 +521,12 @@ class _SideMenuState extends State<SideMenu> {
                 width: 10,
               ),
               SizedBox(
-                width: isDesktop ? width * 0.08 : width * 0.3,
+                width: isDesktop ? width * 0.08 : width * 0.16,
                 child: Text(
                   title,
                   style: TextStyle(
                     color: activeSubColor(page),
-                    fontSize: isDesktop ? fontSize : width * 0.03,
+                    fontSize: isDesktop ? fontSize : width * 0.015,
                   ),
                 ),
               ),
