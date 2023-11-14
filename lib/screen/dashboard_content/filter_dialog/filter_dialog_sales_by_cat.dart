@@ -232,6 +232,7 @@ class _FilterDialogSalesByCategoryState
                           ),
                         ),
                         CustomDropDown(
+                          //   width: width,
                           items: branches,
                           label: _locale.branch,
                           initialValue: selectedBranch,

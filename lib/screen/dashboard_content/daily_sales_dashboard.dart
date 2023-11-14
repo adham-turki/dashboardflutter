@@ -77,25 +77,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
+    todayDate = DatesController().formatDate(DatesController().todayDate());
     fromDateController.text = todayDate;
-    status = [
-      _locale.all,
-      _locale.posted,
-      _locale.draft,
-      _locale.canceled,
-    ];
 
-    charts = [
-      _locale.lineChart,
-      _locale.barChart,
-      _locale.pieChart,
-    ];
-
-    selectedStatus = status[0];
-    selectedChart = charts[0];
     super.didChangeDependencies();
   }
+
+  bool dataLoaded = false;
 
   @override
   void initState() {
@@ -105,12 +93,16 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     });
     Future.delayed(Duration.zero, () {
       lastFromDate = fromDateController.text;
-      lastStatus = selectedStatus;
-      lastBranchCode = selectedBranchCode;
       selectedChart = _locale.lineChart;
-      getPayableAccountsData().then((value) {
-        setState(() {});
-      });
+      lastBranchCode = selectedBranchCode;
+      lastStatus = selectedStatus;
+      if (!dataLoaded) {
+        // Load data when the screen is first opened
+        dataLoaded = true; // Set the flag to true
+        getPayableAccountsData().then((value) {
+          setState(() {});
+        });
+      }
     });
     super.initState();
   }
@@ -137,12 +129,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
               padding:
                   const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
               child: Container(
-                // width: width * 0.7,
-                // height: isDesktop ? height * 0.6 : height * 0.6,
-                // decoration: borderDecoration,
                 height: isDesktop ? height * 0.44 : height * 0.53,
-
-                // width: double.infinity,
                 padding: EdgeInsets.only(left: 5, right: 5, top: 0),
                 decoration: BoxDecoration(
                   color: whiteColor,
@@ -210,15 +197,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         ),
                       ],
                     ),
-                    // selectedChart == _locale.barChart
-                    //     ? SizedBox(
-                    //         height: 15,
-                    //       )
-                    //     : Container(),
-                    selectedChart == _locale.barChart
-                        ? CustomBarChart(
-                            data: barData,
-                          )
+                    selectedChart == _locale.lineChart
+                        ? BalanceLineChart(
+                            yAxisText: "",
+                            xAxisText: "",
+                            balances: listOfBalances,
+                            periods: listOfPeriods)
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(
@@ -230,14 +214,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.31 : height * 0.37,
-                                  dataList: barDataDailySales,
+                                  dataList: pieData,
                                 ),
                               )
-                            : BalanceLineChart(
-                                yAxisText: "",
-                                xAxisText: "",
-                                balances: listOfBalances,
-                                periods: listOfPeriods)
+                            : CustomBarChart(data: barData)
                   ],
                 ),
               ),
@@ -252,24 +232,23 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future<void> getDailySales1({bool? isStart}) async {
+  Future getDailySales1({bool? isStart}) async {
+    print("testt");
     int stat = getVoucherStatus(_locale, statusVar);
     var selectedFromDate = fromDateController.text;
-    final selectedStatus = statusVar;
-    final selectedBranchCodeValue = selectedBranchCode;
 
-    // if (selectedFromDate != lastFromDate || selectedStatus != lastStatus) {
-    //   lastFromDate = selectedFromDate;
-    //   lastStatus = selectedStatus;
-
-    if (selectedFromDate.isEmpty) {
-      selectedFromDate = todayDate;
+    if (fromDateController.text.isEmpty) {
+      if (fromDateController.text.isEmpty) {
+        fromDateController.text = todayDate;
+      }
     }
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
-      voucherStatus: stat,
+      voucherStatus: -100,
       branch: selectedBranchCode,
     );
+    print("in dashboard :${searchCriteria}");
+    print("in dashboard :${selectedBranchCode}");
 
     await dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
@@ -305,7 +284,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       }
     });
   }
-  // }
 
   Future<void> getDailySales({bool? isStart}) async {
     int stat = getVoucherStatus(_locale, statusVar);

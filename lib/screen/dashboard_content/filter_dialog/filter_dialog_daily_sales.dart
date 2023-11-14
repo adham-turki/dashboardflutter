@@ -79,10 +79,11 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
+
     _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
-    getBranch(isStart: true);
 
+    getBranch(isStart: true);
     super.initState();
   }
 
@@ -156,6 +157,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                         },
                       ),
                       CustomDropDown(
+                        //   width: width,
                         items: branches,
                         label: _locale.branch,
                         initialValue: selectedBranch,
@@ -231,6 +233,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           setState(() {
                             selectedBranch = value.toString();
                             selectedBranchCode = branchesMap[value.toString()]!;
+                            print("inside filter :${selectedBranchCode}");
                           });
                         },
                       ),
@@ -261,7 +264,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       // DatesController().formatDate(_toDateController.text),
                       selectedStatus,
                       selectedChart,
-                      selectedBranch);
+                      selectedBranchCode);
 
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);
