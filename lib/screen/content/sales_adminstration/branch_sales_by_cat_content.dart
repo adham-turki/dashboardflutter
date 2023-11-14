@@ -104,7 +104,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     selectedBranch = branches[0];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    selectedCategories = categories[0];
+    selectedCategories = categories[1];
     getBranchByCat(isStart: true);
 
     super.didChangeDependencies();

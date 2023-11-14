@@ -158,7 +158,7 @@ class _BranchesSalesByCatDashboardState
         // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
               padding:

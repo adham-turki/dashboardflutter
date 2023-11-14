@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 const primary = Color(0xFF5297b0);
 const secondary = Color(0xFFbaa095);
-const colColor = Color.fromARGB(218, 23, 107, 135);
+const colColor = Color(0xFF5297b0);
 const gridActiveColor = Color.fromARGB(169, 255, 208, 150);
 const whiteColor = Colors.white;
 const darkBlueColor = Color(0xFF2b4381);
