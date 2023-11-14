@@ -26,14 +26,14 @@ class UserPermitModel {
   }
   factory UserPermitModel.fromJson2(
       Map<String, dynamic> json, AppLocalizations locale) {
-    print("tojsonnnnnnnnnnnnnn: ${UserPermitModel(
-      reportCode: "${json['dash']}",
+    print("hellooooooooo: ${UserPermitModel(
+      reportCode: "${json['reportCode']}",
       reportNamee: json['reportNamee'],
       reportNamea: json['reportNamea'],
-      bolAllowed: json['allowed'] == locale.allowed ? 1 : 0,
+      bolAllowed: json['bolAllowed'] == locale.allowed ? 1 : 0,
     ).toJson()}");
     return UserPermitModel(
-      reportCode: "${json['dash']}",
+      reportCode: "${json['reportCode']}",
       reportNamee: json['reportNamee'],
       reportNamea: json['reportNamea'],
       bolAllowed: json['bolAllowed'] == locale.allowed ? 1 : 0,
@@ -56,7 +56,7 @@ class UserPermitModel {
     List<PlutoColumn> list = [
       PlutoColumn(
         title: "#",
-        field: "dash",
+        field: "reportCode",
         type: PlutoColumnType.number(),
         width: isDesktop ? width * 0.04 : width * 0.1,
         backgroundColor: colColor,
@@ -77,7 +77,7 @@ class UserPermitModel {
       ),
       PlutoColumn(
         title: localizations.allowed,
-        field: "allowed",
+        field: "bolAllowed",
         type: PlutoColumnType.text(),
         width: isDesktop ? width * 0.2 : width * 0.2,
         backgroundColor: colColor,
@@ -89,10 +89,10 @@ class UserPermitModel {
   PlutoRow toPluto(int dash, AppLocalizations locale) {
     final Map<String, PlutoCell> permits = <String, PlutoCell>{};
 
-    permits['dash'] = PlutoCell(value: dash);
+    permits['reportCode'] = PlutoCell(value: dash);
     permits['reportNamee'] = PlutoCell(value: reportNamee ?? "");
     permits['reportNamea'] = PlutoCell(value: reportNamea ?? "");
-    permits['allowed'] =
+    permits['bolAllowed'] =
         PlutoCell(value: bolAllowed == 0 ? locale.notAllowed : locale.allowed);
     print(
         "alloweddddddddddddddddd: ${bolAllowed == 0 ? locale.notAllowed : locale.allowed}");
