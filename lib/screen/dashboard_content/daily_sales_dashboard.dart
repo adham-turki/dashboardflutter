@@ -99,12 +99,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void initState() {
-    for (int i = 0; i < 100; i++) {
-      barDataTest.add(BarData(
-        name: 'Bar $i',
-        percent: Random().nextDouble() * 100,
-      ));
-    }
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
@@ -113,7 +107,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       lastFromDate = fromDateController.text;
       lastStatus = selectedStatus;
       lastBranchCode = selectedBranchCode;
-
+      selectedChart = _locale.lineChart;
       getPayableAccountsData().then((value) {
         setState(() {});
       });

@@ -131,10 +131,12 @@ class BalanceLineChart extends StatelessWidget {
       //  height: isDesktop ? height * 0.423 : height * 0.5,
 
       height: isDesktop
-          ? context.read<ScreenContentProvider>().getPage() == 0
+          ? (context.read<ScreenContentProvider>().getPage() == 0
               ? height * 0.38
-              : height * 0.423
-          : height * 0.43,
+              : height * 0.5)
+          : context.read<ScreenContentProvider>().getPage() == 0
+              ? height * 0.43
+              : height * 0.5,
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
         primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
