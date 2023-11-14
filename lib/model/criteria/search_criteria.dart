@@ -38,6 +38,7 @@ class SearchCriteria {
     final Map<String, dynamic> searchCriteria = <String, dynamic>{};
 
     searchCriteria['fromDate'] = fromDate;
+    searchCriteria['branch'] = branch;
 
     searchCriteria['voucherStatus'] = voucherStatus;
 

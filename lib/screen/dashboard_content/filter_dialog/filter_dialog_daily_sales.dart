@@ -5,12 +5,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/error_controller.dart';
+import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../utils/constants/app_utils.dart';
+import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogDailySales extends StatefulWidget {
-  final Function(String fromDate, String selectedStatus, String chart) onFilter;
+  final Function(
+    String fromDate,
+    String selectedStatus,
+    String chart,
+    String selectedBranchCodeF,
+  ) onFilter;
 
   FilterDialogDailySales({
     required this.onFilter,
@@ -33,8 +40,13 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   List<String> status = [];
   List<String> charts = [];
   var selectedStatus = "";
+
   String currentMonth = "";
   var selectedChart = "";
+  List<String> branches = [];
+  var selectedBranch = "";
+  var selectedBranchCode = "";
+  BranchController branchController = BranchController();
 
   @override
   void didChangeDependencies() {
@@ -52,6 +64,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       _locale.monthly,
       _locale.yearly,
     ];
+    branches = [_locale.all];
+    selectedBranch = branches[0];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
@@ -67,6 +81,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         DatesController().formatDate(DatesController().twoYearsAgo()));
     _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
+    getBranch(isStart: true);
 
     super.initState();
   }
@@ -124,38 +139,9 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       ),
                     ],
                   )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        // height: height * 0.1,
-                        width: isDesktop ? width * 0.135 : width,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                : Container(),
             isDesktop
-                ? Column(
+                ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomDropDown(
@@ -166,6 +152,17 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                         onChanged: (value) {
                           setState(() {
                             selectedChart = value!;
+                          });
+                        },
+                      ),
+                      CustomDropDown(
+                        items: branches,
+                        label: _locale.branch,
+                        initialValue: selectedBranch,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBranch = value.toString();
+                            selectedBranchCode = branchesMap[value.toString()]!;
                           });
                         },
                       ),
@@ -225,6 +222,18 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           });
                         },
                       ),
+                      CustomDropDown(
+                        width: width,
+                        items: branches,
+                        label: _locale.branch,
+                        initialValue: selectedBranch,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedBranch = value.toString();
+                            selectedBranchCode = branchesMap[value.toString()]!;
+                          });
+                        },
+                      ),
                     ],
                   ),
           ],
@@ -251,7 +260,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       DatesController().formatDate(_fromDateController.text),
                       // DatesController().formatDate(_toDateController.text),
                       selectedStatus,
-                      selectedChart);
+                      selectedChart,
+                      selectedBranch);
 
                   context.read<DatesProvider>().setDatesController(
                       _fromDateController, _toDateController);
@@ -285,5 +295,18 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       _fromDateController.text = DatesController().currentYear().toString();
       _toDateController.text = DatesController().todayDate().toString();
     }
+  }
+
+  void getBranch({bool? isStart}) async {
+    branchController.getBranch(isStart: isStart).then((value) {
+      value.forEach((k, v) {
+        if (mounted) {
+          setState(() {
+            branches.add(k);
+          });
+        }
+      });
+      setBranchesMap(_locale, value);
+    });
   }
 }

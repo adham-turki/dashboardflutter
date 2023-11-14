@@ -190,6 +190,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             CustomDate(
               dateController: fromDate,

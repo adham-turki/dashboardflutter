@@ -57,6 +57,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   List<BarData> barData = [];
 
   List<PieChartModel> barDataDailySales = [];
+  var selectedBranchCode = "";
 
   List<BiAccountModel> payableAccounts = [];
 
@@ -66,6 +67,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     'Save as PNG',
   ];
   List<BarData> barDataTest = [];
+  String lastBranchCode = "";
 
   List<PieChartModel> pieData = [];
   String accountNameString = "";
@@ -97,12 +99,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void initState() {
-    for (int i = 0; i < 100; i++) {
-      barDataTest.add(BarData(
-        name: 'Bar $i',
-        percent: Random().nextDouble() * 100,
-      ));
-    }
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
       setState(() {});
@@ -110,6 +106,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     Future.delayed(Duration.zero, () {
       lastFromDate = fromDateController.text;
       lastStatus = selectedStatus;
+      lastBranchCode = selectedBranchCode;
+      selectedChart = _locale.lineChart;
       getPayableAccountsData().then((value) {
         setState(() {});
       });
@@ -188,11 +186,17 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                     context: context,
                                     builder: (context) {
                                       return FilterDialogDailySales(
-                                        onFilter:
-                                            (fromDate, selectedStatus, chart) {
+                                        onFilter: (
+                                          fromDate,
+                                          selectedStatus,
+                                          chart,
+                                          selectedBranchCodeF,
+                                        ) {
                                           fromDateController.text = fromDate;
                                           statusVar = selectedStatus;
                                           selectedChart = chart;
+                                          selectedBranchCode =
+                                              selectedBranchCodeF;
                                         },
                                       );
                                     },
@@ -252,6 +256,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     int stat = getVoucherStatus(_locale, statusVar);
     var selectedFromDate = fromDateController.text;
     final selectedStatus = statusVar;
+    final selectedBranchCodeValue = selectedBranchCode;
 
     // if (selectedFromDate != lastFromDate || selectedStatus != lastStatus) {
     //   lastFromDate = selectedFromDate;
@@ -263,6 +268,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
       voucherStatus: stat,
+      branch: selectedBranchCode,
     );
 
     await dailySalesController
@@ -305,10 +311,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     int stat = getVoucherStatus(_locale, statusVar);
     var selectedFromDate = fromDateController.text;
     final selectedStatus = statusVar;
+    final selectedBranchCodeValue = selectedBranchCode;
 
-    if (selectedFromDate != lastFromDate || selectedStatus != lastStatus) {
+    if (selectedFromDate != lastFromDate ||
+        selectedStatus != lastStatus ||
+        selectedBranchCodeValue != lastBranchCode) {
       lastFromDate = selectedFromDate;
       lastStatus = selectedStatus;
+      lastBranchCode = selectedBranchCode;
 
       if (selectedFromDate.isEmpty) {
         selectedFromDate = todayDate;
@@ -316,6 +326,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       SearchCriteria searchCriteria = SearchCriteria(
         fromDate: selectedFromDate,
         voucherStatus: stat,
+        branch: selectedBranchCode,
       );
 
       await dailySalesController
