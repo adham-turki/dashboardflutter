@@ -5,12 +5,14 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/responsive.dart';
 
 class UserPermitModel {
+  final String key;
   final String reportCode;
   final String reportNamee;
   final String reportNamea;
   final int bolAllowed;
 
   UserPermitModel({
+    required this.key,
     required this.reportCode,
     required this.reportNamee,
     required this.reportNamea,
@@ -18,6 +20,7 @@ class UserPermitModel {
   });
   factory UserPermitModel.fromJson(Map<String, dynamic> json) {
     return UserPermitModel(
+      key: json['key'],
       reportCode: json['reportCode'],
       reportNamee: json['reportNamee'],
       reportNamea: json['reportNamea'],
@@ -27,12 +30,14 @@ class UserPermitModel {
   factory UserPermitModel.fromJson2(
       Map<String, dynamic> json, AppLocalizations locale) {
     print("hellooooooooo: ${UserPermitModel(
+      key: "",
       reportCode: "${json['reportCode']}",
       reportNamee: json['reportNamee'],
       reportNamea: json['reportNamea'],
       bolAllowed: json['bolAllowed'] == locale.allowed ? 1 : 0,
     ).toJson()}");
     return UserPermitModel(
+      key: "",
       reportCode: "${json['reportCode']}",
       reportNamee: json['reportNamee'],
       reportNamea: json['reportNamea'],
@@ -41,6 +46,7 @@ class UserPermitModel {
   }
   Map<String, dynamic> toJson() {
     return {
+      'key': key,
       'reportCode': reportCode,
       'reportNamee': reportNamee,
       'reportNamea': reportNamea,
@@ -94,8 +100,6 @@ class UserPermitModel {
     permits['reportNamea'] = PlutoCell(value: reportNamea ?? "");
     permits['bolAllowed'] =
         PlutoCell(value: bolAllowed == 0 ? locale.notAllowed : locale.allowed);
-    print(
-        "alloweddddddddddddddddd: ${bolAllowed == 0 ? locale.notAllowed : locale.allowed}");
 
     return PlutoRow(cells: permits);
   }
