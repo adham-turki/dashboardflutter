@@ -1,5 +1,6 @@
 import 'package:bi_replicate/controller/settings/user_settings/user_setting_controller.dart';
 import 'package:bi_replicate/model/settings/user_permissions/user_permissions_model.dart';
+import 'package:bi_replicate/model/settings/user_permissions/user_permit_criteria_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,8 +8,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import '../../../../components/check_box.dart';
 import '../../../../components/table_component.dart';
+import '../../../../controller/error_controller.dart';
 import '../../../../controller/settings/user_permissions/user_permissions_controller.dart';
+import '../../../../dialogs/confirm_dialog.dart';
 import '../../../../model/settings/user_settings/user_settings_model.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../widget/drop_down/custom_dropdown.dart';
@@ -31,7 +35,10 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
   List<UserPermitModel> userPermitsList = [];
   List<PlutoRow> topList = [];
   UserPermitModel? userPermitModel;
-
+  TextEditingController arabicNameController = TextEditingController();
+  TextEditingController englishNameController = TextEditingController();
+  int allowedValue = 0;
+  bool isChecked = false;
   List<UsersModel> searchResults = [];
   @override
   void initState() {
@@ -67,15 +74,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
           onChanged: (value) {
             selectedFromUsers = value.toString();
             selectedFromUsersCode = value.codeToString();
-            UserPermissionsController()
-                .getPermitReportsByCode(selectedFromUsersCode)
-                .then((value) {
-              setState(() {
-                userPermitsList = value;
-                topList = getRows();
-                print("lennnnnnnn: ${userPermitsList.length}");
-              });
-            });
+            fetchData();
             print(selectedFromUsers);
             print(selectedFromUsersCode);
             // getCategory1List();
@@ -98,21 +97,35 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
             },
             onSelected: (event) {
               PlutoRow row = event.row!;
-              print("row.toJson(): ${row.toJson()}");
-              userPermitModel =
+              UserPermitModel userPermitModel2 =
                   UserPermitModel.fromJson2(row.toJson(), _locale);
+              print("row.toJson(): ${row.toJson()}");
+
               for (var i = 0; i < userPermitsList.length; i++) {
-                if (userPermitsList[i].reportCode ==
-                    userPermitModel!.reportCode) {
+                print("i: ${userPermitsList[i].key}");
+                if (userPermitsList[i].reportNamee ==
+                    userPermitModel2.reportNamee) {
                   userPermitModel = userPermitsList[i];
+                  print("dd ${userPermitModel!.toJson()}");
                 }
               }
-              print("codeeee: ${userPermitModel!.reportNamee}");
             },
           ),
         )
       ],
     );
+  }
+
+  void fetchData() {
+    UserPermissionsController()
+        .getPermitReportsByCode(selectedFromUsersCode)
+        .then((value) {
+      setState(() {
+        userPermitsList = value;
+        topList = getRows();
+        print("lennnnnnnn: ${userPermitsList.length}");
+      });
+    });
   }
 
   List<PlutoRow> getRows() {
@@ -169,20 +182,143 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
             onPressed: () {
               UserPermitModel permitModel =
                   userPermitModel ?? userPermitsList[0];
-              // showDialog(
-              //   context: context,
-              //   builder: (context) {
-              //     return editDialog(usersModel);
-              //   },
-              // );
-              // deleteMethod();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return editDialog(permitModel);
+                },
+              );
             },
             icon: const Icon(Icons.edit)),
         IconButton(
             onPressed: () {
-              // deleteMethod();
+              deleteMethod();
             },
             icon: const Icon(Icons.delete)),
+      ],
+    );
+  }
+
+  editDialog(UserPermitModel userPermitModel) {
+    allowedValue = userPermitModel.bolAllowed;
+    print("toJsonnnnnnnnnn: ${userPermitModel.toJson()}");
+    arabicNameController.text = userPermitModel.reportNamea ?? "";
+    // passwordController.text = usersModel.password ?? "";
+    englishNameController.text = userPermitModel.reportNamee ?? "";
+    return AlertDialog(
+      title: Text(_locale.editUser),
+      content: SizedBox(
+        width: width * 0.2,
+        height: height * 0.25,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: arabicNameController,
+              decoration: InputDecoration(labelText: _locale.reportNamea),
+              readOnly: true,
+            ),
+            TextField(
+              controller: englishNameController,
+              decoration: InputDecoration(labelText: _locale.reportNamee),
+              readOnly: true,
+            ),
+            PermitCheckbox(
+              hint: _locale.allowed,
+              allowedValue: allowedValue,
+              onChanged: (newValue) {
+                setState(() {
+                  allowedValue = newValue;
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(_locale.cancel),
+        ),
+        TextButton(
+          onPressed: () async {
+            UserPermitModel userPermitModell =
+                userPermitModel ?? userPermitsList[0];
+            UserPermitCriteria userPermitCriteria = UserPermitCriteria(
+                txtKey: userPermitModell.key,
+                txtUserCode: selectedFromUsersCode,
+                txtReportCode: userPermitModell.reportCode,
+                bolAllowed: allowedValue);
+            UserPermissionsController()
+                .editUserPermit(userPermitCriteria)
+                .then((value) {
+              if (value.statusCode == 200) {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return showSuccessDialog(_locale.editedSuccess);
+                  },
+                ).then((value) {
+                  Navigator.pop(context);
+                });
+                // ErrorController.openErrorDialog(200, _locale.addedSuccess);
+                fetchData();
+              }
+            });
+          },
+          child: Text(_locale.edit),
+        ),
+      ],
+    );
+  }
+
+  void deleteMethod() {
+    UserPermitModel userPermitModell = userPermitModel ?? userPermitsList[0];
+    UserPermitCriteria userPermitCriteria = UserPermitCriteria(
+        txtKey: userPermitModell.key,
+        txtUserCode: selectedFromUsersCode,
+        txtReportCode: userPermitModell.reportCode,
+        bolAllowed: userPermitModell.bolAllowed);
+    print("userPermitCriteria: ${userPermitCriteria.toJson()}");
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CustomConfirmDialog(
+            confirmMessage: AppLocalizations.of(context).areYouSure,
+          );
+        }).then((value) {
+      if (value) {
+        UserPermissionsController()
+            .deleteUserPermit(userPermitCriteria)
+            .then((value1) {
+          if (value1.statusCode == 200) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return showSuccessDialog(_locale.deletedSuccesfully);
+              },
+            ).then((value) {});
+            fetchData();
+          }
+          // setState(() {});
+        }).then((value) {});
+      }
+    });
+  }
+
+  showSuccessDialog(String message) {
+    return AlertDialog(
+      title: Text(""),
+      content: Text(message),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(_locale.ok),
+        ),
       ],
     );
   }

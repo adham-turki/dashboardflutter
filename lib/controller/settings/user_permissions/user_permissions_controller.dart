@@ -22,6 +22,7 @@ class UserPermissionsController {
       if (value.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (var permit in jsonData) {
+          print(permit);
           permitList.add(UserPermitModel.fromJson(permit));
         }
       }
