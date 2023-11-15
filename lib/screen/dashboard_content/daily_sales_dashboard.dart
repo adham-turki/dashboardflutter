@@ -241,7 +241,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
       voucherStatus: -100,
-      branch: "B1",
+      branch: "",
     );
     barDataDailySales = [];
     dataMap.clear();
@@ -307,7 +307,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         voucherStatus: stat,
         branch: selectedBranchCode,
       );
-
+      barDataDailySales = [];
+      dataMap.clear();
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
       await dailySalesController
           .getDailySale(searchCriteria, isStart: isStart)
           .then((response) {
