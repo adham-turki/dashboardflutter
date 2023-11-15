@@ -430,6 +430,8 @@ class _CustomDateState extends State<CustomDate> {
       }
       if (dayTemp) {
         monthFocusNode.requestFocus();
+        monthController.selection = TextSelection(
+            baseOffset: 0, extentOffset: monthController.text.length);
       }
     } else if (hint.compareTo(monthHint) == 0 && day.isNotEmpty) {
       if (month.length == 2) {
@@ -449,6 +451,8 @@ class _CustomDateState extends State<CustomDate> {
         }
         if (monthTemp) {
           yearFocusNode.requestFocus();
+          yearController.selection = TextSelection(
+              baseOffset: 0, extentOffset: yearController.text.length);
         }
       }
     } else {
