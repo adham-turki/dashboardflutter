@@ -241,6 +241,8 @@ class _FilterDialogSalesByCategoryState
                               selectedBranch = value.toString();
                               selectedBranchCode =
                                   branchesMap[value.toString()]!;
+                              print(
+                                  "selectedBranchCode: ${selectedBranchCode}");
                             });
                           },
                         ),

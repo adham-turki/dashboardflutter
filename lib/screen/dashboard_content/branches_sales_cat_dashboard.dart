@@ -235,6 +235,7 @@ class _BranchesSalesByCatDashboardState
                                     },
                                   ).then((value) async {
                                     getBranchByCat().then((value) {
+                                      print("llllllllllllllllllllllllllll");
                                       setState(() {});
                                     });
                                   });
@@ -336,9 +337,9 @@ class _BranchesSalesByCatDashboardState
           .getSalesByCategory(searchCriteria, isStart: isStart)
           .then((value) {
         for (var element in value) {
+          // print("adasdasdasdasdasdas");
           double bal = element.creditAmt! - element.debitAmt!;
 
-          Color randomColor = getRandomColor(colorNewList, usedColors);
           if (bal != 0.0) {
             temp = true;
           } else if (bal == 0.0) {
@@ -360,22 +361,24 @@ class _BranchesSalesByCatDashboardState
                     ? element.categoryName!
                     : _locale.general,
                 value: formatDoubleToTwoDecimalPlaces(bal),
-                color: randomColor,
+                color: Colors.amber,
               ),
             );
-
+            print("bardata 1111111111111111 :${barData.length}");
             barData.add(
               BarData(
                 name: element.categoryName!.isNotEmpty
                     ? element.categoryName!
                     : _locale.general,
-                percent: bal,
+                percent: formatDoubleToTwoDecimalPlaces(bal),
               ),
             );
+            print("bardata 22222222222222222222 :${barData.length}");
           }
 
           print("bardata Length :${barData.length}");
         }
+        print("33333333333333333");
       });
     }
   }
