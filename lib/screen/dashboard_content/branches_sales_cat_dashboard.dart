@@ -278,21 +278,27 @@ class _BranchesSalesByCatDashboardState
     );
   }
 
-  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
-    if (usedColors.length == colorList.length) {
-      // If all colors have been used, clear the used colors list
-      usedColors.clear();
-    }
+  // Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+  //   if (usedColors.length == colorList.length) {
+  //     // If all colors have been used, clear the used colors list
+  //     usedColors.clear();
+  //   }
 
+  //   final random = Random();
+  //   Color color;
+  //   do {
+  //     final index = random.nextInt(colorList.length);
+  //     color = colorList[index];
+  //   } while (usedColors.contains(color));
+
+  //   usedColors.add(color);
+  //   return color;
+  // }
+
+  Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    Color color;
-    do {
-      final index = random.nextInt(colorList.length);
-      color = colorList[index];
-    } while (usedColors.contains(color));
-
-    usedColors.add(color);
-    return color;
+    final index = random.nextInt(colorList.length);
+    return colorList[index];
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {
@@ -361,7 +367,7 @@ class _BranchesSalesByCatDashboardState
                     ? element.categoryName!
                     : _locale.general,
                 value: formatDoubleToTwoDecimalPlaces(bal),
-                color: Colors.amber,
+                color: getRandomColor(colorNewList),
               ),
             );
             print("bardata 1111111111111111 :${barData.length}");
@@ -419,9 +425,9 @@ class _BranchesSalesByCatDashboardState
         // creditAmt - debitAmt
         double bal = element.creditAmt! - element.debitAmt!;
 
-        // Generate a random color
-        Color randomColor = getRandomColor(
-            colorNewList, usedColors); // Use the getRandomColor function
+        // // Generate a random color
+        // Color randomColor = getRandomColor(
+        //     colorNewList, usedColors); // Use the getRandomColor function
         if (bal != 0.0) {
           temp = true;
         } else if (bal == 0.0) {
@@ -437,7 +443,7 @@ class _BranchesSalesByCatDashboardState
                   ? _locale.general
                   : element.categoryName!,
               value: formatDoubleToTwoDecimalPlaces(bal),
-              color: randomColor)); // Set random color
+              color: getRandomColor(colorNewList))); // Set random color
           // print("asdasd: ${pieData.length}");
         }
 

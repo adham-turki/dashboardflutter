@@ -3,7 +3,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  String url = "http://167.235.150.228:9012";
+  // String url = "http://167.235.150.228:9012";
+  String url = "https://dash.scopef.com:9012/dailySales/getList2";
   final storage = const FlutterSecureStorage();
 
   Future<http.Response> postMethods(String pathUrl, dynamic body) async {
