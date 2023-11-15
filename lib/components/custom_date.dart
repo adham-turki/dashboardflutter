@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,7 +60,7 @@ class _CustomDateState extends State<CustomDate> {
   FocusNode yearFocusNode = FocusNode();
   FocusNode monthFocusNode = FocusNode();
   FocusNode dayFocusNode = FocusNode();
-
+  DateTime formattedDate = DateTime.now();
   bool dayTemp = true;
   bool monthTemp = true;
   bool yearTemp = true;
@@ -109,6 +110,8 @@ class _CustomDateState extends State<CustomDate> {
     String label = widget.label;
 
     if (widget.dateController!.text.isNotEmpty) {
+      formattedDate =
+          DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
       yearController.text = splitDate()[0];
       monthController.text = splitDate()[1];
       dayController.text = splitDate()[2];
@@ -193,22 +196,44 @@ class _CustomDateState extends State<CustomDate> {
         ),
         onTap: () {
           if (hint == dayHint) {
-            emptyDateControllers();
+            if (dayController.text.isNotEmpty) {
+              // dayController.clear();
+              dayController.selection = TextSelection(
+                  baseOffset: 0, extentOffset: dayController.text.length);
+            }
+            // emptyDateControllers();
           } else if (hint == monthHint) {
             if (monthController.text.isNotEmpty) {
-              monthController.clear();
+              monthController.selection = TextSelection(
+                  baseOffset: 0, extentOffset: monthController.text.length);
             }
           } else if (hint == yearHint) {
             if (yearController.text.isNotEmpty) {
-              yearController.clear();
+              yearController.selection = TextSelection(
+                  baseOffset: 0, extentOffset: yearController.text.length);
             }
           }
+          // if (hint == dayHint) {
+          //   emptyDateControllers();
+          // } else if (hint == monthHint) {
+          //   if (monthController.text.isNotEmpty) {
+          //     monthController.clear();
+          //   }
+          // } else if (hint == yearHint) {
+          //   if (yearController.text.isNotEmpty) {
+          //     yearController.clear();
+          //   }
+          // }
         },
         onChanged: (value) {
           setRequestNodes(hint);
           if (dayController.text.length == 2 &&
               monthController.text.length == 2 &&
               yearController.text.length == 4) {
+            widget.dateController!.text =
+                '${yearController.text}-${monthController.text}-${dayController.text}';
+            formattedDate =
+                DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
             // submitValueDate(focusNode);
           }
         },
@@ -610,7 +635,7 @@ class _CustomDateState extends State<CustomDate> {
     DateTime firstDate = DateTime(2000);
     showDatePicker(
       context: context,
-      initialDate: dateTime,
+      initialDate: formattedDate,
       firstDate: firstDate,
       lastDate: dateTime,
     ).then((dateResult) {
