@@ -87,8 +87,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       selectedChart = _locale.lineChart;
 
       if (!dataLoaded) {
-        // Load data when the screen is first opened
-        dataLoaded = true; // Set the flag to true
+        dataLoaded = true;
         getSalesData().then((value) {
           setState(() {});
         });
@@ -199,14 +198,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 xAxisText: "",
                                 balances: listOfBalances,
                                 periods: listOfPeriods)
-
-                    // PieChartDashboard(
-                    //   radiusNormal: isDesktop ? height * 0.15 : 120,
-                    //   radiusHover: isDesktop ? height * 0.15 : 80,
-                    //   width: isDesktop ? width * 0.33 : width * 0.05,
-                    //   height: isDesktop ? height * 0.33 : height * 0.4,
-                    //   dataList: pieData,
-                    // ),
                   ],
                 ),
               ),

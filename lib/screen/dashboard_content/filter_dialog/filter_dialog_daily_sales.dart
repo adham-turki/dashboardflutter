@@ -67,7 +67,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     branches = [_locale.all];
     selectedBranch = branches[0];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = charts[0];
+    selectedChart = charts[2];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     super.didChangeDependencies();

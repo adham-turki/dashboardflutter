@@ -2,13 +2,10 @@ import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../provider/screen_content_provider.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
