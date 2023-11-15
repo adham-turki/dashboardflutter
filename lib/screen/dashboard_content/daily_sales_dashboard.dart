@@ -69,7 +69,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   List<BarData> barDataTest = [];
   String lastBranchCode = "";
 
-  List<PieChartModel> pieData = [];
+  // List<PieChartModel> pieData = [];
   String accountNameString = "";
   String lastFromDate = "";
   String lastStatus = "";
@@ -77,40 +77,42 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
-    todayDate = DatesController().formatDate(DatesController().todayDate());
+    todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
     fromDateController.text = todayDate;
 
     super.didChangeDependencies();
-  }
-
-  bool dataLoaded = false;
-
-  @override
-  void initState() {
-    getPayableAccounts(isStart: true).then((value) {
-      payableAccounts = value;
-      setState(() {});
-    });
-    Future.delayed(Duration.zero, () {
-      lastFromDate = fromDateController.text;
-      selectedChart = _locale.lineChart;
-      lastBranchCode = selectedBranchCode;
-      lastStatus = selectedStatus;
-      if (!dataLoaded) {
-        // Load data when the screen is first opened
-        dataLoaded = true; // Set the flag to true
-        getPayableAccountsData().then((value) {
-          setState(() {});
-        });
-      }
-    });
-    super.initState();
   }
 
   Future<void> getPayableAccountsData() async {
     await getDailySales1().then((value) {
       setState(() {});
     });
+  }
+
+  bool dataLoaded = false;
+
+  @override
+  void initState() {
+    print("init state");
+
+    Future.delayed(Duration.zero, () async {
+      lastFromDate = fromDateController.text;
+      selectedChart = _locale.barChart;
+      lastBranchCode = selectedBranchCode;
+      lastStatus = selectedStatus;
+      if (!dataLoaded) {
+        dataLoaded = true;
+        await getPayableAccountsData();
+        setState(() {});
+      }
+    });
+
+    getPayableAccounts(isStart: true).then((value) {
+      payableAccounts = value;
+      setState(() {});
+    });
+
+    super.initState();
   }
 
   @override
@@ -214,7 +216,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   width: isDesktop ? width * 0.4 : width * 0.05,
                                   height:
                                       isDesktop ? height * 0.31 : height * 0.37,
-                                  dataList: pieData,
+                                  dataList: barDataDailySales,
                                 ),
                               )
                             : CustomBarChart(data: barData)
@@ -232,27 +234,26 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  Future getDailySales1({bool? isStart}) async {
-    print("testt");
-    int stat = getVoucherStatus(_locale, statusVar);
-    var selectedFromDate = fromDateController.text;
+  Future<void> getDailySales1({bool? isStart}) async {
+    final selectedFromDate = fromDateController.text;
 
-    if (fromDateController.text.isEmpty) {
-      if (fromDateController.text.isEmpty) {
-        fromDateController.text = todayDate;
-      }
-    }
+    // Load data when selected dates change
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
       voucherStatus: -100,
-      branch: selectedBranchCode,
+      branch: "",
     );
-    print("in dashboard :${searchCriteria}");
-    print("in dashboard :${selectedBranchCode}");
-
+    barDataDailySales = [];
+    dataMap.clear();
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
     await dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
+      // Update lastFromDate and lastToDate
+      lastFromDate = selectedFromDate;
+      // Update the data
       for (var elemant in response) {
         String temp = DatesController().formatDate(getNextDay(
           selectedFromDate,
@@ -306,7 +307,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         voucherStatus: stat,
         branch: selectedBranchCode,
       );
-
+      barDataDailySales = [];
+      dataMap.clear();
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
       await dailySalesController
           .getDailySale(searchCriteria, isStart: isStart)
           .then((response) {
