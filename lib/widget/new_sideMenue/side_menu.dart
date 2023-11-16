@@ -92,7 +92,7 @@ class _SideMenuState extends State<SideMenu> {
               height: height * 0.8,
               child: SingleChildScrollView(
                 child: Column(
-                  // mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // CustomSearchField(
                     //   onChanged: (value) {},

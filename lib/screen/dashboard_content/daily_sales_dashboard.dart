@@ -11,6 +11,7 @@ import '../../components/charts.dart';
 import '../../components/charts/pie_chart_dashboard.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
+import '../../model/sales_adminstration/daily_sales_model.dart';
 import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
@@ -219,7 +220,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   dataList: barDataDailySales,
                                 ),
                               )
-                            : CustomBarChart(data: barData)
+                            : SizedBox(
+                                height: height * 0.4,
+                                child: CustomBarChart(
+                                  data: barData,
+                                ),
+                              ),
                   ],
                 ),
               ),
@@ -255,9 +261,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       lastFromDate = selectedFromDate;
       // Update the data
       for (var elemant in response) {
-        String temp = DatesController().formatDate(getNextDay(
-          selectedFromDate,
-        ).toString());
+        String temp = elemant.date ?? "NO DATE";
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
         } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
@@ -316,9 +320,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           .getDailySale(searchCriteria, isStart: isStart)
           .then((response) {
         for (var elemant in response) {
-          String temp = DatesController().formatDate(getNextDay(
-            selectedFromDate,
-          ).toString());
+          String temp = elemant.date ?? "NO DATE";
+
           if (double.parse(elemant.dailySale.toString()) != 0.0) {
             boolTemp = true;
           } else if (double.parse(elemant.dailySale.toString()) == 0.0) {

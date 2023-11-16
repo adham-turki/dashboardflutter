@@ -93,7 +93,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      title: SelectableText(_locale.filter),
+      // title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
         height: isDesktop ? height * 0.28 : height * 0.53,

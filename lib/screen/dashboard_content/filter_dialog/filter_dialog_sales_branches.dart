@@ -83,7 +83,7 @@ class _FilterDialogSalesByBranchesState
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      title: SelectableText(_locale.filter),
+      // title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.37 : width * 0.7,
         height: isDesktop ? height * 0.35 : height * 0.55,

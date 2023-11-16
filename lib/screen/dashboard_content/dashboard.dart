@@ -47,7 +47,7 @@ class _DashboardContentState extends State<DashboardContent> {
         vouchHeaderTransietModel = value!;
       });
     });
-
+    setState(() {});
     super.didChangeDependencies();
   }
 

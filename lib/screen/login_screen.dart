@@ -187,22 +187,28 @@ class _LoginScreenState extends State<LoginScreen> {
         .loadString("assets/centralApi/central_api.properties")
         .then((value) {
       var url = value.trim();
-      CentralApiController().getApi(url, aliasName.text, _locale).then((value) {
+      CentralApiController()
+          .getApi(url, aliasName.text, _locale)
+          .then((value) async {
         if (value.isEmpty) {
           // Navigator.pop(context); // for Circular
           // ErrorController.openErrorDialog(406, _locale.wrongAliasName);
         } else {
           const storage = FlutterSecureStorage();
 
-          storage.write(key: 'api', value: value).then((value) {
+          // String? valueAPI = await storage.read(key: 'api');
+          // print("STORAGE API 1: ${valueAPI}");
+          storage.write(key: 'api', value: value).then((value) async {
+            // valueAPI = await storage.read(key: 'api');
+            // print("STORAGE API 2: ${valueAPI}");
             checkLogIn().then((value) {
               if (value) {
-                if (kIsWeb) {
-                  GoRouter.of(context).go(AppRoutes.homeScreenRoute);
-                } else {
-                  // Navigator.pushReplacementNamed(context, mainScreenRoute);
-                  GoRouter.of(context).go(AppRoutes.homeScreenRoute);
-                }
+                // if (kIsWeb) {
+                //   GoRouter.of(context).go(AppRoutes.homeScreenRoute);
+                // } else {
+                // Navigator.pushReplacementNamed(context, mainScreenRoute);
+                GoRouter.of(context).go(AppRoutes.homeScreenRoute);
+                // }
                 // Navigator.pop(context); // for Circular
 
                 // Navigator.pushReplacementNamed(context, mainScreenRoute);

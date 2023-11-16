@@ -20,6 +20,12 @@ class _LogoutTabState extends State<LogoutTab> {
   double height = 0;
   bool isHovered = false;
   late AppLocalizations locale;
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context);
@@ -40,12 +46,19 @@ class _LogoutTabState extends State<LogoutTab> {
         const storage = FlutterSecureStorage();
 
         await storage.delete(key: "jwt");
-        if (kIsWeb) {
-          GoRouter.of(context).go(AppRoutes.loginRoute);
-        } else {
-          // Navigator.pushReplacementNamed(context, loginScreenRoute);
-          GoRouter.of(context).go(AppRoutes.loginRoute);
-        }
+        // storage.
+        // if (kIsWeb) {
+        //   // Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);
+        //   GoRouter.of(context).pop();
+        //   GoRouter.of(context).go(AppRoutes.loginRoute);
+        // } else {
+        //   // Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);
+        //   GoRouter.of(context).pop();
+        //   GoRouter.of(context).go(AppRoutes.loginRoute);
+        // }
+
+        GoRouter.of(context).go(AppRoutes.initialRoute);
+        // GoRouter.of(context).pop();
       },
       child: MouseRegion(
         onEnter: (event) {

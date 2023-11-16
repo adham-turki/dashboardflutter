@@ -101,7 +101,7 @@ class _FilterDialogSalesByCategoryState
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      title: SelectableText(_locale.filter),
+      // title: SelectableText(_locale.filter),
       content: SingleChildScrollView(
         child: SizedBox(
           width: isDesktop ? width * 0.5 : width * 0.7,
