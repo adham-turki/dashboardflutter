@@ -93,153 +93,158 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      // title: SelectableText(_locale.filter),
+      contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
-        height: isDesktop ? height * 0.28 : height * 0.53,
-        child: Column(
-          children: [
-            isDesktop
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
-                      SizedBox(
-                        // height: height * 0.1,
-                        width: isDesktop ? width * 0.135 : width,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+        height: isDesktop ? height * 0.35 : height * 0.55,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CustomDropDown(
+                          items: status,
+                          label: _locale.status,
+                          initialValue: selectedStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedStatus = value!;
+                            });
                           },
                         ),
-                      ),
-                    ],
-                  )
-                : Container(),
-            isDesktop
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomDropDown(
-                        items: charts,
-                        hint: "",
-                        label: _locale.chartType,
-                        initialValue: selectedChart,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedChart = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        //   width: width,
-                        items: branches,
-                        label: _locale.branch,
-                        initialValue: selectedBranch,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedBranch = value.toString();
-                            selectedBranchCode = branchesMap[value.toString()]!;
-                          });
-                        },
-                      ),
-                      // SizedBox(
-                      //   width: width * 0.01,
-                      // ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        height: height * 0.12,
-                        width: isDesktop ? width * 0.135 : width * 0.9,
-                        child: CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
+                        SizedBox(
+                          // height: height * 0.1,
+                          width: isDesktop ? width * 0.139 : width,
+                          child: CustomDate(
+                            dateController: _fromDateController,
+                            label: _locale.fromDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _fromDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
 
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
-                              });
-                            }
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
+              isDesktop
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomDropDown(
+                          items: charts,
+                          hint: "",
+                          label: _locale.chartType,
+                          initialValue: selectedChart,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedChart = value!;
+                            });
                           },
                         ),
-                      ),
-                      CustomDropDown(
-                        items: charts,
-                        hint: "",
-                        width: width,
-                        label: _locale.chartType,
-                        initialValue: selectedChart,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedChart = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        items: status,
-                        label: _locale.status,
-                        initialValue: selectedStatus,
-                        width: width,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedStatus = value!;
-                          });
-                        },
-                      ),
-                      CustomDropDown(
-                        width: width,
-                        items: branches,
-                        label: _locale.branch,
-                        initialValue: selectedBranch,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedBranch = value.toString();
-                            selectedBranchCode = branchesMap[value.toString()]!;
-                            print("inside filter :${selectedBranchCode}");
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-          ],
+                        CustomDropDown(
+                          //   width: width,
+                          items: branches,
+                          label: _locale.branch,
+                          initialValue: selectedBranch,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedBranch = value.toString();
+                              selectedBranchCode =
+                                  branchesMap[value.toString()]!;
+                            });
+                          },
+                        ),
+                      ],
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: height * 0.12,
+                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          child: CustomDate(
+                            dateController: _fromDateController,
+                            label: _locale.fromDate,
+                            minYear: 2000,
+                            onValue: (isValid, value) {
+                              if (isValid) {
+                                setState(() {
+                                  _fromDateController.text = value;
+                                  DateTime from =
+                                      DateTime.parse(_fromDateController.text);
+                                  DateTime to =
+                                      DateTime.parse(_toDateController.text);
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  }
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        CustomDropDown(
+                          items: charts,
+                          hint: "",
+                          width: width,
+                          label: _locale.chartType,
+                          initialValue: selectedChart,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedChart = value!;
+                            });
+                          },
+                        ),
+                        CustomDropDown(
+                          items: status,
+                          label: _locale.status,
+                          initialValue: selectedStatus,
+                          width: width,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedStatus = value!;
+                            });
+                          },
+                        ),
+                        CustomDropDown(
+                          width: width,
+                          items: branches,
+                          label: _locale.branch,
+                          initialValue: selectedBranch,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedBranch = value.toString();
+                              selectedBranchCode =
+                                  branchesMap[value.toString()]!;
+                              print("inside filter :${selectedBranchCode}");
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+            ],
+          ),
         ),
       ),
       actions: [
@@ -247,8 +252,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Components().blueButton(
-              height: width > 800 ? height * .05 : height * .06,
-              fontSize: width > 800 ? height * .016 : height * .015,
+              height: width > 800 ? height * .057 : height * .06,
+              fontSize: width > 800 ? height * .018 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
@@ -259,9 +264,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       1, _locale.startDateAfterEndDate);
                 } else {
                   widget.onFilter(
-                      // selectedPeriod,
                       DatesController().formatDate(_fromDateController.text),
-                      // DatesController().formatDate(_toDateController.text),
                       selectedStatus,
                       selectedChart,
                       selectedBranchCode);

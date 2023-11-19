@@ -104,7 +104,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
     return SingleChildScrollView(
       child: Container(
-        // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +113,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                   const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
               child: Container(
                 height: isDesktop ? height * 0.44 : height * 0.53,
-                //  width: double.infinity,
                 padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
                 decoration: BoxDecoration(
                   color: whiteColor,
@@ -141,10 +139,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 size:
                                     isDesktop ? height * 0.035 : height * 0.03,
                               ),
-                              // text: _locale.filter,
                               textColor:
                                   const Color.fromARGB(255, 255, 255, 255),
-                              //   borderRadius: 5.0,
                               height: isDesktop ? height * .01 : height * .039,
                               fontSize:
                                   isDesktop ? height * .018 : height * .017,
@@ -172,13 +168,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                             )),
                       ],
                     ),
-                    // selectedChart == _locale.barChart
-                    //     ? SizedBox(
-                    //         height: 15,
-                    //       )
-                    //     : Container(),
                     selectedChart == _locale.barChart
-                        ? CustomBarChart(data: barData)
+                        ? SizedBox(
+                            height: height * 0.4,
+                            child: CustomBarChart(
+                              data: barData,
+                            ),
+                          )
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(

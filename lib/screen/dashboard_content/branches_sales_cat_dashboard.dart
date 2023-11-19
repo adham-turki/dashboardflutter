@@ -155,7 +155,6 @@ class _BranchesSalesByCatDashboardState
     isDesktop = Responsive.isDesktop(context);
     return SingleChildScrollView(
       child: Container(
-        // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -164,15 +163,10 @@ class _BranchesSalesByCatDashboardState
               padding:
                   const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
               child: Container(
-                // width: width * 0.7,
-                // height: isDesktop ? height * 0.6 : height * 0.6,
-                // decoration: borderDecoration,
                 height: isDesktop ? height * 0.48 : height * 0.56,
-
                 width: double.infinity,
                 padding:
                     const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-
                 decoration: BoxDecoration(
                   color: whiteColor,
                   borderRadius: BorderRadius.circular(10),
@@ -202,10 +196,8 @@ class _BranchesSalesByCatDashboardState
                                       ? height * 0.035
                                       : height * 0.03,
                                 ),
-                                // text: _locale.filter,
                                 textColor:
                                     const Color.fromARGB(255, 255, 255, 255),
-                                //   borderRadius: 5.0,
                                 height:
                                     isDesktop ? height * .015 : height * .03,
                                 fontSize:
@@ -235,7 +227,6 @@ class _BranchesSalesByCatDashboardState
                                     },
                                   ).then((value) async {
                                     getBranchByCat().then((value) {
-                                      print("llllllllllllllllllllllllllll");
                                       setState(() {});
                                     });
                                   });
@@ -265,7 +256,6 @@ class _BranchesSalesByCatDashboardState
                                 ),
                               )
                             : CustomBarChart(
-                                // data: barData,
                                 data: barData,
                               )
                   ],
@@ -277,23 +267,6 @@ class _BranchesSalesByCatDashboardState
       ),
     );
   }
-
-  // Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
-  //   if (usedColors.length == colorList.length) {
-  //     // If all colors have been used, clear the used colors list
-  //     usedColors.clear();
-  //   }
-
-  //   final random = Random();
-  //   Color color;
-  //   do {
-  //     final index = random.nextInt(colorList.length);
-  //     color = colorList[index];
-  //   } while (usedColors.contains(color));
-
-  //   usedColors.add(color);
-  //   return color;
-  // }
 
   Color getRandomColor(List<Color> colorList) {
     final random = Random();
@@ -370,7 +343,6 @@ class _BranchesSalesByCatDashboardState
                 color: getRandomColor(colorNewList),
               ),
             );
-            print("bardata 1111111111111111 :${barData.length}");
             barData.add(
               BarData(
                 name: element.categoryName!.isNotEmpty
@@ -379,12 +351,8 @@ class _BranchesSalesByCatDashboardState
                 percent: formatDoubleToTwoDecimalPlaces(bal),
               ),
             );
-            print("bardata 22222222222222222222 :${barData.length}");
           }
-
-          print("bardata Length :${barData.length}");
         }
-        print("33333333333333333");
       });
     }
   }
@@ -417,17 +385,12 @@ class _BranchesSalesByCatDashboardState
     listOfBalances = [];
     listOfPeriods = [];
 
-    // print("ddddddddddd");
     await salesCategoryController
         .getSalesByCategory(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {
-        // creditAmt - debitAmt
         double bal = element.creditAmt! - element.debitAmt!;
 
-        // // Generate a random color
-        // Color randomColor = getRandomColor(
-        //     colorNewList, usedColors); // Use the getRandomColor function
         if (bal != 0.0) {
           temp = true;
         } else if (bal == 0.0) {
@@ -444,7 +407,6 @@ class _BranchesSalesByCatDashboardState
                   : element.categoryName!,
               value: formatDoubleToTwoDecimalPlaces(bal),
               color: getRandomColor(colorNewList))); // Set random color
-          // print("asdasd: ${pieData.length}");
         }
 
         barData.add(
@@ -453,10 +415,8 @@ class _BranchesSalesByCatDashboardState
                 ? _locale.general
                 : element.categoryName!,
             percent: bal,
-          ), // Set random color
+          ),
         );
-
-        print("bardata Length :${barData.length}");
       }
     });
   }

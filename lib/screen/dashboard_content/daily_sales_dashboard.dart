@@ -11,7 +11,6 @@ import '../../components/charts.dart';
 import '../../components/charts/pie_chart_dashboard.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
-import '../../model/sales_adminstration/daily_sales_model.dart';
 import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
@@ -32,7 +31,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   double height = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   bool isDesktop = false;
-  //final TextEditingController _fromDateController = TextEditingController();
   final storage = const FlutterSecureStorage();
   DailySalesController dailySalesController = DailySalesController();
   late AppLocalizations _locale;
@@ -123,10 +121,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     isDesktop = Responsive.isDesktop(context);
     return SingleChildScrollView(
       child: Container(
-        // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
               padding:
@@ -143,6 +140,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           _locale.dailySales,
@@ -163,9 +161,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                       ? height * 0.035
                                       : height * 0.03,
                                 ),
-                                // text: _locale.filter,
                                 textColor: Color.fromARGB(255, 255, 255, 255),
-                                //   borderRadius: 5.0,
                                 height:
                                     isDesktop ? height * .015 : height * .039,
                                 fontSize:

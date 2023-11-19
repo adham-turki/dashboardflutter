@@ -42,12 +42,10 @@ class _FilterDialogSalesByCategoryState
   String currentMonth = "";
   List<String> periods = [];
   var selectedPeriod = "";
-  // List<String> status = [];
   List<String> categories = [];
   List<String> charts = [];
   var selectedChart = "";
 
-  // var selectedStatus = "";
   var selectedCategories = "";
   var selectedBranchCode = "";
   List<String> branches = [];
@@ -101,11 +99,12 @@ class _FilterDialogSalesByCategoryState
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
+      contentPadding: EdgeInsets.zero,
       // title: SelectableText(_locale.filter),
-      content: SingleChildScrollView(
-        child: SizedBox(
-          width: isDesktop ? width * 0.5 : width * 0.7,
-          height: isDesktop ? height * 0.35 : null,
+      content: SizedBox(
+        width: isDesktop ? width * 0.5 : width * 0.7,
+        height: isDesktop ? height * 0.35 : null,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               isDesktop
@@ -179,7 +178,6 @@ class _FilterDialogSalesByCategoryState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _fromDateController,
@@ -207,7 +205,6 @@ class _FilterDialogSalesByCategoryState
                           width: width * 0.01,
                         ),
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _toDateController,
@@ -232,7 +229,6 @@ class _FilterDialogSalesByCategoryState
                           ),
                         ),
                         CustomDropDown(
-                          //   width: width,
                           items: branches,
                           label: _locale.branch,
                           initialValue: selectedBranch,
@@ -241,8 +237,6 @@ class _FilterDialogSalesByCategoryState
                               selectedBranch = value.toString();
                               selectedBranchCode =
                                   branchesMap[value.toString()]!;
-                              print(
-                                  "selectedBranchCode: ${selectedBranchCode}");
                             });
                           },
                         ),
@@ -276,16 +270,6 @@ class _FilterDialogSalesByCategoryState
                             },
                           ),
                         ),
-                        // CustomDatePicker(
-                        //   label: _locale.fromDate,
-                        //   date: DateTime.parse(_toDateController.text),
-                        //   controller: _fromDateController,
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _fromDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                         SizedBox(
                           height: height * 0.12,
                           width: isDesktop ? width * 0.135 : width * 0.9,
@@ -336,17 +320,6 @@ class _FilterDialogSalesByCategoryState
                             });
                           },
                         ),
-
-                        // CustomDatePicker(
-                        //   label: _locale.toDate,
-                        //   controller: _toDateController,
-                        //   date: DateTime.parse(_fromDateController.text),
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _toDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     ),
             ],
@@ -358,8 +331,8 @@ class _FilterDialogSalesByCategoryState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Components().blueButton(
-              height: width > 800 ? height * .05 : height * .06,
-              fontSize: width > 800 ? height * .016 : height * .015,
+              height: width > 800 ? height * .054 : height * .06,
+              fontSize: width > 800 ? height * .0158 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
