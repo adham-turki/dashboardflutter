@@ -83,7 +83,6 @@ class _FilterDialogSalesByBranchesState
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
-      // title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.37 : width * 0.7,
         height: isDesktop ? height * 0.35 : height * 0.55,
@@ -116,16 +115,6 @@ class _FilterDialogSalesByBranchesState
                             });
                           },
                         ),
-                        // CustomDropDown(
-                        //   items: status,
-                        //   label: _locale.status,
-                        //   initialValue: selectedStatus,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       selectedStatus = value!;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     )
                   : Column(
@@ -155,17 +144,6 @@ class _FilterDialogSalesByBranchesState
                             });
                           },
                         ),
-                        // CustomDropDown(
-                        //   items: status,
-                        //   label: _locale.status,
-                        //   initialValue: selectedStatus,
-                        //   width: width,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       selectedStatus = value!;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     ),
               isDesktop
@@ -173,19 +151,16 @@ class _FilterDialogSalesByBranchesState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,
                             minYear: 2000,
                             onValue: (isValid, value) {
-                              print("frommmmmmmmmmmm: ${_fromDateController}");
                               if (isValid) {
                                 setState(() {
                                   _fromDateController.text = value;
-                                  print(
-                                      "frommmmmmmmmmmm: ${_fromDateController}");
+
                                   DateTime from =
                                       DateTime.parse(_fromDateController.text);
                                   DateTime to =
@@ -203,14 +178,11 @@ class _FilterDialogSalesByBranchesState
                         SizedBox(
                           width: width * 0.01,
                         ),
-
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _toDateController,
                             label: _locale.toDate,
-                            // minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {
                                 setState(() {
@@ -229,29 +201,6 @@ class _FilterDialogSalesByBranchesState
                             },
                           ),
                         ),
-                        // CustomDropDown(
-                        //   items: charts,
-                        //   hint: "",
-                        //   width: width,
-                        //   label: _locale.chartType,
-                        //   initialValue: selectedChart,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       selectedChart = value!;
-                        //     });
-                        //   },
-                        // ),
-
-                        // CustomDatePicker(
-                        //   label: _locale.toDate,
-                        //   controller: _toDateController,
-                        //   date: DateTime.parse(_fromDateController.text),
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _toDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     )
                   : Column(
@@ -283,16 +232,6 @@ class _FilterDialogSalesByBranchesState
                             },
                           ),
                         ),
-                        // CustomDatePicker(
-                        //   label: _locale.fromDate,
-                        //   date: DateTime.parse(_toDateController.text),
-                        //   controller: _fromDateController,
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _fromDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                         SizedBox(
                           height: height * 0.12,
                           width: isDesktop ? width * 0.135 : width * 0.9,

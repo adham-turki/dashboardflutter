@@ -28,7 +28,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   double height = 0;
   double width = 0;
-  // final _keyForm = GlobalKey<FormState>();
   TextEditingController userController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController aliasName = TextEditingController();
@@ -107,18 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                         onPressed: () {
                           validateLogin(context);
-
-                          // if (_keyForm.currentState!.validate()) {
-                          //   print("object 22");
-                          //   _savingData().then((value) {
-                          //     print("object 33");
-                          //   });
-                          // }
-                          // Navigator.push(context, MaterialPageRoute(
-                          //   builder: (context) {
-                          //     return const HomePage();
-                          //   },
-                          // ));
                         },
                       ),
                     ],
@@ -173,15 +160,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Future<void> _savingData() async {
-  //   final validation = _keyForm.currentState!.validate();
-  //   if (validation) {
-  //     _keyForm.currentState!.save();
-  //   } else {
-  //     return;
-  //   }
-  // }
-
   Future loadApi() async {
     await rootBundle
         .loadString("assets/centralApi/central_api.properties")
@@ -191,32 +169,13 @@ class _LoginScreenState extends State<LoginScreen> {
           .getApi(url, aliasName.text, _locale)
           .then((value) async {
         if (value.isEmpty) {
-          // Navigator.pop(context); // for Circular
-          // ErrorController.openErrorDialog(406, _locale.wrongAliasName);
         } else {
           const storage = FlutterSecureStorage();
 
-          // String? valueAPI = await storage.read(key: 'api');
-          // print("STORAGE API 1: ${valueAPI}");
           storage.write(key: 'api', value: value).then((value) async {
-            // valueAPI = await storage.read(key: 'api');
-            // print("STORAGE API 2: ${valueAPI}");
             checkLogIn().then((value) {
               if (value) {
-                // if (kIsWeb) {
-                //   GoRouter.of(context).go(AppRoutes.homeScreenRoute);
-                // } else {
-                // Navigator.pushReplacementNamed(context, mainScreenRoute);
                 GoRouter.of(context).go(AppRoutes.homeScreenRoute);
-                // }
-                // Navigator.pop(context); // for Circular
-
-                // Navigator.pushReplacementNamed(context, mainScreenRoute);
-                // Navigator.push(context, MaterialPageRoute(
-                //   builder: (context) {
-                //     return const HomePage();
-                //   },
-                // ));
               }
             });
           });
@@ -255,18 +214,6 @@ class _LoginScreenState extends State<LoginScreen> {
             },
             onPressed: () {
               validateLogin(context);
-
-              // if (_keyForm.currentState!.validate()) {
-              //   print("object 22");
-              //   _savingData().then((value) {
-              //     print("object 33");
-              //   });
-              // }
-              // Navigator.push(context, MaterialPageRoute(
-              //   builder: (context) {
-              //     return const HomePage();
-              //   },
-              // ));
             },
           ),
         ],

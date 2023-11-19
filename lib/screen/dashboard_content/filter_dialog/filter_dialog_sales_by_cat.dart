@@ -42,12 +42,10 @@ class _FilterDialogSalesByCategoryState
   String currentMonth = "";
   List<String> periods = [];
   var selectedPeriod = "";
-  // List<String> status = [];
   List<String> categories = [];
   List<String> charts = [];
   var selectedChart = "";
 
-  // var selectedStatus = "";
   var selectedCategories = "";
   var selectedBranchCode = "";
   List<String> branches = [];
@@ -179,7 +177,6 @@ class _FilterDialogSalesByCategoryState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _fromDateController,
@@ -207,7 +204,6 @@ class _FilterDialogSalesByCategoryState
                           width: width * 0.01,
                         ),
                         SizedBox(
-                          // height: height * 0.1,
                           width: isDesktop ? width * 0.135 : width * 0.9,
                           child: CustomDate(
                             dateController: _toDateController,
@@ -232,7 +228,6 @@ class _FilterDialogSalesByCategoryState
                           ),
                         ),
                         CustomDropDown(
-                          //   width: width,
                           items: branches,
                           label: _locale.branch,
                           initialValue: selectedBranch,
@@ -241,8 +236,6 @@ class _FilterDialogSalesByCategoryState
                               selectedBranch = value.toString();
                               selectedBranchCode =
                                   branchesMap[value.toString()]!;
-                              print(
-                                  "selectedBranchCode: ${selectedBranchCode}");
                             });
                           },
                         ),
@@ -276,16 +269,6 @@ class _FilterDialogSalesByCategoryState
                             },
                           ),
                         ),
-                        // CustomDatePicker(
-                        //   label: _locale.fromDate,
-                        //   date: DateTime.parse(_toDateController.text),
-                        //   controller: _fromDateController,
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _fromDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                         SizedBox(
                           height: height * 0.12,
                           width: isDesktop ? width * 0.135 : width * 0.9,
@@ -336,17 +319,6 @@ class _FilterDialogSalesByCategoryState
                             });
                           },
                         ),
-
-                        // CustomDatePicker(
-                        //   label: _locale.toDate,
-                        //   controller: _toDateController,
-                        //   date: DateTime.parse(_fromDateController.text),
-                        //   onSelected: (value) {
-                        //     setState(() {
-                        //       _toDateController.text = value;
-                        //     });
-                        //   },
-                        // ),
                       ],
                     ),
             ],

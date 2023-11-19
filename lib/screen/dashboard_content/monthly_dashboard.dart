@@ -5,7 +5,6 @@ import '../../../model/bar_chart_data_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
-
 import '../../controller/receivable_management/rec_pay_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../model/settings/setup/bi_account_model.dart';
@@ -118,7 +117,6 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
     isDesktop = Responsive.isDesktop(context);
     return SingleChildScrollView(
       child: Container(
-        // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -126,11 +124,7 @@ class _MonthlyDashboardState extends State<MonthlyDashboard> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                // width: width * 0.7,
-                // height: isDesktop ? height * 0.6 : height * 0.6,
-                // decoration: borderDecoration,
                 height: isDesktop ? height * 0.7 : height * 1.2,
-
                 width: double.infinity,
                 padding: const EdgeInsets.all(appPadding),
                 decoration: BoxDecoration(

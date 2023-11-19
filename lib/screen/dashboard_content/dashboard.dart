@@ -29,7 +29,6 @@ class _DashboardContentState extends State<DashboardContent> {
   var status = "";
   String todayDate = "";
 
-  // List<BarData> barData = [];
   List<PieChartModel> pieData = [];
   List<BarData> barDataCashFlows = [];
   List<PieChartModel> barDataDailySales = [];
@@ -51,7 +50,6 @@ class _DashboardContentState extends State<DashboardContent> {
     super.didChangeDependencies();
   }
 
-  //
   @override
   Widget build(BuildContext context) {
     bool isDesktop = Responsive.isDesktop(context);
@@ -61,9 +59,6 @@ class _DashboardContentState extends State<DashboardContent> {
     return SafeArea(
       child: Column(
         children: [
-          // Responsive.isDesktop(context)
-          //     ? cardsDesktopView()
-          //     : cardsMobileView(),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -71,9 +66,6 @@ class _DashboardContentState extends State<DashboardContent> {
                 flex: 5,
                 child: Column(
                   children: [
-                    // const SizedBox(
-                    //   height: appPadding,
-                    // ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -83,26 +75,15 @@ class _DashboardContentState extends State<DashboardContent> {
                             child: BalanceBarChartDashboard(),
                           ),
                         if (!Responsive.isMobile(context))
-                          // const SizedBox(
-                          //   width: appPadding,
-                          // ),
                           Expanded(
                             flex: 2,
                             child: DailySalesDashboard(),
                           ),
                       ],
                     ),
-                    // const SizedBox(
-                    //   height: appPadding,
-                    // ),
                     if (Responsive.isMobile(context))
                       BalanceBarChartDashboard(),
-
                     if (Responsive.isMobile(context)) DailySalesDashboard(),
-                    // if (Responsive.isMobile(context))
-                    //   const SizedBox(
-                    //     height: appPadding,
-                    //   ),
                   ],
                 ),
               ),
@@ -115,18 +96,12 @@ class _DashboardContentState extends State<DashboardContent> {
                 flex: 5,
                 child: Column(
                   children: [
-                    // const SizedBox(
-                    //   height: 8,
-                    // ),
                     BranchesSalesByCatDashboard(),
                   ],
                 ),
               ),
             ],
           ),
-          // const SizedBox(
-          //   height: 10,
-          // ),
         ],
       ),
     );
@@ -143,7 +118,7 @@ class _DashboardContentState extends State<DashboardContent> {
               .toString(),
           subtitle: '',
           label: locale.totalSales,
-          icon: Icons.attach_money, // Provide the actual path to the icon
+          icon: Icons.attach_money,
         ),
         const SizedBox(
           height: 10,
@@ -155,8 +130,7 @@ class _DashboardContentState extends State<DashboardContent> {
               .toString(),
           subtitle: '',
           label: locale.totalReturnSal,
-          icon: Icons
-              .assignment_return_outlined, // Provide the actual path to the icon
+          icon: Icons.assignment_return_outlined,
         ),
         const SizedBox(
           height: 10,
@@ -171,7 +145,7 @@ class _DashboardContentState extends State<DashboardContent> {
               .toString(),
           subtitle: '',
           label: locale.numOfCustomers,
-          icon: Icons.bar_chart, // Provide the actual path to the icon
+          icon: Icons.bar_chart,
         ),
       ],
     );
@@ -179,7 +153,6 @@ class _DashboardContentState extends State<DashboardContent> {
 
   Row cardsDesktopView() {
     return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         CustomCard(
           gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
@@ -188,7 +161,7 @@ class _DashboardContentState extends State<DashboardContent> {
               .toString(),
           subtitle: '',
           label: locale.totalSales,
-          icon: Icons.attach_money, // Provide the actual path to the icon
+          icon: Icons.attach_money,
         ),
         const SizedBox(
           width: 10,
@@ -213,51 +186,9 @@ class _DashboardContentState extends State<DashboardContent> {
               .toString(),
           subtitle: '',
           label: locale.numOfCustomers,
-          icon: Icons.bar_chart, // Provide the actual path to the icon
+          icon: Icons.bar_chart,
         ),
       ],
     );
   }
-
-  // Row cardsDesktopView() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //     children: [
-  //       CustomCard(
-  //         gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
-  //         title: Converters.formatNumber(
-  //                 vouchHeaderTransietModel.paidSales.toDouble())
-  //             .toString(),
-  //         subtitle: '',
-  //         label: locale.totalSales,
-  //         icon: Icons.attach_money, // Provide the actual path to the icon
-  //       ),
-  //       const SizedBox(
-  //         width: 10,
-  //       ),
-  //       CustomCard(
-  //         gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
-  //         title: Converters.formatNumber(
-  //                 vouchHeaderTransietModel.returnSales.toDouble())
-  //             .toString(),
-  //         subtitle: '',
-  //         label: locale.totalReturnSal,
-  //         icon: Icons
-  //             .assignment_return_outlined, // Provide the actual path to the icon
-  //       ),
-  //       const SizedBox(
-  //         width: 10,
-  //       ),
-  //       CustomCard(
-  //         gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
-  //         title: Converters.formatNumber(
-  //                 vouchHeaderTransietModel.numOfCustomers.toDouble())
-  //             .toString(),
-  //         subtitle: '',
-  //         label: locale.numOfCustomers,
-  //         icon: Icons.bar_chart, // Provide the actual path to the icon
-  //       ),
-  //     ],
-  //   );
-  // }
 }

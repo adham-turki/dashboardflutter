@@ -169,9 +169,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             });
                           },
                         ),
-                        // SizedBox(
-                        //   width: width * 0.01,
-                        // ),
                       ],
                     )
                   : Column(
@@ -262,9 +259,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       1, _locale.startDateAfterEndDate);
                 } else {
                   widget.onFilter(
-                      // selectedPeriod,
                       DatesController().formatDate(_fromDateController.text),
-                      // DatesController().formatDate(_toDateController.text),
                       selectedStatus,
                       selectedChart,
                       selectedBranchCode);
