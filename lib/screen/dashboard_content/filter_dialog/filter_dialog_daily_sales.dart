@@ -96,7 +96,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
-        height: isDesktop ? height * 0.29 : height * 0.55,
+        height: isDesktop ? height * 0.32 : height * 0.55,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
