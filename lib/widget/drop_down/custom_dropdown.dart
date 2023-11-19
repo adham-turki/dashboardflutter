@@ -50,8 +50,10 @@ class _CustomDropDownState extends State<CustomDropDown> {
     bool showSearchBox = widget.showSearchBox ?? false;
     return Padding(
       key: customKey,
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: padding),
+      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           label.isNotEmpty
               ? CustomLabel(

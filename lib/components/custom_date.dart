@@ -120,6 +120,8 @@ class _CustomDateState extends State<CustomDate> {
     return SizedBox(
       width: width * 0.163,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Consumer<DatesProvider>(
             builder: (context, value, child) {

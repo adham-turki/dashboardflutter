@@ -93,14 +93,18 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
+      contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
-        height: isDesktop ? height * 0.35 : height * 0.55,
+        height: isDesktop ? height * 0.365 : height * 0.55,
         child: SingleChildScrollView(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               isDesktop
                   ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomDropDown(
@@ -144,6 +148,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
               isDesktop
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDropDown(
                           items: charts,
@@ -247,8 +252,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Components().blueButton(
-              height: width > 800 ? height * .054 : height * .06,
-              fontSize: width > 800 ? height * .0158 : height * .015,
+              height: width > 800 ? height * .057 : height * .06,
+              fontSize: width > 800 ? height * .018 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
