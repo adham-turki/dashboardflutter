@@ -96,7 +96,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.35 : width * 0.75,
-        height: isDesktop ? height * 0.365 : height * 0.55,
+        height: isDesktop ? height * 0.35 : height * 0.55,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -119,7 +119,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                         ),
                         SizedBox(
                           // height: height * 0.1,
-                          width: isDesktop ? width * 0.135 : width,
+                          width: isDesktop ? width * 0.139 : width,
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,

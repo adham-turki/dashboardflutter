@@ -86,7 +86,7 @@ class _FilterDialogSalesByBranchesState
       contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.37 : width * 0.7,
-        height: isDesktop ? height * 0.365 : height * 0.55,
+        height: isDesktop ? height * 0.35 : height * 0.55,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -152,7 +152,7 @@ class _FilterDialogSalesByBranchesState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SizedBox(
-                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          width: isDesktop ? width * 0.139 : width * 0.9,
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,
@@ -180,7 +180,7 @@ class _FilterDialogSalesByBranchesState
                           width: width * 0.01,
                         ),
                         SizedBox(
-                          width: isDesktop ? width * 0.135 : width * 0.9,
+                          width: isDesktop ? width * 0.139 : width * 0.9,
                           child: CustomDate(
                             dateController: _toDateController,
                             label: _locale.toDate,
