@@ -118,7 +118,7 @@ class _CustomDateState extends State<CustomDate> {
     }
 
     return SizedBox(
-      width: width * 0.163,
+      width: width * 0.165,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

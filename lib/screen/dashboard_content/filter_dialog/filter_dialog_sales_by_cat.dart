@@ -102,8 +102,8 @@ class _FilterDialogSalesByCategoryState
       contentPadding: EdgeInsets.zero,
       // title: SelectableText(_locale.filter),
       content: SizedBox(
-        width: isDesktop ? width * 0.5 : width * 0.7,
-        height: isDesktop ? height * 0.29 : null,
+        width: isDesktop ? width * 0.55 : width * 0.7,
+        height: isDesktop ? height * 0.37 : null,
         child: SingleChildScrollView(
           child: Column(
             children: [
