@@ -178,7 +178,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                     //       )
                     //     : Container(),
                     selectedChart == _locale.barChart
-                        ? CustomBarChart(data: barData)
+                        ? SizedBox(
+                            height: height * 0.4,
+                            child: CustomBarChart(
+                              data: barData,
+                            ),
+                          )
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(

@@ -126,7 +126,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         // height: height * 1.7,
         decoration: const BoxDecoration(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
               padding:
@@ -143,6 +143,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           _locale.dailySales,

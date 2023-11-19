@@ -102,10 +102,10 @@ class _FilterDialogSalesByCategoryState
     isDesktop = Responsive.isDesktop(context);
     return AlertDialog(
       // title: SelectableText(_locale.filter),
-      content: SingleChildScrollView(
-        child: SizedBox(
-          width: isDesktop ? width * 0.5 : width * 0.7,
-          height: isDesktop ? height * 0.35 : null,
+      content: SizedBox(
+        width: isDesktop ? width * 0.5 : width * 0.7,
+        height: isDesktop ? height * 0.35 : null,
+        child: SingleChildScrollView(
           child: Column(
             children: [
               isDesktop
@@ -358,8 +358,8 @@ class _FilterDialogSalesByCategoryState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Components().blueButton(
-              height: width > 800 ? height * .05 : height * .06,
-              fontSize: width > 800 ? height * .016 : height * .015,
+              height: width > 800 ? height * .054 : height * .06,
+              fontSize: width > 800 ? height * .0158 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
                 DateTime from = DateTime.parse(_fromDateController.text);
