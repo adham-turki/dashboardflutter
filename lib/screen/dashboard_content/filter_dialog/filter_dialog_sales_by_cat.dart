@@ -103,7 +103,7 @@ class _FilterDialogSalesByCategoryState
       // title: SelectableText(_locale.filter),
       content: SizedBox(
         width: isDesktop ? width * 0.5 : width * 0.7,
-        height: isDesktop ? height * 0.35 : null,
+        height: isDesktop ? height * 0.29 : null,
         child: SingleChildScrollView(
           child: Column(
             children: [

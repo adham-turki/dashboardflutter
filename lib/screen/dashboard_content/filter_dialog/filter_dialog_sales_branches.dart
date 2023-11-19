@@ -86,7 +86,7 @@ class _FilterDialogSalesByBranchesState
       contentPadding: EdgeInsets.zero,
       content: SizedBox(
         width: isDesktop ? width * 0.37 : width * 0.7,
-        height: isDesktop ? height * 0.35 : height * 0.55,
+        height: isDesktop ? height * 0.29 : height * 0.55,
         child: SingleChildScrollView(
           child: Column(
             children: [
