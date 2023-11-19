@@ -34,6 +34,22 @@ class SearchCriteria {
     return searchCriteria;
   }
 
+  factory SearchCriteria.fromJson(Map<String, dynamic> json) {
+    return SearchCriteria(
+      fromDate: json['fromDate'],
+      toDate: json['toDate'],
+      voucherStatus: json['voucherStatus'],
+      rownum: json['rownum'],
+      byCategory: json['byCategory'],
+      branch: json['branch'],
+      page: json['page'],
+      columns:
+          json['columns'] != null ? List<String>.from(json['columns']) : null,
+      customColumns: json['customColumns'] != null
+          ? List<String>.from(json['customColumns'])
+          : null,
+    );
+  }
   Map<String, dynamic> noToDatetoJson() {
     final Map<String, dynamic> searchCriteria = <String, dynamic>{};
 

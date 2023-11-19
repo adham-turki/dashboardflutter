@@ -1,15 +1,23 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:bi_replicate/components/charts/pie_chart.dart';
 import 'package:bi_replicate/controller/error_controller.dart';
+import 'package:bi_replicate/controller/settings/user_settings/user_report_settings_controller.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
+import 'package:bi_replicate/model/settings/user_settings/code_reports_model.dart';
+import 'package:bi_replicate/model/settings/user_settings/user_report_settings.dart';
+import 'package:bi_replicate/utils/constants/api_constants.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:uuid/uuid.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
+import '../../../controller/settings/user_settings/code_reports_controller.dart';
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/pages_constants.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -57,11 +65,17 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   var selectedChart = "";
   List<BarChartData> barData = [];
   List<PieChartModel> pieData = [];
+  String txtKey = "";
 
   bool isDesktop = false;
   List<Color> usedColors = [];
   String fromDate = "";
   String toDate = "";
+  List<CodeReportsModel> codeReportsList = [];
+  List<UserReportSettingsModel> userReportSettingsList = [];
+  String startSearchCriteria = "";
+  String currentPageName = "";
+  String currentPageCode = "";
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
@@ -78,14 +92,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-
-    getSalesByBranch(isStart: true);
+    getAllCodeReports();
+    print("currentPageCode:::: ${currentPageCode}");
 
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
+    // setSearchCriteria();
     super.initState();
   }
 
@@ -180,6 +195,19 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         }
       });
     } else {
+      // Map<String, dynamic> dataMap = json.decode('{$startSearchCriteria}');
+      // SearchCriteria searchCriteria1 = SearchCriteria(
+      //   fromDate: dataMap['fromDate'],
+      //   toDate: dataMap['toDate'],
+      //   voucherStatus: dataMap['voucherStatus'],
+      //   rownum: dataMap['rownum'],
+      //   byCategory: dataMap['byCategory'],
+      //   branch: dataMap['branch'],
+      //   page: dataMap['page'],
+      // );
+      // print("searchCriteria1: ${searchCriteria1.toJson()}");
+      print("criiiiiiiiiiiiiiiiter: ${startSearchCriteria}");
+
       SearchCriteria searchCriteria = SearchCriteria(
           fromDate: DatesController().formatDate(
               _fromDateController.text.isEmpty
@@ -189,6 +217,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               ? todayDate
               : _toDateController.text),
           voucherStatus: -100);
+      setSearchCriteria(searchCriteria);
       pieData = [];
       dataMap.clear();
       barData = [];
@@ -354,6 +383,51 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     );
   }
 
+  getAllUserReportSettings() {
+    UserReportSettingsController().getAllUserReportSettings().then((value) {
+      setState(() {
+        userReportSettingsList = value;
+        setStartSearchCriteria();
+        getSalesByBranch(isStart: true);
+      });
+    });
+  }
+
+  setStartSearchCriteria() {
+    for (var i = 0; i < userReportSettingsList.length; i++) {
+      if (currentPageCode == userReportSettingsList[i].txtReportcode) {
+        txtKey = userReportSettingsList[i].txtKey;
+        startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
+        print("startSearchCriteriastartSearchCriteria: ${startSearchCriteria}");
+      }
+    }
+  }
+
+  getAllCodeReports() {
+    CodeReportsController().getAllCodeReports().then((value) {
+      setState(() {
+        codeReportsList = value;
+        setPageName();
+        getAllUserReportSettings();
+
+        print("codeReportsList Length: ${codeReportsList.length}");
+      });
+    });
+  }
+
+  setPageName() {
+    for (var i = 0; i < codeReportsList.length; i++) {
+      if (codeReportsList[i].txtReportnamee ==
+          ReportConstants.salesByBranches) {
+        setState(() {
+          currentPageName = codeReportsList[i].txtReportnamee;
+          currentPageCode = codeReportsList[i].txtReportcode;
+          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
+        });
+      }
+    }
+  }
+
   Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
     if (usedColors.length == colorList.length) {
       // If all colors have been used, clear the used colors list
@@ -475,5 +549,60 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         ),
       ],
     );
+  }
+
+  String createUuid() {
+    var uuid = const Uuid();
+    return uuid.v4();
+  }
+
+  void setSearchCriteria(SearchCriteria searchCriteria) {
+    print("currentPageCode: ${currentPageCode}");
+    UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
+        txtKey: txtKey,
+        txtReportcode: currentPageCode,
+        txtUsercode: "",
+        // txtJsoncrit: json.encode(searchCriteria.toJson()),
+        txtJsoncrit: searchCriteria.toJson().toString(),
+        bolAutosave: 1);
+    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
+    // print(
+    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
+    // Map<String, dynamic> toJson = parseStringToJson(
+    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
+    //         .txtJsoncrit);
+    // print(toJson.toString());
+    // print(
+    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
+
+    UserReportSettingsController()
+        .editUserReportSettings(userReportSettingsModel)
+        .then((value) {
+      if (value.statusCode == 200) {
+        print("value.statusCode: ${value.statusCode}");
+      }
+    });
+  }
+
+  Map<String, dynamic> parseStringToJson(String jsonString) {
+    // Replace the symbols to make it valid JSON
+    jsonString = jsonString
+        .replaceAll("'", '"')
+        .replaceAll('null', 'null')
+        .replaceAll('true', 'true')
+        .replaceAll('false', 'false')
+        .replaceAllMapped(
+          RegExp(r'(\b\d{2}-\d{2}-\d{4}\b)'),
+          (match) => '"${match.group(0)}"',
+        );
+
+    // Add double quotes around keys
+    jsonString = jsonString.replaceAllMapped(
+      RegExp(r'(\b\w+\b)(?=:)', caseSensitive: false),
+      (match) => '"${match.group(0)}"',
+    );
+
+    // Parse the string into a Map
+    return json.decode('{$jsonString}');
   }
 }
