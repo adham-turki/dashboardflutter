@@ -55,3 +55,13 @@ const addPermit = "userPermit/add";
 const updatePermit = "userPermit/update";
 const deletePermit = "userPermit/delete";
 const getPermitByUser = "userPermit/reportByUserPermit";
+// userReportSettings
+const getUserReportSettings = "userReportSettings/getAll";
+const addUserReportSettings = "userReportSettings/insert";
+const updateUserReportSettings = "userReportSettings/update";
+const deleteUserReportSettings = "userReportSettings/delete";
+// reportCodes
+const getReportCodes = "reportCodes/getAll";
+const addReportCodes = "reportCodes/add";
+const updateReportCodes = "reportCodes/update";
+const deleteReportCodes = "reportCodes/delete";
