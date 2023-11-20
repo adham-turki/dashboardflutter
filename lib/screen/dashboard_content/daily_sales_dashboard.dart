@@ -136,7 +136,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,54 +146,49 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                           _locale.dailySales,
                           style: TextStyle(fontSize: isDesktop ? 15 : 18),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0.0, vertical: 0),
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width < 800
-                                  ? MediaQuery.of(context).size.width * 0.06
-                                  : MediaQuery.of(context).size.width * 0.03,
-                              child: blueButton1(
-                                icon: Icon(
-                                  Icons.filter_list_sharp,
-                                  color: whiteColor,
-                                  size: isDesktop
-                                      ? height * 0.035
-                                      : height * 0.03,
-                                ),
-                                textColor: Color.fromARGB(255, 255, 255, 255),
-                                height:
-                                    isDesktop ? height * .015 : height * .039,
-                                fontSize:
-                                    isDesktop ? height * .018 : height * .017,
-                                width: isDesktop ? width * 0.13 : width * 0.27,
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return FilterDialogDailySales(
-                                        onFilter: (
-                                          fromDate,
-                                          selectedStatus,
-                                          chart,
-                                          selectedBranchCodeF,
-                                        ) {
-                                          fromDateController.text = fromDate;
-                                          statusVar = selectedStatus;
-                                          selectedChart = chart;
-                                          selectedBranchCode =
-                                              selectedBranchCodeF;
-                                        },
-                                      );
-                                    },
-                                  ).then((value) async {
-                                    getDailySales().then((value) {
-                                      setState(() {});
-                                    });
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width < 800
+                                ? MediaQuery.of(context).size.width * 0.06
+                                : MediaQuery.of(context).size.width * 0.03,
+                            child: blueButton1(
+                              icon: Icon(
+                                Icons.filter_list_sharp,
+                                color: whiteColor,
+                                size:
+                                    isDesktop ? height * 0.035 : height * 0.03,
+                              ),
+                              textColor:
+                                  const Color.fromARGB(255, 255, 255, 255),
+                              height: isDesktop ? height * .01 : height * .039,
+                              fontSize:
+                                  isDesktop ? height * .018 : height * .017,
+                              width: isDesktop ? width * 0.08 : width * 0.27,
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FilterDialogDailySales(
+                                      onFilter: (
+                                        fromDate,
+                                        selectedStatus,
+                                        chart,
+                                        selectedBranchCodeF,
+                                      ) {
+                                        fromDateController.text = fromDate;
+                                        statusVar = selectedStatus;
+                                        selectedChart = chart;
+                                        selectedBranchCode =
+                                            selectedBranchCodeF;
+                                      },
+                                    );
+                                  },
+                                ).then((value) async {
+                                  getDailySales().then((value) {
+                                    setState(() {});
                                   });
-                                },
-                              )),
-                        ),
+                                });
+                              },
+                            )),
                       ],
                     ),
                     selectedChart == _locale.lineChart
@@ -220,7 +215,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 ),
                               )
                             : SizedBox(
-                                height: height * 0.4,
+                                height: height * 0.39,
                                 child: CustomBarChart(
                                   data: barData,
                                 ),

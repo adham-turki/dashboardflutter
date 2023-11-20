@@ -21,14 +21,19 @@ class CustomBarChart extends StatelessWidget {
   final Color? color;
   final Color? textColor;
 
-  const CustomBarChart(
-      {super.key, required this.data, this.color, this.textColor});
+  const CustomBarChart({
+    super.key,
+    required this.data,
+    this.color,
+    this.textColor,
+  });
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     ScrollController scrollController = ScrollController();
-    bool isDesktop = false;
-    isDesktop = Responsive.isDesktop(context);
+    bool isDesktop = Responsive.isDesktop(context);
+    double chartHeight = isDesktop ? height * 0.37 : height * 0.5;
 
     return data.length > 10
         ? Scrollbar(
@@ -40,11 +45,15 @@ class CustomBarChart extends StatelessWidget {
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
-                  height: isDesktop ? height * 0.38 : height * 0.5,
+                  height: isDesktop ? height * 0.35 : height * 0.5,
                   width: data.length * 130,
                   child: SfCartesianChart(
                     isTransposed: true,
-                    primaryXAxis: CategoryAxis(),
+                    primaryXAxis: CategoryAxis(
+                      labelStyle: TextStyle(
+                        fontSize: 13, // Set your desired font size
+                      ),
+                    ),
                     plotAreaBorderWidth: 0,
                     series: <ChartSeries>[
                       BarSeries<BarData, String>(
@@ -72,10 +81,14 @@ class CustomBarChart extends StatelessWidget {
             ),
           )
         : SizedBox(
-            height: isDesktop ? height * 0.38 : height * 0.5,
+            height: chartHeight,
             child: SfCartesianChart(
               isTransposed: true,
-              primaryXAxis: CategoryAxis(),
+              primaryXAxis: CategoryAxis(
+                labelStyle: TextStyle(
+                  fontSize: 11, // Set your desired font size
+                ),
+              ),
               plotAreaBorderWidth: 0,
               series: <ChartSeries>[
                 BarSeries<BarData, String>(
