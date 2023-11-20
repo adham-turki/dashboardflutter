@@ -193,7 +193,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                     ),
                     selectedChart == _locale.lineChart
                         ? SizedBox(
-                            height: height * 0.4,
+                            height: height * 0.39,
                             child: BalanceLineChart(
                                 yAxisText: "",
                                 xAxisText: "",
