@@ -76,6 +76,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   String startSearchCriteria = "";
   String currentPageName = "";
   String currentPageCode = "";
+  SearchCriteria? searchCriteriaa;
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context);
@@ -207,16 +208,25 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       // );
       // print("searchCriteria1: ${searchCriteria1.toJson()}");
       print("criiiiiiiiiiiiiiiiter: ${startSearchCriteria}");
+      print(
+          "searchCriteriaa!.fromDate!: ${DatesController().formatDateReverse(searchCriteriaa!.fromDate!)}");
+      print("_fromDateController.text: ${_fromDateController.text}");
 
       SearchCriteria searchCriteria = SearchCriteria(
-          fromDate: DatesController().formatDate(
-              _fromDateController.text.isEmpty
+          fromDate:
+              // searchCriteriaa!.fromDate!,
+              DatesController().formatDate(_fromDateController.text.isEmpty
                   ? todayDate
                   : _fromDateController.text),
           toDate: DatesController().formatDate(_toDateController.text.isEmpty
               ? todayDate
               : _toDateController.text),
           voucherStatus: -100);
+      // _fromDateController.text =
+      //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+      // _toDateController.text =
+      //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+
       setSearchCriteria(searchCriteria);
       pieData = [];
       dataMap.clear();
@@ -398,7 +408,36 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        print("startSearchCriteriastartSearchCriteria: ${startSearchCriteria}");
+        // Adding double quotes around keys and values to make it valid JSON
+        startSearchCriteria = startSearchCriteria.replaceAllMapped(
+            RegExp(r'(\w+):\s*([\w-]+|\b\b)(?=,|\})'), (match) {
+          if (match.group(1) == "fromDate" ||
+              match.group(1) == "toDate" ||
+              match.group(1) == "branch") {
+            print(match.group(1));
+            return '"${match.group(1)}":"${match.group(2)}"';
+          } else {
+            return '"${match.group(1)}":${match.group(2)}';
+          }
+        });
+
+        // Removing the extra curly braces
+        startSearchCriteria =
+            startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
+
+        // Wrapping the string with curly braces to make it a valid JSON object
+        startSearchCriteria = '{$startSearchCriteria}';
+        print(
+            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+
+        searchCriteriaa =
+            SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        _fromDateController.text =
+            DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+        _toDateController.text =
+            DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+        print(
+            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -557,7 +596,10 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
+    print(
+        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
     print("currentPageCode: ${currentPageCode}");
+    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
@@ -582,27 +624,5 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         print("value.statusCode: ${value.statusCode}");
       }
     });
-  }
-
-  Map<String, dynamic> parseStringToJson(String jsonString) {
-    // Replace the symbols to make it valid JSON
-    jsonString = jsonString
-        .replaceAll("'", '"')
-        .replaceAll('null', 'null')
-        .replaceAll('true', 'true')
-        .replaceAll('false', 'false')
-        .replaceAllMapped(
-          RegExp(r'(\b\d{2}-\d{2}-\d{4}\b)'),
-          (match) => '"${match.group(0)}"',
-        );
-
-    // Add double quotes around keys
-    jsonString = jsonString.replaceAllMapped(
-      RegExp(r'(\b\w+\b)(?=:)', caseSensitive: false),
-      (match) => '"${match.group(0)}"',
-    );
-
-    // Parse the string into a Map
-    return json.decode('{$jsonString}');
   }
 }
