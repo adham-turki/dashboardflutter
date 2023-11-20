@@ -151,56 +151,50 @@ class _FilterDialogSalesByBranchesState
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: isDesktop ? width * 0.139 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _fromDateController,
-                            label: _locale.fromDate,
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _fromDateController.text = value;
+                        CustomDate(
+                          dateController: _fromDateController,
+                          label: _locale.fromDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _fromDateController.text = value;
 
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
 
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
-                                });
-                              }
-                            },
-                          ),
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
+                              });
+                            }
+                          },
                         ),
-                        SizedBox(
-                          width: width * 0.01,
-                        ),
-                        SizedBox(
-                          width: isDesktop ? width * 0.139 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _toDateController,
-                            label: _locale.toDate,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _toDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
+                        // SizedBox(
+                        //   width: width * 0.01,
+                        // ),
+                        CustomDate(
+                          dateController: _toDateController,
+                          label: _locale.toDate,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _toDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
 
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
-                                });
-                              }
-                            },
-                          ),
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
+                              });
+                            }
+                          },
                         ),
                       ],
                     )

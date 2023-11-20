@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../model/bar_chart_data_model.dart';
 import '../model/line_chart_data_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
-import 'package:flutter/material.dart';
 import '../provider/screen_content_provider.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
@@ -22,11 +21,11 @@ class CustomBarChart extends StatelessWidget {
   final Color? color;
   final Color? textColor;
 
-  const CustomBarChart({required this.data, this.color, this.textColor});
+  const CustomBarChart(
+      {super.key, required this.data, this.color, this.textColor});
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     ScrollController scrollController = ScrollController();
     bool isDesktop = false;
     isDesktop = Responsive.isDesktop(context);
@@ -34,17 +33,15 @@ class CustomBarChart extends StatelessWidget {
     return data.length > 10
         ? Scrollbar(
             controller: scrollController,
-            isAlwaysShown: true,
+            thumbVisibility: true,
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: SingleChildScrollView(
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
-                child: Container(
-                  height: isDesktop ? height * 0.4 : height * 0.5,
-
+                child: SizedBox(
+                  height: isDesktop ? height * 0.38 : height * 0.5,
                   width: data.length * 130,
-                  //    padding: const EdgeInsets.all(16.0),
                   child: SfCartesianChart(
                     isTransposed: true,
                     primaryXAxis: CategoryAxis(),
@@ -60,7 +57,7 @@ class CustomBarChart extends StatelessWidget {
                         dataLabelSettings: DataLabelSettings(
                           isVisible: true,
                           textStyle: TextStyle(
-                            color: textColor ?? Color(0xFF219C90),
+                            color: textColor ?? const Color(0xFF219C90),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -74,11 +71,8 @@ class CustomBarChart extends StatelessWidget {
               ),
             ),
           )
-        : Container(
-            //     height: isDesktop ? height * 0.38 : height * 0.45,
-            height: isDesktop ? height * 0.4 : height * 0.5,
-
-            // padding: const EdgeInsets.all(16.0),
+        : SizedBox(
+            height: isDesktop ? height * 0.38 : height * 0.5,
             child: SfCartesianChart(
               isTransposed: true,
               primaryXAxis: CategoryAxis(),
@@ -94,7 +88,7 @@ class CustomBarChart extends StatelessWidget {
                   dataLabelSettings: DataLabelSettings(
                     isVisible: true,
                     textStyle: TextStyle(
-                      color: textColor ?? Color(0xFF219C90),
+                      color: textColor ?? const Color(0xFF219C90),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -122,7 +116,6 @@ class BalanceLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     bool isDesktop = false;
     isDesktop = Responsive.isDesktop(context);
     List<ChartData> data = _getChartData();
@@ -148,6 +141,7 @@ class BalanceLineChart extends StatelessWidget {
         series: <ChartSeries>[
           LineSeries<ChartData, String>(
             dataSource: data,
+            animationDuration: 1000,
             xValueMapper: (ChartData value, _) => value.period,
             yValueMapper: (ChartData value, _) => value.balance,
             markerSettings: const MarkerSettings(
@@ -157,7 +151,6 @@ class BalanceLineChart extends StatelessWidget {
             dataLabelSettings:
                 const DataLabelSettings(isVisible: true, color: Colors.white),
             enableTooltip: true,
-            animationDuration: 1000,
           ),
         ],
       ),
@@ -323,11 +316,10 @@ class BalanceBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
     ScrollController scrollController = ScrollController();
     return data.length > 10
         ? Scrollbar(
-            isAlwaysShown: true,
+            thumbVisibility: true,
             controller: scrollController,
             child: SingleChildScrollView(
               controller: scrollController,

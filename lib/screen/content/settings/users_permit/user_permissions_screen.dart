@@ -1,16 +1,11 @@
 import 'package:bi_replicate/controller/settings/user_settings/user_setting_controller.dart';
 import 'package:bi_replicate/model/settings/user_permissions/user_permissions_model.dart';
 import 'package:bi_replicate/model/settings/user_permissions/user_permit_criteria_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../../components/check_box.dart';
 import '../../../../components/table_component.dart';
-import '../../../../controller/error_controller.dart';
 import '../../../../controller/settings/user_permissions/user_permissions_controller.dart';
 import '../../../../dialogs/confirm_dialog.dart';
 import '../../../../model/settings/user_settings/user_settings_model.dart';
@@ -75,9 +70,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
             selectedFromUsers = value.toString();
             selectedFromUsersCode = value.codeToString();
             fetchData();
-            print(selectedFromUsers);
-            print(selectedFromUsersCode);
-            // getCategory1List();
           },
           initialValue: selectedFromUsers.isNotEmpty ? selectedFromUsers : null,
         ),
@@ -99,14 +91,11 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
               PlutoRow row = event.row!;
               UserPermitModel userPermitModel2 =
                   UserPermitModel.fromJson2(row.toJson(), _locale);
-              print("row.toJson(): ${row.toJson()}");
 
               for (var i = 0; i < userPermitsList.length; i++) {
-                print("i: ${userPermitsList[i].key}");
                 if (userPermitsList[i].reportNamee ==
                     userPermitModel2.reportNamee) {
                   userPermitModel = userPermitsList[i];
-                  print("dd ${userPermitModel!.toJson()}");
                 }
               }
             },
@@ -123,7 +112,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
       setState(() {
         userPermitsList = value;
         topList = getRows();
-        print("lennnnnnnn: ${userPermitsList.length}");
       });
     });
   }
@@ -144,7 +132,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
     List<UsersModel> searchResults = [];
 
     // Replace the following logic with your actual data fetching or search logic
-    await Future.delayed(Duration(seconds: 1)); // Simulating a delay
+    await Future.delayed(const Duration(seconds: 1)); // Simulating a delay
 
     searchResults = usersList
         .where(
@@ -202,7 +190,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
 
   editDialog(UserPermitModel userPermitModel) {
     allowedValue = userPermitModel.bolAllowed;
-    print("toJsonnnnnnnnnn: ${userPermitModel.toJson()}");
     arabicNameController.text = userPermitModel.reportNamea ?? "";
     // passwordController.text = usersModel.password ?? "";
     englishNameController.text = userPermitModel.reportNamee ?? "";
@@ -283,7 +270,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
         txtUserCode: selectedFromUsersCode,
         txtReportCode: userPermitModell.reportCode,
         bolAllowed: userPermitModell.bolAllowed);
-    print("userPermitCriteria: ${userPermitCriteria.toJson()}");
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -314,7 +300,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
 
   showSuccessDialog(String message) {
     return AlertDialog(
-      title: Text(""),
+      title: const Text(""),
       content: Text(message),
       actions: [
         TextButton(

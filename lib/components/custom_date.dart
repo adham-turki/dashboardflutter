@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../provider/dates_provider.dart';
 import '../utils/constants/responsive.dart';
 
+// ignore: must_be_immutable
 class CustomDate extends StatefulWidget {
   final String label;
   int? minYear;
@@ -89,7 +90,6 @@ class _CustomDateState extends State<CustomDate> {
 
   splitDate() {
     controller = widget.dateController!;
-    print("contttttttttt: ${controller.text}");
     return controller.text.split("-");
   }
 
@@ -117,55 +117,58 @@ class _CustomDateState extends State<CustomDate> {
       dayController.text = splitDate()[2];
     }
 
-    return SizedBox(
-      width: width * 0.165,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Consumer<DatesProvider>(
-            builder: (context, value, child) {
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  labelMessage(label),
-                  !value.getDayTemp() ||
-                          !value.getMonthTemp() ||
-                          !value.getYearTemp()
-                      ? errorMessage(_locale.checkDates)
-                      : Container(),
-                ],
-              );
-            },
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: borderColor,
-              ),
-              borderRadius: BorderRadius.circular(borderRadius),
-            ),
-            child: Row(
-              children: [
-                getSuffixIcon(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      child: SizedBox(
+        width: width * 0.165,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Consumer<DatesProvider>(
+              builder: (context, value, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    createDateField(
-                        _maskDayMonth, dayController, dayHint, dayFocusNode),
-                    dateDivider(),
-                    createDateField(_maskDayMonth, monthController, monthHint,
-                        monthFocusNode),
-                    dateDivider(),
-                    createDateField(
-                        _maskYear, yearController, yearHint, yearFocusNode),
+                    labelMessage(label),
+                    !value.getDayTemp() ||
+                            !value.getMonthTemp() ||
+                            !value.getYearTemp()
+                        ? errorMessage(_locale.checkDates)
+                        : Container(),
                   ],
-                ),
-              ],
+                );
+              },
             ),
-          ),
-        ],
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color: borderColor,
+                ),
+                borderRadius: BorderRadius.circular(borderRadius),
+              ),
+              child: Row(
+                children: [
+                  getSuffixIcon(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      createDateField(
+                          _maskDayMonth, dayController, dayHint, dayFocusNode),
+                      dateDivider(),
+                      createDateField(_maskDayMonth, monthController, monthHint,
+                          monthFocusNode),
+                      dateDivider(),
+                      createDateField(
+                          _maskYear, yearController, yearHint, yearFocusNode),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -104,8 +104,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
             children: [
               isDesktop
                   ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         CustomDropDown(
                           items: status,
@@ -117,30 +117,26 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             });
                           },
                         ),
-                        SizedBox(
-                          // height: height * 0.1,
-                          width: isDesktop ? width * 0.139 : width,
-                          child: CustomDate(
-                            dateController: _fromDateController,
-                            label: _locale.fromDate,
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _fromDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
+                        CustomDate(
+                          dateController: _fromDateController,
+                          label: _locale.fromDate,
+                          minYear: 2000,
+                          onValue: (isValid, value) {
+                            if (isValid) {
+                              setState(() {
+                                _fromDateController.text = value;
+                                DateTime from =
+                                    DateTime.parse(_fromDateController.text);
+                                DateTime to =
+                                    DateTime.parse(_toDateController.text);
 
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
-                                });
-                              }
-                            },
-                          ),
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                }
+                              });
+                            }
+                          },
                         ),
                       ],
                     )

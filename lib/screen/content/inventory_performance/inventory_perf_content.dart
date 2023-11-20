@@ -326,21 +326,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             SizedBox(
               width: width * 0.01,
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
             CustomDate(
               dateController: toDate,
               label: _locale.toDate,
-              // minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -350,17 +338,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 }
               },
             ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   controller: toDate,
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
           ],
         ),
       ],
