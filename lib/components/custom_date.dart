@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../provider/dates_provider.dart';
 import '../utils/constants/responsive.dart';
 
+// ignore: must_be_immutable
 class CustomDate extends StatefulWidget {
   final String label;
   int? minYear;
@@ -89,7 +90,6 @@ class _CustomDateState extends State<CustomDate> {
 
   splitDate() {
     controller = widget.dateController!;
-    print("contttttttttt: ${controller.text}");
     return controller.text.split("-");
   }
 
@@ -118,7 +118,7 @@ class _CustomDateState extends State<CustomDate> {
     }
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
       child: SizedBox(
         width: width * 0.165,
         child: Column(

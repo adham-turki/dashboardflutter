@@ -20,11 +20,12 @@ class UsersModel {
     required this.role,
   });
   String codeToString() {
-    return "$code";
+    return code;
   }
 
+  @override
   String toString() {
-    return "$username";
+    return username;
   }
 
   factory UsersModel.fromJson(Map<String, dynamic> json) {

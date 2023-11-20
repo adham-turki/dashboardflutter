@@ -16,7 +16,6 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/custom_btn.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class OutStandingChequesContent extends StatefulWidget {
@@ -208,21 +207,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             SizedBox(
               width: width * 0.01,
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
             CustomDate(
               dateController: toDate,
               label: _locale.toDate,
-              // minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -231,22 +218,8 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     setControllertoDateText();
                   });
                 }
-                print("toDateeeeeIs $isValid");
-
-                print("toDateeeee $value");
               },
             ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   controller: toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: SizedBox(
@@ -344,7 +317,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             SizedBox(
-              // height: height * 0.12,
               width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: fromDate,
@@ -360,24 +332,11 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 },
               ),
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
             SizedBox(
-              // height: height * 0.12,
               width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: toDate,
                 label: _locale.toDate,
-                // minYear: 2000,
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {
@@ -388,17 +347,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                 },
               ),
             ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   controller: toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: SizedBox(
@@ -524,13 +472,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         ..click();
 
       html.Url.revokeObjectUrl(url);
-    } else {
-      // final directory = await getTemporaryDirectory();
-      // final file = File('${directory.path}/$filename');
-      // await file.writeAsBytes(byteList);
-      // // Use platform-specific code to open the file in a Flutter app
-      // For example: launch(url) from the url_launcher package
-    }
+    } else {}
   }
 
   PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
