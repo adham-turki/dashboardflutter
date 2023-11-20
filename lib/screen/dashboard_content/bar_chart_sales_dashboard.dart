@@ -106,7 +106,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       child: Container(
         decoration: const BoxDecoration(),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
               padding:
@@ -119,7 +119,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,11 +189,14 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                   dataList: pieData,
                                 ),
                               )
-                            : BalanceLineChart(
-                                yAxisText: "",
-                                xAxisText: "",
-                                balances: listOfBalances,
-                                periods: listOfPeriods)
+                            : SizedBox(
+                                height: height * 0.4,
+                                child: BalanceLineChart(
+                                    yAxisText: "",
+                                    xAxisText: "",
+                                    balances: listOfBalances,
+                                    periods: listOfPeriods),
+                              )
                   ],
                 ),
               ),

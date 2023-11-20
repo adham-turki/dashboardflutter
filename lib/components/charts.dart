@@ -40,8 +40,8 @@ class CustomBarChart extends StatelessWidget {
               child: SingleChildScrollView(
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
-                child: Container(
-                  height: isDesktop ? height * 0.4 : height * 0.5,
+                child: SizedBox(
+                  height: isDesktop ? height * 0.38 : height * 0.5,
 
                   width: data.length * 130,
                   //    padding: const EdgeInsets.all(16.0),
@@ -74,9 +74,9 @@ class CustomBarChart extends StatelessWidget {
               ),
             ),
           )
-        : Container(
+        : SizedBox(
             //     height: isDesktop ? height * 0.38 : height * 0.45,
-            height: isDesktop ? height * 0.4 : height * 0.5,
+            height: isDesktop ? height * 0.38 : height * 0.5,
 
             // padding: const EdgeInsets.all(16.0),
             child: SfCartesianChart(
@@ -148,6 +148,7 @@ class BalanceLineChart extends StatelessWidget {
         series: <ChartSeries>[
           LineSeries<ChartData, String>(
             dataSource: data,
+            animationDuration: 1000,
             xValueMapper: (ChartData value, _) => value.period,
             yValueMapper: (ChartData value, _) => value.balance,
             markerSettings: const MarkerSettings(
@@ -157,7 +158,6 @@ class BalanceLineChart extends StatelessWidget {
             dataLabelSettings:
                 const DataLabelSettings(isVisible: true, color: Colors.white),
             enableTooltip: true,
-            animationDuration: 1000,
           ),
         ],
       ),

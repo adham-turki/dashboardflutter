@@ -136,7 +136,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,11 +197,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                       ],
                     ),
                     selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: "",
-                            xAxisText: "",
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
+                        ? SizedBox(
+                            height: height * 0.4,
+                            child: BalanceLineChart(
+                                yAxisText: "",
+                                xAxisText: "",
+                                balances: listOfBalances,
+                                periods: listOfPeriods),
+                          )
                         : selectedChart == _locale.pieChart
                             ? Center(
                                 child: PieChartDashboard(
