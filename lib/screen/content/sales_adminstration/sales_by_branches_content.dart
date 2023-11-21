@@ -444,13 +444,16 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
   getAllCodeReports() {
     CodeReportsController().getAllCodeReports().then((value) {
-      setState(() {
-        codeReportsList = value;
-        setPageName();
-        getAllUserReportSettings();
-
-        print("codeReportsList Length: ${codeReportsList.length}");
-      });
+      if (value.isNotEmpty) {
+        setState(() {
+          codeReportsList = value;
+          setPageName();
+          if (currentPageName.isNotEmpty) {
+            getAllUserReportSettings();
+          }
+          print("codeReportsList Length: ${codeReportsList.length}");
+        });
+      }
     });
   }
 

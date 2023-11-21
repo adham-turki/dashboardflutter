@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,12 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
 import '../../components/charts/pie_chart_dashboard.dart';
+import '../../controller/settings/user_settings/code_reports_controller.dart';
+import '../../controller/settings/user_settings/user_report_settings_controller.dart';
+import '../../model/settings/user_settings/code_reports_model.dart';
+import '../../model/settings/user_settings/user_report_settings.dart';
 import '../../utils/constants/app_utils.dart';
+import '../../utils/constants/pages_constants.dart';
 import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_sales_branches.dart';
 
@@ -57,7 +63,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   List<PieChartModel> pieData = [];
 
   bool isDesktop = false;
-
+  List<CodeReportsModel> codeReportsList = [];
+  List<UserReportSettingsModel> userReportSettingsList = [];
+  String startSearchCriteria = "";
+  String currentPageName = "";
+  String currentPageCode = "";
+  SearchCriteria? searchCriteriaa;
+  String txtKey = "";
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -81,18 +93,19 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      lastFromDate = fromDateController.text;
-      lastToDate = toDateController.text;
-      selectedChart = _locale.lineChart;
+    // Future.delayed(Duration.zero, () {
+    //   lastFromDate = fromDateController.text;
+    //   lastToDate = toDateController.text;
+    //   selectedChart = _locale.lineChart;
 
-      if (!dataLoaded) {
-        dataLoaded = true;
-        getSalesData().then((value) {
-          setState(() {});
-        });
-      }
-    });
+    //   if (!dataLoaded) {
+    //     dataLoaded = true;
+    //     getSalesData().then((value) {
+    //       setState(() {});
+    //     });
+    //   }
+    // });
+    getAllCodeReports();
     super.initState();
   }
 
@@ -156,6 +169,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                         toDateController.text = toDate;
                                         period = selectedPeriod;
                                         selectedChart = chart;
+                                        SearchCriteria searchCriteria =
+                                            SearchCriteria(
+                                          fromDate: fromDateController.text,
+                                          toDate: toDateController.text,
+                                          voucherStatus: -100,
+                                        );
+                                        setSearchCriteria(searchCriteria);
                                       },
                                     );
                                   },
@@ -207,6 +227,126 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     );
   }
 
+  setStartSearchCriteria() {
+    for (var i = 0; i < userReportSettingsList.length; i++) {
+      if (currentPageCode == userReportSettingsList[i].txtReportcode) {
+        txtKey = userReportSettingsList[i].txtKey;
+        startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
+        // Adding double quotes around keys and values to make it valid JSON
+        startSearchCriteria = startSearchCriteria
+            .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
+          if (match.group(1) == "fromDate" ||
+              match.group(1) == "toDate" ||
+              match.group(1) == "branch") {
+            print(match.group(1));
+            return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
+          } else {
+            return '"${match.group(1)}":${match.group(2)}';
+          }
+        });
+
+        // Removing the extra curly braces
+        startSearchCriteria =
+            startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
+
+        // Wrapping the string with curly braces to make it a valid JSON object
+        startSearchCriteria = '{$startSearchCriteria}';
+        print(
+            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+
+        searchCriteriaa =
+            SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        fromDateController.text = searchCriteriaa!.fromDate!;
+        toDateController.text = searchCriteriaa!.toDate!;
+        // selectedBranchCode = searchCriteriaa!.branch!;
+        // selectedBranchCode = searchCriteriaa!.byCategory!;
+
+        print(
+            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
+      }
+    }
+  }
+
+  getAllCodeReports() {
+    CodeReportsController().getAllCodeReports().then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          codeReportsList = value;
+          setPageName();
+          if (currentPageName.isNotEmpty) {
+            getAllUserReportSettings();
+          }
+
+          print("codeReportsList Length: ${codeReportsList.length}");
+        });
+      }
+    });
+  }
+
+  getAllUserReportSettings() {
+    UserReportSettingsController().getAllUserReportSettings().then((value) {
+      setState(() {
+        userReportSettingsList = value;
+        setStartSearchCriteria();
+        Future.delayed(Duration.zero, () {
+          lastFromDate = fromDateController.text;
+          lastToDate = toDateController.text;
+          selectedChart = _locale.lineChart;
+
+          if (!dataLoaded) {
+            dataLoaded = true;
+            getSalesData().then((value) {
+              setState(() {});
+            });
+          }
+        });
+      });
+    });
+  }
+
+  setPageName() {
+    for (var i = 0; i < codeReportsList.length; i++) {
+      if (codeReportsList[i].txtReportnamee ==
+          ReportConstants.salesByBranches) {
+        setState(() {
+          currentPageName = codeReportsList[i].txtReportnamee;
+          currentPageCode = codeReportsList[i].txtReportcode;
+          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
+        });
+      }
+    }
+  }
+
+  void setSearchCriteria(SearchCriteria searchCriteria) {
+    print(
+        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
+    print("currentPageCode: ${currentPageCode}");
+    String search = "${searchCriteria.toJson()}";
+    UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
+        txtKey: txtKey,
+        txtReportcode: currentPageCode,
+        txtUsercode: "",
+        txtJsoncrit: searchCriteria.toJson().toString(),
+        bolAutosave: 1);
+    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
+    // print(
+    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
+    // Map<String, dynamic> toJson = parseStringToJson(
+    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
+    //         .txtJsoncrit);
+    // print(toJson.toString());
+    // print(
+    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
+
+    UserReportSettingsController()
+        .editUserReportSettings(userReportSettingsModel)
+        .then((value) {
+      if (value.statusCode == 200) {
+        print("value.statusCode: ${value.statusCode}");
+      }
+    });
+  }
+
   double formatDoubleToTwoDecimalPlaces(double number) {
     return double.parse(number.toStringAsFixed(2));
   }
@@ -227,6 +367,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       toDate: selectedToDate,
       voucherStatus: -100,
     );
+    setSearchCriteria(searchCriteria);
     pieData = [];
     dataMap.clear();
     barData = [];

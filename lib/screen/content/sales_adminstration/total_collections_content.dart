@@ -234,13 +234,17 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
 
   getAllCodeReports() {
     CodeReportsController().getAllCodeReports().then((value) {
-      setState(() {
-        codeReportsList = value;
-        setPageName();
-        getAllUserReportSettings();
+      if (value.isNotEmpty) {
+        setState(() {
+          codeReportsList = value;
+          setPageName();
+          if (currentPageName.isNotEmpty) {
+            getAllUserReportSettings();
+          }
 
-        print("codeReportsList Length: ${codeReportsList.length}");
-      });
+          print("codeReportsList Length: ${codeReportsList.length}");
+        });
+      }
     });
   }
 

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +12,14 @@ import '../../components/charts.dart';
 import '../../components/charts/pie_chart_dashboard.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
+import '../../controller/settings/user_settings/code_reports_controller.dart';
+import '../../controller/settings/user_settings/user_report_settings_controller.dart';
 import '../../model/settings/setup/bi_account_model.dart';
+import '../../model/settings/user_settings/code_reports_model.dart';
+import '../../model/settings/user_settings/user_report_settings.dart';
 import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
+import '../../utils/constants/pages_constants.dart';
 import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_daily_sales.dart';
 
@@ -72,7 +78,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   String accountNameString = "";
   String lastFromDate = "";
   String lastStatus = "";
-
+  List<CodeReportsModel> codeReportsList = [];
+  List<UserReportSettingsModel> userReportSettingsList = [];
+  String startSearchCriteria = "";
+  String currentPageName = "";
+  String currentPageCode = "";
+  SearchCriteria? searchCriteriaa;
+  String txtKey = "";
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -93,18 +105,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void initState() {
     print("init state");
-
-    Future.delayed(Duration.zero, () async {
-      lastFromDate = fromDateController.text;
-      selectedChart = _locale.barChart;
-      lastBranchCode = selectedBranchCode;
-      lastStatus = selectedStatus;
-      if (!dataLoaded) {
-        dataLoaded = true;
-        await getPayableAccountsData();
-        setState(() {});
-      }
-    });
+    getAllCodeReports();
 
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
@@ -179,6 +180,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                         selectedChart = chart;
                                         selectedBranchCode =
                                             selectedBranchCodeF;
+                                        SearchCriteria searchCriteria =
+                                            SearchCriteria(
+                                          fromDate: fromDateController.text,
+                                          voucherStatus: -100,
+                                          branch: "",
+                                        );
+                                        setSearchCriteria(searchCriteria);
                                       },
                                     );
                                   },
@@ -230,6 +238,123 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     );
   }
 
+  setStartSearchCriteria() {
+    for (var i = 0; i < userReportSettingsList.length; i++) {
+      if (currentPageCode == userReportSettingsList[i].txtReportcode) {
+        txtKey = userReportSettingsList[i].txtKey;
+        startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
+        // Adding double quotes around keys and values to make it valid JSON
+        startSearchCriteria = startSearchCriteria
+            .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
+          if (match.group(1) == "fromDate" ||
+              match.group(1) == "toDate" ||
+              match.group(1) == "branch") {
+            print(match.group(1));
+            return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
+          } else {
+            return '"${match.group(1)}":${match.group(2)}';
+          }
+        });
+
+        // Removing the extra curly braces
+        startSearchCriteria =
+            startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
+
+        // Wrapping the string with curly braces to make it a valid JSON object
+        startSearchCriteria = '{$startSearchCriteria}';
+        print(
+            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+
+        searchCriteriaa =
+            SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        fromDateController.text = searchCriteriaa!.fromDate!;
+        // selectedBranchCode = searchCriteriaa!.branch!;
+        // selectedBranchCode = searchCriteriaa!.byCategory!;
+
+        print(
+            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
+      }
+    }
+  }
+
+  getAllCodeReports() {
+    CodeReportsController().getAllCodeReports().then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          codeReportsList = value;
+          setPageName();
+          if (currentPageName.isNotEmpty) {
+            getAllUserReportSettings();
+          }
+
+          print("codeReportsList Length: ${codeReportsList.length}");
+        });
+      }
+    });
+  }
+
+  getAllUserReportSettings() {
+    UserReportSettingsController().getAllUserReportSettings().then((value) {
+      setState(() {
+        userReportSettingsList = value;
+        setStartSearchCriteria();
+        Future.delayed(Duration.zero, () async {
+          lastFromDate = fromDateController.text;
+          selectedChart = _locale.barChart;
+          lastBranchCode = selectedBranchCode;
+          lastStatus = selectedStatus;
+          if (!dataLoaded) {
+            dataLoaded = true;
+            await getPayableAccountsData();
+            setState(() {});
+          }
+        });
+      });
+    });
+  }
+
+  setPageName() {
+    for (var i = 0; i < codeReportsList.length; i++) {
+      if (codeReportsList[i].txtReportnamee == ReportConstants.dailySales) {
+        setState(() {
+          currentPageName = codeReportsList[i].txtReportnamee;
+          currentPageCode = codeReportsList[i].txtReportcode;
+          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
+        });
+      }
+    }
+  }
+
+  void setSearchCriteria(SearchCriteria searchCriteria) {
+    print(
+        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
+    print("currentPageCode: ${currentPageCode}");
+    String search = "${searchCriteria.toJson()}";
+    UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
+        txtKey: txtKey,
+        txtReportcode: currentPageCode,
+        txtUsercode: "",
+        txtJsoncrit: searchCriteria.toJson().toString(),
+        bolAutosave: 1);
+    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
+    // print(
+    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
+    // Map<String, dynamic> toJson = parseStringToJson(
+    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
+    //         .txtJsoncrit);
+    // print(toJson.toString());
+    // print(
+    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
+
+    UserReportSettingsController()
+        .editUserReportSettings(userReportSettingsModel)
+        .then((value) {
+      if (value.statusCode == 200) {
+        print("value.statusCode: ${value.statusCode}");
+      }
+    });
+  }
+
   double formatDoubleToTwoDecimalPlaces(double number) {
     return double.parse(number.toStringAsFixed(2));
   }
@@ -243,6 +368,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       voucherStatus: -100,
       branch: "",
     );
+    setSearchCriteria(searchCriteria);
     barDataDailySales = [];
     dataMap.clear();
     barData = [];

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/error_controller.dart';
+import '../../../controller/settings/user_settings/code_reports_controller.dart';
+import '../../../controller/settings/user_settings/user_report_settings_controller.dart';
+import '../../../model/criteria/search_criteria.dart';
+import '../../../model/settings/user_settings/code_reports_model.dart';
+import '../../../model/settings/user_settings/user_report_settings.dart';
 import '../../../utils/constants/app_utils.dart';
+import '../../../utils/constants/pages_constants.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
@@ -40,6 +48,13 @@ class _FilterDialogSalesByBranchesState
   var selectedChart = "";
 
   var selectedStatus = "";
+  List<CodeReportsModel> codeReportsList = [];
+  List<UserReportSettingsModel> userReportSettingsList = [];
+  String startSearchCriteria = "";
+  String currentPageName = "";
+  String currentPageCode = "";
+  SearchCriteria? searchCriteriaa;
+  String txtKey = "";
 
   @override
   void didChangeDependencies() {
@@ -61,11 +76,6 @@ class _FilterDialogSalesByBranchesState
     selectedChart = charts[0];
     selectedPeriod = periods[0];
     selectedStatus = status[0];
-    super.didChangeDependencies();
-  }
-
-  @override
-  void initState() {
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
@@ -74,6 +84,12 @@ class _FilterDialogSalesByBranchesState
     _toDateController.text = todayDate;
 
     _fromDateController.text = currentMonth;
+    getAllCodeReports();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
     super.initState();
   }
 
@@ -293,6 +309,116 @@ class _FilterDialogSalesByBranchesState
         ),
       ],
     );
+  }
+
+  setStartSearchCriteria() {
+    for (var i = 0; i < userReportSettingsList.length; i++) {
+      if (currentPageCode == userReportSettingsList[i].txtReportcode) {
+        txtKey = userReportSettingsList[i].txtKey;
+        startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
+        // Adding double quotes around keys and values to make it valid JSON
+        startSearchCriteria = startSearchCriteria
+            .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
+          if (match.group(1) == "fromDate" ||
+              match.group(1) == "toDate" ||
+              match.group(1) == "branch") {
+            print(match.group(1));
+            return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
+          } else {
+            return '"${match.group(1)}":${match.group(2)}';
+          }
+        });
+
+        // Removing the extra curly braces
+        startSearchCriteria =
+            startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
+
+        // Wrapping the string with curly braces to make it a valid JSON object
+        startSearchCriteria = '{$startSearchCriteria}';
+        print(
+            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+
+        searchCriteriaa =
+            SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        _fromDateController.text =
+            DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+        _toDateController.text =
+            DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+        // selectedBranchCode = searchCriteriaa!.branch!;
+        // selectedBranchCode = searchCriteriaa!.byCategory!;
+
+        print(
+            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
+      }
+    }
+  }
+
+  getAllCodeReports() {
+    CodeReportsController().getAllCodeReports().then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          codeReportsList = value;
+          setPageName();
+          if (currentPageName.isNotEmpty) {
+            getAllUserReportSettings();
+          }
+
+          print("codeReportsList Length: ${codeReportsList.length}");
+        });
+      }
+    });
+  }
+
+  getAllUserReportSettings() {
+    UserReportSettingsController().getAllUserReportSettings().then((value) {
+      setState(() {
+        userReportSettingsList = value;
+        setStartSearchCriteria();
+      });
+    });
+  }
+
+  setPageName() {
+    for (var i = 0; i < codeReportsList.length; i++) {
+      if (codeReportsList[i].txtReportnamee ==
+          ReportConstants.salesByBranches) {
+        setState(() {
+          currentPageName = codeReportsList[i].txtReportnamee;
+          currentPageCode = codeReportsList[i].txtReportcode;
+          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
+        });
+      }
+    }
+  }
+
+  void setSearchCriteria(SearchCriteria searchCriteria) {
+    print(
+        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
+    print("currentPageCode: ${currentPageCode}");
+    String search = "${searchCriteria.toJson()}";
+    UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
+        txtKey: txtKey,
+        txtReportcode: currentPageCode,
+        txtUsercode: "",
+        txtJsoncrit: searchCriteria.toJson().toString(),
+        bolAutosave: 1);
+    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
+    // print(
+    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
+    // Map<String, dynamic> toJson = parseStringToJson(
+    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
+    //         .txtJsoncrit);
+    // print(toJson.toString());
+    // print(
+    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
+
+    UserReportSettingsController()
+        .editUserReportSettings(userReportSettingsModel)
+        .then((value) {
+      if (value.statusCode == 200) {
+        print("value.statusCode: ${value.statusCode}");
+      }
+    });
   }
 
   void checkPeriods(value) {
