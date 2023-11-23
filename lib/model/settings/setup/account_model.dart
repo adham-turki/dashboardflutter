@@ -117,6 +117,9 @@ class AccountModel {
       bolRestrictedCurTransaction: json['bolRestrictedcurtransaction'],
     );
   }
+  String codeToString() {
+    return txtCode!;
+  }
 
   Map<String, dynamic> toJson() {
     return {

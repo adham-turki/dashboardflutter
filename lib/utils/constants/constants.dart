@@ -8,6 +8,8 @@ const blackColor = Color.fromARGB(255, 0, 0, 0);
 int selected = 1;
 int selectedOriginal = 1;
 int selectedSub = 0;
+List<String> characters = List.generate(
+    26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
 
 ButtonStyle customButtonStyle(Size size, double fontSize, Color color) {
   return ElevatedButton.styleFrom(

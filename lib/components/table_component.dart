@@ -10,18 +10,21 @@ class TableComponent extends StatefulWidget {
   final Function(PlutoGridOnRowDoubleTapEvent event)? doubleTab;
   final Function(PlutoGridOnRowSecondaryTapEvent event)? rightClickTap;
   final Function(PlutoGridStateManager event)? headerBuilder;
+  final Function(PlutoGridStateManager event)? onLoaded;
   final Key key;
-  const TableComponent({
-    required this.key,
-    // super.key,
-    required this.plCols,
-    required this.polRows,
-    this.onSelected,
-    this.footerBuilder,
-    this.doubleTab,
-    this.rightClickTap,
-    this.headerBuilder,
-  });
+  PlutoGridStateManager? stateManager;
+  TableComponent(
+      {required this.key,
+      // super.key,
+      required this.plCols,
+      required this.polRows,
+      this.onSelected,
+      this.footerBuilder,
+      this.doubleTab,
+      this.rightClickTap,
+      this.headerBuilder,
+      this.onLoaded,
+      this.stateManager});
   @override
   State<TableComponent> createState() => _TableComponentState();
 }
@@ -54,6 +57,7 @@ class _TableComponentState extends State<TableComponent> {
     height = MediaQuery.of(context).size.height;
     List<PlutoColumn> polCols = widget.plCols;
     List<PlutoRow> polRows = widget.polRows;
+    print("fetch(): ${polRows.length}");
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
         scrollbar: PlutoGridScrollbarConfig(
@@ -87,6 +91,8 @@ class _TableComponentState extends State<TableComponent> {
         }
       },
       onLoaded: (PlutoGridOnLoadedEvent event) {
+        widget.stateManager = event.stateManager;
+        widget.onLoaded!(event.stateManager);
         stateManager = event.stateManager;
         stateManager.setShowColumnFilter(false);
       },

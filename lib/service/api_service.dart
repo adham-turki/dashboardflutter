@@ -25,7 +25,8 @@ class ApiService {
           "Authorization": "Bearer $token",
         },
       );
-
+      print(token);
+      print(Uri.parse(requestUrl));
       if (response.statusCode != 200) {
         if (response.statusCode == 417 || response.statusCode == 401) {
           ErrorController.openErrorDialog(

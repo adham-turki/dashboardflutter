@@ -4,6 +4,7 @@ import 'package:bi_replicate/service/api_service.dart';
 import '../../../model/settings/setup/account_model.dart';
 import '../../../model/settings/setup/bi_account_model.dart';
 import '../../../utils/constants/api_constants.dart';
+import 'package:http/http.dart' as http;
 
 class SetupController {
   Future<List<AccountModel>> getAllAccounts({bool? isStart}) async {
@@ -16,6 +17,29 @@ class SetupController {
         list.add(AccountModel.fromJson(elemant));
       }
     });
+    return list;
+  }
+
+  Future<List<AccountModel>> getAllReportAccounts({bool? isStart}) async {
+    List<AccountModel> list = [];
+    String pathUrl = "reportAccounts/getAll";
+    var requestUrl = "http://167.235.150.228:7001/$pathUrl";
+    print("Uri.parse(requestUrl): ${Uri.parse(requestUrl)}");
+
+    var response = await http.get(
+      Uri.parse(requestUrl),
+      headers: {
+        "Accept": "application/json",
+        "content-type": "application/json",
+      },
+    );
+    print("response.statusCode: ${response.statusCode}");
+    var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+    for (var elemant in jsonData) {
+      //creditAmt - debitAmt
+      list.add(AccountModel.fromJson(elemant));
+    }
+
     return list;
   }
 

@@ -9,7 +9,7 @@ import '../utils/constants/responsive.dart';
 
 // ignore: must_be_immutable
 class CustomDate extends StatefulWidget {
-  final String label;
+  final String? label;
   int? minYear;
   Function(bool isValid, String value)? onValue;
   bool? ddmmyyyy;
@@ -18,7 +18,7 @@ class CustomDate extends StatefulWidget {
 
   CustomDate(
       {super.key,
-      required this.label,
+      this.label,
       this.onValue,
       this.dateController,
       this.minYear,
@@ -107,7 +107,7 @@ class _CustomDateState extends State<CustomDate> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    String label = widget.label;
+    String label = widget.label ?? "";
 
     if (widget.dateController!.text.isNotEmpty) {
       formattedDate =
@@ -406,12 +406,14 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   Widget labelMessage(String msg) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        msg,
-      ),
-    );
+    return msg.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              msg,
+            ),
+          )
+        : SizedBox.shrink();
   }
 
   void setRequestNodes(String hint) {

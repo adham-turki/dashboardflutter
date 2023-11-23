@@ -17,6 +17,7 @@ import 'package:bi_replicate/screen/content/settings/setup_content/setup.dart';
 import 'package:bi_replicate/screen/content/settings/change_pass/change_password_screen.dart';
 import 'package:bi_replicate/screen/content/settings/users_content/users_content.dart';
 import 'package:bi_replicate/screen/content/settings/users_permit/user_permissions_screen.dart';
+import 'package:bi_replicate/screen/journal_reports_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,8 @@ class _HomePageState extends State<HomePage> {
         return const SetupScreen();
       case 18:
         return const ChangePasswordScreen();
+      case 19:
+        return const JournalReportsScreen();
       default:
         return Container();
     }

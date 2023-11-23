@@ -6,6 +6,28 @@ const colColor = Color(0xFF5297b0);
 const gridActiveColor = Color.fromARGB(169, 255, 208, 150);
 const whiteColor = Colors.white;
 const darkBlueColor = Color(0xFF2b4381);
+ButtonStyle greenStyle(Size size, double fontSize) {
+  return ElevatedButton.styleFrom(
+      backgroundColor: primary,
+      fixedSize: size,
+      textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold));
+}
+
+ButtonStyle cancelStyle(Size size, double fontSize) {
+  return ElevatedButton.styleFrom(
+      backgroundColor: Color.fromARGB(255, 206, 63, 63),
+      textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+      fixedSize: size,
+      alignment: Alignment.center);
+}
+
+ButtonStyle blackStyle(Size size, double fontSize) {
+  return ElevatedButton.styleFrom(
+      backgroundColor: secondary,
+      textStyle: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+      fixedSize: size,
+      alignment: Alignment.center);
+}
 
 final colorNewList = <Color>[
   Colors.green,

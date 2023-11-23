@@ -300,6 +300,8 @@ class _ContentHeaderState extends State<ContentHeader> {
         return locale.setup;
       case 18:
         return locale.changePassword;
+      case 19:
+        return "Journal Reports";
       default:
         return "";
     }
