@@ -65,3 +65,5 @@ const getReportCodes = "reportCodes/getAll";
 const addReportCodes = "reportCodes/add";
 const updateReportCodes = "reportCodes/update";
 const deleteReportCodes = "reportCodes/delete";
+// vouchType
+const getVouchTypes = "vouchType/getVouchType";

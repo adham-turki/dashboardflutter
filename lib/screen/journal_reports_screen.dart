@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:bi_replicate/controller/general_ledger/journal_report_controller.dart';
+import 'package:bi_replicate/controller/vouch_type_controller.dart';
 import 'package:bi_replicate/model/journal_reports_model.dart';
 import 'package:bi_replicate/model/new_search_criteria_model.dart';
 import 'package:cool_alert/cool_alert.dart';
@@ -23,6 +24,7 @@ import '../components/table_component.dart';
 import '../controller/journal_controller.dart';
 import '../controller/settings/setup/setup_screen_controller.dart';
 import '../model/settings/setup/account_model.dart';
+import '../model/vouch_type_model.dart';
 import '../utils/constants/colors.dart';
 import '../utils/constants/constants_apis.dart';
 import '../utils/constants/maps.dart';
@@ -61,7 +63,10 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
   NewSearchCriteria? searchCriteriaForExcel;
   List<String> accountsNameList = [];
   List<AccountModel> accountModelList = [];
+  List<String> vouchTypeNameList = [];
+  List<VouchTypeModel> vouchTypeList = [];
   Map<String, dynamic>? accountToAdd;
+  Map<String, dynamic>? vouchTypeToAdd;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -172,14 +177,8 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
       //   },
       // ),
     ];
-    getAccountList().then((value) {
-      for (var i = 0; i < accountModelList.length; i++) {
-        print(
-            "accountModelList[i].txtEnglishName: ${accountModelList[i].txtEnglishName}");
-        print("accountModelList[i].txtCode: ${accountModelList[i].txtCode}");
-      }
-    });
-
+    getAccountList().then((value) {});
+    getVouchTypeList().then((value) {});
     super.didChangeDependencies();
   }
 
@@ -259,6 +258,7 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                               context: context,
                               builder: (context) => SearchComponent(
                                 accountsList: accountModelList,
+                                voucherTypeList: vouchTypeList,
                                 onFilter: (selectedPeriod,
                                     fromDate,
                                     toDate,
@@ -506,25 +506,25 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         toAccCode: selectedToAccount,
         toDate: _toDateHere.text,
         toJCode: selectedToCode,
-        vouchType: "-1",
-        voucherStatus: selectedVocherType);
+        vouchType: selectedVocherType.isEmpty ? "-1" : selectedVocherType,
+        voucherStatus: "${selectedStatus}");
     searchCriteriaForExcel = NewSearchCriteria(
-        fromAccCode: "",
+        fromAccCode: selectedFromAccount,
         fromDate: _fromDate.text,
         fromJCode: selectedFromCode,
         page: "0",
-        toAccCode: "",
+        toAccCode: selectedToAccount,
         toDate: _toDateHere.text,
         toJCode: selectedToCode,
-        vouchType: "-1",
-        voucherStatus: selectedVocherType);
+        vouchType: selectedVocherType.isEmpty ? "-1" : selectedVocherType,
+        voucherStatus: "${selectedStatus}");
     List<JournalReportsModel> value =
         await JournalController().getAllJournalReports(searchCriteria!);
     setState(() {
       journalReportsList = value;
       for (int i = 0; i < journalReportsList.length; i++) {
         topList.add(journalReportsList[i].toPluto());
-        print(journalReportsList[i].referDate);
+        // print(journalReportsList[i].referDate);
       }
     });
   }
@@ -543,6 +543,24 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         accountToAdd![accountModelList[i].txtEnglishName!] =
             accountModelList[i].txtCode;
       }
+    });
+
+    setState(() {});
+  }
+
+  Future getVouchTypeList() async {
+    vouchTypeNameList = [];
+    accountToAdd = <String, dynamic>{};
+    await VouchTypeController().getAllVouchTypes().then((value) {
+      vouchTypeList = value;
+
+      for (var elemant in value) {
+        vouchTypeNameList.add(elemant.txtEnglishname);
+      }
+      // for (int i = 0; i < vouchTypeList.length; i++) {
+      //   vouchTypeToAdd![vouchTypeList[i].txtEnglishname] =
+      //       vouchTypeList[i].intVouchtype;
+      // }
     });
 
     setState(() {});

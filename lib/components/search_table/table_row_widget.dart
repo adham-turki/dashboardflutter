@@ -42,27 +42,15 @@ class _TableRowWidgetState extends State<TableRowWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(widget.rowData.length, (index) {
               final item = widget.rowData[index];
-              if (item is bool) {
-                // Checkboxes
-                return Checkbox(
-                  value: checkboxValues[index],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      // Update the checkbox value when changed
-                      checkboxValues[index] = value!;
-                    });
-                  },
-                );
-              } else {
-                // Text data
-                return Text(
-                  item.toString(),
-                  style: TextStyle(
-                    fontWeight:
-                        widget.isHeader ? FontWeight.bold : FontWeight.normal,
-                  ),
-                );
-              }
+
+              // Text data
+              return Text(
+                item.toString(),
+                style: TextStyle(
+                  fontWeight:
+                      widget.isHeader ? FontWeight.bold : FontWeight.normal,
+                ),
+              );
             }),
           ),
         ),

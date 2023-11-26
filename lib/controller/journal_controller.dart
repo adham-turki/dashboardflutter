@@ -34,7 +34,7 @@ class JournalController {
     }
     var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
     for (var elemant in jsonData) {
-      print(JournalReportsModel.fromJson(elemant).accCode);
+      // print(JournalReportsModel.fromJson(elemant).accCode);
       journalReportsList.add(JournalReportsModel.fromJson(elemant));
     }
     return journalReportsList;

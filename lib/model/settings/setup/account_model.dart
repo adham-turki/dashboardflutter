@@ -117,9 +117,6 @@ class AccountModel {
       bolRestrictedCurTransaction: json['bolRestrictedcurtransaction'],
     );
   }
-  String codeToString() {
-    return txtCode!;
-  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -166,5 +163,9 @@ class AccountModel {
   @override
   String toString() {
     return "$txtEnglishName";
+  }
+
+  String codeToString() {
+    return txtCode!;
   }
 }
