@@ -1,4 +1,5 @@
 import 'package:bi_replicate/utils/constants/colors.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
@@ -34,8 +35,16 @@ class _TableComponentState extends State<TableComponent> {
   double height = 0;
   double scrollThickness = 20;
   double scrollRadius = 10;
+  late AppLocalizations _locale;
+
   late final PlutoGridStateManager stateManager;
   // var _preventContextMenu;
+  @override
+  void didChangeDependencies() {
+    _locale = AppLocalizations.of(context);
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
     // _preventContextMenu = (html.Event event) => {
@@ -104,8 +113,8 @@ class _TableComponentState extends State<TableComponent> {
           widget.onSelected!(event);
         }
       },
-      noRowsWidget: const Center(
-        child: Text("No data available."),
+      noRowsWidget: Center(
+        child: Text(_locale.noDataAvailable),
       ),
       onRowSecondaryTap: (event) {
         if (widget.rightClickTap != null) {

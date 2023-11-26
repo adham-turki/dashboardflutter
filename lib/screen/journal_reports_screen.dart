@@ -65,6 +65,113 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
+    columns = <PlutoColumn>[
+      PlutoColumn(
+          // width: 1000,
+          title: _locale.date,
+          field: 'date',
+          type: PlutoColumnType.date(),
+          enableRowChecked: true,
+          backgroundColor: colColor),
+      PlutoColumn(
+        title: _locale.voucher,
+        field: 'voucher',
+        type: PlutoColumnType.text(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.voucherNum,
+        field: 'voucherNum',
+        type: PlutoColumnType.text(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.status,
+        field: 'status',
+        type: PlutoColumnType.select(<String>[
+          'All',
+          'Draft',
+          'Posted',
+        ]),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.account,
+        field: 'account',
+        type: PlutoColumnType.text(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.reference,
+        field: 'refernce',
+        type: PlutoColumnType.text(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.currency,
+        field: 'currency',
+        type: PlutoColumnType.select(<String>[
+          'ILS ₪',
+          'USD',
+        ]),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.debit,
+        field: 'debit',
+        type: PlutoColumnType.currency(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.credit,
+        field: 'credit',
+        type: PlutoColumnType.currency(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.dibc,
+        field: 'dibc',
+        type: PlutoColumnType.currency(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.cibc,
+        field: 'cibc',
+        type: PlutoColumnType.currency(),
+        backgroundColor: colColor,
+      ),
+      PlutoColumn(
+        title: _locale.comments,
+        field: 'comments',
+        type: PlutoColumnType.text(),
+        backgroundColor: colColor,
+      ),
+
+      // PlutoColumn(
+      //   title: 'Total',
+      //   field: 'total',
+      //   type: PlutoColumnType.currency(),
+      //           enableRowChecked: true,
+
+      //   footerRenderer: (rendererContext) {
+      //     return PlutoAggregateColumnFooter(
+      //       rendererContext: rendererContext,
+      //       formatAsCurrency: true,
+      //       type: PlutoAggregateColumnType.sum,
+      //       alignment: Alignment.center,
+      //       titleSpanBuilder: (text) {
+      //         return [
+      //           const TextSpan(
+      //             text: 'Total',
+      //             style: TextStyle(color: Colors.red),
+      //           ),
+
+      //         ];
+      //       },
+      //     );
+      //   },
+      // ),
+    ];
     getAccountList().then((value) {
       for (var i = 0; i < accountModelList.length; i++) {
         print(
@@ -98,10 +205,10 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("From Date: ${_fromDate.text}"),
-                  Text('To Date: ${_toDateHere.text}'),
+                  Text("${_locale.fromDate}: ${_fromDate.text}"),
+                  Text('${_locale.toDate}: ${_toDateHere.text}'),
                   Text(
-                    'Status : ${selectedStatusName}',
+                    '${_locale.status} : ${selectedStatusName}',
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       decoration: TextDecoration.underline,
@@ -145,8 +252,10 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                     SizedBox(
                         height: MediaQuery.of(context).size.height * 0.07,
                         child: FilterButton(
+                          locale: _locale,
                           onPressed: () {
                             showDialog(
+                              barrierDismissible: false,
                               context: context,
                               builder: (context) => SearchComponent(
                                 accountsList: accountModelList,
@@ -188,9 +297,11 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                                 },
                               ),
                             ).then((value) {
-                              setState(() {
-                                fetch();
-                              });
+                              if (value) {
+                                setState(() {
+                                  fetch();
+                                });
+                              }
                             });
                           },
                         )),
@@ -232,10 +343,10 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
             ],
           ),
         ),
-        SizedBox(height: height * 0.1),
+        SizedBox(height: height * 0.02),
         SizedBox(
-          width: isDesktop ? width * 0.7 : width,
-          height: height * 0.5,
+          width: isDesktop ? width * 0.8 : width,
+          height: height * 0.7,
           child: TableComponent(
             key: UniqueKey(),
             onLoaded: (event) {
@@ -263,12 +374,12 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         type: CoolAlertType.success,
         title: "",
         widget: Column(
-          children: const [
+          children: [
             Text(
-              "Excel Exported",
-              style: TextStyle(fontSize: 30),
+              _locale.excelExported,
+              style: const TextStyle(fontSize: 30),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25,
             )
           ],
@@ -283,6 +394,37 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         });
   }
 
+  showEmptyDialog(BuildContext context) {
+    CoolAlert.show(
+        barrierDismissible: false,
+        cancelBtnText: _locale.cancel,
+        confirmBtnText: _locale.ok,
+        width: MediaQuery.of(context).size.width * 0.3,
+        context: context,
+        type: CoolAlertType.warning,
+        title: "",
+        widget: Column(
+          children: [
+            Text(
+              _locale.noDataAvailable,
+              style: const TextStyle(fontSize: 30),
+            ),
+            const SizedBox(
+              height: 25,
+            )
+          ],
+        ),
+        confirmBtnTextStyle: const TextStyle(fontSize: 30, color: Colors.white),
+        cancelBtnTextStyle: const TextStyle(fontSize: 30),
+        onConfirmBtnTap: () {
+          // setState(() {
+          //   toContinue = true;
+          // });
+          Navigator.pop(context);
+          Navigator.pop(context);
+        });
+  }
+
   void exportToExcel() async {
     // Create a new Excel workbook and sheet
     final workbook = Excel.createExcel();
@@ -292,40 +434,44 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         .getAllJournalReports(searchCriteriaForExcel!)
         .then((value) async {
       sheet.appendRow([
-        "Date",
-        "Voucher",
-        "#Voucher",
-        "Status",
-        "Account",
-        "Reference",
-        "Currency",
-        "Debit",
-        "Cridet",
-        "Debit in Base Currency",
-        "Cridet in Base Currency",
-        "Comments",
+        _locale.date,
+        _locale.voucher,
+        _locale.voucherNum,
+        _locale.status,
+        _locale.account,
+        _locale.reference,
+        _locale.currency,
+        _locale.debit,
+        _locale.credit,
+        _locale.dibc,
+        _locale.cibc,
+        _locale.comments,
       ]);
-      for (int i = 0; i < value.length; i++) {
-        final data = value[i];
-        sheet.appendRow([
-          data.referDate ?? "",
-          data.voucherTypeNameE ?? "",
-          data.voucher ?? "",
-          data.statusName ?? "",
-          data.accName ?? "",
-          data.custSupName ?? "",
-          data.transCurrency ?? "",
-          data.debit,
-          data.credit,
-          data.debitInBaseCur,
-          data.creditInBaseCur,
-          data.comments ?? "",
-        ]);
+      if (value.isNotEmpty) {
+        for (int i = 0; i < value.length; i++) {
+          final data = value[i];
+          sheet.appendRow([
+            data.referDate ?? "",
+            data.voucherTypeNameE ?? "",
+            data.voucher ?? "",
+            data.statusName ?? "",
+            data.accName ?? "",
+            data.custSupName ?? "",
+            data.transCurrency ?? "",
+            data.debit,
+            data.credit,
+            data.debitInBaseCur,
+            data.creditInBaseCur,
+            data.comments ?? "",
+          ]);
+        }
+        Navigator.pop(context);
+        downloadFile(Uint8List.fromList(workbook.encode()!),
+            "${_locale.journalReports}.xlsx");
+        showSuccesDialog(context);
+      } else if (value.isEmpty) {
+        showEmptyDialog(context);
       }
-      Navigator.pop(context);
-      downloadFile(
-          Uint8List.fromList(workbook.encode()!), "Journal Reports-Sheet.xlsx");
-      showSuccesDialog(context);
     });
   }
 
@@ -383,113 +529,7 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
     });
   }
 
-  final List<PlutoColumn> columns = <PlutoColumn>[
-    PlutoColumn(
-        // width: 1000,
-        title: 'Date',
-        field: 'date',
-        type: PlutoColumnType.date(),
-        enableRowChecked: true,
-        backgroundColor: colColor),
-    PlutoColumn(
-      title: 'Voucher',
-      field: 'voucher',
-      type: PlutoColumnType.text(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Voucher#',
-      field: 'voucherNum',
-      type: PlutoColumnType.text(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Status',
-      field: 'status',
-      type: PlutoColumnType.select(<String>[
-        'All',
-        'Draft',
-        'Posted',
-      ]),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Account',
-      field: 'account',
-      type: PlutoColumnType.text(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Refernce',
-      field: 'refernce',
-      type: PlutoColumnType.text(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Currency',
-      field: 'currency',
-      type: PlutoColumnType.select(<String>[
-        'ILS ₪',
-        'USD',
-      ]),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Debit',
-      field: 'debit',
-      type: PlutoColumnType.currency(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Credit',
-      field: 'credit',
-      type: PlutoColumnType.currency(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Debit In Base Currency',
-      field: 'dibc',
-      type: PlutoColumnType.currency(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Credit In Base Currency',
-      field: 'cibc',
-      type: PlutoColumnType.currency(),
-      backgroundColor: colColor,
-    ),
-    PlutoColumn(
-      title: 'Comments',
-      field: 'comments',
-      type: PlutoColumnType.text(),
-      backgroundColor: colColor,
-    ),
-
-    // PlutoColumn(
-    //   title: 'Total',
-    //   field: 'total',
-    //   type: PlutoColumnType.currency(),
-    //           enableRowChecked: true,
-
-    //   footerRenderer: (rendererContext) {
-    //     return PlutoAggregateColumnFooter(
-    //       rendererContext: rendererContext,
-    //       formatAsCurrency: true,
-    //       type: PlutoAggregateColumnType.sum,
-    //       alignment: Alignment.center,
-    //       titleSpanBuilder: (text) {
-    //         return [
-    //           const TextSpan(
-    //             text: 'Total',
-    //             style: TextStyle(color: Colors.red),
-    //           ),
-
-    //         ];
-    //       },
-    //     );
-    //   },
-    // ),
-  ];
+  List<PlutoColumn> columns = [];
   Future getAccountList() async {
     accountsNameList = [];
     accountToAdd = <String, dynamic>{};

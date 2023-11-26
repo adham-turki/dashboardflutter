@@ -134,7 +134,7 @@ List<MenuModel> getMenu(AppLocalizations locale) {
           title: locale.changePassword,
           pageNumber: 18,
         ),
-        // SubMenuModel(title: "Journal Reports", pageNumber: 19)
+        // SubMenuModel(title: locale.journalReports, pageNumber: 19)
       ],
       pageNumber: -1,
     ),
