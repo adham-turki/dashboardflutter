@@ -127,8 +127,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     selectedPeriod = periods[0];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    // getCashFlows(isStart: true);
-    getAllCodeReports();
+    getCashFlows(isStart: true);
+    // getAllCodeReports();
     super.didChangeDependencies();
   }
 
@@ -643,7 +643,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     String endDate = DatesController().formatDate(_toDateController.text);
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate, toDate: endDate, voucherStatus: status);
-    setSearchCriteria(searchCriteria);
+    // setSearchCriteria(searchCriteria);
     cashFlowController.getChartCash(searchCriteria).then((value) {
       setState(() {
         balance = value[0].value! - value[1].value!;
