@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/search_table/table_widget.dart';
 import 'package:bi_replicate/controller/vouch_type_controller.dart';
 import 'package:bi_replicate/model/settings/setup/account_model.dart';
+import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -71,9 +72,13 @@ class _SearchComponentState extends State<SearchComponent> {
   bool showTable2 = false;
   bool isDesktop = false;
   bool _showTable = false;
+  List<AccountModel> accounts = [];
+  List<AccountModel> accounts1 = [];
   @override
   void initState() {
     position = const Offset(300, 300);
+    accounts = widget.accountsList!;
+    accounts1 = widget.accountsList!;
 
     // TODO: implement initState
     super.initState();
@@ -85,6 +90,7 @@ class _SearchComponentState extends State<SearchComponent> {
       print("value.length: ${value.length}");
     });
     _locale = AppLocalizations.of(context);
+    print("_locale.localeName: ${_locale.localeName}");
     periods = [
       _locale.daily,
       _locale.weekly,
@@ -245,6 +251,7 @@ class _SearchComponentState extends State<SearchComponent> {
                                 width: screenWidth / 2.2,
                                 height: screenHeight * 0.1,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     SizedBox(
                                       width: (screenWidth / 2.2) / 4.8,
@@ -263,11 +270,22 @@ class _SearchComponentState extends State<SearchComponent> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: (screenWidth / 2.2) / 1.4,
-                                          padding: const EdgeInsets.only(
-                                              left: 15, right: 15, bottom: 15),
+                                        SizedBox(
+                                          width: (screenWidth / 2.2) / 1.44,
+                                          // padding: const EdgeInsets.only(
+                                          //     left: 15, right: 15, bottom: 15),
                                           child: TextField(
+                                            decoration: InputDecoration(
+                                              border:
+                                                  OutlineInputBorder(), // Adding border here
+                                              hintText: 'Search',
+                                              // You can add more styling options here as needed
+                                            ),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                filteredList(value);
+                                              });
+                                            },
                                             controller: _textEditingController,
                                             onTap: () {
                                               setState(() {
@@ -481,6 +499,7 @@ class _SearchComponentState extends State<SearchComponent> {
                                 width: screenWidth / 2.2,
                                 height: screenHeight * 0.1,
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Container(
                                       alignment: Alignment.centerLeft,
@@ -497,12 +516,23 @@ class _SearchComponentState extends State<SearchComponent> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          width: (screenWidth / 2.2) / 1.4,
-                                          padding: const EdgeInsets.only(
-                                              left: 15, right: 15, bottom: 15),
+                                        SizedBox(
+                                          width: (screenWidth / 2.2) /
+                                              1.44, // padding: const EdgeInsets.only(
+                                          //     left: 15, right: 15, bottom: 15),
                                           child: TextField(
+                                            decoration: const InputDecoration(
+                                              border:
+                                                  OutlineInputBorder(), // Adding border here
+                                              hintText: 'Search',
+                                              // You can add more styling options here as needed
+                                            ),
                                             controller: _textEditingController2,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                filteredList1(value);
+                                              });
+                                            },
                                             onTap: () {
                                               setState(() {
                                                 showTable2 = !showTable2;
@@ -741,7 +771,9 @@ class _SearchComponentState extends State<SearchComponent> {
                 ),
               ),
               Positioned(
-                left: position.dx + 150,
+                left: _locale.localeName == "ar"
+                    ? position.dx + 150
+                    : position.dx - 200,
                 top: position.dy - 20,
                 child: Visibility(
                   visible: showTable,
@@ -756,7 +788,9 @@ class _SearchComponentState extends State<SearchComponent> {
                 ),
               ),
               Positioned(
-                left: position.dx - 200,
+                left: _locale.localeName == "ar"
+                    ? position.dx - 200
+                    : position.dx + 150,
                 top: position.dy - 20,
                 child: Visibility(
                   visible: showTable2,
@@ -777,7 +811,7 @@ class _SearchComponentState extends State<SearchComponent> {
 
   _showTableWidget(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.22,
       height: MediaQuery.of(context).size.height * 0.25,
       color: Colors.white,
       child: Column(
@@ -789,11 +823,11 @@ class _SearchComponentState extends State<SearchComponent> {
               _locale.name,
             ],
             rows: [
-              for (int i = 0; i < widget.accountsList!.length; i++)
+              for (int i = 0; i < accounts.length; i++)
                 data_row.DataRow(
                   values: [
-                    widget.accountsList![i].txtCode!,
-                    widget.accountsList![i].txtEnglishName!,
+                    accounts[i].txtCode!,
+                    accounts[i].txtEnglishName!,
                   ],
                 ),
             ],
@@ -812,9 +846,35 @@ class _SearchComponentState extends State<SearchComponent> {
     );
   }
 
+  filteredList(String query) {
+    accounts = widget.accountsList!;
+    accounts = accounts.where((account) {
+      return (account.txtCode != null &&
+              account.txtCode!.toLowerCase().contains(query.toLowerCase())) ||
+          (account.txtEnglishName != null &&
+              account.txtEnglishName!
+                  .toLowerCase()
+                  .contains(query.toLowerCase()));
+    }).toList();
+    print("accountsList.length: ${accounts.length}");
+  }
+
+  filteredList1(String query) {
+    accounts1 = widget.accountsList!;
+    accounts1 = accounts1.where((account) {
+      return (account.txtCode != null &&
+              account.txtCode!.toLowerCase().contains(query.toLowerCase())) ||
+          (account.txtEnglishName != null &&
+              account.txtEnglishName!
+                  .toLowerCase()
+                  .contains(query.toLowerCase()));
+    }).toList();
+    print("accountsList.length: ${accounts1.length}");
+  }
+
   _showTableWidget2(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.22,
       height: MediaQuery.of(context).size.height * 0.25,
       color: Colors.white,
       child: Column(
@@ -826,11 +886,11 @@ class _SearchComponentState extends State<SearchComponent> {
               _locale.name,
             ],
             rows: [
-              for (int i = 0; i < widget.accountsList!.length; i++)
+              for (int i = 0; i < accounts1.length; i++)
                 data_row.DataRow(
                   values: [
-                    widget.accountsList![i].txtCode!,
-                    widget.accountsList![i].txtEnglishName!,
+                    accounts1[i].txtCode!,
+                    accounts1[i].txtEnglishName!,
                   ],
                 ),
             ],
@@ -873,7 +933,7 @@ class _SearchComponentState extends State<SearchComponent> {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    searchResults = widget.accountsList!
+    searchResults = accounts
         .where((user) =>
             user.txtEnglishName!.toLowerCase().contains(query.toLowerCase()))
         .toList();

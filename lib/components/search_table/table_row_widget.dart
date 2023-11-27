@@ -39,16 +39,19 @@ class _TableRowWidgetState extends State<TableRowWidget> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(widget.rowData.length, (index) {
               final item = widget.rowData[index];
 
               // Text data
-              return Text(
-                item.toString(),
-                style: TextStyle(
-                  fontWeight:
-                      widget.isHeader ? FontWeight.bold : FontWeight.normal,
+              return SizedBox(
+                width: MediaQuery.of(context).size.width * 0.1,
+                child: Text(
+                  item.toString(),
+                  style: TextStyle(
+                    fontWeight:
+                        widget.isHeader ? FontWeight.bold : FontWeight.normal,
+                  ),
                 ),
               );
             }),
