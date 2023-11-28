@@ -254,5 +254,6 @@
     "fromCode": "From Code",
     "toCode": "To Code",
     "voucherType": "Voucher Type",
-    "addtoFav": "Add To Favorite"
+    "addtoFav": "Add To Favorite",
+    "chooseColumns": "Choose Columns"
 }

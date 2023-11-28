@@ -230,5 +230,6 @@
     "fromCode": "من كود",
     "toCode": "الى كود",
     "voucherType": "نوع السند",
-    "addtoFav": "اضافة الى المفضلة"
+    "addtoFav": "اضافة الى المفضلة",
+    "chooseColumns": "اختر الأعمدة"
 }

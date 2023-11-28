@@ -29,6 +29,7 @@ import '../utils/constants/colors.dart';
 import '../utils/constants/constants_apis.dart';
 import '../utils/constants/maps.dart';
 import '../utils/constants/responsive.dart';
+import '../widget/check_boxes_dialog.dart';
 import '../widget/text_field_custom.dart';
 import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
@@ -67,6 +68,18 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
   List<VouchTypeModel> vouchTypeList = [];
   Map<String, dynamic>? accountToAdd;
   Map<String, dynamic>? vouchTypeToAdd;
+  bool dateBoolVall = true;
+  bool voucherBoolVall = true;
+  bool voucherNumBoolVall = true;
+  bool statusBoolVall = true;
+  bool accountBoolVall = true;
+  bool referenceBoolVall = true;
+  bool currencyBoolVall = true;
+  bool debitBoolVall = true;
+  bool cridetBoolVall = true;
+  bool dibcBoolVall = true;
+  bool cibcBoolVall = true;
+  bool commentsBoolVall = true;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context);
@@ -327,8 +340,54 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                       imagePath: 'assets/images/excel.png',
                       onPressed: () {
                         // exportToCsv();
-                        exportToExcel();
-                        debugPrint('Excel clicked!');
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return ExportCheckBoxesDialog(
+                              onFilter: (dateBoolVal,
+                                  voucherBoolVal,
+                                  voucherNumBoolVal,
+                                  statusBoolVal,
+                                  accountBoolVal,
+                                  referenceBoolVal,
+                                  currency,
+                                  debitBoolVal,
+                                  cridetBoolVal,
+                                  dibcBoolVal,
+                                  cibcBoolVal,
+                                  commentsBoolVal) {
+                                dateBoolVall = dateBoolVal;
+                                voucherBoolVall = voucherBoolVal;
+                                voucherNumBoolVall = voucherNumBoolVal;
+                                statusBoolVall = statusBoolVal;
+                                accountBoolVall = accountBoolVal;
+                                referenceBoolVall = referenceBoolVal;
+                                currencyBoolVall = currency;
+                                debitBoolVall = debitBoolVal;
+                                cridetBoolVall = cridetBoolVal;
+                                dibcBoolVall = dibcBoolVal;
+                                cibcBoolVall = cibcBoolVal;
+                                commentsBoolVall = commentsBoolVal;
+                                print('dateBoolVal: $dateBoolVal');
+                                print('voucherBoolVal: $voucherBoolVal');
+                                print('voucherNumBoolVal: $voucherNumBoolVal');
+                                print('statusBoolVal: $statusBoolVal');
+                                print('accountBoolVal: $accountBoolVal');
+                                print('referenceBoolVal: $referenceBoolVal');
+                                print('currencyBoolVal: $currency');
+                                print('debitBoolVal: $debitBoolVal');
+                                print('creditBoolVal: $cridetBoolVall');
+                                print('dibcBoolVal: $dibcBoolVal');
+                                print('cibcBoolVal: $cibcBoolVal');
+                                print('commentsBoolVal: $commentsBoolVal');
+                              },
+                            );
+                          },
+                        ).then((value) {
+                          if (value) {
+                            exportToExcel();
+                          }
+                        });
                       },
                     ),
                     MyImageButton(
@@ -434,35 +493,35 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         .getAllJournalReports(searchCriteriaForExcel!)
         .then((value) async {
       sheet.appendRow([
-        _locale.date,
-        _locale.voucher,
-        _locale.voucherNum,
-        _locale.status,
-        _locale.account,
-        _locale.reference,
-        _locale.currency,
-        _locale.debit,
-        _locale.credit,
-        _locale.dibc,
-        _locale.cibc,
-        _locale.comments,
+        if (dateBoolVall) _locale.date,
+        if (voucherBoolVall) _locale.voucher,
+        if (voucherNumBoolVall) _locale.voucherNum,
+        if (statusBoolVall) _locale.status,
+        if (accountBoolVall) _locale.account,
+        if (referenceBoolVall) _locale.reference,
+        if (currencyBoolVall) _locale.currency,
+        if (debitBoolVall) _locale.debit,
+        if (cridetBoolVall) _locale.credit,
+        if (dibcBoolVall) _locale.dibc,
+        if (cibcBoolVall) _locale.cibc,
+        if (commentsBoolVall) _locale.comments,
       ]);
       if (value.isNotEmpty) {
         for (int i = 0; i < value.length; i++) {
           final data = value[i];
           sheet.appendRow([
-            data.referDate ?? "",
-            data.voucherTypeNameE ?? "",
-            data.voucher ?? "",
-            data.statusName ?? "",
-            data.accName ?? "",
-            data.custSupName ?? "",
-            data.transCurrency ?? "",
-            data.debit,
-            data.credit,
-            data.debitInBaseCur,
-            data.creditInBaseCur,
-            data.comments ?? "",
+            if (dateBoolVall) data.referDate ?? "",
+            if (voucherBoolVall) data.voucherTypeNameE ?? "",
+            if (voucherNumBoolVall) data.voucher ?? "",
+            if (statusBoolVall) data.statusName ?? "",
+            if (accountBoolVall) data.accName ?? "",
+            if (referenceBoolVall) data.custSupName ?? "",
+            if (currencyBoolVall) data.transCurrency ?? "",
+            if (debitBoolVall) data.debit,
+            if (cridetBoolVall) data.credit,
+            if (dibcBoolVall) data.debitInBaseCur,
+            if (cibcBoolVall) data.creditInBaseCur,
+            if (commentsBoolVall) data.comments ?? "",
           ]);
         }
         Navigator.pop(context);
