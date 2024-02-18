@@ -47,7 +47,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
 
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     status = [
       _locale.all,
@@ -107,7 +107,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsBankSettlement(
-                AppLocalizations.of(context), context),
+                AppLocalizations.of(context)!, context),
             polRows: [],
             footerBuilder: (stateManager) {
               return lazyPaginationFooter(stateManager);
@@ -139,7 +139,7 @@ class _ChequesAndBankContentState extends State<ChequesAndBankContent> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: ChequesPayableModel.getColumnsChequesPayable(
-                AppLocalizations.of(context), context),
+                AppLocalizations.of(context)!, context),
             polRows: [],
             footerBuilder: (stateManager) {
               return lazyPaginationFooter(stateManager);

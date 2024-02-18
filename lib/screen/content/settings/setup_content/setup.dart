@@ -42,7 +42,7 @@ class _SetupScreenState extends State<SetupScreen> {
   ];
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }

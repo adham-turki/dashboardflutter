@@ -61,7 +61,7 @@ class _AgingReceivableState extends State<AgingReceivable> {
   List<BarChartData> barData = [];
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     status = [
       _locale.all,
       _locale.posted,

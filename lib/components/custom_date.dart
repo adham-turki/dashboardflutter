@@ -84,7 +84,7 @@ class _CustomDateState extends State<CustomDate> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

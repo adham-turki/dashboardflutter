@@ -68,7 +68,7 @@ class _FilterDialogSalesByCategoryState
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     periods = [
       _locale.daily,

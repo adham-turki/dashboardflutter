@@ -55,7 +55,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

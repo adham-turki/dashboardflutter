@@ -9,7 +9,7 @@ import 'package:bi_replicate/model/journal_reports_model.dart';
 import 'package:bi_replicate/model/new_search_criteria_model.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:excel/excel.dart';
-import 'package:file_saver/file_saver.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -31,7 +31,6 @@ import '../utils/constants/maps.dart';
 import '../utils/constants/responsive.dart';
 import '../widget/check_boxes_dialog.dart';
 import '../widget/text_field_custom.dart';
-import 'package:pluto_grid_export/pluto_grid_export.dart' as pluto_grid_export;
 
 class JournalReportsScreen extends StatefulWidget {
   const JournalReportsScreen({super.key});
@@ -82,7 +81,7 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
   bool commentsBoolVall = true;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     columns = <PlutoColumn>[
       PlutoColumn(
           // width: 1000,
@@ -545,6 +544,7 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
   void exportToCsv() async {
     String title = "pluto_grid_export";
 
+    var pluto_grid_export;
     var exported = const Utf8Encoder()
         .convert(pluto_grid_export.PlutoGridExport.exportCSV(stateManager));
     print(exported);

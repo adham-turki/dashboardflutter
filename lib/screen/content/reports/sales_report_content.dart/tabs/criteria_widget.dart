@@ -121,7 +121,7 @@ class _LeftWidgetState extends State<LeftWidget> {
   bool isMobile = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
 
     super.didChangeDependencies();
@@ -886,7 +886,7 @@ class _RightWidgetState extends State<RightWidget> {
   bool isMobile = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
 
     super.didChangeDependencies();

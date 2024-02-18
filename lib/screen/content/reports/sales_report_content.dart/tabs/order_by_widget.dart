@@ -49,7 +49,7 @@ class _OrderByWidgetState extends State<OrderByWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
 
     firstList = [

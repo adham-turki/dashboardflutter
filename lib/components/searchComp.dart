@@ -89,7 +89,7 @@ class _SearchComponentState extends State<SearchComponent> {
     VouchTypeController().getAllVouchTypes().then((value) {
       print("value.length: ${value.length}");
     });
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     print("_locale.localeName: ${_locale.localeName}");
     periods = [
       _locale.daily,

@@ -104,7 +104,7 @@ class _BranchesSalesByCatDashboardState
   bool isDesktop = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     periods = [
       _locale.daily,

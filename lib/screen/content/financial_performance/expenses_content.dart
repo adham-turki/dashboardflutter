@@ -85,7 +85,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 

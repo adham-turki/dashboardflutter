@@ -87,7 +87,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   String txtKey = "";
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
     fromDateController.text = todayDate;
 

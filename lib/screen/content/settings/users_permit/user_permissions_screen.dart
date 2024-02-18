@@ -43,7 +43,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }
@@ -82,7 +82,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: UserPermitModel.getColumns(
-                context, AppLocalizations.of(context)),
+                context, AppLocalizations.of(context)!),
             polRows: getRows(),
             footerBuilder: (PlutoGridStateManager stateManager) {
               return tableFooter();
@@ -275,7 +275,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
         barrierDismissible: false,
         builder: (context) {
           return CustomConfirmDialog(
-            confirmMessage: AppLocalizations.of(context).areYouSure,
+            confirmMessage: AppLocalizations.of(context)!.areYouSure,
           );
         }).then((value) {
       if (value) {

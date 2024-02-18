@@ -24,7 +24,7 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   @override
   void didChangeDependencies() {
     _localeProvider = Provider.of<LocaleProvider>(context);
-    _local = AppLocalizations.of(context);
+    _local = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

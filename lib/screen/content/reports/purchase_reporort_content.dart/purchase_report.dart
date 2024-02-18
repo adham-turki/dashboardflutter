@@ -45,7 +45,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
   // TextEditingController toDate = TextEditingController();
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     readProvider = context.read<PurchaseCriteraProvider>();
     readProvider.emptyProvider();
     orderByColumns = [
@@ -358,7 +358,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
           child: TableComponent(
             key: UniqueKey(),
             plCols: PurchaseCostReportModel.getColumns(
-                AppLocalizations.of(context),
+                AppLocalizations.of(context)!,
                 orderByColumns,
                 reportsResult,
                 context),

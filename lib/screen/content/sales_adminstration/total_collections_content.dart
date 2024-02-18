@@ -77,7 +77,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   bool boolTemp = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 

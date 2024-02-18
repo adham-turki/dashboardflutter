@@ -64,7 +64,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     status = [
       _locale.all,
       _locale.posted,
@@ -131,7 +131,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: ChequesModel.getColumns(
-                          AppLocalizations.of(context), reportsResult, context),
+                          AppLocalizations.of(context)!,
+                          reportsResult,
+                          context),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);

@@ -77,12 +77,12 @@ class _SideMenuState extends State<SideMenu> {
                         children: [
                           for (int i = 0;
                               i <
-                                  getSubMenu(AppLocalizations.of(context))
+                                  getSubMenu(AppLocalizations.of(context)!)
                                       .length;
                               i++)
                             TabMenu(
                                 sideTabModel: getSubMenu(
-                                    AppLocalizations.of(context))[i]),
+                                    AppLocalizations.of(context)!)[i]),
                         ],
                       ),
                       // Column(

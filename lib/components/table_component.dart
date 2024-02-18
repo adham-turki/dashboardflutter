@@ -41,7 +41,7 @@ class _TableComponentState extends State<TableComponent> {
   // var _preventContextMenu;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

@@ -31,7 +31,7 @@ class _ErrorDialogState extends State<ErrorDialog> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
   }
 
   @override

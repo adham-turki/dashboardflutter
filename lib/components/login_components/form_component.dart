@@ -33,7 +33,7 @@ class _FormComponentState extends State<FormComponent> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
   }
 
   @override

@@ -72,7 +72,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   String txtKey = "";
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDate(DatesController().todayDate());
     currentMonth =
         DatesController().formatDate(DatesController().twoYearsAgo());

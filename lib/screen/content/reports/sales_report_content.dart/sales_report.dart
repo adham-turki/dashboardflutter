@@ -47,7 +47,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
 
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
     readProvider.emptyProvider();
 
@@ -375,7 +375,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
               child: TableComponent(
                 key: UniqueKey(),
                 plCols: SalesCostReportModel.getColumns(
-                    AppLocalizations.of(context),
+                    AppLocalizations.of(context)!,
                     orderByColumns,
                     reportsResult,
                     context),

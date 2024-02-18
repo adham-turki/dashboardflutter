@@ -42,7 +42,7 @@ class _SetupWidgetState extends State<SetupWidget> {
   // bool isMobile = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     viewValues = [_locale.all, _locale.code, _locale.barCode];
     transactionTypeValues = [_locale.all, _locale.sales, _locale.returnSales];
     readProvider = context.read<PurchaseCriteraProvider>();

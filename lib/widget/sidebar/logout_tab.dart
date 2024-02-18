@@ -28,7 +28,7 @@ class _LogoutTabState extends State<LogoutTab> {
 
   @override
   void didChangeDependencies() {
-    locale = AppLocalizations.of(context);
+    locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }

@@ -40,7 +40,7 @@ class _DashboardContentState extends State<DashboardContent> {
   late AppLocalizations locale;
   @override
   void didChangeDependencies() async {
-    locale = AppLocalizations.of(context);
+    locale = AppLocalizations.of(context)!;
     VouchHeaderTransietController().getBranch().then((value) {
       setState(() {
         vouchHeaderTransietModel = value!;

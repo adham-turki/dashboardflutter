@@ -91,7 +91,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   final usedColors = <Color>[];
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     _fromDateController.text = todayDate;

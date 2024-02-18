@@ -67,7 +67,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     hintValue = numberOfrow.text == "" ? "0" : (numberOfrow.text);
     status = [
       _locale.all,
@@ -146,7 +146,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context), context),
+                                AppLocalizations.of(context)!, context),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -174,7 +174,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context), context),
+                                AppLocalizations.of(context)!, context),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);
@@ -211,7 +211,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context), context),
+                                AppLocalizations.of(context)!, context),
                             polRows: polTopRows,
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooter(stateManager);
@@ -239,7 +239,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           child: TableComponent(
                             key: UniqueKey(),
                             plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context), context),
+                                AppLocalizations.of(context)!, context),
                             polRows: [],
                             footerBuilder: (stateManager) {
                               return lazyPaginationFooterLeast(stateManager);

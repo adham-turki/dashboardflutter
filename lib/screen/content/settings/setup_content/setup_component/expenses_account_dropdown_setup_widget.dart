@@ -26,7 +26,7 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
   late AppLocalizations _locale;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }

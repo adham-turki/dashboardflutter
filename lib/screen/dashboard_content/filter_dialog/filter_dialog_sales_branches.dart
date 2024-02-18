@@ -58,7 +58,7 @@ class _FilterDialogSalesByBranchesState
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     status = [
       _locale.all,

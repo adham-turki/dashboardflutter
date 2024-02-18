@@ -38,7 +38,7 @@ class _CardComponentState extends State<CardComponent> {
   bool isMobile = false;
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }

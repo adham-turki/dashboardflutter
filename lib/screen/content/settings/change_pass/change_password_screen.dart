@@ -34,7 +34,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

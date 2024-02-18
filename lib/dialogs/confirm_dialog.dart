@@ -25,7 +25,7 @@ class _CustomConfirmDialogState extends State<CustomConfirmDialog> {
   final FocusNode _foucasNode = FocusNode();
   @override
   void didChangeDependencies() {
-    _local = AppLocalizations.of(context);
+    _local = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 

@@ -46,7 +46,7 @@ class _ExportCheckBoxesDialogState extends State<ExportCheckBoxesDialog> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }

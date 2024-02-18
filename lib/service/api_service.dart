@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
+import '../components/key.dart';
 import '../controller/error_controller.dart';
 import '../model/api_url.dart';
 import '../utils/constants/api_constants.dart';
+import '../utils/constants/constants.dart';
 
 class ApiService {
   // static String url = "https://bic.scopef.com:9002";
@@ -29,6 +34,16 @@ class ApiService {
       print(Uri.parse(requestUrl));
       if (response.statusCode != 200) {
         if (response.statusCode == 417 || response.statusCode == 401) {
+          final context = navigatorKey.currentState!.overlay!.context;
+
+          await storage.delete(key: "jwt").then((value) {
+            if (kIsWeb) {
+              // Navigator.pop(context);
+              GoRouter.of(context).go(loginScreenRoute);
+            } else {
+              Navigator.pushReplacementNamed(context, loginScreenRoute);
+            }
+          });
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,
@@ -102,6 +117,16 @@ class ApiService {
         }
 
         if (response.statusCode == 417 || response.statusCode == 401) {
+          final context = navigatorKey.currentState!.overlay!.context;
+
+          await storage.delete(key: "jwt").then((value) {
+            if (kIsWeb) {
+              // Navigator.pop(context);
+              GoRouter.of(context).go(loginScreenRoute);
+            } else {
+              Navigator.pushReplacementNamed(context, loginScreenRoute);
+            }
+          });
           ErrorController.openErrorDialog(
             response.statusCode,
             response.body,

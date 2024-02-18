@@ -62,7 +62,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
   @override
   void didChangeDependencies() async {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
     status = [
       _locale.all,
       _locale.posted,
@@ -132,7 +132,9 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     child: TableComponent(
                       key: UniqueKey(),
                       plCols: TotalSalesModel.getColumns(
-                          AppLocalizations.of(context), reportsResult, context),
+                          AppLocalizations.of(context)!,
+                          reportsResult,
+                          context),
                       polRows: [],
                       footerBuilder: (stateManager) {
                         return lazyPaginationFooter(stateManager);

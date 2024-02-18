@@ -41,6 +41,7 @@ dependencies:
   provider: ^6.0.5
   pluto_grid: ^5.4.9
   dropdown_search: ^5.0.6
+  local_session_timeout: ^2.3.2
   http: ^0.13.6
   syncfusion_flutter_datepicker: ^21.2.3
   mask_text_input_formatter: ^2.5.0

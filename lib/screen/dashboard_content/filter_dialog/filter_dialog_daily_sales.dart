@@ -64,7 +64,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
 
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context);
+    _locale = AppLocalizations.of(context)!;
 
     status = [
       _locale.all,

@@ -32,7 +32,7 @@ class _ContentHeaderState extends State<ContentHeader> {
 
   @override
   void didChangeDependencies() {
-    locale = AppLocalizations.of(context);
+    locale = AppLocalizations.of(context)!;
     VouchHeaderTransietController().getBranch().then((value) {
       setState(() {
         vouchHeaderTransietModel = value!;

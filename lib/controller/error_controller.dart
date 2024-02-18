@@ -7,7 +7,7 @@ class ErrorController {
   static bool temp = false;
   static openErrorDialog(int responseStatus, String errorDetails) async {
     final context = navigatorKey.currentState!.overlay!.context;
-    AppLocalizations locale = AppLocalizations.of(context);
+    AppLocalizations locale = AppLocalizations.of(context)!;
     //details for each response status from the api
     if (responseStatus == 400) {
       dialogBasedonResponseStatus(Icons.warning, errorDetails, locale.error400,

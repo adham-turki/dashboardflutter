@@ -44,7 +44,7 @@ class _UsersContentState extends State<UsersContent> {
 
   @override
   void didChangeDependencies() {
-    locale = AppLocalizations.of(context);
+    locale = AppLocalizations.of(context)!;
 
     super.didChangeDependencies();
   }
@@ -59,7 +59,7 @@ class _UsersContentState extends State<UsersContent> {
           child: TableComponent(
             key: UniqueKey(),
             plCols:
-                UsersModel.getColumns(context, AppLocalizations.of(context)),
+                UsersModel.getColumns(context, AppLocalizations.of(context)!),
             polRows: getRows(),
             footerBuilder: (PlutoGridStateManager stateManager) {
               return tableFooter();
@@ -99,7 +99,7 @@ class _UsersContentState extends State<UsersContent> {
         barrierDismissible: false,
         builder: (context) {
           return CustomConfirmDialog(
-            confirmMessage: AppLocalizations.of(context).areYouSure,
+            confirmMessage: AppLocalizations.of(context)!.areYouSure,
           );
         }).then((value) {
       if (value) {
