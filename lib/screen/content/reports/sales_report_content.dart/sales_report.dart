@@ -136,6 +136,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             selectedValueFromDropdown4 == "")) {
       // setState(() {
       orderByColumns = orderByColumnsTemp;
+      if (readProvider.useItemCostPrice == true) {
+        orderByColumnsTemp.addAll([
+          _locale.costPriceAvg,
+          _locale.totalCost,
+          _locale.diffBetCostAndSale,
+          _locale.profitPercent
+        ]);
+      }
       // });
     } else {
       Set<String> selectedValues = {};
@@ -187,8 +195,16 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         _locale.averagePrice,
         _locale.total,
       ]);
+      if (readProvider.useItemCostPrice == true) {
+        columns.addAll([
+          _locale.costPriceAvg,
+          _locale.totalCost,
+          _locale.diffBetCostAndSale,
+        ]);
+      }
       // setState(() {
       orderByColumns = columns;
+
       // });
     }
   }

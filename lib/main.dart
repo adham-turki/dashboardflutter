@@ -86,8 +86,8 @@ class _MyAppState extends State<MyApp> {
     const storage = FlutterSecureStorage();
 
     final sessionConfig = SessionConfig(
-      invalidateSessionForAppLostFocus: const Duration(seconds: 10),
-      invalidateSessionForUserInactivity: const Duration(seconds: 10),
+      invalidateSessionForAppLostFocus: const Duration(minutes: 30),
+      invalidateSessionForUserInactivity: const Duration(minutes: 30),
     );
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) async {
       // stop listening, as user will already be in auth page

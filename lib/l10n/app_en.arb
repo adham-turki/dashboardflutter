@@ -255,5 +255,9 @@
     "toCode": "To Code",
     "voucherType": "Voucher Type",
     "addtoFav": "Add To Favorite",
-    "chooseColumns": "Choose Columns"
+    "chooseColumns": "Choose Columns",
+    "costPriceAvg": "Cost Price Averge",
+    "totalCost": "Total Cost",
+    "diffBetCostAndSale": "Difference between Cost and Sale",
+    "profitPercent": "Profit Percentage %"
 }

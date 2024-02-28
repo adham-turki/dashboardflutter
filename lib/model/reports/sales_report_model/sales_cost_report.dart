@@ -29,6 +29,10 @@ class SalesCostReportModel {
   String? monthly;
   String? brand;
   String? invoice;
+  double? costPriceRate;
+  double? totalCost;
+  double? differCostSale;
+  String? profitRatio;
   SalesCostReportModel();
 
   SalesCostReportModel.fromJson(Map<String, dynamic> salesReport) {
@@ -98,6 +102,22 @@ class SalesCostReportModel {
     invoice = salesReport['invoice'].toString() == "null"
         ? ""
         : salesReport['invoice'];
+
+    costPriceRate = salesReport['costPriceRate'].toString() == "null"
+        ? 0.0
+        : salesReport['costPriceRate'];
+
+    totalCost = salesReport['totalCost'].toString() == "null"
+        ? 0.0
+        : salesReport['totalCost'];
+
+    differCostSale = salesReport['differCostSale'].toString() == "null"
+        ? 0.0
+        : salesReport['differCostSale'];
+
+    profitRatio = salesReport['profitRatio'].toString() == "null"
+        ? ""
+        : salesReport['profitRatio'];
   }
   PlutoRow toPluto() {
     final Map<String, PlutoCell> salesReport = <String, PlutoCell>{};
@@ -121,6 +141,10 @@ class SalesCostReportModel {
     salesReport['monthly'] = PlutoCell(value: monthly ?? "");
     salesReport['brand'] = PlutoCell(value: brand ?? "");
     salesReport['invoice'] = PlutoCell(value: invoice ?? "");
+    salesReport['costPriceRate'] = PlutoCell(value: costPriceRate ?? "");
+    salesReport['totalCost'] = PlutoCell(value: totalCost ?? "");
+    salesReport['differCostSale'] = PlutoCell(value: differCostSale ?? "");
+    salesReport['profitRatio'] = PlutoCell(value: profitRatio ?? "");
 
     return PlutoRow(cells: salesReport);
   }
@@ -165,7 +189,30 @@ class SalesCostReportModel {
                         return footerRenderer(
                             rendererContext, reportsResult.total!);
                       }
-                    : null,
+                    : fieldsName[i] == 'costPriceRate' && reportsResult != null
+                        ? (rendererContext) {
+                            return footerRenderer(
+                                rendererContext, reportsResult.costPriceRate!);
+                          }
+                        : fieldsName[i] == 'totalCost' && reportsResult != null
+                            ? (rendererContext) {
+                                return footerRenderer(
+                                    rendererContext, reportsResult.totalCost!);
+                              }
+                            : fieldsName[i] == 'differCostSale' &&
+                                    reportsResult != null
+                                ? (rendererContext) {
+                                    return footerRenderer(rendererContext,
+                                        reportsResult.differCostSale!);
+                                  }
+                                : fieldsName[i] == 'profitRatio' &&
+                                        reportsResult != null
+                                    ? (rendererContext) {
+                                        return footerRendererString(
+                                            rendererContext,
+                                            reportsResult.profitRatio!);
+                                      }
+                                    : null,
       ));
     }
 
@@ -183,6 +230,24 @@ class SalesCostReportModel {
         return [
           TextSpan(
             text: Converters.formatNumber(valueAll),
+            style: gridFooterStyle,
+          ),
+        ];
+      },
+    );
+  }
+
+  static PlutoAggregateColumnFooter footerRendererString(
+      PlutoColumnFooterRendererContext rendererContext, String valueAll) {
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: false,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: valueAll,
             style: gridFooterStyle,
           ),
         ];

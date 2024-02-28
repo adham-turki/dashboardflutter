@@ -50,7 +50,11 @@ List<String> getColumnsName(
     locale.monthly: "monthly",
     locale.yearly: "yearly",
     locale.brand: "brand",
-    locale.invoice: "invoice"
+    locale.invoice: "invoice",
+    locale.costPriceAvg: "costPriceRate",
+    locale.totalCost: "totalCost",
+    locale.diffBetCostAndSale: "differCostSale",
+    locale.profitPercent: "profitRatio"
   };
 
   List<String> columnsName = [];
@@ -82,7 +86,11 @@ List<String> getCustomColumnsName(
     locale.monthly: locale.monthly,
     locale.yearly: locale.yearly,
     locale.brand: locale.brand,
-    locale.invoice: locale.invoice
+    locale.invoice: locale.invoice,
+    locale.costPriceAvg: locale.costPriceAvg,
+    locale.totalCost: locale.totalCost,
+    locale.diffBetCostAndSale: locale.diffBetCostAndSale,
+    locale.profitPercent: locale.profitPercent
   };
 
   List<String> columnsName = [];

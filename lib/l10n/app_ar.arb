@@ -231,5 +231,9 @@
     "toCode": "الى كود",
     "voucherType": "نوع السند",
     "addtoFav": "اضافة الى المفضلة",
-    "chooseColumns": "اختر الأعمدة"
+    "chooseColumns": "اختر الأعمدة",
+    "costPriceAvg": "معدل سعر التكلفة",
+    "totalCost": "مجموع التكلفة",
+    "diffBetCostAndSale": "الفرق بين التكلفة والبيع",
+    "profitPercent": "نسبة الربح %"
 }
