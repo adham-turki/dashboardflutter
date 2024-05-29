@@ -82,14 +82,14 @@ class TotalSalesModel {
         title: localizations.name,
         field: "name",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.124 : width * 0.3,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.returnQty,
         field: "inQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.075 : width * 0.3,
+        width: isDesktop ? width * 0.09 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -102,7 +102,7 @@ class TotalSalesModel {
         title: localizations.salesQty,
         field: "outQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.075 : width * 0.3,
+        width: isDesktop ? width * 0.09 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {
@@ -115,7 +115,7 @@ class TotalSalesModel {
         title: localizations.netSalesQty,
         field: "netSold",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.085 : width * 0.3,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: reportResult != null
             ? (rendererContext) {

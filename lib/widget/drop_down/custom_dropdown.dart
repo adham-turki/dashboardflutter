@@ -6,7 +6,7 @@ import '../custom_label.dart';
 
 // ignore: must_be_immutable
 class CustomDropDown extends StatefulWidget {
-  final String? label;
+  final String label;
   final double? width;
   final double? padding;
   final Key? customKey;
@@ -27,7 +27,7 @@ class CustomDropDown extends StatefulWidget {
     this.items,
     this.padding,
     this.customKey,
-    this.label,
+    required this.label,
     this.hint,
     this.onChanged,
     this.showSearchBox,
@@ -42,12 +42,12 @@ class CustomDropDown extends StatefulWidget {
 class _CustomDropDownState extends State<CustomDropDown> {
   @override
   Widget build(BuildContext context) {
-    double width = widget.width ?? MediaQuery.of(context).size.width * 0.165;
+    double width = widget.width ?? MediaQuery.of(context).size.width * 0.15;
     Key? customKey = widget.customKey;
     double height = widget.height ?? MediaQuery.of(context).size.height * 0.15;
 
     ///  double padding = widget.padding ?? 8.0;
-    String label = widget.label!;
+    String label = widget.label;
     bool showSearchBox = widget.showSearchBox ?? false;
     return Padding(
       key: customKey,
@@ -61,7 +61,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                   label: label,
                   width: width,
                 )
-              : SizedBox.shrink(),
+              : Container(),
           Container(
             color: Colors.white,
             width: width,
@@ -102,7 +102,7 @@ class _CustomDropDownState extends State<CustomDropDown> {
                     // textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: height * .016,
+                        fontSize: height * .021,
                         color: const Color.fromARGB(235, 158, 158, 158))),
               )
             : Padding(

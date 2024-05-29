@@ -235,5 +235,11 @@
     "costPriceAvg": "معدل سعر التكلفة",
     "totalCost": "مجموع التكلفة",
     "diffBetCostAndSale": "الفرق بين التكلفة والبيع",
-    "profitPercent": "نسبة الربح %"
+    "profitPercent": "نسبة الربح %",
+    "dateConflict": "تعارض التاريخ",
+    "startTimeAfterEndTime": "وقت النهاية يجب أن يكون بعد وقت البداية",
+    "timeConflict": "تعارض الوقت",
+    "validMonth": "الرجاء إدخال شهر صالح",
+    "validDate": "الرجاء إدخال تاريخ صالح"
+    
 }

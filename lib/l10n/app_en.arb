@@ -259,5 +259,10 @@
     "costPriceAvg": "Cost Price Averge",
     "totalCost": "Total Cost",
     "diffBetCostAndSale": "Difference between Cost and Sale",
-    "profitPercent": "Profit Percentage %"
+    "profitPercent": "Profit Percentage %",
+    "dateConflict": "Date Conflict",
+    "startTimeAfterEndTime": "End Time should be after Start Time",
+    "timeConflict": "Time Conflict",
+    "validMonth": "Please enter a valid month",
+    "validDate": "Please enter a valid date"
 }

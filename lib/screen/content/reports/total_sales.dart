@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import '../../../components/custom_date.dart';
+import '../../../components/search_table/date_time_component.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
@@ -114,9 +115,51 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: isDesktop ? width * 0.7 : width * 0.9,
-          decoration: borderDecoration,
+          width: isDesktop ? width * 0.8 : width * 0.9,
+          decoration: borderDecorationWhite,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: SizedBox(
+              width: MediaQuery.of(context).size.width < 800
+                  ? MediaQuery.of(context).size.width * 0.6
+                  : MediaQuery.of(context).size.width * 0.16,
+              child: Components().blueButton(
+                text: _locale.exportToExcel,
+                textColor: Colors.white,
+                borderRadius: 5.0,
+                height: isDesktop ? height * .05 : height * .06,
+                fontSize: isDesktop ? height * .016 : height * .011,
+                width: isDesktop ? width * 0.15 : width * 0.25,
+                onPressed: () {
+                  DateTime from = DateTime.parse(fromDate.text);
+                  DateTime to = DateTime.parse(toDate.text);
+
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    if (reportsResult!.count == 0) {
+                      ErrorController.openErrorDialog(406, _locale.error406);
+                    } else {
+                      int status = getVoucherStatus(_locale, selectedStatus);
+                      SearchCriteria searchCriteria = SearchCriteria(
+                        fromDate: DatesController().formatDate(fromDate.text),
+                        toDate: DatesController().formatDate(toDate.text),
+                        voucherStatus: status,
+                        columns: [],
+                        customColumns: [],
+                      );
+                      TotalSalesController()
+                          .exportToExcelApi(searchCriteria)
+                          .then((value) {
+                        saveExcelFile(value, "${_locale.totalSales}.xlsx");
+                      });
+                    }
+                  }
+                },
+              )),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -127,7 +170,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               Column(
                 children: [
                   SizedBox(
-                    width: isDesktop ? width * 0.7 : width * 0.9,
+                    width: isDesktop ? width * 0.8 : width * 0.9,
                     height: height * 0.67,
                     child: TableComponent(
                       key: UniqueKey(),
@@ -155,50 +198,36 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              items: periods,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) async {
-                checkPeriods(value);
-                selectedPeriod = value;
-                reportsResult = await totalSalesController
-                    .getTotalSalesResultMehtod(criteria);
-                setState(() {});
-              },
-            ),
-            CustomDropDown(
-              label: _locale.status,
-              hint: status[0],
-              items: status,
-              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
-              height: height * 0.18,
-              onChanged: (value) async {
-                selectedStatus = value;
-                int status = getVoucherStatus(_locale, selectedStatus);
-
-                criteria.voucherStatus = status;
-                reportsResult = await totalSalesController
-                    .getTotalSalesResultMehtod(criteria);
-                setState(() {});
-              },
-            ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              width: width * .135,
-              child: CustomDate(
-                dateController: fromDate,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              // SizedBox(
+              //   width: width * .18,
+              //   child: CustomDate(
+              //     dateController: fromDate,
+              //     label: _locale.fromDate,
+              //     minYear: 2000,
+              //     onValue: (isValid, value) {
+              //       if (isValid) {
+              //         setState(() {
+              //           fromDate.text = value;
+              //           setControllerFromDateText();
+              //         });
+              //       }
+              //     },
+              //   ),
+              // ),
+              DateTimeComponent(
+                readOnly: false,
+                height: height * 0.06,
+                dateWidth: width * 0.18,
                 label: _locale.fromDate,
-                minYear: 2000,
+                dateController: fromDate,
+                dateControllerToCompareWith: null,
+                isInitiaDate: true,
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {
@@ -207,28 +236,30 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     });
                   }
                 },
+                timeControllerToCompareWith: null,
               ),
-            ),
-            SizedBox(
-              width: width * 0.01,
-            ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
-            SizedBox(
-              width: width * .135,
-              child: CustomDate(
-                dateController: toDate,
+              SizedBox(
+                width: width * 0.01,
+              ),
+              // CustomDatePicker(
+              //   label: _locale.fromDate,
+              //   controller: fromDate,
+              //   date: DateTime.parse(toDate.text),
+              //   onChanged: (value) {
+              //     setControllerFromDateText();
+              //   },
+              //   onSelected: (value) {
+              //     setControllerFromDateText();
+              //   },
+              // ),
+              DateTimeComponent(
+                readOnly: false,
+                height: height * 0.06,
+                dateWidth: width * 0.18,
                 label: _locale.toDate,
-                // minYear: 2000,
+                dateController: toDate,
+                dateControllerToCompareWith: null,
+                isInitiaDate: true,
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {
@@ -237,65 +268,39 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                     });
                   }
                 },
+                timeControllerToCompareWith: null,
               ),
-            ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   controller: toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.6
-                      : MediaQuery.of(context).size.width * 0.16,
-                  child: Components().blueButton(
-                    text: _locale.exportToExcel,
-                    textColor: Colors.white,
-                    borderRadius: 5.0,
-                    height: isDesktop ? height * .05 : height * .06,
-                    fontSize: isDesktop ? height * .016 : height * .011,
-                    width: isDesktop ? width * 0.15 : width * 0.25,
-                    onPressed: () {
-                      DateTime from = DateTime.parse(fromDate.text);
-                      DateTime to = DateTime.parse(toDate.text);
+              CustomDropDown(
+                hint: periods[0],
+                label: _locale.period,
+                items: periods,
+                initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+                onChanged: (value) async {
+                  checkPeriods(value);
+                  selectedPeriod = value;
+                  reportsResult = await totalSalesController
+                      .getTotalSalesResultMehtod(criteria);
+                  setState(() {});
+                },
+              ),
+              CustomDropDown(
+                label: _locale.status,
+                hint: status[0],
+                items: status,
+                initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
+                height: height * 0.18,
+                onChanged: (value) async {
+                  selectedStatus = value;
+                  int status = getVoucherStatus(_locale, selectedStatus);
 
-                      if (from.isAfter(to)) {
-                        ErrorController.openErrorDialog(
-                            1, _locale.startDateAfterEndDate);
-                      } else {
-                        if (reportsResult!.count == 0) {
-                          ErrorController.openErrorDialog(
-                              406, _locale.error406);
-                        } else {
-                          int status =
-                              getVoucherStatus(_locale, selectedStatus);
-                          SearchCriteria searchCriteria = SearchCriteria(
-                            fromDate:
-                                DatesController().formatDate(fromDate.text),
-                            toDate: DatesController().formatDate(toDate.text),
-                            voucherStatus: status,
-                            columns: [],
-                            customColumns: [],
-                          );
-                          TotalSalesController()
-                              .exportToExcelApi(searchCriteria)
-                              .then((value) {
-                            saveExcelFile(value, "${_locale.totalSales}.xlsx");
-                          });
-                        }
-                      }
-                    },
-                  )),
-            ),
-          ],
+                  criteria.voucherStatus = status;
+                  reportsResult = await totalSalesController
+                      .getTotalSalesResultMehtod(criteria);
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -401,53 +406,53 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             //     setControllertoDateText();
             //   },
             // ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-              child: SizedBox(
-                  width: MediaQuery.of(context).size.width < 800
-                      ? MediaQuery.of(context).size.width * 0.6
-                      : MediaQuery.of(context).size.width * 0.16,
-                  child: Components().blueButton(
-                    text: _locale.exportToExcel,
-                    textColor: Colors.white,
-                    borderRadius: 5.0,
-                    height: isDesktop ? height * .05 : height * .06,
-                    fontSize: isDesktop ? height * .016 : height * .011,
-                    width: isDesktop ? width * 0.15 : width * 0.25,
-                    onPressed: () {
-                      print("frommmmmmmmmm ${fromDate.text}");
-                      DateTime from = DateTime.parse(fromDate.text);
-                      DateTime to = DateTime.parse(toDate.text);
-                      print("frommmmmmmmmm2 ${from}");
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
+            //   child: SizedBox(
+            //       width: MediaQuery.of(context).size.width < 800
+            //           ? MediaQuery.of(context).size.width * 0.6
+            //           : MediaQuery.of(context).size.width * 0.16,
+            //       child: Components().blueButton(
+            //         text: _locale.exportToExcel,
+            //         textColor: Colors.white,
+            //         borderRadius: 5.0,
+            //         height: isDesktop ? height * .05 : height * .06,
+            //         fontSize: isDesktop ? height * .016 : height * .011,
+            //         width: isDesktop ? width * 0.15 : width * 0.25,
+            //         onPressed: () {
+            //           print("frommmmmmmmmm ${fromDate.text}");
+            //           DateTime from = DateTime.parse(fromDate.text);
+            //           DateTime to = DateTime.parse(toDate.text);
+            //           print("frommmmmmmmmm2 ${from}");
 
-                      if (from.isAfter(to)) {
-                        ErrorController.openErrorDialog(
-                            1, _locale.startDateAfterEndDate);
-                      } else {
-                        if (reportsResult!.count == 0) {
-                          ErrorController.openErrorDialog(
-                              406, _locale.error406);
-                        } else {
-                          int status =
-                              getVoucherStatus(_locale, selectedStatus);
-                          SearchCriteria searchCriteria = SearchCriteria(
-                            fromDate:
-                                DatesController().formatDate(fromDate.text),
-                            toDate: DatesController().formatDate(toDate.text),
-                            voucherStatus: status,
-                            columns: [],
-                            customColumns: [],
-                          );
-                          TotalSalesController()
-                              .exportToExcelApi(searchCriteria)
-                              .then((value) {
-                            saveExcelFile(value, "${_locale.totalSales}.xlsx");
-                          });
-                        }
-                      }
-                    },
-                  )),
-            ),
+            //           if (from.isAfter(to)) {
+            //             ErrorController.openErrorDialog(
+            //                 1, _locale.startDateAfterEndDate);
+            //           } else {
+            //             if (reportsResult!.count == 0) {
+            //               ErrorController.openErrorDialog(
+            //                   406, _locale.error406);
+            //             } else {
+            //               int status =
+            //                   getVoucherStatus(_locale, selectedStatus);
+            //               SearchCriteria searchCriteria = SearchCriteria(
+            //                 fromDate:
+            //                     DatesController().formatDate(fromDate.text),
+            //                 toDate: DatesController().formatDate(toDate.text),
+            //                 voucherStatus: status,
+            //                 columns: [],
+            //                 customColumns: [],
+            //               );
+            //               TotalSalesController()
+            //                   .exportToExcelApi(searchCriteria)
+            //                   .then((value) {
+            //                 saveExcelFile(value, "${_locale.totalSales}.xlsx");
+            //               });
+            //             }
+            //           }
+            //         },
+            //       )),
+            // ),
           ],
         ),
       ],

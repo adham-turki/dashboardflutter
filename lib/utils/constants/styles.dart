@@ -301,3 +301,9 @@ var borderDecoration = BoxDecoration(
   border: Border.all(color: Colors.black38),
   borderRadius: BorderRadius.circular(5),
 );
+
+var borderDecorationWhite = BoxDecoration(
+  color: Colors.white,
+  border: Border.all(color: Colors.black38),
+  borderRadius: BorderRadius.circular(5),
+);
