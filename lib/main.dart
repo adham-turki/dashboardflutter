@@ -21,6 +21,8 @@ import 'l10n/l10n.dart';
 import 'model/routes.dart';
 import 'dart:html' as html;
 
+import 'provider/reports_provider.dart';
+
 // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
@@ -33,6 +35,7 @@ void main() {
         ChangeNotifierProvider(create: (create) => SalesCriteraProvider()),
         ChangeNotifierProvider(create: (create) => PurchaseCriteraProvider()),
         ChangeNotifierProvider(create: (create) => DatesProvider()),
+        ChangeNotifierProvider(create: (create) => ReportsProvider())
       ],
       child: const MyApp(),
     ),

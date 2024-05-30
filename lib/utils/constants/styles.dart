@@ -1,3 +1,4 @@
+import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 fortyEight600TextStyle(color) {
@@ -293,6 +294,11 @@ eight400TextStyle(color) {
 
 const gridFooterStyle = TextStyle(
   color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+
+const gridFooterStyleBlue = TextStyle(
+  color: Colors.black54,
   fontWeight: FontWeight.bold,
 );
 

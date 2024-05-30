@@ -1,24 +1,30 @@
 import 'dart:typed_data';
 import 'dart:html' as html;
-import 'package:bi_replicate/controller/reports/total_sales_controller.dart';
-import 'package:bi_replicate/model/reports/total_sales/total_sales_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-import '../../../components/custom_date.dart';
+import 'package:provider/provider.dart';
+
 import '../../../components/search_table/date_time_component.dart';
 import '../../../components/table_component.dart';
+import '../../../components/table_component_new.dart';
+
 import '../../../controller/error_controller.dart';
+import '../../../controller/reports/total_sales_controller.dart';
+
 import '../../../model/criteria/search_criteria.dart';
+import '../../../model/reports/total_sales/total_sales_model.dart';
 import '../../../model/reports/total_sales/total_sales_result.dart';
+
+import '../../../provider/reports_provider.dart';
 import '../../../utils/constants/app_utils.dart';
+import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/constants.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/custom_btn.dart';
-import '../../../widget/custom_date_picker.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
 class TotalSalesContent extends StatefulWidget {
@@ -31,11 +37,11 @@ class TotalSalesContent extends StatefulWidget {
 class _TotalSalesContentState extends State<TotalSalesContent> {
   TextEditingController fromDate = TextEditingController();
   TextEditingController toDate = TextEditingController();
+
   TotalSalesController totalSalesController = TotalSalesController();
 
   late AppLocalizations _locale;
   List<String> status = [];
-  List<String> periods = [];
   var selectedStatus = "";
   String? fromDateValue;
   String? toDateValue;
@@ -44,6 +50,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
   var selectedPeriod = "";
   String hintValue = '0';
+  String currentMonth = "";
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
 
@@ -51,13 +58,34 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   List<String> columnsNameMap = [];
 
   final storage = const FlutterSecureStorage();
+  List<PlutoColumn> polCols = [];
 
   SearchCriteria criteria = SearchCriteria();
   List<PlutoRow> polTopRows = [];
   TotalSalesResult? reportsResult;
+  late ReportsProvider reportsProvider;
+  List<String> periods = [];
+  late Map<int, String> periodMap;
+  ValueNotifier isDownload = ValueNotifier(false);
+  List<PlutoRow> rowList = [];
+  ValueNotifier pageLis = ValueNotifier(1);
+  ValueNotifier isLoading = ValueNotifier(true);
+  ValueNotifier isLoadingData = ValueNotifier(true);
+  ValueNotifier itemsNumberDisplayed = ValueNotifier(0);
+  ValueNotifier<List<PlutoRow>> tableListener = ValueNotifier([]);
+  int count = 0;
+  late PlutoGridStateManager stateManager;
 
   @override
   void initState() {
+    reportsProvider = context.read<ReportsProvider>();
+
+    todayDate = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().todayDate()));
+    currentMonth = DatesController().formatDateReverse(
+        DatesController().formatDate(DatesController().oneMonthAgo()));
+    fromDate.text = todayDate;
+    toDate.text = todayDate;
     super.initState();
   }
 
@@ -79,16 +107,62 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
     selectedStatus = status[0];
     selectedPeriod = periods[0];
-    fromDate.text = todayDate;
-    toDate.text = todayDate;
+
+    reportsProvider = context.read<ReportsProvider>();
 
     criteria.fromDate = DatesController().formatDate(fromDate.text);
     criteria.toDate = DatesController().formatDate(toDate.text);
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
+    criteria.page = 1;
+    polCols = TotalSalesModel.getColumns(
+        AppLocalizations.of(context)!, reportsResult, context);
+    if (stateManager != null) {
+      int maxNumber = 1;
 
-    reportsResult = await totalSalesController
-        .getTotalSalesResultMehtod(criteria, isStart: true);
+      for (int i = 0; i < polCols.length; i++) {
+        int length = polCols[i].title.split(" ").length;
+        if (length > maxNumber) {
+          maxNumber = length;
+        }
+        String title = specialColumnsWidth(polCols, i, _locale)
+            ? polCols[i].title
+            : longSentenceWidth(polCols, i, _locale)
+                ? '${polCols[i].title.split(' ').take(2).join(' ')}\n${polCols[i].title.split(' ').skip(2).join(' ')}'
+                : polCols[i]
+                    .title
+                    .replaceAll(" ", "\n"); // _locale.lastPricePurchase
+        polCols[i].titleSpan = TextSpan(
+          children: [
+            WidgetSpan(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ),
+          ],
+        );
+        polCols[i].titleTextAlign = PlutoColumnTextAlign.center;
+        polCols[i].textAlign = PlutoColumnTextAlign.center;
+
+        stateManager!.columns[i].title = polCols[i].title;
+        stateManager!.columns[i].width = polCols[i].width;
+        stateManager!.columns[i].titleTextAlign = polCols[i].titleTextAlign;
+        stateManager!.columns[i].textAlign = polCols[i].textAlign;
+        stateManager!.columns[i].titleSpan = polCols[i].titleSpan;
+      }
+      // for (int i = 0; i < stateManager!!.rows.length; i++) {
+      //   stateManager!!.rows[i].cells['intStatus']!.value =
+      //       getStatusNameDependsLang(
+      //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
+      // }
+      stateManager!.notifyListeners(true);
+    }
+    // reportsResult = await totalSalesController
+    //     .getTotalSalesResultMehtod(criteria, isStart: true);
+    // fromDate.text = '2023-01-01'; // Replace with your desired initial date
+    // toDate.text = todayDate;
+
     super.didChangeDependencies();
   }
 
@@ -99,7 +173,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   String? voucherTypeValue;
   String? periodValue;
 
-  int count = 0;
   bool isDesktop = false;
   bool isMobile = false;
 
@@ -111,82 +184,175 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     isMobile = Responsive.isMobile(context);
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
           width: isDesktop ? width * 0.8 : width * 0.9,
           decoration: borderDecorationWhite,
-          child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
+          child: desktopCritiria(context),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-              width: MediaQuery.of(context).size.width < 800
-                  ? MediaQuery.of(context).size.width * 0.6
-                  : MediaQuery.of(context).size.width * 0.16,
-              child: Components().blueButton(
-                text: _locale.exportToExcel,
-                textColor: Colors.white,
-                borderRadius: 5.0,
-                height: isDesktop ? height * .05 : height * .06,
-                fontSize: isDesktop ? height * .016 : height * .011,
-                width: isDesktop ? width * 0.15 : width * 0.25,
-                onPressed: () {
-                  DateTime from = DateTime.parse(fromDate.text);
-                  DateTime to = DateTime.parse(toDate.text);
+        SizedBox(
+          height: height * 0.02,
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.28,
+          child: ValueListenableBuilder(
+            valueListenable: isDownload,
+            builder: (context, value, child) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton.icon(
+                    label: Text(
+                      _locale.search,
+                      style: const TextStyle(fontSize: 16, color: whiteColor),
+                    ),
+                    style: customButtonStyle(
+                        Size(width * 0.13, height * 0.045), 16, primary),
+                    icon: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
+                    onPressed: () async {
+                      DateTime from = DateTime.parse(DatesController()
+                          .formatDateReverse(criteria.fromDate!));
+                      DateTime to = DateTime.parse(DatesController()
+                          .formatDateReverse(criteria.toDate!));
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    if (reportsResult!.count == 0) {
-                      ErrorController.openErrorDialog(406, _locale.error406);
-                    } else {
-                      int status = getVoucherStatus(_locale, selectedStatus);
-                      SearchCriteria searchCriteria = SearchCriteria(
-                        fromDate: DatesController().formatDate(fromDate.text),
-                        toDate: DatesController().formatDate(toDate.text),
-                        voucherStatus: status,
-                        columns: [],
-                        customColumns: [],
-                      );
-                      TotalSalesController()
-                          .exportToExcelApi(searchCriteria)
-                          .then((value) {
-                        saveExcelFile(value, "${_locale.totalSales}.xlsx");
-                      });
-                    }
-                  }
-                },
-              )),
+                      if (from.isAfter(to)) {
+                        ErrorController.openErrorDialog(
+                            1, _locale.startDateAfterEndDate);
+                      } else {
+                        pageLis.value = 1;
+                        criteria.page = pageLis.value;
+                        dynamic body = criteria;
+
+                        stateManager.removeAllRows();
+
+                        List<TotalSalesModel> result = [];
+                        stateManager.setShowLoading(true);
+                        await totalSalesController
+                            .getTotalSalesMethod(body)
+                            .then((value) {
+                          result = value;
+                          stateManager.setShowLoading(false);
+                        });
+
+                        List<PlutoRow> rowsToAdd =
+                            result.map((item) => item.toPluto()).toList();
+                        stateManager.appendRows(rowsToAdd);
+                        pageLis.value = pageLis.value + 1;
+                        reportsResult = await totalSalesController
+                            .getTotalSalesResultMehtod(body);
+                        // if (pageLis.value == 1) {
+
+                        reportsResult = await totalSalesController
+                            .getTotalSalesResultMehtod(criteria, isStart: true);
+
+                        List<PlutoColumn> columns = TotalSalesModel.getColumns(
+                            AppLocalizations.of(context)!,
+                            reportsResult,
+                            context);
+                        for (int i = 0; i < columns.length; i++) {
+                          stateManager.columns[i].footerRenderer =
+                              columns[i].footerRenderer;
+                        }
+                        setState(() {});
+                        // }
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: isDownload.value
+                        ? null
+                        : () {
+                            isDownload.value = true;
+                            DateTime from = DateTime.parse(fromDate.text);
+                            DateTime to = DateTime.parse(toDate.text);
+
+                            if (from.isAfter(to)) {
+                              ErrorController.openErrorDialog(
+                                  1, _locale.startDateAfterEndDate);
+                            } else {
+                              if (reportsResult!.count == 0) {
+                                ErrorController.openErrorDialog(
+                                    406, _locale.error406);
+                                isDownload.value = false;
+                              } else {
+                                int status =
+                                    getVoucherStatus(_locale, selectedStatus);
+                                SearchCriteria searchCriteria = SearchCriteria(
+                                  fromDate: DatesController()
+                                      .formatDate(fromDate.text),
+                                  toDate:
+                                      DatesController().formatDate(toDate.text),
+                                  voucherStatus: status,
+                                  columns: [],
+                                  customColumns: [],
+                                );
+                                TotalSalesController()
+                                    .exportToExcelApi(searchCriteria)
+                                    .then((value) {
+                                  saveExcelFile(
+                                      value, "${_locale.totalSales}.xlsx");
+                                  isDownload.value = false;
+                                });
+                              }
+                            }
+                          },
+                    icon: Icon(
+                      Icons.description,
+                      size: width * 0.015,
+                      color: whiteColor,
+                    ),
+                    label: isDownload.value
+                        ? SizedBox(
+                            width: width * 0.015,
+                            height: height * 0.04,
+                            child: const CircularProgressIndicator(
+                              color: primary,
+                            ))
+                        : Text(
+                            _locale.exportToExcel,
+                            style: const TextStyle(
+                                fontSize: 16, color: whiteColor),
+                          ),
+                    style: customButtonStyle(
+                        Size(width * 0.13, height * 0.045), 16, primary),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: height * 0.02,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  SizedBox(
-                    width: isDesktop ? width * 0.8 : width * 0.9,
-                    height: height * 0.67,
-                    child: TableComponent(
-                      key: UniqueKey(),
-                      plCols: TotalSalesModel.getColumns(
-                          AppLocalizations.of(context)!,
-                          reportsResult,
-                          context),
-                      polRows: [],
-                      footerBuilder: (stateManager) {
-                        return lazyPaginationFooter(stateManager);
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          child: SizedBox(
+            // width: isDesktop ? width * 0.7 : width * 0.9,
+            height: height * 0.4,
+            child: TableComponentNew(
+              columnHeight: 50,
+              // key: UniqueKey(),
+              plCols: polCols,
+              polRows: [],
+              footerBuilder: (stateManager) {
+                return lazyLoadingfooter(stateManager);
+              },
+              onLoaded: (PlutoGridOnLoadedEvent event) {
+                stateManager = event.stateManager;
+                if (isLoading.value) {
+                  stateManager.setShowLoading(true);
+                }
+                stateManager.setShowColumnFilter(true);
+              },
+            ),
           ),
         ),
       ],
@@ -204,22 +370,56 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // SizedBox(
-              //   width: width * .18,
-              //   child: CustomDate(
-              //     dateController: fromDate,
-              //     label: _locale.fromDate,
-              //     minYear: 2000,
-              //     onValue: (isValid, value) {
-              //       if (isValid) {
-              //         setState(() {
-              //           fromDate.text = value;
-              //           setControllerFromDateText();
-              //         });
-              //       }
-              //     },
-              //   ),
-              // ),
+              CustomDropDown(
+                hint: periods[0],
+                label: _locale.period,
+                items: periods,
+                initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
+                    ? periods.first
+                    : reportsProvider.getTotalSalesPeriodIndex() == 0
+                        ? _locale.daily
+                        : reportsProvider.getTotalSalesPeriodIndex() == 1
+                            ? _locale.weekly
+                            : reportsProvider.getTotalSalesPeriodIndex() == 2
+                                ? _locale.monthly
+                                : reportsProvider.getTotalSalesPeriodIndex() ==
+                                        3
+                                    ? _locale.yearly
+                                    : periods.first,
+                onChanged: (value) async {
+                  checkPeriods(value);
+                  selectedPeriod = value;
+                  getPeriodByIndex();
+                  // reportsResult = await totalSalesController
+                  //     .getTotalSalesResultMehtod(criteria);
+                  setState(() {});
+                },
+                height: height * 0.3,
+              ),
+              CustomDropDown(
+                label: _locale.status,
+                hint: status[0],
+                items: status,
+                initialValue: reportsProvider.getTotalSalesStatusIndex() == -1
+                    ? _locale.all
+                    : reportsProvider.getTotalSalesStatusIndex() == 0
+                        ? _locale.all
+                        : reportsProvider.getTotalSalesStatusIndex() == 1
+                            ? _locale.posted
+                            : reportsProvider.getTotalSalesStatusIndex() == 2
+                                ? _locale.draft
+                                : status[3],
+                height: height * 0.3,
+                onChanged: (value) async {
+                  selectedStatus = value;
+                  int status = getVoucherStatus(_locale, selectedStatus);
+                  getStatusByIndex();
+                  criteria.voucherStatus = status;
+                  // reportsResult = await totalSalesController
+                  //     .getTotalSalesResultMehtod(criteria);
+                  // setState(() {});
+                },
+              ),
               DateTimeComponent(
                 readOnly: false,
                 height: height * 0.06,
@@ -241,17 +441,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 width: width * 0.01,
               ),
-              // CustomDatePicker(
-              //   label: _locale.fromDate,
-              //   controller: fromDate,
-              //   date: DateTime.parse(toDate.text),
-              //   onChanged: (value) {
-              //     setControllerFromDateText();
-              //   },
-              //   onSelected: (value) {
-              //     setControllerFromDateText();
-              //   },
-              // ),
               DateTimeComponent(
                 readOnly: false,
                 height: height * 0.06,
@@ -270,190 +459,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                 },
                 timeControllerToCompareWith: null,
               ),
-              CustomDropDown(
-                hint: periods[0],
-                label: _locale.period,
-                items: periods,
-                initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-                onChanged: (value) async {
-                  checkPeriods(value);
-                  selectedPeriod = value;
-                  reportsResult = await totalSalesController
-                      .getTotalSalesResultMehtod(criteria);
-                  setState(() {});
-                },
-              ),
-              CustomDropDown(
-                label: _locale.status,
-                hint: status[0],
-                items: status,
-                initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
-                height: height * 0.18,
-                onChanged: (value) async {
-                  selectedStatus = value;
-                  int status = getVoucherStatus(_locale, selectedStatus);
-
-                  criteria.voucherStatus = status;
-                  reportsResult = await totalSalesController
-                      .getTotalSalesResultMehtod(criteria);
-                  setState(() {});
-                },
-              ),
             ],
           ),
-        ),
-      ],
-    );
-  }
-
-  Column mobileCritiria(BuildContext context) {
-    double widthMobile = width;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              width: widthMobile * 0.81,
-              items: periods,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) async {
-                checkPeriods(value);
-                selectedPeriod = value;
-                reportsResult = await totalSalesController
-                    .getTotalSalesResultMehtod(criteria);
-                setState(() {});
-              },
-            ),
-            CustomDropDown(
-              label: _locale.status,
-              hint: status[0],
-              items: status,
-              width: widthMobile * 0.81,
-              initialValue: selectedStatus.isNotEmpty ? selectedStatus : null,
-              height: height * 0.18,
-              onChanged: (value) async {
-                selectedStatus = value;
-                int status = getVoucherStatus(_locale, selectedStatus);
-
-                criteria.voucherStatus = status;
-                reportsResult = await totalSalesController
-                    .getTotalSalesResultMehtod(criteria);
-                setState(() {});
-              },
-            ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            SizedBox(
-              width: width,
-              child: CustomDate(
-                dateController: fromDate,
-                label: _locale.fromDate,
-                minYear: 2000,
-                onValue: (isValid, value) {
-                  if (isValid) {
-                    setState(() {
-                      fromDate.text = value;
-                      setControllerFromDateText();
-                    });
-                  }
-                },
-              ),
-            ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: fromDate,
-            //   date: DateTime.parse(toDate.text),
-            //   onChanged: (value) {
-            //     setControllerFromDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllerFromDateText();
-            //   },
-            // ),
-            SizedBox(
-              width: width,
-              child: CustomDate(
-                dateController: toDate,
-                label: _locale.toDate,
-                // minYear: 2000,
-                onValue: (isValid, value) {
-                  if (isValid) {
-                    setState(() {
-                      toDate.text = value;
-                      setControllertoDateText();
-                    });
-                  }
-                },
-              ),
-            ),
-            // CustomDatePicker(
-            //   label: _locale.toDate,
-            //   controller: toDate,
-            //   date: DateTime.parse(fromDate.text),
-            //   onChanged: (value) {
-            //     setControllertoDateText();
-            //   },
-            //   onSelected: (value) {
-            //     setControllertoDateText();
-            //   },
-            // ),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
-            //   child: SizedBox(
-            //       width: MediaQuery.of(context).size.width < 800
-            //           ? MediaQuery.of(context).size.width * 0.6
-            //           : MediaQuery.of(context).size.width * 0.16,
-            //       child: Components().blueButton(
-            //         text: _locale.exportToExcel,
-            //         textColor: Colors.white,
-            //         borderRadius: 5.0,
-            //         height: isDesktop ? height * .05 : height * .06,
-            //         fontSize: isDesktop ? height * .016 : height * .011,
-            //         width: isDesktop ? width * 0.15 : width * 0.25,
-            //         onPressed: () {
-            //           print("frommmmmmmmmm ${fromDate.text}");
-            //           DateTime from = DateTime.parse(fromDate.text);
-            //           DateTime to = DateTime.parse(toDate.text);
-            //           print("frommmmmmmmmm2 ${from}");
-
-            //           if (from.isAfter(to)) {
-            //             ErrorController.openErrorDialog(
-            //                 1, _locale.startDateAfterEndDate);
-            //           } else {
-            //             if (reportsResult!.count == 0) {
-            //               ErrorController.openErrorDialog(
-            //                   406, _locale.error406);
-            //             } else {
-            //               int status =
-            //                   getVoucherStatus(_locale, selectedStatus);
-            //               SearchCriteria searchCriteria = SearchCriteria(
-            //                 fromDate:
-            //                     DatesController().formatDate(fromDate.text),
-            //                 toDate: DatesController().formatDate(toDate.text),
-            //                 voucherStatus: status,
-            //                 columns: [],
-            //                 customColumns: [],
-            //               );
-            //               TotalSalesController()
-            //                   .exportToExcelApi(searchCriteria)
-            //                   .then((value) {
-            //                 saveExcelFile(value, "${_locale.totalSales}.xlsx");
-            //               });
-            //             }
-            //           }
-            //         },
-            //       )),
-            // ),
-          ],
         ),
       ],
     );
@@ -463,35 +470,57 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     fromDateValue = fromDate.text;
     String startDate = DatesController().formatDate(fromDateValue!);
     criteria.fromDate = startDate;
-    reportsResult =
-        await totalSalesController.getTotalSalesResultMehtod(criteria);
+    // reportsResult =
+    //     await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
       DateTime from = DateTime.parse(fromDate.text);
       DateTime to = DateTime.parse(toDate.text);
 
       if (from.isAfter(to)) {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
       }
+      // else {
+      //   fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      // }
     });
+  }
+
+  void getPeriodByIndex() {
+    selectedPeriod == _locale.daily
+        ? reportsProvider.setTotalSalesPeriodIndex(0)
+        : selectedPeriod == _locale.weekly
+            ? reportsProvider.setTotalSalesPeriodIndex(1)
+            : selectedPeriod == _locale.monthly
+                ? reportsProvider.setTotalSalesPeriodIndex(2)
+                : reportsProvider.setTotalSalesPeriodIndex(3);
+  }
+
+  void getStatusByIndex() {
+    selectedStatus == _locale.all
+        ? reportsProvider.setTotalSalesStatusIndex(0)
+        : selectedStatus == _locale.posted
+            ? reportsProvider.setTotalSalesStatusIndex(1)
+            : selectedStatus == _locale.draft
+                ? reportsProvider.setTotalSalesStatusIndex(2)
+                : reportsProvider.setTotalSalesStatusIndex(3);
   }
 
   void setControllertoDateText() async {
     toDateValue = toDate.text;
     String endDate = DatesController().formatDate(toDateValue!);
     criteria.toDate = endDate;
-    reportsResult =
-        await totalSalesController.getTotalSalesResultMehtod(criteria);
+    // reportsResult =
+    //     await totalSalesController.getTotalSalesResultMehtod(criteria);
     return setState(() {
       DateTime from = DateTime.parse(fromDate.text);
       DateTime to = DateTime.parse(toDate.text);
 
       if (from.isAfter(to)) {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
       }
+      // else {
+      //   fetch(PlutoLazyPaginationRequest(page: criteria.page!));
+      // }
     });
   }
 
@@ -536,45 +565,98 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     } else {}
   }
 
-  PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
-    return PlutoLazyPagination(
-      initialPage: 1,
+  // PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
+  //   return PlutoLazyPagination(
+  //     initialPage: 1,
+  //     initialFetch: true,
+  //     pageSizeToMove: 1,
+  //     fetchWithSorting: false,
+  //     fetchWithFiltering: false,
+  //     fetch: (request) {
+  //       return fetch1(request);
+  //     },
+  //     stateManager: stateManager,
+  //   );
+  // }
+
+  // Future<PlutoLazyPaginationResponse> fetch1(
+  //     PlutoLazyPaginationRequest request) async {
+  //   int page = request.page;
+
+  //   //To send the number of page to the JSON Object
+  //   criteria.page = page;
+
+  //   List<PlutoRow> topList = [];
+  //   List<TotalSalesModel> invList = [];
+
+  //   int totalPage =
+  //       reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
+
+  //   if (reportsResult != null && reportsResult!.count != 0) {
+  //     await totalSalesController.getTotalSalesMethod(criteria).then((value) {
+  //       invList = value;
+  //     });
+  //   }
+  //   for (int i = 0; i < invList.length; i++) {
+  //     topList.add(invList[i].toPluto());
+  //   }
+
+  //   return PlutoLazyPaginationResponse(
+  //     totalPage: totalPage,
+  //     rows: reportsResult == null ? [] : topList,
+  //   );
+  // }
+
+  PlutoInfinityScrollRows lazyLoadingfooter(
+      PlutoGridStateManager stateManager) {
+    return PlutoInfinityScrollRows(
       initialFetch: true,
-      pageSizeToMove: 1,
       fetchWithSorting: false,
       fetchWithFiltering: false,
-      fetch: (request) {
-        return fetch(request);
-      },
+      fetch: fetch,
       stateManager: stateManager,
     );
   }
 
-  Future<PlutoLazyPaginationResponse> fetch(
-      PlutoLazyPaginationRequest request) async {
-    int page = request.page;
+  Future<PlutoInfinityScrollRowsResponse> fetch(
+    PlutoInfinityScrollRowsRequest request,
+  ) async {
+    // if (pageLis.value == 1) {
+    reportsResult = await totalSalesController
+        .getTotalSalesResultMehtod(criteria, isStart: true);
 
-    //To send the number of page to the JSON Object
-    criteria.page = page;
-
+    List<PlutoColumn> columns = TotalSalesModel.getColumns(
+        AppLocalizations.of(context)!, reportsResult, context);
+    for (int i = 0; i < columns.length; i++) {
+      stateManager.columns[i].footerRenderer = columns[i].footerRenderer;
+    }
+    // }
     List<PlutoRow> topList = [];
     List<TotalSalesModel> invList = [];
 
-    int totalPage =
-        reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
+    criteria.page = pageLis.value;
+    dynamic body = criteria;
 
-    if (reportsResult != null && reportsResult!.count != 0) {
-      await totalSalesController.getTotalSalesMethod(criteria).then((value) {
-        invList = value;
-      });
-    }
+    await totalSalesController.getTotalSalesMethod(body).then((value) {
+      invList = value;
+    });
     for (int i = 0; i < invList.length; i++) {
-      topList.add(invList[i].toPluto());
+      PlutoRow plutoRow = invList[i].toPluto();
+      rowList.add(plutoRow);
+      topList.add(plutoRow);
     }
 
-    return PlutoLazyPaginationResponse(
-      totalPage: totalPage,
-      rows: reportsResult == null ? [] : topList,
-    );
+    stateManager.setShowLoading(false);
+    isLoading.value = false;
+    isLoadingData.value = false;
+    bool isLast = invList.isEmpty ? true : false;
+    count = invList.length;
+    pageLis.value = pageLis.value + 1;
+    itemsNumberDisplayed.value = count;
+
+    return Future.value(PlutoInfinityScrollRowsResponse(
+      isLast: false,
+      rows: topList.toList(),
+    ));
   }
 }

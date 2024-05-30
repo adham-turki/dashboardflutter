@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pluto_grid/pluto_grid.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 ///colors
 const darkBlueColor = Color(0xFF2b4381);
@@ -28,6 +30,19 @@ LinearGradient createGradient(Color endColor) {
     begin: Alignment.bottomCenter,
     end: Alignment.topCenter,
   );
+}
+
+bool longSentenceWidth(
+        List<PlutoColumn> polCols, int i, AppLocalizations locale) =>
+    polCols[i].title == locale.stockCategoryLevel("1") ||
+    polCols[i].title == locale.stockCategoryLevel("2") ||
+    polCols[i].title == locale.stockCategoryLevel("3");
+
+bool specialColumnsWidth(
+    List<PlutoColumn> polCols, int i, AppLocalizations locale) {
+  return polCols[i].title == locale.supplier("1") ||
+      polCols[i].title == locale.supplier("2") ||
+      polCols[i].title == locale.supplier("3");
 }
 
 ///routes

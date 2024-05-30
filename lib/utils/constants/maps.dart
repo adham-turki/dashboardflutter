@@ -29,6 +29,40 @@ getCategoryNum(String selectedCategories, AppLocalizations locale) {
   return byCategoryMap[selectedCategories];
 }
 
+// List<String> getColumnsName(
+//     AppLocalizations locale, List<String> columns, bool sales) {
+//   Map<String, String> columnsMap = {
+//     '#': "dash",
+//     locale.branch: "branch",
+//     locale.stockCategoryLevel("1"): "stockCategories1",
+//     locale.stockCategoryLevel("2"): "stockCategories2",
+//     locale.stockCategoryLevel("3"): "stockCategories3",
+//     locale.supplier("1"): "supplier1",
+//     locale.supplier("2"): "supplier2",
+//     locale.supplier("3"): "supplier3",
+//     locale.customer: "customer",
+//     locale.stock: "stock",
+//     locale.modelNo: "modelNo",
+//     locale.qty: "quantity",
+//     locale.averagePrice: sales == true ? "avgPrice" : "averagePrice",
+//     locale.total: "total",
+//     locale.daily: "daily",
+//     locale.monthly: "monthly",
+//     locale.yearly: "yearly",
+//     locale.brand: "brand",
+//     locale.invoice: "invoice",
+//     locale.costPriceAvg: "costPriceRate",
+//     locale.totalCost: "totalCost",
+//     locale.diffBetCostAndSale: "differCostSale",
+//     locale.profitPercent: "profitRatio"
+//   };
+
+//   List<String> columnsName = [];
+//   for (int i = 0; i < columns.length; i++) {
+//     columnsName.add(columnsMap[columns[i]]!);
+//   }
+//   return columnsName;
+// }
 List<String> getColumnsName(
     AppLocalizations locale, List<String> columns, bool sales) {
   Map<String, String> columnsMap = {
@@ -54,7 +88,7 @@ List<String> getColumnsName(
     locale.costPriceAvg: "costPriceRate",
     locale.totalCost: "totalCost",
     locale.diffBetCostAndSale: "differCostSale",
-    locale.profitPercent: "profitRatio"
+    locale.profitPercent: "profitRatio",
   };
 
   List<String> columnsName = [];

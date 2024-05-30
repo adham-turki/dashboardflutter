@@ -19,7 +19,6 @@ class PurchaseCostReportModel {
   String? supplier2;
   String? supplier3;
   String? stockCode;
-  String? stockBarcode;
   String? modelNo;
   double? quantity;
   double? avgPrice;
@@ -67,9 +66,6 @@ class PurchaseCostReportModel {
     stockCode = purchaseReport['stockCode'].toString() == "null"
         ? ""
         : purchaseReport['stockCode'];
-    stockBarcode = purchaseReport['stockBarcode'].toString() == "null"
-        ? ""
-        : purchaseReport['stockBarcode'];
     stock = purchaseReport['stock'].toString() == "null"
         ? ""
         : purchaseReport['stock'];
@@ -163,7 +159,7 @@ class PurchaseCostReportModel {
                 ? width * .04
                 : width * .13
             : width * 0.36,
-        backgroundColor: colColor,
+        backgroundColor: columnColors,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null
             ? (rendererContext) {
                 return footerRenderer(rendererContext, reportsResult.avgPrice!);
