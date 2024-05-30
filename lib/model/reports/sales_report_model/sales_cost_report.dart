@@ -1,13 +1,13 @@
-import 'package:bi_replicate/model/reports/reports_result.dart';
-import 'package:bi_replicate/utils/constants/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 import '../../../utils/constants/colors.dart';
+import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/converters.dart';
+import '../reports_result.dart';
 
 class SalesCostReportModel {
   String? dash;
@@ -155,28 +155,39 @@ class SalesCostReportModel {
       ReportsResult? reportsResult,
       BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
+    // print("reportttttt :${reports}");
     bool isDesktop = Responsive.isDesktop(context);
     List<String> fieldsName = getColumnsName(localizations, colsName, true);
     List<PlutoColumn> list = [];
     if (reportsResult == null) {}
     for (int i = 0; i < colsName.length; i++) {
+      // print("inside fooooor :${fieldsName[i]}");
       list.add(PlutoColumn(
         title: colsName[i],
         field: fieldsName[i],
-        type: fieldsName[i] == 'avgPrice' ||
-                fieldsName[i] == 'quantity' ||
-                fieldsName[i] == 'total'
-            ? PlutoColumnType.number()
-            : PlutoColumnType.text(),
+        type: fieldsName[i] == 'total' ||
+                fieldsName[i] == "costPriceRate" ||
+                fieldsName[i] == "totalCost" ||
+                fieldsName[i] == "differCostSale"
+            ? PlutoColumnType.currency(
+                name: '(ILS) ',
+                negative: true,
+              )
+            : fieldsName[i] == 'avgPrice'
+                ? PlutoColumnType.currency(
+                    name: '(ILS) ',
+                    negative: true,
+                  )
+                : PlutoColumnType.text(),
         width: isDesktop
             ? fieldsName[i] == 'dash'
                 ? width * .04
-                : width * .13
+                : width * .068
             : width * 0.32,
-        backgroundColor: colColor,
+        backgroundColor: columnColors,
         footerRenderer: fieldsName[i] == 'avgPrice' && reportsResult != null
             ? (rendererContext) {
+                print("inside rendererrr");
                 return footerRenderer(rendererContext, reportsResult.avgPrice!);
               }
             : fieldsName[i] == 'quantity' && reportsResult != null
@@ -186,23 +197,23 @@ class SalesCostReportModel {
                   }
                 : fieldsName[i] == 'total' && reportsResult != null
                     ? (rendererContext) {
-                        return footerRenderer(
+                        return footerRendererPrice(
                             rendererContext, reportsResult.total!);
                       }
                     : fieldsName[i] == 'costPriceRate' && reportsResult != null
                         ? (rendererContext) {
-                            return footerRenderer(
+                            return footerRendererPrice(
                                 rendererContext, reportsResult.costPriceRate!);
                           }
                         : fieldsName[i] == 'totalCost' && reportsResult != null
                             ? (rendererContext) {
-                                return footerRenderer(
+                                return footerRendererPrice(
                                     rendererContext, reportsResult.totalCost!);
                               }
                             : fieldsName[i] == 'differCostSale' &&
                                     reportsResult != null
                                 ? (rendererContext) {
-                                    return footerRenderer(rendererContext,
+                                    return footerRendererPrice(rendererContext,
                                         reportsResult.differCostSale!);
                                   }
                                 : fieldsName[i] == 'profitRatio' &&
@@ -212,7 +223,10 @@ class SalesCostReportModel {
                                             rendererContext,
                                             reportsResult.profitRatio!);
                                       }
-                                    : null,
+                                    : (rendererContext) {
+                                        return footerRendererString(
+                                            rendererContext, "");
+                                      },
       ));
     }
 
@@ -230,7 +244,7 @@ class SalesCostReportModel {
         return [
           TextSpan(
             text: Converters.formatNumber(valueAll),
-            style: gridFooterStyle,
+            style: gridFooterStyleBlue,
           ),
         ];
       },
@@ -248,7 +262,25 @@ class SalesCostReportModel {
         return [
           TextSpan(
             text: valueAll,
-            style: gridFooterStyle,
+            style: gridFooterStyleBlue,
+          ),
+        ];
+      },
+    );
+  }
+
+  static PlutoAggregateColumnFooter footerRendererPrice(
+      PlutoColumnFooterRendererContext rendererContext, double valueAll) {
+    return PlutoAggregateColumnFooter(
+      rendererContext: rendererContext,
+      formatAsCurrency: false,
+      type: PlutoAggregateColumnType.sum,
+      alignment: Alignment.center,
+      titleSpanBuilder: (text) {
+        return [
+          TextSpan(
+            text: '(ILS)  ${Converters.formatNumber(valueAll)}  ',
+            style: gridFooterStyleBlue,
           ),
         ];
       },

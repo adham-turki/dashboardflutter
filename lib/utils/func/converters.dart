@@ -12,4 +12,26 @@ class Converters {
     NumberFormat myFormat = NumberFormat.decimalPattern('ar');
     return myFormat.format(num);
   }
+
+  static String formatDate(String dateString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateString);
+      String formattedDate = DateFormat('dd-MM-yyyy').format(dateTime);
+      return formattedDate;
+    } catch (e) {
+      print('Error formatting date: $e');
+      return dateString; // Return original string if parsing fails
+    }
+  }
+
+  static String formatDate2(String dateString) {
+    try {
+      DateTime dateTime = DateTime.parse(dateString);
+      String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+      return formattedDate;
+    } catch (e) {
+      print('Error formatting date: $e');
+      return dateString; // Return original string if parsing fails
+    }
+  }
 }

@@ -6,6 +6,8 @@ const colColor = Color(0xFF5297b0);
 const gridActiveColor = Color.fromARGB(169, 255, 208, 150);
 const whiteColor = Colors.white;
 const darkBlueColor = Color(0xFF2b4381);
+var columnColors = Colors.grey[100];
+
 ButtonStyle greenStyle(Size size, double fontSize) {
   return ElevatedButton.styleFrom(
       backgroundColor: primary,

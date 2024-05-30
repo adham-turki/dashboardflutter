@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../../provider/sales_search_provider.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../../../widget/drop_down/drop_down_clear.dart';
+
+
 
 class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged1;
@@ -53,7 +56,7 @@ class _OrderByWidgetState extends State<OrderByWidget> {
     readProvider = context.read<SalesCriteraProvider>();
 
     firstList = [
-      "",
+      // "",
       _locale.branch,
       _locale.stockCategoryLevel("1"),
       _locale.stockCategoryLevel("2"),
@@ -128,117 +131,176 @@ class _OrderByWidgetState extends State<OrderByWidget> {
       ),
       padding: const EdgeInsets.all(10.0),
       width: width * 0.65,
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomDropDown(
+          DropDown(
+            bordeText: _locale.orderBy,
             items: firstList,
-            label: "",
-            width: isDesktop ? null : width * .55,
-            hint: selectedValue1,
+            // label: "",
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.045 : height * 0.35,
+            // width: double.infinity,
+            // hint: selectedValue1,
             initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
+            valSelected: selectedValue1 != "",
             onChanged: (value) {
-              setState(() {
-                selectedValue1 = value!;
+              if (value == null) {
+                setState(() {
+                  selectedValue1 = "";
 
-                if (ordersMap[selectedValue1] != 0) {
-                  if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                      false) {
-                    ordersList.add(ordersMap[selectedValue1]!);
+                  readProvider.setVal1("");
+                  widget.onSelectedValueChanged1(selectedValue1);
+                });
+              } else {
+                setState(() {
+                  selectedValue1 = value!;
 
-                    readProvider.setOrders(ordersList);
+                  if (ordersMap[selectedValue1] != 0) {
+                    if (ordersList.contains(ordersMap[selectedValue1]!) ==
+                        false) {
+                      ordersList.add(ordersMap[selectedValue1]!);
+
+                      readProvider.setOrders(ordersList);
+                    }
+                  } else {
+                    if (readProvider.getVal1 != "") {
+                      ordersList.remove(ordersMap[readProvider.getVal1]);
+                    }
                   }
-                } else {
-                  if (readProvider.getVal1 != "") {
-                    ordersList.remove(ordersMap[readProvider.getVal1]);
-                  }
-                }
-                readProvider.setVal1(selectedValue1);
-                //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
-                widget.onSelectedValueChanged1(selectedValue1);
-              });
+                  readProvider.setVal1(selectedValue1);
+                  widget.onSelectedValueChanged1(selectedValue1);
+                });
+              }
             },
           ),
-          CustomDropDown(
-            label: "",
-            width: isDesktop ? null : width * .55,
+          DropDown(
+            bordeText: _locale.orderBy,
+            // label: "",
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.045 : height * 0.35,
+            // width: isDesktop ? null : width * .55,
+            // width: double
+            //     .infinity, // Set width to take up the entire available width
             items: firstList,
-            hint: selectedValue2,
+            // hint: selectedValue2,
             initialValue: selectedValue2.isNotEmpty ? selectedValue2 : null,
+            valSelected: selectedValue2 != "",
             onChanged: (value) {
-              setState(() {
-                selectedValue2 = value!;
-                if (ordersMap[selectedValue2] != 0) {
-                  if (ordersList.contains(ordersMap[selectedValue2]!) ==
-                      false) {
-                    ordersList.add(ordersMap[selectedValue2]!);
-                    readProvider.setOrders(ordersList);
-                  }
-                } else {
-                  if (readProvider.getVal2 != "") {
-                    ordersList.remove(ordersMap[readProvider.getVal2]);
-                  }
-                }
+              if (value == null) {
+                setState(() {
+                  selectedValue2 = "";
 
-                readProvider.setVal2(selectedValue2);
+                  readProvider.setVal2(selectedValue2);
 
-                widget.onSelectedValueChanged2(selectedValue2);
-              });
+                  widget.onSelectedValueChanged2(selectedValue2);
+                });
+              } else {
+                setState(() {
+                  selectedValue2 = value!;
+                  if (ordersMap[selectedValue2] != 0) {
+                    if (ordersList.contains(ordersMap[selectedValue2]!) ==
+                        false) {
+                      ordersList.add(ordersMap[selectedValue2]!);
+                      readProvider.setOrders(ordersList);
+                    }
+                  } else {
+                    if (readProvider.getVal2 != "") {
+                      ordersList.remove(ordersMap[readProvider.getVal2]);
+                    }
+                  }
+
+                  readProvider.setVal2(selectedValue2);
+
+                  widget.onSelectedValueChanged2(selectedValue2);
+                });
+              }
             },
           ),
-          CustomDropDown(
-            label: "",
-            width: isDesktop ? null : width * .55,
+          DropDown(
+            bordeText: _locale.orderBy,
+            // label: "",
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.045 : height * 0.35,
+            // width: double.infinity,
             items: firstList,
-            hint: selectedValue3,
+            // hint: selectedValue3,
             initialValue: selectedValue3.isNotEmpty ? selectedValue3 : null,
+            valSelected: selectedValue3 != "",
             onChanged: (value) {
-              setState(() {
-                selectedValue3 = value!;
-                if (ordersMap[selectedValue3] != 0) {
-                  if (ordersList.contains(ordersMap[selectedValue3]!) ==
-                      false) {
-                    ordersList.add(ordersMap[selectedValue3]!);
-                    readProvider.setOrders(ordersList);
-                  }
-                } else {
-                  if (readProvider.getVal3 != "") {
-                    ordersList.remove(ordersMap[readProvider.getVal3]);
-                  }
-                }
+              if (value == null) {
+                setState(() {
+                  selectedValue3 == "";
 
-                // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
-                readProvider.setVal3(selectedValue3);
+                  // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
+                  readProvider.setVal3(selectedValue3);
 
-                widget.onSelectedValueChanged3(selectedValue3);
-              });
+                  widget.onSelectedValueChanged3(selectedValue3);
+                });
+              } else {
+                setState(() {
+                  selectedValue3 = value!;
+                  if (ordersMap[selectedValue3] != 0) {
+                    if (ordersList.contains(ordersMap[selectedValue3]!) ==
+                        false) {
+                      ordersList.add(ordersMap[selectedValue3]!);
+                      readProvider.setOrders(ordersList);
+                    }
+                  } else {
+                    if (readProvider.getVal3 != "") {
+                      ordersList.remove(ordersMap[readProvider.getVal3]);
+                    }
+                  }
+
+                  // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
+                  readProvider.setVal3(selectedValue3);
+
+                  widget.onSelectedValueChanged3(selectedValue3);
+                });
+              }
             },
           ),
-          CustomDropDown(
-            label: "",
-            width: isDesktop ? null : width * .55,
+          DropDown(
+            bordeText: _locale.orderBy,
+            // label: "",
+            width: isDesktop ? width * .14 : width * .35,
+            height: isDesktop ? height * 0.045 : height * 0.35,
+            // width: double.infinity,
             items: firstList,
-            hint: selectedValue4,
+            // hint: selectedValue4,
             initialValue: selectedValue4.isNotEmpty ? selectedValue4 : null,
+            valSelected: selectedValue4 != "",
             onChanged: (value) {
-              setState(() {
-                selectedValue4 = value!;
-                if (ordersMap[selectedValue4] != 0) {
-                  if (ordersList.contains(ordersMap[selectedValue4]!) ==
-                      false) {
-                    ordersList.add(ordersMap[selectedValue4]!);
-                    readProvider.setOrders(ordersList);
-                  }
-                } else {
-                  if (readProvider.getVal4 != "") {
-                    ordersList.remove(ordersMap[readProvider.getVal4]);
-                  }
-                }
+              if (value == null) {
+                setState(() {
+                  selectedValue4 = "";
 
-                // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
-                readProvider.setVal4(selectedValue4);
+                  // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
+                  readProvider.setVal4(selectedValue4);
 
-                widget.onSelectedValueChanged4(selectedValue4);
-              });
+                  widget.onSelectedValueChanged4(selectedValue4);
+                });
+              } else {
+                setState(() {
+                  selectedValue4 = value!;
+                  if (ordersMap[selectedValue4] != 0) {
+                    if (ordersList.contains(ordersMap[selectedValue4]!) ==
+                        false) {
+                      ordersList.add(ordersMap[selectedValue4]!);
+                      readProvider.setOrders(ordersList);
+                    }
+                  } else {
+                    if (readProvider.getVal4 != "") {
+                      ordersList.remove(ordersMap[readProvider.getVal4]);
+                    }
+                  }
+
+                  // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
+                  readProvider.setVal4(selectedValue4);
+
+                  widget.onSelectedValueChanged4(selectedValue4);
+                });
+              }
             },
           ),
         ],

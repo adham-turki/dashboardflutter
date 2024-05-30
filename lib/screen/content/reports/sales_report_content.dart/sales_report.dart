@@ -1,25 +1,29 @@
-import 'package:bi_replicate/controller/error_controller.dart';
-import 'package:bi_replicate/model/reports/reports_result.dart';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:html' as html;
-import '../../../../components/table_component.dart';
+import '../../../../components/table_component_new.dart';
+import '../../../../controller/error_controller.dart';
 import '../../../../controller/reports/report_controller.dart';
 import '../../../../model/criteria/search_criteria.dart';
+import '../../../../model/reports/reports_result.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
 import '../../../../utils/constants/app_utils.dart';
+import '../../../../utils/constants/colors.dart';
+import '../../../../utils/constants/constants.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../utils/func/dates_controller.dart';
-import '../../../../widget/custom_btn.dart';
 import 'tabs/criteria_widget.dart';
 import 'tabs/order_by_widget.dart';
 import 'tabs/setup_widget.dart';
+import '../../../../components/table_component.dart';
 
 class SalesReportScreen extends StatefulWidget {
   const SalesReportScreen({Key? key}) : super(key: key);
@@ -37,23 +41,44 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   late SalesCriteraProvider readProvider;
   int limitPage = 0;
   List<String> finalRow = [];
-  // TextEditingController fromDate = TextEditingController();
+  ValueNotifier traficResultModelNotifier =
+      ValueNotifier(SalesCostReportModel());
+
+  TextEditingController fromDate = TextEditingController();
   // TextEditingController toDate = TextEditingController();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
   bool isMobile = false;
+  ValueNotifier isDownload = ValueNotifier(false);
+  bool hidefilter = false;
+  bool isHide = false;
+  ValueNotifier pageLis = ValueNotifier(1);
+  ValueNotifier isLoading = ValueNotifier(true);
+  ValueNotifier isLoadingData = ValueNotifier(true);
+  ValueNotifier itemsNumberDisplayed = ValueNotifier(0);
+  ValueNotifier<List<PlutoRow>> tableListener = ValueNotifier([]);
+  int count = 0;
+  PlutoGridStateManager? stateManager;
+  List<PlutoRow> rowList = [];
+  List<PlutoColumn> polCols = [];
   // bool isMobile = false;
+  // String todayDate = DatesController().formatDateReverse(
+  //     DatesController().formatDate(DatesController().todayDate()));
+
+  ValueNotifier isReset = ValueNotifier(false);
 
   @override
   void didChangeDependencies() async {
     _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
     readProvider.emptyProvider();
+    // polCols = [];
 
     orderByColumns = [
       '#',
-      _locale.branch,
+      _locale.branch, _locale.stock,
+
       _locale.stockCategoryLevel("1"),
       _locale.stockCategoryLevel("2"),
       _locale.stockCategoryLevel("3"),
@@ -61,22 +86,72 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.supplier("2"),
       _locale.supplier("3"),
       _locale.customer,
-      _locale.stock,
       _locale.modelNo,
       _locale.qty,
       _locale.averagePrice,
-      _locale.total
+      _locale.total,
+      // _locale.costPriceAvg,
+      // _locale.totalCost,
+      // _locale.diffBetCostAndSale,
+      // _locale.profitPercent
     ];
-
-    reportsResult = await ReportController()
-        .getSalesResultMehtod(readProvider.toJson(), isStart: true);
+    polCols = SalesCostReportModel.getColumns(
+        AppLocalizations.of(context)!, orderByColumns, reportsResult, context);
     // await getResult().then(
     //   (value) {
     //     searchSalesCostReport(1);
     //   },
     //  );
 
+    if (stateManager != null) {
+      int maxNumber = 1;
+
+      for (int i = 0; i < polCols.length; i++) {
+        int length = polCols[i].title.split(" ").length;
+        if (length > maxNumber) {
+          maxNumber = length;
+        }
+        String title = specialColumnsWidth(polCols, i, _locale)
+            ? polCols[i].title
+            : longSentenceWidth(polCols, i, _locale)
+                ? '${polCols[i].title.split(' ').take(2).join(' ')}\n${polCols[i].title.split(' ').skip(2).join(' ')}'
+                : polCols[i]
+                    .title
+                    .replaceAll(" ", "\n"); // _locale.lastPricePurchase
+        polCols[i].titleSpan = TextSpan(
+          children: [
+            WidgetSpan(
+              child: Text(
+                title,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ),
+          ],
+        );
+        polCols[i].titleTextAlign = PlutoColumnTextAlign.center;
+        polCols[i].textAlign = PlutoColumnTextAlign.center;
+
+        stateManager!.columns[i].title = polCols[i].title;
+        stateManager!.columns[i].width = polCols[i].width;
+        stateManager!.columns[i].titleTextAlign = polCols[i].titleTextAlign;
+        stateManager!.columns[i].textAlign = polCols[i].textAlign;
+        stateManager!.columns[i].titleSpan = polCols[i].titleSpan;
+      }
+      // for (int i = 0; i < stateManager!!.rows.length; i++) {
+      //   stateManager!!.rows[i].cells['intStatus']!.value =
+      //       getStatusNameDependsLang(
+      //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
+      // }
+      stateManager!.notifyListeners(true);
+    }
+
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    readProvider.emptyProvider();
+    super.dispose();
   }
 
   String selectedValueFromDropdown1 = "";
@@ -112,6 +187,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     List<String> orderByColumnsTemp = [
       '#',
       _locale.branch,
+      _locale.stock,
       _locale.stockCategoryLevel("1"),
       _locale.stockCategoryLevel("2"),
       _locale.stockCategoryLevel("3"),
@@ -119,11 +195,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.supplier("2"),
       _locale.supplier("3"),
       _locale.customer,
-      _locale.stock,
       _locale.modelNo,
       _locale.qty,
       _locale.averagePrice,
-      _locale.total
+      _locale.total,
+      // _locale.costPriceAvg,
+      // _locale.totalCost,
+      // _locale.diffBetCostAndSale,
+      // _locale.profitPercent
     ];
 
     if ((selectedValueFromDropdown1.isEmpty ||
@@ -134,8 +213,20 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             selectedValueFromDropdown3 == "") &&
         (selectedValueFromDropdown4.isEmpty ||
             selectedValueFromDropdown4 == "")) {
-      // setState(() {
       orderByColumns = orderByColumnsTemp;
+      stateManager!.removeColumns(stateManager!.columns);
+
+      for (int i = 0;
+          i <
+              SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                      orderByColumns, reportsResult, context)
+                  .length;
+          i++) {
+        stateManager!.insertColumns(i, [
+          SalesCostReportModel.getColumns(
+              _locale, orderByColumnsTemp, reportsResult, context)[i]
+        ]);
+      }
       if (readProvider.useItemCostPrice == true) {
         orderByColumnsTemp.addAll([
           _locale.costPriceAvg,
@@ -143,7 +234,50 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
           _locale.diffBetCostAndSale,
           _locale.profitPercent
         ]);
+        stateManager!.removeColumns(stateManager!.columns);
+
+        for (int i = 0;
+            i <
+                SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                        orderByColumns, reportsResult, context)
+                    .length;
+            i++) {
+          stateManager!.insertColumns(i, [
+            SalesCostReportModel.getColumns(
+                _locale, orderByColumnsTemp, reportsResult, context)[i]
+          ]);
+        }
+      } else if (readProvider.useItemCostPrice == false) {
+        stateManager!.removeColumns(stateManager!.columns);
+        List<String> temp = [
+          '#',
+          _locale.branch,
+          _locale.stock,
+          _locale.stockCategoryLevel("1"),
+          _locale.stockCategoryLevel("2"),
+          _locale.stockCategoryLevel("3"),
+          _locale.supplier("1"),
+          _locale.supplier("2"),
+          _locale.supplier("3"),
+          _locale.customer,
+          _locale.modelNo,
+          _locale.qty,
+          _locale.averagePrice,
+          _locale.total,
+        ];
+        for (int i = 0;
+            i <
+                SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                        orderByColumns, reportsResult, context)
+                    .length;
+            i++) {
+          stateManager!.insertColumns(i, [
+            SalesCostReportModel.getColumns(
+                _locale, temp, reportsResult, context)[i]
+          ]);
+        }
       }
+
       // });
     } else {
       Set<String> selectedValues = {};
@@ -196,15 +330,70 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         _locale.total,
       ]);
       if (readProvider.useItemCostPrice == true) {
-        columns.addAll([
+        orderByColumnsTemp.addAll([
           _locale.costPriceAvg,
           _locale.totalCost,
           _locale.diffBetCostAndSale,
+          _locale.profitPercent
         ]);
+        stateManager!.removeColumns(stateManager!.columns);
+
+        for (int i = 0;
+            i <
+                SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                        orderByColumns, reportsResult, context)
+                    .length;
+            i++) {
+          stateManager!.insertColumns(i, [
+            SalesCostReportModel.getColumns(
+                _locale, orderByColumnsTemp, reportsResult, context)[i]
+          ]);
+        }
       }
+
       // setState(() {
       orderByColumns = columns;
-
+      stateManager!.removeColumns(stateManager!.columns);
+      if (readProvider.getOrders!.isNotEmpty) {
+        for (int i = 0;
+            i <
+                SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                        orderByColumns, reportsResult, context)
+                    .length;
+            i++) {
+          stateManager!.insertColumns(i, [
+            SalesCostReportModel.getColumns(
+                _locale, orderByColumns, reportsResult, context)[i]
+          ]);
+        }
+      } else {
+        List<String> temp = [
+          '#',
+          _locale.branch,
+          _locale.stock,
+          _locale.stockCategoryLevel("1"),
+          _locale.stockCategoryLevel("2"),
+          _locale.stockCategoryLevel("3"),
+          _locale.supplier("1"),
+          _locale.supplier("2"),
+          _locale.supplier("3"),
+          _locale.modelNo,
+          _locale.qty,
+          _locale.averagePrice,
+          _locale.total
+        ];
+        for (int i = 0;
+            i <
+                SalesCostReportModel.getColumns(AppLocalizations.of(context)!,
+                        temp, reportsResult, context)
+                    .length;
+            i++) {
+          stateManager!.insertColumns(i, [
+            SalesCostReportModel.getColumns(
+                _locale, temp, reportsResult, context)[i]
+          ]);
+        }
+      }
       // });
     }
   }
@@ -218,188 +407,580 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     isMobile = Responsive.isMobile(context);
 
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-              child: SizedBox(
-                width: isDesktop ? width * 0.7 : width * 0.9,
-                height: isDesktop ? height * 0.1 : height * 0.1,
-                child: TabBar(
-                  unselectedLabelColor: Colors.grey,
-                  labelColor: Colors.black,
-                  tabs: [
-                    Tab(
-                      child: Text(maxLines: 1, _locale.criteria),
+            SizedBox(
+              height: height * 0.04,
+              child: DottedBorder(
+                color: Colors.blue,
+                strokeWidth: 1,
+                dashPattern: const [
+                  2,
+                  2,
+                ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                          message: hidefilter == true
+                              ? _locale.showFilters
+                              : _locale.hideFilters,
+                          child: IconButton(
+                            padding: const EdgeInsets.only(top: 3),
+                            onPressed: () {
+                              setState(() {
+                                hidefilter = !hidefilter;
+                                isHide = true;
+                              });
+                            },
+                            icon: hidefilter == false
+                                ? Icon(
+                                    Icons.arrow_circle_up_sharp,
+                                    size: height * 0.025,
+                                  )
+                                : Icon(
+                                    Icons.arrow_circle_down_sharp,
+                                    size: height * 0.025,
+                                  ),
+                          ),
+                        ),
+                        Text(_locale.chooseFilter),
+                      ],
                     ),
-                    Tab(
-                      child: Text(maxLines: 1, _locale.orderBy),
-                    ),
-                    Tab(
-                      child: Text(maxLines: 1, _locale.setUPSetting),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Tooltip(
+                          message: _locale.reset,
+                          child: IconButton(
+                              padding: const EdgeInsets.only(top: 3),
+                              onPressed: () {
+                                setState(() {
+                                  readProvider.emptyProvider();
+                                  salesList = [];
+                                  finalRow = [];
+                                  orderByColumns = [
+                                    '#',
+                                    _locale.branch,
+                                    _locale.stockCategoryLevel("1"),
+                                    _locale.stockCategoryLevel("2"),
+                                    _locale.stockCategoryLevel("3"),
+                                    _locale.supplier("1"),
+                                    _locale.supplier("2"),
+                                    _locale.supplier("3"),
+                                    _locale.customer,
+                                    _locale.stock,
+                                    _locale.modelNo,
+                                    _locale.qty,
+                                    _locale.averagePrice,
+                                    _locale.total
+                                  ];
+                                });
+                              },
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.black,
+                                size: height * 0.025,
+                              )),
+                        ),
+                        Tooltip(
+                          message: _locale.exportToExcel,
+                          child: IconButton(
+                              padding: const EdgeInsets.only(top: 3),
+                              onPressed: () {
+                                isDownload.value = true;
+
+                                DateTime from = DateTime.parse(DatesController()
+                                    .formatDateReverse(
+                                        readProvider.getFromDate()!));
+                                DateTime to = DateTime.parse(DatesController()
+                                    .formatDateReverse(
+                                        readProvider.getToDate()!));
+
+                                if (from.isAfter(to)) {
+                                  ErrorController.openErrorDialog(
+                                      1, _locale.startDateAfterEndDate);
+                                } else {
+                                  if (salesList.isEmpty) {
+                                    ErrorController.openErrorDialog(
+                                        406, _locale.error406);
+                                    isDownload.value = false;
+                                  } else {
+                                    SearchCriteria searchCriteria =
+                                        SearchCriteria(
+                                      fromDate: readProvider.fromDate,
+                                      toDate: readProvider.toDate,
+                                      voucherStatus: -100,
+                                      columns: getColumnsName(
+                                          _locale, orderByColumns, true),
+                                      customColumns: getCustomColumnsName(
+                                          _locale, orderByColumns, true),
+                                    );
+                                    Map<String, dynamic> body =
+                                        readProvider.toJson();
+                                    ReportController()
+                                        .exportToExcelApi(searchCriteria, body)
+                                        .then((value) {
+                                      saveExcelFile(
+                                          value, "${_locale.salesreport}.xlsx");
+                                      isDownload.value = false;
+                                    });
+                                  }
+                                }
+                              },
+                              icon: Icon(
+                                Icons.description,
+                                color: Colors.black,
+                                size: height * 0.025,
+                              )),
+                        ),
+                      ],
                     ),
                   ],
-                  onTap: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
                 ),
               ),
             ),
-            _currentIndex == 0
-                ? CriteriaWidget(
-                    // fromDate: fromDate,
-                    // toDate: toDate,
-                    )
-                : _currentIndex == 1
-                    ? OrderByWidget(
-                        // fromDate: fromDate,
-                        // toDate: toDate,
-                        onSelectedValueChanged1: updateSelectedValue1,
-                        onSelectedValueChanged2: updateSelectedValue2,
-                        onSelectedValueChanged3: updateSelectedValue3,
-                        onSelectedValueChanged4: updateSelectedValue4)
-                    : SetupWidget(
-                        // fromDate: fromDate,
-                        // toDate: toDate,
+            hidefilter == false
+                ? Column(
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          width: isDesktop ? width * 0.7 : width * 0.9,
+                          height: height * 0.045,
+                          child: TabBar(
+                            unselectedLabelColor: Colors.grey,
+                            labelColor: Colors.black,
+                            indicatorColor: primary,
+                            tabs: [
+                              Tab(
+                                child: Text(
+                                    maxLines: 1, _locale.critiriaAndOrderBy),
+                              ),
+                              // Tab(
+                              //   child: Text(maxLines: 1, _locale.orderBy),
+                              // ),
+                              Tab(
+                                child: Text(maxLines: 1, _locale.setUPSetting),
+                              ),
+                            ],
+                            onTap: (index) {
+                              setState(() {
+                                _currentIndex = index;
+                              });
+                            },
+                          ),
                         ),
-            SizedBox(
-              height: isDesktop ? height * 0.05 : height * 0.05,
-            ),
+                      ),
+                      _currentIndex == 0
+                          ? CriteriaWidget(
+                              onSelectedValueChanged1: updateSelectedValue1,
+                              onSelectedValueChanged2: updateSelectedValue2,
+                              onSelectedValueChanged3: updateSelectedValue3,
+                              onSelectedValueChanged4: updateSelectedValue4)
+                          : SetupWidget(),
+                    ],
+                  )
+                : SizedBox.shrink(),
+            // SizedBox(
+            //   height: isDesktop ? height * 0.0001 : height * 0.05,
+            // ),
             SizedBox(
               width: isDesktop ? width * 0.5 : width * .7,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CustomButton(
-                    text: _locale.reset,
-                    textColor: Colors.white,
-                    borderRadius: 5.0,
-                    onPressed: () {
-                      setState(() {
-                        readProvider.emptyProvider();
-                        salesList = [];
-                        finalRow = [];
-                        orderByColumns = [
-                          '#',
-                          _locale.branch,
-                          _locale.stockCategoryLevel("1"),
-                          _locale.stockCategoryLevel("2"),
-                          _locale.stockCategoryLevel("3"),
-                          _locale.supplier("1"),
-                          _locale.supplier("2"),
-                          _locale.supplier("3"),
-                          _locale.customer,
-                          _locale.stock,
-                          _locale.modelNo,
-                          _locale.qty,
-                          _locale.averagePrice,
-                          _locale.total
-                        ];
-                      });
-                    },
-                  ),
-                  CustomButton(
-                    text: _locale.search,
-                    textColor: Colors.white,
-                    borderRadius: 5.0,
-                    onPressed: () async {
-                      // context.read<SalesCriteraProvider>().setFromDate(
-                      //     DatesController().formatDate(fromDate.text));
-                      // context
-                      //     .read<SalesCriteraProvider>()
-                      //     .setToDate(DatesController().formatDate(toDate.text));
-                      DateTime from = DateTime.parse(DatesController()
-                          .formatDateReverse(readProvider.getFromDate!));
-                      DateTime to = DateTime.parse(DatesController()
-                          .formatDateReverse(readProvider.getToDate!));
+                  // ValueListenableBuilder(
+                  //   valueListenable: isReset,
+                  //   builder: (context, value, child) {
+                  //     return Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         ElevatedButton.icon(
+                  //           onPressed: isReset.value
+                  //               ? null
+                  //               : () {
+                  //                   isReset.value = true;
+                  //                   setState(() {
+                  //                     readProvider.emptyProvider();
+                  //                     salesList = [];
+                  //                     finalRow = [];
+                  //                     orderByColumns = [
+                  //                       '#',
+                  //                       _locale.branch,
+                  //                       _locale.stockCategoryLevel("1"),
+                  //                       _locale.stockCategoryLevel("2"),
+                  //                       _locale.stockCategoryLevel("3"),
+                  //                       _locale.supplier("1"),
+                  //                       _locale.supplier("2"),
+                  //                       _locale.supplier("3"),
+                  //                       _locale.customer,
+                  //                       _locale.stock,
+                  //                       _locale.modelNo,
+                  //                       _locale.qty,
+                  //                       _locale.averagePrice,
+                  //                       _locale.total
+                  //                     ];
+                  //                   });
+                  //                   Future.delayed(Duration(milliseconds: 20),
+                  //                       () {
+                  //                     // setState(() {
+                  //                     isReset.value = false;
+                  //                     // });
+                  //                   });
+                  //                 },
+                  //           icon: const Icon(
+                  //             Icons.restore,
+                  //             color: whiteColor,
+                  //           ),
+                  //           label: isReset.value
+                  //               ? SizedBox(
+                  //                   width: width * 0.015,
+                  //                   height: height * 0.04,
+                  //                   child: const CircularProgressIndicator(
+                  //                     color: primary,
+                  //                   ))
+                  //               : Text(
+                  //                   _locale.reset,
+                  //                   style: const TextStyle(
+                  //                       fontSize: 16, color: whiteColor),
+                  //                 ),
+                  //           style: customButtonStyle(
+                  //               Size(width * 0.13, height * 0.045),
+                  //               16,
+                  //               primary),
+                  //         ),
+                  //       ],
+                  //     );
+                  //   },
+                  // ),
+                  Padding(
+                    padding: _currentIndex == 0
+                        ? EdgeInsets.only(top: 0.0)
+                        : EdgeInsets.only(top: 8.0),
+                    child: Container(
+                      width: width * 0.023,
+                      height: height * 0.04,
+                      color: primary,
+                      child: IconButton(
+                        alignment: Alignment.center,
+                        color: primary,
+                        onPressed: () async {
+                          // context.read<SalesCriteraProvider>().setFromDate(
+                          //     DatesController().formatDate(fromDate.text));
+                          // context
+                          //     .read<SalesCriteraProvider>()
+                          //     .setToDate(DatesController().formatDate(toDate.text));
 
-                      if (from.isAfter(to)) {
-                        ErrorController.openErrorDialog(
-                            1, _locale.startDateAfterEndDate);
-                      } else {
-                        await generateColumns();
+                          DateTime from = DateTime.parse(DatesController()
+                              .formatDateReverse(DatesController()
+                                  .formatDate(readProvider.getFromDate()!)));
+                          DateTime to = DateTime.parse(DatesController()
+                              .formatDateReverse(DatesController()
+                                  .formatDate(readProvider.getToDate()!)));
 
-                        dynamic body = readProvider.toJson();
-                        reportsResult =
-                            await ReportController().getSalesResultMehtod(body);
-                        setState(() {});
-                      }
-                    },
-                  ),
-                  Components().blueButton(
-                    text: _locale.exportToExcel,
-                    textColor: Colors.white,
-                    borderRadius: 5.0,
-                    height: isDesktop ? height * .05 : height * .06,
-                    fontSize: isDesktop ? height * .016 : height * .011,
-                    width: isDesktop ? width * 0.15 : width * 0.25,
-                    onPressed: () {
-                      DateTime from = DateTime.parse(DatesController()
-                          .formatDateReverse(readProvider.getFromDate!));
-                      DateTime to = DateTime.parse(DatesController()
-                          .formatDateReverse(readProvider.getToDate!));
+                          if (from.isAfter(to)) {
+                            ErrorController.openErrorDialog(
+                                1, _locale.startDateAfterEndDate);
+                          } else {
+                            setState(() {
+                              hidefilter = !hidefilter;
+                            });
+                            // }
+                            // dynamic body = readProvider.toJson();
 
-                      if (from.isAfter(to)) {
-                        print("formmmm $from");
-                        print("to $to");
-                        print("hellllllllo");
-                        ErrorController.openErrorDialog(
-                            1, _locale.startDateAfterEndDate);
-                      } else {
-                        if (salesList.isEmpty) {
-                          ErrorController.openErrorDialog(
-                              406, _locale.error406);
-                        } else {
-                          SearchCriteria searchCriteria = SearchCriteria(
-                            fromDate: readProvider.fromDate,
-                            toDate: readProvider.toDate,
-                            voucherStatus: -100,
-                            columns:
-                                getColumnsName(_locale, orderByColumns, true),
-                            customColumns: getCustomColumnsName(
-                                _locale, orderByColumns, true),
-                          );
-                          Map<String, dynamic> body = readProvider.toJson();
-                          ReportController()
-                              .exportToExcelApi(searchCriteria, body)
-                              .then((value) {
-                            saveExcelFile(value, "${_locale.salesreport}.xlsx");
-                          });
-                        }
-                      }
-                    },
+                            pageLis.value = 1;
+
+                            readProvider.setPage(pageLis.value);
+                            dynamic body = readProvider.toJson();
+                            stateManager!.setShowLoading(true);
+                            await generateColumns();
+                            // if (pageLis.value == 1) {
+                            reportsResult = await ReportController()
+                                .getSalesResultMehtod(readProvider.toJson(),
+                                    isStart: true);
+                            stateManager!.removeAllRows();
+
+                            List<SalesCostReportModel> result = [];
+                            ReportController purchaseReportController =
+                                ReportController();
+
+                            await purchaseReportController
+                                .postSalesCostReportMethod(body)
+                                .then((value) {
+                              result = value;
+                              stateManager!.setShowLoading(false);
+                            });
+
+                            List<PlutoColumn> columns =
+                                SalesCostReportModel.getColumns(
+                                    AppLocalizations.of(context)!,
+                                    orderByColumns,
+                                    reportsResult,
+                                    context);
+                            if (stateManager != null) {
+                              int maxNumber = 1;
+
+                              for (int i = 0; i < polCols.length; i++) {
+                                int length = polCols[i].title.split(" ").length;
+                                if (length > maxNumber) {
+                                  maxNumber = length;
+                                }
+                                String title = specialColumnsWidth(
+                                        polCols, i, _locale)
+                                    ? polCols[i].title
+                                    : longSentenceWidth(polCols, i, _locale)
+                                        ? '${polCols[i].title.split(' ').take(2).join(' ')}\n${polCols[i].title.split(' ').skip(2).join(' ')}'
+                                        : polCols[i].title.replaceAll(" ",
+                                            "\n"); // _locale.lastPricePurchase
+                                polCols[i].titleSpan = TextSpan(
+                                  children: [
+                                    WidgetSpan(
+                                      child: Text(
+                                        title,
+                                        style: const TextStyle(fontSize: 10),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                                polCols[i].titleTextAlign =
+                                    PlutoColumnTextAlign.center;
+                                polCols[i].textAlign =
+                                    PlutoColumnTextAlign.center;
+
+                                stateManager!.columns[i].title =
+                                    polCols[i].title;
+                                stateManager!.columns[i].width =
+                                    polCols[i].width;
+                                stateManager!.columns[i].titleTextAlign =
+                                    polCols[i].titleTextAlign;
+                                stateManager!.columns[i].textAlign =
+                                    polCols[i].textAlign;
+                                stateManager!.columns[i].titleSpan =
+                                    polCols[i].titleSpan;
+                              }
+                              // for (int i = 0; i < stateManager!!.rows.length; i++) {
+                              //   stateManager!!.rows[i].cells['intStatus']!.value =
+                              //       getStatusNameDependsLang(
+                              //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
+                              // }
+                              stateManager!.notifyListeners(true);
+                            }
+
+                            for (int i = 0; i < columns.length; i++) {
+                              stateManager!.columns[i].footerRenderer =
+                                  columns[i].footerRenderer;
+                            }
+                            setState(() {});
+                            stateManager!.notifyListeners(true);
+                            List<PlutoRow> rowsToAdd =
+                                result.map((item) => item.toPluto()).toList();
+                            stateManager!.appendRows(rowsToAdd);
+                            pageLis.value = pageLis.value + 1;
+                            reportsResult = await ReportController()
+                                .getSalesResultMehtod(body);
+                            // setState(() {});
+                          }
+                        },
+                        icon: Icon(
+                          Icons.search,
+                          color: whiteColor,
+                          size: 18,
+                        ),
+                        // style: customButtonStyle(
+                        //     Size(width * 0.13, height * 0.045), 16, primary),
+                      ),
+                    ),
                   ),
-                  // SizedBox(
-                  //   width: isMobile ? width * 0.05 : width * 0.05,
+                  // ElevatedButton.icon(
+                  //   label: Text(
+                  //     _locale.calculate,
+                  //     style: const TextStyle(fontSize: 16, color: whiteColor),
+                  //   ),
+                  //   style: customButtonStyle(
+                  //       Size(width * 0.13, height * 0.045), 16, primary),
+                  //   icon: const Icon(Icons.search),
+                  //   onPressed: () async {
+                  //     // context.read<SalesCriteraProvider>().setFromDate(
+                  //     //     DatesController().formatDate(fromDate.text));
+                  //     // context
+                  //     //     .read<SalesCriteraProvider>()
+                  //     //     .setToDate(DatesController().formatDate(toDate.text));
+                  //     DateTime from = DateTime.parse(DatesController()
+                  //         .formatDateReverse(readProvider.getFromDate()!));
+                  //     DateTime to = DateTime.parse(DatesController()
+                  //         .formatDateReverse(readProvider.getToDate()!));
+
+                  //     if (from.isAfter(to)) {
+                  //       ErrorController.openErrorDialog(
+                  //           1, _locale.startDateAfterEndDate);
+                  //     } else {
+                  //       // }
+                  //       // dynamic body = readProvider.toJson();
+
+                  //       pageLis.value = 1;
+
+                  //       readProvider.setPage(pageLis.value);
+                  //       dynamic body = readProvider.toJson();
+                  //       await generateColumns();
+                  //       // if (pageLis.value == 1) {
+                  //       reportsResult = await ReportController()
+                  //           .getSalesResultMehtod(readProvider.toJson(),
+                  //               isStart: true);
+                  //       stateManager!.removeAllRows();
+
+                  //       List<SalesCostReportModel> result = [];
+                  //       ReportController purchaseReportController =
+                  //           ReportController();
+                  //       await purchaseReportController
+                  //           .postSalesCostReportMethod(body)
+                  //           .then((value) {
+                  //         result = value;
+                  //       });
+
+                  //       List<PlutoColumn> columns =
+                  //           SalesCostReportModel.getColumns(
+                  //               AppLocalizations.of(context)!,
+                  //               orderByColumns,
+                  //               reportsResult,
+                  //               context);
+                  //       for (int i = 0; i < columns.length; i++) {
+                  //         stateManager!.columns[i].footerRenderer =
+                  //             columns[i].footerRenderer;
+                  //       }
+                  //       setState(() {});
+                  //       stateManager!.notifyListeners(true);
+                  //       List<PlutoRow> rowsToAdd =
+                  //           result.map((item) => item.toPluto()).toList();
+                  //       stateManager!.appendRows(rowsToAdd);
+                  //       pageLis.value = pageLis.value + 1;
+                  //       reportsResult =
+                  //           await ReportController().getSalesResultMehtod(body);
+                  //       // setState(() {});
+                  //     }
+                  //   },
+                  // ),
+                  // ValueListenableBuilder(
+                  //   valueListenable: isDownload,
+                  //   builder: (context, value, child) {
+                  //     return Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         ElevatedButton.icon(
+                  //           onPressed: isDownload.value
+                  //               ? null
+                  //               : () {
+                  //                   isDownload.value = true;
+
+                  //                   DateTime from = DateTime.parse(
+                  //                       DatesController().formatDateReverse(
+                  //                           readProvider.getFromDate()!));
+                  //                   DateTime to = DateTime.parse(
+                  //                       DatesController().formatDateReverse(
+                  //                           readProvider.getToDate()!));
+
+                  //                   if (from.isAfter(to)) {
+                  //                     ErrorController.openErrorDialog(
+                  //                         1, _locale.startDateAfterEndDate);
+                  //                   } else {
+                  //                     if (salesList.isEmpty) {
+                  //                       ErrorController.openErrorDialog(
+                  //                           406, _locale.error406);
+                  //                       isDownload.value = false;
+                  //                     } else {
+                  //                       SearchCriteria searchCriteria =
+                  //                           SearchCriteria(
+                  //                         fromDate: readProvider.fromDate,
+                  //                         toDate: readProvider.toDate,
+                  //                         voucherStatus: -100,
+                  //                         columns: getColumnsName(
+                  //                             _locale, orderByColumns, true),
+                  //                         customColumns: getCustomColumnsName(
+                  //                             _locale, orderByColumns, true),
+                  //                       );
+                  //                       Map<String, dynamic> body =
+                  //                           readProvider.toJson();
+                  //                       ReportController()
+                  //                           .exportToExcelApi(
+                  //                               searchCriteria, body)
+                  //                           .then((value) {
+                  //                         saveExcelFile(value,
+                  //                             "${_locale.salesreport}.xlsx");
+                  //                         isDownload.value = false;
+                  //                       });
+                  //                     }
+                  //                   }
+                  //                 },
+                  //           icon: Icon(
+                  //             Icons.description,
+                  //             size: width * 0.015,
+                  //             color: whiteColor,
+                  //           ),
+                  //           label: isDownload.value
+                  //               ? SizedBox(
+                  //                   width: width * 0.015,
+                  //                   height: height * 0.04,
+                  //                   child: const CircularProgressIndicator(
+                  //                     color: primary,
+                  //                   ))
+                  //               : Text(
+                  //                   _locale.changeToExcel,
+                  //                   style: const TextStyle(
+                  //                       fontSize: 16, color: whiteColor),
+                  //                 ),
+                  //           style: customButtonStyle(
+                  //               Size(width * 0.13, height * 0.045),
+                  //               16,
+                  //               primary),
+                  //         ),
+                  //       ],
+                  //     );
+                  //   },
                   // ),
                 ],
               ),
             ),
-            SizedBox(
-              height: isDesktop ? height * 0.05 : height * 0.05,
-            ),
-            SizedBox(
-              width: isDesktop
-                  ? orderByColumns.length > 6
-                      ? width * 0.7
-                      : width * double.parse("0.${orderByColumns.length}6")
-                  : width * 0.7,
-              height: height * 0.7,
-              child: TableComponent(
-                key: UniqueKey(),
-                plCols: SalesCostReportModel.getColumns(
-                    AppLocalizations.of(context)!,
-                    orderByColumns,
-                    reportsResult,
-                    context),
-                polRows: [],
-                footerBuilder: (stateManager) {
-                  // print("stateManager ${stateManager.}");
-                  return lazyPaginationFooter(stateManager);
-                },
+            // SizedBox(
+            //   height: isDesktop ? height * 0.0001 : height * 0.05,
+            // ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                // width: isDesktop
+                // ? orderByColumns.length > 6
+                //     ? width * 0.8
+                //     : width * double.parse("0.${orderByColumns.length}6")
+                // : width * 0.7,
+                height: hidefilter == true
+                    ? height * 0.77
+                    : _currentIndex == 1
+                        ? height * 0.6
+                        : _currentIndex == 0
+                            ? height * 0.48
+                            : height * 0.4,
+                child: TableComponentNew(
+                  columnHeight: 70,
+                  // key: UniqueKey(),
+                  plCols: polCols,
+                  polRows: [],
+                  footerBuilder: (stateManager) {
+                    return lazyLoadingfooter(stateManager!);
+                  },
+                  onLoaded: (PlutoGridOnLoadedEvent event) {
+                    stateManager = event.stateManager;
+                    if (isLoading.value) {
+                      stateManager!.setShowLoading(true);
+                    }
+                    stateManager!.setShowColumnFilter(true);
+                  },
+                ),
               ),
             ),
           ],
@@ -429,47 +1010,108 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     }
   }
 
-  PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
-    return PlutoLazyPagination(
-      initialPage: 1,
+  // PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager! stateManager!) {
+  //   return PlutoLazyPagination(
+  //     initialPage: 1,
+  //     initialFetch: true,
+  //     pageSizeToMove: 1,
+  //     fetchWithSorting: false,
+  //     fetchWithFiltering: false,
+  //     fetch: (request) {
+  //       return fetchPagination(request);
+  //     },
+  //     stateManager!: stateManager!,
+  //   );
+  // }
+
+  // Future<PlutoLazyPaginationResponse> fetchPagination(
+  //     PlutoLazyPaginationRequest request) async {
+  //   int page = request.page;
+
+  //   ReportController salesReportController = ReportController();
+  //   // List<SalesCostReportModel> newList = salesList;
+  //   readProvider.setPage(page);
+  //   dynamic body = readProvider.toJson();
+  //   salesList = [];
+  //   // reportsResult = await salesReportController.getSalesResultMehtod(body);
+  //   List<PlutoRow> topList = [];
+
+  //   limitPage = reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
+
+  //   if (reportsResult != null && reportsResult!.count != 0) {
+  //     await await salesReportController
+  //         .postSalesCostReportMethod(body)
+  //         .then((value) {
+  //       salesList = value;
+  //     });
+  //   }
+  //   for (int i = 0; i < salesList.length; i++) {
+  //     topList.add(salesList[i].toPluto());
+  //   }
+  //   return PlutoLazyPaginationResponse(
+  //     totalPage: limitPage,
+  //     rows: reportsResult == null ? [] : topList,
+  //   );
+  // }
+
+  PlutoInfinityScrollRows lazyLoadingfooter(
+      PlutoGridStateManager stateManager) {
+    return PlutoInfinityScrollRows(
       initialFetch: true,
-      pageSizeToMove: 1,
       fetchWithSorting: false,
       fetchWithFiltering: false,
-      fetch: (request) {
-        return fetch(request);
-      },
+      fetch: fetch,
       stateManager: stateManager,
     );
   }
 
-  Future<PlutoLazyPaginationResponse> fetch(
-      PlutoLazyPaginationRequest request) async {
-    int page = request.page;
+  Future<PlutoInfinityScrollRowsResponse> fetch(
+    PlutoInfinityScrollRowsRequest request,
+  ) async {
+    if (pageLis.value == 1) {
+      reportsResult = await ReportController()
+          .getSalesResultMehtod(readProvider.toJson(), isStart: true);
 
-    ReportController salesReportController = ReportController();
-    // List<SalesCostReportModel> newList = salesList;
-    readProvider.setPage(page);
-    dynamic body = readProvider.toJson();
-    salesList = [];
-    // reportsResult = await salesReportController.getSalesResultMehtod(body);
+      List<PlutoColumn> columns = SalesCostReportModel.getColumns(
+          AppLocalizations.of(context)!,
+          orderByColumns,
+          reportsResult,
+          context);
+      for (int i = 0; i < columns.length; i++) {
+        stateManager!.columns[i].footerRenderer = columns[i].footerRenderer;
+      }
+    }
     List<PlutoRow> topList = [];
+    salesList = [];
+    ReportController salesReportController = ReportController();
 
-    limitPage = reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
+    readProvider.setPage(pageLis.value);
+    dynamic body = readProvider.toJson();
 
-    if (reportsResult != null && reportsResult!.count != 0) {
-      await await salesReportController
-          .postSalesCostReportMethod(body)
-          .then((value) {
-        salesList = value;
-      });
-    }
+    await salesReportController.postSalesCostReportMethod(body).then((value) {
+      salesList = value;
+    });
+
+    reportsResult =
+        await ReportController().getSalesResultMehtod(readProvider.toJson());
+
     for (int i = 0; i < salesList.length; i++) {
-      topList.add(salesList[i].toPluto());
+      PlutoRow plutoRow = salesList[i].toPluto();
+      rowList.add(plutoRow);
+      topList.add(plutoRow);
     }
-    return PlutoLazyPaginationResponse(
-      totalPage: limitPage,
+
+    stateManager!.setShowLoading(false);
+    isLoading.value = false;
+    isLoadingData.value = false;
+    bool isLast = salesList.isEmpty ? true : false;
+    count = salesList.length;
+    pageLis.value = pageLis.value + 1;
+    itemsNumberDisplayed.value = count;
+
+    return Future.value(PlutoInfinityScrollRowsResponse(
+      isLast: isLast,
       rows: reportsResult == null ? [] : topList,
-    );
+    ));
   }
 }

@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:bi_replicate/service/api_service.dart';
-
+import '../../../service/api_service.dart';
+import '../../../utils/constants/values.dart';
 import '../../model/criteria/search_criteria.dart';
 import '../../model/reports/purchase_cost_report.dart';
 import '../../model/reports/reports_result.dart';
@@ -10,9 +9,55 @@ import '../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../model/reports/sales_report_model/sales_report_model.dart';
 import '../../model/sales_adminstration/branch_model.dart';
 import '../../utils/constants/api_constants.dart';
-import '../../utils/constants/values.dart';
 
 class ReportController {
+  // Future<List<BranchModel>> getSalesStkMethodInformative(
+  //     dynamic salesSearchCriteria,
+  //     InformativeReportProvider informativeReportProvider,
+  //     {bool? isStart}) async {
+  //   var api = getSalesStk;
+  //   late SalesReportModel salesStkObj;
+  //   List<BranchModel> salesStkList = [];
+  //   await ApiService()
+  //       .postRequest(api, salesSearchCriteria, isStart: isStart)
+  //       .then((response) {
+  //     if (response.statusCode == statusOk) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+  //       salesStkObj = SalesReportModel.fromJson(jsonData);
+  //       salesStkList = salesStkObj.branchModel;
+  //     }
+  //     salesStkList = salesStkList
+  //         .where((branch) => !informativeReportProvider.itemsList
+  //             .any((item) => item.branchCode == branch.branchCode))
+  //         .toList();
+  //   });
+  //   return salesStkList;
+  // }
+
+  // Future<List<BranchModel>> getSalesStkDocReportMethod(
+  //     dynamic salesSearchCriteria, DocReportProvider informativeReportProvider,
+  //     {bool? isStart}) async {
+  //   var api = getSalesStk;
+  //   late SalesReportModel salesStkObj;
+  //   List<BranchModel> salesStkList = [];
+  //   await ApiService()
+  //       .postRequest(api, salesSearchCriteria, isStart: isStart)
+  //       .then((response) {
+  //     if (response.statusCode == statusOk) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+  //       salesStkObj = SalesReportModel.fromJson(jsonData);
+  //       salesStkList = salesStkObj.branchModel;
+  //     }
+  //     salesStkList = salesStkList
+  //         .where((branch) => !informativeReportProvider.itemsList
+  //             .any((item) => item.branchCode == branch.branchCode))
+  //         .toList();
+  //   });
+  //   return salesStkList;
+  // }
+
   Future<List<BranchModel>> getSalesStkMethod(dynamic salesSearchCriteria,
       {bool? isStart}) async {
     var api = getSalesStk;
@@ -23,6 +68,7 @@ class ReportController {
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
         salesStkObj = SalesReportModel.fromJson(jsonData);
         salesStkList = salesStkObj.branchModel;
       }
@@ -48,6 +94,22 @@ class ReportController {
     return salesCampList;
   }
 
+  Future<ReportsResult?> getPurchaseResultMehtod(dynamic purchaseProvider,
+      {bool? isStart}) async {
+    var api = getPurchaseResult;
+    ReportsResult? purchaseResult;
+    await ApiService()
+        .postRequest(api, purchaseProvider, isStart: isStart)
+        .then((response) {
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+        purchaseResult = ReportsResult.fromJson(jsonData);
+      }
+    });
+    return purchaseResult;
+  }
+
   Future<List<BranchModel>> getSalesBranchesMethod(dynamic salesSearchCriteria,
       {bool? isStart}) async {
     var api = getSalesBranches;
@@ -64,6 +126,128 @@ class ReportController {
     });
     return branchList;
   }
+
+  Future<Uint8List> exportToExcelApi(
+      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
+    Uint8List excelByteData = Uint8List.fromList([
+      0x48, 0x65, 0x6C, 0x6C,
+      0x6F, // Example byte data (ASCII values for "Hello")
+      // Add more bytes as needed
+    ]);
+    String eUrl = '$exportToExeclSalesReport/count=${10}';
+    var body = {
+      "mainForm": searchBody,
+      "columns": searchCriteria.columns,
+      "customColumns": searchCriteria.customColumns
+    };
+    print("search ${body}");
+    await ApiService().postRequest(eUrl, body).then((value) {
+      excelByteData = value.bodyBytes;
+    });
+    return excelByteData;
+  }
+
+  Future<ReportsResult?> getSalesResultMehtod(dynamic salesProvider,
+      {bool? isStart}) async {
+    var api = getSalesResult;
+    late ReportsResult? salesResult;
+
+    await ApiService()
+        .postRequest(api, salesProvider, isStart: isStart)
+        .then((response) {
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        salesResult = ReportsResult.fromJson(jsonData);
+      }
+    });
+
+    return salesResult;
+  }
+
+  Future<Uint8List> exportPurchaseToExcelApi(
+      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
+    Uint8List excelByteData = Uint8List.fromList([
+      0x48, 0x65, 0x6C, 0x6C,
+      0x6F, // Example byte data (ASCII values for "Hello")
+      // Add more bytes as needed
+    ]);
+    String eUrl = '$exportToExeclPurchaseReport/count=${10}';
+    var body = {
+      "purchasesForm": searchBody,
+      "columns": searchCriteria.columns,
+      "customColumns": searchCriteria.customColumns
+    };
+    await ApiService().postRequest(eUrl, body).then((value) {
+      excelByteData = value.bodyBytes;
+      print("ressss ${value.statusCode}");
+    });
+    return excelByteData;
+  }
+  // Future<List<BranchModel>> getSalesBranchesMethod(dynamic salesSearchCriteria,
+  //     {bool? isStart}) async {
+  //   var api = getSalesBranches;
+  //   late SalesReportModel salesBranchesObj;
+  //   List<BranchModel> branchList = [];
+  //   await ApiService()
+  //       .postRequest(api, salesSearchCriteria, isStart: isStart)
+  //       .then((response) {
+  //     if (response.statusCode == statusOk) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+  //       salesBranchesObj = SalesReportModel.fromJson(jsonData);
+  //       branchList = salesBranchesObj.branchModel;
+  //     }
+  //   });
+  //   return branchList;
+  // }
+
+  // Future<List<BranchModel>> getSalesSuppliersMethodInformative(
+  //     dynamic salesSearchCriteria,
+  //     InformativeReportProvider informativeReportProvider,
+  //     {bool? isStart}) async {
+  //   var api = getSalesSuppliers;
+  //   late SalesReportModel salesSuppliersObj;
+
+  //   List<BranchModel> salesSuppliersList = [];
+
+  //   await ApiService()
+  //       .postRequest(api, salesSearchCriteria, isStart: isStart)
+  //       .then((response) {
+  //     if (response.statusCode == statusOk) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+  //       salesSuppliersObj = SalesReportModel.fromJson(jsonData);
+  //       salesSuppliersList = salesSuppliersObj.branchModel;
+  //       salesSuppliersList = salesSuppliersList
+  //           .where((branch) => !informativeReportProvider.supplierList
+  //               .any((item) => item.branchCode == branch.branchCode))
+  //           .toList();
+  //     }
+  //   });
+  //   return salesSuppliersList;
+  // }
+
+  // Future<List<BranchModel>> getSalesSuppliersMethodDoc(
+  //     dynamic salesSearchCriteria, DocReportProvider doc,
+  //     {bool? isStart}) async {
+  //   var api = getSalesSuppliers;
+  //   late SalesReportModel salesSuppliersObj;
+
+  //   List<BranchModel> salesSuppliersList = [];
+
+  //   await ApiService()
+  //       .postRequest(api, salesSearchCriteria, isStart: isStart)
+  //       .then((response) {
+  //     if (response.statusCode == statusOk) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+  //       salesSuppliersObj = SalesReportModel.fromJson(jsonData);
+  //       salesSuppliersList = salesSuppliersObj.branchModel;
+  //       salesSuppliersList = salesSuppliersList
+  //           .where((branch) => !doc.supplierList
+  //               .any((item) => item.branchCode == branch.branchCode))
+  //           .toList();
+  //     }
+  //   });
+  //   return salesSuppliersList;
+  // }
 
   Future<List<BranchModel>> getSalesSuppliersMethod(dynamic salesSearchCriteria,
       {bool? isStart}) async {
@@ -154,7 +338,7 @@ class ReportController {
     await ApiService()
         .postRequest(api, salesSearchCriteria, isStart: isStart)
         .then((response) {
-      if (response.statusCode == statusOk) {
+      if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         salesStkCountCateg1Obj = SalesReportModel.fromJson(jsonData);
         salesStkCountCateg1List = salesStkCountCateg1Obj.branchModel;
@@ -240,79 +424,9 @@ class ReportController {
           purchaseCostReportList
               .add(PurchaseCostReportModel.fromJson(purchseCostReport));
         }
+        print("purchaseCostReportList:${purchaseCostReportList.length}");
       }
     });
     return purchaseCostReportList;
-  }
-
-  Future<ReportsResult?> getSalesResultMehtod(dynamic salesProvider,
-      {bool? isStart}) async {
-    var api = getSalesResult;
-    late ReportsResult? salesResult;
-
-    await ApiService()
-        .postRequest(api, salesProvider, isStart: isStart)
-        .then((response) {
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        salesResult = ReportsResult.fromJson(jsonData);
-      }
-    });
-
-    return salesResult;
-  }
-
-  Future<ReportsResult?> getPurchaseResultMehtod(dynamic purchaseProvider,
-      {bool? isStart}) async {
-    var api = getPurchaseResult;
-    ReportsResult? purchaseResult;
-    await ApiService()
-        .postRequest(api, purchaseProvider, isStart: isStart)
-        .then((response) {
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-
-        purchaseResult = ReportsResult.fromJson(jsonData);
-      }
-    });
-    return purchaseResult;
-  }
-
-  Future<Uint8List> exportToExcelApi(
-      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
-    Uint8List excelByteData = Uint8List.fromList([
-      0x48, 0x65, 0x6C, 0x6C,
-      0x6F, // Example byte data (ASCII values for "Hello")
-      // Add more bytes as needed
-    ]);
-    String eUrl = '$exportToExeclSalesReport/count=${10}';
-    var body = {
-      "mainForm": searchBody,
-      "columns": searchCriteria.columns,
-      "customColumns": searchCriteria.customColumns
-    };
-    await ApiService().postRequest(eUrl, body).then((value) {
-      excelByteData = value.bodyBytes;
-    });
-    return excelByteData;
-  }
-
-  Future<Uint8List> exportPurchaseToExcelApi(
-      SearchCriteria searchCriteria, Map<String, dynamic> searchBody) async {
-    Uint8List excelByteData = Uint8List.fromList([
-      0x48, 0x65, 0x6C, 0x6C,
-      0x6F, // Example byte data (ASCII values for "Hello")
-      // Add more bytes as needed
-    ]);
-    String eUrl = '$exportToExeclPurchaseReport/count=${10}';
-    var body = {
-      "purchasesForm": searchBody,
-      "columns": searchCriteria.columns,
-      "customColumns": searchCriteria.customColumns
-    };
-    await ApiService().postRequest(eUrl, body).then((value) {
-      excelByteData = value.bodyBytes;
-    });
-    return excelByteData;
   }
 }

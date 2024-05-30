@@ -240,6 +240,15 @@
     "startTimeAfterEndTime": "وقت النهاية يجب أن يكون بعد وقت البداية",
     "timeConflict": "تعارض الوقت",
     "validMonth": "الرجاء إدخال شهر صالح",
-    "validDate": "الرجاء إدخال تاريخ صالح"
+    "validDate": "الرجاء إدخال تاريخ صالح",
+    "itemName": "اسم الصنف",
+    "critiriaAndOrderBy": "المعايير والترتيب حسب",
+    "showFilters": "إظهار الفلاتر",
+    "hideFilters": "إخفاء الفلاتر",
+    "chooseFilter": "اختيار الفلاتر",
+    "contains":"يحتوي"
+
+
+
     
 }

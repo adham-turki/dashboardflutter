@@ -79,4 +79,11 @@ class DatesController {
       }
     }
   }
+
+  String oneMonthAgo() {
+    DateTime now = DateTime.now();
+    DateTime oneMonthAgo = DateTime(now.year, now.month - 1, now.day);
+    final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
+    return dateFormatter.format(oneMonthAgo);
+  }
 }

@@ -264,5 +264,15 @@
     "startTimeAfterEndTime": "End Time should be after Start Time",
     "timeConflict": "Time Conflict",
     "validMonth": "Please enter a valid month",
-    "validDate": "Please enter a valid date"
+    "validDate": "Please enter a valid date",
+    "itemName": "Item Name",
+    "showFilters": "Show filter",
+    "hideFilters": "Hide Filters",
+    "chooseFilter": "Choose filter",
+    "critiriaAndOrderBy": "Critiria and order by",
+    "contains":"Contains"
+
+    
+
+
 }

@@ -1,33 +1,42 @@
 import 'package:flutter/material.dart';
 
+import '../model/sales_adminstration/branch_model.dart';
+import '../utils/func/converters.dart';
+import '../utils/func/dates_controller.dart';
+
 class SalesCriteraProvider with ChangeNotifier {
-  String? fromDate;
-  String? toDate;
+  String fromDate =
+      DatesController().formatDate(DatesController().oneMonthAgo());
+  String toDate = DatesController().formatDate(DatesController().todayDate());
   int? page;
   bool? checkMultipleBranch;
   bool? checkAllBranch;
-  List<String>? codesBranch;
+  List<BranchModel> codesBranch = [];
   bool? checkMultipleStockCategory1;
   bool? checkAllStockCategory1;
-  List<String>? codesStockCategory1;
+  // List<String>? codesStockCategory1;
+  List<BranchModel> codesStockCategory1 = [];
   bool? checkMultipleStockCategory2;
   bool? checkAllStockCategory2;
-  List<String>? codesStockCategory2;
+  List<BranchModel> codesStockCategory2 = [];
   bool? checkMultipleStockCategory3;
   bool? checkAllStockCategory3;
-  List<String>? codesStockCategory3;
+  // List<String>? codesStockCategory3;
+  List<BranchModel> codesStockCategory3 = [];
+
   bool? checkMultipleSupplier;
   bool? checkAllSupplier;
-  List<String>? codesSupplier;
+  List<BranchModel> codesSupplier = [];
   bool? checkMultipleCustomer;
   bool? checkAllCustomer;
-  List<String>? codesCustomer;
+  // List<String>? codesCustomer;
+  List<BranchModel> codesCustomer = [];
   bool? checkMultipleCustomerCategory;
   bool? checkAllCustomerCategory;
-  List<String>? codesCustomerCategory;
+  List<BranchModel> codesCustomerCategory = [];
   bool? checkMultipleStock;
   bool? checkAllStock;
-  List<String>? codesStock;
+  List<BranchModel> codesStock = [];
   bool? checkMultipleCompaig;
   List<String>? compaigList;
   String? campaignNo;
@@ -242,21 +251,32 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  String? get getFromDate => fromDate;
-  void setFromDate(String? value) {
+  void setFromDate(String value) {
     fromDate = value;
     notifyListeners();
   }
 
-  String? get getToDate => toDate;
-  void setToDate(String? value) {
+  void setToDate(String value) {
     toDate = value;
     notifyListeners();
+  }
+
+  String getFromDate() {
+    return fromDate;
+  }
+
+  String getToDate() {
+    return toDate;
   }
 
   int? get getPage => page;
   void setPage(int? value) {
     page = value;
+    notifyListeners();
+  }
+
+  void clearBranches() {
+    codesBranch = [];
     notifyListeners();
   }
 
@@ -272,9 +292,13 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesBranch => codesBranch;
-  void setCodesBranch(List<String>? value) {
-    codesBranch = value;
+  List<BranchModel>? get getCodesBranch => codesBranch;
+  void setCodesBranch(List<BranchModel>? value) {
+    for (var categ in value!) {
+      if (!codesBranch.any((item) => item.branchCode == categ.branchCode)) {
+        codesBranch.add(categ);
+      }
+    }
     notifyListeners();
   }
 
@@ -290,9 +314,19 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesStockCategory1 => codesStockCategory1;
-  void setCodesStockCategory1(List<String>? value) {
-    codesStockCategory1 = value;
+  List<BranchModel>? get getCodesStockCategory1 => codesStockCategory1;
+  void setCodesStockCategory1(List<BranchModel> value) {
+    for (var categ in value) {
+      if (!codesStockCategory1
+          .any((item) => item.branchCode == categ.branchCode)) {
+        codesStockCategory1.add(categ);
+      }
+    }
+    notifyListeners();
+  }
+
+  void clearCodesStockCategory1() {
+    codesStockCategory1 = [];
     notifyListeners();
   }
 
@@ -308,9 +342,14 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesStockCategory2 => codesStockCategory2;
-  void setCodesStockCategory2(List<String>? value) {
+  List<BranchModel>? get getCodesStockCategory2 => codesStockCategory2;
+  void setCodesStockCategory2(List<BranchModel> value) {
     codesStockCategory2 = value;
+    notifyListeners();
+  }
+
+  void clearCodesStockCategory2() {
+    codesStockCategory2 = [];
     notifyListeners();
   }
 
@@ -326,9 +365,19 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesStockCategory3 => codesStockCategory3;
-  void setCodesStockCategory3(List<String>? value) {
-    codesStockCategory3 = value;
+  List<BranchModel>? get getCodesStockCategory3 => codesStockCategory3;
+  void setCodesStockCategory3(List<BranchModel>? categ3) {
+    for (var categ in categ3!) {
+      if (!codesStockCategory3
+          .any((item) => item.branchCode == categ.branchCode)) {
+        codesStockCategory3.add(categ);
+      }
+    }
+    notifyListeners();
+  }
+
+  void clearCodesStockCategory3() {
+    codesStockCategory3 = [];
     notifyListeners();
   }
 
@@ -344,9 +393,13 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesSupplier => codesSupplier;
-  void setCodesSupplier(List<String>? value) {
-    codesSupplier = value;
+  List<BranchModel>? get getCodesSupplier => codesSupplier;
+  void setCodesSupplier(List<BranchModel> value) {
+    for (var categ in value) {
+      if (!codesSupplier.any((item) => item.branchCode == categ.branchCode)) {
+        codesSupplier.add(categ);
+      }
+    }
     notifyListeners();
   }
 
@@ -362,9 +415,18 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesCustomer => codesCustomer;
-  void setCodesCustomer(List<String>? value) {
-    codesCustomer = value;
+  List<BranchModel>? get getCodesCustomer => codesCustomer;
+  void setCodesCustomer(List<BranchModel> value) {
+    for (var categ in value!) {
+      if (!codesCustomer.any((item) => item.branchCode == categ.branchCode)) {
+        codesCustomer.add(categ);
+      }
+    }
+    notifyListeners();
+  }
+
+  void clearCodeCustomer() {
+    codesCustomer = [];
     notifyListeners();
   }
 
@@ -380,9 +442,19 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesCustomerCategory => codesCustomerCategory;
-  void setCodesCustomerCategory(List<String>? value) {
-    codesCustomerCategory = value;
+  List<BranchModel>? get getCodesCustomerCategory => codesCustomerCategory;
+  void setCodesCustomerCategory(List<BranchModel> value) {
+    for (var categ in value) {
+      if (!codesCustomerCategory
+          .any((item) => item.branchCode == categ.branchCode)) {
+        codesCustomerCategory.add(categ);
+      }
+    }
+    notifyListeners();
+  }
+
+  void clearCodeCustomerCategory() {
+    codesCustomerCategory = [];
     notifyListeners();
   }
 
@@ -398,9 +470,18 @@ class SalesCriteraProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<String>? get getCodesStock => codesStock;
-  void setCodesStock(List<String>? value) {
-    codesStock = value;
+  List<BranchModel>? get getCodesStock => codesStock;
+  void setCodesStock(List<BranchModel> value) {
+    for (var categ in value) {
+      if (!codesStock.any((item) => item.branchCode == categ.branchCode)) {
+        codesStock.add(categ);
+      }
+    }
+    notifyListeners();
+  }
+
+  void clearStocks() {
+    codesStock = [];
     notifyListeners();
   }
 
@@ -443,6 +524,11 @@ class SalesCriteraProvider with ChangeNotifier {
   String? get getTransType => transType;
   void setTransType(String? value) {
     transType = value;
+    notifyListeners();
+  }
+
+  void clearCodesSupplier() {
+    codesSupplier = [];
     notifyListeners();
   }
 
@@ -562,35 +648,41 @@ class SalesCriteraProvider with ChangeNotifier {
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> data = <String, dynamic>{};
-    data['fromDate'] = fromDate ?? "";
-    data['toDate'] = toDate ?? "";
-    data['page'] = page ?? 1;
-    data['checkMultipleBranch'] = checkMultipleBranch ?? false;
+    data['fromDate'] = Converters.formatDate(fromDate);
+    data['toDate'] = Converters.formatDate(toDate);
+    data['page'] = page;
+    data['checkMultipleBranch'] = true;
     data['checkAllBranch'] = checkAllBranch ?? false;
-    data['codesBranch'] = codesBranch ?? [];
-    data['checkMultipleStockCategory1'] = checkMultipleStockCategory1 ?? false;
+    data['codesBranch'] =
+        codesBranch.map((branch) => branch.branchCode!).toList() ?? [];
+    data['checkMultipleStockCategory1'] = true;
     data['checkAllStockCategory1'] = checkAllStockCategory1 ?? false;
-    data['codesStockCategory1'] = codesStockCategory1 ?? [];
-    data['checkMultipleStockCategory2'] = checkMultipleStockCategory2 ?? false;
+    data['codesStockCategory1'] =
+        codesStockCategory1.map((branch) => branch.branchCode!).toList() ?? [];
+    data['checkMultipleStockCategory2'] = true;
     data['checkAllStockCategory2'] = checkAllStockCategory2 ?? false;
-    data['codesStockCategory2'] = codesStockCategory2 ?? [];
-    data['checkMultipleStockCategory3'] = checkMultipleStockCategory3 ?? false;
+    data['codesStockCategory2'] =
+        codesStockCategory2.map((e) => e.branchCode).toList() ?? [];
+    data['checkMultipleStockCategory3'] = true;
     data['checkAllStockCategory3'] = checkAllStockCategory3 ?? false;
-    data['codesStockCategory3'] = codesStockCategory3 ?? [];
-    data['checkMultipleSupplier'] = checkMultipleSupplier ?? false;
+    data['codesStockCategory3'] =
+        codesStockCategory3.map((branch) => branch.branchCode!).toList() ?? [];
+    data['checkMultipleSupplier'] = true;
     data['checkAllSupplier'] = checkAllSupplier ?? false;
-    data['codesSupplier'] = codesSupplier ?? [];
-    data['checkMultipleCustomer'] = checkMultipleCustomer ?? false;
+    data['codesSupplier'] =
+        codesSupplier.map((branch) => branch.branchCode!).toList() ?? [];
+    data['checkMultipleCustomer'] = true;
     data['checkAllCustomer'] = checkAllCustomer ?? false;
-    data['codesCustomer'] = codesCustomer ?? [];
-    data['checkMultipleCustomerCategory'] =
-        checkMultipleCustomerCategory ?? false;
+    data['codesCustomer'] =
+        codesCustomer.map((e) => e.branchCode!).toList() ?? [];
+    data['checkMultipleCustomerCategory'] = true;
     data['checkAllCustomerCategory'] = checkAllCustomerCategory ?? false;
-    data['codesCustomerCategory'] = codesCustomerCategory ?? [];
-    data['checkMultipleStock'] = checkMultipleStock ?? false;
+    data['codesCustomerCategory'] =
+        codesCustomerCategory.map((e) => e.branchCode!).toList() ?? [];
+    data['checkMultipleStock'] = true;
     data['checkAllStock'] = checkAllStock ?? false;
-    data['codesStock'] = codesStock ?? [];
-    data['checkMultipleCompaig'] = checkMultipleCompaig ?? false;
+    data['codesStock'] = codesStock.map((e) => e.branchCode!).toList() ?? [];
+    data['checkMultipleCompaig'] = true;
     data['CompaigList'] = compaigList ?? [];
     data['campaignNo'] = campaignNo ?? "";
     data['modelNo'] = modelNo ?? "";
@@ -613,25 +705,25 @@ class SalesCriteraProvider with ChangeNotifier {
   }
 
   void emptyProvider() {
-    fromDate = "";
-    toDate = "";
+    fromDate = Converters.formatDate2(DatesController().oneMonthAgo());
+    toDate = Converters.formatDate2(DatesController().todayDate());
     page = 1;
-    checkMultipleBranch = false;
+    checkMultipleBranch = true;
     checkAllBranch = false;
     codesBranch = [];
-    checkMultipleStockCategory1 = false;
-    checkMultipleStockCategory2 = false;
-    checkMultipleStockCategory3 = false;
+    checkMultipleStockCategory1 = true;
+    checkMultipleStockCategory2 = true;
+    checkMultipleStockCategory3 = true;
     checkAllStockCategory1 = false;
     checkAllStockCategory2 = false;
     checkAllStockCategory3 = false;
     codesStockCategory1 = [];
     codesStockCategory2 = [];
     codesStockCategory3 = [];
-    checkMultipleStock = false;
-    checkMultipleCustomer = false;
-    checkMultipleCustomerCategory = false;
-    checkMultipleSupplier = false;
+    checkMultipleStock = true;
+    checkMultipleCustomer = true;
+    checkMultipleCustomerCategory = true;
+    checkMultipleSupplier = true;
     checkAllStock = false;
     checkAllCustomer = false;
     checkAllCustomerCategory = false;
