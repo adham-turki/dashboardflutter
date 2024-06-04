@@ -792,9 +792,33 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                             child: IconButton(
                                 padding: const EdgeInsets.only(top: 3),
                                 onPressed: () {
-                                  readProvider.emptyProvider();
-                                  salesList = [];
-                                  finalRow = [];
+                                  isReset.value = true;
+                                  setState(() {
+                                    readProvider.emptyProvider();
+                                    salesList = [];
+                                    finalRow = [];
+                                    // orderByColumns = [
+                                    //   '#',
+                                    //   _locale.branch,
+                                    //   _locale.stockCategoryLevel("1"),
+                                    //   _locale.stockCategoryLevel("2"),
+                                    //   _locale.stockCategoryLevel("3"),
+                                    //   _locale.supplier("1"),
+                                    //   _locale.supplier("2"),
+                                    //   _locale.supplier("3"),
+                                    //   _locale.stock,
+                                    //   _locale.modelNo,
+                                    //   _locale.qty,
+                                    //   _locale.averagePrice,
+                                    //   _locale.total
+                                    // ];
+                                  });
+                                  Future.delayed(Duration(milliseconds: 20),
+                                      () {
+                                    // setState(() {
+                                    isReset.value = false;
+                                    // });
+                                  });
                                 },
                                 icon: Icon(
                                   Icons.refresh,

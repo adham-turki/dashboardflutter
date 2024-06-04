@@ -57,6 +57,7 @@ class _LogoutTabState extends State<LogoutTab> {
         //   GoRouter.of(context).go(AppRoutes.loginRoute);
         // }
 
+        // ignore: use_build_context_synchronously
         GoRouter.of(context).go(AppRoutes.initialRoute);
         // GoRouter.of(context).pop();
       },

@@ -4,8 +4,10 @@ import 'package:bi_replicate/utils/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../components/key.dart';
+import '../provider/screen_content_provider.dart';
 
 class AppRoutes {
   static const initialRoute = "/";
@@ -35,10 +37,21 @@ class AppRoutes {
         ),
       ]);
 
+  // static Future<String?> _redirect(BuildContext context) async {
+  //   const storage = FlutterSecureStorage();
+  //   String? token = await storage.read(key: 'jwt');
+  //   return token != null ? mainScreenRoute : loginRoute;
+  // }
   static Future<String?> _redirect(BuildContext context) async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'jwt');
-    return token != null ? mainScreenRoute : loginRoute;
+    if (token != null) {
+      // Clear the current page index
+      context.read<ScreenContentProvider>().setPage(0, "");
+      return mainScreenRoute;
+    } else {
+      return loginRoute;
+    }
   }
 
   static Future<String?> _redirect2(BuildContext context) async {
