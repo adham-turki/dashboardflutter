@@ -422,7 +422,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               ),
               DateTimeComponent(
                 readOnly: false,
-                height: height * 0.06,
+                height: height * 0.045,
                 dateWidth: width * 0.18,
                 label: _locale.fromDate,
                 dateController: fromDate,
@@ -443,7 +443,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               ),
               DateTimeComponent(
                 readOnly: false,
-                height: height * 0.06,
+                height: height * 0.045,
                 dateWidth: width * 0.18,
                 label: _locale.toDate,
                 dateController: toDate,
