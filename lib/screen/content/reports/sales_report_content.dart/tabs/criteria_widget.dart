@@ -22,7 +22,6 @@ import '../../../../../widget/custom_textfield2.dart';
 import '../../../../../widget/drop_down/drop_down_clear.dart';
 import '../../../../../widget/test_drop_down.dart';
 
-
 class CriteriaWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged1;
   final Function(String) onSelectedValueChanged2;
@@ -69,28 +68,22 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
             border: Border.all(color: Colors.grey),
           ),
           padding:
-              isDesktop ? const EdgeInsets.all(10) : const EdgeInsets.all(10),
+              isDesktop ? const EdgeInsets.all(0) : const EdgeInsets.all(10),
           // width: width * 0.80,
           child: isDesktop
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      LeftWidget(
-                          onSelectedValueChanged1:
-                              widget.onSelectedValueChanged1,
-                          onSelectedValueChanged2:
-                              widget.onSelectedValueChanged2,
-                          onSelectedValueChanged3:
-                              widget.onSelectedValueChanged3,
-                          onSelectedValueChanged4:
-                              widget.onSelectedValueChanged4),
-                      // RightWidget(),
-                      // MiddleWidget(),
-                    ],
-                  ),
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LeftWidget(
+                        onSelectedValueChanged1: widget.onSelectedValueChanged1,
+                        onSelectedValueChanged2: widget.onSelectedValueChanged2,
+                        onSelectedValueChanged3: widget.onSelectedValueChanged3,
+                        onSelectedValueChanged4:
+                            widget.onSelectedValueChanged4),
+                    // RightWidget(),
+                    // MiddleWidget(),
+                  ],
                 )
               : Column(
                   children: [
@@ -300,16 +293,16 @@ class _LeftWidgetState extends State<LeftWidget> {
     selectedValue4 = readProvider.getVal4!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             DateTimeComponent(
               readOnly: false,
               height: height * 0.04,
-              dateWidth: width * 0.18,
+              dateWidth: width * 0.14,
               label: _locale.fromDate,
               dateController: fromDate,
               dateControllerToCompareWith: null,
@@ -328,12 +321,12 @@ class _LeftWidgetState extends State<LeftWidget> {
               timeControllerToCompareWith: null,
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.0015,
             ),
             DateTimeComponent(
               readOnly: false,
               height: height * 0.04,
-              dateWidth: width * 0.18,
+              dateWidth: width * 0.14,
               label: _locale.toDate,
               dateController: toDate,
               dateControllerToCompareWith: null,
@@ -350,13 +343,13 @@ class _LeftWidgetState extends State<LeftWidget> {
               timeControllerToCompareWith: null,
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.0015,
             ),
             //  initialValue: reportsProvider.fromCode!.branchName == null
             //           ? null
             //           : selectedFromCode,
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -415,10 +408,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * .01,
+              width: width * .001,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -475,15 +468,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
-          ],
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        Row(
-          children: [
             SizedBox(
-              width: width * 0.18,
+              width: width * .001,
+            ),
+            SizedBox(
+              width: width * 0.13,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -541,72 +530,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * .01,
+              width: width * .001,
             ),
             SizedBox(
-              width: width * 0.18,
-              height: height * 0.045,
-              child: Consumer<SalesCriteraProvider>(
-                  builder: (context, value, child) {
-                return Tooltip(
-                  message: hintStock,
-                  child: TestDropdown(
-                    cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
-                    isEnabled: true,
-                    stringValue: readProvider.codesStock
-                        .map((e) => e.branchName!)
-                        .join(', '),
-                    borderText: _locale.stock,
-                    onClearIconPressed: () {
-                      setState(() {
-                        stockList.clear();
-
-                        hintStock = "";
-                        readProvider.clearStocks();
-                      });
-                    },
-                    onChanged: (val) {
-                      stockList.clear();
-                      for (int i = 0; i < val.length; i++) {
-                        stockList.add(val[i]);
-                      }
-
-                      readProvider.setCodesStock(stockList);
-                      if (readProvider.codesStock.isEmpty) {
-                        hintStock = "";
-                      } else {
-                        hintStock = "";
-
-                        hintStock = readProvider.codesStock
-                            .map((e) => e.branchName!)
-                            .join(', ');
-                        // Removing the last comma and space if exists
-                        if (hintStock.endsWith(', ')) {
-                          hintStock =
-                              hintStock.substring(0, hintStock.length - 2);
-                        }
-                      }
-
-                      setState(() {});
-                    },
-
-                    onSearch: (text) {
-                      DropDownSearchCriteria dropDownSearchCriteria =
-                          getSearchCriteria(text);
-
-                      return salesReportController
-                          .getSalesStkMethod(dropDownSearchCriteria.toJson());
-                    },
-                  ),
-                );
-              }),
-            ),
-            SizedBox(
-              width: width * .01,
-            ),
-            SizedBox(
-              width: width * 0.18,
+              width: width * 0.13,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -664,11 +591,15 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Row(
+          children: [
             SizedBox(
-              width: width * 0.01,
-            ),
-            SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -727,15 +658,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
-          ],
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        Row(
-          children: [
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.0015,
+            ),
+            SizedBox(
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -794,10 +721,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.0015,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<SalesCriteraProvider>(
                   builder: (context, value, child) {
@@ -857,12 +784,13 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.0015,
             ),
             CustomTextField2(
+              // isDocReport: true,
               text: Text(_locale.campaignNo),
-              width: width * 0.4,
-              isReport: true,
+              width: width * 0.14,
+              // isReport: true,
               // label: _locale.campaignNo,
               controller: campaignNoController,
               onSubmitted: (text) {
@@ -873,12 +801,74 @@ class _LeftWidgetState extends State<LeftWidget> {
               },
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.0015,
+            ),
+            SizedBox(
+              width: width * 0.13,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintStock,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesStock
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.stock,
+                    onClearIconPressed: () {
+                      setState(() {
+                        stockList.clear();
+
+                        hintStock = "";
+                        readProvider.clearStocks();
+                      });
+                    },
+                    onChanged: (val) {
+                      stockList.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        stockList.add(val[i]);
+                      }
+
+                      readProvider.setCodesStock(stockList);
+                      if (readProvider.codesStock.isEmpty) {
+                        hintStock = "";
+                      } else {
+                        hintStock = "";
+
+                        hintStock = readProvider.codesStock
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintStock.endsWith(', ')) {
+                          hintStock =
+                              hintStock.substring(0, hintStock.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+
+                    onSearch: (text) {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+
+                      return salesReportController
+                          .getSalesStkMethod(dropDownSearchCriteria.toJson());
+                    },
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              width: width * 0.0015,
             ),
             CustomTextField2(
-              text: Text(_locale.modelNo), isReport: true,
+              text: Text(_locale.modelNo),
+              width: width * 0.13,
 
-              width: width * 0.4,
               // label: _locale.modelNo,
               controller: modelNoController,
               onSubmitted: (text) {
@@ -895,286 +885,267 @@ class _LeftWidgetState extends State<LeftWidget> {
         ),
         Row(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DropDown(
-                  showClearIcon: true,
-                  onClearIconPressed: () {
-                    setState(() {
-                      if (selectedValue1.isNotEmpty &&
-                          ordersMap[selectedValue1] != null &&
-                          ordersMap[selectedValue2] !=
-                              ordersMap[selectedValue1] &&
-                          ordersMap[selectedValue3] !=
-                              ordersMap[selectedValue1] &&
-                          ordersMap[selectedValue4] !=
-                              ordersMap[selectedValue1]) {
-                        ordersList.remove(ordersMap[selectedValue1]);
-                        if (readProvider.getOrders != null) {
-                          readProvider.getOrders!
-                              .remove(ordersMap[selectedValue1]);
-                        }
-                      }
-                      selectedValue1 = "";
-                      readProvider.setVal1("");
-                      readProvider.setOrders(ordersList);
-                      widget.onSelectedValueChanged1("");
-                    });
-                  },
-                  bordeText: _locale.orderBy,
-                  items: firstList,
-                  // label: "",
-                  width: isDesktop ? width * .18 : width * .35,
-                  height: isDesktop
-                      ? height * 0.045
-                      : height * 0.35, // hint: selectedValue1,
-                  initialValue:
-                      selectedValue1.isNotEmpty ? selectedValue1 : null,
-                  valSelected: selectedValue1 != "",
-                  onChanged: (value) {
-                    if (value == null) {
-                      setState(() {
-                        selectedValue1 = "";
-
-                        readProvider.setVal1(selectedValue1);
-                        //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
-                        widget.onSelectedValueChanged1(selectedValue1);
-                      });
-                    } else {
-                      setState(() {
-                        // print("valvalvalvalval111 $value");
-
-                        selectedValue1 = value!;
-                        // print("valvalvalvalval222 $selectedValue1");
-                        // if (ordersMap[selectedValue1] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue1]!);
-
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal1 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal1]);
-                        //   }
-                        // }
-                        readProvider.setVal1(selectedValue1);
-                        //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
-                        widget.onSelectedValueChanged1(selectedValue1);
-                      });
+            // SizedBox(
+            //   width: width * 0.0015,
+            // ),
+            DropDown(
+              showClearIcon: true,
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue1.isNotEmpty &&
+                      ordersMap[selectedValue1] != null &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue1] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue1] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue1]) {
+                    ordersList.remove(ordersMap[selectedValue1]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue1]);
                     }
+                  }
+                  selectedValue1 = "";
+                  readProvider.setVal1("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged1("");
+                });
+              },
+              bordeText: _locale.orderBy + " 1",
+              items: firstList,
+              // label: "",
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop
+                  ? height * 0.045
+                  : height * 0.35, // hint: selectedValue1,
+              initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
+              valSelected: selectedValue1 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue1 = "";
 
-                    setOrderList();
-                  },
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                DropDown(
-                  onClearIconPressed: () {
-                    setState(() {
-                      if (selectedValue2.isNotEmpty &&
-                          ordersMap[selectedValue2] != null &&
-                          ordersMap[selectedValue1] !=
-                              ordersMap[selectedValue2] &&
-                          ordersMap[selectedValue3] !=
-                              ordersMap[selectedValue2] &&
-                          ordersMap[selectedValue4] !=
-                              ordersMap[selectedValue2]) {
-                        ordersList.remove(ordersMap[selectedValue2]);
-                        if (readProvider.getOrders != null) {
-                          readProvider.getOrders!
-                              .remove(ordersMap[selectedValue2]);
-                        }
-                      }
-                      selectedValue2 = "";
-                      readProvider.setVal2("");
-                      readProvider.setOrders(ordersList);
-                      widget.onSelectedValueChanged2("");
-                    });
-                  },
-                  showClearIcon: true,
-                  bordeText: _locale.orderBy,
-                  // label: "",
-                  // width: isDesktop ? null : width * .55,
-                  items: firstList,
-                  // hint: selectedValue2,
-                  initialValue:
-                      selectedValue2.isNotEmpty ? selectedValue2 : null,
-                  width: isDesktop ? width * .18 : width * .35,
-                  height: isDesktop ? height * 0.045 : height * 0.35,
-                  valSelected: selectedValue2 != "",
-                  onChanged: (value) {
-                    if (value == null) {
-                      setState(() {
-                        selectedValue2 = "";
-                        readProvider.setVal2(selectedValue2);
-                        widget.onSelectedValueChanged2(selectedValue2);
-                      });
-                    } else {
-                      setState(() {
-                        selectedValue2 = value!;
-                        // if (ordersMap[selectedValue2] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue2]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal2 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal2]);
-                        //   }
-                        // }
+                    readProvider.setVal1(selectedValue1);
+                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
+                    widget.onSelectedValueChanged1(selectedValue1);
+                  });
+                } else {
+                  setState(() {
+                    // print("valvalvalvalval111 $value");
 
-                        readProvider.setVal2(selectedValue2);
+                    selectedValue1 = value!;
+                    // print("valvalvalvalval222 $selectedValue1");
+                    // if (ordersMap[selectedValue1] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue1]!);
 
-                        widget.onSelectedValueChanged2(selectedValue2);
-                      });
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal1 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
+                    //   }
+                    // }
+                    readProvider.setVal1(selectedValue1);
+                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
+                    widget.onSelectedValueChanged1(selectedValue1);
+                  });
+                }
+
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              width: width * 0.0015,
+            ),
+            DropDown(
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue2.isNotEmpty &&
+                      ordersMap[selectedValue2] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue2] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue2] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue2]) {
+                    ordersList.remove(ordersMap[selectedValue2]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue2]);
                     }
-                    setOrderList();
-                  },
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                DropDown(
-                  showClearIcon: true,
+                  }
+                  selectedValue2 = "";
+                  readProvider.setVal2("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged2("");
+                });
+              },
+              showClearIcon: true,
+              bordeText: _locale.orderBy + " 2",
+              // label: "",
+              // width: isDesktop ? null : width * .55,
+              items: firstList,
+              // hint: selectedValue2,
+              initialValue: selectedValue2.isNotEmpty ? selectedValue2 : null,
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop ? height * 0.045 : height * 0.35,
+              valSelected: selectedValue2 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue2 = "";
+                    readProvider.setVal2(selectedValue2);
+                    widget.onSelectedValueChanged2(selectedValue2);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue2 = value!;
+                    // if (ordersMap[selectedValue2] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue2]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal2 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal2]);
+                    //   }
+                    // }
 
-                  onClearIconPressed: () {
-                    setState(() {
-                      if (selectedValue3.isNotEmpty &&
-                          ordersMap[selectedValue3] != null &&
-                          ordersMap[selectedValue1] !=
-                              ordersMap[selectedValue3] &&
-                          ordersMap[selectedValue2] !=
-                              ordersMap[selectedValue3] &&
-                          ordersMap[selectedValue4] !=
-                              ordersMap[selectedValue3]) {
-                        ordersList.remove(ordersMap[selectedValue3]);
-                        if (readProvider.getOrders != null) {
-                          readProvider.getOrders!
-                              .remove(ordersMap[selectedValue3]);
-                        }
-                      }
-                      selectedValue3 = "";
-                      readProvider.setVal3("");
-                      readProvider.setOrders(ordersList);
-                      widget.onSelectedValueChanged3("");
-                    });
-                  },
-                  bordeText: _locale.orderBy,
-                  // width: isDesktop ? null : width * .55,
-                  width: isDesktop ? width * .18 : width * .35,
-                  height: isDesktop ? height * 0.045 : height * 0.35,
-                  items: firstList,
-                  // hint: selectedValue3,
-                  initialValue:
-                      selectedValue3.isNotEmpty ? selectedValue3 : null,
-                  valSelected: selectedValue3 != "",
-                  onChanged: (value) {
-                    if (value == null) {
-                      setState(() {
-                        selectedValue3 = "";
-                        readProvider.setVal3(selectedValue3);
-                        widget.onSelectedValueChanged3(selectedValue3);
-                      });
-                    } else {
-                      setState(() {
-                        selectedValue3 = value!;
-                        // if (ordersMap[selectedValue3] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue3]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal3 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal3]);
-                        //   }
-                        // }
+                    readProvider.setVal2(selectedValue2);
 
-                        // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
-                        readProvider.setVal3(selectedValue3);
+                    widget.onSelectedValueChanged2(selectedValue2);
+                  });
+                }
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              width: width * 0.0015,
+            ),
+            DropDown(
+              showClearIcon: true,
 
-                        widget.onSelectedValueChanged3(selectedValue3);
-                      });
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue3.isNotEmpty &&
+                      ordersMap[selectedValue3] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue3] &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue3] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue3]) {
+                    ordersList.remove(ordersMap[selectedValue3]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue3]);
                     }
-                    setOrderList();
-                  },
-                ),
-                SizedBox(
-                  width: width * 0.01,
-                ),
-                DropDown(
-                  showClearIcon: true,
+                  }
+                  selectedValue3 = "";
+                  readProvider.setVal3("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged3("");
+                });
+              },
+              bordeText: _locale.orderBy + " 3",
+              // width: isDesktop ? null : width * .55,
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop ? height * 0.045 : height * 0.35,
+              items: firstList,
+              // hint: selectedValue3,
+              initialValue: selectedValue3.isNotEmpty ? selectedValue3 : null,
+              valSelected: selectedValue3 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue3 = "";
+                    readProvider.setVal3(selectedValue3);
+                    widget.onSelectedValueChanged3(selectedValue3);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue3 = value!;
+                    // if (ordersMap[selectedValue3] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue3]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal3 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal3]);
+                    //   }
+                    // }
 
-                  onClearIconPressed: () {
-                    setState(() {
-                      if (selectedValue4.isNotEmpty &&
-                          ordersMap[selectedValue4] != null &&
-                          ordersMap[selectedValue1] !=
-                              ordersMap[selectedValue4] &&
-                          ordersMap[selectedValue2] !=
-                              ordersMap[selectedValue4] &&
-                          ordersMap[selectedValue3] !=
-                              ordersMap[selectedValue4]) {
-                        ordersList.remove(ordersMap[selectedValue4]);
-                        if (readProvider.getOrders != null) {
-                          readProvider.getOrders!
-                              .remove(ordersMap[selectedValue4]);
-                        }
-                      }
-                      selectedValue4 = "";
-                      readProvider.setVal4("");
-                      readProvider.setOrders(ordersList);
-                      widget.onSelectedValueChanged4("");
-                    });
-                  },
-                  bordeText: _locale.orderBy,
-                  items: firstList,
-                  // hint: selectedValue4,
-                  valSelected: selectedValue4 != "",
+                    // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
+                    readProvider.setVal3(selectedValue3);
 
-                  initialValue:
-                      selectedValue4.isNotEmpty ? selectedValue4 : null,
-                  width: isDesktop ? width * .18 : width * .35,
-                  height: isDesktop ? height * 0.045 : height * 0.35,
-                  onChanged: (value) {
-                    if (value == null) {
-                      setState(() {
-                        selectedValue4 = "";
-                        readProvider.setVal4(selectedValue4);
-                        widget.onSelectedValueChanged4(selectedValue4);
-                      });
-                    } else {
-                      setState(() {
-                        selectedValue4 = value!;
-                        // if (ordersMap[selectedValue4] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue4]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal4 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal4]);
-                        //   }
-                        // }
+                    widget.onSelectedValueChanged3(selectedValue3);
+                  });
+                }
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              width: width * 0.0015,
+            ),
+            DropDown(
+              showClearIcon: true,
 
-                        // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
-                        readProvider.setVal4(selectedValue4);
-
-                        widget.onSelectedValueChanged4(selectedValue4);
-                      });
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue4.isNotEmpty &&
+                      ordersMap[selectedValue4] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue4] &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue4] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue4]) {
+                    ordersList.remove(ordersMap[selectedValue4]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue4]);
                     }
-                    setOrderList();
-                  },
-                ),
-              ],
+                  }
+                  selectedValue4 = "";
+                  readProvider.setVal4("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged4("");
+                });
+              },
+              bordeText: _locale.orderBy + " 4",
+              items: firstList,
+              // hint: selectedValue4,
+              valSelected: selectedValue4 != "",
+
+              initialValue: selectedValue4.isNotEmpty ? selectedValue4 : null,
+              width: isDesktop ? width * .14 : width * .35,
+              height: isDesktop ? height * 0.045 : height * 0.35,
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue4 = "";
+                    readProvider.setVal4(selectedValue4);
+                    widget.onSelectedValueChanged4(selectedValue4);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue4 = value!;
+                    // if (ordersMap[selectedValue4] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue4]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal4 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal4]);
+                    //   }
+                    // }
+
+                    // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
+                    readProvider.setVal4(selectedValue4);
+
+                    widget.onSelectedValueChanged4(selectedValue4);
+                  });
+                }
+                setOrderList();
+              },
             ),
           ],
-        )
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
       ],
     );
   }

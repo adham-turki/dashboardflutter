@@ -51,26 +51,47 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
     isDesktop = Responsive.isDesktop(context);
     isMobile = Responsive.isMobile(context);
 
-    return Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: Colors.grey),
-        ),
-        padding:
-            isDesktop ? const EdgeInsets.all(10.0) : const EdgeInsets.all(10),
-        width: width * 0.80,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            LeftWidget(
-                onSelectedValueChanged1: widget.onSelectedValueChanged1,
-                onSelectedValueChanged2: widget.onSelectedValueChanged2,
-                onSelectedValueChanged3: widget.onSelectedValueChanged3,
-                onSelectedValueChanged4: widget.onSelectedValueChanged4),
-            // RightWidget(),
-          ],
-        ));
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 255, 255, 255),
+            border: Border.all(color: Colors.grey),
+          ),
+          padding:
+              isDesktop ? const EdgeInsets.all(0) : const EdgeInsets.all(10),
+          // width: width * 0.80,
+          child: isDesktop
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LeftWidget(
+                        onSelectedValueChanged1: widget.onSelectedValueChanged1,
+                        onSelectedValueChanged2: widget.onSelectedValueChanged2,
+                        onSelectedValueChanged3: widget.onSelectedValueChanged3,
+                        onSelectedValueChanged4:
+                            widget.onSelectedValueChanged4),
+                    // RightWidget(),
+                    // MiddleWidget(),
+                  ],
+                )
+              : Column(
+                  children: [
+                    LeftWidget(
+                        onSelectedValueChanged1: widget.onSelectedValueChanged1,
+                        onSelectedValueChanged2: widget.onSelectedValueChanged2,
+                        onSelectedValueChanged3: widget.onSelectedValueChanged3,
+                        onSelectedValueChanged4:
+                            widget.onSelectedValueChanged4),
+                    // SizedBox(
+                    //   height: height * .01,
+                    // ),
+                    // RightWidget(),
+                    //MiddleWidget(),
+                  ],
+                )),
+    );
   }
 }
 
@@ -317,7 +338,7 @@ class _LeftWidgetState extends State<LeftWidget> {
             DateTimeComponent(
               readOnly: false,
               height: height * 0.045,
-              dateWidth: width * 0.18,
+              dateWidth: width * 0.14,
               label: _locale.fromDate,
               dateController: fromDate,
               dateControllerToCompareWith: null,
@@ -336,12 +357,12 @@ class _LeftWidgetState extends State<LeftWidget> {
               timeControllerToCompareWith: null,
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             DateTimeComponent(
               readOnly: false,
               height: height * 0.045,
-              dateWidth: width * 0.18,
+              dateWidth: width * 0.14,
               label: _locale.toDate,
               dateController: toDate,
               dateControllerToCompareWith: null,
@@ -360,10 +381,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               timeControllerToCompareWith: null,
             ),
             SizedBox(
-              width: width * .01,
+              width: width * .001,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -421,10 +442,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -481,15 +502,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
-          ],
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        Row(
-          children: [
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.001,
+            ),
+            SizedBox(
+              width: width * 0.13,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -548,10 +565,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.13,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -609,11 +626,15 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Row(
+          children: [
             SizedBox(
-              width: width * .01,
-            ),
-            SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -673,10 +694,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * .01,
+              width: width * .001,
             ),
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -734,17 +755,11 @@ class _LeftWidgetState extends State<LeftWidget> {
                 );
               }),
             ),
-          ],
-        ),
-        SizedBox(
-          height: height * .01,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
             SizedBox(
-              width: width * 0.18,
+              width: width * 0.001,
+            ),
+            SizedBox(
+              width: width * 0.14,
               height: height * 0.045,
               child: Consumer<PurchaseCriteraProvider>(
                   builder: (context, value, child) {
@@ -804,11 +819,11 @@ class _LeftWidgetState extends State<LeftWidget> {
               }),
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             CustomTextField2(
-              isReport: true,
-              width: width * 0.45,
+              // isReport: true,
+              width: width * 0.14,
               text: Text(_locale.campaignNo),
               // label: _locale.campaignNo,
               controller: campaignNoController,
@@ -820,11 +835,11 @@ class _LeftWidgetState extends State<LeftWidget> {
               },
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             CustomTextField2(
-              isReport: true,
-              width: width * 0.45,
+              // isReport: true,
+              width: width * 0.13,
               text: Text(_locale.modelNo),
               // label: _locale.modelNo,
               controller: modelNoController,
@@ -836,7 +851,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               },
             ),
             SizedBox(
-              width: width * 0.01,
+              width: width * 0.001,
             ),
             DropDown(
               showClearIcon: true,
@@ -859,10 +874,10 @@ class _LeftWidgetState extends State<LeftWidget> {
                   widget.onSelectedValueChanged1("");
                 });
               },
-              bordeText: _locale.orderBy,
+              bordeText: _locale.orderBy + " 1",
               items: firstList,
               // label: "",
-              width: isDesktop ? width * .18 : width * .35,
+              width: isDesktop ? width * .13 : width * .35,
               height: isDesktop
                   ? height * 0.045
                   : height * 0.35, // hint: selectedValue1,
@@ -940,14 +955,14 @@ class _LeftWidgetState extends State<LeftWidget> {
                       widget.onSelectedValueChanged2("");
                     });
                   },
-                  bordeText: _locale.orderBy,
+                  bordeText: _locale.orderBy + " 2",
                   // label: "",
                   // width: isDesktop ? null : width * .55,
                   items: firstList,
                   // hint: selectedValue2,
                   initialValue:
                       selectedValue2.isNotEmpty ? selectedValue2 : null,
-                  width: isDesktop ? width * .18 : width * .35,
+                  width: isDesktop ? width * .14 : width * .35,
                   height: isDesktop ? height * 0.045 : height * 0.35,
                   valSelected: selectedValue2 != "",
                   onChanged: (value) {
@@ -981,7 +996,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   },
                 ),
                 SizedBox(
-                  width: width * 0.01,
+                  width: width * 0.001,
                 ),
                 DropDown(
                   showClearIcon: true,
@@ -1008,9 +1023,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                       widget.onSelectedValueChanged3("");
                     });
                   },
-                  bordeText: _locale.orderBy,
+                  bordeText: _locale.orderBy + " 3",
                   // width: isDesktop ? null : width * .55,
-                  width: isDesktop ? width * .18 : width * .35,
+                  width: isDesktop ? width * .14 : width * .35,
                   height: isDesktop ? height * 0.045 : height * 0.35,
                   items: firstList,
                   // hint: selectedValue3,
@@ -1049,7 +1064,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   },
                 ),
                 SizedBox(
-                  width: width * 0.01,
+                  width: width * 0.001,
                 ),
                 DropDown(
                   showClearIcon: true,
@@ -1076,14 +1091,14 @@ class _LeftWidgetState extends State<LeftWidget> {
                       widget.onSelectedValueChanged4("");
                     });
                   },
-                  bordeText: _locale.orderBy,
+                  bordeText: _locale.orderBy + " 4",
                   items: firstList,
                   // hint: selectedValue4,
                   valSelected: selectedValue4 != "",
 
                   initialValue:
                       selectedValue4.isNotEmpty ? selectedValue4 : null,
-                  width: isDesktop ? width * .18 : width * .35,
+                  width: isDesktop ? width * .14 : width * .35,
                   height: isDesktop ? height * 0.045 : height * 0.35,
                   onChanged: (value) {
                     if (value == null) {
@@ -1119,7 +1134,10 @@ class _LeftWidgetState extends State<LeftWidget> {
               ],
             ),
           ],
-        )
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
       ],
     );
   }

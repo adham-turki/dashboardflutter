@@ -88,12 +88,12 @@ class _CustomTextField2State extends State<CustomTextField2> {
           ? MediaQuery.of(context).size.height * 0.045
           : widget.isDocReport!
               ? MediaQuery.of(context).size.height * 0.045
-              : MediaQuery.of(context).size.height * 0.03,
+              : MediaQuery.of(context).size.height * 0.045,
       width: widget.isReport!
           ? MediaQuery.of(context).size.width * 0.18
           : widget.isDocReport!
               ? MediaQuery.of(context).size.width * 0.15
-              : MediaQuery.of(context).size.width * 0.18,
+              : widget.width,
       child: TextFieldCustomNew(
         controller: widget.controller,
         onChanged: widget.onChanged,

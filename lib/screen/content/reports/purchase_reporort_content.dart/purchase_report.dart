@@ -390,148 +390,148 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
               // mainAxisAlignment: MainAxisAlignment.start,
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-            SizedBox(
-              height: height * 0.04,
-              child: DottedBorder(
-                color: Colors.blue,
-                strokeWidth: 1,
-                dashPattern: const [
-                  2,
-                  2,
-                ],
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Tooltip(
-                          message: hidefilter == true
-                              ? _locale.showFilters
-                              : _locale.hideFilters,
-                          child: IconButton(
-                            padding: const EdgeInsets.only(top: 3),
-                            onPressed: () {
-                              setState(() {
-                                hidefilter = !hidefilter;
-                              });
-                            },
-                            icon: hidefilter == false
-                                ? Icon(
-                                    Icons.arrow_circle_up_sharp,
-                                    size: height * 0.025,
-                                  )
-                                : Icon(
-                                    Icons.arrow_circle_down_sharp,
-                                    size: height * 0.025,
-                                  ),
-                          ),
-                        ),
-                        Text(_locale.chooseFilter),
-                      ],
-                    ),
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Tooltip(
-                          message: _locale.reset,
-                          child: IconButton(
-                              padding: const EdgeInsets.only(top: 3),
-                              onPressed: () {
-                                isReset.value = true;
-                                setState(() {
-                                  readProvider.emptyProvider();
-                                  purchaseList = [];
-                                  finalRow = [];
-                                  // orderByColumns = [
-                                  //   '#',
-                                  //   _locale.branch,
-                                  //   _locale.stockCategoryLevel("1"),
-                                  //   _locale.stockCategoryLevel("2"),
-                                  //   _locale.stockCategoryLevel("3"),
-                                  //   _locale.supplier("1"),
-                                  //   _locale.supplier("2"),
-                                  //   _locale.supplier("3"),
-                                  //   _locale.stock,
-                                  //   _locale.modelNo,
-                                  //   _locale.qty,
-                                  //   _locale.averagePrice,
-                                  //   _locale.total
-                                  // ];
-                                });
-                                Future.delayed(Duration(milliseconds: 20), () {
-                                  // setState(() {
-                                  isReset.value = false;
-                                  // });
-                                });
-                              },
-                              icon: Icon(
-                                Icons.refresh,
-                                color: Colors.black,
-                                size: height * 0.025,
-                              )),
-                        ),
-                        Tooltip(
-                          message: _locale.exportToExcel,
-                          child: IconButton(
-                              padding: const EdgeInsets.only(top: 3),
-                              onPressed: () {
-                                isDownload.value = true;
-                                DateTime from = DateTime.parse(DatesController()
-                                    .formatDateReverse(
-                                        readProvider.getFromDate()!));
-                                DateTime to = DateTime.parse(DatesController()
-                                    .formatDateReverse(
-                                        readProvider.getToDate()!));
+            // SizedBox(
+            //   height: height * 0.04,
+            //   child: DottedBorder(
+            //     color: Colors.blue,
+            //     strokeWidth: 1,
+            //     dashPattern: const [
+            //       2,
+            //       2,
+            //     ],
+            //     child: Row(
+            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //       children: [
+            //         SizedBox(),
+            //         Row(
+            //           mainAxisAlignment: MainAxisAlignment.center,
+            //           crossAxisAlignment: CrossAxisAlignment.center,
+            //           children: [
+            //             Tooltip(
+            //               message: hidefilter == true
+            //                   ? _locale.showFilters
+            //                   : _locale.hideFilters,
+            //               child: IconButton(
+            //                 padding: const EdgeInsets.only(top: 3),
+            //                 onPressed: () {
+            //                   setState(() {
+            //                     hidefilter = !hidefilter;
+            //                   });
+            //                 },
+            //                 icon: hidefilter == false
+            //                     ? Icon(
+            //                         Icons.arrow_circle_up_sharp,
+            //                         size: height * 0.025,
+            //                       )
+            //                     : Icon(
+            //                         Icons.arrow_circle_down_sharp,
+            //                         size: height * 0.025,
+            //                       ),
+            //               ),
+            //             ),
+            //             Text(_locale.chooseFilter),
+            //           ],
+            //         ),
+            //         Row(
+            //           // mainAxisAlignment: MainAxisAlignment.center,
+            //           // crossAxisAlignment: CrossAxisAlignment.start,
+            //           children: [
+            //             Tooltip(
+            //               message: _locale.reset,
+            //               child: IconButton(
+            //                   padding: const EdgeInsets.only(top: 3),
+            //                   onPressed: () {
+            //                     isReset.value = true;
+            //                     setState(() {
+            //                       readProvider.emptyProvider();
+            //                       purchaseList = [];
+            //                       finalRow = [];
+            //                       // orderByColumns = [
+            //                       //   '#',
+            //                       //   _locale.branch,
+            //                       //   _locale.stockCategoryLevel("1"),
+            //                       //   _locale.stockCategoryLevel("2"),
+            //                       //   _locale.stockCategoryLevel("3"),
+            //                       //   _locale.supplier("1"),
+            //                       //   _locale.supplier("2"),
+            //                       //   _locale.supplier("3"),
+            //                       //   _locale.stock,
+            //                       //   _locale.modelNo,
+            //                       //   _locale.qty,
+            //                       //   _locale.averagePrice,
+            //                       //   _locale.total
+            //                       // ];
+            //                     });
+            //                     Future.delayed(Duration(milliseconds: 20), () {
+            //                       // setState(() {
+            //                       isReset.value = false;
+            //                       // });
+            //                     });
+            //                   },
+            //                   icon: Icon(
+            //                     Icons.refresh,
+            //                     color: Colors.black,
+            //                     size: height * 0.025,
+            //                   )),
+            //             ),
+            //             Tooltip(
+            //               message: _locale.exportToExcel,
+            //               child: IconButton(
+            //                   padding: const EdgeInsets.only(top: 3),
+            //                   onPressed: () {
+            //                     isDownload.value = true;
+            //                     DateTime from = DateTime.parse(DatesController()
+            //                         .formatDateReverse(
+            //                             readProvider.getFromDate()!));
+            //                     DateTime to = DateTime.parse(DatesController()
+            //                         .formatDateReverse(
+            //                             readProvider.getToDate()!));
 
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                } else {
-                                  if (purchaseList.isEmpty) {
-                                    ErrorController.openErrorDialog(
-                                        406, _locale.error406);
-                                    isDownload.value = false;
-                                  } else {
-                                    SearchCriteria searchCriteria =
-                                        SearchCriteria(
-                                      fromDate: readProvider.fromDate,
-                                      toDate: readProvider.toDate,
-                                      voucherStatus: -100,
-                                      columns: getColumnsName(
-                                          _locale, orderByColumns, false),
-                                      customColumns: getCustomColumnsName(
-                                          _locale, orderByColumns, false),
-                                    );
-                                    Map<String, dynamic> body =
-                                        readProvider.toJson();
+            //                     if (from.isAfter(to)) {
+            //                       ErrorController.openErrorDialog(
+            //                           1, _locale.startDateAfterEndDate);
+            //                     } else {
+            //                       if (purchaseList.isEmpty) {
+            //                         ErrorController.openErrorDialog(
+            //                             406, _locale.error406);
+            //                         isDownload.value = false;
+            //                       } else {
+            //                         SearchCriteria searchCriteria =
+            //                             SearchCriteria(
+            //                           fromDate: readProvider.fromDate,
+            //                           toDate: readProvider.toDate,
+            //                           voucherStatus: -100,
+            //                           columns: getColumnsName(
+            //                               _locale, orderByColumns, false),
+            //                           customColumns: getCustomColumnsName(
+            //                               _locale, orderByColumns, false),
+            //                         );
+            //                         Map<String, dynamic> body =
+            //                             readProvider.toJson();
 
-                                    ReportController()
-                                        .exportPurchaseToExcelApi(
-                                            searchCriteria, body)
-                                        .then((value) {
-                                      saveExcelFile(value,
-                                          "${_locale.purchasesReport}.xlsx");
-                                      isDownload.value = false;
-                                    });
-                                  }
-                                }
-                              },
-                              icon: Icon(
-                                Icons.description,
-                                color: Colors.black,
-                                size: height * 0.025,
-                              )),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            //                         ReportController()
+            //                             .exportPurchaseToExcelApi(
+            //                                 searchCriteria, body)
+            //                             .then((value) {
+            //                           saveExcelFile(value,
+            //                               "${_locale.purchasesReport}.xlsx");
+            //                           isDownload.value = false;
+            //                         });
+            //                       }
+            //                     }
+            //                   },
+            //                   icon: Icon(
+            //                     Icons.description,
+            //                     color: Colors.black,
+            //                     size: height * 0.025,
+            //                   )),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             hidefilter == false
                 ? Column(
                     children: [
@@ -580,242 +580,238 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
             SizedBox(
               height: isDesktop ? height * 0.01 : height * 0.05,
             ),
-            SizedBox(
-              width: isDesktop ? width * 0.5 : width * .7,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // ValueListenableBuilder(
-                  //   valueListenable: isReset,
-                  //   builder: (context, value, child) {
-                  //     return Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       children: [
-                  //         ElevatedButton.icon(
-                  //           onPressed: isReset.value
-                  //               ? null
-                  //               : () {
-                  //                   isReset.value = true;
-                  //                   setState(() {
-                  //                     readProvider.emptyProvider();
-                  //                     purchaseList = [];
-                  //                     finalRow = [];
-                  //                     orderByColumns = [
-                  //                       '#',
-                  //                       _locale.branch,
-                  //                       _locale.stockCategoryLevel("1"),
-                  //                       _locale.stockCategoryLevel("2"),
-                  //                       _locale.stockCategoryLevel("3"),
-                  //                       _locale.supplier("1"),
-                  //                       _locale.supplier("2"),
-                  //                       _locale.supplier("3"),
-                  //                       _locale.stock,
-                  //                       _locale.modelNo,
-                  //                       _locale.qty,
-                  //                       _locale.averagePrice,
-                  //                       _locale.total
-                  //                     ];
-                  //                   });
-                  //                   Future.delayed(Duration(milliseconds: 20),
-                  //                       () {
-                  //                     // setState(() {
-                  //                     isReset.value = false;
-                  //                     // });
-                  //                   });
-                  //                 },
-                  //           icon: const Icon(
-                  //             Icons.restore,
-                  //             color: whiteColor,
-                  //           ),
-                  //           label: isReset.value
-                  //               ? SizedBox(
-                  //                   width: width * 0.015,
-                  //                   height: height * 0.04,
-                  //                   child: const CircularProgressIndicator(
-                  //                     color: primary,
-                  //                   ))
-                  //               : Text(
-                  //                   _locale.reset,
-                  //                   style: const TextStyle(
-                  //                       fontSize: 16, color: whiteColor),
-                  //                 ),
-                  //           style: customButtonStyle(
-                  //               Size(width * 0.13, height * 0.045),
-                  //               16,
-                  //               primary),
-                  //         ),
-                  //       ],
-                  //     );
-                  //   },
-                  // ),
-                  Padding(
-                    padding: hidefilter
-                        ? EdgeInsets.only(top: 8.0)
-                        : EdgeInsets.all(0),
-                    child: Container(
-                      width: width * 0.023,
-                      height: height * 0.04,
-                      color: primary,
-                      child: IconButton(
-                        alignment: Alignment.center,
-                        color: primary,
-                        onPressed: () async {
-                          DateTime from = DateTime.parse(DatesController()
-                              .formatDateReverse(DatesController()
-                                  .formatDate(readProvider.getFromDate()!)));
-                          DateTime to = DateTime.parse(DatesController()
-                              .formatDateReverse(DatesController()
-                                  .formatDate(readProvider.getToDate()!)));
-                          if (from.isAfter(to)) {
-                            ErrorController.openErrorDialog(
-                                1, _locale.startDateAfterEndDate);
-                          } else {
-                            setState(() {
-                              hidefilter = !hidefilter;
-                            });
-                            // await generateColumns();
-                            // dynamic body = readProvider.toJson();
-                            // reportsResult = await ReportController()
-                            //     .getPurchaseResultMehtod(body);
-                            // setState(() {});
-                            pageLis.value = 1;
-                            readProvider.setPage(pageLis.value);
-                            dynamic body = readProvider.toJson();
-                            await generateColumns();
-                            reportsResult = await ReportController()
-                                .getPurchaseResultMehtod(body, isStart: true);
-                            // dynamic body = readProvider.toJson();
-                            stateManager.removeAllRows();
 
-                            List<PurchaseCostReportModel> result = [];
-                            ReportController purchaseReportController =
-                                ReportController();
-                            stateManager.setShowLoading(true);
-                            await purchaseReportController
-                                .postPurchaseCostReportMethod(body)
-                                .then((value) {
-                              result = value;
-                              stateManager.setShowLoading(false);
-                            });
-                            List<PlutoColumn> columns =
-                                PurchaseCostReportModel.getColumns(
-                                    AppLocalizations.of(context)!,
-                                    orderByColumns,
-                                    reportsResult,
-                                    context);
-                            for (int i = 0; i < columns.length; i++) {
-                              stateManager!.columns[i].footerRenderer =
-                                  columns[i].footerRenderer;
-                            }
-                            setState(() {});
-                            stateManager!.notifyListeners(true);
-                            List<PlutoRow> rowsToAdd =
-                                result.map((item) => item.toPluto()).toList();
-                            stateManager.appendRows(rowsToAdd);
-                            pageLis.value = pageLis.value + 1;
-                            reportsResult = await ReportController()
-                                .getPurchaseResultMehtod(body);
-                          }
-                        },
-                        icon: Icon(
-                          Icons.search,
-                          color: whiteColor,
-                          size: 18,
-                        ),
-                        // style: customButtonStyle(
-                        //     Size(width * 0.13, height * 0.045), 16, primary),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: height * 0.04,
+                child: DottedBorder(
+                  color: Colors.blue,
+                  strokeWidth: 1,
+                  dashPattern: const [
+                    2,
+                    2,
+                  ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Tooltip(
+                            message: hidefilter == true
+                                ? _locale.showFilters
+                                : _locale.hideFilters,
+                            child: IconButton(
+                              padding: const EdgeInsets.only(top: 3),
+                              onPressed: () {
+                                setState(() {
+                                  hidefilter = !hidefilter;
+                                });
+                              },
+                              icon: hidefilter == false
+                                  ? Icon(
+                                      Icons.arrow_circle_up_sharp,
+                                      size: height * 0.025,
+                                    )
+                                  : Icon(
+                                      Icons.arrow_circle_down_sharp,
+                                      size: height * 0.025,
+                                    ),
+                            ),
+                          ),
+                          Text(_locale.chooseFilter),
+                        ],
                       ),
-                    ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      const VerticalDivider(
+                        color: primary,
+                        width: 1,
+                        thickness: 1,
+                        indent: 0,
+                        endIndent: 0,
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            alignment: Alignment.center,
+                            color: primary,
+                            onPressed: () async {
+                              DateTime from = DateTime.parse(DatesController()
+                                  .formatDateReverse(DatesController()
+                                      .formatDate(
+                                          readProvider.getFromDate()!)));
+                              DateTime to = DateTime.parse(DatesController()
+                                  .formatDateReverse(DatesController()
+                                      .formatDate(readProvider.getToDate()!)));
+                              if (from.isAfter(to)) {
+                                ErrorController.openErrorDialog(
+                                    1, _locale.startDateAfterEndDate);
+                              } else {
+                                setState(() {
+                                  hidefilter = !hidefilter;
+                                });
+                                // await generateColumns();
+                                // dynamic body = readProvider.toJson();
+                                // reportsResult = await ReportController()
+                                //     .getPurchaseResultMehtod(body);
+                                // setState(() {});
+                                pageLis.value = 1;
+                                readProvider.setPage(pageLis.value);
+                                dynamic body = readProvider.toJson();
+                                await generateColumns();
+                                reportsResult = await ReportController()
+                                    .getPurchaseResultMehtod(body,
+                                        isStart: true);
+                                // dynamic body = readProvider.toJson();
+                                stateManager.removeAllRows();
+
+                                List<PurchaseCostReportModel> result = [];
+                                ReportController purchaseReportController =
+                                    ReportController();
+                                stateManager.setShowLoading(true);
+                                await purchaseReportController
+                                    .postPurchaseCostReportMethod(body)
+                                    .then((value) {
+                                  result = value;
+                                  stateManager.setShowLoading(false);
+                                });
+                                List<PlutoColumn> columns =
+                                    PurchaseCostReportModel.getColumns(
+                                        AppLocalizations.of(context)!,
+                                        orderByColumns,
+                                        reportsResult,
+                                        context);
+                                for (int i = 0; i < columns.length; i++) {
+                                  stateManager!.columns[i].footerRenderer =
+                                      columns[i].footerRenderer;
+                                }
+                                setState(() {});
+                                stateManager!.notifyListeners(true);
+                                List<PlutoRow> rowsToAdd = result
+                                    .map((item) => item.toPluto())
+                                    .toList();
+                                stateManager.appendRows(rowsToAdd);
+                                pageLis.value = pageLis.value + 1;
+                                reportsResult = await ReportController()
+                                    .getPurchaseResultMehtod(body);
+                              }
+                            },
+                            icon: Icon(
+                              Icons.search,
+                              size: height * 0.025,
+                              color: Colors.black,
+                            ),
+                            // style: customButtonStyle(
+                            //     Size(width * 0.13, height * 0.045), 16, primary2),
+                          ),
+                          Tooltip(
+                            message: _locale.reset,
+                            child: IconButton(
+                                padding: const EdgeInsets.only(top: 3),
+                                onPressed: () {
+                                  isReset.value = true;
+                                  setState(() {
+                                    readProvider.emptyProvider();
+                                    purchaseList = [];
+                                    finalRow = [];
+                                    // orderByColumns = [
+                                    //   '#',
+                                    //   _locale.branch,
+                                    //   _locale.stockCategoryLevel("1"),
+                                    //   _locale.stockCategoryLevel("2"),
+                                    //   _locale.stockCategoryLevel("3"),
+                                    //   _locale.supplier("1"),
+                                    //   _locale.supplier("2"),
+                                    //   _locale.supplier("3"),
+                                    //   _locale.stock,
+                                    //   _locale.modelNo,
+                                    //   _locale.qty,
+                                    //   _locale.averagePrice,
+                                    //   _locale.total
+                                    // ];
+                                  });
+                                  Future.delayed(Duration(milliseconds: 20),
+                                      () {
+                                    // setState(() {
+                                    isReset.value = false;
+                                    // });
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.refresh,
+                                  color: Colors.black,
+                                  size: height * 0.025,
+                                )),
+                          ),
+                          Tooltip(
+                            message: _locale.exportToExcel,
+                            child: IconButton(
+                                padding: const EdgeInsets.only(top: 3),
+                                onPressed: () {
+                                  isDownload.value = true;
+                                  DateTime from = DateTime.parse(
+                                      DatesController().formatDateReverse(
+                                          readProvider.getFromDate()!));
+                                  DateTime to = DateTime.parse(DatesController()
+                                      .formatDateReverse(
+                                          readProvider.getToDate()!));
+
+                                  if (from.isAfter(to)) {
+                                    ErrorController.openErrorDialog(
+                                        1, _locale.startDateAfterEndDate);
+                                  } else {
+                                    if (purchaseList.isEmpty) {
+                                      ErrorController.openErrorDialog(
+                                          406, _locale.error406);
+                                      isDownload.value = false;
+                                    } else {
+                                      SearchCriteria searchCriteria =
+                                          SearchCriteria(
+                                        fromDate: readProvider.fromDate,
+                                        toDate: readProvider.toDate,
+                                        voucherStatus: -100,
+                                        columns: getColumnsName(
+                                            _locale, orderByColumns, false),
+                                        customColumns: getCustomColumnsName(
+                                            _locale, orderByColumns, false),
+                                      );
+                                      Map<String, dynamic> body =
+                                          readProvider.toJson();
+
+                                      ReportController()
+                                          .exportPurchaseToExcelApi(
+                                              searchCriteria, body)
+                                          .then((value) {
+                                        saveExcelFile(value,
+                                            "${_locale.purchasesReport}.xlsx");
+                                        isDownload.value = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                icon: Icon(
+                                  Icons.description,
+                                  color: Colors.black,
+                                  size: height * 0.025,
+                                )),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  // ElevatedButton.icon(
-                  //   label: Text(
-                  //     _locale.calculate,
-                  //     style: const TextStyle(fontSize: 16, color: whiteColor),
-                  //   ),
-                  //   style: customButtonStyle(
-                  //       Size(width * 0.13, height * 0.045), 16, primary),
-                  //   icon: const Icon(Icons.search),
-                  // ),
-                  // ValueListenableBuilder(
-                  //   valueListenable: isDownload,
-                  //   builder: (context, value, child) {
-                  //     return Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       children: [
-                  //         ElevatedButton.icon(
-                  //           onPressed: isDownload.value
-                  //               ? null
-                  //               : () {
-                  //                   isDownload.value = true;
-                  //                   DateTime from = DateTime.parse(
-                  //                       DatesController().formatDateReverse(
-                  //                           readProvider.getFromDate()!));
-                  //                   DateTime to = DateTime.parse(
-                  //                       DatesController().formatDateReverse(
-                  //                           readProvider.getToDate()!));
-
-                  //                   if (from.isAfter(to)) {
-                  //                     ErrorController.openErrorDialog(
-                  //                         1, _locale.startDateAfterEndDate);
-                  //                   } else {
-                  //                     if (purchaseList.isEmpty) {
-                  //                       ErrorController.openErrorDialog(
-                  //                           406, _locale.error406);
-                  //                       isDownload.value = false;
-                  //                     } else {
-                  //                       SearchCriteria searchCriteria =
-                  //                           SearchCriteria(
-                  //                         fromDate: readProvider.fromDate,
-                  //                         toDate: readProvider.toDate,
-                  //                         voucherStatus: -100,
-                  //                         columns: getColumnsName(
-                  //                             _locale, orderByColumns, false),
-                  //                         customColumns: getCustomColumnsName(
-                  //                             _locale, orderByColumns, false),
-                  //                       );
-                  //                       Map<String, dynamic> body =
-                  //                           readProvider.toJson();
-
-                  //                       ReportController()
-                  //                           .exportPurchaseToExcelApi(
-                  //                               searchCriteria, body)
-                  //                           .then((value) {
-                  //                         saveExcelFile(value,
-                  //                             "${_locale.purchasesReport}.xlsx");
-                  //                         isDownload.value = false;
-                  //                       });
-                  //                     }
-                  //                   }
-                  //                 },
-                  //           icon: Icon(
-                  //             Icons.description,
-                  //             size: width * 0.015,
-                  //             color: whiteColor,
-                  //           ),
-                  //           label: isDownload.value
-                  //               ? SizedBox(
-                  //                   width: width * 0.015,
-                  //                   height: height * 0.04,
-                  //                   child: const CircularProgressIndicator(
-                  //                     color: primary,
-                  //                   ))
-                  //               : Text(
-                  //                   _locale.changeToExcel,
-                  //                   style: const TextStyle(
-                  //                       fontSize: 16, color: whiteColor),
-                  //                 ),
-                  //           style: customButtonStyle(
-                  //               Size(width * 0.13, height * 0.045),
-                  //               16,
-                  //               primary),
-                  //         ),
-                  //       ],
-                  //     );
-                  //   },
-                  // ),
-                ],
+                ),
               ),
             ),
+
             // SizedBox(
             //   height: isDesktop ? height * 0.006 : height * 0.05,
             // ),
