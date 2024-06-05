@@ -313,7 +313,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
+          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }

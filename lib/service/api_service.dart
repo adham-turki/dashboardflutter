@@ -15,11 +15,15 @@ class ApiService {
   final storage = const FlutterSecureStorage();
 
   Future getRequest(String api, {bool? isStart}) async {
+    // ApiURL.urlServer = "";
+
     String? token = await storage.read(key: 'jwt');
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }
+    // print("Get First {ApiURL.urlServer}:${ApiURL.urlServer} API :${api}");
     var requestUrl = "${ApiURL.urlServer}/$api";
+    // print("Get Second {ApiURL.urlServer}:${ApiURL.urlServer} API :${api}");
 
     try {
       var response = await http.get(
@@ -31,7 +35,9 @@ class ApiService {
         },
       );
       print(token);
-      print(Uri.parse(requestUrl));
+
+      print(
+          "reposnse status Code  ${response.statusCode} urllll :${requestUrl}");
       if (response.statusCode != 200) {
         if (response.statusCode == 417 || response.statusCode == 401) {
           final context = navigatorKey.currentState!.overlay!.context;
@@ -88,15 +94,24 @@ class ApiService {
   }
 
   Future postRequest(String api, dynamic toJson, {bool? isStart}) async {
+    // ApiURL.urlServer = "";
+
     if (ApiURL.urlServer == "") {
+      print("inside if statemnt :${ApiURL.urlServer}");
       await ApiService().getUrl();
     }
     String? token = await storage.read(key: 'jwt');
+    // print(
+    //     "Get postRequest first {ApiURL.urlServer}:${ApiURL.urlServer} API :${api}");
+
     var requestUrl = "${ApiURL.urlServer}/$api";
+    // print(
+    //     "Get postRequest Second {ApiURL.urlServer}:${ApiURL.urlServer} API :${api}");
+
     print(token);
     print("req body : ${toJson}");
-    print(Uri.parse(requestUrl));
-    print(json.encode(toJson));
+    print("Post Method URL :${Uri.parse(requestUrl)}");
+    // print(json.encode(toJson));
     try {
       var response = await http.post(
         Uri.parse(requestUrl),
@@ -107,7 +122,8 @@ class ApiService {
         },
         body: json.encode(toJson),
       );
-      print("resssssssss ${response.statusCode}");
+      print(
+          "reposnse status Code  postRequestpostRequest ${response.statusCode} urllll :${Uri.parse(requestUrl)} ");
       if (api == logInApi &&
           (response.statusCode == 400 || response.statusCode == 406)) {
         return response;
@@ -186,6 +202,7 @@ class ApiService {
 
   getUrl() async {
     await storage.read(key: 'api').then((value) {
+      print("inisde getURL Method : ${value}");
       ApiURL().setUrl(value!);
     });
   }

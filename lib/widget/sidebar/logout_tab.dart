@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import '../../model/api_url.dart';
 import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
@@ -46,6 +47,10 @@ class _LogoutTabState extends State<LogoutTab> {
         const storage = FlutterSecureStorage();
 
         await storage.delete(key: "jwt");
+        String previousUrlServer = ApiURL.urlServer; // Store previous value
+        print("First Logout:${previousUrlServer}");
+        ApiURL.urlServer = "";
+        print("Second Logout:${previousUrlServer} ${ApiURL.urlServer}");
         // storage.
         // if (kIsWeb) {
         //   // Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);
