@@ -74,6 +74,8 @@ class _SetupScreenState extends State<SetupScreen> {
                       child: TabBar(
                         // isScrollable: true,
                         labelStyle: TextStyle(
+                          // color: Colors.white,
+
                           fontSize: isDesktop ? height * .016 : height * .008,
                         ),
                         // labelColor: Colors.black,
@@ -83,43 +85,61 @@ class _SetupScreenState extends State<SetupScreen> {
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text: _locale.expensesAccounts, // Custom tab label
+                            child: Text(
+                              _locale.expensesAccounts,
+                              style: TextStyle(color: Colors.white),
+                            ), // Custom tab label
                           ),
                           Tab(
                             icon: Icon(
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text: _locale.cachBoxAccounts, // Custom tab label
+                            // text: _locale.cachBoxAccounts, // Custom tab label
+                            child: Text(
+                              _locale.cachBoxAccounts,
+                              style: TextStyle(color: Colors.white),
+                            ), // C
                           ),
                           Tab(
                             icon: Icon(
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text:
-                                _locale.receivableAccounts, // Custom tab label
+                            child: Text(
+                              _locale.receivableAccounts,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           Tab(
                             icon: Icon(
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text: _locale.payableAccounts, // Custom tab label
+                            child: Text(
+                              _locale.payableAccounts,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           Tab(
                             icon: Icon(
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text: _locale.bankAccounts, // Custom tab label
+                            child: Text(
+                              _locale.bankAccounts,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           Tab(
                             icon: Icon(
                               Icons.account_balance,
                               color: const Color(0xffe7b84e).withOpacity(0.7),
                             ),
-                            text: _locale.dailySalesCount, // Custom tab label
+                            child: Text(
+                              _locale.dailySalesCount,
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
 
