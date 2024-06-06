@@ -172,7 +172,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                         SearchCriteria searchCriteria =
                                             SearchCriteria(
                                           fromDate: fromDateController.text,
-                                          toDate: toDateController.text,
+                                          toDate: toDateController.text.isEmpty
+                                              ? todayDate
+                                              : toDateController.text,
                                           voucherStatus: -100,
                                         );
                                         setSearchCriteria(searchCriteria);

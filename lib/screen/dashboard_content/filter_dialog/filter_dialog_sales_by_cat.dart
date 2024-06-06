@@ -94,8 +94,9 @@ class _FilterDialogSalesByCategoryState
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
 
-    _fromDateController.text = currentMonth;
     _toDateController.text = todayDate;
+
+    _fromDateController.text = currentMonth;
     getAllCodeReports();
     super.didChangeDependencies();
   }
