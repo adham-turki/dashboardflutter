@@ -309,8 +309,7 @@ class _BranchesSalesByCatDashboardState
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+        print("from date branches cat before: ${searchCriteriaa!.fromDate}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -319,8 +318,7 @@ class _BranchesSalesByCatDashboardState
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
+        print("from date branches cat: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -375,7 +373,7 @@ class _BranchesSalesByCatDashboardState
   void setSearchCriteria(SearchCriteria searchCriteria) {
     print(
         "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
+    // print("currentPageCode: ${currentPageCode}");
     String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,

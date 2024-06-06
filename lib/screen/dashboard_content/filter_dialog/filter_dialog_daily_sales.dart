@@ -313,8 +313,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+        print("start search daily sales filter dialog: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));

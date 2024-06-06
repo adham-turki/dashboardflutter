@@ -253,8 +253,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+        print("bar chart sales dashboard : ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));

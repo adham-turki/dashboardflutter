@@ -26,6 +26,7 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
+import '../../../widget/drop_down/drop_down_clear.dart';
 
 class TotalSalesContent extends StatefulWidget {
   const TotalSalesContent({super.key});
@@ -370,10 +371,12 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              CustomDropDown(
-                hint: periods[0],
-                label: _locale.period,
+              DropDown(
+                // item/: periods[0],/
+                bordeText: _locale.period,
                 items: periods,
+                width: isDesktop ? width * .14 : width * .35,
+                height: isDesktop ? height * 0.045 : height * 0.35,
                 initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
                     ? periods.first
                     : reportsProvider.getTotalSalesPeriodIndex() == 0
@@ -394,11 +397,13 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   //     .getTotalSalesResultMehtod(criteria);
                   setState(() {});
                 },
-                height: height * 0.3,
               ),
-              CustomDropDown(
-                label: _locale.status,
-                hint: status[0],
+              SizedBox(
+                width: width * 0.01,
+              ),
+              DropDown(
+                bordeText: _locale.status,
+                // hint: status[0],
                 items: status,
                 initialValue: reportsProvider.getTotalSalesStatusIndex() == -1
                     ? _locale.all
@@ -409,7 +414,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                             : reportsProvider.getTotalSalesStatusIndex() == 2
                                 ? _locale.draft
                                 : status[3],
-                height: height * 0.3,
+                width: isDesktop ? width * .14 : width * .35,
+                height: isDesktop ? height * 0.045 : height * 0.35,
                 onChanged: (value) async {
                   selectedStatus = value;
                   int status = getVoucherStatus(_locale, selectedStatus);
@@ -419,6 +425,9 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   //     .getTotalSalesResultMehtod(criteria);
                   // setState(() {});
                 },
+              ),
+              SizedBox(
+                width: width * 0.01,
               ),
               DateTimeComponent(
                 readOnly: false,

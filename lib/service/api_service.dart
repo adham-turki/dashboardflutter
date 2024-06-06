@@ -111,7 +111,7 @@ class ApiService {
     print(token);
     print("req body : ${toJson}");
     print("Post Method URL :${Uri.parse(requestUrl)}");
-    // print(json.encode(toJson));
+    print(json.encode(toJson));
     try {
       var response = await http.post(
         Uri.parse(requestUrl),
@@ -122,8 +122,7 @@ class ApiService {
         },
         body: json.encode(toJson),
       );
-      print(
-          "reposnse status Code  postRequestpostRequest ${response.statusCode} urllll :${Uri.parse(requestUrl)} ");
+      print("reposnse status Code   ${response.statusCode} ");
       if (api == logInApi &&
           (response.statusCode == 400 || response.statusCode == 406)) {
         return response;

@@ -262,8 +262,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+        print("start search daily sales: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));

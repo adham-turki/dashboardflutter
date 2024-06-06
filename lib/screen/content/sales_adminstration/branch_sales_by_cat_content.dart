@@ -245,7 +245,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
         print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
+            "start search sales by category: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
