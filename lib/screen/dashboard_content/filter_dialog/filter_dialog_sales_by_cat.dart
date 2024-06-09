@@ -86,6 +86,7 @@ class _FilterDialogSalesByCategoryState
     selectedChart = charts[2];
 
     selectedCategories = categories[1];
+
     branches = [_locale.all];
     selectedBranch = branches[0];
     selectedPeriod = periods[0];
@@ -128,6 +129,7 @@ class _FilterDialogSalesByCategoryState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDropDown(
+                          width: width * 0.165,
                           items: periods,
                           label: _locale.period,
                           initialValue: selectedPeriod,
@@ -139,6 +141,7 @@ class _FilterDialogSalesByCategoryState
                           },
                         ),
                         CustomDropDown(
+                          width: width * 0.165,
                           items: categories,
                           label: _locale.byCategory,
                           initialValue: selectedCategories,
@@ -149,6 +152,7 @@ class _FilterDialogSalesByCategoryState
                           },
                         ),
                         CustomDropDown(
+                          width: width * 0.165,
                           items: charts,
                           hint: "",
                           label: _locale.chartType,
@@ -240,6 +244,7 @@ class _FilterDialogSalesByCategoryState
                           },
                         ),
                         CustomDropDown(
+                          width: width * 0.165,
                           items: branches,
                           label: _locale.branch,
                           initialValue: selectedBranch,
@@ -408,6 +413,14 @@ class _FilterDialogSalesByCategoryState
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
         _toDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+        selectedCategories = searchCriteriaa!.byCategory! == 1
+            ? _locale.brands
+            : searchCriteriaa!.byCategory! == 2
+                ? _locale.categories("1")
+                : searchCriteriaa!.byCategory! == 3
+                    ? _locale.categories("2")
+                    : _locale.classifications;
+
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 

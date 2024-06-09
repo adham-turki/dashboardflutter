@@ -192,10 +192,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                       ],
                     ),
                     selectedChart == _locale.barChart
-                        ? SizedBox(
-                            height: height * 0.4,
-                            child: CustomBarChart(
-                              data: barData,
+                        ? Center(
+                            child: SizedBox(
+                              height: height * 0.38,
+                              child: CustomBarChart(
+                                data: barData,
+                              ),
                             ),
                           )
                         : selectedChart == _locale.pieChart
@@ -212,13 +214,15 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                   dataList: pieData,
                                 ),
                               )
-                            : SizedBox(
-                                height: height * 0.4,
-                                child: BalanceLineChart(
-                                    yAxisText: "",
-                                    xAxisText: "",
-                                    balances: listOfBalances,
-                                    periods: listOfPeriods),
+                            : Center(
+                                child: SizedBox(
+                                  height: height * 0.38,
+                                  child: BalanceLineChart(
+                                      yAxisText: "",
+                                      xAxisText: "",
+                                      balances: listOfBalances,
+                                      periods: listOfPeriods),
+                                ),
                               )
                   ],
                 ),

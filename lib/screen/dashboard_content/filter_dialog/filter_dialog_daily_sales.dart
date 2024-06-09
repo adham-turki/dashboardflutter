@@ -121,6 +121,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDropDown(
+                          width: width * 0.165,
                           items: status,
                           label: _locale.status,
                           initialValue: selectedStatus,
@@ -160,6 +161,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomDropDown(
+                          width: width * 0.165,
                           items: charts,
                           hint: "",
                           label: _locale.chartType,
@@ -171,6 +173,8 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           },
                         ),
                         CustomDropDown(
+                          width: width * 0.165,
+
                           //   width: width,
                           items: branches,
                           label: _locale.branch,

@@ -112,6 +112,7 @@ class _FilterDialogSalesByBranchesState
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomDropDown(
+                          width: width * 0.165,
                           items: periods,
                           label: _locale.period,
                           initialValue: selectedPeriod,
@@ -123,6 +124,7 @@ class _FilterDialogSalesByBranchesState
                           },
                         ),
                         CustomDropDown(
+                          width: width * 0.165,
                           items: charts,
                           hint: "",
                           label: _locale.chartType,

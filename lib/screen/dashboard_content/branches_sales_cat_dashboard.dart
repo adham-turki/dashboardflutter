@@ -315,6 +315,14 @@ class _BranchesSalesByCatDashboardState
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         fromDateController.text = searchCriteriaa!.fromDate!;
         toDateController.text = searchCriteriaa!.toDate!;
+        selectedCategories = searchCriteriaa!.byCategory! == 1
+            ? _locale.brands
+            : searchCriteriaa!.byCategory! == 2
+                ? _locale.categories("1")
+                : searchCriteriaa!.byCategory! == 3
+                    ? _locale.categories("2")
+                    : _locale.classifications;
+
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 
