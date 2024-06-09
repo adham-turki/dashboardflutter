@@ -342,7 +342,7 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
       TextEditingController controller, String hint, FocusNode focusNode) {
     return Center(
       child: SizedBox(
-        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
+        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.085,
         // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(
