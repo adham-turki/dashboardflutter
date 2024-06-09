@@ -59,7 +59,7 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
           ),
           padding:
               isDesktop ? const EdgeInsets.all(0) : const EdgeInsets.all(10),
-          // width: width * 0.80,
+          width: isDesktop ? null : width * 0.8,
           child: isDesktop
               ? Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

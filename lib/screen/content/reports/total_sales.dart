@@ -197,7 +197,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
           height: height * 0.02,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
+          // width: MediaQuery.of(context).size.width * 0.2,
           child: ValueListenableBuilder(
             valueListenable: isDownload,
             builder: (context, value, child) {
