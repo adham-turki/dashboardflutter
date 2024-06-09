@@ -578,7 +578,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                   )
                 : SizedBox.shrink(),
             SizedBox(
-              height: isDesktop ? height * 0.01 : height * 0.05,
+              height: isDesktop ? height * 0.01 : height * 0.01,
             ),
 
             Padding(

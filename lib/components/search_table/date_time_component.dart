@@ -328,7 +328,14 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
   }
 
   SizedBox dateDivider() {
-    return SizedBox(width: width * 0.003, child: const Text("-"));
+    return SizedBox(
+        width: width * 0.003,
+        child: Center(
+          child: const Text(
+            "-",
+            style: TextStyle(),
+          ),
+        ));
   }
 
   Widget createDateField(MaskTextInputFormatter mask,
@@ -336,7 +343,7 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
     return Center(
       child: SizedBox(
         width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
-        height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
+        // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(
             readOnly: widget.readOnly != null ? widget.readOnly! : false,
@@ -522,7 +529,7 @@ class _DateTimeComponentState extends State<DateTimeComponent> {
       },
       child: Icon(
         Icons.date_range,
-        size: MediaQuery.of(context).size.width * 0.012,
+        // size: MediaQuery.of(context).size.width * 0.012,
         color: darkBlueColor,
       ),
     );

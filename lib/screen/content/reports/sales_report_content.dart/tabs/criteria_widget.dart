@@ -292,6 +292,14 @@ class _LeftWidgetState extends State<LeftWidget> {
     selectedValue3 = readProvider.getVal3!;
     selectedValue4 = readProvider.getVal4!;
     return Column(
+      children: [
+        isDesktop ? desktopCritiria(context) : mobileCritiria(context),
+      ],
+    );
+  }
+
+  Column desktopCritiria(BuildContext context) {
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -1146,6 +1154,880 @@ class _LeftWidgetState extends State<LeftWidget> {
         SizedBox(
           height: height * .01,
         ),
+      ],
+    );
+  }
+
+  Column mobileCritiria(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            DateTimeComponent(
+              readOnly: false,
+              dateWidth: isDesktop ? width * .14 : width * .7,
+              height: isDesktop ? height * 0.045 : height * 0.045,
+              label: _locale.fromDate,
+              dateController: fromDate,
+              dateControllerToCompareWith: null,
+              isInitiaDate: true,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    fromDate.text = value;
+                    setFromDateController();
+                    context
+                        .read<SalesCriteraProvider>()
+                        .setFromDate(fromDate.text);
+                  });
+                }
+              },
+              timeControllerToCompareWith: null,
+            ),
+            // SizedBox(
+            //   width: width * 0.0015,
+            // ),
+            DateTimeComponent(
+              readOnly: false,
+              dateWidth: isDesktop ? width * .14 : width * .7,
+              height: isDesktop ? height * 0.045 : height * 0.045,
+              label: _locale.toDate,
+              dateController: toDate,
+              dateControllerToCompareWith: null,
+              isInitiaDate: true,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    toDate.text = value;
+                    setToDateController();
+                    context.read<SalesCriteraProvider>().setToDate(toDate.text);
+                  });
+                }
+              },
+              timeControllerToCompareWith: null,
+            ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            //  initialValue: reportsProvider.fromCode!.branchName == null
+            //           ? null
+            //           : selectedFromCode,
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintStockCatLevel1,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    isEnabled: true,
+                    stringValue: readProvider.codesStockCategory1
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    // hintStockCatLevel1 ?? _locale.stockCategoryLevel("1"),
+                    borderText: _locale.stockCategoryLevel("1"),
+                    onClearIconPressed: () {
+                      setState(() {
+                        stockCatLevel1Codes.clear();
+                        hintStockCatLevel1 = "";
+                        readProvider.clearCodesStockCategory1();
+                      });
+                    },
+                    onChanged: (val) {
+                      stockCatLevel1Codes.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        stockCatLevel1Codes.add(val[i]);
+                      }
+
+                      readProvider.setCodesStockCategory1(stockCatLevel1Codes);
+                      if (readProvider.codesStockCategory1.isEmpty) {
+                        hintStockCatLevel1 = "";
+                      } else {
+                        hintStockCatLevel1 = "";
+
+                        hintStockCatLevel1 = readProvider.codesStockCategory1
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintStockCatLevel1.endsWith(', ')) {
+                          hintStockCatLevel1 = hintStockCatLevel1.substring(
+                              0, hintStockCatLevel1.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList = await salesReportController
+                          .getSalesStkCountCateg1Method(dropDownSearchCriteria);
+
+                      return newList;
+                    },
+                    // bordeText: '',
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintStockCatLevel3,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesStockCategory3
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.stockCategoryLevel("3"),
+                    onClearIconPressed: () {
+                      setState(() {
+                        stockCatLevel3Codes.clear();
+                        hintStockCatLevel3 = "";
+                        readProvider.clearCodesStockCategory3();
+                      });
+                    },
+                    onChanged: (val) {
+                      stockCatLevel3Codes.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        stockCatLevel3Codes.add(val[i]);
+                      }
+
+                      readProvider.setCodesStockCategory3(stockCatLevel3Codes);
+                      if (readProvider.codesStockCategory3.isEmpty) {
+                        hintStockCatLevel3 = "";
+                      } else {
+                        hintStockCatLevel3 = "";
+
+                        hintStockCatLevel3 = readProvider.codesStockCategory3
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintStockCatLevel3.endsWith(', ')) {
+                          hintStockCatLevel3 = hintStockCatLevel3.substring(
+                              0, hintStockCatLevel3.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList = await salesReportController
+                          .getSalesStkCountCateg3Method(dropDownSearchCriteria);
+
+                      return newList;
+                    },
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintCustomers,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesCustomer
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.customer,
+                    onClearIconPressed: () {
+                      setState(() {
+                        customersList.clear();
+                        hintCustomers = "";
+                        readProvider.clearCodeCustomer();
+                      });
+                    },
+                    onChanged: (val) {
+                      customersList.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        customersList.add(val[i]);
+                      }
+
+                      readProvider.setCodesCustomer(customersList);
+                      if (readProvider.codesCustomer.isEmpty) {
+                        hintCustomers = "";
+                      } else {
+                        hintCustomers = "";
+
+                        hintCustomers = readProvider.codesCustomer
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintCustomers.endsWith(', ')) {
+                          hintCustomers = hintCustomers.substring(
+                              0, hintCustomers.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList = await salesReportController
+                          .getSalesCustomersMethod(dropDownSearchCriteria);
+
+                      return newList;
+                    },
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintBranches,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesBranch
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.branch,
+                    onClearIconPressed: () {
+                      setState(() {
+                        branchesList.clear();
+                        hintBranches = "";
+                        readProvider.clearBranches();
+                      });
+                    },
+                    onChanged: (val) {
+                      branchesList.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        branchesList.add(val[i]);
+                      }
+
+                      readProvider.setCodesBranch(branchesList);
+                      if (readProvider.codesBranch.isEmpty) {
+                        hintBranches = "";
+                      } else {
+                        hintBranches = "";
+
+                        hintBranches = readProvider.codesBranch
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintBranches.endsWith(', ')) {
+                          hintBranches = hintBranches.substring(
+                              0, hintBranches.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList =
+                          await salesReportController.getSalesBranchesMethod(
+                              dropDownSearchCriteria.toJsonBranch());
+
+                      return newList;
+                    },
+                  ),
+                );
+              }),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Column(
+          children: [
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hinCodesStockCategory2,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesStockCategory2
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    onClearIconPressed: () {
+                      setState(() {
+                        stockCatLevel2Codes.clear();
+                        hinCodesStockCategory2 = "";
+                        readProvider.clearCodesStockCategory2();
+                      });
+                    },
+                    onChanged: (val) {
+                      stockCatLevel2Codes.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        stockCatLevel2Codes.add(val[i]);
+                      }
+
+                      readProvider.setCodesStockCategory2(stockCatLevel2Codes);
+                      if (readProvider.codesStockCategory2.isEmpty) {
+                        hinCodesStockCategory2 = "";
+                      } else {
+                        hinCodesStockCategory2 = "";
+
+                        hinCodesStockCategory2 = readProvider
+                            .codesStockCategory2
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hinCodesStockCategory2.endsWith(', ')) {
+                          hinCodesStockCategory2 = hinCodesStockCategory2
+                              .substring(0, hinCodesStockCategory2.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList = await salesReportController
+                          .getSalesStkCountCateg2Method(
+                              dropDownSearchCriteria.toJsonBranch());
+
+                      return newList;
+                    },
+                    borderText: _locale.stockCategoryLevel("2"),
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintCodeSuppliers,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesSupplier
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.supplier(""),
+                    onClearIconPressed: () {
+                      setState(() {
+                        codeSuppliersList.clear();
+                        hintCodeSuppliers = "";
+                        readProvider.clearCodesSupplier();
+                      });
+                    },
+                    onChanged: (val) {
+                      codeSuppliersList.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        codeSuppliersList.add(val[i]);
+                      }
+
+                      readProvider.setCodesSupplier(codeSuppliersList);
+                      if (readProvider.codesSupplier.isEmpty) {
+                        hintCodeSuppliers = "";
+                      } else {
+                        hintCodeSuppliers = "";
+
+                        hintCodeSuppliers = readProvider.codesSupplier
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintCodeSuppliers.endsWith(', ')) {
+                          hintCodeSuppliers = hintCodeSuppliers.substring(
+                              0, hintCodeSuppliers.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList =
+                          await salesReportController.getSalesSuppliersMethod(
+                              dropDownSearchCriteria.toJsonBranch());
+
+                      return newList;
+                    },
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintCustomersCategory,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesCustomerCategory
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.customerCategory,
+                    onClearIconPressed: () {
+                      setState(() {
+                        customersListCategory.clear();
+                        hintCustomersCategory = "";
+                        readProvider.clearCodeCustomerCategory();
+                      });
+                    },
+                    onChanged: (val) {
+                      customersListCategory.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        customersListCategory.add(val[i]);
+                      }
+
+                      readProvider
+                          .setCodesCustomerCategory(customersListCategory);
+                      if (readProvider.codesCustomerCategory.isEmpty) {
+                        hintCustomersCategory = "";
+                      } else {
+                        hintCustomersCategory = "";
+
+                        hintCustomersCategory = readProvider
+                            .codesCustomerCategory
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintCustomersCategory.endsWith(', ')) {
+                          hintCustomersCategory = hintCustomersCategory
+                              .substring(0, hintCustomersCategory.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+                    onSearch: (text) async {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+                      List<BranchModel> newList = await salesReportController
+                          .getSalesCustomersCategMethod(dropDownSearchCriteria);
+
+                      return newList;
+                    },
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            CustomTextField2(
+              // isDocReport: true,
+              text: Text(_locale.campaignNo),
+              width: width * 0.7,
+              // isReport: true,
+              // label: _locale.campaignNo,
+              controller: campaignNoController,
+              onSubmitted: (text) {
+                readProvider.setCampaignNo(campaignNoController.text);
+              },
+              onChanged: (value) {
+                readProvider.setCampaignNo(campaignNoController.text);
+              },
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            SizedBox(
+              width: width * 0.7,
+              height: height * 0.045,
+              child: Consumer<SalesCriteraProvider>(
+                  builder: (context, value, child) {
+                return Tooltip(
+                  message: hintStock,
+                  child: TestDropdown(
+                    cleanPrevSelectedItem: true,
+                    // icon: const Icon(Icons.search),
+                    isEnabled: true,
+                    stringValue: readProvider.codesStock
+                        .map((e) => e.branchName!)
+                        .join(', '),
+                    borderText: _locale.stock,
+                    onClearIconPressed: () {
+                      setState(() {
+                        stockList.clear();
+
+                        hintStock = "";
+                        readProvider.clearStocks();
+                      });
+                    },
+                    onChanged: (val) {
+                      stockList.clear();
+                      for (int i = 0; i < val.length; i++) {
+                        stockList.add(val[i]);
+                      }
+
+                      readProvider.setCodesStock(stockList);
+                      if (readProvider.codesStock.isEmpty) {
+                        hintStock = "";
+                      } else {
+                        hintStock = "";
+
+                        hintStock = readProvider.codesStock
+                            .map((e) => e.branchName!)
+                            .join(', ');
+                        // Removing the last comma and space if exists
+                        if (hintStock.endsWith(', ')) {
+                          hintStock =
+                              hintStock.substring(0, hintStock.length - 2);
+                        }
+                      }
+
+                      setState(() {});
+                    },
+
+                    onSearch: (text) {
+                      DropDownSearchCriteria dropDownSearchCriteria =
+                          getSearchCriteria(text);
+
+                      return salesReportController
+                          .getSalesStkMethod(dropDownSearchCriteria.toJson());
+                    },
+                  ),
+                );
+              }),
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            CustomTextField2(
+              text: Text(_locale.modelNo),
+              width: width * 0.7,
+
+              // label: _locale.modelNo,
+              controller: modelNoController,
+              onSubmitted: (text) {
+                readProvider.setModelNo(modelNoController.text);
+              },
+              onChanged: (value) {
+                readProvider.setModelNo(modelNoController.text);
+              },
+            ),
+          ],
+        ),
+        SizedBox(
+          height: height * .01,
+        ),
+        Column(
+          children: [
+            // SizedBox(
+            //   width: width * 0.0015,
+            // ),
+            DropDown(
+              showClearIcon: true,
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue1.isNotEmpty &&
+                      ordersMap[selectedValue1] != null &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue1] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue1] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue1]) {
+                    ordersList.remove(ordersMap[selectedValue1]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue1]);
+                    }
+                  }
+                  selectedValue1 = "";
+                  readProvider.setVal1("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged1("");
+                });
+              },
+              bordeText: _locale.orderBy + " 1",
+              items: firstList,
+              // label: "",
+              width: isDesktop ? width * .7 : width * .7,
+              height: isDesktop
+                  ? height * 0.045
+                  : height * 0.045, // hint: selectedValue1,
+              initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
+              valSelected: selectedValue1 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue1 = "";
+
+                    readProvider.setVal1(selectedValue1);
+                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
+                    widget.onSelectedValueChanged1(selectedValue1);
+                  });
+                } else {
+                  setState(() {
+                    // print("valvalvalvalval111 $value");
+
+                    selectedValue1 = value!;
+                    // print("valvalvalvalval222 $selectedValue1");
+                    // if (ordersMap[selectedValue1] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue1]!);
+
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal1 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
+                    //   }
+                    // }
+                    readProvider.setVal1(selectedValue1);
+                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
+                    widget.onSelectedValueChanged1(selectedValue1);
+                  });
+                }
+
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            DropDown(
+              width: width * 0.7,
+
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue2.isNotEmpty &&
+                      ordersMap[selectedValue2] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue2] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue2] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue2]) {
+                    ordersList.remove(ordersMap[selectedValue2]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue2]);
+                    }
+                  }
+                  selectedValue2 = "";
+                  readProvider.setVal2("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged2("");
+                });
+              },
+              showClearIcon: true,
+              bordeText: _locale.orderBy + " 2",
+              // label: "",
+              // width: isDesktop ? null : width * .55,
+              items: firstList,
+              // hint: selectedValue2,
+              initialValue: selectedValue2.isNotEmpty ? selectedValue2 : null,
+              height: isDesktop ? height * 0.045 : height * 0.045,
+              valSelected: selectedValue2 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue2 = "";
+                    readProvider.setVal2(selectedValue2);
+                    widget.onSelectedValueChanged2(selectedValue2);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue2 = value!;
+                    // if (ordersMap[selectedValue2] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue2]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal2 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal2]);
+                    //   }
+                    // }
+
+                    readProvider.setVal2(selectedValue2);
+
+                    widget.onSelectedValueChanged2(selectedValue2);
+                  });
+                }
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            DropDown(
+              showClearIcon: true,
+
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue3.isNotEmpty &&
+                      ordersMap[selectedValue3] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue3] &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue3] &&
+                      ordersMap[selectedValue4] != ordersMap[selectedValue3]) {
+                    ordersList.remove(ordersMap[selectedValue3]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue3]);
+                    }
+                  }
+                  selectedValue3 = "";
+                  readProvider.setVal3("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged3("");
+                });
+              },
+              bordeText: _locale.orderBy + " 3",
+              // width: isDesktop ? null : width * .55,
+              width: width * 0.7,
+              height: isDesktop ? height * 0.045 : height * 0.045,
+              items: firstList,
+              // hint: selectedValue3,
+              initialValue: selectedValue3.isNotEmpty ? selectedValue3 : null,
+              valSelected: selectedValue3 != "",
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue3 = "";
+                    readProvider.setVal3(selectedValue3);
+                    widget.onSelectedValueChanged3(selectedValue3);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue3 = value!;
+                    // if (ordersMap[selectedValue3] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue3]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal3 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal3]);
+                    //   }
+                    // }
+
+                    // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
+                    readProvider.setVal3(selectedValue3);
+
+                    widget.onSelectedValueChanged3(selectedValue3);
+                  });
+                }
+                setOrderList();
+              },
+            ),
+            SizedBox(
+              height: height * .01,
+            ),
+            DropDown(
+              showClearIcon: true,
+
+              onClearIconPressed: () {
+                setState(() {
+                  if (selectedValue4.isNotEmpty &&
+                      ordersMap[selectedValue4] != null &&
+                      ordersMap[selectedValue1] != ordersMap[selectedValue4] &&
+                      ordersMap[selectedValue2] != ordersMap[selectedValue4] &&
+                      ordersMap[selectedValue3] != ordersMap[selectedValue4]) {
+                    ordersList.remove(ordersMap[selectedValue4]);
+                    if (readProvider.getOrders != null) {
+                      readProvider.getOrders!.remove(ordersMap[selectedValue4]);
+                    }
+                  }
+                  selectedValue4 = "";
+                  readProvider.setVal4("");
+                  readProvider.setOrders(ordersList);
+                  widget.onSelectedValueChanged4("");
+                });
+              },
+              bordeText: _locale.orderBy + " 4",
+              items: firstList,
+              // hint: selectedValue4,
+              valSelected: selectedValue4 != "",
+
+              initialValue: selectedValue4.isNotEmpty ? selectedValue4 : null,
+              width: width * 0.7,
+
+              height: isDesktop ? height * 0.045 : height * 0.045,
+              onChanged: (value) {
+                if (value == null) {
+                  setState(() {
+                    selectedValue4 = "";
+                    readProvider.setVal4(selectedValue4);
+                    widget.onSelectedValueChanged4(selectedValue4);
+                  });
+                } else {
+                  setState(() {
+                    selectedValue4 = value!;
+                    // if (ordersMap[selectedValue4] != 0) {
+                    //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
+                    //       false) {
+                    //     ordersList.add(ordersMap[selectedValue4]!);
+                    //     readProvider.setOrders(ordersList);
+                    //   }
+                    // } else {
+                    //   if (readProvider.getVal4 != "") {
+                    //     ordersList.remove(ordersMap[readProvider.getVal4]);
+                    //   }
+                    // }
+
+                    // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
+                    readProvider.setVal4(selectedValue4);
+
+                    widget.onSelectedValueChanged4(selectedValue4);
+                  });
+                }
+                setOrderList();
+              },
+            ),
+          ],
+        ),
+        // SizedBox(
+        //   height: height * .01,
+        // ),
       ],
     );
   }

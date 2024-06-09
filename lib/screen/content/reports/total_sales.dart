@@ -191,18 +191,19 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
         Container(
           width: isDesktop ? width * 0.8 : width * 0.9,
           decoration: borderDecorationWhite,
-          child: desktopCritiria(context),
+          child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
         ),
         SizedBox(
           height: height * 0.02,
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.28,
+          width: MediaQuery.of(context).size.width * 0.2,
           child: ValueListenableBuilder(
             valueListenable: isDownload,
             builder: (context, value, child) {
               return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   ElevatedButton.icon(
                     label: Text(
@@ -210,7 +211,10 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                       style: const TextStyle(fontSize: 16, color: whiteColor),
                     ),
                     style: customButtonStyle(
-                        Size(width * 0.13, height * 0.045), 16, primary),
+                        Size(isDesktop ? width * 0.13 : width * 0.35,
+                            height * 0.045),
+                        isDesktop ? 16 : 12,
+                        primary),
                     icon: const Icon(
                       Icons.search,
                       color: Colors.white,
@@ -307,7 +311,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                           },
                     icon: Icon(
                       Icons.description,
-                      size: width * 0.015,
+                      size: isDesktop ? width * 0.015 : width * 0.05,
                       color: whiteColor,
                     ),
                     label: isDownload.value
@@ -319,11 +323,15 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                             ))
                         : Text(
                             _locale.exportToExcel,
-                            style: const TextStyle(
-                                fontSize: 16, color: whiteColor),
+                            style: TextStyle(
+                                fontSize: isDesktop ? 16 : 12,
+                                color: whiteColor),
                           ),
                     style: customButtonStyle(
-                        Size(width * 0.13, height * 0.045), 16, primary),
+                        Size(isDesktop ? width * 0.13 : width * 0.35,
+                            height * 0.045),
+                        16,
+                        primary),
                   ),
                 ],
               );
@@ -454,6 +462,124 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                 readOnly: false,
                 height: height * 0.045,
                 dateWidth: width * 0.18,
+                label: _locale.toDate,
+                dateController: toDate,
+                dateControllerToCompareWith: null,
+                isInitiaDate: true,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      toDate.text = value;
+                      setControllertoDateText();
+                    });
+                  }
+                },
+                timeControllerToCompareWith: null,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column mobileCritiria(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              SizedBox(
+                height: height * 0.01,
+              ),
+              DropDown(
+                // item/: periods[0],/
+                bordeText: _locale.period,
+                items: periods,
+                width: isDesktop ? width * .14 : width * .7,
+                height: isDesktop ? height * 0.045 : height * 0.045,
+                initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
+                    ? periods.first
+                    : reportsProvider.getTotalSalesPeriodIndex() == 0
+                        ? _locale.daily
+                        : reportsProvider.getTotalSalesPeriodIndex() == 1
+                            ? _locale.weekly
+                            : reportsProvider.getTotalSalesPeriodIndex() == 2
+                                ? _locale.monthly
+                                : reportsProvider.getTotalSalesPeriodIndex() ==
+                                        3
+                                    ? _locale.yearly
+                                    : periods.first,
+                onChanged: (value) async {
+                  checkPeriods(value);
+                  selectedPeriod = value;
+                  getPeriodByIndex();
+                  // reportsResult = await totalSalesController
+                  //     .getTotalSalesResultMehtod(criteria);
+                  setState(() {});
+                },
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              DropDown(
+                bordeText: _locale.status,
+                // hint: status[0],
+                items: status,
+                initialValue: reportsProvider.getTotalSalesStatusIndex() == -1
+                    ? _locale.all
+                    : reportsProvider.getTotalSalesStatusIndex() == 0
+                        ? _locale.all
+                        : reportsProvider.getTotalSalesStatusIndex() == 1
+                            ? _locale.posted
+                            : reportsProvider.getTotalSalesStatusIndex() == 2
+                                ? _locale.draft
+                                : status[3],
+                width: isDesktop ? width * .14 : width * .7,
+                height: isDesktop ? height * 0.045 : height * 0.045,
+                onChanged: (value) async {
+                  selectedStatus = value;
+                  int status = getVoucherStatus(_locale, selectedStatus);
+                  getStatusByIndex();
+                  criteria.voucherStatus = status;
+                  // reportsResult = await totalSalesController
+                  //     .getTotalSalesResultMehtod(criteria);
+                  // setState(() {});
+                },
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              DateTimeComponent(
+                readOnly: false,
+                dateWidth: isDesktop ? width * .14 : width * .7,
+                height: isDesktop ? height * 0.045 : height * 0.045,
+                label: _locale.fromDate,
+                dateController: fromDate,
+                dateControllerToCompareWith: null,
+                isInitiaDate: true,
+                onValue: (isValid, value) {
+                  if (isValid) {
+                    setState(() {
+                      fromDate.text = value;
+                      setControllerFromDateText();
+                    });
+                  }
+                },
+                timeControllerToCompareWith: null,
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              DateTimeComponent(
+                readOnly: false,
+                dateWidth: isDesktop ? width * .14 : width * .7,
+                height: isDesktop ? height * 0.045 : height * 0.045,
                 label: _locale.toDate,
                 dateController: toDate,
                 dateControllerToCompareWith: null,
