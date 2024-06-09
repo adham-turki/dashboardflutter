@@ -336,7 +336,7 @@ class _FilterDialogSalesByBranchesState
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("search critiria filter sales branches : ${startSearchCriteria}");
+        print("start search barnches: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));

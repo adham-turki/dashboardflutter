@@ -79,6 +79,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
     fromDateController.text = currentMonth;
     toDateController.text = todayDate;
+    toDateController.text = todayDate;
 
     super.didChangeDependencies();
   }
@@ -290,9 +291,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         userReportSettingsList = value;
         setStartSearchCriteria();
         Future.delayed(Duration.zero, () {
-          lastFromDate = fromDateController.text;
-          lastToDate = toDateController.text;
-          selectedChart = _locale.lineChart;
+          // lastFromDate = fromDateController.text;
+          // lastToDate = toDateController.text;
+          // selectedChart = _locale.lineChart;
 
           if (!dataLoaded) {
             dataLoaded = true;
