@@ -144,6 +144,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             decoration: borderDecoration,
             child: isDesktop ? desktopCriteria() : mobileCriteria(),
           ),
+          SizedBox(
+            height: height * 0.01,
+          ),
           Center(
             child: GestureDetector(
               onTap: () {
