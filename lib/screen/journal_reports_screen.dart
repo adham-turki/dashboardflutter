@@ -541,18 +541,18 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
       ..click();
   }
 
-  void exportToCsv() async {
-    String title = "pluto_grid_export";
+  // void exportToCsv() async {
+  //   String title = "pluto_grid_export";
 
-    var pluto_grid_export;
-    var exported = const Utf8Encoder()
-        .convert(pluto_grid_export.PlutoGridExport.exportCSV(stateManager));
-    print(exported);
+  //   var pluto_grid_export;
+  //   var exported = const Utf8Encoder()
+  //       .convert(pluto_grid_export.PlutoGridExport.exportCSV(stateManager));
+  //   print(exported);
 
-    // use file_saver from pub.dev
-    // await FileSaver.instance
-    //     .saveFile(name: "$title.csv", bytes: exported, mimeType: MimeType.csv);
-  }
+  //   // use file_saver from pub.dev
+  //   // await FileSaver.instance
+  //   //     .saveFile(name: "$title.csv", bytes: exported, mimeType: MimeType.csv);
+  // }
 
   fetch() async {
     journalReportsList.clear();
