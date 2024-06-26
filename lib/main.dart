@@ -19,7 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'l10n/l10n.dart';
 import 'model/routes.dart';
-import 'dart:html' as html;
+// import 'dart:html' as html;
 
 import 'provider/reports_provider.dart';
 
@@ -59,10 +59,10 @@ class _MyAppState extends State<MyApp> {
   final sessionStateStream = StreamController<SessionState>();
   @override
   Widget build(BuildContext context) {
-    html.window.onBeforeUnload.listen((event) async {
-      final context2 = navigatorKey.currentState!.overlay!.context;
-      GoRouter.of(context2).go(loginScreenRoute);
-    });
+    // html.window.onBeforeUnload.listen((event) async {
+    //   final context2 = navigatorKey.currentState!.overlay!.context;
+    //   GoRouter.of(context2).go(loginScreenRoute);
+    // });
     final provider = Provider.of<LocaleProvider>(context);
     // Locale newLocal = provider.locale;
     Future<void> loadStoredLocale() async {

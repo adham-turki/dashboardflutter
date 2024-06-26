@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class LoginController {
   Future<bool> logInPost(UserModel userModel, AppLocalizations local) async {
     String api = logInApi;
+        print("reqBody: ${userModel.toJson()}");
+
     var response = await ApiService().postRequest(api, userModel.toJson());
 
     print("code: ${response.statusCode}");

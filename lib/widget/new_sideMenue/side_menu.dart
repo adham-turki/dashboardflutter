@@ -419,8 +419,8 @@ class _SideMenuState extends State<SideMenu> {
                             color: activeColor,
                             size: isDesktop
                                 ? !isCollapsed
-                                    ? width * 0.01
-                                    : width * 0.0138
+                                    ? width * 0.015
+                                    : width * 0.0143
                                 : width * 0.022,
                           ),
                           !isCollapsed
@@ -433,7 +433,7 @@ class _SideMenuState extends State<SideMenu> {
                                   title,
                                   style: TextStyle(
                                       fontSize:
-                                          isDesktop ? fontSize : width * 0.019,
+                                          isDesktop ? fontSize : width * 0.03,
                                       fontWeight: FontWeight.w500,
                                       color: activeColor),
                                 )
@@ -448,7 +448,7 @@ class _SideMenuState extends State<SideMenu> {
                                 selectedMenu == index
                                     ? Icons.arrow_drop_down_rounded
                                     : Icons.arrow_right_rounded,
-                                size: isDesktop ? width * 0.011 : width * 0.02,
+                                size: isDesktop ? width * 0.011 : width * 0.03,
                               )
                             : Container()
                         : Container(),
@@ -526,7 +526,7 @@ class _SideMenuState extends State<SideMenu> {
                   title,
                   style: TextStyle(
                     color: activeSubColor(page),
-                    fontSize: isDesktop ? fontSize : width * 0.015,
+                    fontSize: isDesktop ? fontSize : width * 0.025,
                   ),
                 ),
               ),
