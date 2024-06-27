@@ -410,8 +410,12 @@ class _BranchesSalesByCatDashboardState
 
   Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    final index = random.nextInt(colorList.length);
-    return colorList[index];
+         int r = random.nextInt(256); // 0 to 255
+  int g = random.nextInt(256); // 0 to 255
+  int b = random.nextInt(256); // 0 to 255
+
+  // Create Color object from RGB values
+    return  Color.fromRGBO(r, g, b, 1.0); 
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {

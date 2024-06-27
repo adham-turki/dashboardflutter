@@ -627,8 +627,12 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     final random = Random();
     Color color;
     do {
-      final index = random.nextInt(colorList.length);
-      color = colorList[index];
+          int r = random.nextInt(256); // 0 to 255
+  int g = random.nextInt(256); // 0 to 255
+  int b = random.nextInt(256); // 0 to 255
+
+  // Create Color object from RGB values
+   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
     usedColors.add(color);

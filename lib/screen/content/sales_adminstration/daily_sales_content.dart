@@ -6,6 +6,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
@@ -62,7 +63,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
-  final dataMap = <String, double>{};
+  // final dataMap = <String, double>{};
   List<CodeReportsModel> codeReportsList = [];
   List<UserReportSettingsModel> userReportSettingsList = [];
   String startSearchCriteria = "";
@@ -475,13 +476,17 @@ class _DailySalesContentState extends State<DailySalesContent> {
     );
   }
 
+  String formatNumber(double num) {
+    NumberFormat myFormat = NumberFormat("#.##");
+    return myFormat.format(num);
+  }
   double formatDoubleToTwoDecimalPlaces(double number) {
-    return double.parse(number.toStringAsFixed(2));
+    return double.parse(formatNumber(number));
   }
 
   void getDailySales({bool? isStart}) {
     listOfBalances = [];
-    dataMap.clear();
+    // dataMap.clear();
     pieData = [];
     barData = [];
     int status = getVoucherStatus(_locale, selectedStatus);
@@ -499,38 +504,41 @@ class _DailySalesContentState extends State<DailySalesContent> {
     dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
+          
       for (var elemant in response) {
         String temp =
             DatesController().formatDate(getNextDay(startDate).toString());
-        if (double.parse(elemant.dailySale.toString()) != 0.0) {
+        if (elemant.dailySale != 0.0) {
           boolTemp = true;
-        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+        } else if (elemant.dailySale == 0.0) {
           boolTemp = false;
         }
-        setState(() {
-          listOfBalances.add(double.parse(elemant.dailySale.toString()));
+          listOfBalances.add(elemant.dailySale!);
           listOfPeriods.add(temp);
-          if (boolTemp) {
-            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-                double.parse(elemant.dailySale.toString()));
+                   if (boolTemp) {
+            // dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+                // elemant.dailySale!);
             pieData.add(PieChartModel(
                 title: temp,
-                value: double.parse(elemant.dailySale.toString()) == 0.0
+                value: elemant.dailySale == 0.0
                     ? 1.0
                     : formatDoubleToTwoDecimalPlaces(
-                        double.parse(elemant.dailySale.toString())),
+                       elemant.dailySale!),
                 color: getRandomColor(colorNewList, usedColors)));
           }
 
           barData.add(
-            BarChartData(temp, double.parse(elemant.dailySale.toString())),
+            BarChartData(temp, elemant.dailySale!),
           );
-        });
-      }
+        
+       
+      }setState(() {
+            
+          });
     });
   }
 
-  Color getRandomColor(List<Color> colorList, List<Color> usedColors) {
+   getRandomColor(List<Color> colorList, List<Color> usedColors) {
     if (usedColors.length == colorList.length) {
       // If all colors have been used, clear the used colors list
       usedColors.clear();
@@ -539,12 +547,18 @@ class _DailySalesContentState extends State<DailySalesContent> {
     final random = Random();
     Color color;
     do {
-      final index = random.nextInt(colorList.length);
-      color = colorList[index];
+     int r = random.nextInt(256); // 0 to 255
+  int g = random.nextInt(256); // 0 to 255
+  int b = random.nextInt(256); // 0 to 255
+
+  // Create Color object from RGB values
+   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+
     } while (usedColors.contains(color));
 
-    usedColors.add(color);
+    usedColors.add(color);    
     return color;
+
   }
 
   int count = 0;
