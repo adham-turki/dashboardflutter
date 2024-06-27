@@ -246,9 +246,6 @@
     "showFilters": "إظهار الفلاتر",
     "hideFilters": "إخفاء الفلاتر",
     "chooseFilter": "اختيار الفلاتر",
-    "contains":"يحتوي"
-
-
-
-    
+    "contains": "يحتوي",
+    "expiredSessionLoginDialog": "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً"
 }

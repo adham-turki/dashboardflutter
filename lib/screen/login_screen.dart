@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Encryption/encryption.dart';
 import '../components/login_components/custom_painter.dart';
 import '../components/login_components/form_component.dart';
@@ -173,8 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
           const storage = FlutterSecureStorage();
 
           storage.write(key: 'api', value: value).then((value) async {
-            checkLogIn().then((value) {
+            checkLogIn().then((value) async {
               if (value) {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString("userName", userController.text);
                 GoRouter.of(context).go(AppRoutes.homeScreenRoute);
               }
             });

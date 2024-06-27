@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'package:bi_replicate/components/key.dart';
+import 'package:bi_replicate/dialogs/login_dialog.dart';
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/provider/local_provider.dart';
 import 'package:bi_replicate/provider/purchase_provider.dart';
 import 'package:bi_replicate/provider/sales_search_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
-import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
@@ -56,15 +55,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool temp = true;
+  bool isLoginDialog = false;
   final sessionStateStream = StreamController<SessionState>();
   @override
   Widget build(BuildContext context) {
-    // html.window.onBeforeUnload.listen((event) async {
-    //   final context2 = navigatorKey.currentState!.overlay!.context;
-    //   GoRouter.of(context2).go(loginScreenRoute);
-    // });
     final provider = Provider.of<LocaleProvider>(context);
-    // Locale newLocal = provider.locale;
     Future<void> loadStoredLocale() async {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? storedLanguageCode = prefs.getString('selectedLanguage');
@@ -72,62 +67,58 @@ class _MyAppState extends State<MyApp> {
       if (storedLanguageCode != null) {
         Locale storedLocale = Locale(storedLanguageCode);
         provider.setLocale(storedLocale);
-        // newLocal = storedLocale;
       }
     }
-
-    // void _redirect() async {
-    //   const storage = FlutterSecureStorage();
-    //   await storage.deleteAll();
-    // }
 
     if (temp) {
       loadStoredLocale();
       temp = false;
     }
-    // _redirect();
-    const storage = FlutterSecureStorage();
 
     final sessionConfig = SessionConfig(
-      invalidateSessionForAppLostFocus: const Duration(minutes: 30),
+      invalidateSessionForAppLostFocus: const Duration(minutes: 1),
       invalidateSessionForUserInactivity: const Duration(minutes: 30),
     );
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) async {
+      const storage = FlutterSecureStorage();
+      final context2 = navigatorKey.currentState!.overlay!.context;
+
       // stop listening, as user will already be in auth page
       sessionStateStream.add(SessionState.stopListening);
-      if (timeoutEvent == SessionTimeoutState.userInactivityTimeout) {
-        final context2 = navigatorKey.currentState!.overlay!.context!;
-
+      if (timeoutEvent == SessionTimeoutState.userInactivityTimeout &&
+          GoRouter.of(context2)
+                  .routeInformationProvider
+                  .value
+                  .uri
+                  .toString()
+                  .compareTo(loginScreenRoute) !=
+              0 &&
+          !isLoginDialog) {
         await storage.delete(key: "jwt").then((value) {
           // handle user  inactive timeout
+          isLoginDialog = true;
 
-          if (kIsWeb) {
-            // context.read<ScreenContentProvider>().setPage(0);
-            GoRouter.of(context2).go(loginScreenRoute);
-          } else {
-            Navigator.pop(context2);
-            // context.read<ScreenContentProvider>().setPage(0);
-
-            Navigator.pushReplacementNamed(context2, loginScreenRoute);
-          }
+          showDialog(
+              context: context2,
+              barrierDismissible: false,
+              builder: (builder) {
+                return const LoginDialog();
+              }).then((value) => isLoginDialog = false);
         });
       } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
-        print("steeep7");
-
         // handle user  app lost focus timeout
         const storage = FlutterSecureStorage();
         final context2 = navigatorKey.currentState!.overlay!.context;
 
         await storage.delete(key: "jwt").then((value) {
-          if (kIsWeb) {
-            // context.read<ScreenContentProvider>().setPage(0);
-            GoRouter.of(context2).go(loginScreenRoute);
-          } else {
-            Navigator.pop(context2);
-            // context.read<ScreenContentProvider>().setPage(0);
+          isLoginDialog = true;
 
-            Navigator.pushReplacementNamed(context2, loginScreenRoute);
-          }
+          showDialog(
+              context: context2,
+              barrierDismissible: false,
+              builder: (builder) {
+                return const LoginDialog();
+              }).then((value) => isLoginDialog = false);
         });
       }
     });

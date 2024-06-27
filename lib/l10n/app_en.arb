@@ -270,9 +270,6 @@
     "hideFilters": "Hide Filters",
     "chooseFilter": "Choose filter",
     "critiriaAndOrderBy": "Critiria and order by",
-    "contains":"Contains"
-
-    
-
-
+    "contains": "Contains",
+    "expiredSessionLoginDialog": "Your session has expired.please log in again"
 }
