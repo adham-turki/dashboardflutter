@@ -309,7 +309,6 @@ class _BranchesSalesByCatDashboardState
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("from date branches cat before: ${searchCriteriaa!.fromDate}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -326,7 +325,6 @@ class _BranchesSalesByCatDashboardState
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 
-        print("from date branches cat: ${searchCriteriaa!.fromDate}");
       }
     }
   }
