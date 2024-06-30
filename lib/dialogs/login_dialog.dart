@@ -64,11 +64,11 @@ class _LoginDialogState extends State<LoginDialog> {
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
           width: isDesktop ? dialogWidth * 0.37 : dialogWidth * 0.8,
-          height: isDesktop ? dialogHeight * 0.8 : dialogHeight * 0.65,
+          height: isDesktop ? dialogHeight * 0.85 : dialogHeight * 0.65,
           child: Column(
             children: [
               SizedBox(
-                height: isDesktop ? dialogHeight * 0.23 : dialogHeight * 0.25,
+                height: isDesktop ? dialogHeight * 0.33 : dialogHeight * 0.25,
                 width: double.infinity,
                 child: Column(
                   children: [
@@ -100,10 +100,9 @@ class _LoginDialogState extends State<LoginDialog> {
                           child: Image.asset(
                             "assets/images/expired2.png",
                             width: isDesktop
-                                ? dialogWidth * 0.076
+                                ? dialogWidth * 0.08
                                 : dialogWidth * 0.4,
-                            height:
-                                isDesktop ? dialogHeight : dialogWidth * 0.25,
+                            height: dialogHeight * 0.25,
                           ),
                         ),
                       ],
@@ -112,7 +111,7 @@ class _LoginDialogState extends State<LoginDialog> {
                 ),
               ),
               SizedBox(
-                height: isDesktop ? dialogHeight * 0.1 : dialogHeight * 0.04,
+                height: dialogHeight * 0.04,
               ),
               loginText(),
               SizedBox(
