@@ -76,13 +76,12 @@ class _MyAppState extends State<MyApp> {
     }
 
     final sessionConfig = SessionConfig(
-      invalidateSessionForAppLostFocus: const Duration(minutes: 1),
+      invalidateSessionForAppLostFocus: const Duration(minutes: 30),
       invalidateSessionForUserInactivity: const Duration(minutes: 30),
     );
     sessionConfig.stream.listen((SessionTimeoutState timeoutEvent) async {
       const storage = FlutterSecureStorage();
       final context2 = navigatorKey.currentState!.overlay!.context;
-
       // stop listening, as user will already be in auth page
       sessionStateStream.add(SessionState.stopListening);
       if (timeoutEvent == SessionTimeoutState.userInactivityTimeout &&
@@ -105,7 +104,15 @@ class _MyAppState extends State<MyApp> {
                 return const LoginDialog();
               }).then((value) => isLoginDialog = false);
         });
-      } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout) {
+      } else if (timeoutEvent == SessionTimeoutState.appFocusTimeout &&
+          GoRouter.of(context2)
+                  .routeInformationProvider
+                  .value
+                  .uri
+                  .toString()
+                  .compareTo(loginScreenRoute) !=
+              0 &&
+          !isLoginDialog) {
         // handle user  app lost focus timeout
         const storage = FlutterSecureStorage();
         final context2 = navigatorKey.currentState!.overlay!.context;

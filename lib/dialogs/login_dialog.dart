@@ -63,12 +63,12 @@ class _LoginDialogState extends State<LoginDialog> {
       child: Dialog(
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: SizedBox(
-          width: dialogWidth * 0.37,
-          height: dialogHeight * 0.8,
+          width: isDesktop ? dialogWidth * 0.37 : dialogWidth * 0.8,
+          height: isDesktop ? dialogHeight * 0.8 : dialogHeight * 0.65,
           child: Column(
             children: [
               SizedBox(
-                height: dialogHeight * 0.23,
+                height: isDesktop ? dialogHeight * 0.23 : dialogHeight * 0.25,
                 width: double.infinity,
                 child: Column(
                   children: [
@@ -83,12 +83,7 @@ class _LoginDialogState extends State<LoginDialog> {
                                 color: Color.fromARGB(255, 237, 34, 20)),
                             child: IconButton(
                                 onPressed: () async {
-                                  if (kIsWeb) {
-                                    GoRouter.of(context).go(loginScreenRoute);
-                                  } else {
-                                    Navigator.pushReplacementNamed(
-                                        context, loginScreenRoute);
-                                  }
+                                  GoRouter.of(context).go(loginScreenRoute);
                                 },
                                 icon: const Icon(
                                   Icons.close_rounded,
@@ -106,7 +101,9 @@ class _LoginDialogState extends State<LoginDialog> {
                             "assets/images/expired2.png",
                             width: isDesktop
                                 ? dialogWidth * 0.076
-                                : dialogWidth * 0.5,
+                                : dialogWidth * 0.4,
+                            height:
+                                isDesktop ? dialogHeight : dialogWidth * 0.25,
                           ),
                         ),
                       ],
@@ -115,11 +112,11 @@ class _LoginDialogState extends State<LoginDialog> {
                 ),
               ),
               SizedBox(
-                height: dialogHeight * 0.1,
+                height: isDesktop ? dialogHeight * 0.1 : dialogHeight * 0.04,
               ),
               loginText(),
               SizedBox(
-                height: dialogHeight * 0.04,
+                height: isDesktop ? dialogHeight * 0.04 : dialogHeight * 0.02,
               ),
               customTextField(
                 _locale.userName,
@@ -179,7 +176,7 @@ class _LoginDialogState extends State<LoginDialog> {
             ),
           ],
         ),
-        width: isDesktop ? dialogWidth * 0.3 : dialogWidth * 0.8,
+        width: isDesktop ? dialogWidth * 0.3 : dialogWidth * 0.65,
         height: 60,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
