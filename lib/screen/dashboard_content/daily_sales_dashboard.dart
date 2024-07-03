@@ -1,5 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
+import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
+import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -9,7 +12,6 @@ import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
-import '../../components/charts/pie_chart_dashboard.dart';
 import '../../controller/sales_adminstration/daily_sales_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
 import '../../controller/settings/user_settings/code_reports_controller.dart';
@@ -24,12 +26,12 @@ import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_daily_sales.dart';
 
 class DailySalesDashboard extends StatefulWidget {
-  DailySalesDashboard({
+  const DailySalesDashboard({
     Key? key,
   }) : super(key: key);
 
   @override
-  _DailySalesDashboardState createState() => _DailySalesDashboardState();
+  State<DailySalesDashboard> createState() => _DailySalesDashboardState();
 }
 
 class _DailySalesDashboardState extends State<DailySalesDashboard> {
@@ -90,7 +92,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
     fromDateController.text = todayDate;
-
+    selectedChart = _locale.lineChart;
     super.didChangeDependencies();
   }
 
@@ -120,120 +122,103 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    return SingleChildScrollView(
-      child: Container(
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-              child: Container(
-                height: isDesktop ? height * 0.44 : height * 0.53,
-                padding: EdgeInsets.only(left: 5, right: 5, top: 0),
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _locale.dailySales,
-                          style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width < 800
-                                ? MediaQuery.of(context).size.width * 0.06
-                                : MediaQuery.of(context).size.width * 0.03,
-                            child: blueButton1(
-                              icon: Icon(
-                                Icons.filter_list_sharp,
-                                color: whiteColor,
-                                size:
-                                    isDesktop ? height * 0.035 : height * 0.03,
-                              ),
-                              textColor:
-                                  const Color.fromARGB(255, 255, 255, 255),
-                              height: isDesktop ? height * .01 : height * .039,
-                              fontSize:
-                                  isDesktop ? height * .018 : height * .017,
-                              width: isDesktop ? width * 0.08 : width * 0.27,
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return FilterDialogDailySales(
-                                      onFilter: (
-                                        fromDate,
-                                        selectedStatus,
-                                        chart,
-                                        selectedBranchCodeF,
-                                      ) {
-                                        fromDateController.text = fromDate;
-                                        statusVar = selectedStatus;
-                                        selectedChart = chart;
-                                        selectedBranchCode =
-                                            selectedBranchCodeF;
-                                        SearchCriteria searchCriteria =
-                                            SearchCriteria(
-                                          fromDate: fromDateController.text,
-                                          voucherStatus: -100,
-                                          branch: "",
-                                        );
-                                        setSearchCriteria(searchCriteria);
-                                      },
-                                    );
-                                  },
-                                ).then((value) async {
-                                  getDailySales().then((value) {
-                                    setState(() {});
-                                  });
+    return Container(
+      decoration: const BoxDecoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
+            child: Container(
+              height: isDesktop ? height * 0.44 : height * 0.48,
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _locale.dailySales,
+                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width < 800
+                              ? MediaQuery.of(context).size.width * 0.06
+                              : MediaQuery.of(context).size.width * 0.03,
+                          child: blueButton1(
+                            icon: Icon(
+                              Icons.filter_list_sharp,
+                              color: whiteColor,
+                              size: isDesktop ? height * 0.035 : height * 0.03,
+                            ),
+                            textColor: const Color.fromARGB(255, 255, 255, 255),
+                            height: isDesktop ? height * .01 : height * .039,
+                            fontSize: isDesktop ? height * .018 : height * .017,
+                            width: isDesktop ? width * 0.08 : width * 0.27,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return FilterDialogDailySales(
+                                    selectedChart: selectedChart,
+                                    onFilter: (
+                                      fromDate,
+                                      selectedStatus,
+                                      chart,
+                                      selectedBranchCodeF,
+                                    ) {
+                                      fromDateController.text = fromDate;
+                                      statusVar = selectedStatus;
+                                      selectedChart = chart;
+                                      selectedBranchCode = selectedBranchCodeF;
+                                      SearchCriteria searchCriteria =
+                                          SearchCriteria(
+                                        fromDate: fromDateController.text,
+                                        voucherStatus: -100,
+                                        branch: "",
+                                      );
+                                      setSearchCriteria(searchCriteria);
+                                    },
+                                  );
+                                },
+                              ).then((value) async {
+                                getDailySales().then((value) {
+                                  setState(() {});
                                 });
-                              },
-                            )),
-                      ],
-                    ),
-                    selectedChart == _locale.lineChart
-                        ? SizedBox(
-                            height: height * 0.39,
-                            child: BalanceLineChart(
-                                yAxisText: "",
-                                xAxisText: "",
-                                balances: listOfBalances,
-                                periods: listOfPeriods),
-                          )
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartDashboard(
-                                  radiusNormal:
-                                      isDesktop ? height * 0.15 : height * 0.15,
-                                  radiusHover: isDesktop
-                                      ? height * 0.15
-                                      : height * 0.015,
-                                  width: isDesktop ? width * 0.4 : width * 0.05,
-                                  height:
-                                      isDesktop ? height * 0.31 : height * 0.37,
-                                  dataList: barDataDailySales,
-                                ),
-                              )
-                            : SizedBox(
-                                height: height * 0.39,
-                                child: CustomBarChart(
-                                  data: barData,
-                                ),
-                              ),
-                  ],
-                ),
+                              });
+                            },
+                          )),
+                    ],
+                  ),
+                  selectedChart == _locale.pieChart
+                      ? Center(
+                          child: PieDashboardChart(
+                            dataList: barDataDailySales,
+                          ),
+                        )
+                      : selectedChart == _locale.barChart
+                          ? BarDashboardChart(
+                              barChartData: barData,
+                              isMax: true,
+                            )
+                          : SizedBox(
+                              height: height * 0.4,
+                              child: LineDashboardChart(
+                                  isMax: true,
+                                  balances: listOfBalances,
+                                  periods: listOfPeriods),
+                            )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -299,7 +284,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         setStartSearchCriteria();
         Future.delayed(Duration.zero, () async {
           lastFromDate = fromDateController.text;
-          selectedChart = _locale.barChart;
+          selectedChart = _locale.lineChart;
           lastBranchCode = selectedBranchCode;
           lastStatus = selectedStatus;
           if (!dataLoaded) {
@@ -472,13 +457,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   }
 
   Color getRandomColor(List<Color> colorList) {
-        final random = Random();
-         int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+    final random = Random();
+    int r = random.nextInt(256); // 0 to 255
+    int g = random.nextInt(256); // 0 to 255
+    int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-    return  Color.fromRGBO(r, g, b, 1.0); 
+    // Create Color object from RGB values
+    return Color.fromRGBO(r, g, b, 1.0);
   }
 
   int count = 0;

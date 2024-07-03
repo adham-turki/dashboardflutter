@@ -83,11 +83,11 @@ class _ContentHeaderState extends State<ContentHeader> {
             ],
           );
         })),
-        provider.getPage() == 0
-            ? Responsive.isDesktop(context)
-                ? cardsDesktopView()
-                : cardsMobileView()
-            : Container(),
+        // provider.getPage() == 0
+        //     ? Responsive.isDesktop(context)
+        //         ? cardsDesktopView()
+        //         : cardsMobileView()
+        //     : Container(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,46 +121,38 @@ class _ContentHeaderState extends State<ContentHeader> {
     );
   }
 
-  Column mobileView(BuildContext context) {
-    return Column(
-      //  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  Row mobileView(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Consumer<ScreenContentProvider>(builder: ((context, value, child) {
           return SelectableText(
             maxLines: 1,
             getPage(),
             style: TextStyle(
-              fontSize: Responsive.isDesktop(context) ? width * 0.015 : 18,
+              fontSize: Responsive.isDesktop(context) ? width * 0.015 : 13,
               fontWeight: FontWeight.w500,
             ),
           );
         })),
-        SelectableText(
-          maxLines: 1,
-          "${locale.baseCurrency}: ${locale.ils}",
-          style: const TextStyle(
-            fontSize: 18,
-          ),
-        ),
         provider.getPage() == 0
             ? SelectableText(
                 maxLines: 1,
                 "$currentMonth / $todayDate",
                 style: TextStyle(
                   fontSize: provider.getPage() == 0
-                      ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                      : (Responsive.isDesktop(context) ? width * 0.01 : 18),
+                      ? (Responsive.isDesktop(context) ? width * 0.01 : 13)
+                      : (Responsive.isDesktop(context) ? width * 0.01 : 15),
                 ),
               )
             : Container(),
-        SizedBox(
-          height: 5,
+        SelectableText(
+          maxLines: 1,
+          "${locale.baseCurrency}: ${locale.ils}",
+          style: TextStyle(
+            fontSize: Responsive.isDesktop(context) ? 18 : 14,
+          ),
         ),
-        provider.getPage() == 0
-            ? Responsive.isDesktop(context)
-                ? cardsDesktopView()
-                : cardsMobileView()
-            : Container(),
       ],
     );
   }

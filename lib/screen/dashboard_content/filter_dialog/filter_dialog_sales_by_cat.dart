@@ -20,6 +20,7 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogSalesByCategory extends StatefulWidget {
+  String? selectedChart;
   final Function(
       String selectedPeriod,
       String fromDate,
@@ -28,9 +29,7 @@ class FilterDialogSalesByCategory extends StatefulWidget {
       String selectedBranchCodeF,
       String chart) onFilter;
 
-  FilterDialogSalesByCategory({
-    required this.onFilter,
-  });
+  FilterDialogSalesByCategory({required this.onFilter, this.selectedChart});
 
   @override
   _FilterDialogSalesByCategoryState createState() =>
@@ -83,7 +82,7 @@ class _FilterDialogSalesByCategoryState
       _locale.classifications
     ];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = charts[2];
+    selectedChart = widget.selectedChart!;
 
     selectedCategories = categories[1];
 

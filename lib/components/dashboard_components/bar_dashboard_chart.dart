@@ -1,0 +1,227 @@
+import 'dart:math';
+
+import 'package:bi_replicate/components/dashboard_components/dashboard_bar_data.dart';
+import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
+import '../charts.dart';
+
+class BarDashboardChart extends StatefulWidget {
+  final List<BarData> barChartData;
+  final bool isMax;
+
+  const BarDashboardChart(
+      {super.key, required this.barChartData, required this.isMax});
+
+  @override
+  State<BarDashboardChart> createState() => _BarDashboardChartState();
+}
+
+class _BarDashboardChartState extends State<BarDashboardChart> {
+  List<DashboardBarData> dataList = [];
+  List<Color> usedColors = [];
+  int touchedGroupIndex = -1;
+  double width = 0;
+  double height = 0;
+
+  final ScrollController _scrollController = ScrollController();
+
+  void convertBarDataToDashboardBarData() {
+    if (dataList.isEmpty) {
+      dataList = [];
+      List<BarData> barDat = widget.barChartData;
+      for (int i = 0; i < barDat.length; i++) {
+        DashboardBarData dashboardBarData = DashboardBarData(
+            getRandomColor(), barDat[i].percent!, barDat[i].percent!);
+        dataList.add(dashboardBarData);
+      }
+    }
+  }
+
+  BarChartGroupData generateBarGroup(
+    int x,
+    Color color,
+    double value,
+  ) {
+    return BarChartGroupData(
+      x: x,
+      barRods: [
+        BarChartRodData(
+          toY: value,
+          color: color,
+          width: 6,
+        ),
+      ],
+      showingTooltipIndicators: touchedGroupIndex == x ? [0] : [],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    convertBarDataToDashboardBarData();
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    bool isMobile = Responsive.isMobile(context);
+
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scrollbar(
+        controller: _scrollController,
+        thumbVisibility: true,
+        thickness: 8,
+        trackVisibility: true,
+        radius: const Radius.circular(4),
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          child: Padding(
+            padding:
+                const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
+            child: SizedBox(
+              width: isMobile
+                  ? width * 23
+                  : widget.isMax && dataList.length < 6
+                      ? width * .6
+                      : width * (dataList.length / 15),
+              height: height * 0.35,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  ),
+                  Expanded(
+                    child: BarChart(
+                      BarChartData(
+                        alignment: BarChartAlignment.spaceBetween,
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border.symmetric(
+                            horizontal: BorderSide(
+                              color: Colors.grey.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          leftTitles: AxisTitles(
+                            drawBelowEverything: true,
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 100,
+                              getTitlesWidget: (value, meta) {
+                                return Text(
+                                  value.toInt().toString(),
+                                  textAlign: TextAlign.left,
+                                );
+                              },
+                            ),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 32,
+                              interval: 1,
+                              getTitlesWidget: (value, meta) {
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: Text(
+                                    widget.barChartData[value.toInt()].name!,
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          rightTitles: const AxisTitles(),
+                          topTitles: const AxisTitles(),
+                        ),
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: Colors.grey.withOpacity(0.2),
+                            strokeWidth: 1,
+                          ),
+                        ),
+                        barGroups: dataList.asMap().entries.map((e) {
+                          final index = e.key;
+                          final data = e.value;
+                          return generateBarGroup(
+                            index,
+                            data.color,
+                            data.value,
+                          );
+                        }).toList(),
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          handleBuiltInTouches: false,
+                          touchTooltipData: BarTouchTooltipData(
+                            tooltipMargin: 0,
+                            getTooltipItem: (
+                              BarChartGroupData group,
+                              int groupIndex,
+                              BarChartRodData rod,
+                              int rodIndex,
+                            ) {
+                              return BarTooltipItem(
+                                rod.toY.toString(),
+                                TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: rod.color,
+                                  fontSize: 14,
+                                  shadows: const [
+                                    Shadow(
+                                      color: Colors.black26,
+                                      blurRadius: 12,
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                          touchCallback: (event, response) {
+                            if (event.isInterestedForInteractions &&
+                                response != null &&
+                                response.spot != null) {
+                              setState(() {
+                                touchedGroupIndex =
+                                    response.spot!.touchedBarGroupIndex;
+                              });
+                            } else {
+                              setState(() {
+                                touchedGroupIndex = -1;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color getRandomColor() {
+    final random = Random();
+    Color color;
+    do {
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
+
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+    } while (usedColors.contains(color));
+
+    usedColors.add(color);
+    return color;
+  }
+}

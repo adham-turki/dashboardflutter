@@ -16,7 +16,7 @@ class DashboardContent extends StatefulWidget {
   const DashboardContent({Key? key}) : super(key: key);
 
   @override
-  _DashboardContentState createState() => _DashboardContentState();
+  State<DashboardContent> createState() => _DashboardContentState();
 }
 
 double width = 0;
@@ -59,7 +59,7 @@ class _DashboardContentState extends State<DashboardContent> {
     return SafeArea(
       child: Column(
         children: [
-          Row(
+          const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
@@ -69,21 +69,21 @@ class _DashboardContentState extends State<DashboardContent> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (!Responsive.isMobile(context))
-                          Expanded(
-                            flex: 2,
-                            child: BalanceBarChartDashboard(),
-                          ),
-                        if (!Responsive.isMobile(context))
-                          Expanded(
-                            flex: 2,
-                            child: DailySalesDashboard(),
-                          ),
+                        // if (!Responsive.isMobile(context))
+                        Expanded(
+                          flex: 2,
+                          child: BalanceBarChartDashboard(),
+                        ),
+                        // if (!Responsive.isMobile(context))
+                        // Expanded(
+                        //   flex: 2,
+                        //   child: DailySalesDashboard(),
+                        // ),
                       ],
                     ),
-                    if (Responsive.isMobile(context))
-                      BalanceBarChartDashboard(),
-                    if (Responsive.isMobile(context)) DailySalesDashboard(),
+                    // if (Responsive.isMobile(context))
+                    //   const BalanceBarChartDashboard(),
+                    // if (Responsive.isMobile(context)) DailySalesDashboard(),
                   ],
                 ),
               ),
@@ -93,12 +93,16 @@ class _DashboardContentState extends State<DashboardContent> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                flex: 5,
+                flex: 2,
                 child: Column(
                   children: [
                     BranchesSalesByCatDashboard(),
                   ],
                 ),
+              ),
+              Expanded(
+                flex: 2,
+                child: DailySalesDashboard(),
               ),
             ],
           ),
@@ -107,88 +111,88 @@ class _DashboardContentState extends State<DashboardContent> {
     );
   }
 
-  Column cardsMobileView() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CustomCard(
-          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.paidSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalSales,
-          icon: Icons.attach_money,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.returnSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalReturnSal,
-          icon: Icons.assignment_return_outlined,
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-        CustomCard(
-          gradientColor: const [
-            Color.fromRGBO(71, 65, 193, 1),
-            Color(0xff7e4fe4)
-          ],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.numOfCustomers.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.numOfCustomers,
-          icon: Icons.bar_chart,
-        ),
-      ],
-    );
-  }
+  // Column cardsMobileView() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.center,
+  //     children: [
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.paidSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalSales,
+  //         icon: Icons.attach_money,
+  //       ),
+  //       const SizedBox(
+  //         height: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.returnSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalReturnSal,
+  //         icon: Icons.assignment_return_outlined,
+  //       ),
+  //       const SizedBox(
+  //         height: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [
+  //           Color.fromRGBO(71, 65, 193, 1),
+  //           Color(0xff7e4fe4)
+  //         ],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.numOfCustomers.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.numOfCustomers,
+  //         icon: Icons.bar_chart,
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Row cardsDesktopView() {
-    return Row(
-      children: [
-        CustomCard(
-          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.paidSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalSales,
-          icon: Icons.attach_money,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.returnSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalReturnSal,
-          icon: Icons
-              .assignment_return_outlined, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.numOfCustomers.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.numOfCustomers,
-          icon: Icons.bar_chart,
-        ),
-      ],
-    );
-  }
+  // Row cardsDesktopView() {
+  //   return Row(
+  //     children: [
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.paidSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalSales,
+  //         icon: Icons.attach_money,
+  //       ),
+  //       const SizedBox(
+  //         width: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.returnSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalReturnSal,
+  //         icon: Icons
+  //             .assignment_return_outlined, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.numOfCustomers.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.numOfCustomers,
+  //         icon: Icons.bar_chart,
+  //       ),
+  //     ],
+  //   );
+  // }
 }

@@ -1,4 +1,5 @@
 import 'package:bi_replicate/model/custom_scroll_behavior.dart';
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../model/chart/pie_chart_model.dart';
@@ -35,7 +36,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
   double height = 500;
 
   Color borderColor = Colors.white;
-
+  bool isMobile = false;
   @override
   void initState() {
     setAttributes();
@@ -47,12 +48,15 @@ class _PieChartComponentState extends State<PieChartComponent> {
   Widget build(BuildContext context) {
     List<PieChartModel> dataList = widget.dataList;
     bool isEmpty = dataList.isEmpty ? true : false;
+    isMobile = Responsive.isMobile(context);
+    radiusNormal = isMobile ? 65 : 130;
+    radiusHover = isMobile ? 75 : 140;
 
     return Column(
       children: [
         SizedBox(
           width: width,
-          height: height,
+          height: isMobile ? height * 0.3 : height * .56,
           child: PieChart(
             PieChartData(
               centerSpaceRadius: 1,
@@ -105,7 +109,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         title: "${data.title}\n${Converters.formatNumber(data.value!)}",
         color: data.color,
         radius: radius,
-        titleStyle: const TextStyle(color: Colors.white),
+        titleStyle: TextStyle(color: Colors.white, fontSize: isMobile ? 9 : 15),
         borderSide: isTouched
             ? BorderSide(
                 color: borderColor,
@@ -135,7 +139,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         ),
         child: Text(
           data.title ?? "NONE",
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white, fontSize: isMobile ? 9 : 15),
         ),
       ),
     );
@@ -170,6 +174,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
           color: data.color!,
           isSquare: true,
           text: "${data.title!} (${Converters.formatNumber(data.value!)})",
+          size: isMobile ? 9 : 16,
+          textSize: isMobile ? 9 : 16,
         ),
       );
     });

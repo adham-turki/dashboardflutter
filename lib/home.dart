@@ -17,6 +17,7 @@ import 'package:bi_replicate/screen/content/settings/setup_content/setup.dart';
 import 'package:bi_replicate/screen/content/settings/change_pass/change_password_screen.dart';
 import 'package:bi_replicate/screen/content/settings/users_content/users_content.dart';
 import 'package:bi_replicate/screen/content/settings/users_permit/user_permissions_screen.dart';
+import 'package:bi_replicate/screen/dashboard_content_test.dart/dashboard_screen.dart';
 import 'package:bi_replicate/screen/journal_reports_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -65,9 +66,7 @@ class _HomePageState extends State<HomePage> {
                         ? context.read<ScreenContentProvider>().getPage() == 0
                             ? height * 0.07
                             : height * 0.055
-                        : context.read<ScreenContentProvider>().getPage() == 0
-                            ? height * 0.24
-                            : height * 0.085,
+                        : height * 0.085,
                     child: ContentHeader(
                         page: context.read<ScreenContentProvider>().getPage()),
                   ),
@@ -76,10 +75,10 @@ class _HomePageState extends State<HomePage> {
                     height: context.read<ScreenContentProvider>().getPage() == 0
                         ? isDesktop
                             ? height * 0.93
-                            : height * 0.67
+                            : height * 0.8
                         : isDesktop
                             ? height * 0.92
-                            : height * 0.85,
+                            : height * 0.8,
                     // width: isDesktop ? width * 0.835 : width * 0.95,
                     child: SingleChildScrollView(
                       child: Consumer<ScreenContentProvider>(
@@ -102,7 +101,7 @@ class _HomePageState extends State<HomePage> {
     index = context.read<ScreenContentProvider>().getPage();
     switch (index) {
       case 0:
-        return const DashboardContent();
+        return const DashboardScreen();
       case 1:
         return const SalesByBranchesContent();
       case 2:

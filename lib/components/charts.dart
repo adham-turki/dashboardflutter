@@ -145,7 +145,7 @@ class BalanceLineChart extends StatelessWidget {
       child: SfCartesianChart(
         primaryXAxis: CategoryAxis(title: AxisTitle(text: xAxisText)),
         primaryYAxis: NumericAxis(title: AxisTitle(text: yAxisText)),
-        plotAreaBorderColor: Colors.transparent,
+        plotAreaBorderColor: primary.withOpacity(0.2),
         plotAreaBackgroundColor: Colors.transparent,
         borderColor: Colors.transparent,
         borderWidth: 0,

@@ -20,6 +20,7 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogDailySales extends StatefulWidget {
+  String? selectedChart;
   final Function(
     String fromDate,
     String selectedStatus,
@@ -27,9 +28,7 @@ class FilterDialogDailySales extends StatefulWidget {
     String selectedBranchCodeF,
   ) onFilter;
 
-  FilterDialogDailySales({
-    required this.onFilter,
-  });
+  FilterDialogDailySales({required this.onFilter, this.selectedChart});
 
   @override
   _FilterDialogDailySalesState createState() => _FilterDialogDailySalesState();
@@ -81,7 +80,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     branches = [_locale.all];
     selectedBranch = branches[0];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = charts[2];
+    selectedChart = widget.selectedChart!;
     selectedPeriod = periods[0];
     selectedStatus = status[0];
     todayDate = DatesController().formatDateReverse(

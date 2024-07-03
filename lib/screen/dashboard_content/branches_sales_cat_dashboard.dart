@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:bi_replicate/components/charts/pie_chart_dashboard.dart';
+import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,6 +12,8 @@ import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../components/charts.dart';
+import '../../components/dashboard_components/bar_dashboard_chart.dart';
+import '../../components/dashboard_components/pie_dashboard_chart.dart';
 import '../../controller/financial_performance/cash_flow_controller.dart';
 import '../../controller/sales_adminstration/sales_category_controller.dart';
 import '../../controller/settings/setup/accounts_name.dart';
@@ -27,12 +29,12 @@ import '../../utils/constants/responsive.dart';
 import 'filter_dialog/filter_dialog_sales_by_cat.dart';
 
 class BranchesSalesByCatDashboard extends StatefulWidget {
-  BranchesSalesByCatDashboard({
+  const BranchesSalesByCatDashboard({
     Key? key,
   }) : super(key: key);
 
   @override
-  _BranchesSalesByCatDashboardState createState() =>
+  State<BranchesSalesByCatDashboard> createState() =>
       _BranchesSalesByCatDashboardState();
 }
 
@@ -126,6 +128,8 @@ class _BranchesSalesByCatDashboardState
     toDateController.text = todayDate;
     selectedCategories = categories[1];
     selectedPeriod = periods[0];
+    selectedChart = _locale.barChart;
+
     super.didChangeDependencies();
   }
 
@@ -158,129 +162,110 @@ class _BranchesSalesByCatDashboardState
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    return SingleChildScrollView(
-      child: Container(
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-              child: Container(
-                height: isDesktop ? height * 0.48 : height * 0.56,
-                width: double.infinity,
-                padding:
-                    const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-                decoration: BoxDecoration(
-                  color: whiteColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          _locale.branchesSalesByCategories,
-                          style: TextStyle(fontSize: isDesktop ? 16 : 18),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 0.0, vertical: 0),
-                          child: SizedBox(
-                              width: MediaQuery.of(context).size.width < 800
-                                  ? MediaQuery.of(context).size.width * 0.06
-                                  : MediaQuery.of(context).size.width * 0.03,
-                              child: blueButton1(
-                                icon: Icon(
-                                  Icons.filter_list_sharp,
-                                  color: whiteColor,
-                                  size: isDesktop
-                                      ? height * 0.035
-                                      : height * 0.03,
-                                ),
-                                textColor:
-                                    const Color.fromARGB(255, 255, 255, 255),
-                                height:
-                                    isDesktop ? height * .015 : height * .03,
-                                fontSize:
-                                    isDesktop ? height * .018 : height * .017,
-                                width: isDesktop ? width * 0.13 : width * 0.25,
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return FilterDialogSalesByCategory(
-                                        onFilter: (selectedPeriodF,
-                                            fromDate,
-                                            toDate,
-                                            selectedCategoriesF,
-                                            selectedBranchCodeF,
-                                            chart) {
-                                          fromDateController.text = fromDate;
-                                          toDateController.text = toDate;
-                                          selectedCategories =
-                                              selectedCategoriesF;
-                                          selectedBranchCode =
-                                              selectedBranchCodeF;
-                                          selectedPeriod = selectedPeriodF;
-                                          selectedChart = chart;
-                                          SearchCriteria searchCriteria =
-                                              SearchCriteria(
-                                            fromDate: fromDateController.text,
-                                            toDate:
-                                                toDateController.text.isEmpty
-                                                    ? todayDate
-                                                    : toDateController.text,
-                                            byCategory: getCategoryNum(
-                                                selectedCategories, _locale),
-                                            branch: selectedBranchCode,
-                                          );
-                                          setSearchCriteria(searchCriteria);
-                                        },
+    return Container(
+      decoration: const BoxDecoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
+            child: Container(
+              height: isDesktop ? height * 0.44 : height * 0.48,
+              width: double.infinity,
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
+              decoration: BoxDecoration(
+                color: whiteColor,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        _locale.branchesSalesByCategories,
+                        style: TextStyle(fontSize: isDesktop ? 16 : 18),
+                      ),
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width < 800
+                              ? MediaQuery.of(context).size.width * 0.06
+                              : MediaQuery.of(context).size.width * 0.03,
+                          child: blueButton1(
+                            icon: Icon(
+                              Icons.filter_list_sharp,
+                              color: whiteColor,
+                              size: isDesktop ? height * 0.035 : height * 0.03,
+                            ),
+                            textColor: const Color.fromARGB(255, 255, 255, 255),
+                            height: isDesktop ? height * .015 : height * .03,
+                            fontSize: isDesktop ? height * .018 : height * .017,
+                            width: isDesktop ? width * 0.13 : width * 0.25,
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return FilterDialogSalesByCategory(
+                                    selectedChart: selectedChart,
+                                    onFilter: (selectedPeriodF,
+                                        fromDate,
+                                        toDate,
+                                        selectedCategoriesF,
+                                        selectedBranchCodeF,
+                                        chart) {
+                                      fromDateController.text = fromDate;
+                                      toDateController.text = toDate;
+                                      selectedCategories = selectedCategoriesF;
+                                      selectedBranchCode = selectedBranchCodeF;
+                                      selectedPeriod = selectedPeriodF;
+                                      selectedChart = chart;
+                                      SearchCriteria searchCriteria =
+                                          SearchCriteria(
+                                        fromDate: fromDateController.text,
+                                        toDate: toDateController.text.isEmpty
+                                            ? todayDate
+                                            : toDateController.text,
+                                        byCategory: getCategoryNum(
+                                            selectedCategories, _locale),
+                                        branch: selectedBranchCode,
                                       );
+                                      setSearchCriteria(searchCriteria);
                                     },
-                                  ).then((value) async {
-                                    getBranchByCat().then((value) {
-                                      setState(() {});
-                                    });
-                                  });
+                                  );
                                 },
-                              )),
-                        ),
-                      ],
-                    ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: "",
-                            xAxisText: "",
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartDashboard(
-                                  radiusNormal:
-                                      isDesktop ? height * 0.15 : height * 0.15,
-                                  radiusHover: isDesktop
-                                      ? height * 0.15
-                                      : height * 0.015,
-                                  width: isDesktop ? width * 0.4 : width * 0.05,
-                                  height:
-                                      isDesktop ? height * 0.36 : height * 0.36,
-                                  dataList: pieData,
-                                ),
-                              )
-                            : CustomBarChart(
-                                data: barData,
-                              )
-                  ],
-                ),
+                              ).then((value) async {
+                                getBranchByCat().then((value) {
+                                  setState(() {});
+                                });
+                              });
+                            },
+                          )),
+                    ],
+                  ),
+                  selectedChart == _locale.lineChart
+                      ? SizedBox(
+                          height: height * .3,
+                          child: LineDashboardChart(
+                              isMax: false,
+                              balances: listOfBalances,
+                              periods: listOfPeriods),
+                        )
+                      : selectedChart == _locale.pieChart
+                          ? Center(
+                              child: PieDashboardChart(
+                                dataList: pieData,
+                              ),
+                            )
+                          : BarDashboardChart(
+                              barChartData: barData,
+                              isMax: false,
+                            )
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -324,7 +309,6 @@ class _BranchesSalesByCatDashboardState
 
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
-
       }
     }
   }
@@ -408,12 +392,12 @@ class _BranchesSalesByCatDashboardState
 
   Color getRandomColor(List<Color> colorList) {
     final random = Random();
-         int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+    int r = random.nextInt(256); // 0 to 255
+    int g = random.nextInt(256); // 0 to 255
+    int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-    return  Color.fromRGBO(r, g, b, 1.0); 
+    // Create Color object from RGB values
+    return Color.fromRGBO(r, g, b, 1.0);
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {
