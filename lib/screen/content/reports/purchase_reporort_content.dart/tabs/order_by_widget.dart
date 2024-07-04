@@ -164,7 +164,6 @@ class _OrderByWidgetState extends State<OrderByWidget> {
                       }
                     }
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 }

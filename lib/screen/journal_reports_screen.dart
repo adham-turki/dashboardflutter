@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html';
+// import 'dart:html';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -335,60 +335,60 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                         debugPrint('Whatsapp clicked!');
                       },
                     ),
-                    MyImageButton(
-                      imagePath: 'assets/images/excel.png',
-                      onPressed: () {
-                        // exportToCsv();
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return ExportCheckBoxesDialog(
-                              onFilter: (dateBoolVal,
-                                  voucherBoolVal,
-                                  voucherNumBoolVal,
-                                  statusBoolVal,
-                                  accountBoolVal,
-                                  referenceBoolVal,
-                                  currency,
-                                  debitBoolVal,
-                                  cridetBoolVal,
-                                  dibcBoolVal,
-                                  cibcBoolVal,
-                                  commentsBoolVal) {
-                                dateBoolVall = dateBoolVal;
-                                voucherBoolVall = voucherBoolVal;
-                                voucherNumBoolVall = voucherNumBoolVal;
-                                statusBoolVall = statusBoolVal;
-                                accountBoolVall = accountBoolVal;
-                                referenceBoolVall = referenceBoolVal;
-                                currencyBoolVall = currency;
-                                debitBoolVall = debitBoolVal;
-                                cridetBoolVall = cridetBoolVal;
-                                dibcBoolVall = dibcBoolVal;
-                                cibcBoolVall = cibcBoolVal;
-                                commentsBoolVall = commentsBoolVal;
-                                print('dateBoolVal: $dateBoolVal');
-                                print('voucherBoolVal: $voucherBoolVal');
-                                print('voucherNumBoolVal: $voucherNumBoolVal');
-                                print('statusBoolVal: $statusBoolVal');
-                                print('accountBoolVal: $accountBoolVal');
-                                print('referenceBoolVal: $referenceBoolVal');
-                                print('currencyBoolVal: $currency');
-                                print('debitBoolVal: $debitBoolVal');
-                                print('creditBoolVal: $cridetBoolVall');
-                                print('dibcBoolVal: $dibcBoolVal');
-                                print('cibcBoolVal: $cibcBoolVal');
-                                print('commentsBoolVal: $commentsBoolVal');
-                              },
-                            );
-                          },
-                        ).then((value) {
-                          if (value) {
-                            exportToExcel();
-                          }
-                        });
-                      },
-                    ),
+                    // MyImageButton(
+                    //   imagePath: 'assets/images/excel.png',
+                    //   onPressed: () {
+                    //     // exportToCsv();
+                    //     showDialog(
+                    //       context: context,
+                    //       builder: (context) {
+                    //         return ExportCheckBoxesDialog(
+                    //           onFilter: (dateBoolVal,
+                    //               voucherBoolVal,
+                    //               voucherNumBoolVal,
+                    //               statusBoolVal,
+                    //               accountBoolVal,
+                    //               referenceBoolVal,
+                    //               currency,
+                    //               debitBoolVal,
+                    //               cridetBoolVal,
+                    //               dibcBoolVal,
+                    //               cibcBoolVal,
+                    //               commentsBoolVal) {
+                    //             dateBoolVall = dateBoolVal;
+                    //             voucherBoolVall = voucherBoolVal;
+                    //             voucherNumBoolVall = voucherNumBoolVal;
+                    //             statusBoolVall = statusBoolVal;
+                    //             accountBoolVall = accountBoolVal;
+                    //             referenceBoolVall = referenceBoolVal;
+                    //             currencyBoolVall = currency;
+                    //             debitBoolVall = debitBoolVal;
+                    //             cridetBoolVall = cridetBoolVal;
+                    //             dibcBoolVall = dibcBoolVal;
+                    //             cibcBoolVall = cibcBoolVal;
+                    //             commentsBoolVall = commentsBoolVal;
+                    //             print('dateBoolVal: $dateBoolVal');
+                    //             print('voucherBoolVal: $voucherBoolVal');
+                    //             print('voucherNumBoolVal: $voucherNumBoolVal');
+                    //             print('statusBoolVal: $statusBoolVal');
+                    //             print('accountBoolVal: $accountBoolVal');
+                    //             print('referenceBoolVal: $referenceBoolVal');
+                    //             print('currencyBoolVal: $currency');
+                    //             print('debitBoolVal: $debitBoolVal');
+                    //             print('creditBoolVal: $cridetBoolVall');
+                    //             print('dibcBoolVal: $dibcBoolVal');
+                    //             print('cibcBoolVal: $cibcBoolVal');
+                    //             print('commentsBoolVal: $commentsBoolVal');
+                    //           },
+                    //         );
+                    //       },
+                    //     ).then((value) {
+                    //       if (value) {
+                    //         exportToExcel();
+                    //       }
+                    //     });
+                    //   },
+                    // ),
                     MyImageButton(
                       imagePath: 'assets/images/printer.png',
                       onPressed: () {
@@ -483,63 +483,63 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         });
   }
 
-  void exportToExcel() async {
-    // Create a new Excel workbook and sheet
-    final workbook = Excel.createExcel();
-    final sheet = workbook['Sheet1'];
-    showLoading(context);
-    JournalController()
-        .getAllJournalReports(searchCriteriaForExcel!)
-        .then((value) async {
-      sheet.appendRow([
-        if (dateBoolVall) _locale.date,
-        if (voucherBoolVall) _locale.voucher,
-        if (voucherNumBoolVall) _locale.voucherNum,
-        if (statusBoolVall) _locale.status,
-        if (accountBoolVall) _locale.account,
-        if (referenceBoolVall) _locale.reference,
-        if (currencyBoolVall) _locale.currency,
-        if (debitBoolVall) _locale.debit,
-        if (cridetBoolVall) _locale.credit,
-        if (dibcBoolVall) _locale.dibc,
-        if (cibcBoolVall) _locale.cibc,
-        if (commentsBoolVall) _locale.comments,
-      ]);
-      if (value.isNotEmpty) {
-        for (int i = 0; i < value.length; i++) {
-          final data = value[i];
-          sheet.appendRow([
-            if (dateBoolVall) data.referDate ?? "",
-            if (voucherBoolVall) data.voucherTypeNameE ?? "",
-            if (voucherNumBoolVall) data.voucher ?? "",
-            if (statusBoolVall) data.statusName ?? "",
-            if (accountBoolVall) data.accName ?? "",
-            if (referenceBoolVall) data.custSupName ?? "",
-            if (currencyBoolVall) data.transCurrency ?? "",
-            if (debitBoolVall) data.debit,
-            if (cridetBoolVall) data.credit,
-            if (dibcBoolVall) data.debitInBaseCur,
-            if (cibcBoolVall) data.creditInBaseCur,
-            if (commentsBoolVall) data.comments ?? "",
-          ]);
-        }
-        Navigator.pop(context);
-        downloadFile(Uint8List.fromList(workbook.encode()!),
-            "${_locale.journalReports}.xlsx");
-        showSuccesDialog(context);
-      } else if (value.isEmpty) {
-        showEmptyDialog(context);
-      }
-    });
-  }
+  // void exportToExcel() async {
+  //   // Create a new Excel workbook and sheet
+  //   final workbook = Excel.createExcel();
+  //   final sheet = workbook['Sheet1'];
+  //   showLoading(context);
+  //   JournalController()
+  //       .getAllJournalReports(searchCriteriaForExcel!)
+  //       .then((value) async {
+  //     sheet.appendRow([
+  //       if (dateBoolVall) _locale.date,
+  //       if (voucherBoolVall) _locale.voucher,
+  //       if (voucherNumBoolVall) _locale.voucherNum,
+  //       if (statusBoolVall) _locale.status,
+  //       if (accountBoolVall) _locale.account,
+  //       if (referenceBoolVall) _locale.reference,
+  //       if (currencyBoolVall) _locale.currency,
+  //       if (debitBoolVall) _locale.debit,
+  //       if (cridetBoolVall) _locale.credit,
+  //       if (dibcBoolVall) _locale.dibc,
+  //       if (cibcBoolVall) _locale.cibc,
+  //       if (commentsBoolVall) _locale.comments,
+  //     ]);
+  //     if (value.isNotEmpty) {
+  //       for (int i = 0; i < value.length; i++) {
+  //         final data = value[i];
+  //         sheet.appendRow([
+  //           if (dateBoolVall) data.referDate ?? "",
+  //           if (voucherBoolVall) data.voucherTypeNameE ?? "",
+  //           if (voucherNumBoolVall) data.voucher ?? "",
+  //           if (statusBoolVall) data.statusName ?? "",
+  //           if (accountBoolVall) data.accName ?? "",
+  //           if (referenceBoolVall) data.custSupName ?? "",
+  //           if (currencyBoolVall) data.transCurrency ?? "",
+  //           if (debitBoolVall) data.debit,
+  //           if (cridetBoolVall) data.credit,
+  //           if (dibcBoolVall) data.debitInBaseCur,
+  //           if (cibcBoolVall) data.creditInBaseCur,
+  //           if (commentsBoolVall) data.comments ?? "",
+  //         ]);
+  //       }
+  //       Navigator.pop(context);
+  //       downloadFile(Uint8List.fromList(workbook.encode()!),
+  //           "${_locale.journalReports}.xlsx");
+  //       showSuccesDialog(context);
+  //     } else if (value.isEmpty) {
+  //       showEmptyDialog(context);
+  //     }
+  //   });
+  // }
 
-  void downloadFile(Uint8List bytes, String fileName) {
-    final blob = Blob([bytes]);
-    final url = Url.createObjectUrlFromBlob(blob);
-    final anchor = AnchorElement(href: url)
-      ..download = fileName
-      ..click();
-  }
+  // void downloadFile(Uint8List bytes, String fileName) {
+  //   final blob = Blob([bytes]);
+  //   final url = Url.createObjectUrlFromBlob(blob);
+  //   final anchor = AnchorElement(href: url)
+  //     ..download = fileName
+  //     ..click();
+  // }
 
   // void exportToCsv() async {
   //   String title = "pluto_grid_export";

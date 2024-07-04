@@ -318,33 +318,18 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             if (isValid) {
               setState(() {
                 _fromDateController.text = value;
-                DateTime from = DateTime.parse(_fromDateController.text);
-                DateTime to = DateTime.parse(_toDateController.text);
 
-                if (from.isAfter(to)) {
-                  ErrorController.openErrorDialog(
-                      1, _locale.startDateAfterEndDate);
-                } else {
-                  getSalesByBranch();
-                }
+                getSalesByBranch();
               });
             }
           },
+          dateControllerToCompareWith: _toDateController,
+          isInitiaDate: true,
+          timeControllerToCompareWith: null,
         ),
         SizedBox(
           width: width * 0.01,
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   date: DateTime.parse(_toDateController.text),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         CustomDate(
           dateController: _toDateController,
           date: toDate,
@@ -353,30 +338,15 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             if (isValid) {
               setState(() {
                 _toDateController.text = value;
-                DateTime from = DateTime.parse(_fromDateController.text);
-                DateTime to = DateTime.parse(_toDateController.text);
 
-                if (from.isAfter(to)) {
-                  ErrorController.openErrorDialog(
-                      1, _locale.startDateAfterEndDate);
-                } else {
-                  getSalesByBranch();
-                }
+                getSalesByBranch();
               });
             }
           },
+          dateControllerToCompareWith: _fromDateController,
+          isInitiaDate: false,
+          timeControllerToCompareWith: null,
         ),
-        // CustomDatePicker(
-        //   label: _locale.toDate,
-        //   controller: _toDateController,
-        //   date: DateTime.parse(_fromDateController.text),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _toDateController.text = value;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         CustomDropDown(
           items: charts,
           hint: "",
@@ -478,12 +448,13 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     final random = Random();
     Color color;
     do {
-          int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
     usedColors.add(color);
@@ -519,31 +490,16 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  DateTime from = DateTime.parse(_fromDateController.text);
-                  DateTime to = DateTime.parse(_toDateController.text);
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    getSalesByBranch();
-                  }
+                  getSalesByBranch();
                 });
               }
             },
+            dateControllerToCompareWith: _toDateController,
+            isInitiaDate: true,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   date: DateTime.parse(_toDateController.text),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         SizedBox(
           width: widthMobile * 0.81,
           child: CustomDate(
@@ -554,31 +510,16 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  DateTime from = DateTime.parse(_fromDateController.text);
-                  DateTime to = DateTime.parse(_toDateController.text);
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    getSalesByBranch();
-                  }
+                  getSalesByBranch();
                 });
               }
             },
+            dateControllerToCompareWith: _fromDateController,
+            isInitiaDate: false,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.toDate,
-        //   controller: _toDateController,
-        //   date: DateTime.parse(_fromDateController.text),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _toDateController.text = value;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         CustomDropDown(
           items: charts,
           width: widthMobile * 0.81,

@@ -397,18 +397,10 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: null,
+              isInitiaDate: true,
+              timeControllerToCompareWith: null,
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   date: DateTime.now(),
-            //   controller: _fromDateController,
-            //   onSelected: (value) {
-            //     setState(() {
-            //       _fromDateController.text = value;
-            //       getRecPayData();
-            //     });
-            //   },
-            // ),
           ],
         ),
       ],
@@ -459,19 +451,11 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                 });
               }
             },
+            dateControllerToCompareWith: null,
+            isInitiaDate: true,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   date: DateTime.now(),
-        //   controller: _fromDateController,
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getRecPayData();
-        //     });
-        //   },
-        // ),
       ],
     );
   }

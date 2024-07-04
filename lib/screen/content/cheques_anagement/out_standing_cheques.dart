@@ -205,6 +205,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: toDate,
+              isInitiaDate: true,
+              timeControllerToCompareWith: null,
             ),
             SizedBox(
               width: width * 0.01,
@@ -221,6 +224,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: fromDate,
+              isInitiaDate: false,
+              timeControllerToCompareWith: null,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
@@ -332,6 +338,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     });
                   }
                 },
+                dateControllerToCompareWith: toDate,
+                isInitiaDate: true,
+                timeControllerToCompareWith: null,
               ),
             ),
             SizedBox(
@@ -347,6 +356,9 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     });
                   }
                 },
+                dateControllerToCompareWith: fromDate,
+                isInitiaDate: false,
+                timeControllerToCompareWith: null,
               ),
             ),
             Padding(
@@ -400,19 +412,11 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   void setControllerFromDateText() async {
     fromDateValue = fromDate.text;
     String startDate = DatesController().formatDate(fromDateValue!);
-    String endDate = DatesController().formatDate(toDate.text);
 
     criteria.fromDate = startDate;
     reportsResult = await controller.getChequeResultMethod(criteria);
     return setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      }
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -424,14 +428,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
     reportsResult = await controller.getChequeResultMethod(criteria);
 
     return setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      }
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 

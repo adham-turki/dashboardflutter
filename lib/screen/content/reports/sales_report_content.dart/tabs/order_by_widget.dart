@@ -8,8 +8,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../widget/drop_down/drop_down_clear.dart';
 
-
-
 class OrderByWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged1;
   final Function(String) onSelectedValueChanged2;
@@ -149,7 +147,7 @@ class _OrderByWidgetState extends State<OrderByWidget> {
                 setState(() {
                   selectedValue1 = "";
 
-                  readProvider.setVal1("");
+                  readProvider.setVal1(selectedValue1);
                   widget.onSelectedValueChanged1(selectedValue1);
                 });
               } else {

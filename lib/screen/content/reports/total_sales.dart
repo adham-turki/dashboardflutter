@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 
+import '../../../components/custom_date.dart';
 import '../../../components/search_table/date_time_component.dart';
 import '../../../components/table_component.dart';
 import '../../../components/table_component_new.dart';
@@ -437,13 +438,13 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 width: width * 0.01,
               ),
-              DateTimeComponent(
+              CustomDate(
                 readOnly: false,
                 height: height * 0.045,
                 dateWidth: width * 0.18,
                 label: _locale.fromDate,
                 dateController: fromDate,
-                dateControllerToCompareWith: null,
+                dateControllerToCompareWith: toDate,
                 isInitiaDate: true,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -458,14 +459,14 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 width: width * 0.01,
               ),
-              DateTimeComponent(
+              CustomDate(
                 readOnly: false,
                 height: height * 0.045,
                 dateWidth: width * 0.18,
                 label: _locale.toDate,
                 dateController: toDate,
-                dateControllerToCompareWith: null,
-                isInitiaDate: true,
+                dateControllerToCompareWith: fromDate,
+                isInitiaDate: false,
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {
@@ -555,13 +556,13 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 height: height * 0.01,
               ),
-              DateTimeComponent(
+              CustomDate(
                 readOnly: false,
                 dateWidth: isDesktop ? width * .14 : width * .7,
                 height: isDesktop ? height * 0.045 : height * 0.045,
                 label: _locale.fromDate,
                 dateController: fromDate,
-                dateControllerToCompareWith: null,
+                dateControllerToCompareWith: toDate,
                 isInitiaDate: true,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -576,14 +577,14 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 height: height * 0.01,
               ),
-              DateTimeComponent(
+              CustomDate(
                 readOnly: false,
                 dateWidth: isDesktop ? width * .14 : width * .7,
                 height: isDesktop ? height * 0.045 : height * 0.045,
                 label: _locale.toDate,
                 dateController: toDate,
-                dateControllerToCompareWith: null,
-                isInitiaDate: true,
+                dateControllerToCompareWith: fromDate,
+                isInitiaDate: false,
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {
@@ -605,19 +606,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     fromDateValue = fromDate.text;
     String startDate = DatesController().formatDate(fromDateValue!);
     criteria.fromDate = startDate;
-    // reportsResult =
-    //     await totalSalesController.getTotalSalesResultMehtod(criteria);
-    return setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      }
-      // else {
-      //   fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      // }
-    });
   }
 
   void getPeriodByIndex() {
@@ -644,19 +632,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     toDateValue = toDate.text;
     String endDate = DatesController().formatDate(toDateValue!);
     criteria.toDate = endDate;
-    // reportsResult =
-    //     await totalSalesController.getTotalSalesResultMehtod(criteria);
-    return setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      }
-      // else {
-      //   fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      // }
-    });
   }
 
   void checkPeriods(value) {

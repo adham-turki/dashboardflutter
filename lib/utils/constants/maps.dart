@@ -1,11 +1,16 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Map<String, dynamic> branchesMap = {};
+Map<String, dynamic> branchesMap2 = {};
 
 void setBranchesMap(AppLocalizations local, Map<String, dynamic> branches) {
   branchesMap.addAll({});
   branchesMap[local.all] = "";
   branchesMap.addAll(branches);
+  branchesMap2[""] = local.all;
+  branches.forEach((key, value) {
+    branchesMap2[value] = key;
+  });
 }
 
 Map<String, dynamic> getBranch() => branchesMap;

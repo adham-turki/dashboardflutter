@@ -87,12 +87,20 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   String currentPageCode = "";
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
+  int counter = 0;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
     todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
     fromDateController.text = todayDate;
-    selectedChart = _locale.lineChart;
+
+    if (counter == 0) {
+      selectedChart = _locale.lineChart;
+      selectedStatus = _locale.all;
+      statusVar = _locale.all;
+      selectedBranchCode = _locale.all;
+    }
+    counter++;
     super.didChangeDependencies();
   }
 
@@ -167,6 +175,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 builder: (context) {
                                   return FilterDialogDailySales(
                                     selectedChart: selectedChart,
+                                    selectedStatus: statusVar,
+                                    selectedBranchCodeF: selectedBranchCode,
                                     onFilter: (
                                       fromDate,
                                       selectedStatus,
@@ -176,7 +186,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                       fromDateController.text = fromDate;
                                       statusVar = selectedStatus;
                                       selectedChart = chart;
+
                                       selectedBranchCode = selectedBranchCodeF;
+
                                       SearchCriteria searchCriteria =
                                           SearchCriteria(
                                         fromDate: fromDateController.text,
@@ -252,8 +264,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         fromDateController.text = searchCriteriaa!.fromDate!;
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
 
         print(
             "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");

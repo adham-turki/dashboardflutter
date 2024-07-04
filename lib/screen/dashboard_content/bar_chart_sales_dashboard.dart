@@ -72,7 +72,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   String currentPageCode = "";
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
-
+  int count = 0;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -83,7 +83,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     fromDateController.text = currentMonth;
     toDateController.text = todayDate;
     toDateController.text = todayDate;
-    selectedChart = _locale.pieChart;
+
+    if (count == 0) {
+      selectedChart = _locale.pieChart;
+      period = _locale.daily;
+    }
+    count++;
     super.didChangeDependencies();
   }
 
@@ -152,6 +157,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 builder: (context) {
                                   return FilterDialogSalesByBranches(
                                     selectedChart: selectedChart,
+                                    selectedPeriod: period,
                                     onFilter: (selectedPeriod, fromDate, toDate,
                                         chart) {
                                       fromDateController.text = fromDate;

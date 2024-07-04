@@ -152,8 +152,9 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                     right: 50, bottom: 15, top: 15, left: 0),
                 child: SizedBox(
                     width: isMobile
-                        ? width * 6
-                        : widget.isMax && periods.length < 6
+                        ? width * 15
+                        : (widget.isMax && periods.length < 6) ||
+                                periods.length < 6
                             ? width * .6
                             : width * (periods.length / 15),
                     child: Column(

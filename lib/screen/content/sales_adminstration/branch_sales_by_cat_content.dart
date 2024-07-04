@@ -244,8 +244,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "start search sales by category: ${startSearchCriteria}");
+        print("start search sales by category: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -418,30 +417,18 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     if (isValid) {
                       setState(() {
                         _fromDateController.text = value;
-                        print("frommmmmmmmmmmm: ${_fromDateController}");
-                        DateTime from =
-                            DateTime.parse(_fromDateController.text);
-                        DateTime to = DateTime.parse(_toDateController.text);
 
-                        if (from.isAfter(to)) {
-                          ErrorController.openErrorDialog(
-                              1, _locale.startDateAfterEndDate);
-                        } else {
-                          getBranchByCat();
-                        }
+                        getBranchByCat();
                       });
                     }
                   },
+                  dateControllerToCompareWith: _toDateController,
+                  isInitiaDate: true,
+                  timeControllerToCompareWith: null,
                 ),
                 SizedBox(
                   width: width * 0.01,
                 ),
-                // CustomDatePicker(
-                //   label: _locale.fromDate,
-                //   controller: _fromDateController,
-                //   date: DateTime.parse(_toDateController.text),
-                //   onSelected: (value) {},
-                // ),
                 CustomDate(
                   dateController: _toDateController,
                   label: _locale.toDate,
@@ -450,31 +437,15 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     if (isValid) {
                       setState(() {
                         _toDateController.text = value;
-                        DateTime from =
-                            DateTime.parse(_fromDateController.text);
-                        DateTime to = DateTime.parse(_toDateController.text);
 
-                        if (from.isAfter(to)) {
-                          ErrorController.openErrorDialog(
-                              1, _locale.startDateAfterEndDate);
-                        } else {
-                          getBranchByCat();
-                        }
+                        getBranchByCat();
                       });
                     }
                   },
+                  dateControllerToCompareWith: _fromDateController,
+                  isInitiaDate: false,
+                  timeControllerToCompareWith: null,
                 ),
-                // CustomDatePicker(
-                //   label: _locale.toDate,
-                //   controller: _toDateController,
-                //   date: DateTime.parse(_fromDateController.text),
-                //   onSelected: (value) {
-                //     setState(() {
-                //       _toDateController.text = value;
-                //       getBranchByCat();
-                //     });
-                //   },
-                // ),
               ],
             ),
           ],
@@ -548,26 +519,16 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               if (isValid) {
                 setState(() {
                   _fromDateController.text = value;
-                  DateTime from = DateTime.parse(_fromDateController.text);
-                  DateTime to = DateTime.parse(_toDateController.text);
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    getBranchByCat();
-                  }
+                  getBranchByCat();
                 });
               }
             },
+            dateControllerToCompareWith: _toDateController,
+            isInitiaDate: true,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   date: DateTime.parse(_toDateController.text),
-        //   onSelected: (value) {},
-        // ),
         SizedBox(
           width: widthMobile * 0.81,
           child: CustomDate(
@@ -578,18 +539,14 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
               if (isValid) {
                 setState(() {
                   _toDateController.text = value;
-                  DateTime from = DateTime.parse(_fromDateController.text);
-                  DateTime to = DateTime.parse(_toDateController.text);
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    getBranchByCat();
-                  }
+                  getBranchByCat();
                 });
               }
             },
+            dateControllerToCompareWith: _fromDateController,
+            isInitiaDate: false,
+            timeControllerToCompareWith: null,
           ),
         ),
       ],
@@ -605,12 +562,13 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     final random = Random();
     Color color;
     do {
-           int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
     usedColors.add(color);

@@ -1,3 +1,4 @@
+import 'package:bi_replicate/components/custom_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -342,13 +343,13 @@ class _LeftWidgetState extends State<LeftWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            DateTimeComponent(
+            CustomDate(
               readOnly: false,
               dateWidth: isDesktop ? width * .14 : width * .7,
               height: isDesktop ? height * 0.045 : height * 0.045,
               label: _locale.fromDate,
               dateController: fromDate,
-              dateControllerToCompareWith: null,
+              dateControllerToCompareWith: toDate,
               isInitiaDate: true,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -366,14 +367,14 @@ class _LeftWidgetState extends State<LeftWidget> {
             SizedBox(
               height: height * .01,
             ),
-            DateTimeComponent(
+            CustomDate(
               readOnly: false,
               dateWidth: isDesktop ? width * .14 : width * .7,
               height: isDesktop ? height * 0.045 : height * 0.045,
               label: _locale.toDate,
               dateController: toDate,
-              dateControllerToCompareWith: null,
-              isInitiaDate: true,
+              dateControllerToCompareWith: fromDate,
+              isInitiaDate: false,
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -891,7 +892,6 @@ class _LeftWidgetState extends State<LeftWidget> {
               initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
               valSelected: selectedValue1 != "",
               onChanged: (value) {
-                print("insidde on change");
                 if (value == null) {
                   setState(() {
                     selectedValue1 = "";
@@ -1158,13 +1158,13 @@ class _LeftWidgetState extends State<LeftWidget> {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            DateTimeComponent(
+            CustomDate(
               readOnly: false,
               height: height * 0.045,
               dateWidth: width * 0.14,
               label: _locale.fromDate,
               dateController: fromDate,
-              dateControllerToCompareWith: null,
+              dateControllerToCompareWith: toDate,
               isInitiaDate: true,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -1182,14 +1182,14 @@ class _LeftWidgetState extends State<LeftWidget> {
             SizedBox(
               width: width * 0.001,
             ),
-            DateTimeComponent(
+            CustomDate(
               readOnly: false,
               height: height * 0.045,
               dateWidth: width * 0.14,
               label: _locale.toDate,
               dateController: toDate,
-              dateControllerToCompareWith: null,
-              isInitiaDate: true,
+              dateControllerToCompareWith: fromDate,
+              isInitiaDate: false,
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -1984,6 +1984,7 @@ class _LeftWidgetState extends State<LeftWidget> {
     intMap.forEach((element) {
       ordersList.add(element);
     });
+
     readProvider.setOrders(ordersList);
   }
 
@@ -2086,12 +2087,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     String startDate = DatesController().formatDate(fromDateValue);
 
     setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      }
       readProvider.setFromDate(startDate);
     });
   }
@@ -2100,12 +2095,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     String toDateValue = toDate.text;
     String endDate = DatesController().formatDate(toDateValue);
     setState(() {
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
-
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      }
       readProvider.setToDate(endDate);
     });
   }

@@ -28,14 +28,12 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
   final ScrollController _scrollController = ScrollController();
 
   void convertBarDataToDashboardBarData() {
-    if (dataList.isEmpty) {
-      dataList = [];
-      List<BarData> barDat = widget.barChartData;
-      for (int i = 0; i < barDat.length; i++) {
-        DashboardBarData dashboardBarData = DashboardBarData(
-            getRandomColor(), barDat[i].percent!, barDat[i].percent!);
-        dataList.add(dashboardBarData);
-      }
+    dataList = [];
+    List<BarData> barDat = widget.barChartData;
+    for (int i = 0; i < barDat.length; i++) {
+      DashboardBarData dashboardBarData = DashboardBarData(
+          getRandomColor(), barDat[i].percent!, barDat[i].percent!);
+      dataList.add(dashboardBarData);
     }
   }
 
@@ -81,7 +79,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
             child: SizedBox(
               width: isMobile
                   ? width * 23
-                  : widget.isMax && dataList.length < 6
+                  : (widget.isMax && dataList.length < 6) || dataList.length < 6
                       ? width * .6
                       : width * (dataList.length / 15),
               height: height * 0.35,
@@ -111,6 +109,8 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                               showTitles: true,
                               reservedSize: 100,
                               getTitlesWidget: (value, meta) {
+                                print("vaaaaaaaaaaaaaaaaaaaalue2 ${value}");
+
                                 return Text(
                                   value.toInt().toString(),
                                   textAlign: TextAlign.left,
@@ -124,6 +124,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                               reservedSize: 32,
                               interval: 1,
                               getTitlesWidget: (value, meta) {
+                                print("vaaaaaaaaaaaaaaaaaaaalue1 ${value}");
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
                                   child: Text(
@@ -146,8 +147,10 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                           ),
                         ),
                         barGroups: dataList.asMap().entries.map((e) {
+                          print("datalistLength ${dataList.length}");
                           final index = e.key;
                           final data = e.value;
+                          print("vaaaaaaaaaaaaaaaaaaaalue3 $index");
                           return generateBarGroup(
                             index,
                             data.color,

@@ -395,19 +395,11 @@ class _ExpensesContentState extends State<ExpensesContent> {
                     });
                   }
                 },
+                dateControllerToCompareWith: null,
+                isInitiaDate: true,
+                timeControllerToCompareWith: null,
               ),
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: _fromDateController,
-            //   date: DateTime.now(),
-            //   onSelected: (value) {
-            //     setState(() {
-            //       _fromDateController.text = value;
-            //       getExpenses();
-            //     });
-            //   },
-            // ),
           ],
         ),
       ],
@@ -458,19 +450,11 @@ class _ExpensesContentState extends State<ExpensesContent> {
                 });
               }
             },
+            dateControllerToCompareWith: null,
+            isInitiaDate: true,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   date: DateTime.now(),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getExpenses();
-        //     });
-        //   },
-        // ),
       ],
     );
   }
@@ -568,12 +552,13 @@ class _ExpensesContentState extends State<ExpensesContent> {
     final random = Random();
     Color color;
     do {
-          int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
     usedColors.add(color);

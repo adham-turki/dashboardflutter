@@ -397,18 +397,10 @@ class _DailySalesContentState extends State<DailySalesContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: null,
+              isInitiaDate: true,
+              timeControllerToCompareWith: null,
             ),
-            // CustomDatePicker(
-            //   label: _locale.fromDate,
-            //   controller: _fromDateController,
-            //   date: DateTime.now(),
-            //   onSelected: (value) {
-            //     setState(() {
-            //       _fromDateController.text = value;
-            //       getDailySales();
-            //     });
-            //   },
-            // ),
           ],
         ),
       ],
@@ -459,19 +451,11 @@ class _DailySalesContentState extends State<DailySalesContent> {
                 });
               }
             },
+            dateControllerToCompareWith: null,
+            isInitiaDate: true,
+            timeControllerToCompareWith: null,
           ),
         ),
-        // CustomDatePicker(
-        //   label: _locale.fromDate,
-        //   controller: _fromDateController,
-        //   date: DateTime.now(),
-        //   onSelected: (value) {
-        //     setState(() {
-        //       _fromDateController.text = value;
-        //       getDailySales();
-        //     });
-        //   },
-        // ),
       ],
     );
   }
@@ -480,6 +464,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     NumberFormat myFormat = NumberFormat("#.##");
     return myFormat.format(num);
   }
+
   double formatDoubleToTwoDecimalPlaces(double number) {
     return double.parse(formatNumber(number));
   }
@@ -504,7 +489,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
     dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
-          
       for (var elemant in response) {
         String temp =
             DatesController().formatDate(getNextDay(startDate).toString());
@@ -513,32 +497,28 @@ class _DailySalesContentState extends State<DailySalesContent> {
         } else if (elemant.dailySale == 0.0) {
           boolTemp = false;
         }
-          listOfBalances.add(elemant.dailySale!);
-          listOfPeriods.add(temp);
-                   if (boolTemp) {
-            // dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-                // elemant.dailySale!);
-            pieData.add(PieChartModel(
-                title: temp,
-                value: elemant.dailySale == 0.0
-                    ? 1.0
-                    : formatDoubleToTwoDecimalPlaces(
-                       elemant.dailySale!),
-                color: getRandomColor(colorNewList, usedColors)));
-          }
+        listOfBalances.add(elemant.dailySale!);
+        listOfPeriods.add(temp);
+        if (boolTemp) {
+          // dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+          // elemant.dailySale!);
+          pieData.add(PieChartModel(
+              title: temp,
+              value: elemant.dailySale == 0.0
+                  ? 1.0
+                  : formatDoubleToTwoDecimalPlaces(elemant.dailySale!),
+              color: getRandomColor(colorNewList, usedColors)));
+        }
 
-          barData.add(
-            BarChartData(temp, elemant.dailySale!),
-          );
-        
-       
-      }setState(() {
-            
-          });
+        barData.add(
+          BarChartData(temp, elemant.dailySale!),
+        );
+      }
+      setState(() {});
     });
   }
 
-   getRandomColor(List<Color> colorList, List<Color> usedColors) {
+  getRandomColor(List<Color> colorList, List<Color> usedColors) {
     if (usedColors.length == colorList.length) {
       // If all colors have been used, clear the used colors list
       usedColors.clear();
@@ -547,18 +527,17 @@ class _DailySalesContentState extends State<DailySalesContent> {
     final random = Random();
     Color color;
     do {
-     int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
-
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
-    usedColors.add(color);    
+    usedColors.add(color);
     return color;
-
   }
 
   int count = 0;

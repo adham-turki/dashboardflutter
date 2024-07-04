@@ -322,6 +322,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: toDate,
+              isInitiaDate: true,
+              timeControllerToCompareWith: null,
             ),
             SizedBox(
               width: width * 0.01,
@@ -337,6 +340,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   });
                 }
               },
+              dateControllerToCompareWith: fromDate,
+              isInitiaDate: false,
+              timeControllerToCompareWith: null,
             ),
           ],
         ),
@@ -416,6 +422,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                     });
                   }
                 },
+                dateControllerToCompareWith: toDate,
+                isInitiaDate: true,
+                timeControllerToCompareWith: null,
               ),
             ),
             SizedBox(
@@ -428,10 +437,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   if (isValid) {
                     setState(() {
                       toDate.text = value;
-                      setControllerFromDateText();
+                      setControllertoDateText();
                     });
                   }
                 },
+                dateControllerToCompareWith: fromDate,
+                isInitiaDate: false,
+                timeControllerToCompareWith: null,
               ),
             ),
           ],
@@ -445,14 +457,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       fromDateValue = fromDate.text;
       String startDate = DatesController().formatDate(fromDateValue!);
       criteria.fromDate = startDate;
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
 
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      }
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 
@@ -461,14 +467,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       toDateValue = toDate.text;
       String endDate = DatesController().formatDate(toDateValue!);
       criteria.toDate = endDate;
-      DateTime from = DateTime.parse(fromDate.text);
-      DateTime to = DateTime.parse(toDate.text);
 
-      if (from.isAfter(to)) {
-        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-      } else {
-        fetch(PlutoLazyPaginationRequest(page: criteria.page!));
-      }
+      fetch(PlutoLazyPaginationRequest(page: criteria.page!));
     });
   }
 

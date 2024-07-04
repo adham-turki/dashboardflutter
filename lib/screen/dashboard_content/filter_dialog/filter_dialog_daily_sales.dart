@@ -20,18 +20,21 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogDailySales extends StatefulWidget {
-  String? selectedChart;
-  final Function(
-    String fromDate,
-    String selectedStatus,
-    String chart,
-    String selectedBranchCodeF,
-  ) onFilter;
+  final String? selectedChart;
+  final String? selectedStatus;
+  final String? selectedBranchCodeF;
+  final Function(String fromDate, String selectedStatus, String chart,
+      String selectedBranchCodeF) onFilter;
 
-  FilterDialogDailySales({required this.onFilter, this.selectedChart});
+  const FilterDialogDailySales(
+      {super.key,
+      required this.onFilter,
+      this.selectedChart,
+      this.selectedBranchCodeF,
+      this.selectedStatus});
 
   @override
-  _FilterDialogDailySalesState createState() => _FilterDialogDailySalesState();
+  State<FilterDialogDailySales> createState() => _FilterDialogDailySalesState();
 }
 
 class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
@@ -42,7 +45,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   double width = 0;
   double height = 0;
   String todayDate = "";
-  List<String> periods = [];
   var selectedPeriod = "";
   List<String> status = [];
   List<String> charts = [];
@@ -71,18 +73,12 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       _locale.draft,
       _locale.canceled,
     ];
-    periods = [
-      _locale.daily,
-      _locale.weekly,
-      _locale.monthly,
-      _locale.yearly,
-    ];
+
     branches = [_locale.all];
-    selectedBranch = branches[0];
+
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = widget.selectedChart!;
-    selectedPeriod = periods[0];
-    selectedStatus = status[0];
+    selectedStatus = widget.selectedStatus!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
@@ -96,6 +92,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   @override
   void initState() {
     getBranch(isStart: true);
+
     super.initState();
   }
 
@@ -138,18 +135,12 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                // DateTime to =
-                                //     DateTime.parse(_toDateController.text);
-
-                                // if (from.isAfter(to)) {
-                                //   ErrorController.openErrorDialog(
-                                //       1, _locale.startDateAfterEndDate);
-                                // }
                               });
                             }
                           },
+                          dateControllerToCompareWith: null,
+                          isInitiaDate: true,
+                          timeControllerToCompareWith: null,
                         ),
                       ],
                     )
@@ -202,18 +193,12 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                               if (isValid) {
                                 setState(() {
                                   _fromDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
-
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
                                 });
                               }
                             },
+                            dateControllerToCompareWith: null,
+                            isInitiaDate: true,
+                            timeControllerToCompareWith: null,
                           ),
                         ),
                         CustomDropDown(
@@ -268,9 +253,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
               fontSize: width > 800 ? height * .018 : height * .015,
               width: isDesktop ? width * 0.09 : width * 0.25,
               onPressed: () {
-                DateTime from = DateTime.parse(_fromDateController.text);
-                // DateTime to = DateTime.parse(_toDateController.text);
-
                 widget.onFilter(
                     DatesController().formatDate(_fromDateController.text),
                     selectedStatus,
@@ -303,7 +285,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -342,8 +323,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -381,15 +360,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
@@ -398,25 +368,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         print("value.statusCode: ${value.statusCode}");
       }
     });
-  }
-
-  void checkPeriods(value) {
-    if (value == periods[0]) {
-      _fromDateController.text = DatesController().todayDate().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[1]) {
-      _fromDateController.text = DatesController().currentWeek().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[2]) {
-      _fromDateController.text = DatesController().currentMonth().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
-    if (value == periods[3]) {
-      _fromDateController.text = DatesController().currentYear().toString();
-      _toDateController.text = DatesController().todayDate().toString();
-    }
   }
 
   void getBranch({bool? isStart}) async {
@@ -429,6 +380,11 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         }
       });
       setBranchesMap(_locale, value);
+      selectedBranch = widget.selectedBranchCodeF == _locale.all
+          ? widget.selectedBranchCodeF!
+          : branchesMap2[widget.selectedBranchCodeF];
+
+      selectedBranchCode = branchesMap[selectedBranch];
     });
   }
 }

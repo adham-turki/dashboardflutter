@@ -18,15 +18,20 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogSalesByBranches extends StatefulWidget {
-  String? selectedChart;
+  final String? selectedChart;
+  final String? selectedPeriod;
   final Function(
           String selectedPeriod, String fromDate, String toDate, String chart)
       onFilter;
 
-  FilterDialogSalesByBranches({required this.onFilter, this.selectedChart});
+  const FilterDialogSalesByBranches(
+      {super.key,
+      required this.onFilter,
+      this.selectedChart,
+      this.selectedPeriod});
 
   @override
-  _FilterDialogSalesByBranchesState createState() =>
+  State<FilterDialogSalesByBranches> createState() =>
       _FilterDialogSalesByBranchesState();
 }
 
@@ -74,7 +79,7 @@ class _FilterDialogSalesByBranchesState
     ];
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = widget.selectedChart!;
-    selectedPeriod = periods[0];
+    selectedPeriod = widget.selectedPeriod!;
     selectedStatus = status[0];
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
@@ -177,19 +182,12 @@ class _FilterDialogSalesByBranchesState
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
-
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
                               });
                             }
                           },
+                          dateControllerToCompareWith: _toDateController,
+                          isInitiaDate: true,
+                          timeControllerToCompareWith: null,
                         ),
                         // SizedBox(
                         //   width: width * 0.01,
@@ -201,18 +199,12 @@ class _FilterDialogSalesByBranchesState
                             if (isValid) {
                               setState(() {
                                 _toDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
                               });
                             }
                           },
+                          dateControllerToCompareWith: _fromDateController,
+                          isInitiaDate: false,
+                          timeControllerToCompareWith: null,
                         ),
                       ],
                     )
@@ -230,19 +222,12 @@ class _FilterDialogSalesByBranchesState
                               if (isValid) {
                                 setState(() {
                                   _fromDateController.text = value;
-
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
-
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
                                 });
                               }
                             },
+                            dateControllerToCompareWith: _toDateController,
+                            isInitiaDate: true,
+                            timeControllerToCompareWith: null,
                           ),
                         ),
                         SizedBox(
@@ -256,18 +241,12 @@ class _FilterDialogSalesByBranchesState
                               if (isValid) {
                                 setState(() {
                                   _toDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
-
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
                                 });
                               }
                             },
+                            dateControllerToCompareWith: _fromDateController,
+                            isInitiaDate: false,
+                            timeControllerToCompareWith: null,
                           ),
                         ),
                       ],

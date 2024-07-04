@@ -234,6 +234,9 @@ class _SearchComponentState extends State<SearchComponent> {
                                             });
                                           }
                                         },
+                                        dateControllerToCompareWith: toDateHere,
+                                        isInitiaDate: true,
+                                        timeControllerToCompareWith: null,
                                       ),
                                     ),
                                     // SizedBox(
@@ -490,6 +493,9 @@ class _SearchComponentState extends State<SearchComponent> {
                                             });
                                           }
                                         },
+                                        dateControllerToCompareWith: fromDate,
+                                        isInitiaDate: false,
+                                        timeControllerToCompareWith: null,
                                       ),
                                     ),
                                   ],

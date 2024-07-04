@@ -20,7 +20,9 @@ import '../../../utils/constants/responsive.dart';
 import '../../../utils/func/dates_controller.dart';
 
 class FilterDialogSalesByCategory extends StatefulWidget {
-  String? selectedChart;
+  final String? selectedChart;
+  final String? selectedPeriod;
+  final String? selectedBranchCodeF;
   final Function(
       String selectedPeriod,
       String fromDate,
@@ -29,10 +31,15 @@ class FilterDialogSalesByCategory extends StatefulWidget {
       String selectedBranchCodeF,
       String chart) onFilter;
 
-  FilterDialogSalesByCategory({required this.onFilter, this.selectedChart});
+  const FilterDialogSalesByCategory(
+      {super.key,
+      required this.onFilter,
+      this.selectedChart,
+      this.selectedBranchCodeF,
+      this.selectedPeriod});
 
   @override
-  _FilterDialogSalesByCategoryState createState() =>
+  State<FilterDialogSalesByCategory> createState() =>
       _FilterDialogSalesByCategoryState();
 }
 
@@ -87,8 +94,7 @@ class _FilterDialogSalesByCategoryState
     selectedCategories = categories[1];
 
     branches = [_locale.all];
-    selectedBranch = branches[0];
-    selectedPeriod = periods[0];
+    selectedPeriod = widget.selectedPeriod!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
@@ -205,18 +211,12 @@ class _FilterDialogSalesByCategoryState
                             if (isValid) {
                               setState(() {
                                 _fromDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
                               });
                             }
                           },
+                          dateControllerToCompareWith: _toDateController,
+                          isInitiaDate: true,
+                          timeControllerToCompareWith: null,
                         ),
                         // SizedBox(
                         //   width: width * 0.01,
@@ -229,18 +229,12 @@ class _FilterDialogSalesByCategoryState
                             if (isValid) {
                               setState(() {
                                 _toDateController.text = value;
-                                DateTime from =
-                                    DateTime.parse(_fromDateController.text);
-                                DateTime to =
-                                    DateTime.parse(_toDateController.text);
-
-                                if (from.isAfter(to)) {
-                                  ErrorController.openErrorDialog(
-                                      1, _locale.startDateAfterEndDate);
-                                }
                               });
                             }
                           },
+                          dateControllerToCompareWith: _fromDateController,
+                          isInitiaDate: false,
+                          timeControllerToCompareWith: null,
                         ),
                         CustomDropDown(
                           width: width * 0.165,
@@ -271,18 +265,12 @@ class _FilterDialogSalesByCategoryState
                               if (isValid) {
                                 setState(() {
                                   _fromDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
-
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
                                 });
                               }
                             },
+                            dateControllerToCompareWith: _toDateController,
+                            isInitiaDate: true,
+                            timeControllerToCompareWith: null,
                           ),
                         ),
                         SizedBox(
@@ -296,18 +284,12 @@ class _FilterDialogSalesByCategoryState
                               if (isValid) {
                                 setState(() {
                                   _toDateController.text = value;
-                                  DateTime from =
-                                      DateTime.parse(_fromDateController.text);
-                                  DateTime to =
-                                      DateTime.parse(_toDateController.text);
-
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
-                                  }
                                 });
                               }
                             },
+                            dateControllerToCompareWith: _fromDateController,
+                            isInitiaDate: false,
+                            timeControllerToCompareWith: null,
                           ),
                         ),
                         CustomDropDown(
@@ -468,10 +450,6 @@ class _FilterDialogSalesByCategoryState
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
@@ -526,6 +504,11 @@ class _FilterDialogSalesByCategoryState
         }
       });
       setBranchesMap(_locale, value);
+      selectedBranch = widget.selectedBranchCodeF == _locale.all
+          ? widget.selectedBranchCodeF!
+          : branchesMap2[widget.selectedBranchCodeF];
+
+      selectedBranchCode = branchesMap[selectedBranch];
     });
   }
 }

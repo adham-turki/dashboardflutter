@@ -104,6 +104,7 @@ class _BranchesSalesByCatDashboardState
   SalesCategoryController salesCategoryController = SalesCategoryController();
 
   bool isDesktop = false;
+  int count = 0;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -126,10 +127,14 @@ class _BranchesSalesByCatDashboardState
 
     fromDateController.text = currentYear;
     toDateController.text = todayDate;
-    selectedCategories = categories[1];
-    selectedPeriod = periods[0];
-    selectedChart = _locale.barChart;
-
+    print("counttttttt ${count}");
+    if (count == 0) {
+      selectedCategories = categories[1];
+      selectedPeriod = periods[0];
+      selectedChart = _locale.barChart;
+      selectedBranchCode = _locale.all;
+    }
+    count++;
     super.didChangeDependencies();
   }
 
@@ -208,6 +213,8 @@ class _BranchesSalesByCatDashboardState
                                 builder: (context) {
                                   return FilterDialogSalesByCategory(
                                     selectedChart: selectedChart,
+                                    selectedBranchCodeF: selectedBranchCode,
+                                    selectedPeriod: selectedPeriod,
                                     onFilter: (selectedPeriodF,
                                         fromDate,
                                         toDate,
@@ -276,6 +283,8 @@ class _BranchesSalesByCatDashboardState
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
         // Adding double quotes around keys and values to make it valid JSON
+        print("seatrhCriteria1111111111 ${startSearchCriteria}");
+
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
@@ -294,9 +303,10 @@ class _BranchesSalesByCatDashboardState
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        print("seatchCriteria ${searchCriteriaa}");
+
         fromDateController.text = searchCriteriaa!.fromDate!;
         toDateController.text = searchCriteriaa!.toDate!;
         selectedCategories = searchCriteriaa!.byCategory! == 1

@@ -491,57 +491,51 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
             //                     size: height * 0.025,
             //                   )),
             //             ),
-            //             Tooltip(
-            //               message: _locale.exportToExcel,
-            //               child: IconButton(
-            //                   padding: const EdgeInsets.only(top: 3),
-            //                   onPressed: () {
-            //                     isDownload.value = true;
+            Tooltip(
+              message: _locale.exportToExcel,
+              child: IconButton(
+                  padding: const EdgeInsets.only(top: 3),
+                  onPressed: () {
+                    isDownload.value = true;
 
-            //                     DateTime from = DateTime.parse(DatesController()
-            //                         .formatDateReverse(
-            //                             readProvider.getFromDate()!));
-            //                     DateTime to = DateTime.parse(DatesController()
-            //                         .formatDateReverse(
-            //                             readProvider.getToDate()!));
+                    DateTime from = DateTime.parse(DatesController()
+                        .formatDateReverse(readProvider.getFromDate()!));
+                    DateTime to = DateTime.parse(DatesController()
+                        .formatDateReverse(readProvider.getToDate()!));
 
-            //                     if (from.isAfter(to)) {
-            //                       ErrorController.openErrorDialog(
-            //                           1, _locale.startDateAfterEndDate);
-            //                     } else {
-            //                       if (salesList.isEmpty) {
-            //                         ErrorController.openErrorDialog(
-            //                             406, _locale.error406);
-            //                         isDownload.value = false;
-            //                       } else {
-            //                         SearchCriteria searchCriteria =
-            //                             SearchCriteria(
-            //                           fromDate: readProvider.fromDate,
-            //                           toDate: readProvider.toDate,
-            //                           voucherStatus: -100,
-            //                           columns: getColumnsName(
-            //                               _locale, orderByColumns, true),
-            //                           customColumns: getCustomColumnsName(
-            //                               _locale, orderByColumns, true),
-            //                         );
-            //                         Map<String, dynamic> body =
-            //                             readProvider.toJson();
-            //                         ReportController()
-            //                             .exportToExcelApi(searchCriteria, body)
-            //                             .then((value) {
-            //                           saveExcelFile(
-            //                               value, "${_locale.salesreport}.xlsx");
-            //                           isDownload.value = false;
-            //                         });
-            //                       }
-            //                     }
-            //                   },
-            //                   icon: Icon(
-            //                     Icons.description,
-            //                     color: Colors.black,
-            //                     size: height * 0.025,
-            //                   )),
-            //             ),
+                    if (from.isAfter(to)) {
+                      ErrorController.openErrorDialog(
+                          1, _locale.startDateAfterEndDate);
+                    } else {
+                      if (salesList.isEmpty) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                        isDownload.value = false;
+                      } else {
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: readProvider.fromDate,
+                          toDate: readProvider.toDate,
+                          voucherStatus: -100,
+                          columns:
+                              getColumnsName(_locale, orderByColumns, true),
+                          customColumns: getCustomColumnsName(
+                              _locale, orderByColumns, true),
+                        );
+                        Map<String, dynamic> body = readProvider.toJson();
+                        ReportController()
+                            .exportToExcelApi(searchCriteria, body)
+                            .then((value) {
+                          saveExcelFile(value, "${_locale.salesreport}.xlsx");
+                          isDownload.value = false;
+                        });
+                      }
+                    }
+                  },
+                  icon: Icon(
+                    Icons.description,
+                    color: Colors.black,
+                    size: height * 0.025,
+                  )),
+            ),
             //           ],
             //         ),
             //       ],
@@ -691,8 +685,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                 await generateColumns();
                                 // if (pageLis.value == 1) {
                                 reportsResult = await ReportController()
-                                    .getSalesResultMehtod(readProvider.toJson(),
-                                        isStart: true);
+                                    .getSalesResultMehtod(body, isStart: true);
                                 stateManager!.removeAllRows();
 
                                 List<SalesCostReportModel> result = [];

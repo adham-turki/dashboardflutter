@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'dart:html' as html;
+
 import '../../../../components/table_component.dart';
 import '../../../../components/table_component_new.dart';
 import '../../../../controller/error_controller.dart';
@@ -474,58 +475,52 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
             //                     size: height * 0.025,
             //                   )),
             //             ),
-            //             Tooltip(
-            //               message: _locale.exportToExcel,
-            //               child: IconButton(
-            //                   padding: const EdgeInsets.only(top: 3),
-            //                   onPressed: () {
-            //                     isDownload.value = true;
-            //                     DateTime from = DateTime.parse(DatesController()
-            //                         .formatDateReverse(
-            //                             readProvider.getFromDate()!));
-            //                     DateTime to = DateTime.parse(DatesController()
-            //                         .formatDateReverse(
-            //                             readProvider.getToDate()!));
+            Tooltip(
+              message: _locale.exportToExcel,
+              child: IconButton(
+                  padding: const EdgeInsets.only(top: 3),
+                  onPressed: () {
+                    isDownload.value = true;
+                    DateTime from = DateTime.parse(DatesController()
+                        .formatDateReverse(readProvider.getFromDate()!));
+                    DateTime to = DateTime.parse(DatesController()
+                        .formatDateReverse(readProvider.getToDate()!));
 
-            //                     if (from.isAfter(to)) {
-            //                       ErrorController.openErrorDialog(
-            //                           1, _locale.startDateAfterEndDate);
-            //                     } else {
-            //                       if (purchaseList.isEmpty) {
-            //                         ErrorController.openErrorDialog(
-            //                             406, _locale.error406);
-            //                         isDownload.value = false;
-            //                       } else {
-            //                         SearchCriteria searchCriteria =
-            //                             SearchCriteria(
-            //                           fromDate: readProvider.fromDate,
-            //                           toDate: readProvider.toDate,
-            //                           voucherStatus: -100,
-            //                           columns: getColumnsName(
-            //                               _locale, orderByColumns, false),
-            //                           customColumns: getCustomColumnsName(
-            //                               _locale, orderByColumns, false),
-            //                         );
-            //                         Map<String, dynamic> body =
-            //                             readProvider.toJson();
+                    if (from.isAfter(to)) {
+                      ErrorController.openErrorDialog(
+                          1, _locale.startDateAfterEndDate);
+                    } else {
+                      if (purchaseList.isEmpty) {
+                        ErrorController.openErrorDialog(406, _locale.error406);
+                        isDownload.value = false;
+                      } else {
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: readProvider.fromDate,
+                          toDate: readProvider.toDate,
+                          voucherStatus: -100,
+                          columns:
+                              getColumnsName(_locale, orderByColumns, false),
+                          customColumns: getCustomColumnsName(
+                              _locale, orderByColumns, false),
+                        );
+                        Map<String, dynamic> body = readProvider.toJson();
 
-            //                         ReportController()
-            //                             .exportPurchaseToExcelApi(
-            //                                 searchCriteria, body)
-            //                             .then((value) {
-            //                           saveExcelFile(value,
-            //                               "${_locale.purchasesReport}.xlsx");
-            //                           isDownload.value = false;
-            //                         });
-            //                       }
-            //                     }
-            //                   },
-            //                   icon: Icon(
-            //                     Icons.description,
-            //                     color: Colors.black,
-            //                     size: height * 0.025,
-            //                   )),
-            //             ),
+                        ReportController()
+                            .exportPurchaseToExcelApi(searchCriteria, body)
+                            .then((value) {
+                          saveExcelFile(
+                              value, "${_locale.purchasesReport}.xlsx");
+                          isDownload.value = false;
+                        });
+                      }
+                    }
+                  },
+                  icon: Icon(
+                    Icons.description,
+                    color: Colors.black,
+                    size: height * 0.025,
+                  )),
+            ),
             //           ],
             //         ),
             //       ],

@@ -4,26 +4,48 @@ import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../controller/error_controller.dart';
 import '../provider/dates_provider.dart';
+import '../utils/constants/colors.dart';
 import '../utils/constants/responsive.dart';
 
 // ignore: must_be_immutable
 class CustomDate extends StatefulWidget {
   final String? label;
   int? minYear;
+  double? height;
   Function(bool isValid, String value)? onValue;
   bool? ddmmyyyy;
   final TextEditingController? dateController;
   String? date;
+  bool? readOnly;
+  TimeOfDay? selectedTime;
+  final ValueChanged<TimeOfDay?>? onTimeChanged;
+  final Function(String newDate, String oldDate)? onDateChanged;
+  double? dateWidth;
+  bool? isTimeDate;
+  final TextEditingController? dateControllerToCompareWith;
+  final TimeOfDay? timeControllerToCompareWith;
 
+  bool isInitiaDate;
   CustomDate(
       {super.key,
       this.label,
       this.onValue,
+      this.dateWidth,
+      this.height,
+      required this.dateControllerToCompareWith,
+      required this.isInitiaDate,
+      required this.timeControllerToCompareWith,
+      this.isTimeDate,
+      this.onDateChanged,
+      this.selectedTime,
+      this.onTimeChanged,
       this.dateController,
       this.minYear,
       this.ddmmyyyy,
-      this.date});
+      this.date,
+      this.readOnly});
 
   @override
   State<CustomDate> createState() => _CustomDateState();
@@ -41,6 +63,7 @@ class _CustomDateState extends State<CustomDate> {
   TextEditingController yearController = TextEditingController();
   TextEditingController monthController = TextEditingController();
   TextEditingController dayController = TextEditingController();
+  DateTime formattedDate = DateTime.now();
 
   String yearHint = "YYYY";
   String monthHint = "MM";
@@ -49,7 +72,7 @@ class _CustomDateState extends State<CustomDate> {
   Color borderColor = Colors.grey;
   Color borderErrorColor = Colors.red;
   double borderRadius = 5;
-
+  // TimeOfDay? selectedTime;
   bool isValid = false;
 
   String activeDateErrorMessage = "Check Your Input Format!";
@@ -61,7 +84,7 @@ class _CustomDateState extends State<CustomDate> {
   FocusNode yearFocusNode = FocusNode();
   FocusNode monthFocusNode = FocusNode();
   FocusNode dayFocusNode = FocusNode();
-  DateTime formattedDate = DateTime.now();
+
   bool dayTemp = true;
   bool monthTemp = true;
   bool yearTemp = true;
@@ -74,14 +97,20 @@ class _CustomDateState extends State<CustomDate> {
 
   clearDateProvider() {
     if (!context.read<DatesProvider>().dayTemp) {
+      dayTemp = true;
       context.read<DatesProvider>().setDayTemp(true);
     } else if (!context.read<DatesProvider>().monthTemp) {
+      monthTemp = true;
       context.read<DatesProvider>().setMonthTemp(true);
     } else if (!context.read<DatesProvider>().yearTemp) {
+      yearTemp = true;
       context.read<DatesProvider>().setYearTemp(true);
     }
+    setState(() {});
   }
 
+  TimeOfDay? selectedTime;
+  DateTime? selectedDate;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -106,24 +135,30 @@ class _CustomDateState extends State<CustomDate> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
+    selectedTime = widget.selectedTime;
+    selectedDate = DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
 
     String label = widget.label ?? "";
 
     if (widget.dateController!.text.isNotEmpty) {
       formattedDate =
           DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
+
       yearController.text = splitDate()[0];
       monthController.text = splitDate()[1];
       dayController.text = splitDate()[2];
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
+      padding: EdgeInsets.symmetric(
+          horizontal: widget.dateWidth != null ? 0.0 : 8.0, vertical: 0),
       child: SizedBox(
-        width: width * 0.165,
+        width: widget.isTimeDate == true
+            ? width * 0.19
+            : widget.dateWidth ?? width * 0.165,
+        // height: height * 0.09,
+
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Consumer<DatesProvider>(
               builder: (context, value, child) {
@@ -131,28 +166,31 @@ class _CustomDateState extends State<CustomDate> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     labelMessage(label),
-                    !value.getDayTemp() ||
-                            !value.getMonthTemp() ||
-                            !value.getYearTemp()
-                        ? errorMessage(_locale.checkDates)
-                        : Container(),
+                    !dayTemp || !monthTemp || !yearTemp
+                        ? errorMessage(_locale.validDate)
+                        : const SizedBox.shrink(),
                   ],
                 );
               },
             ),
             Container(
+              //  width: width * 0.9,
+              height: widget.height ?? height * 0.053,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: borderColor,
+                  color: Color.fromARGB(255, 67, 67, 67),
                 ),
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   getSuffixIcon(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       createDateField(
                           _maskDayMonth, dayController, dayHint, dayFocusNode),
@@ -164,6 +202,126 @@ class _CustomDateState extends State<CustomDate> {
                           _maskYear, yearController, yearHint, yearFocusNode),
                     ],
                   ),
+                  widget.isTimeDate == true
+                      ? const VerticalDivider(
+                          color: Color.fromARGB(255, 97, 97, 97),
+                          thickness: 0.5,
+                          width: 15,
+                        )
+                      : Container(),
+                  widget.isTimeDate == true
+                      ? Row(
+                          children: [
+                            InkWell(
+                              onTap: () async {
+                                if (widget.readOnly == true) {
+                                } else {
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime:
+                                        widget.selectedTime ?? TimeOfDay.now(),
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return Theme(
+                                        data: ThemeData.light().copyWith(
+                                          primaryColor: Colors.blue,
+                                          colorScheme: const ColorScheme.light(
+                                              primary: Colors.blue),
+                                          buttonTheme: const ButtonThemeData(
+                                            textTheme: ButtonTextTheme.normal,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  ).then((value) {
+                                    widget.selectedTime = value;
+
+                                    if (widget.dateControllerToCompareWith !=
+                                        null) {
+                                      DateTime dateController = DateTime.parse(
+                                          widget.dateController!.text);
+                                      DateTime dateController2 = DateTime.parse(
+                                          widget.dateControllerToCompareWith!
+                                              .text);
+                                      if (dateController
+                                          .isAtSameMomentAs(dateController2)) {
+                                        checkTimeValidation();
+                                      }
+                                    }
+
+                                    if (value != null) {
+                                      widget
+                                          .onTimeChanged!(widget.selectedTime);
+                                    }
+                                  });
+                                }
+                              },
+                              child: Icon(
+                                Icons.timer,
+                                color: primary,
+                                size: MediaQuery.of(context).size.width * 0.012,
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                if (widget.readOnly == true) {
+                                } else {
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime:
+                                        widget.selectedTime ?? TimeOfDay.now(),
+                                    builder:
+                                        (BuildContext context, Widget? child) {
+                                      return Theme(
+                                        data: ThemeData.light().copyWith(
+                                          primaryColor: Colors.blue,
+                                          colorScheme: const ColorScheme.light(
+                                              primary: Colors.blue),
+                                          buttonTheme: const ButtonThemeData(
+                                            textTheme: ButtonTextTheme.normal,
+                                          ),
+                                        ),
+                                        child: child!,
+                                      );
+                                    },
+                                  ).then((value) {
+                                    widget.selectedTime = value;
+
+                                    if (widget.dateControllerToCompareWith !=
+                                        null) {
+                                      DateTime dateController = DateTime.parse(
+                                          widget.dateController!.text);
+                                      DateTime dateController2 = DateTime.parse(
+                                          widget.dateControllerToCompareWith!
+                                              .text);
+                                      if (dateController
+                                          .isAtSameMomentAs(dateController2)) {
+                                        checkTimeValidation();
+                                      }
+                                    }
+
+                                    if (value != null) {
+                                      widget
+                                          .onTimeChanged!(widget.selectedTime);
+                                    }
+                                  });
+                                }
+                              },
+                              child: Center(
+                                child: Text(
+                                  widget.selectedTime != null
+                                      ? widget.selectedTime!.format(context)
+                                      : TimeOfDay.now().format(context),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: height * 0.0165),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -174,79 +332,158 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   SizedBox dateDivider() {
-    return SizedBox(
-      width: width * 0.008,
-      child: Transform.rotate(
-        angle: 120 * 3.14159265359 / 180,
-        child: const Divider(
-          thickness: 3,
-          color: Colors.black54,
+    return SizedBox(width: width * 0.003, child: const Text("-"));
+  }
+
+  Widget createDateField(MaskTextInputFormatter mask,
+      TextEditingController controller, String hint, FocusNode focusNode) {
+    return Center(
+      child: SizedBox(
+        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
+        height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
+        child: Center(
+          child: TextFormField(
+            readOnly: widget.readOnly != null ? widget.readOnly! : false,
+            style: TextStyle(fontSize: height * 0.0165),
+            focusNode: focusNode,
+            controller: controller,
+            inputFormatters: [mask],
+            textAlign: TextAlign.center,
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hint,
+            ),
+            onTap: () {
+              if (hint == dayHint) {
+                if (dayController.text.isNotEmpty) {
+                  dayController.selection = TextSelection(
+                      baseOffset: 0, extentOffset: dayController.text.length);
+                }
+              } else if (hint == monthHint) {
+                if (monthController.text.isNotEmpty) {
+                  monthController.selection = TextSelection(
+                      baseOffset: 0, extentOffset: monthController.text.length);
+                }
+              } else if (hint == yearHint) {
+                if (yearController.text.isNotEmpty) {
+                  yearController.selection = TextSelection(
+                      baseOffset: 0, extentOffset: yearController.text.length);
+                }
+              }
+            },
+            onChanged: (value) {
+              setRequestNodes(hint);
+              print("ooooooooooo $value");
+
+              if (dayController.text.length == 2 &&
+                  monthController.text.length == 2 &&
+                  yearController.text.length == 4) {
+                print("ooooooooooo 22 $value");
+                widget.dateController!.text =
+                    '${yearController.text}-${monthController.text}-${dayController.text}';
+                submitValueDate(focusNode);
+
+                formattedDate =
+                    DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
+              }
+
+              if (widget.dateControllerToCompareWith != null) {
+                checkValidation();
+              }
+            },
+            onFieldSubmitted: (value) {
+              submitValueDate(focusNode);
+              if (widget.dateControllerToCompareWith != null) {
+                checkValidation();
+              }
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget createDateField(MaskTextInputFormatter mask,
-      TextEditingController controller, String hint, FocusNode focusNode) {
-    return SizedBox(
-      width: Responsive.isDesktop(context) ? width * 0.028 : width * 0.1,
-      child: TextFormField(
-        focusNode: focusNode,
-        controller: controller,
-        inputFormatters: [mask],
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: hint,
-        ),
-        onTap: () {
-          if (hint == dayHint) {
-            if (dayController.text.isNotEmpty) {
-              // dayController.clear();
-              dayController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: dayController.text.length);
-            }
-            // emptyDateControllers();
-          } else if (hint == monthHint) {
-            if (monthController.text.isNotEmpty) {
-              monthController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: monthController.text.length);
-            }
-          } else if (hint == yearHint) {
-            if (yearController.text.isNotEmpty) {
-              yearController.selection = TextSelection(
-                  baseOffset: 0, extentOffset: yearController.text.length);
-            }
-          }
-          // if (hint == dayHint) {
-          //   emptyDateControllers();
-          // } else if (hint == monthHint) {
-          //   if (monthController.text.isNotEmpty) {
-          //     monthController.clear();
-          //   }
-          // } else if (hint == yearHint) {
-          //   if (yearController.text.isNotEmpty) {
-          //     yearController.clear();
-          //   }
-          // }
-        },
-        onChanged: (value) {
-          setRequestNodes(hint);
-          if (dayController.text.length == 2 &&
-              monthController.text.length == 2 &&
-              yearController.text.length == 4) {
-            widget.dateController!.text =
-                '${yearController.text}-${monthController.text}-${dayController.text}';
-            formattedDate =
-                DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
-            // submitValueDate(focusNode);
-          }
-        },
-        onFieldSubmitted: (value) {
-          submitValueDate(focusNode);
-        },
-      ),
-    );
+  void checkValidation() {
+    TimeOfDay timeController =
+        widget.selectedTime ?? const TimeOfDay(hour: 00, minute: 00);
+    TimeOfDay timeController2 = widget.timeControllerToCompareWith ??
+        const TimeOfDay(hour: 00, minute: 00);
+    DateTime dateController = DateTime.parse(widget.dateController!.text);
+    DateTime dateController2 =
+        DateTime.parse(widget.dateControllerToCompareWith!.text);
+    if (widget.isInitiaDate == false) {
+      if (dateController.isBefore(dateController2)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+
+        widget.dateController!.text =
+            DateFormat('yyyy-MM-dd').format(selectedDate!);
+
+        setState(() {});
+      } else if (dateController.isAtSameMomentAs(dateController2) &&
+          (timeController.hour < timeController2.hour ||
+              (timeController.hour == timeController2.hour &&
+                  timeController.minute < timeController2.minute))) {
+        ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
+
+        widget.dateController!.text =
+            DateFormat('yyyy-MM-dd').format(selectedDate!);
+
+        setState(() {});
+      } else {
+        if (widget.onDateChanged != null) {
+          widget.onDateChanged!(widget.dateController!.text,
+              DateFormat('yyyy-MM-dd').format(selectedDate!));
+        }
+      }
+    } else if (widget.isInitiaDate == true) {
+      if (dateController.isAfter(dateController2)) {
+        ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
+
+        widget.dateController!.text =
+            DateFormat('yyyy-MM-dd').format(selectedDate!);
+
+        setState(() {});
+      } else if (dateController.isAtSameMomentAs(dateController2) &&
+          (timeController.hour > timeController2.hour ||
+              (timeController.hour == timeController2.hour &&
+                  timeController.minute > timeController2.minute))) {
+        ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
+
+        widget.dateController!.text =
+            DateFormat('yyyy-MM-dd').format(selectedDate!);
+
+        setState(() {});
+      } else {
+        if (widget.onDateChanged != null) {
+          widget.onDateChanged!(widget.dateControllerToCompareWith!.text,
+              DateFormat('yyyy-MM-dd').format(selectedDate!));
+        }
+      }
+    }
+  }
+
+  void checkTimeValidation() {
+    TimeOfDay timeController = widget.selectedTime!;
+    TimeOfDay timeController2 = widget.timeControllerToCompareWith!;
+    if (widget.isInitiaDate == false) {
+      if (timeController.hour < timeController2.hour ||
+          (timeController.hour == timeController2.hour &&
+              timeController.minute < timeController2.minute)) {
+        ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
+        widget.selectedTime = selectedTime;
+
+        setState(() {});
+      }
+    } else if (widget.isInitiaDate == true) {
+      if (timeController.hour > timeController2.hour ||
+          (timeController.hour == timeController2.hour &&
+              timeController.minute > timeController2.minute)) {
+        ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
+        widget.selectedTime = selectedTime;
+
+        setState(() {});
+      }
+    }
   }
 
   emptyDateControllers() {
@@ -280,24 +517,17 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   Widget getSuffixIcon() {
-    return Container(
-      decoration: BoxDecoration(
-          border: Border(
-        right: BorderSide(
-          color: borderColor,
-          width: 1.5,
-        ),
-      )),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InkWell(
-          onTap: () {
-            setDatePickerValues();
-          },
-          child: const Icon(
-            Icons.date_range_outlined,
-          ),
-        ),
+    return InkWell(
+      onTap: () {
+        if (widget.readOnly == true) {
+        } else {
+          setDatePickerValues();
+        }
+      },
+      child: Icon(
+        Icons.date_range,
+        size: MediaQuery.of(context).size.width * 0.012,
+        color: primary,
       ),
     );
   }
@@ -310,44 +540,29 @@ class _CustomDateState extends State<CustomDate> {
     DateTime dateTime = DateTime.now();
 
     int yearNow = dateTime.year;
-    int monthNow = dateTime.month;
-    int dayNow = dateTime.day;
 
     if (yearStr.isNotEmpty && yearStr.length == 4) {
       int minYear = widget.minYear ?? 2000;
       int year = int.parse(yearStr);
-      if (year > yearNow || year < minYear) {
+      if (year < minYear) {
         yearController.text = yearNow.toString();
         return true;
       }
     }
 
-    if (monthStr.isNotEmpty && monthStr.length == 2) {
-      int month = int.parse(monthStr);
-      int year = int.parse(yearStr);
-
-      if (month > monthNow && year == yearNow) {
-        monthController.text = monthNow.toString();
-        dayController.text = dayNow.toString();
-        return true;
-      }
-    }
+    if (monthStr.isNotEmpty && monthStr.length == 2) {}
 
     if (yearStr.length != 4 || monthStr.length != 2 || dayStr.length != 2) {
       return false;
     }
 
     try {
-      int year = int.parse(yearStr);
       int month = int.parse(monthStr);
       int day = int.parse(dayStr);
 
-      if (year <= yearNow && yearStr.length == 4) {
+      if (yearStr.length == 4) {
         if (month <= 12) {
           if (dayStr.length == 2) {
-            if (day > dayNow && month >= monthNow && year >= yearNow) {
-              dayController.text = dayNow.toString();
-            }
             if ((month == 4 || month == 6 || month == 9 || month == 11) &&
                 day <= 30) {
               return true;
@@ -394,7 +609,7 @@ class _CustomDateState extends State<CustomDate> {
 
   Widget errorMessage(String msg) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Text(
         msg,
         style: TextStyle(
@@ -406,14 +621,13 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   Widget labelMessage(String msg) {
-    return msg.isNotEmpty
-        ? Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Text(
-              msg,
-            ),
-          )
-        : SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 9.0),
+      child: Text(
+        style: const TextStyle(fontSize: 13),
+        msg,
+      ),
+    );
   }
 
   void setRequestNodes(String hint) {
@@ -422,63 +636,66 @@ class _CustomDateState extends State<CustomDate> {
     String day = dayController.text;
     DateTime dateTime = DateTime.now();
 
-    if (hint.compareTo(dayHint) == 0 && day.length == 2) {
-      dayController.text = dayController.text;
-      if (int.parse(dayController.text) > 31 && dayController.text[0] != "0") {
-        context.read<DatesProvider>().setDayTemp(false);
-        dayController.text = dateTime.day.toString();
-        // dayTemp = false;
-        // setState(() {});
-      } else {
-        // dayController.text = dateTime.day.toString();
-        context.read<DatesProvider>().setDayTemp(true);
+    if (hint.compareTo(dayHint) == 0) {
+      if (day.length == 2) {
+        dayController.text = dayController.text;
+        if (int.parse(dayController.text) > 31 &&
+            dayController.text[0] != "0") {
+          dayTemp = false;
+          context.read<DatesProvider>().setDayTemp(false);
+          setState(() {});
 
-        // dayTemp = true;
-      }
-      if (dayTemp) {
-        monthFocusNode.requestFocus();
-        monthController.selection = TextSelection(
-            baseOffset: 0, extentOffset: monthController.text.length);
+          dayController.text = dateTime.day.toString();
+        } else {
+          // dayController.text = dateTime.day.toString();
+          context.read<DatesProvider>().setDayTemp(true);
+
+          dayTemp = true;
+          setState(() {});
+        }
+        if (dayTemp) {
+          monthFocusNode.requestFocus();
+        }
       }
     } else if (hint.compareTo(monthHint) == 0 && day.isNotEmpty) {
       if (month.length == 2) {
         monthController.text = monthController.text;
         if (int.parse(monthController.text) > 12 &&
             monthController.text[0] != "0") {
-          // monthTemp = false;
+          monthTemp = false;
           context.read<DatesProvider>().setMonthTemp(false);
-          // setState(() {});
+          setState(() {});
 
           monthController.text = dateTime.month.toString();
         } else {
           // dayController.text = dateTime.day.toString();
           context.read<DatesProvider>().setMonthTemp(true);
 
-          // monthTemp = true;
+          monthTemp = true;
+          setState(() {});
         }
         if (monthTemp) {
           yearFocusNode.requestFocus();
-          yearController.selection = TextSelection(
-              baseOffset: 0, extentOffset: yearController.text.length);
         }
       }
     } else {
       if (year.length == 4) {
         yearController.text = yearController.text;
-        if (int.parse(yearController.text) > dateTime.year &&
-            yearController.text[0] != "0") {
-          // yearController.text = dateTime.year.toString();
-          // yearTemp = false;
-          context.read<DatesProvider>().setYearTemp(false);
+        // if (yearController.text[0] != "0") {
+        //   // yearController.text = dateTime.year.toString();
+        //   // yearTemp = false;
+        //   context.read<DatesProvider>().setYearTemp(false);
 
-          // setState(() {});
+        //   // setState(() {});
 
-          yearController.text = dateTime.year.toString();
-        } else {
-          // yearController.text = dateTime.year.toString();
-          // yearTemp = true;
-          context.read<DatesProvider>().setYearTemp(true);
-        }
+        //   yearController.text = dateTime.year.toString();
+        // } else {
+        // yearController.text = dateTime.year.toString();
+        // yearTemp = true;
+        context.read<DatesProvider>().setYearTemp(true);
+        yearTemp = true;
+        setState(() {});
+        // }
         // yearFocusNode.unfocus();
 
         isValid = dateValidation();
@@ -642,13 +859,12 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   void setDatePickerValues() {
-    DateTime dateTime = DateTime.now();
     DateTime firstDate = DateTime(2000);
     showDatePicker(
       context: context,
       initialDate: formattedDate,
       firstDate: firstDate,
-      lastDate: dateTime,
+      lastDate: DateTime(2050),
     ).then((dateResult) {
       setState(() {
         if (dateResult != null && widget.onValue != null) {
@@ -662,11 +878,19 @@ class _CustomDateState extends State<CustomDate> {
             dayController.text = "0${dayController.text}";
           }
           bool isValid = dateValidation();
+
           if (isValid) {
+            dayTemp = true;
+            monthTemp = true;
+            yearTemp = true;
             context.read<DatesProvider>().setDayTemp(true);
             context.read<DatesProvider>().setMonthTemp(true);
             context.read<DatesProvider>().setYearTemp(true);
+
             widget.onValue!(true, getDateValue());
+            if (widget.dateControllerToCompareWith != null) {
+              checkValidation();
+            }
           }
         }
       });
