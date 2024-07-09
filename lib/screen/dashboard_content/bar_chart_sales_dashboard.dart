@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
+import 'package:bi_replicate/utils/constants/maps.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,9 +48,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   String todayDate = "";
   String currentMonth = "";
 
-  var period = "";
-  var selectedChart = "";
-  var statusVar = "";
+  int period = 0;
+  int selectedChart = 0;
 
   String lastFromDate = "";
   String lastToDate = "";
@@ -73,6 +73,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
   int count = 0;
+  bool isLoading = false;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -80,13 +82,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     currentMonth =
         DatesController().formatDate(DatesController().twoYearsAgo());
 
-    fromDateController.text = currentMonth;
-    toDateController.text = todayDate;
-    toDateController.text = todayDate;
-
     if (count == 0) {
-      selectedChart = _locale.pieChart;
-      period = _locale.daily;
+      fromDateController.text = currentMonth;
+      toDateController.text = todayDate;
+      toDateController.text = todayDate;
+
+      selectedChart = Pie_Chart;
+      period = Daily_Period;
     }
     count++;
     super.didChangeDependencies();
@@ -111,6 +113,10 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
+
+    String fromDate =
+        DatesController().formatDateReverse(fromDateController.text);
+    String toDate = DatesController().formatDateReverse(toDateController.text);
 
     return Container(
       decoration: const BoxDecoration(),
@@ -137,6 +143,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                         _locale.salesByBranches,
                         style: TextStyle(fontSize: isDesktop ? 15 : 18),
                       ),
+                      Text(
+                        _locale.localeName == "en"
+                            ? "${fromDateController.text}  -  ${toDateController.text}"
+                            : "$fromDate  -  $toDate",
+                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                      ),
                       SizedBox(
                           width: MediaQuery.of(context).size.width < 800
                               ? MediaQuery.of(context).size.width * 0.06
@@ -152,61 +164,79 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                             fontSize: isDesktop ? height * .018 : height * .017,
                             width: isDesktop ? width * 0.08 : width * 0.27,
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return FilterDialogSalesByBranches(
-                                    selectedChart: selectedChart,
-                                    selectedPeriod: period,
-                                    onFilter: (selectedPeriod, fromDate, toDate,
-                                        chart) {
-                                      fromDateController.text = fromDate;
-                                      toDateController.text = toDate;
-                                      period = selectedPeriod;
-                                      selectedChart = chart;
-                                      SearchCriteria searchCriteria =
-                                          SearchCriteria(
-                                        fromDate: fromDateController.text,
-                                        toDate: toDateController.text.isEmpty
-                                            ? todayDate
-                                            : toDateController.text,
-                                        voucherStatus: -100,
-                                      );
-                                      setSearchCriteria(searchCriteria);
-                                    },
-                                  );
-                                },
-                              ).then((value) async {
-                                getSalesByBranch().then((value) {
-                                  setState(() {});
+                              if (isLoading == false) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FilterDialogSalesByBranches(
+                                      selectedChart: getChartByCode(
+                                          selectedChart, _locale),
+                                      selectedPeriod:
+                                          getPeriodByCode(period, _locale),
+                                      fromDate: fromDateController.text,
+                                      toDate: toDateController.text,
+                                      onFilter: (selectedPeriod, fromDate,
+                                          toDate, chart) {
+                                        fromDateController.text = fromDate;
+                                        toDateController.text = toDate;
+                                        period = getPeriodByName(
+                                            selectedPeriod, _locale);
+                                        selectedChart =
+                                            getChartByName(chart, _locale);
+                                        SearchCriteria searchCriteria =
+                                            SearchCriteria(
+                                          fromDate: fromDateController.text,
+                                          toDate: toDateController.text.isEmpty
+                                              ? todayDate
+                                              : toDateController.text,
+                                          voucherStatus: -100,
+                                        );
+                                        setSearchCriteria(searchCriteria);
+                                      },
+                                    );
+                                  },
+                                ).then((value) async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  getSalesByBranch().then((value) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
                                 });
-                              });
+                              }
                             },
                           )),
                     ],
                   ),
-                  selectedChart == _locale.barChart
-                      ? Center(
-                          child: BarDashboardChart(
-                            barChartData: barData,
-                            isMax: false,
-                          ),
+                  isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 150),
+                          child: CircularProgressIndicator(),
                         )
-                      : selectedChart == _locale.lineChart
+                      : selectedChart == Bar_Chart
                           ? Center(
-                              child: SizedBox(
-                                height: height * 0.4,
-                                child: LineDashboardChart(
-                                    isMax: false,
-                                    balances: listOfBalances,
-                                    periods: listOfPeriods),
+                              child: BarDashboardChart(
+                                barChartData: barData,
+                                isMax: false,
                               ),
                             )
-                          : Center(
-                              child: PieDashboardChart(
-                                dataList: pieData,
-                              ),
-                            )
+                          : selectedChart == Line_Chart
+                              ? Center(
+                                  child: SizedBox(
+                                    height: height * 0.4,
+                                    child: LineDashboardChart(
+                                        isMax: false,
+                                        balances: listOfBalances,
+                                        periods: listOfPeriods),
+                                  ),
+                                )
+                              : Center(
+                                  child: PieDashboardChart(
+                                    dataList: pieData,
+                                  ),
+                                )
                 ],
               ),
             ),
@@ -255,7 +285,10 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     }
   }
 
-  getAllCodeReports() {
+  getAllCodeReports() async {
+    setState(() {
+      isLoading = true;
+    });
     CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
         setState(() {
@@ -265,9 +298,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
             getAllUserReportSettings();
           }
 
-          print("codeReportsList Length: ${codeReportsList.length}");
+          print(
+              "isLoaaaaading codeReportsList Length: ${codeReportsList.length}");
         });
       }
+    });
+    setState(() {
+      isLoading = false;
     });
   }
 

@@ -23,6 +23,8 @@ class FilterDialogDailySales extends StatefulWidget {
   final String? selectedChart;
   final String? selectedStatus;
   final String? selectedBranchCodeF;
+  final String? fromDate;
+  final List<String>? branches;
   final Function(String fromDate, String selectedStatus, String chart,
       String selectedBranchCodeF) onFilter;
 
@@ -31,7 +33,9 @@ class FilterDialogDailySales extends StatefulWidget {
       required this.onFilter,
       this.selectedChart,
       this.selectedBranchCodeF,
-      this.selectedStatus});
+      this.selectedStatus,
+      this.fromDate,
+      this.branches});
 
   @override
   State<FilterDialogDailySales> createState() => _FilterDialogDailySalesState();
@@ -61,7 +65,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   List<String> branches = [];
   var selectedBranch = "";
   var selectedBranchCode = "";
-  BranchController branchController = BranchController();
 
   @override
   void didChangeDependencies() {
@@ -74,7 +77,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       _locale.canceled,
     ];
 
-    branches = [_locale.all];
+    branches = widget.branches ?? [_locale.all];
 
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = widget.selectedChart!;
@@ -83,16 +86,25 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
-    _fromDateController.text = currentMonth;
+    _fromDateController.text = widget.fromDate != null
+        ? DatesController().formatDateReverse(widget.fromDate!)
+        : currentMonth;
     _toDateController.text = todayDate;
+
+    selectedBranch = widget.selectedBranchCodeF == null
+        ? _locale.all
+        : widget.selectedBranchCodeF == _locale.all
+            ? widget.selectedBranchCodeF!
+            : branchesMap2[widget.selectedBranchCodeF!];
+
+    selectedBranchCode = branchesMap[selectedBranch];
+
     getAllCodeReports();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    getBranch(isStart: true);
-
     super.initState();
   }
 
@@ -297,19 +309,13 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("start search daily sales filter dialog: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        _fromDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-        _toDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
+        // _fromDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+        // _toDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
       }
     }
   }
@@ -367,24 +373,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
       if (value.statusCode == 200) {
         print("value.statusCode: ${value.statusCode}");
       }
-    });
-  }
-
-  void getBranch({bool? isStart}) async {
-    branchController.getBranch(isStart: isStart).then((value) {
-      value.forEach((k, v) {
-        if (mounted) {
-          setState(() {
-            branches.add(k);
-          });
-        }
-      });
-      setBranchesMap(_locale, value);
-      selectedBranch = widget.selectedBranchCodeF == _locale.all
-          ? widget.selectedBranchCodeF!
-          : branchesMap2[widget.selectedBranchCodeF];
-
-      selectedBranchCode = branchesMap[selectedBranch];
     });
   }
 }

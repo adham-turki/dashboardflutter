@@ -23,6 +23,10 @@ class FilterDialogSalesByCategory extends StatefulWidget {
   final String? selectedChart;
   final String? selectedPeriod;
   final String? selectedBranchCodeF;
+  final String? fromDate;
+  final String? toDate;
+  final String? selectedCategory;
+  final List<String>? branches;
   final Function(
       String selectedPeriod,
       String fromDate,
@@ -36,7 +40,11 @@ class FilterDialogSalesByCategory extends StatefulWidget {
       required this.onFilter,
       this.selectedChart,
       this.selectedBranchCodeF,
-      this.selectedPeriod});
+      this.selectedPeriod,
+      this.fromDate,
+      this.toDate,
+      this.selectedCategory,
+      this.branches});
 
   @override
   State<FilterDialogSalesByCategory> createState() =>
@@ -100,17 +108,29 @@ class _FilterDialogSalesByCategoryState
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
 
-    _toDateController.text = todayDate;
+    _toDateController.text = widget.toDate != null
+        ? DatesController().formatDateReverse(widget.toDate!)
+        : todayDate;
 
-    _fromDateController.text = currentMonth;
+    _fromDateController.text = widget.fromDate != null
+        ? DatesController().formatDateReverse(widget.fromDate!)
+        : currentMonth;
+    selectedCategories = widget.selectedCategory ?? "";
+    branches = widget.branches ?? [_locale.all];
+
+    selectedBranch = widget.selectedBranchCodeF == null
+        ? _locale.all
+        : widget.selectedBranchCodeF == _locale.all
+            ? widget.selectedBranchCodeF!
+            : branchesMap2[widget.selectedBranchCodeF!];
+
+    selectedBranchCode = branchesMap[selectedBranch];
     getAllCodeReports();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    getBranch(isStart: true);
-
     super.initState();
   }
 
@@ -383,24 +403,24 @@ class _FilterDialogSalesByCategoryState
         // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
-
+        startSearchCriteria = startSearchCriteria.replaceAll('الكل', '');
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
         // print("start search sales dashboard : ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        _fromDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-        _toDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        selectedCategories = searchCriteriaa!.byCategory! == 1
-            ? _locale.brands
-            : searchCriteriaa!.byCategory! == 2
-                ? _locale.categories("1")
-                : searchCriteriaa!.byCategory! == 3
-                    ? _locale.categories("2")
-                    : _locale.classifications;
+        // _fromDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+        // _toDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+        // selectedCategories = searchCriteriaa!.byCategory! == 1
+        //     ? _locale.brands
+        //     : searchCriteriaa!.byCategory! == 2
+        //         ? _locale.categories("1")
+        //         : searchCriteriaa!.byCategory! == 3
+        //             ? _locale.categories("2")
+        //             : _locale.classifications;
 
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
@@ -492,23 +512,5 @@ class _FilterDialogSalesByCategoryState
       _fromDateController.text = DatesController().currentYear().toString();
       _toDateController.text = DatesController().todayDate().toString();
     }
-  }
-
-  void getBranch({bool? isStart}) async {
-    branchController.getBranch(isStart: isStart).then((value) {
-      value.forEach((k, v) {
-        if (mounted) {
-          setState(() {
-            branches.add(k);
-          });
-        }
-      });
-      setBranchesMap(_locale, value);
-      selectedBranch = widget.selectedBranchCodeF == _locale.all
-          ? widget.selectedBranchCodeF!
-          : branchesMap2[widget.selectedBranchCodeF];
-
-      selectedBranchCode = branchesMap[selectedBranch];
-    });
   }
 }

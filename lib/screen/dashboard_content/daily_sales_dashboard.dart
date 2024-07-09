@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
+import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -50,13 +51,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   bool accountsActive = false;
 
   TextEditingController fromDateController = TextEditingController();
-  var period = "";
-  var statusVar = "";
+  int statusVar = 0;
 
   String todayDate = "";
 
-  var selectedStatus = "";
-  var selectedChart = "";
+  int selectedStatus = 0;
+  int selectedChart = 0;
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
   final dataMap = <String, double>{};
@@ -88,17 +88,21 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
   int counter = 0;
+  bool isLoading = false;
+  List<String> branches = [];
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
+    getBranch();
     todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
-    fromDateController.text = todayDate;
 
     if (counter == 0) {
-      selectedChart = _locale.lineChart;
-      selectedStatus = _locale.all;
-      statusVar = _locale.all;
-      selectedBranchCode = _locale.all;
+      fromDateController.text = todayDate;
+      selectedChart = Line_Chart;
+      selectedStatus = All_Status;
+      statusVar = All_Status;
+      selectedBranchCode = "";
     }
     counter++;
     super.didChangeDependencies();
@@ -114,7 +118,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void initState() {
-    print("init state");
     getAllCodeReports();
 
     getPayableAccounts(isStart: true).then((value) {
@@ -130,6 +133,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
+    String fromDate =
+        DatesController().formatDateReverse(fromDateController.text);
     return Container(
       decoration: const BoxDecoration(),
       child: Column(
@@ -155,6 +160,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         _locale.dailySales,
                         style: TextStyle(fontSize: isDesktop ? 15 : 18),
                       ),
+                      Text(
+                        _locale.localeName == "en"
+                            ? fromDateController.text
+                            : fromDate,
+                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                      ),
                       SizedBox(
                           width: MediaQuery.of(context).size.width < 800
                               ? MediaQuery.of(context).size.width * 0.06
@@ -170,62 +181,86 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                             fontSize: isDesktop ? height * .018 : height * .017,
                             width: isDesktop ? width * 0.08 : width * 0.27,
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return FilterDialogDailySales(
-                                    selectedChart: selectedChart,
-                                    selectedStatus: statusVar,
-                                    selectedBranchCodeF: selectedBranchCode,
-                                    onFilter: (
-                                      fromDate,
-                                      selectedStatus,
-                                      chart,
-                                      selectedBranchCodeF,
-                                    ) {
-                                      fromDateController.text = fromDate;
-                                      statusVar = selectedStatus;
-                                      selectedChart = chart;
+                              if (isLoading == false) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FilterDialogDailySales(
+                                      selectedChart: getChartByCode(
+                                          selectedChart, _locale),
+                                      selectedStatus: getVoucherStatusByCode(
+                                          _locale, statusVar),
+                                      selectedBranchCodeF:
+                                          selectedBranchCode == ""
+                                              ? _locale.all
+                                              : selectedBranchCode,
+                                      fromDate: fromDateController.text,
+                                      branches: branches,
+                                      onFilter: (
+                                        fromDate,
+                                        selectedStatus,
+                                        chart,
+                                        selectedBranchCodeF,
+                                      ) {
+                                        fromDateController.text = fromDate;
+                                        statusVar = getVoucherStatus(
+                                            _locale, selectedStatus);
+                                        selectedChart =
+                                            getChartByName(chart, _locale);
 
-                                      selectedBranchCode = selectedBranchCodeF;
+                                        selectedBranchCode =
+                                            selectedBranchCodeF == _locale.all
+                                                ? ""
+                                                : selectedBranchCodeF;
 
-                                      SearchCriteria searchCriteria =
-                                          SearchCriteria(
-                                        fromDate: fromDateController.text,
-                                        voucherStatus: -100,
-                                        branch: "",
-                                      );
-                                      setSearchCriteria(searchCriteria);
-                                    },
-                                  );
-                                },
-                              ).then((value) async {
-                                getDailySales().then((value) {
-                                  setState(() {});
+                                        SearchCriteria searchCriteria =
+                                            SearchCriteria(
+                                          fromDate: fromDateController.text,
+                                          voucherStatus: -100,
+                                          branch: "",
+                                        );
+                                        setSearchCriteria(searchCriteria);
+                                      },
+                                    );
+                                  },
+                                ).then((value) async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  getDailySales().then((value) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
                                 });
-                              });
+                              }
                             },
                           )),
                     ],
                   ),
-                  selectedChart == _locale.pieChart
-                      ? Center(
-                          child: PieDashboardChart(
-                            dataList: barDataDailySales,
-                          ),
+                  isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 150),
+                          child: CircularProgressIndicator(),
                         )
-                      : selectedChart == _locale.barChart
-                          ? BarDashboardChart(
-                              barChartData: barData,
-                              isMax: true,
+                      : selectedChart == Pie_Chart
+                          ? Center(
+                              child: PieDashboardChart(
+                                dataList: barDataDailySales,
+                              ),
                             )
-                          : SizedBox(
-                              height: height * 0.4,
-                              child: LineDashboardChart(
+                          : selectedChart == Bar_Chart
+                              ? BarDashboardChart(
+                                  barChartData: barData,
                                   isMax: true,
-                                  balances: listOfBalances,
-                                  periods: listOfPeriods),
-                            )
+                                )
+                              : SizedBox(
+                                  height: height * 0.4,
+                                  child: LineDashboardChart(
+                                      isMax: true,
+                                      balances: listOfBalances,
+                                      periods: listOfPeriods),
+                                )
                 ],
               ),
             ),
@@ -241,12 +276,15 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
         // Adding double quotes around keys and values to make it valid JSON
+        print(
+            "startSearchCriteria3434343434 matchGroup 1000  ${startSearchCriteria}");
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
+            print(
+                "startSearchCriteria3434343434 matchGroup 111  ${match.group(1)}");
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -271,8 +309,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     }
   }
 
-  getAllCodeReports() {
-    CodeReportsController().getAllCodeReports().then((value) {
+  getAllCodeReports() async {
+    setState(() {
+      isLoading = true;
+    });
+    await CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
         setState(() {
           codeReportsList = value;
@@ -285,6 +326,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         });
       }
     });
+    setState(() {
+      isLoading = false;
+    });
   }
 
   getAllUserReportSettings() {
@@ -294,9 +338,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         setStartSearchCriteria();
         Future.delayed(Duration.zero, () async {
           lastFromDate = fromDateController.text;
-          selectedChart = _locale.lineChart;
+          selectedChart = Line_Chart;
           lastBranchCode = selectedBranchCode;
-          lastStatus = selectedStatus;
+          lastStatus = getVoucherStatusByCode(_locale, All_Status);
           if (!dataLoaded) {
             dataLoaded = true;
             await getPayableAccountsData();
@@ -405,16 +449,16 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   }
 
   Future<void> getDailySales({bool? isStart}) async {
-    int stat = getVoucherStatus(_locale, statusVar);
+    int stat = statusVar;
     var selectedFromDate = fromDateController.text;
     final selectedStatus = statusVar;
     final selectedBranchCodeValue = selectedBranchCode;
 
     if (selectedFromDate != lastFromDate ||
-        selectedStatus != lastStatus ||
+        getVoucherStatusByCode(_locale, selectedStatus) != lastStatus ||
         selectedBranchCodeValue != lastBranchCode) {
       lastFromDate = selectedFromDate;
-      lastStatus = selectedStatus;
+      lastStatus = getVoucherStatusByCode(_locale, statusVar);
       lastBranchCode = selectedBranchCode;
 
       if (selectedFromDate.isEmpty) {
@@ -492,5 +536,18 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     final DateTime nextDay = currentDate.add(Duration(days: count));
 
     return nextDay;
+  }
+
+  void getBranch() async {
+    BranchController().getBranch().then((value) {
+      value.forEach((k, v) {
+        if (mounted) {
+          setState(() {
+            branches.add(k);
+          });
+        }
+      });
+      setBranchesMap(_locale, value);
+    });
   }
 }

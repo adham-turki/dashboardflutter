@@ -179,7 +179,7 @@ class _CustomDateState extends State<CustomDate> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
-                  color: Color.fromARGB(255, 67, 67, 67),
+                  color: const Color.fromARGB(255, 67, 67, 67),
                 ),
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
@@ -337,10 +337,10 @@ class _CustomDateState extends State<CustomDate> {
 
   Widget createDateField(MaskTextInputFormatter mask,
       TextEditingController controller, String hint, FocusNode focusNode) {
-    return Center(
+    return Padding(
+      padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 15),
       child: SizedBox(
         width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
-        height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(
             readOnly: widget.readOnly != null ? widget.readOnly! : false,
@@ -373,12 +373,10 @@ class _CustomDateState extends State<CustomDate> {
             },
             onChanged: (value) {
               setRequestNodes(hint);
-              print("ooooooooooo $value");
 
               if (dayController.text.length == 2 &&
                   monthController.text.length == 2 &&
                   yearController.text.length == 4) {
-                print("ooooooooooo 22 $value");
                 widget.dateController!.text =
                     '${yearController.text}-${monthController.text}-${dayController.text}';
                 submitValueDate(focusNode);
@@ -526,7 +524,7 @@ class _CustomDateState extends State<CustomDate> {
       },
       child: Icon(
         Icons.date_range,
-        size: MediaQuery.of(context).size.width * 0.012,
+        size: MediaQuery.of(context).size.height * 0.03,
         color: primary,
       ),
     );
@@ -542,7 +540,7 @@ class _CustomDateState extends State<CustomDate> {
     int yearNow = dateTime.year;
 
     if (yearStr.isNotEmpty && yearStr.length == 4) {
-      int minYear = widget.minYear ?? 2000;
+      int minYear = widget.minYear ?? 1900;
       int year = int.parse(yearStr);
       if (year < minYear) {
         yearController.text = yearNow.toString();

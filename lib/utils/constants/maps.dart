@@ -1,8 +1,9 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Map<String, dynamic> branchesMap = {};
 Map<String, dynamic> branchesMap2 = {};
-
 void setBranchesMap(AppLocalizations local, Map<String, dynamic> branches) {
   branchesMap.addAll({});
   branchesMap[local.all] = "";
@@ -13,7 +14,9 @@ void setBranchesMap(AppLocalizations local, Map<String, dynamic> branches) {
   });
 }
 
-Map<String, dynamic> getBranch() => branchesMap;
+// Map<String, dynamic> getBranch(AppLocalizations local) {
+// branchesMap;
+// }
 int getVoucherStatus(AppLocalizations local, String status) {
   Map<String, int> voucherStatusMap = {
     local.all: -100,
@@ -34,40 +37,84 @@ getCategoryNum(String selectedCategories, AppLocalizations locale) {
   return byCategoryMap[selectedCategories];
 }
 
-// List<String> getColumnsName(
-//     AppLocalizations locale, List<String> columns, bool sales) {
-//   Map<String, String> columnsMap = {
-//     '#': "dash",
-//     locale.branch: "branch",
-//     locale.stockCategoryLevel("1"): "stockCategories1",
-//     locale.stockCategoryLevel("2"): "stockCategories2",
-//     locale.stockCategoryLevel("3"): "stockCategories3",
-//     locale.supplier("1"): "supplier1",
-//     locale.supplier("2"): "supplier2",
-//     locale.supplier("3"): "supplier3",
-//     locale.customer: "customer",
-//     locale.stock: "stock",
-//     locale.modelNo: "modelNo",
-//     locale.qty: "quantity",
-//     locale.averagePrice: sales == true ? "avgPrice" : "averagePrice",
-//     locale.total: "total",
-//     locale.daily: "daily",
-//     locale.monthly: "monthly",
-//     locale.yearly: "yearly",
-//     locale.brand: "brand",
-//     locale.invoice: "invoice",
-//     locale.costPriceAvg: "costPriceRate",
-//     locale.totalCost: "totalCost",
-//     locale.diffBetCostAndSale: "differCostSale",
-//     locale.profitPercent: "profitRatio"
-//   };
+///
+int All_Status = -100,
+    Posted_Status = 0,
+    Draft_Status = -1,
+    Canceled_Status = 1;
 
-//   List<String> columnsName = [];
-//   for (int i = 0; i < columns.length; i++) {
-//     columnsName.add(columnsMap[columns[i]]!);
-//   }
-//   return columnsName;
-// }
+getVoucherStatusByCode(AppLocalizations local, int code) {
+  Map<int, String> voucherStatusMap = {
+    All_Status: local.all,
+    Posted_Status: local.posted,
+    Draft_Status: local.draft,
+    Canceled_Status: local.canceled
+  };
+  return voucherStatusMap[code]!;
+}
+
+int Brands_Category = 1,
+    Category1_Category = 2,
+    Category2_Category = 3,
+    Classifications_Category = 4;
+
+getCategoryByCode(int selectedCategories, AppLocalizations locale) {
+  Map<int, String> byCategoryMap = {
+    Brands_Category: locale.brands,
+    Category1_Category: locale.categories("1"),
+    Category2_Category: locale.categories("2"),
+    Classifications_Category: locale.classifications
+  };
+  return byCategoryMap[selectedCategories];
+}
+
+int Daily_Period = 1, Weekly_Period = 2, Monthly_Period = 3, Yearly_Period = 4;
+
+getPeriodByCode(int selectedPeriod, AppLocalizations locale) {
+  Map<int, String> byPeriodMap = {
+    Daily_Period: locale.daily,
+    Weekly_Period: locale.weekly,
+    Monthly_Period: locale.monthly,
+    Yearly_Period: locale.yearly
+  };
+
+  return byPeriodMap[selectedPeriod];
+}
+
+getPeriodByName(String selectedPeriod, AppLocalizations locale) {
+  Map<String, int> byPeriodMap = {
+    locale.daily: Daily_Period,
+    locale.weekly: Weekly_Period,
+    locale.monthly: Monthly_Period,
+    locale.yearly: Yearly_Period
+  };
+
+  return byPeriodMap[selectedPeriod];
+}
+
+int Line_Chart = 1, Pie_Chart = 2, Bar_Chart = 3;
+
+getChartByCode(int selectedChart, AppLocalizations locale) {
+  Map<int, String> byChartMap = {
+    Line_Chart: locale.lineChart,
+    Pie_Chart: locale.pieChart,
+    Bar_Chart: locale.barChart,
+  };
+
+  return byChartMap[selectedChart];
+}
+
+getChartByName(String selectedChart, AppLocalizations locale) {
+  print("sleeee2 $selectedChart");
+  Map<String, int> byChartMap = {
+    locale.lineChart: Line_Chart,
+    locale.pieChart: Pie_Chart,
+    locale.barChart: Bar_Chart,
+  };
+
+  return byChartMap[selectedChart];
+}
+
 List<String> getColumnsName(
     AppLocalizations locale, List<String> columns, bool sales) {
   Map<String, String> columnsMap = {

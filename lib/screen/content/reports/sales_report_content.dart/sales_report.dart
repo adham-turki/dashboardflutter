@@ -1,8 +1,8 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,16 +14,13 @@ import '../../../../model/criteria/search_criteria.dart';
 import '../../../../model/reports/reports_result.dart';
 import '../../../../model/reports/sales_report_model/sales_cost_report.dart';
 import '../../../../provider/sales_search_provider.dart';
-import '../../../../utils/constants/app_utils.dart';
 import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/constants.dart';
 import '../../../../utils/constants/maps.dart';
 import '../../../../utils/constants/responsive.dart';
 import '../../../../utils/func/dates_controller.dart';
 import 'tabs/criteria_widget.dart';
-import 'tabs/order_by_widget.dart';
 import 'tabs/setup_widget.dart';
-import '../../../../components/table_component.dart';
 
 class SalesReportScreen extends StatefulWidget {
   const SalesReportScreen({Key? key}) : super(key: key);
@@ -1000,6 +997,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   Future<PlutoInfinityScrollRowsResponse> fetch(
     PlutoInfinityScrollRowsRequest request,
   ) async {
+    print("paaaaaaaaaaaaaaaaaaaageLis ${pageLis.value}");
     if (pageLis.value == 1) {
       reportsResult = await ReportController()
           .getSalesResultMehtod(readProvider.toJson(), isStart: true);
@@ -1036,13 +1034,12 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     stateManager!.setShowLoading(false);
     isLoading.value = false;
     isLoadingData.value = false;
-    bool isLast = salesList.isEmpty ? true : false;
     count = salesList.length;
     pageLis.value = pageLis.value + 1;
     itemsNumberDisplayed.value = count;
 
     return Future.value(PlutoInfinityScrollRowsResponse(
-      isLast: isLast,
+      isLast: false,
       rows: reportsResult == null ? [] : topList,
     ));
   }

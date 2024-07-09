@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:typed_data';
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
@@ -5,28 +7,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:provider/provider.dart';
-
 import '../../../components/custom_date.dart';
-import '../../../components/search_table/date_time_component.dart';
-import '../../../components/table_component.dart';
 import '../../../components/table_component_new.dart';
-
 import '../../../controller/error_controller.dart';
 import '../../../controller/reports/total_sales_controller.dart';
-
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/reports/total_sales/total_sales_model.dart';
 import '../../../model/reports/total_sales/total_sales_result.dart';
-
 import '../../../provider/reports_provider.dart';
-import '../../../utils/constants/app_utils.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/constants.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
 import '../../../utils/func/dates_controller.dart';
-import '../../../widget/drop_down/custom_dropdown.dart';
 import '../../../widget/drop_down/drop_down_clear.dart';
 
 class TotalSalesContent extends StatefulWidget {
@@ -84,6 +78,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
+
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().oneMonthAgo()));
     fromDate.text = todayDate;
@@ -147,18 +142,18 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
         polCols[i].titleTextAlign = PlutoColumnTextAlign.center;
         polCols[i].textAlign = PlutoColumnTextAlign.center;
 
-        stateManager!.columns[i].title = polCols[i].title;
-        stateManager!.columns[i].width = polCols[i].width;
-        stateManager!.columns[i].titleTextAlign = polCols[i].titleTextAlign;
-        stateManager!.columns[i].textAlign = polCols[i].textAlign;
-        stateManager!.columns[i].titleSpan = polCols[i].titleSpan;
+        stateManager.columns[i].title = polCols[i].title;
+        stateManager.columns[i].width = polCols[i].width;
+        stateManager.columns[i].titleTextAlign = polCols[i].titleTextAlign;
+        stateManager.columns[i].textAlign = polCols[i].textAlign;
+        stateManager.columns[i].titleSpan = polCols[i].titleSpan;
       }
       // for (int i = 0; i < stateManager!!.rows.length; i++) {
       //   stateManager!!.rows[i].cells['intStatus']!.value =
       //       getStatusNameDependsLang(
       //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
       // }
-      stateManager!.notifyListeners(true);
+      stateManager.notifyListeners(true);
     }
     // reportsResult = await totalSalesController
     //     .getTotalSalesResultMehtod(criteria, isStart: true);
@@ -177,7 +172,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
   bool isDesktop = false;
   bool isMobile = false;
-
+  int listCounter = 0;
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -244,9 +239,10 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                           result = value;
                           stateManager.setShowLoading(false);
                         });
-
-                        List<PlutoRow> rowsToAdd =
-                            result.map((item) => item.toPluto()).toList();
+                        listCounter = 0;
+                        List<PlutoRow> rowsToAdd = result.map((item) {
+                          return item.toPluto(++listCounter);
+                        }).toList();
                         stateManager.appendRows(rowsToAdd);
                         pageLis.value = pageLis.value + 1;
                         reportsResult = await totalSalesController
@@ -731,7 +727,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   Future<PlutoInfinityScrollRowsResponse> fetch(
     PlutoInfinityScrollRowsRequest request,
   ) async {
-    // if (pageLis.value == 1) {
     reportsResult = await totalSalesController
         .getTotalSalesResultMehtod(criteria, isStart: true);
 
@@ -740,7 +735,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     for (int i = 0; i < columns.length; i++) {
       stateManager.columns[i].footerRenderer = columns[i].footerRenderer;
     }
-    // }
     List<PlutoRow> topList = [];
     List<TotalSalesModel> invList = [];
 
@@ -751,7 +745,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
       invList = value;
     });
     for (int i = 0; i < invList.length; i++) {
-      PlutoRow plutoRow = invList[i].toPluto();
+      PlutoRow plutoRow = invList[i].toPluto(++listCounter);
       rowList.add(plutoRow);
       topList.add(plutoRow);
     }
@@ -759,7 +753,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     stateManager.setShowLoading(false);
     isLoading.value = false;
     isLoadingData.value = false;
-    bool isLast = invList.isEmpty ? true : false;
     count = invList.length;
     pageLis.value = pageLis.value + 1;
     itemsNumberDisplayed.value = count;

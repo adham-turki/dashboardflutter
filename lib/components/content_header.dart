@@ -101,20 +101,20 @@ class _ContentHeaderState extends State<ContentHeader> {
                     : (Responsive.isDesktop(context) ? width * 0.012 : 18),
               ),
             ),
-            provider.getPage() == 0
-                ? SelectableText(
-                    maxLines: 1,
-                    "$currentMonth / $todayDate",
-                    style: TextStyle(
-                      fontSize: context
-                                  .read<ScreenContentProvider>()
-                                  .getPage() ==
-                              0
-                          ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                          : (Responsive.isDesktop(context) ? width * 0.01 : 18),
-                    ),
-                  )
-                : Container(),
+            // provider.getPage() == 0
+            //     ? SelectableText(
+            //         maxLines: 1,
+            //         "$currentMonth / $todayDate",
+            //         style: TextStyle(
+            //           fontSize: context
+            //                       .read<ScreenContentProvider>()
+            //                       .getPage() ==
+            //                   0
+            //               ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
+            //               : (Responsive.isDesktop(context) ? width * 0.01 : 18),
+            //         ),
+            //       )
+            //     : Container(),
           ],
         ),
       ],
@@ -135,17 +135,17 @@ class _ContentHeaderState extends State<ContentHeader> {
             ),
           );
         })),
-        provider.getPage() == 0
-            ? SelectableText(
-                maxLines: 1,
-                "$currentMonth / $todayDate",
-                style: TextStyle(
-                  fontSize: provider.getPage() == 0
-                      ? (Responsive.isDesktop(context) ? width * 0.01 : 13)
-                      : (Responsive.isDesktop(context) ? width * 0.01 : 15),
-                ),
-              )
-            : Container(),
+        // provider.getPage() == 0
+        //     ? SelectableText(
+        //         maxLines: 1,
+        //         "$currentMonth / $todayDate",
+        //         style: TextStyle(
+        //           fontSize: provider.getPage() == 0
+        //               ? (Responsive.isDesktop(context) ? width * 0.01 : 13)
+        //               : (Responsive.isDesktop(context) ? width * 0.01 : 15),
+        //         ),
+        //       )
+        //     : Container(),
         SelectableText(
           maxLines: 1,
           "${locale.baseCurrency}: ${locale.ils}",

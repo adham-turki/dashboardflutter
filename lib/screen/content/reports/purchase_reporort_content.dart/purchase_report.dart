@@ -948,7 +948,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
     itemsNumberDisplayed.value = count;
 
     return Future.value(PlutoInfinityScrollRowsResponse(
-      isLast: isLast,
+      isLast: false,
       rows: reportsResult == null ? [] : topList,
     ));
   }

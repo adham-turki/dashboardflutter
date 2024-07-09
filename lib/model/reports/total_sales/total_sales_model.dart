@@ -19,11 +19,10 @@ class TotalSalesModel {
   double? totalAmount;
   double? count;
   String? stockBarCode;
-  int? counter = 0;
   TotalSalesModel(this.code, this.name, this.inQnty, this.outQnty, this.netSold,
-      this.debit, this.credit, this.totalAmount, this.count);
+      this.debit, this.credit, this.totalAmount);
 
-  TotalSalesModel.fromJson(Map<String, dynamic> totalSales, int countNum) {
+  TotalSalesModel.fromJson(Map<String, dynamic> totalSales) {
     code = totalSales['code'].toString() == "null"
         ? ""
         : totalSales['code'].toString();
@@ -51,10 +50,9 @@ class TotalSalesModel {
     stockBarCode = totalSales['stockBarCode'].toString() == "null"
         ? ""
         : totalSales['stockBarCode'];
-    counter = countNum;
   }
 
-  PlutoRow toPluto() {
+  PlutoRow toPluto(int counter) {
     final Map<String, PlutoCell> totalSales = <String, PlutoCell>{};
     totalSales['code'] = PlutoCell(value: code ?? "");
     totalSales['name'] = PlutoCell(value: name ?? "");
@@ -66,7 +64,7 @@ class TotalSalesModel {
     totalSales['totalAmount'] = PlutoCell(value: totalAmount ?? 0);
     totalSales['count'] = PlutoCell(value: count ?? 0);
     totalSales['stockBarCode'] = PlutoCell(value: stockBarCode ?? "");
-    totalSales['counter'] = PlutoCell(value: counter ?? 0);
+    totalSales['counter'] = PlutoCell(value: counter);
     return PlutoRow(cells: totalSales);
   }
 

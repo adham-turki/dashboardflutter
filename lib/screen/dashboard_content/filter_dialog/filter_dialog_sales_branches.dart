@@ -20,6 +20,8 @@ import '../../../utils/func/dates_controller.dart';
 class FilterDialogSalesByBranches extends StatefulWidget {
   final String? selectedChart;
   final String? selectedPeriod;
+  final String? fromDate;
+  final String? toDate;
   final Function(
           String selectedPeriod, String fromDate, String toDate, String chart)
       onFilter;
@@ -28,7 +30,9 @@ class FilterDialogSalesByBranches extends StatefulWidget {
       {super.key,
       required this.onFilter,
       this.selectedChart,
-      this.selectedPeriod});
+      this.selectedPeriod,
+      this.fromDate,
+      this.toDate});
 
   @override
   State<FilterDialogSalesByBranches> createState() =>
@@ -86,9 +90,13 @@ class _FilterDialogSalesByBranchesState
 
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
-    _toDateController.text = todayDate;
+    _toDateController.text = widget.fromDate != null
+        ? DatesController().formatDateReverse(widget.toDate!)
+        : todayDate;
 
-    _fromDateController.text = currentMonth;
+    _fromDateController.text = widget.fromDate != null
+        ? DatesController().formatDateReverse(widget.fromDate!)
+        : currentMonth;
     getAllCodeReports();
     super.didChangeDependencies();
   }
@@ -320,10 +328,10 @@ class _FilterDialogSalesByBranchesState
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        _fromDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-        _toDateController.text =
-            DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+        // _fromDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
+        // _toDateController.text =
+        //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 

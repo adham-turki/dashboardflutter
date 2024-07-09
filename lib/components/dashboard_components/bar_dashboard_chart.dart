@@ -24,7 +24,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
   int touchedGroupIndex = -1;
   double width = 0;
   double height = 0;
-
+  bool isFilter = true;
   final ScrollController _scrollController = ScrollController();
 
   void convertBarDataToDashboardBarData() {
@@ -157,48 +157,48 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                             data.value,
                           );
                         }).toList(),
-                        barTouchData: BarTouchData(
-                          enabled: true,
-                          handleBuiltInTouches: false,
-                          touchTooltipData: BarTouchTooltipData(
-                            tooltipMargin: 0,
-                            getTooltipItem: (
-                              BarChartGroupData group,
-                              int groupIndex,
-                              BarChartRodData rod,
-                              int rodIndex,
-                            ) {
-                              return BarTooltipItem(
-                                rod.toY.toString(),
-                                TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: rod.color,
-                                  fontSize: 14,
-                                  shadows: const [
-                                    Shadow(
-                                      color: Colors.black26,
-                                      blurRadius: 12,
-                                    )
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                          touchCallback: (event, response) {
-                            if (event.isInterestedForInteractions &&
-                                response != null &&
-                                response.spot != null) {
-                              setState(() {
-                                touchedGroupIndex =
-                                    response.spot!.touchedBarGroupIndex;
-                              });
-                            } else {
-                              setState(() {
-                                touchedGroupIndex = -1;
-                              });
-                            }
-                          },
-                        ),
+                        // barTouchData: BarTouchData(
+                        //   enabled: true,
+                        //   handleBuiltInTouches: false,
+                        //   touchTooltipData: BarTouchTooltipData(
+                        //     tooltipMargin: 0,
+                        //     getTooltipItem: (
+                        //       BarChartGroupData group,
+                        //       int groupIndex,
+                        //       BarChartRodData rod,
+                        //       int rodIndex,
+                        //     ) {
+                        //       return BarTooltipItem(
+                        //         rod.toY.toString(),
+                        //         TextStyle(
+                        //           fontWeight: FontWeight.bold,
+                        //           color: rod.color,
+                        //           fontSize: 14,
+                        //           shadows: const [
+                        //             Shadow(
+                        //               color: Colors.black26,
+                        //               blurRadius: 12,
+                        //             )
+                        //           ],
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        //   touchCallback: (event, response) {
+                        //     if (event.isInterestedForInteractions &&
+                        //         response != null &&
+                        //         response.spot != null) {
+                        //       setState(() {
+                        //         touchedGroupIndex =
+                        //             response.spot!.touchedBarGroupIndex;
+                        //       });
+                        //     } else {
+                        //       setState(() {
+                        //         touchedGroupIndex = -1;
+                        //       });
+                        //     }
+                        //   },
+                        // ),
                       ),
                     ),
                   ),

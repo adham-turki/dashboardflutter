@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
+import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -76,9 +77,7 @@ class _BranchesSalesByCatDashboardState
   String todayDate1 = "";
   List<String> periods = [];
   List<String> categories = [];
-  var selectedPeriod = "";
 
-  var selectedChart = "";
   List<BarData> barData = [];
 
   List<PieChartModel> pieData = [];
@@ -88,11 +87,12 @@ class _BranchesSalesByCatDashboardState
   //List<String> status = [];
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
-  var period = "";
-  var statusVar = ""; //not required
   String todayDate = "";
   String currentYear = "";
-  var selectedCategories = "";
+  int selectedCategories = 0;
+  int selectedPeriod = 0;
+  int selectedChart = 0;
+
   var selectedBranchCode = "";
 
   double balance = 0;
@@ -105,9 +105,13 @@ class _BranchesSalesByCatDashboardState
 
   bool isDesktop = false;
   int count = 0;
+  bool isLoading = false;
+  List<String> branches = [];
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
+    getBranch();
 
     periods = [
       _locale.daily,
@@ -125,14 +129,13 @@ class _BranchesSalesByCatDashboardState
     todayDate = DatesController().formatDate(DatesController().todayDate());
     currentYear = DatesController().formatDate(DatesController().twoYearsAgo());
 
-    fromDateController.text = currentYear;
-    toDateController.text = todayDate;
-    print("counttttttt ${count}");
     if (count == 0) {
-      selectedCategories = categories[1];
-      selectedPeriod = periods[0];
-      selectedChart = _locale.barChart;
-      selectedBranchCode = _locale.all;
+      fromDateController.text = currentYear;
+      toDateController.text = todayDate;
+      selectedCategories = Category1_Category;
+      selectedPeriod = Daily_Period;
+      selectedChart = Bar_Chart;
+      selectedBranchCode = "";
     }
     count++;
     super.didChangeDependencies();
@@ -148,6 +151,7 @@ class _BranchesSalesByCatDashboardState
         percent: Random().nextDouble() * 100,
       ));
     }
+
     getCashBoxAccount(isStart: true).then((value) {
       cashboxAccounts = value;
       setState(() {});
@@ -157,7 +161,7 @@ class _BranchesSalesByCatDashboardState
   }
 
   Future<void> getBranchByCatData() async {
-    await getBranchByCat1().then((value) {
+    await getBranchByCat().then((value) {
       setState(() {});
     });
   }
@@ -167,6 +171,10 @@ class _BranchesSalesByCatDashboardState
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
+    String fromDate =
+        DatesController().formatDateReverse(fromDateController.text);
+    String toDate = DatesController().formatDateReverse(toDateController.text);
+
     return Container(
       decoration: const BoxDecoration(),
       child: Column(
@@ -193,6 +201,12 @@ class _BranchesSalesByCatDashboardState
                         _locale.branchesSalesByCategories,
                         style: TextStyle(fontSize: isDesktop ? 16 : 18),
                       ),
+                      Text(
+                        _locale.localeName == "en"
+                            ? "${fromDateController.text}  -  ${toDateController.text}"
+                            : "$fromDate  -  $toDate",
+                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                      ),
                       SizedBox(
                           width: MediaQuery.of(context).size.width < 800
                               ? MediaQuery.of(context).size.width * 0.06
@@ -208,66 +222,95 @@ class _BranchesSalesByCatDashboardState
                             fontSize: isDesktop ? height * .018 : height * .017,
                             width: isDesktop ? width * 0.13 : width * 0.25,
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return FilterDialogSalesByCategory(
-                                    selectedChart: selectedChart,
-                                    selectedBranchCodeF: selectedBranchCode,
-                                    selectedPeriod: selectedPeriod,
-                                    onFilter: (selectedPeriodF,
-                                        fromDate,
-                                        toDate,
-                                        selectedCategoriesF,
-                                        selectedBranchCodeF,
-                                        chart) {
-                                      fromDateController.text = fromDate;
-                                      toDateController.text = toDate;
-                                      selectedCategories = selectedCategoriesF;
-                                      selectedBranchCode = selectedBranchCodeF;
-                                      selectedPeriod = selectedPeriodF;
-                                      selectedChart = chart;
-                                      SearchCriteria searchCriteria =
-                                          SearchCriteria(
-                                        fromDate: fromDateController.text,
-                                        toDate: toDateController.text.isEmpty
-                                            ? todayDate
-                                            : toDateController.text,
-                                        byCategory: getCategoryNum(
-                                            selectedCategories, _locale),
-                                        branch: selectedBranchCode,
-                                      );
-                                      setSearchCriteria(searchCriteria);
-                                    },
-                                  );
-                                },
-                              ).then((value) async {
-                                getBranchByCat().then((value) {
-                                  setState(() {});
+                              print("isLoaaaaading $isLoading");
+                              if (isLoading == false) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return FilterDialogSalesByCategory(
+                                      selectedChart: getChartByCode(
+                                          selectedChart, _locale),
+                                      selectedBranchCodeF:
+                                          selectedBranchCode == ""
+                                              ? _locale.all
+                                              : selectedBranchCode,
+                                      selectedPeriod: getPeriodByCode(
+                                          selectedPeriod, _locale),
+                                      fromDate: fromDateController.text,
+                                      toDate: toDateController.text,
+                                      selectedCategory: getCategoryByCode(
+                                          selectedCategories, _locale),
+                                      branches: branches,
+                                      onFilter: (selectedPeriodF,
+                                          fromDate,
+                                          toDate,
+                                          selectedCategoriesF,
+                                          selectedBranchCodeF,
+                                          chart) {
+                                        fromDateController.text = fromDate;
+                                        toDateController.text = toDate;
+                                        selectedCategories = getCategoryNum(
+                                            selectedCategoriesF, _locale);
+                                        selectedBranchCode =
+                                            selectedBranchCodeF == _locale.all
+                                                ? ""
+                                                : selectedBranchCodeF;
+                                        selectedPeriod = getPeriodByName(
+                                            selectedPeriodF, _locale);
+                                        selectedChart =
+                                            getChartByName(chart, _locale);
+                                        SearchCriteria searchCriteria =
+                                            SearchCriteria(
+                                          fromDate: fromDateController.text,
+                                          toDate: toDateController.text.isEmpty
+                                              ? todayDate
+                                              : toDateController.text,
+                                          byCategory: getCategoryNum(
+                                              selectedCategoriesF, _locale),
+                                          branch: selectedBranchCode,
+                                        );
+                                        setSearchCriteria(searchCriteria);
+                                      },
+                                    );
+                                  },
+                                ).then((value) async {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  getBranchByCat().then((value) {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  });
                                 });
-                              });
+                              }
                             },
                           )),
                     ],
                   ),
-                  selectedChart == _locale.lineChart
-                      ? SizedBox(
-                          height: height * .3,
-                          child: LineDashboardChart(
-                              isMax: false,
-                              balances: listOfBalances,
-                              periods: listOfPeriods),
+                  isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.only(bottom: 150),
+                          child: CircularProgressIndicator(),
                         )
-                      : selectedChart == _locale.pieChart
-                          ? Center(
-                              child: PieDashboardChart(
-                                dataList: pieData,
-                              ),
+                      : selectedChart == Line_Chart
+                          ? SizedBox(
+                              height: height * .3,
+                              child: LineDashboardChart(
+                                  isMax: false,
+                                  balances: listOfBalances,
+                                  periods: listOfPeriods),
                             )
-                          : BarDashboardChart(
-                              barChartData: barData,
-                              isMax: false,
-                            )
+                          : selectedChart == Pie_Chart
+                              ? Center(
+                                  child: PieDashboardChart(
+                                    dataList: pieData,
+                                  ),
+                                )
+                              : BarDashboardChart(
+                                  barChartData: barData,
+                                  isMax: false,
+                                )
                 ],
               ),
             ),
@@ -283,48 +326,52 @@ class _BranchesSalesByCatDashboardState
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
         // Adding double quotes around keys and values to make it valid JSON
-        print("seatrhCriteria1111111111 ${startSearchCriteria}");
+        print("startSearchCriteria3434343434 ${startSearchCriteria}");
+        print(
+            "startSearchCriteria3434343434 matchGroup 0  ${startSearchCriteria}");
+        startSearchCriteria = startSearchCriteria.replaceAll('الكل', '');
 
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
+            print(
+                "startSearchCriteria3434343434 matchGroup 1 ${match.group(1)}");
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-
         // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
+        // print("start search sales dashboard : ${startSearchCriteria}");
+        print("startSearchCriteria3434343434 ${startSearchCriteria}");
+
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        print("seatchCriteria ${searchCriteriaa}");
-
         fromDateController.text = searchCriteriaa!.fromDate!;
         toDateController.text = searchCriteriaa!.toDate!;
         selectedCategories = searchCriteriaa!.byCategory! == 1
-            ? _locale.brands
+            ? Brands_Category
             : searchCriteriaa!.byCategory! == 2
-                ? _locale.categories("1")
+                ? Category1_Category
                 : searchCriteriaa!.byCategory! == 3
-                    ? _locale.categories("2")
-                    : _locale.classifications;
-
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
+                    ? Category2_Category
+                    : Classifications_Category;
       }
     }
   }
 
-  getAllCodeReports() {
-    CodeReportsController().getAllCodeReports().then((value) {
+  getAllCodeReports() async {
+    setState(() {
+      isLoading = true;
+    });
+    await CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
         setState(() {
           codeReportsList = value;
@@ -332,10 +379,11 @@ class _BranchesSalesByCatDashboardState
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
+    });
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -343,16 +391,19 @@ class _BranchesSalesByCatDashboardState
     UserReportSettingsController().getAllUserReportSettings().then((value) {
       setState(() {
         userReportSettingsList = value;
+
         setStartSearchCriteria();
-        Future.delayed(Duration.zero, () {
-          // lastFromDate = fromDateController.text;
-          // lastCategories = selectedCategories;
-          // lastBranchCode = selectedBranchCode;
-          getBranchByCatData().then((value) {
-            setState(() {});
-          });
+        print("balLengthhhh33");
+
+        print("balLengthhhh11 ${barData.length}");
+        Future.delayed(Duration.zero, () async {
+          // await getBranchByCatData();
+
+          await getBranchByCat();
+          print("balLengthhhh11 ${barData.length}");
+
+          setState(() {});
         });
-        getBranchByCat(isStart: true);
       });
     });
   }
@@ -420,10 +471,10 @@ class _BranchesSalesByCatDashboardState
     final selectedBranchCodeValue = selectedBranchCode;
 
     if (selectedFromDate != lastFromDate ||
-        selectedCategoriesValue != lastCategories ||
+        getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
         selectedBranchCodeValue != lastBranchCode) {
       lastFromDate = selectedFromDate;
-      lastCategories = selectedCategories;
+      lastCategories = getCategoryByCode(selectedCategories, _locale);
       lastBranchCode = selectedBranchCode;
 
       // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
@@ -439,8 +490,8 @@ class _BranchesSalesByCatDashboardState
         fromDate: selectedFromDate,
         toDate:
             toDateController.text.isEmpty ? todayDate : toDateController.text,
-        byCategory: getCategoryNum(selectedCategories, _locale),
-        branch: selectedBranchCode,
+        byCategory: selectedCategories,
+        branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
       );
       setSearchCriteria(searchCriteria);
       pieData = [];
@@ -493,67 +544,81 @@ class _BranchesSalesByCatDashboardState
     }
   }
 
-  Future getBranchByCat1({bool? isStart}) async {
-    listOfBalances = [];
-    pieData = [];
-    barData = [];
-    dataMap.clear();
-    int cat = getCategoryNum(selectedCategories, _locale);
-    if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
-      if (fromDateController.text.isEmpty) {
-        fromDateController.text = todayDate;
-      }
-      if (toDateController.text.isEmpty) {
-        toDateController.text = todayDate;
-      }
-    }
+  // Future getBranchByCat1({bool? isStart}) async {
+  //   listOfBalances = [];
+  //   pieData = [];
+  //   barData = [];
+  //   dataMap.clear();
+  //   int cat = getCategoryNum(selectedCategories, _locale);
+  //   if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
+  //     if (fromDateController.text.isEmpty) {
+  //       fromDateController.text = todayDate;
+  //     }
+  //     if (toDateController.text.isEmpty) {
+  //       toDateController.text = todayDate;
+  //     }
+  //   }
 
-    SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: fromDateController.text.isEmpty
-            ? todayDate
-            : fromDateController.text,
-        toDate:
-            toDateController.text.isEmpty ? todayDate : toDateController.text,
-        byCategory: cat,
-        branch: selectedBranchCode);
-    pieData = [];
-    barData = [];
-    listOfBalances = [];
-    listOfPeriods = [];
+  //   SearchCriteria searchCriteria = SearchCriteria(
+  //       fromDate: fromDateController.text.isEmpty
+  //           ? todayDate
+  //           : fromDateController.text,
+  //       toDate:
+  //           toDateController.text.isEmpty ? todayDate : toDateController.text,
+  //       byCategory: cat,
+  //       branch: selectedBranchCode);
+  //   pieData = [];
+  //   barData = [];
+  //   listOfBalances = [];
+  //   listOfPeriods = [];
 
-    await salesCategoryController
-        .getSalesByCategory(searchCriteria, isStart: isStart)
-        .then((value) {
-      for (var element in value) {
-        double bal = element.creditAmt! - element.debitAmt!;
+  //   await salesCategoryController
+  //       .getSalesByCategory(searchCriteria, isStart: isStart)
+  //       .then((value) {
+  //     for (var element in value) {
+  //       double bal = element.creditAmt! - element.debitAmt!;
 
-        if (bal != 0.0) {
-          temp = true;
-        } else if (bal == 0.0) {
-          temp = false;
+  //       if (bal != 0.0) {
+  //         temp = true;
+  //       } else if (bal == 0.0) {
+  //         temp = false;
+  //       }
+  //       listOfBalances.add(bal);
+  //       listOfPeriods.add(element.categoryName!);
+  //       if (temp) {
+  //         dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
+
+  //         pieData.add(PieChartModel(
+  //             title: element.categoryName! == ""
+  //                 ? _locale.general
+  //                 : element.categoryName!,
+  //             value: formatDoubleToTwoDecimalPlaces(bal),
+  //             color: getRandomColor(colorNewList))); // Set random color
+  //       }
+
+  //       barData.add(
+  //         BarData(
+  //           name: element.categoryName! == ""
+  //               ? _locale.general
+  //               : element.categoryName!,
+  //           percent: bal,
+  //         ),
+  //       );
+  //     }
+  //     print("balLengthhhh ${barData.length}");
+  //   });
+  // }
+
+  void getBranch() async {
+    BranchController().getBranch().then((value) {
+      value.forEach((k, v) {
+        if (mounted) {
+          setState(() {
+            branches.add(k);
+          });
         }
-        listOfBalances.add(bal);
-        listOfPeriods.add(element.categoryName!);
-        if (temp) {
-          dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
-
-          pieData.add(PieChartModel(
-              title: element.categoryName! == ""
-                  ? _locale.general
-                  : element.categoryName!,
-              value: formatDoubleToTwoDecimalPlaces(bal),
-              color: getRandomColor(colorNewList))); // Set random color
-        }
-
-        barData.add(
-          BarData(
-            name: element.categoryName! == ""
-                ? _locale.general
-                : element.categoryName!,
-            percent: bal,
-          ),
-        );
-      }
+      });
+      setBranchesMap(_locale, value);
     });
   }
 }

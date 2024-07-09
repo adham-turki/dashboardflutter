@@ -14,16 +14,13 @@ class TotalSalesController {
       {bool? isStart}) async {
     var api = getTotalSales;
     List<TotalSalesModel> totalSalesList = [];
-    int count = 0;
     await ApiService()
         .postRequest(api, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        count = ((searchCriteria.page! - 1) * 10) + 1;
         for (var totalSales in jsonData) {
-          totalSalesList.add(TotalSalesModel.fromJson(totalSales, count));
-          count++;
+          totalSalesList.add(TotalSalesModel.fromJson(totalSales));
         }
       }
     });
