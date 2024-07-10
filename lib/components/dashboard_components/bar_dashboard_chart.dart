@@ -26,6 +26,8 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
   double height = 0;
   bool isFilter = true;
   final ScrollController _scrollController = ScrollController();
+  bool isLoading = false;
+  Widget buildWidget = const Row();
 
   void convertBarDataToDashboardBarData() {
     dataList = [];
@@ -56,13 +58,23 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    getBuildWidget();
+    super.didChangeDependencies();
+  }
+
+  getBuildWidget() {
+    setState(() {
+      isLoading = true;
+    });
     convertBarDataToDashboardBarData();
+    print("isLoading $isLoading dataListLength ${dataList.length}");
+
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     bool isMobile = Responsive.isMobile(context);
 
-    return Directionality(
+    buildWidget = Directionality(
       textDirection: TextDirection.ltr,
       child: Scrollbar(
         controller: _scrollController,
@@ -109,8 +121,6 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                               showTitles: true,
                               reservedSize: 100,
                               getTitlesWidget: (value, meta) {
-                                print("vaaaaaaaaaaaaaaaaaaaalue2 ${value}");
-
                                 return Text(
                                   value.toInt().toString(),
                                   textAlign: TextAlign.left,
@@ -124,7 +134,6 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                               reservedSize: 32,
                               interval: 1,
                               getTitlesWidget: (value, meta) {
-                                print("vaaaaaaaaaaaaaaaaaaaalue1 ${value}");
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
                                   child: Text(
@@ -147,58 +156,14 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                           ),
                         ),
                         barGroups: dataList.asMap().entries.map((e) {
-                          print("datalistLength ${dataList.length}");
                           final index = e.key;
                           final data = e.value;
-                          print("vaaaaaaaaaaaaaaaaaaaalue3 $index");
                           return generateBarGroup(
                             index,
                             data.color,
                             data.value,
                           );
                         }).toList(),
-                        // barTouchData: BarTouchData(
-                        //   enabled: true,
-                        //   handleBuiltInTouches: false,
-                        //   touchTooltipData: BarTouchTooltipData(
-                        //     tooltipMargin: 0,
-                        //     getTooltipItem: (
-                        //       BarChartGroupData group,
-                        //       int groupIndex,
-                        //       BarChartRodData rod,
-                        //       int rodIndex,
-                        //     ) {
-                        //       return BarTooltipItem(
-                        //         rod.toY.toString(),
-                        //         TextStyle(
-                        //           fontWeight: FontWeight.bold,
-                        //           color: rod.color,
-                        //           fontSize: 14,
-                        //           shadows: const [
-                        //             Shadow(
-                        //               color: Colors.black26,
-                        //               blurRadius: 12,
-                        //             )
-                        //           ],
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        //   touchCallback: (event, response) {
-                        //     if (event.isInterestedForInteractions &&
-                        //         response != null &&
-                        //         response.spot != null) {
-                        //       setState(() {
-                        //         touchedGroupIndex =
-                        //             response.spot!.touchedBarGroupIndex;
-                        //       });
-                        //     } else {
-                        //       setState(() {
-                        //         touchedGroupIndex = -1;
-                        //       });
-                        //     }
-                        //   },
-                        // ),
                       ),
                     ),
                   ),
@@ -209,6 +174,18 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
         ),
       ),
     );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : buildWidget;
   }
 
   Color getRandomColor() {

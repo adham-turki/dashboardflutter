@@ -105,7 +105,7 @@ class _BranchesSalesByCatDashboardState
 
   bool isDesktop = false;
   int count = 0;
-  bool isLoading = false;
+  bool isLoading = true;
   List<String> branches = [];
 
   @override
@@ -368,9 +368,6 @@ class _BranchesSalesByCatDashboardState
   }
 
   getAllCodeReports() async {
-    setState(() {
-      isLoading = true;
-    });
     await CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
         setState(() {
@@ -378,32 +375,28 @@ class _BranchesSalesByCatDashboardState
           setPageName();
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
+          } else {
+            setState(() {
+              isLoading = false;
+            });
           }
         });
       }
     });
-    setState(() {
-      isLoading = false;
-    });
   }
 
   getAllUserReportSettings() {
-    UserReportSettingsController().getAllUserReportSettings().then((value) {
+    UserReportSettingsController()
+        .getAllUserReportSettings()
+        .then((value) async {
+      userReportSettingsList = value;
+
+      setStartSearchCriteria();
+
+      await getBranchByCat();
+
       setState(() {
-        userReportSettingsList = value;
-
-        setStartSearchCriteria();
-        print("balLengthhhh33");
-
-        print("balLengthhhh11 ${barData.length}");
-        Future.delayed(Duration.zero, () async {
-          // await getBranchByCatData();
-
-          await getBranchByCat();
-          print("balLengthhhh11 ${barData.length}");
-
-          setState(() {});
-        });
+        isLoading = false;
       });
     });
   }

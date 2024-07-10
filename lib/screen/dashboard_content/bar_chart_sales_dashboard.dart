@@ -296,36 +296,33 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           setPageName();
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
+          } else {
+            setState(() {
+              isLoading = false;
+            });
           }
-
-          print(
-              "isLoaaaaading codeReportsList Length: ${codeReportsList.length}");
         });
       }
-    });
-    setState(() {
-      isLoading = false;
     });
   }
 
   getAllUserReportSettings() {
-    UserReportSettingsController().getAllUserReportSettings().then((value) {
-      setState(() {
-        userReportSettingsList = value;
-        setStartSearchCriteria();
-        Future.delayed(Duration.zero, () {
-          // lastFromDate = fromDateController.text;
-          // lastToDate = toDateController.text;
-          // selectedChart = _locale.lineChart;
-
-          if (!dataLoaded) {
-            dataLoaded = true;
-            getSalesData().then((value) {
-              setState(() {});
-            });
-          }
+    UserReportSettingsController()
+        .getAllUserReportSettings()
+        .then((value) async {
+      userReportSettingsList = value;
+      setStartSearchCriteria();
+      if (!dataLoaded) {
+        dataLoaded = true;
+        await getSalesData();
+        setState(() {
+          isLoading = false;
         });
-      });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
   }
 

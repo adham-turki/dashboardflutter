@@ -37,6 +37,15 @@ class _PieChartComponentState extends State<PieChartComponent> {
 
   Color borderColor = Colors.white;
   bool isMobile = false;
+  bool isLoading = false;
+  Widget buildWidget = const Row();
+
+  @override
+  void didChangeDependencies() {
+    // getBuildWidget();
+    super.didChangeDependencies();
+  }
+
   @override
   void initState() {
     setAttributes();
@@ -44,15 +53,14 @@ class _PieChartComponentState extends State<PieChartComponent> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  getBuildWidget() {
     List<PieChartModel> dataList = widget.dataList;
     bool isEmpty = dataList.isEmpty ? true : false;
-    isMobile = Responsive.isMobile(context);
-    radiusNormal = isMobile ? 65 : 130;
-    radiusHover = isMobile ? 75 : 140;
+    setState(() {
+      isLoading = true;
+    });
 
-    return Column(
+    buildWidget = Column(
       children: [
         SizedBox(
           width: width,
@@ -97,6 +105,22 @@ class _PieChartComponentState extends State<PieChartComponent> {
         ),
       ],
     );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    isMobile = Responsive.isMobile(context);
+    radiusNormal = isMobile ? 65 : 130;
+    radiusHover = isMobile ? 75 : 140;
+    getBuildWidget();
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : buildWidget;
   }
 
   List<PieChartSectionData> showList(List<PieChartModel> dataList) {

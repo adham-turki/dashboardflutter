@@ -434,25 +434,19 @@ class _FilterDialogSalesByCategoryState
   getAllCodeReports() {
     CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
-        setState(() {
-          codeReportsList = value;
-          setPageName();
-          if (currentPageName.isNotEmpty) {
-            getAllUserReportSettings();
-          }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
-        });
+        codeReportsList = value;
+        setPageName();
+        if (currentPageName.isNotEmpty) {
+          getAllUserReportSettings();
+        }
       }
     });
   }
 
   getAllUserReportSettings() {
     UserReportSettingsController().getAllUserReportSettings().then((value) {
-      setState(() {
-        userReportSettingsList = value;
-        setStartSearchCriteria();
-      });
+      userReportSettingsList = value;
+      setStartSearchCriteria();
     });
   }
 
@@ -460,11 +454,8 @@ class _FilterDialogSalesByCategoryState
     for (var i = 0; i < codeReportsList.length; i++) {
       if (codeReportsList[i].txtReportnamee ==
           ReportConstants.branchesSalesByCategories) {
-        setState(() {
-          currentPageName = codeReportsList[i].txtReportnamee;
-          currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
-        });
+        currentPageName = codeReportsList[i].txtReportnamee;
+        currentPageCode = codeReportsList[i].txtReportcode;
       }
     }
   }

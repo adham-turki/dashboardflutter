@@ -88,7 +88,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
   int counter = 0;
-  bool isLoading = false;
+  bool isLoading = true;
   List<String> branches = [];
 
   @override
@@ -109,9 +109,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   }
 
   Future<void> getPayableAccountsData() async {
-    await getDailySales1().then((value) {
-      setState(() {});
-    });
+    await getDailySales1().then((value) {});
   }
 
   bool dataLoaded = false;
@@ -122,7 +120,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
-      setState(() {});
     });
 
     super.initState();
@@ -276,15 +273,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
         // Adding double quotes around keys and values to make it valid JSON
-        print(
-            "startSearchCriteria3434343434 matchGroup 1000  ${startSearchCriteria}");
+
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(
-                "startSearchCriteria3434343434 matchGroup 111  ${match.group(1)}");
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -297,14 +291,10 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("start search daily sales: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         fromDateController.text = searchCriteriaa!.fromDate!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -315,82 +305,61 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     });
     await CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
-        setState(() {
-          codeReportsList = value;
-          setPageName();
-          if (currentPageName.isNotEmpty) {
-            getAllUserReportSettings();
-          }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
-        });
+        codeReportsList = value;
+        setPageName();
+        if (currentPageName.isNotEmpty) {
+          getAllUserReportSettings();
+        } else {
+          setState(() {
+            isLoading = false;
+          });
+        }
       }
-    });
-    setState(() {
-      isLoading = false;
     });
   }
 
-  getAllUserReportSettings() {
-    UserReportSettingsController().getAllUserReportSettings().then((value) {
-      setState(() {
-        userReportSettingsList = value;
-        setStartSearchCriteria();
-        Future.delayed(Duration.zero, () async {
-          lastFromDate = fromDateController.text;
-          selectedChart = Line_Chart;
-          lastBranchCode = selectedBranchCode;
-          lastStatus = getVoucherStatusByCode(_locale, All_Status);
-          if (!dataLoaded) {
-            dataLoaded = true;
-            await getPayableAccountsData();
-            setState(() {});
-          }
+  getAllUserReportSettings() async {
+    UserReportSettingsController()
+        .getAllUserReportSettings()
+        .then((value) async {
+      userReportSettingsList = value;
+      setStartSearchCriteria();
+      lastFromDate = fromDateController.text;
+      selectedChart = Line_Chart;
+      lastBranchCode = selectedBranchCode;
+      lastStatus = getVoucherStatusByCode(_locale, All_Status);
+      if (!dataLoaded) {
+        dataLoaded = true;
+        await getPayableAccountsData();
+        setState(() {
+          isLoading = false;
         });
-      });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+      }
     });
   }
 
   setPageName() {
     for (var i = 0; i < codeReportsList.length; i++) {
       if (codeReportsList[i].txtReportnamee == ReportConstants.dailySales) {
-        setState(() {
-          currentPageName = codeReportsList[i].txtReportnamee;
-          currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
-        });
+        currentPageName = codeReportsList[i].txtReportnamee;
+        currentPageCode = codeReportsList[i].txtReportcode;
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
-
     UserReportSettingsController()
-        .editUserReportSettings(userReportSettingsModel)
-        .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
-    });
+        .editUserReportSettings(userReportSettingsModel);
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {
@@ -446,6 +415,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         );
       }
     });
+
+    print("BBBBBBBBBbbarLength ${barData.length}");
   }
 
   Future<void> getDailySales({bool? isStart}) async {
@@ -542,9 +513,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     BranchController().getBranch().then((value) {
       value.forEach((k, v) {
         if (mounted) {
-          setState(() {
-            branches.add(k);
-          });
+          branches.add(k);
         }
       });
       setBranchesMap(_locale, value);

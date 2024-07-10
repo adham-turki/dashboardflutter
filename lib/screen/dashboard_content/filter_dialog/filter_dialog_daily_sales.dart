@@ -323,43 +323,32 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   getAllCodeReports() {
     CodeReportsController().getAllCodeReports().then((value) {
       if (value.isNotEmpty) {
-        setState(() {
-          codeReportsList = value;
-          setPageName();
-          if (currentPageName.isNotEmpty) {
-            getAllUserReportSettings();
-          }
-        });
+        codeReportsList = value;
+        setPageName();
+        if (currentPageName.isNotEmpty) {
+          getAllUserReportSettings();
+        }
       }
     });
   }
 
   getAllUserReportSettings() {
     UserReportSettingsController().getAllUserReportSettings().then((value) {
-      setState(() {
-        userReportSettingsList = value;
-        setStartSearchCriteria();
-      });
+      userReportSettingsList = value;
+      setStartSearchCriteria();
     });
   }
 
   setPageName() {
     for (var i = 0; i < codeReportsList.length; i++) {
       if (codeReportsList[i].txtReportnamee == ReportConstants.dailySales) {
-        setState(() {
-          currentPageName = codeReportsList[i].txtReportnamee;
-          currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
-        });
+        currentPageName = codeReportsList[i].txtReportnamee;
+        currentPageCode = codeReportsList[i].txtReportcode;
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
@@ -368,11 +357,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         bolAutosave: 1);
 
     UserReportSettingsController()
-        .editUserReportSettings(userReportSettingsModel)
-        .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
-    });
+        .editUserReportSettings(userReportSettingsModel);
   }
 }

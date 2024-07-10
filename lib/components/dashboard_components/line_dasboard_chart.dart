@@ -22,7 +22,8 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   List<double> balances = [];
   List<String> periods = [];
   bool isShowingMainData = false;
-
+  bool isLoading = false;
+  Widget buildWidget = const Row();
   LineChartData get sampleData2 => LineChartData(
       lineTouchData: lineTouchData2,
       gridData: gridData,
@@ -128,6 +129,48 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   double width = 0;
   double height = 0;
   final ScrollController _scrollController = ScrollController();
+  @override
+  void didChangeDependencies() {
+    // getBuildWidget();
+    super.didChangeDependencies();
+  }
+
+  getBuildWidget() {
+    setState(() {
+      isLoading = true;
+    });
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    balances = widget.balances;
+    periods = widget.periods;
+    bool isMobile = Responsive.isMobile(context);
+    buildWidget = Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scrollbar(
+          controller: _scrollController,
+          thumbVisibility: true,
+          thickness: 8,
+          trackVisibility: true,
+          radius: const Radius.circular(4),
+          child: Padding(
+            padding:
+                const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
+            child: SizedBox(
+                width: isMobile
+                    ? width * 15
+                    : (widget.isMax && periods.length < 6) || periods.length < 6
+                        ? width * .6
+                        : width * (periods.length / 15),
+                child: LineChart(
+                  sampleData2,
+                  // duration: const Duration(milliseconds: 250),
+                )),
+          )),
+    );
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
