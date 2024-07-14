@@ -42,7 +42,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-
+  String firstDayCurrentMonth = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().currentMonth()));
   final storage = const FlutterSecureStorage();
 
   SearchCriteria criteria = SearchCriteria();
@@ -53,7 +54,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   @override
   void initState() {
-    fromDate.text = todayDate;
+    fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
 
     criteria.fromDate = DatesController().formatDate(fromDate.text);

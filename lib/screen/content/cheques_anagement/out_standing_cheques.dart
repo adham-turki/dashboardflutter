@@ -44,10 +44,12 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
   String hintValue = '0';
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-  String netMonth = DatesController().formatDateReverse(DatesController()
-      .formatDate(DateTime(DatesController().today.year,
-              DatesController().today.month + 1, DatesController().today.day)
-          .toString()));
+  String firstDayCurrentMonth = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().currentMonth()));
+  // String netMonth = DatesController().formatDateReverse(DatesController()
+  //     .formatDate(DateTime(DatesController().today.year,
+  //             DatesController().today.month + 1, DatesController().today.day)
+  //         .toString()));
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
@@ -80,7 +82,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
     selectedStatus = status[0];
     selectedPeriod = periods[0];
-    fromDate.text = todayDate;
+    fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
     criteria.fromDate = DatesController().formatDate(fromDate.text);
     criteria.toDate = DatesController().formatDate(toDate.text);
@@ -89,7 +91,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
     reportsResult =
         await controller.getChequeResultMethod(criteria, isStart: true);
-    print("helloRes ${reportsResult}");
     super.didChangeDependencies();
   }
 

@@ -46,10 +46,10 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
 
   var selectedPeriod = "";
   String hintValue = '0';
-  String currentMonth = "";
   String todayDate = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().todayDate()));
-
+  String firstDayCurrentMonth = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().currentMonth()));
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
@@ -79,9 +79,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
 
-    currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().oneMonthAgo()));
-    fromDate.text = todayDate;
+    fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
     super.initState();
   }
