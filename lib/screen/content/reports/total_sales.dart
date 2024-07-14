@@ -340,7 +340,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
             // width: isDesktop ? width * 0.7 : width * 0.9,
-            height: height * 0.4,
+            height: height * 0.7,
             child: TableComponentNew(
               columnHeight: 50,
               // key: UniqueKey(),

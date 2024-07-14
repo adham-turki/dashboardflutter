@@ -83,9 +83,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         DatesController().formatDate(DatesController().twoYearsAgo());
 
     if (count == 0) {
-      fromDateController.text = currentMonth;
-      toDateController.text = todayDate;
-      toDateController.text = todayDate;
+      fromDateController.text = "";
+      toDateController.text = "";
 
       selectedChart = Pie_Chart;
       period = Daily_Period;
@@ -114,9 +113,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
 
-    String fromDate =
-        DatesController().formatDateReverse(fromDateController.text);
-    String toDate = DatesController().formatDateReverse(toDateController.text);
+    String fromDate = fromDateController.text.isEmpty
+        ? ""
+        : DatesController().formatDateReverse(fromDateController.text);
+    String toDate = toDateController.text.isEmpty
+        ? ""
+        : DatesController().formatDateReverse(toDateController.text);
 
     return Container(
       decoration: const BoxDecoration(),
@@ -274,8 +276,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        fromDateController.text = searchCriteriaa!.fromDate!;
-        toDateController.text = searchCriteriaa!.toDate!;
+        fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
+            ? currentMonth
+            : searchCriteriaa!.fromDate!;
+        toDateController.text = searchCriteriaa!.toDate!.isEmpty
+            ? todayDate
+            : searchCriteriaa!.toDate!;
         // selectedBranchCode = searchCriteriaa!.branch!;
         // selectedBranchCode = searchCriteriaa!.byCategory!;
 

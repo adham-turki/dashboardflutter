@@ -130,8 +130,8 @@ class _BranchesSalesByCatDashboardState
     currentYear = DatesController().formatDate(DatesController().twoYearsAgo());
 
     if (count == 0) {
-      fromDateController.text = currentYear;
-      toDateController.text = todayDate;
+      fromDateController.text = "";
+      toDateController.text = "";
       selectedCategories = Category1_Category;
       selectedPeriod = Daily_Period;
       selectedChart = Bar_Chart;
@@ -171,9 +171,12 @@ class _BranchesSalesByCatDashboardState
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    String fromDate =
-        DatesController().formatDateReverse(fromDateController.text);
-    String toDate = DatesController().formatDateReverse(toDateController.text);
+    String fromDate = fromDateController.text.isEmpty
+        ? ""
+        : DatesController().formatDateReverse(fromDateController.text);
+    String toDate = toDateController.text.isEmpty
+        ? ""
+        : DatesController().formatDateReverse(toDateController.text);
 
     return Container(
       decoration: const BoxDecoration(),
@@ -354,8 +357,12 @@ class _BranchesSalesByCatDashboardState
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        fromDateController.text = searchCriteriaa!.fromDate!;
-        toDateController.text = searchCriteriaa!.toDate!;
+        fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
+            ? currentYear
+            : searchCriteriaa!.fromDate!;
+        toDateController.text = searchCriteriaa!.toDate!.isEmpty
+            ? todayDate
+            : searchCriteriaa!.toDate!;
         selectedCategories = searchCriteriaa!.byCategory! == 1
             ? Brands_Category
             : searchCriteriaa!.byCategory! == 2

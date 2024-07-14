@@ -36,8 +36,8 @@ class SearchCriteria {
 
   factory SearchCriteria.fromJson(Map<String, dynamic> json) {
     return SearchCriteria(
-      fromDate: json['fromDate'],
-      toDate: json['toDate'],
+      fromDate: json['fromDate'].toString() == "null" ? "" : json['fromDate'],
+      toDate: json['toDate'].toString() == "null" ? "" : json['toDate'],
       voucherStatus: json['voucherStatus'],
       rownum: json['rownum'],
       byCategory: json['byCategory'],

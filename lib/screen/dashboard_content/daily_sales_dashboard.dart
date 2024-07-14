@@ -98,7 +98,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     todayDate = DatesController().formatDate(DatesController().twoYearsAgo());
 
     if (counter == 0) {
-      fromDateController.text = todayDate;
+      fromDateController.text = "";
       selectedChart = Line_Chart;
       selectedStatus = All_Status;
       statusVar = All_Status;
@@ -130,8 +130,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    String fromDate =
-        DatesController().formatDateReverse(fromDateController.text);
+    String fromDate = fromDateController.text.isEmpty
+        ? ""
+        : DatesController().formatDateReverse(fromDateController.text);
     return Container(
       decoration: const BoxDecoration(),
       child: Column(
@@ -294,7 +295,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        fromDateController.text = searchCriteriaa!.fromDate!;
+        fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
+            ? todayDate
+            : searchCriteriaa!.fromDate!;
       }
     }
   }
