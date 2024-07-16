@@ -73,6 +73,8 @@ class _ExpensesContentState extends State<ExpensesContent> {
   final usedColors = <Color>[];
   @override
   void initState() {
+    getAllCodeReports();
+
     getExpensesAccounts(isStart: true).then((value) {
       expensesAccounts = value;
       setState(() {});
@@ -113,7 +115,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
     selectedStatus = status[0];
     selectedPeriod = periods[0];
     // getExpenses(isStart: true);
-    getAllCodeReports();
     super.didChangeDependencies();
   }
 
@@ -385,6 +386,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
               child: CustomDate(
                 dateController: _fromDateController,
                 label: _locale.fromDate,
+                lastDate: DateTime.now(),
                 minYear: 2000,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -441,6 +443,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {

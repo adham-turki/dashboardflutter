@@ -226,6 +226,7 @@ class _FilterDialogSalesByCategoryState
                         CustomDate(
                           dateController: _fromDateController,
                           label: _locale.fromDate,
+                          lastDate: DateTime.now(),
                           minYear: 2000,
                           onValue: (isValid, value) {
                             if (isValid) {
@@ -244,6 +245,7 @@ class _FilterDialogSalesByCategoryState
                         CustomDate(
                           dateController: _toDateController,
                           label: _locale.toDate,
+                          lastDate: DateTime.now(),
                           minYear: 2000,
                           onValue: (isValid, value) {
                             if (isValid) {
@@ -280,6 +282,7 @@ class _FilterDialogSalesByCategoryState
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,
+                            lastDate: DateTime.now(),
                             minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {
@@ -299,6 +302,7 @@ class _FilterDialogSalesByCategoryState
                           child: CustomDate(
                             dateController: _toDateController,
                             label: _locale.toDate,
+                            lastDate: DateTime.now(),
                             minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {

@@ -96,6 +96,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
       cashboxAccounts = value;
       setState(() {});
     });
+    getAllCodeReports();
 
     super.initState();
   }
@@ -128,7 +129,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     selectedChart = charts[0];
     selectedStatus = status[0];
     getCashFlows(isStart: true);
-    // getAllCodeReports();
     super.didChangeDependencies();
   }
 
@@ -421,6 +421,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 CustomDate(
                   dateController: _fromDateController,
                   label: _locale.fromDate,
+                  lastDate: DateTime.now(),
                   minYear: 2000,
                   onValue: (isValid, value) {
                     if (isValid) {
@@ -440,7 +441,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 ),
                 CustomDate(
                   dateController: _toDateController,
-                  label: _locale.toDate,
+                  label: _locale.toDate, lastDate: DateTime.now(),
+
                   // minYear: 2000,
                   onValue: (isValid, value) {
                     if (isValid) {
@@ -510,6 +512,7 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -529,7 +532,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _toDateController,
-            label: _locale.toDate,
+            label: _locale.toDate, lastDate: DateTime.now(),
+
             // minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -581,7 +585,9 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
     String endDate = DatesController().formatDate(_toDateController.text);
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate, toDate: endDate, voucherStatus: status);
-    // setSearchCriteria(searchCriteria);
+    if (isStart != true) {
+      setSearchCriteria(searchCriteria);
+    }
     cashFlowController.getChartCash(searchCriteria).then((value) {
       setState(() {
         balance = value[0].value! - value[1].value!;

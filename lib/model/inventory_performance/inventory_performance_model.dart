@@ -29,8 +29,10 @@ class InventoryPerformanceModel {
         : (double.parse(inventoryPerformance['outQnty'].toString()));
   }
 
-  PlutoRow toPluto() {
+  PlutoRow toPluto(int counter) {
     final Map<String, PlutoCell> inventoryPerformance = <String, PlutoCell>{};
+    inventoryPerformance['counter'] = PlutoCell(value: counter);
+
     inventoryPerformance['stkCode'] = PlutoCell(value: code ?? "");
     inventoryPerformance['nameE'] = PlutoCell(value: name ?? "");
 
@@ -46,6 +48,13 @@ class InventoryPerformanceModel {
     // double width *0.15 = totalWidth / numberOfColumns;
     bool isDesktop = Responsive.isDesktop(context);
     List<PlutoColumn> list = [
+      PlutoColumn(
+        title: "#",
+        field: "counter",
+        type: PlutoColumnType.text(),
+        width: isDesktop ? width * 0.06 : width * 0.3,
+        backgroundColor: colColor,
+      ),
       PlutoColumn(
         title: localizations.code,
         field: "stkCode",

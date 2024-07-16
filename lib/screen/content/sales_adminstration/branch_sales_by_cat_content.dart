@@ -119,12 +119,13 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     selectedPeriod = periods[0];
     selectedCategories = categories[1];
     // getBranchByCat(isStart: true);
-    getAllCodeReports();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
+    getAllCodeReports();
+
     getBranch(isStart: true);
     // _fromDateController.addListener(() {});
     // _toDateController.addListener(() {});
@@ -412,6 +413,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 CustomDate(
                   dateController: _fromDateController,
                   label: _locale.fromDate,
+                  lastDate: DateTime.now(),
                   minYear: 2000,
                   onValue: (isValid, value) {
                     if (isValid) {
@@ -432,7 +434,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 CustomDate(
                   dateController: _toDateController,
                   label: _locale.toDate,
-                  // minYear: 2000,
+                  lastDate: DateTime.now(),
                   onValue: (isValid, value) {
                     if (isValid) {
                       setState(() {
@@ -514,6 +516,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -534,7 +537,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
           child: CustomDate(
             dateController: _toDateController,
             label: _locale.toDate,
-            // minYear: 2000,
+            lastDate: DateTime.now(),
             onValue: (isValid, value) {
               if (isValid) {
                 setState(() {

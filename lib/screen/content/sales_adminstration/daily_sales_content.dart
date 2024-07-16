@@ -99,13 +99,12 @@ class _DailySalesContentState extends State<DailySalesContent> {
     selectedStatus = status[0];
     selectedChart = charts[0];
     getDailySales(isStart: true);
-    // getAllCodeReports();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    // getExpensesAccounts();
+    getAllCodeReports();
     for (int i = 0; i < 100; i++) {
       barDataTest.add(BarChartData(
         'Bar $i',
@@ -388,6 +387,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
             CustomDate(
               dateController: _fromDateController,
               label: _locale.fromDate,
+              lastDate: DateTime.now(),
               minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -442,6 +442,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -485,7 +486,9 @@ class _DailySalesContentState extends State<DailySalesContent> {
     String startDate = DatesController().formatDate(_fromDateController.text);
     SearchCriteria searchCriteria =
         SearchCriteria(fromDate: startDate, voucherStatus: status);
-    setSearchCriteria(searchCriteria);
+    if (isStart != true) {
+      setSearchCriteria(searchCriteria);
+    }
     dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {

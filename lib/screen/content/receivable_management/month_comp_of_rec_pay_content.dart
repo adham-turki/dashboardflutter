@@ -109,13 +109,12 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     selectedChart = charts[0];
     selectedStatus = status[0];
     // getRecPayData(isStart: true);
-    getAllCodeReports();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
-    // getExpensesAccounts();
+    getAllCodeReports();
     payableRecAccounts = [];
     getPayableAccounts(isStart: true).then((value) {
       payableRecAccounts = value;
@@ -386,7 +385,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             ),
             CustomDate(
               dateController: _fromDateController,
-              label: _locale.fromDate,
+              label: _locale.fromDate, lastDate: DateTime.now(),
               // minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -441,7 +440,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
           width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _fromDateController,
-            label: _locale.fromDate,
+            label: _locale.fromDate, lastDate: DateTime.now(),
             // minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {

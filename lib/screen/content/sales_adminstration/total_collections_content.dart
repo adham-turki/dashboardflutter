@@ -105,8 +105,13 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     selectedChart = charts[0];
     selectedStatus = status[0];
     // getTotalCollections(isStart: true);
-    getAllCodeReports();
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    getAllCodeReports();
+    super.initState();
   }
 
   @override
@@ -353,6 +358,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                   child: CustomDate(
                     dateController: _fromDateController,
                     label: _locale.fromDate,
+                    lastDate: DateTime.now(),
                     minYear: 2000,
                     onValue: (isValid, value) {
                       if (isValid) {
@@ -374,6 +380,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                 CustomDate(
                   dateController: _toDateController,
                   label: _locale.toDate,
+                  lastDate: DateTime.now(),
                   onValue: (isValid, value) {
                     if (isValid) {
                       setState(() {
@@ -442,6 +449,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           child: CustomDate(
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -462,6 +470,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           child: CustomDate(
             dateController: _toDateController,
             label: _locale.toDate,
+            lastDate: DateTime.now(),
             onValue: (isValid, value) {
               if (isValid) {
                 setState(() {

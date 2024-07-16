@@ -197,6 +197,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             CustomDate(
               dateController: fromDate,
               label: _locale.fromDate,
+              lastDate: DateTime.now(),
               minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -216,6 +217,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
             CustomDate(
               dateController: toDate,
               label: _locale.toDate,
+              lastDate: DateTime.now(),
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -330,6 +332,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               child: CustomDate(
                 dateController: fromDate,
                 label: _locale.fromDate,
+                lastDate: DateTime.now(),
                 minYear: 2000,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -349,6 +352,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
               child: CustomDate(
                 dateController: toDate,
                 label: _locale.toDate,
+                lastDate: DateTime.now(),
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {

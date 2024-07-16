@@ -84,10 +84,12 @@ class _ExpensesAccountDropDownState extends State<ExpensesAccountDropDown> {
                 textColor: Colors.white,
                 borderRadius: 5.0,
                 onPressed: () {
-                  setState(() {
-                    widget.addAccount(selectedAccount, widget.type!);
-                    selectedAccount = "";
-                  });
+                  if (selectedAccount.isNotEmpty) {
+                    setState(() {
+                      widget.addAccount(selectedAccount, widget.type!);
+                      selectedAccount = "";
+                    });
+                  }
                 },
               ),
             ],

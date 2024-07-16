@@ -93,7 +93,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    getAllCodeReports();
     print("currentPageCode:::: ${currentPageCode}");
 
     super.didChangeDependencies();
@@ -101,7 +100,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
   @override
   void initState() {
-    // setSearchCriteria();
+    getAllCodeReports();
     super.initState();
   }
 
@@ -313,6 +312,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           date: fromDate,
           dateController: _fromDateController,
           label: _locale.fromDate,
+          lastDate: DateTime.now(),
           minYear: 2000,
           onValue: (isValid, value) {
             if (isValid) {
@@ -334,6 +334,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           dateController: _toDateController,
           date: toDate,
           label: _locale.toDate,
+          lastDate: DateTime.now(),
           onValue: (isValid, value) {
             if (isValid) {
               setState(() {
@@ -485,6 +486,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             date: fromDate,
             dateController: _fromDateController,
             label: _locale.fromDate,
+            lastDate: DateTime.now(),
             minYear: 2000,
             onValue: (isValid, value) {
               if (isValid) {
@@ -506,6 +508,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             date: toDate,
             dateController: _toDateController,
             label: _locale.toDate,
+            lastDate: DateTime.now(),
             onValue: (isValid, value) {
               if (isValid) {
                 setState(() {

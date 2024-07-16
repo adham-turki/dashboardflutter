@@ -226,6 +226,7 @@ class _SearchComponentState extends State<SearchComponent> {
                                         label: "",
                                         dateController: fromDate,
                                         minYear: 2000,
+                                        lastDate: DateTime.now(),
                                         onValue: (isValid, value) {
                                           if (isValid) {
                                             setState(() {
@@ -485,6 +486,7 @@ class _SearchComponentState extends State<SearchComponent> {
                                       child: CustomDate(
                                         dateController: toDateHere,
                                         minYear: 2000,
+                                        lastDate: DateTime.now(),
                                         onValue: (isValid, value) {
                                           if (isValid) {
                                             setState(() {

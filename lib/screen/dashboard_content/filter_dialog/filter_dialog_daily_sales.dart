@@ -142,6 +142,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                         CustomDate(
                           dateController: _fromDateController,
                           label: _locale.fromDate,
+                          lastDate: DateTime.now(),
                           minYear: 2000,
                           onValue: (isValid, value) {
                             if (isValid) {
@@ -200,6 +201,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,
+                            lastDate: DateTime.now(),
                             minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {

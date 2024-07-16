@@ -350,6 +350,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               label: _locale.fromDate,
               dateController: fromDate,
               dateControllerToCompareWith: toDate,
+              lastDate: DateTime.now(),
               isInitiaDate: true,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -373,6 +374,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               height: isDesktop ? height * 0.045 : height * 0.045,
               label: _locale.toDate,
               dateController: toDate,
+              lastDate: DateTime.now(),
               dateControllerToCompareWith: fromDate,
               isInitiaDate: false,
               onValue: (isValid, value) {
@@ -1165,6 +1167,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               label: _locale.fromDate,
               dateController: fromDate,
               dateControllerToCompareWith: toDate,
+              lastDate: DateTime.now(),
               isInitiaDate: true,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -1188,6 +1191,7 @@ class _LeftWidgetState extends State<LeftWidget> {
               dateWidth: width * 0.14,
               label: _locale.toDate,
               dateController: toDate,
+              lastDate: DateTime.now(),
               dateControllerToCompareWith: fromDate,
               isInitiaDate: false,
               onValue: (isValid, value) {

@@ -314,6 +314,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             CustomDate(
               dateController: fromDate,
               label: _locale.fromDate,
+              lastDate: DateTime.now(),
               minYear: 2000,
               onValue: (isValid, value) {
                 if (isValid) {
@@ -333,6 +334,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             CustomDate(
               dateController: toDate,
               label: _locale.toDate,
+              lastDate: DateTime.now(),
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -414,6 +416,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               child: CustomDate(
                 dateController: fromDate,
                 label: _locale.fromDate,
+                lastDate: DateTime.now(),
                 minYear: 2000,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -432,7 +435,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: toDate,
-                label: _locale.toDate,
+                label: _locale.toDate, lastDate: DateTime.now(),
+
                 // minYear: 2000,
                 onValue: (isValid, value) {
                   if (isValid) {
@@ -514,6 +518,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     );
   }
 
+  int counterFirstTbl = 0;
+  int counterSecTbl = 0;
+
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
     List<PlutoRow> topList = [];
@@ -532,7 +539,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       countDec = 1;
     }
     for (int i = 0; i < invList.length; i++) {
-      topList.add(invList[i].toPluto());
+      topList.add(invList[i].toPluto(++counterFirstTbl));
     }
 
     return PlutoLazyPaginationResponse(
@@ -582,7 +589,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     int totalPage = 1;
 
     for (int i = 0; i < invList.length; i++) {
-      topList.add(invList[i].toPluto());
+      topList.add(invList[i].toPluto(++counterSecTbl));
     }
 
     return PlutoLazyPaginationResponse(

@@ -185,6 +185,7 @@ class _FilterDialogSalesByBranchesState
                         CustomDate(
                           dateController: _fromDateController,
                           label: _locale.fromDate,
+                          lastDate: DateTime.now(),
                           minYear: 2000,
                           onValue: (isValid, value) {
                             if (isValid) {
@@ -203,6 +204,7 @@ class _FilterDialogSalesByBranchesState
                         CustomDate(
                           dateController: _toDateController,
                           label: _locale.toDate,
+                          lastDate: DateTime.now(),
                           onValue: (isValid, value) {
                             if (isValid) {
                               setState(() {
@@ -225,6 +227,7 @@ class _FilterDialogSalesByBranchesState
                           child: CustomDate(
                             dateController: _fromDateController,
                             label: _locale.fromDate,
+                            lastDate: DateTime.now(),
                             minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {
@@ -244,6 +247,7 @@ class _FilterDialogSalesByBranchesState
                           child: CustomDate(
                             dateController: _toDateController,
                             label: _locale.toDate,
+                            lastDate: DateTime.now(),
                             minYear: 2000,
                             onValue: (isValid, value) {
                               if (isValid) {

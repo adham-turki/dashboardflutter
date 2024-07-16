@@ -26,6 +26,8 @@ class CustomDate extends StatefulWidget {
   bool? isTimeDate;
   final TextEditingController? dateControllerToCompareWith;
   final TimeOfDay? timeControllerToCompareWith;
+  DateTime? firstDate;
+  DateTime? lastDate;
 
   bool isInitiaDate;
   CustomDate(
@@ -45,7 +47,9 @@ class CustomDate extends StatefulWidget {
       this.minYear,
       this.ddmmyyyy,
       this.date,
-      this.readOnly});
+      this.readOnly,
+      this.firstDate,
+      this.lastDate});
 
   @override
   State<CustomDate> createState() => _CustomDateState();
@@ -341,6 +345,7 @@ class _CustomDateState extends State<CustomDate> {
       padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 15),
       child: SizedBox(
         width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
+        // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(
             readOnly: widget.readOnly != null ? widget.readOnly! : false,
@@ -536,15 +541,56 @@ class _CustomDateState extends State<CustomDate> {
     String dayStr = dayController.text;
 
     DateTime dateTime = DateTime.now();
+    DateTime firstDate = DateTime.now();
+    DateTime lastDate = DateTime.now();
 
+    DateTime enteredDate =
+        DateTime(int.parse(yearStr), int.parse(monthStr), int.parse(dayStr));
     int yearNow = dateTime.year;
 
     if (yearStr.isNotEmpty && yearStr.length == 4) {
-      int minYear = widget.minYear ?? 1900;
-      int year = int.parse(yearStr);
-      if (year < minYear) {
-        yearController.text = yearNow.toString();
-        return true;
+      if (widget.firstDate != null) {
+        firstDate = widget.firstDate!;
+
+        if (firstDate.isBefore(enteredDate)) {
+          return true;
+        } else {
+          yearController.text = firstDate.year.toString();
+          monthController.text = firstDate.month.toString();
+          dayController.text = firstDate.day.toString();
+          if (monthController.text.length < 2) {
+            monthController.text = "0${monthController.text}";
+          }
+          if (dayController.text.length < 2) {
+            dayController.text = "0${dayController.text}";
+          }
+          return true;
+        }
+      }
+      if (widget.lastDate != null) {
+        lastDate = widget.lastDate!;
+
+        if (lastDate.isAfter(enteredDate)) {
+          return true;
+        } else {
+          yearController.text = lastDate.year.toString();
+          monthController.text = lastDate.month.toString();
+          dayController.text = lastDate.day.toString();
+          if (monthController.text.length < 2) {
+            monthController.text = "0${monthController.text}";
+          }
+          if (dayController.text.length < 2) {
+            dayController.text = "0${dayController.text}";
+          }
+          return true;
+        }
+      } else {
+        int minYear = widget.minYear ?? 1900;
+        int year = int.parse(yearStr);
+        if (year < minYear) {
+          yearController.text = yearNow.toString();
+          return true;
+        }
       }
     }
 
@@ -857,12 +903,20 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   void setDatePickerValues() {
-    DateTime firstDate = DateTime(2000);
+    DateTime firstDate = widget.firstDate != null
+        ? widget.firstDate!
+        : widget.minYear != null
+            ? DateTime(widget.minYear!)
+            : DateTime(1900);
+
+    DateTime lastDate =
+        widget.lastDate != null ? widget.lastDate! : DateTime(2050);
+
     showDatePicker(
       context: context,
       initialDate: formattedDate,
       firstDate: firstDate,
-      lastDate: DateTime(2050),
+      lastDate: lastDate,
     ).then((dateResult) {
       setState(() {
         if (dateResult != null && widget.onValue != null) {
