@@ -242,34 +242,31 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
-                      DateTime from = DateTime.parse(fromDate.text);
-                      DateTime to = DateTime.parse(toDate.text);
+                      // DateTime from = DateTime.parse(fromDate.text);
+                      // DateTime to = DateTime.parse(toDate.text);
 
-                      if (from.isAfter(to)) {
-                        ErrorController.openErrorDialog(
-                            1, _locale.startDateAfterEndDate);
+                      // if (from.isAfter(to)) {
+                      //   ErrorController.openErrorDialog(
+                      //       1, _locale.startDateAfterEndDate);
+                      // } else {
+                      if (reportsResult!.count == 0) {
+                        // ErrorController.openErrorDialog(406, _locale.error406);
                       } else {
-                        if (reportsResult!.count == 0) {
-                          ErrorController.openErrorDialog(
-                              406, _locale.error406);
-                        } else {
-                          int status =
-                              getVoucherStatus(_locale, selectedStatus);
-                          SearchCriteria searchCriteria = SearchCriteria(
-                            fromDate:
-                                DatesController().formatDate(fromDate.text),
-                            toDate: DatesController().formatDate(toDate.text),
-                            voucherStatus: status,
-                            columns: columnsNameMap,
-                            customColumns: columnsNameMap,
-                          );
-                          SelfChequesController()
-                              .exportToExcelApi(searchCriteria)
-                              .then((value) {
-                            saveExcelFile(value, "${_locale.cheques}.xlsx");
-                          });
-                        }
+                        int status = getVoucherStatus(_locale, selectedStatus);
+                        SearchCriteria searchCriteria = SearchCriteria(
+                          fromDate: DatesController().formatDate(fromDate.text),
+                          toDate: DatesController().formatDate(toDate.text),
+                          voucherStatus: status,
+                          columns: columnsNameMap,
+                          customColumns: columnsNameMap,
+                        );
+                        SelfChequesController()
+                            .exportToExcelApi(searchCriteria)
+                            .then((value) {
+                          saveExcelFile(value, "${_locale.cheques}.xlsx");
+                        });
                       }
+                      // }
                     },
                   )),
             ),

@@ -475,52 +475,52 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
             //                     size: height * 0.025,
             //                   )),
             //             ),
-            Tooltip(
-              message: _locale.exportToExcel,
-              child: IconButton(
-                  padding: const EdgeInsets.only(top: 3),
-                  onPressed: () {
-                    isDownload.value = true;
-                    DateTime from = DateTime.parse(DatesController()
-                        .formatDateReverse(readProvider.getFromDate()!));
-                    DateTime to = DateTime.parse(DatesController()
-                        .formatDateReverse(readProvider.getToDate()!));
+            // Tooltip(
+            //   message: _locale.exportToExcel,
+            //   child: IconButton(
+            //       padding: const EdgeInsets.only(top: 3),
+            //       onPressed: () {
+            //         isDownload.value = true;
+            //         DateTime from = DateTime.parse(DatesController()
+            //             .formatDateReverse(readProvider.getFromDate()!));
+            //         DateTime to = DateTime.parse(DatesController()
+            //             .formatDateReverse(readProvider.getToDate()!));
 
-                    if (from.isAfter(to)) {
-                      ErrorController.openErrorDialog(
-                          1, _locale.startDateAfterEndDate);
-                    } else {
-                      if (purchaseList.isEmpty) {
-                        ErrorController.openErrorDialog(406, _locale.error406);
-                        isDownload.value = false;
-                      } else {
-                        SearchCriteria searchCriteria = SearchCriteria(
-                          fromDate: readProvider.fromDate,
-                          toDate: readProvider.toDate,
-                          voucherStatus: -100,
-                          columns:
-                              getColumnsName(_locale, orderByColumns, false),
-                          customColumns: getCustomColumnsName(
-                              _locale, orderByColumns, false),
-                        );
-                        Map<String, dynamic> body = readProvider.toJson();
+            //         if (from.isAfter(to)) {
+            //           ErrorController.openErrorDialog(
+            //               1, _locale.startDateAfterEndDate);
+            //         } else {
+            //           if (purchaseList.isEmpty) {
+            //             ErrorController.openErrorDialog(406, _locale.error406);
+            //             isDownload.value = false;
+            //           } else {
+            //             SearchCriteria searchCriteria = SearchCriteria(
+            //               fromDate: readProvider.fromDate,
+            //               toDate: readProvider.toDate,
+            //               voucherStatus: -100,
+            //               columns:
+            //                   getColumnsName(_locale, orderByColumns, false),
+            //               customColumns: getCustomColumnsName(
+            //                   _locale, orderByColumns, false),
+            //             );
+            //             Map<String, dynamic> body = readProvider.toJson();
 
-                        ReportController()
-                            .exportPurchaseToExcelApi(searchCriteria, body)
-                            .then((value) {
-                          saveExcelFile(
-                              value, "${_locale.purchasesReport}.xlsx");
-                          isDownload.value = false;
-                        });
-                      }
-                    }
-                  },
-                  icon: Icon(
-                    Icons.description,
-                    color: Colors.black,
-                    size: height * 0.025,
-                  )),
-            ),
+            //             ReportController()
+            //                 .exportPurchaseToExcelApi(searchCriteria, body)
+            //                 .then((value) {
+            //               saveExcelFile(
+            //                   value, "${_locale.purchasesReport}.xlsx");
+            //               isDownload.value = false;
+            //             });
+            //           }
+            //         }
+            //       },
+            //       icon: Icon(
+            //         Icons.description,
+            //         color: Colors.black,
+            //         size: height * 0.025,
+            //       )),
+            // ),
             //           ],
             //         ),
             //       ],
@@ -753,44 +753,31 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                                 padding: const EdgeInsets.only(top: 3),
                                 onPressed: () {
                                   isDownload.value = true;
-                                  DateTime from = DateTime.parse(
-                                      DatesController().formatDateReverse(
-                                          readProvider.getFromDate()!));
-                                  DateTime to = DateTime.parse(DatesController()
-                                      .formatDateReverse(
-                                          readProvider.getToDate()!));
 
-                                  if (from.isAfter(to)) {
-                                    ErrorController.openErrorDialog(
-                                        1, _locale.startDateAfterEndDate);
+                                  if (reportsResult!.count == 0) {
+                                    isDownload.value = false;
                                   } else {
-                                    if (purchaseList.isEmpty) {
-                                      ErrorController.openErrorDialog(
-                                          406, _locale.error406);
-                                      isDownload.value = false;
-                                    } else {
-                                      SearchCriteria searchCriteria =
-                                          SearchCriteria(
-                                        fromDate: readProvider.fromDate,
-                                        toDate: readProvider.toDate,
-                                        voucherStatus: -100,
-                                        columns: getColumnsName(
-                                            _locale, orderByColumns, false),
-                                        customColumns: getCustomColumnsName(
-                                            _locale, orderByColumns, false),
-                                      );
-                                      Map<String, dynamic> body =
-                                          readProvider.toJson();
+                                    SearchCriteria searchCriteria =
+                                        SearchCriteria(
+                                      fromDate: readProvider.fromDate,
+                                      toDate: readProvider.toDate,
+                                      voucherStatus: -100,
+                                      columns: getColumnsName(
+                                          _locale, orderByColumns, false),
+                                      customColumns: getCustomColumnsName(
+                                          _locale, orderByColumns, false),
+                                    );
+                                    Map<String, dynamic> body =
+                                        readProvider.toJson();
 
-                                      ReportController()
-                                          .exportPurchaseToExcelApi(
-                                              searchCriteria, body)
-                                          .then((value) {
-                                        saveExcelFile(value,
-                                            "${_locale.purchasesReport}.xlsx");
-                                        isDownload.value = false;
-                                      });
-                                    }
+                                    ReportController()
+                                        .exportPurchaseToExcelApi(
+                                            searchCriteria, body)
+                                        .then((value) {
+                                      saveExcelFile(value,
+                                          "${_locale.purchasesReport}.xlsx");
+                                      isDownload.value = false;
+                                    });
                                   }
                                 },
                                 icon: Icon(

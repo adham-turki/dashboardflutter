@@ -271,37 +271,30 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                         ? null
                         : () {
                             isDownload.value = true;
-                            DateTime from = DateTime.parse(fromDate.text);
-                            DateTime to = DateTime.parse(toDate.text);
 
-                            if (from.isAfter(to)) {
-                              ErrorController.openErrorDialog(
-                                  1, _locale.startDateAfterEndDate);
+                            if (reportsResult!.count == 0) {
+                              // ErrorController.openErrorDialog(
+                              //     406, _locale.error406);
+                              isDownload.value = false;
                             } else {
-                              if (reportsResult!.count == 0) {
-                                ErrorController.openErrorDialog(
-                                    406, _locale.error406);
+                              int status =
+                                  getVoucherStatus(_locale, selectedStatus);
+                              SearchCriteria searchCriteria = SearchCriteria(
+                                fromDate:
+                                    DatesController().formatDate(fromDate.text),
+                                toDate:
+                                    DatesController().formatDate(toDate.text),
+                                voucherStatus: status,
+                                columns: [],
+                                customColumns: [],
+                              );
+                              TotalSalesController()
+                                  .exportToExcelApi(searchCriteria)
+                                  .then((value) {
+                                saveExcelFile(
+                                    value, "${_locale.totalSales}.xlsx");
                                 isDownload.value = false;
-                              } else {
-                                int status =
-                                    getVoucherStatus(_locale, selectedStatus);
-                                SearchCriteria searchCriteria = SearchCriteria(
-                                  fromDate: DatesController()
-                                      .formatDate(fromDate.text),
-                                  toDate:
-                                      DatesController().formatDate(toDate.text),
-                                  voucherStatus: status,
-                                  columns: [],
-                                  customColumns: [],
-                                );
-                                TotalSalesController()
-                                    .exportToExcelApi(searchCriteria)
-                                    .then((value) {
-                                  saveExcelFile(
-                                      value, "${_locale.totalSales}.xlsx");
-                                  isDownload.value = false;
-                                });
-                              }
+                              });
                             }
                           },
                     icon: Icon(
