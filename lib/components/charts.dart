@@ -120,12 +120,14 @@ class BalanceLineChart extends StatelessWidget {
   final String yAxisText;
   final List<double> balances;
   final List<String> periods;
+
   const BalanceLineChart(
       {super.key,
       required this.balances,
       required this.periods,
       required this.xAxisText,
       required this.yAxisText});
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;

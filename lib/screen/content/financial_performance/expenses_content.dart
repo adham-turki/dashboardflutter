@@ -59,6 +59,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
   ExpensesController expensesController = ExpensesController();
   List<double> listOfBalances = [];
   List<String> listOfPeriods = [];
+  bool isLoading = true;
 
   final List<String> items = [
     'Print',
@@ -212,24 +213,34 @@ class _ExpensesContentState extends State<ExpensesContent> {
                         ),
                       ],
                     ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
-                              )
-                            : BalanceBarChart(data: barData),
+                    isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(150),
+                            child: CircularProgressIndicator(),
+                          )
+                        : selectedChart == _locale.lineChart
+                            ? BalanceLineChart(
+                                yAxisText: _locale.balances,
+                                xAxisText: _locale.periods,
+                                balances: listOfBalances,
+                                periods: listOfPeriods)
+                            : selectedChart == _locale.pieChart
+                                ? Center(
+                                    child: PieChartComponent(
+                                      radiusNormal:
+                                          isDesktop ? height * 0.17 : 70,
+                                      radiusHover:
+                                          isDesktop ? height * 0.17 : 80,
+                                      width: isDesktop
+                                          ? width * 0.42
+                                          : width * 0.1,
+                                      height: isDesktop
+                                          ? height * 0.42
+                                          : height * 0.4,
+                                      dataList: pieData,
+                                    ),
+                                  )
+                                : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -468,6 +479,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
 
   int count = 0;
   getExpenses({bool? isStart}) {
+    setState(() {
+      isLoading = true;
+    });
     listOfBalances = [];
     listOfPeriods = [];
     pieData = [];
@@ -513,6 +527,9 @@ class _ExpensesContentState extends State<ExpensesContent> {
               BarChartData(temp, double.parse(elemant.expense.toString())));
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 

@@ -134,7 +134,7 @@ class ReportController {
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclSalesReport/count=${10}';
+    String eUrl = exportToExeclSalesReport;
     var body = {
       "mainForm": searchBody,
       "columns": searchCriteria.columns,
@@ -171,7 +171,7 @@ class ReportController {
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclPurchaseReport/count=${10}';
+    String eUrl = exportToExeclPurchaseReport;
     var body = {
       "purchasesForm": searchBody,
       "columns": searchCriteria.columns,

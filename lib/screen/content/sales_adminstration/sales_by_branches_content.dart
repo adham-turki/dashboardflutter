@@ -71,6 +71,8 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   List<Color> usedColors = [];
   String fromDate = "";
   String toDate = "";
+  bool isLoading = true;
+
   List<CodeReportsModel> codeReportsList = [];
   List<UserReportSettingsModel> userReportSettingsList = [];
   String startSearchCriteria = "";
@@ -150,24 +152,34 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
                         ),
                       ],
                     ),
-                    selectedChart == _locale.barChart
-                        ? BalanceBarChart(data: barData)
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.4,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
-                              )
-                            : BalanceLineChart(
-                                yAxisText: _locale.balances,
-                                xAxisText: _locale.periods,
-                                balances: listOfBalances,
-                                periods: listOfPeriods),
+                    isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(150),
+                            child: CircularProgressIndicator(),
+                          )
+                        : selectedChart == _locale.barChart
+                            ? BalanceBarChart(data: barData)
+                            : selectedChart == _locale.pieChart
+                                ? Center(
+                                    child: PieChartComponent(
+                                      radiusNormal:
+                                          isDesktop ? height * 0.17 : 70,
+                                      radiusHover:
+                                          isDesktop ? height * 0.17 : 80,
+                                      width: isDesktop
+                                          ? width * 0.42
+                                          : width * 0.4,
+                                      height: isDesktop
+                                          ? height * 0.42
+                                          : height * 0.4,
+                                      dataList: pieData,
+                                    ),
+                                  )
+                                : BalanceLineChart(
+                                    yAxisText: _locale.balances,
+                                    xAxisText: _locale.periods,
+                                    balances: listOfBalances,
+                                    periods: listOfPeriods),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -225,7 +237,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
       // _toDateController.text =
       //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-
+      setState(() {
+        isLoading = true;
+      });
       setSearchCriteria(searchCriteria);
       pieData = [];
       dataMap.clear();
@@ -260,6 +274,9 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             );
           });
         }
+        setState(() {
+          isLoading = false;
+        });
       });
     }
   }

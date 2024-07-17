@@ -51,7 +51,7 @@ class TotalSalesController {
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclTotalSales/count=${10}';
+    String eUrl = exportToExeclTotalSales;
     var body = {
       "searchForm": {
         "fromDate": searchCriteria.fromDate,

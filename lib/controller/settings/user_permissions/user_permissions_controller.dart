@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/settings/user_permissions/user_permissions_mo
 import 'package:bi_replicate/model/settings/user_permissions/user_permit_criteria_model.dart';
 import 'package:bi_replicate/model/settings/user_settings/user_settings_model.dart';
 import 'package:bi_replicate/utils/constants/api_constants.dart';
+import 'package:bi_replicate/utils/constants/values.dart';
 import 'package:http/http.dart';
 
 import '../../../service/api_service.dart';
@@ -19,7 +20,7 @@ class UserPermissionsController {
     await ApiService()
         .postRequest(api, usersModel.permitToJson())
         .then((value) {
-      if (value.statusCode == 200) {
+      if (value.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(value.bodyBytes));
         for (var permit in jsonData) {
           print(permit);

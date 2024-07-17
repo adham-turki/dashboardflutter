@@ -75,6 +75,8 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   List<BarChartData> barData = [];
   String todayDate = "";
   bool boolTemp = false;
+  bool isLoading = true;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -160,25 +162,34 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
                         ),
                       ],
                     ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width:
-                                      isDesktop ? width * 0.42 : width * 0.05,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
-                              )
-                            : BalanceBarChart(data: barData),
+                    isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(150),
+                            child: CircularProgressIndicator(),
+                          )
+                        : selectedChart == _locale.lineChart
+                            ? BalanceLineChart(
+                                yAxisText: _locale.balances,
+                                xAxisText: _locale.periods,
+                                balances: listOfBalances,
+                                periods: listOfPeriods)
+                            : selectedChart == _locale.pieChart
+                                ? Center(
+                                    child: PieChartComponent(
+                                      radiusNormal:
+                                          isDesktop ? height * 0.17 : 70,
+                                      radiusHover:
+                                          isDesktop ? height * 0.17 : 80,
+                                      width: isDesktop
+                                          ? width * 0.42
+                                          : width * 0.05,
+                                      height: isDesktop
+                                          ? height * 0.42
+                                          : height * 0.4,
+                                      dataList: pieData,
+                                    ),
+                                  )
+                                : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -494,6 +505,9 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
   }
 
   getTotalCollections({bool? isStart}) {
+    setState(() {
+      isLoading = true;
+    });
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -543,6 +557,9 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           );
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 

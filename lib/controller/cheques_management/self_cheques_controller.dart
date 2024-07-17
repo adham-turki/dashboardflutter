@@ -20,7 +20,7 @@ class SelfChequesController {
     await ApiService()
         .postRequest(pathUrl, searchCriteria.chequesToJson(), isStart: isStart)
         .then((response) {
-      if (response.statusCode == 200) {
+      if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
         count = ((searchCriteria.page! - 1) * 10) + 1;
@@ -56,7 +56,7 @@ class SelfChequesController {
       0x6F, // Example byte data (ASCII values for "Hello")
       // Add more bytes as needed
     ]);
-    String eUrl = '$exportToExeclCheques/count=${10}';
+    String eUrl = exportToExeclCheques;
     var body = {
       "searchForm": {
         "fromDate": searchCriteria.fromDate,

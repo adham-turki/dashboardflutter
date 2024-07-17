@@ -3,6 +3,7 @@ import '../../model/criteria/search_criteria.dart';
 import '../../model/inventory_performance/inventory_performance_model.dart';
 import '../../service/api_service.dart';
 import '../../utils/constants/api_constants.dart';
+import '../../utils/constants/values.dart';
 
 class InventoryPerformanceController {
   Future<List<InventoryPerformanceModel>> totalSellInc(
@@ -13,7 +14,7 @@ class InventoryPerformanceController {
     await ApiService()
         .postRequest(getTotalSellInc, searchCriteria.toJson(), isStart: isStart)
         .then((response) {
-      if (response.statusCode == 200) {
+      if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var elemant in jsonData) {
           //creditAmt - debitAmt

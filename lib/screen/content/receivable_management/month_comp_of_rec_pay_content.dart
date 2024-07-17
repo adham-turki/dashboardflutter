@@ -86,6 +86,7 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
   List<BarChartData> barData = [];
   List<BarChartData> barData2 = [];
   String todayDate = "";
+  bool isLoading = true;
 
   @override
   void didChangeDependencies() {
@@ -215,19 +216,24 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
                       ),
                     ],
                   ),
-                  selectedChart == _locale.lineChart
-                      ? BalanceDoubleLineChart(
-                          xAxisText: "",
-                          yAxisText: _locale.balances,
-                          balances: listOfBalances,
-                          periods: listOfPeriods,
-                          balances2: listOfBalances2,
-                          periods2: listOfPeriods2,
+                  isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.all(150),
+                          child: CircularProgressIndicator(),
                         )
-                      : BalanceDoubleBarChart(
-                          data: barData,
-                          data2: barData2,
-                        ),
+                      : selectedChart == _locale.lineChart
+                          ? BalanceDoubleLineChart(
+                              xAxisText: "",
+                              yAxisText: _locale.balances,
+                              balances: listOfBalances,
+                              periods: listOfPeriods,
+                              balances2: listOfBalances2,
+                              periods2: listOfPeriods2,
+                            )
+                          : BalanceDoubleBarChart(
+                              data: barData,
+                              data2: barData2,
+                            ),
                   const SizedBox(), //Footer
                 ],
               ),
@@ -460,6 +466,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
   }
 
   getRecPayData({bool? isStart}) {
+    setState(() {
+      isLoading = true;
+    });
     listOfBalances = [];
     listOfBalances2 = [];
     listOfPeriods = [];
@@ -505,6 +514,9 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
           );
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 

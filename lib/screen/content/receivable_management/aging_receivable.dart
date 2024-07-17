@@ -27,6 +27,8 @@ class _AgingReceivableState extends State<AgingReceivable> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
+  bool isLoading = true;
+
   final dropdownKey = GlobalKey<DropdownButton2State>();
   late AppLocalizations _locale;
   List<String> status = [];
@@ -144,24 +146,34 @@ class _AgingReceivableState extends State<AgingReceivable> {
                         ],
                       ),
                     ),
-                    selectedChart == _locale.lineChart
-                        ? BalanceLineChart(
-                            yAxisText: _locale.balances,
-                            xAxisText: _locale.periods,
-                            balances: listOfBalances,
-                            periods: listOfPeriods)
-                        : selectedChart == _locale.pieChart
-                            ? Center(
-                                child: PieChartComponent(
-                                  radiusNormal: isDesktop ? height * 0.17 : 70,
-                                  radiusHover: isDesktop ? height * 0.17 : 80,
-                                  width: isDesktop ? width * 0.42 : width * 0.1,
-                                  height:
-                                      isDesktop ? height * 0.42 : height * 0.4,
-                                  dataList: pieData,
-                                ),
-                              )
-                            : BalanceBarChart(data: barData),
+                    isLoading
+                        ? const Padding(
+                            padding: EdgeInsets.all(150),
+                            child: CircularProgressIndicator(),
+                          )
+                        : selectedChart == _locale.lineChart
+                            ? BalanceLineChart(
+                                yAxisText: _locale.balances,
+                                xAxisText: _locale.periods,
+                                balances: listOfBalances,
+                                periods: listOfPeriods)
+                            : selectedChart == _locale.pieChart
+                                ? Center(
+                                    child: PieChartComponent(
+                                      radiusNormal:
+                                          isDesktop ? height * 0.17 : 70,
+                                      radiusHover:
+                                          isDesktop ? height * 0.17 : 80,
+                                      width: isDesktop
+                                          ? width * 0.42
+                                          : width * 0.1,
+                                      height: isDesktop
+                                          ? height * 0.42
+                                          : height * 0.4,
+                                      dataList: pieData,
+                                    ),
+                                  )
+                                : BalanceBarChart(data: barData),
                     const SizedBox(), //Footer
                   ],
                 ),
@@ -248,6 +260,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
   }
 
   getAgingReceivable({bool? isStart}) {
+    setState(() {
+      isLoading = true;
+    });
     listOfBalances = [];
     pieData = [];
     barData = [];
@@ -285,6 +300,9 @@ class _AgingReceivableState extends State<AgingReceivable> {
           );
         });
       }
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
@@ -297,12 +315,13 @@ class _AgingReceivableState extends State<AgingReceivable> {
     final random = Random();
     Color color;
     do {
-          int r = random.nextInt(256); // 0 to 255
-  int g = random.nextInt(256); // 0 to 255
-  int b = random.nextInt(256); // 0 to 255
+      int r = random.nextInt(256); // 0 to 255
+      int g = random.nextInt(256); // 0 to 255
+      int b = random.nextInt(256); // 0 to 255
 
-  // Create Color object from RGB values
-   color = Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
+      // Create Color object from RGB values
+      color =
+          Color.fromRGBO(r, g, b, 1.0); // Alpha is set to 1.0 (fully opaque)
     } while (usedColors.contains(color));
 
     usedColors.add(color);

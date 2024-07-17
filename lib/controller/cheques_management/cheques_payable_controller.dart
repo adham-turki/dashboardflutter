@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:bi_replicate/service/api_service.dart';
+import 'package:bi_replicate/utils/constants/values.dart';
 
 import '../../model/cheques_bank/cheques_payable_model.dart';
 import '../../model/criteria/search_criteria.dart';
@@ -15,9 +16,11 @@ class ChequesPayableController {
         .postRequest(getChequesPayable, searchCriteria.statusToJson(),
             isStart: isStart)
         .then((response) {
-      var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
 
-      chequesPayableModel = ChequesPayableModel.fromJson(jsonData);
+        chequesPayableModel = ChequesPayableModel.fromJson(jsonData);
+      }
     });
     return chequesPayableModel;
   }
