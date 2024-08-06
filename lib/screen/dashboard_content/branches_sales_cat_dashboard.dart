@@ -202,13 +202,13 @@ class _BranchesSalesByCatDashboardState
                     children: [
                       Text(
                         _locale.branchesSalesByCategories,
-                        style: TextStyle(fontSize: isDesktop ? 16 : 18),
+                        style: TextStyle(fontSize: isDesktop ? 16 : 13),
                       ),
                       Text(
                         _locale.localeName == "en"
                             ? "${fromDateController.text}  -  ${toDateController.text}"
                             : "$fromDate  -  $toDate",
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                        style: TextStyle(fontSize: isDesktop ? 15 : 13),
                       ),
                       SizedBox(
                           width: MediaQuery.of(context).size.width < 800
