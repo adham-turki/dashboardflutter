@@ -344,7 +344,7 @@ class _CustomDateState extends State<CustomDate> {
     return Padding(
       padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 15),
       child: SizedBox(
-        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.07,
+        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.2,
         // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(
@@ -464,7 +464,7 @@ class _CustomDateState extends State<CustomDate> {
         setState(() {});
       } else {
         if (widget.onDateChanged != null) {
-          widget.onDateChanged!(widget.dateControllerToCompareWith!.text,
+          widget.onDateChanged!(widget.dateController!.text,
               DateFormat('yyyy-MM-dd').format(selectedDate!));
         }
       }

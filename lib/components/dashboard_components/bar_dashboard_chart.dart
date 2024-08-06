@@ -90,7 +90,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                 const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
             child: SizedBox(
               width: isMobile
-                  ? width * 23
+                  ? width * 18
                   : (widget.isMax && dataList.length < 6) || dataList.length < 6
                       ? width * .6
                       : width * (dataList.length / 15),

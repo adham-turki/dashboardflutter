@@ -156,9 +156,8 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
             padding:
                 const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
             child: SizedBox(
-                width: isMobile
-                    ? width * 15
-                    : (widget.isMax && periods.length < 6) || periods.length < 6
+                width:
+                    (widget.isMax && periods.length < 6) || periods.length < 6
                         ? width * .6
                         : width * (periods.length / 15),
                 child: LineChart(
