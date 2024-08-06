@@ -193,7 +193,7 @@
     "cash": "كاش",
     "chooseDate": "اختر التاريخ",
     "numOfCustomers": "عدد الزبائن",
-    "totalReturnSal": "عدد الفواتير المردودة",
+    "totalReturnSal": "إجمالي الفواتير المردودة",
     "startDateAfterEndDate": "تاريخ النهاية يجب أن يكون بعد تاريخ البداية",
     "dateConflict": "تعارض التاريخ",
     "filter": "تأكيد",
