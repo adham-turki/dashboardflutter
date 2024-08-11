@@ -157,7 +157,9 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                 const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
             child: SizedBox(
                 width: isMobile
-                    ? width * 5
+                    ? (widget.isMax && periods.length < 6) || periods.length < 6
+                        ? width * 0.8
+                        : width * (periods.length / 4)
                     : (widget.isMax && periods.length < 6) || periods.length < 6
                         ? width * .6
                         : width * (periods.length / 15),
@@ -197,8 +199,8 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                     width: isMobile
                         ? (widget.isMax && periods.length < 6) ||
                                 periods.length < 6
-                            ? width * 1.5
-                            : width * 5
+                            ? width * 0.8
+                            : width * (periods.length / 4)
                         : (widget.isMax && periods.length < 6) ||
                                 periods.length < 6
                             ? width * .6

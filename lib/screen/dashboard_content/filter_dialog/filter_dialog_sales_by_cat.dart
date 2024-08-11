@@ -348,39 +348,42 @@ class _FilterDialogSalesByCategoryState
         ),
       ),
       actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Components().blueButton(
-              height: width > 800 ? height * .054 : height * .06,
-              fontSize: width > 800 ? height * .0158 : height * .015,
-              width: isDesktop ? width * 0.09 : width * 0.25,
-              onPressed: () {
-                DateTime from = DateTime.parse(_fromDateController.text);
-                DateTime to = DateTime.parse(_toDateController.text);
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Components().blueButton(
+                height: width > 800 ? height * .054 : height * .06,
+                fontSize: width > 800 ? height * .0158 : height * .015,
+                width: isDesktop ? width * 0.09 : width * 0.25,
+                onPressed: () {
+                  DateTime from = DateTime.parse(_fromDateController.text);
+                  DateTime to = DateTime.parse(_toDateController.text);
 
-                if (from.isAfter(to)) {
-                  ErrorController.openErrorDialog(
-                      1, _locale.startDateAfterEndDate);
-                } else {
-                  widget.onFilter(
-                      selectedPeriod,
-                      DatesController().formatDate(_fromDateController.text),
-                      DatesController().formatDate(_toDateController.text),
-                      selectedCategories,
-                      selectedBranchCode,
-                      selectedChart);
+                  if (from.isAfter(to)) {
+                    ErrorController.openErrorDialog(
+                        1, _locale.startDateAfterEndDate);
+                  } else {
+                    widget.onFilter(
+                        selectedPeriod,
+                        DatesController().formatDate(_fromDateController.text),
+                        DatesController().formatDate(_toDateController.text),
+                        selectedCategories,
+                        selectedBranchCode,
+                        selectedChart);
 
-                  context.read<DatesProvider>().setDatesController(
-                      _fromDateController, _toDateController);
-                  Navigator.of(context).pop();
-                }
-              },
-              text: _locale.filter,
-              borderRadius: 0.3,
-              textColor: Colors.white,
-            ),
-          ],
+                    context.read<DatesProvider>().setDatesController(
+                        _fromDateController, _toDateController);
+                    Navigator.of(context).pop();
+                  }
+                },
+                text: _locale.filter,
+                borderRadius: 0.3,
+                textColor: Colors.white,
+              ),
+            ],
+          ),
         ),
       ],
     );
