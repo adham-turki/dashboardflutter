@@ -188,10 +188,10 @@
     "user": "User",
     "ok": "Ok",
     "cancel": "Cancel",
-    "wrongAliasName": "Wrong Alias Name!",
-    "aliasName": "Alias Name",
+    "wrongAliasName": "Wrong Customer Alias Name!",
+    "aliasName": "Customer Alias Name",
     "deletedSuccesfully": "Deleted Succesfully",
-    "aliasReqField": "Alias name is required",
+    "aliasReqField": "Customer Alias name is required",
     "nameReqField": "Username is required",
     "passReqField": "Password is required",
     "cashIn": "Cash In",
@@ -271,5 +271,6 @@
     "chooseFilter": "Choose filter",
     "critiriaAndOrderBy": "Critiria and order by",
     "contains": "Contains",
-    "expiredSessionLoginDialog": "Your session has expired.please log in again"
+    "expiredSessionLoginDialog": "Your session has expired.please log in again",
+    "businessIntelligenceSystem": "Business Intelligence System"
 }

@@ -122,14 +122,32 @@ class _LoginScreenState extends State<LoginScreen> {
               right: 10,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: LanguageWidget(
-                    color: Colors.black,
-                    onLocaleChanged: (locale) {
-                      localeProvider.setLocale(locale);
-                    },
-                  ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      height: 80,
+                      width: 80,
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                                child: Image.asset(
+                                    "assets/images/scope_logo.png")),
+                          ]),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: LanguageWidget(
+                        color: Colors.black,
+                        onLocaleChanged: (locale) {
+                          localeProvider.setLocale(locale);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

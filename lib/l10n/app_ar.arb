@@ -164,10 +164,10 @@
     "user": "مستخدم",
     "ok": "موافق",
     "cancel": "إلغاء",
-    "wrongAliasName": "اسم الشركة خاطئ!",
-    "aliasName": "اسم الشركة",
+    "wrongAliasName": "اسم شركة الزبون خاطئ!",
+    "aliasName": "اسم شركة الزبون",
     "deletedSuccesfully": "تم الحذف بنجاح",
-    "aliasReqField": "الاسم الشركة مطلوب",
+    "aliasReqField": "اسم شركة الزبون مطلوب",
     "nameReqField": "اسم المستخدم مطلوب",
     "passReqField": "كلمة المرور مطلوبة",
     "cashIn": "حركة النقد الداخلة",
@@ -247,5 +247,6 @@
     "hideFilters": "إخفاء الفلاتر",
     "chooseFilter": "اختيار الفلاتر",
     "contains": "يحتوي",
-    "expiredSessionLoginDialog": "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً"
+    "expiredSessionLoginDialog": "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً",
+    "businessIntelligenceSystem": "نظام ذكاء الأعمال"
 }

@@ -125,12 +125,23 @@ class _FormComponentState extends State<FormComponent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                        "BI",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: width * 0.03,
-                            fontWeight: FontWeight.bold),
+                      Column(
+                        children: [
+                          Text(
+                            "BI",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.03,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            _locale.businessIntelligenceSystem,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: width * 0.015,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -233,12 +244,23 @@ class _FormComponentState extends State<FormComponent> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  "BI",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: width * 0.1,
-                      fontWeight: FontWeight.bold),
+                Column(
+                  children: [
+                    Text(
+                      "BI",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: width * 0.1,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      _locale.businessIntelligenceSystem,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: width * 0.035,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
                 Directionality(
                   textDirection: _locale.localeName == "ar"
