@@ -6,6 +6,7 @@ import '../../controller/vouch_header_transiet_controller.dart';
 import '../../model/vouch_header_transiet_model.dart';
 import '../../utils/constants/responsive.dart';
 import '../../utils/func/converters.dart';
+import '../../utils/func/dates_controller.dart';
 import '../../widget/sidebar/custom_cards.dart';
 import '../dashboard_content/bar_chart_sales_dashboard.dart';
 import '../dashboard_content/daily_sales_dashboard.dart';
@@ -24,7 +25,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   late AppLocalizations locale;
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
-
+  String fromDateEn =
+      DatesController().formatDate(DatesController().currentMonth());
+  String fromDateAr = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().currentMonth()));
+  String toDateEn = DatesController().formatDate(DatesController().todayDate());
+  String toDateAr = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().todayDate()));
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
@@ -66,6 +73,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: height * 0.144,
                           content: CardContent(
                             title: locale.totalSales,
+                            dates: locale.localeName == "en"
+                                ? "$fromDateEn - $toDateEn"
+                                : "$fromDateAr - $toDateAr",
                             value: Converters.formatNumber(
                                     vouchHeaderTransietModel.paidSales
                                         .toDouble())
@@ -86,6 +96,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: height * 0.144,
                           content: CardContent(
                             title: locale.totalReturnSal,
+                            dates: locale.localeName == "en"
+                                ? "$fromDateEn - $toDateEn"
+                                : "$fromDateAr - $toDateAr",
                             value: Converters.formatNumber(
                                     vouchHeaderTransietModel.returnSales
                                         .toDouble())
@@ -106,6 +119,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: height * 0.144,
                           content: CardContent(
                             title: locale.numOfCustomers,
+                            dates: locale.localeName == "en"
+                                ? "$fromDateEn - $toDateEn"
+                                : "$fromDateAr - $toDateAr",
                             value: Converters.formatNumber(
                                     vouchHeaderTransietModel.numOfCustomers
                                         .toDouble())
@@ -123,7 +139,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: width * 0.003,
             ),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: CustomCards(
                 height: height * 0.45,
                 content: const DailySalesDashboard(),
@@ -171,6 +187,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: height * 0.144,
                 content: CardContent(
                   title: locale.totalSales,
+                  dates: locale.localeName == "ar"
+                      ? "$fromDateEn - $toDateEn"
+                      : "$fromDateEn - $toDateEn",
                   value: Converters.formatNumber(
                           vouchHeaderTransietModel.paidSales.toDouble())
                       .toString(),
@@ -186,6 +205,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: height * 0.144,
                 content: CardContent(
                   title: locale.totalReturnSal,
+                  dates: locale.localeName == "ar"
+                      ? "$fromDateEn - $toDateEn"
+                      : "$fromDateEn - $toDateEn",
                   value: Converters.formatNumber(
                           vouchHeaderTransietModel.returnSales.toDouble())
                       .toString(),
@@ -201,6 +223,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 height: height * 0.144,
                 content: CardContent(
                   title: locale.numOfCustomers,
+                  dates: locale.localeName == "ar"
+                      ? "$fromDateEn - $toDateEn"
+                      : "$fromDateEn - $toDateEn",
                   value: Converters.formatNumber(
                           vouchHeaderTransietModel.numOfCustomers.toDouble())
                       .toString(),
