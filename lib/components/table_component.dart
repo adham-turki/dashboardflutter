@@ -12,6 +12,7 @@ class TableComponent extends StatefulWidget {
   final Function(PlutoGridOnRowSecondaryTapEvent event)? rightClickTap;
   final Function(PlutoGridStateManager event)? headerBuilder;
   final Function(PlutoGridStateManager event)? onLoaded;
+  final double? rowHeight;
   final Key key;
   PlutoGridStateManager? stateManager;
   TableComponent(
@@ -25,7 +26,8 @@ class TableComponent extends StatefulWidget {
       this.rightClickTap,
       this.headerBuilder,
       this.onLoaded,
-      this.stateManager});
+      this.stateManager,
+      this.rowHeight});
   @override
   State<TableComponent> createState() => _TableComponentState();
 }
@@ -74,16 +76,16 @@ class _TableComponentState extends State<TableComponent> {
           scrollbarRadius: Radius.circular(scrollRadius),
         ),
         style: PlutoGridStyleConfig(
-          enableRowColorAnimation: true,
-          activatedColor: gridActiveColor,
-          menuBackgroundColor: Colors.white,
-          // iconColor: Colors.white,
-          columnHeight: 50,
-          columnTextStyle: const TextStyle(
-              fontSize: 14, color: Colors.white, letterSpacing: 1),
-          oddRowColor: Colors.grey[100],
-          evenRowColor: Colors.white,
-        ),
+            enableRowColorAnimation: true,
+            activatedColor: gridActiveColor,
+            menuBackgroundColor: Colors.white,
+            // iconColor: Colors.white,
+            columnHeight: 50,
+            columnTextStyle: const TextStyle(
+                fontSize: 14, color: Colors.white, letterSpacing: 1),
+            oddRowColor: Colors.grey[100],
+            evenRowColor: Colors.white,
+            rowHeight: widget.rowHeight ?? PlutoGridSettings.rowHeight),
       ),
       createFooter: (stateManager) {
         if (widget.footerBuilder != null) {

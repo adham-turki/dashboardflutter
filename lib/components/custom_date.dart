@@ -395,9 +395,12 @@ class _CustomDateState extends State<CustomDate> {
               }
             },
             onTapOutside: (event) {
-              submitValueDate(focusNode);
-              if (widget.dateControllerToCompareWith != null) {
-                checkValidation();
+              if (focusNode.hasFocus) {
+                submitValueDate(focusNode);
+                if (widget.dateControllerToCompareWith != null) {
+                  checkValidation();
+                }
+                focusNode.unfocus();
               }
             },
             onFieldSubmitted: (value) {

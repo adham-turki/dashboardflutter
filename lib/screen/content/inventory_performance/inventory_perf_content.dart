@@ -146,6 +146,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * 0.6,
                           child: TableComponent(
                             key: UniqueKey(),
+                            rowHeight: 30,
                             plCols: InventoryPerformanceModel.getColumns(
                                 AppLocalizations.of(context)!, context),
                             polRows: polTopRows,
@@ -174,6 +175,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * 0.6,
                           child: TableComponent(
                             key: UniqueKey(),
+                            rowHeight: 30,
                             plCols: InventoryPerformanceModel.getColumns(
                                 AppLocalizations.of(context)!, context),
                             polRows: [],
@@ -211,6 +213,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
+                            rowHeight: 30,
                             plCols: InventoryPerformanceModel.getColumns(
                                 AppLocalizations.of(context)!, context),
                             polRows: polTopRows,
@@ -239,6 +242,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           height: height * 0.7,
                           child: TableComponent(
                             key: UniqueKey(),
+                            rowHeight: 30,
                             plCols: InventoryPerformanceModel.getColumns(
                                 AppLocalizations.of(context)!, context),
                             polRows: [],

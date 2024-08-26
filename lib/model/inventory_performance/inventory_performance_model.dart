@@ -52,7 +52,7 @@ class InventoryPerformanceModel {
         title: "#",
         field: "counter",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.06 : width * 0.3,
+        width: isDesktop ? width * 0.03 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
@@ -66,21 +66,21 @@ class InventoryPerformanceModel {
         title: localizations.name,
         field: "nameE",
         type: PlutoColumnType.text(),
-        width: isDesktop ? width * 0.13 : width * 0.3,
+        width: isDesktop ? width * 0.12 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.currentQty,
         field: "inQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.09 : width * 0.3,
+        width: isDesktop ? width * 0.0782 : width * 0.3,
         backgroundColor: colColor,
       ),
       PlutoColumn(
         title: localizations.soldQnty,
         field: "outQnty",
         type: PlutoColumnType.number(),
-        width: isDesktop ? width * 0.089 : width * 0.3,
+        width: isDesktop ? width * 0.079 : width * 0.3,
         backgroundColor: colColor,
         footerRenderer: (rendererContext) {
           return InventoryPerformanceModel.footerRenderer(
