@@ -99,7 +99,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
     ];
     selectedStatus = status[0];
     selectedChart = charts[0];
-    getDailySales(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -259,10 +258,12 @@ class _DailySalesContentState extends State<DailySalesContent> {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
         // Adding double quotes around keys and values to make it valid JSON
+
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
-          if (match.group(1) == "fromDate") {
-            print(match.group(1));
+          if (match.group(1) == "fromDate" ||
+              match.group(1) == "toDate" ||
+              match.group(1) == "branch") {
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -275,19 +276,11 @@ class _DailySalesContentState extends State<DailySalesContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         _fromDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -301,8 +294,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -486,6 +477,8 @@ class _DailySalesContentState extends State<DailySalesContent> {
       isLoading = true;
     });
     listOfBalances = [];
+    listOfPeriods = [];
+
     // dataMap.clear();
     pieData = [];
     barData = [];
@@ -499,7 +492,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     }
     String startDate = DatesController().formatDate(_fromDateController.text);
     SearchCriteria searchCriteria =
-        SearchCriteria(fromDate: startDate, voucherStatus: status);
+        SearchCriteria(fromDate: startDate, voucherStatus: status, branch: "");
     if (isStart != true) {
       setSearchCriteria(searchCriteria);
     }
@@ -507,28 +500,28 @@ class _DailySalesContentState extends State<DailySalesContent> {
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
       for (var elemant in response) {
-        String temp =
-            DatesController().formatDate(getNextDay(startDate).toString());
-        if (elemant.dailySale != 0.0) {
+        String temp = elemant.date ?? "NO DATE";
+        if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
-        } else if (elemant.dailySale == 0.0) {
+        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
           boolTemp = false;
         }
-        listOfBalances.add(elemant.dailySale!);
+        listOfBalances.add(double.parse(elemant.dailySale.toString()));
         listOfPeriods.add(temp);
         if (boolTemp) {
           // dataMap[temp] = formatDoubleToTwoDecimalPlaces(
           // elemant.dailySale!);
           pieData.add(PieChartModel(
               title: temp,
-              value: elemant.dailySale == 0.0
+              value: double.parse(elemant.dailySale.toString()) == 0.0
                   ? 1.0
-                  : formatDoubleToTwoDecimalPlaces(elemant.dailySale!),
+                  : formatDoubleToTwoDecimalPlaces(
+                      double.parse(elemant.dailySale.toString())),
               color: getRandomColor(colorNewList, usedColors)));
         }
 
         barData.add(
-          BarChartData(temp, elemant.dailySale!),
+          BarChartData(temp, double.parse(elemant.dailySale.toString())),
         );
       }
       setState(() {
