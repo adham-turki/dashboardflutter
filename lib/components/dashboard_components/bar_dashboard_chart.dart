@@ -87,7 +87,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
           scrollDirection: Axis.horizontal,
           child: Padding(
             padding:
-                const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
+                const EdgeInsets.only(right: 50, bottom: 15, top: 20, left: 0),
             child: SizedBox(
               width: isMobile
                   ? (widget.isMax && dataList.length < 6) || dataList.length < 6
@@ -147,7 +147,21 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                             ),
                           ),
                           rightTitles: const AxisTitles(),
-                          topTitles: const AxisTitles(),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 35,
+                              interval: 1,
+                              getTitlesWidget: (value, meta) {
+                                return SideTitleWidget(
+                                  axisSide: meta.axisSide,
+                                  child: const Text(
+                                    "",
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                         gridData: FlGridData(
                           show: true,

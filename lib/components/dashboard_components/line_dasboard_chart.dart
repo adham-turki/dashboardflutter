@@ -43,8 +43,8 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+        topTitles: AxisTitles(
+          sideTitles: topTitles,
         ),
         leftTitles: AxisTitles(
           sideTitles: leftTitles,
@@ -65,11 +65,21 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
     return Text(text, style: style, textAlign: TextAlign.center);
   }
 
+  Widget topTitleWidgets(double value, TitleMeta meta) {
+    return const Text("");
+  }
+
   SideTitles get leftTitles => SideTitles(
         getTitlesWidget: leftTitleWidgets,
         showTitles: true,
         interval: balances.isEmpty ? 300000 : getMax() / 5,
         reservedSize: 100,
+      );
+  SideTitles get topTitles => SideTitles(
+        getTitlesWidget: topTitleWidgets,
+        showTitles: true,
+        interval: balances.isEmpty ? 300000 : getMax() / 5,
+        reservedSize: 35,
       );
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
