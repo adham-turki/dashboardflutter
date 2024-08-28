@@ -119,9 +119,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: height * 0.144,
                           content: CardContent(
                             title: locale.numOfCustomers,
-                            dates: locale.localeName == "en"
-                                ? "$fromDateEn - $toDateEn"
-                                : "$fromDateAr - $toDateAr",
                             value: Converters.formatNumber(
                                     vouchHeaderTransietModel.numOfCustomers
                                         .toDouble())
