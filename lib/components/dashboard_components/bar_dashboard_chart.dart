@@ -127,7 +127,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                                   : getMax() / 6,
                               getTitlesWidget: (value, meta) {
                                 return Text(
-                                  value.toInt().toString(),
+                                  value.ceil().toString(),
                                   textAlign: TextAlign.left,
                                 );
                               },
@@ -142,7 +142,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
                                   child: Text(
-                                    widget.barChartData[value.toInt()].name!,
+                                    widget.barChartData[value.ceil()].name!,
                                     style: const TextStyle(fontSize: 14),
                                   ),
                                 );
