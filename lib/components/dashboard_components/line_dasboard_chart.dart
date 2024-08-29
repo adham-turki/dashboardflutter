@@ -1,4 +1,5 @@
 import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -32,9 +33,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
       lineBarsData: lineBarsData2,
       baselineY: 1);
 
-  LineTouchData get lineTouchData2 => const LineTouchData(
-        enabled: true,
-      );
+  LineTouchData get lineTouchData2 => const LineTouchData(enabled: true);
 
   FlTitlesData get titlesData2 => FlTitlesData(
         bottomTitles: AxisTitles(
@@ -60,8 +59,9 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
       fontSize: 14,
     );
     String text;
-    text = value.ceil().toString();
 
+    text = value.ceil().toString();
+    print("vaaaal $value $text");
     return Text(text, style: style, textAlign: TextAlign.center);
   }
 
@@ -72,13 +72,12 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   SideTitles get leftTitles => SideTitles(
         getTitlesWidget: leftTitleWidgets,
         showTitles: true,
-        interval: balances.isEmpty ? 300000 : getMax() / 5,
+        interval: balances.isEmpty ? 300000 : getMax() / 6,
         reservedSize: 100,
       );
   SideTitles get topTitles => SideTitles(
         getTitlesWidget: topTitleWidgets,
         showTitles: true,
-        interval: balances.isEmpty ? 300000 : getMax() / 5,
         reservedSize: 35,
       );
 
@@ -151,7 +150,12 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
     });
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    balances = widget.balances;
+    balances = [];
+    for (int i = 0; i < widget.balances.length; i++) {
+      balances
+          .add(double.parse(Converters.formatNumberDigits(widget.balances[i])));
+    }
+
     periods = widget.periods;
     bool isMobile = Responsive.isMobile(context);
     buildWidget = Directionality(
@@ -173,9 +177,17 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                     : (widget.isMax && periods.length < 6) || periods.length < 6
                         ? width * .6
                         : width * (periods.length / 15),
-                child: LineChart(
-                  sampleData2,
-                  // duration: const Duration(milliseconds: 250),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.0)),
+                    Expanded(
+                        child: LineChart(
+                      sampleData2,
+                      duration: const Duration(milliseconds: 250),
+                    )),
+                  ],
                 )),
           )),
     );
@@ -188,7 +200,11 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    balances = widget.balances;
+    for (int i = 0; i < widget.balances.length; i++) {
+      balances
+          .add(double.parse(Converters.formatNumberDigits(widget.balances[i])));
+    }
+
     periods = widget.periods;
     bool isMobile = Responsive.isMobile(context);
     return Directionality(

@@ -13,6 +13,11 @@ class Converters {
     return myFormat.format(num);
   }
 
+  static formatNumberDigits(double num) {
+    NumberFormat myFormat = NumberFormat("#.####");
+    return myFormat.format(num);
+  }
+
   static String formatDate(String dateString) {
     try {
       DateTime dateTime = DateTime.parse(dateString);

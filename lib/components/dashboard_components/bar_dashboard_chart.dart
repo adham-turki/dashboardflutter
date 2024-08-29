@@ -122,6 +122,9 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                             sideTitles: SideTitles(
                               showTitles: true,
                               reservedSize: 100,
+                              interval: widget.barChartData.isEmpty
+                                  ? 300000
+                                  : getMax() / 6,
                               getTitlesWidget: (value, meta) {
                                 return Text(
                                   value.toInt().toString(),
@@ -193,6 +196,16 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  double getMax() {
+    double max = 0;
+    for (int i = 0; i < widget.barChartData.length; i++) {
+      if (widget.barChartData[i].percent! > max) {
+        max = widget.barChartData[i].percent!;
+      }
+    }
+    return max;
   }
 
   @override

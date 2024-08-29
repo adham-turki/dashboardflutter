@@ -188,7 +188,6 @@ class _BranchesSalesByCatDashboardState
                 const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
             child: Container(
               height: isDesktop ? height * 0.44 : height * 0.48,
-              width: double.infinity,
               padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
               decoration: BoxDecoration(
                 color: whiteColor,
@@ -298,7 +297,7 @@ class _BranchesSalesByCatDashboardState
                         )
                       : selectedChart == Line_Chart
                           ? SizedBox(
-                              height: height * .3,
+                              height: height * .4,
                               child: LineDashboardChart(
                                   isMax: false,
                                   balances: listOfBalances,
