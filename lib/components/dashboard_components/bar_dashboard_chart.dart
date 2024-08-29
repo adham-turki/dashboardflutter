@@ -140,13 +140,15 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 32,
+                              reservedSize: 60,
                               interval: 1,
                               getTitlesWidget: (value, meta) {
                                 return SideTitleWidget(
                                   axisSide: meta.axisSide,
                                   child: Text(
-                                    widget.barChartData[value.ceil()].name!,
+                                    widget.barChartData[value.ceil()].name!
+                                        .replaceFirst(" ", "\n"),
+                                    textAlign: TextAlign.center,
                                     style: const TextStyle(fontSize: 14),
                                   ),
                                 );

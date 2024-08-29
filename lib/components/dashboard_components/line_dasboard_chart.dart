@@ -68,7 +68,6 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
 
     text = value.ceil().toString();
     duplicateValue.add(value.ceil());
-    print("vaaaal $value $text");
     return Text(text, style: style, textAlign: TextAlign.center);
   }
 
@@ -94,8 +93,13 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
     );
     int index = value.round();
 
-    Widget text =
-        Text(periods.isNotEmpty ? periods[index] : 0.toString(), style: style);
+    String title = periods.isNotEmpty ? periods[index] : 0.toString();
+    Widget text = Text(
+      title.replaceFirst(" ", "\n"),
+      style: style,
+      textAlign: TextAlign.center,
+    );
+
     return SideTitleWidget(
       axisSide: meta.axisSide,
       child: text,
@@ -104,7 +108,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
 
   SideTitles get bottomTitles => SideTitles(
         showTitles: true,
-        reservedSize: 32,
+        reservedSize: 60,
         interval: 1,
         getTitlesWidget: bottomTitleWidgets,
       );
