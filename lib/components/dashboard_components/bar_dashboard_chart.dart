@@ -90,12 +90,16 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                 const EdgeInsets.only(right: 50, bottom: 15, top: 20, left: 0),
             child: SizedBox(
               width: isMobile
-                  ? (widget.isMax && dataList.length < 6) || dataList.length < 6
+                  ? (widget.isMax && dataList.length < 6)
                       ? width * 0.8
-                      : width * (dataList.length / 4)
-                  : (widget.isMax && dataList.length < 6) || dataList.length < 6
+                      : (!widget.isMax && dataList.length < 6)
+                          ? width * 0.4
+                          : width * (dataList.length / 4)
+                  : (widget.isMax && dataList.length < 6)
                       ? width * .6
-                      : width * (dataList.length / 15),
+                      : (!widget.isMax && dataList.length < 6)
+                          ? width * 0.3
+                          : width * (dataList.length / 15),
               height: height * 0.35,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
