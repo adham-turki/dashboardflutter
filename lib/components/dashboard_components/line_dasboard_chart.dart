@@ -147,7 +147,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   final ScrollController _scrollController = ScrollController();
   @override
   void didChangeDependencies() {
-    // getBuildWidget();
+    getBuildWidget();
     super.didChangeDependencies();
   }
 
@@ -166,59 +166,6 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
     periods = widget.periods;
     bool isMobile = Responsive.isMobile(context);
     buildWidget = Directionality(
-      textDirection: TextDirection.ltr,
-      child: Scrollbar(
-          controller: _scrollController,
-          thumbVisibility: true,
-          thickness: 8,
-          trackVisibility: true,
-          radius: const Radius.circular(4),
-          child: Padding(
-            padding:
-                const EdgeInsets.only(right: 50, bottom: 15, top: 15, left: 0),
-            child: SizedBox(
-                width: isMobile
-                    ? (widget.isMax && periods.length < 6)
-                        ? width * 0.8
-                        : (!widget.isMax && periods.length < 6)
-                            ? width * 0.4
-                            : width * (periods.length / 4)
-                    : (widget.isMax && periods.length < 6)
-                        ? width * 0.6
-                        : (!widget.isMax && periods.length < 6)
-                            ? width * 0.3
-                            : width * (periods.length / 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0)),
-                    Expanded(
-                        child: LineChart(
-                      sampleData2,
-                      duration: const Duration(milliseconds: 250),
-                    )),
-                  ],
-                )),
-          )),
-    );
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    width = MediaQuery.of(context).size.width;
-    height = MediaQuery.of(context).size.height;
-    for (int i = 0; i < widget.balances.length; i++) {
-      balances
-          .add(double.parse(Converters.formatNumberDigits(widget.balances[i])));
-    }
-
-    periods = widget.periods;
-    bool isMobile = Responsive.isMobile(context);
-    return Directionality(
       textDirection: TextDirection.ltr,
       child: Scrollbar(
           controller: _scrollController,
@@ -258,6 +205,67 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                     )),
               ))),
     );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : buildWidget;
+    // width = MediaQuery.of(context).size.width;
+    // height = MediaQuery.of(context).size.height;
+    // for (int i = 0; i < widget.balances.length; i++) {
+    //   balances
+    //       .add(double.parse(Converters.formatNumberDigits(widget.balances[i])));
+    // }
+
+    // periods = widget.periods;
+    // bool isMobile = Responsive.isMobile(context);
+    // return Directionality(
+    //   textDirection: TextDirection.ltr,
+    //   child: Scrollbar(
+    //       controller: _scrollController,
+    //       thumbVisibility: true,
+    //       thickness: 8,
+    //       trackVisibility: true,
+    //       radius: const Radius.circular(4),
+    //       child: SingleChildScrollView(
+    //           controller: _scrollController,
+    //           scrollDirection: Axis.horizontal,
+    //           child: Padding(
+    //             padding: const EdgeInsets.only(
+    //                 right: 50, bottom: 15, top: 15, left: 0),
+    //             child: SizedBox(
+    //                 width: isMobile
+    //                     ? (widget.isMax && periods.length < 6)
+    //                         ? width * 0.8
+    //                         : (!widget.isMax && periods.length < 6)
+    //                             ? width * 0.4
+    //                             : width * (periods.length / 4)
+    //                     : (widget.isMax && periods.length < 6)
+    //                         ? width * 0.6
+    //                         : (!widget.isMax && periods.length < 6)
+    //                             ? width * 0.3
+    //                             : width * (periods.length / 15),
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                   children: [
+    //                     const Padding(
+    //                         padding: EdgeInsets.symmetric(horizontal: 5.0)),
+    //                     Expanded(
+    //                         child: LineChart(
+    //                       sampleData2,
+    //                       duration: const Duration(milliseconds: 250),
+    //                     )),
+    //                   ],
+    //                 )),
+    //           ))),
+    // );
   }
 
   double getMax() {
