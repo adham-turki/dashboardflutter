@@ -54,13 +54,20 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
         lineChartBarData2_1,
       ];
 
+  Set<int> duplicateValue = {};
+
   Widget leftTitleWidgets(double value, TitleMeta meta) {
+    if (duplicateValue.contains(value.ceil() - 1) ||
+        duplicateValue.contains(value.ceil() + 1)) {
+      return const Text("");
+    }
     const style = TextStyle(
       fontSize: 14,
     );
     String text;
 
     text = value.ceil().toString();
+    duplicateValue.add(value.ceil());
     print("vaaaal $value $text");
     return Text(text, style: style, textAlign: TextAlign.center);
   }
