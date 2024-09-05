@@ -72,6 +72,11 @@ class _TableComponentState extends State<TableComponent> {
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
         scrollbar: PlutoGridScrollbarConfig(
+          onlyDraggingThumb: false,
+          scrollbarThicknessWhileDragging: 20,
+          draggableScrollbar: true,
+          isAlwaysShown: true,
+          scrollBarColor: primary,
           scrollbarThickness: scrollThickness,
           scrollbarRadius: Radius.circular(scrollRadius),
         ),

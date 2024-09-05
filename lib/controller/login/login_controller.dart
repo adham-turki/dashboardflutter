@@ -22,13 +22,13 @@ class LoginController {
     print("body: ${response.body}");
     if (response.statusCode == statusOk) {
       String token = response.body.substring(13, response.body.length - 2);
-      print("tokeeeen : :$token");
       const storage = FlutterSecureStorage();
 
       await storage.write(key: 'jwt', value: token);
       await storage.write(key: 'user', value: userModel.userName);
+      print("tokeeeen : :$token");
 
-      await getExpDate(token, storage);
+      // await getExpDate(token, storage);
       return true;
     } else {
       if (response.statusCode == 400 || response.statusCode == 406) {
@@ -42,9 +42,15 @@ class LoginController {
   }
 
   Future<void> getExpDate(String token, FlutterSecureStorage storage) async {
+    print("tokeeeen22 : :$token");
+
     final encodedPayload = token.split('.')[1];
+    print("encodedPayload : :$encodedPayload");
+
     final payloadData =
         utf8.fuse(base64).decode(base64.normalize(encodedPayload));
+    print("payloadData : :$payloadData");
+
     final payLoad = PayloadModel.fromJson(jsonDecode(payloadData));
     DateTime expDateTime =
         DateTime.fromMillisecondsSinceEpoch(payLoad.exp! * 1000);
