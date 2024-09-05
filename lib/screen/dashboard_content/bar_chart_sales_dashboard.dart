@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
@@ -75,6 +77,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   int count = 0;
   bool isLoading = false;
   ValueNotifier totalBranchesSale = ValueNotifier(0);
+  Timer? _timer;
 
   @override
   void didChangeDependencies() {
@@ -105,6 +108,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   @override
   void initState() {
     getAllCodeReports();
+    _startTimer();
+
     super.initState();
   }
 
@@ -204,10 +209,14 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                   },
                                 ).then((value) async {
                                   setState(() {
+                                    _timer!.cancel();
+
                                     isLoading = true;
                                   });
                                   getSalesByBranch().then((value) {
                                     setState(() {
+                                      _startTimer();
+
                                       isLoading = false;
                                     });
                                   });
@@ -447,61 +456,98 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         "baaaaaaaaaaaaaaal ${listOfBalances.length}  ${listOfPeriods.length}");
   }
 
+  void _startTimer() {
+    const storage = FlutterSecureStorage();
+
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        await getSalesByBranch().then((value) async {
+          setState(() {
+            isLoading = true;
+          });
+
+          await Future.delayed(const Duration(milliseconds: 1));
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        _timer!.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _stopTimer(); // Stop timer when the widget is disposed
+
+    super.dispose();
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel(); // Cancel the timer
+      _timer = null; // Reset timer reference
+    }
+  }
+
   Future<void> getSalesByBranch() async {
     final selectedFromDate = fromDateController.text;
     final selectedToDate = toDateController.text;
 
     if (dataLoaded) {
-      if (selectedFromDate != lastFromDate || selectedToDate != lastToDate) {
-        // Load data when selected dates change
-        SearchCriteria searchCriteria = SearchCriteria(
-          fromDate: selectedFromDate,
-          toDate: selectedToDate,
-          voucherStatus: -100,
-        );
-        pieData = [];
-        dataMap.clear();
-        barData = [];
-        listOfBalances = [];
-        listOfPeriods = [];
-        await salesBranchesController
-            .getSalesByBranches(searchCriteria)
-            .then((value) {
-          // Update lastFromDate and lastToDate
-          lastFromDate = selectedFromDate;
-          lastToDate = selectedToDate;
-          // Update the data
-          for (var element in value) {
-            double a = (element.totalSales! + element.retSalesDis!) -
-                (element.salesDis! + element.totalReturnSales!);
-            a = Converters().formateDouble(a);
-            if (a != 0.0) {
-              temp = true;
-            } else if (a == 0.0) {
-              temp = false;
-            }
-            listOfBalances.add(a);
-            listOfPeriods.add(element.namee!);
-            if (temp) {
-              dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
-              pieData.add(PieChartModel(
-                title: element.namee!,
-                value: formatDoubleToTwoDecimalPlaces(a),
-                color: getNextColor(),
-              ));
-            }
-            barData.add(
-              BarData(name: element.namee!, percent: a),
-            );
+      // if (selectedFromDate != lastFromDate || selectedToDate != lastToDate) {
+      // Load data when selected dates change
+      SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: selectedFromDate,
+        toDate: selectedToDate,
+        voucherStatus: -100,
+      );
+      pieData = [];
+      dataMap.clear();
+      barData = [];
+      listOfBalances = [];
+      listOfPeriods = [];
+      await salesBranchesController
+          .getSalesByBranches(searchCriteria)
+          .then((value) {
+        // Update lastFromDate and lastToDate
+        lastFromDate = selectedFromDate;
+        lastToDate = selectedToDate;
+        // Update the data
+        for (var element in value) {
+          double a = (element.totalSales! + element.retSalesDis!) -
+              (element.salesDis! + element.totalReturnSales!);
+          a = Converters().formateDouble(a);
+          if (a != 0.0) {
+            temp = true;
+          } else if (a == 0.0) {
+            temp = false;
           }
-          double total = 0;
-          for (int i = 0; i < listOfBalances.length; i++) {
-            total += listOfBalances[i];
+          listOfBalances.add(a);
+          listOfPeriods.add(element.namee!);
+          if (temp) {
+            dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+            pieData.add(PieChartModel(
+              title: element.namee!,
+              value: formatDoubleToTwoDecimalPlaces(a),
+              color: getNextColor(),
+            ));
           }
-          totalBranchesSale.value =
-              double.parse(Converters.formatNumberDigits(total));
-        });
-      }
+          barData.add(
+            BarData(name: element.namee!, percent: a),
+          );
+        }
+        double total = 0;
+        for (int i = 0; i < listOfBalances.length; i++) {
+          total += listOfBalances[i];
+        }
+        totalBranchesSale.value =
+            double.parse(Converters.formatNumberDigits(total));
+      });
+      // }
     }
   }
 

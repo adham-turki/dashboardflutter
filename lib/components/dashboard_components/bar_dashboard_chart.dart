@@ -63,12 +63,16 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
     super.didChangeDependencies();
   }
 
+  Color myCustomTooltipColor(BarChartGroupData group) {
+    // Example logic: change color based on group index
+    return Colors.blue.shade200;
+  }
+
   getBuildWidget() {
     setState(() {
       isLoading = true;
     });
     convertBarDataToDashboardBarData();
-    print("isLoading $isLoading dataListLength ${dataList.length}");
 
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
@@ -110,6 +114,18 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                   Expanded(
                     child: BarChart(
                       BarChartData(
+                        barTouchData: BarTouchData(
+                            touchTooltipData: BarTouchTooltipData(
+                          getTooltipColor: myCustomTooltipColor,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            return BarTooltipItem(
+                              '${rod.toY}', // Tooltip text
+                              const TextStyle(
+                                color: Colors.black, // Text color
+                              ),
+                            );
+                          },
+                        )),
                         alignment: BarChartAlignment.spaceBetween,
                         borderData: FlBorderData(
                           show: true,

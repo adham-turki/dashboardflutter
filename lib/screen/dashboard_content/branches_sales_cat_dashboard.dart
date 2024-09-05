@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -8,6 +9,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
@@ -111,6 +113,7 @@ class _BranchesSalesByCatDashboardState
   bool isLoading = true;
   List<String> branches = [];
   ValueNotifier totalBranchesByCateg = ValueNotifier(0);
+  Timer? _timer;
 
   @override
   void didChangeDependencies() {
@@ -161,6 +164,8 @@ class _BranchesSalesByCatDashboardState
       setState(() {});
     });
     getAllCodeReports();
+    _startTimer();
+
     super.initState();
   }
 
@@ -284,10 +289,14 @@ class _BranchesSalesByCatDashboardState
                                   },
                                 ).then((value) async {
                                   setState(() {
+                                    _timer!.cancel();
+
                                     isLoading = true;
                                   });
                                   getBranchByCat().then((value) {
                                     setState(() {
+                                      _startTimer();
+
                                       isLoading = false;
                                     });
                                   });
@@ -478,87 +487,87 @@ class _BranchesSalesByCatDashboardState
     final selectedCategoriesValue = selectedCategories;
     final selectedBranchCodeValue = selectedBranchCode;
 
-    if (selectedFromDate != lastFromDate ||
-        getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
-        selectedBranchCodeValue != lastBranchCode ||
-        selectedToDate != lastToDate) {
-      lastFromDate = selectedFromDate;
-      lastToDate = selectedToDate;
+    // if (selectedFromDate != lastFromDate ||
+    //     getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
+    //     selectedBranchCodeValue != lastBranchCode ||
+    //     selectedToDate != lastToDate) {
+    lastFromDate = selectedFromDate;
+    lastToDate = selectedToDate;
 
-      lastCategories = getCategoryByCode(selectedCategories, _locale);
-      lastBranchCode = selectedBranchCode;
+    lastCategories = getCategoryByCode(selectedCategories, _locale);
+    lastBranchCode = selectedBranchCode;
 
-      // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
-      //   if (selectedFromDate.isEmpty) {
-      //     selectedFromDate = todayDate;
-      //   }
-      //   if (toDateController.text.isEmpty) {
-      //     toDateController.text = todayDate;
-      //   }
-      // }
+    // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
+    //   if (selectedFromDate.isEmpty) {
+    //     selectedFromDate = todayDate;
+    //   }
+    //   if (toDateController.text.isEmpty) {
+    //     toDateController.text = todayDate;
+    //   }
+    // }
 
-      SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: selectedFromDate,
-        toDate: selectedToDate,
-        byCategory: selectedCategories,
-        branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
-      );
-      setSearchCriteria(searchCriteria);
-      pieData = [];
-      barData = [];
-      listOfBalances = [];
-      listOfPeriods = [];
+    SearchCriteria searchCriteria = SearchCriteria(
+      fromDate: selectedFromDate,
+      toDate: selectedToDate,
+      byCategory: selectedCategories,
+      branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
+    );
+    setSearchCriteria(searchCriteria);
+    pieData = [];
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
 
-      await salesCategoryController
-          .getSalesByCategory(searchCriteria, isStart: isStart)
-          .then((value) {
-        for (var element in value) {
-          // print("adasdasdasdasdasdas");
-          double bal = element.creditAmt! - element.debitAmt!;
+    await salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
+      for (var element in value) {
+        // print("adasdasdasdasdasdas");
+        double bal = element.creditAmt! - element.debitAmt!;
 
-          if (bal != 0.0) {
-            temp = true;
-          } else if (bal == 0.0) {
-            temp = false;
-          }
-          listOfBalances.add(bal);
-          listOfPeriods.add(
-            element.categoryName!.isNotEmpty
-                ? element.categoryName!
-                : _locale.general,
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
+        }
+        listOfBalances.add(bal);
+        listOfPeriods.add(
+          element.categoryName!.isNotEmpty
+              ? element.categoryName!
+              : _locale.general,
+        );
+        if (temp) {
+          dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
+
+          pieData.add(
+            PieChartModel(
+              title: element.categoryName!.isNotEmpty
+                  ? element.categoryName!
+                  : _locale.general,
+              value: formatDoubleToTwoDecimalPlaces(bal),
+              color: getRandomColor(colorNewList),
+            ),
           );
-          if (temp) {
-            dataMap[element.categoryName!] =
-                formatDoubleToTwoDecimalPlaces(bal);
-
-            pieData.add(
-              PieChartModel(
-                title: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                value: formatDoubleToTwoDecimalPlaces(bal),
-                color: getRandomColor(colorNewList),
-              ),
-            );
-            barData.add(
-              BarData(
-                name: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                percent: formatDoubleToTwoDecimalPlaces(bal),
-              ),
-            );
-          }
+          barData.add(
+            BarData(
+              name: element.categoryName!.isNotEmpty
+                  ? element.categoryName!
+                  : _locale.general,
+              percent: formatDoubleToTwoDecimalPlaces(bal),
+            ),
+          );
         }
+      }
 
-        double total = 0;
-        for (int i = 0; i < listOfBalances.length; i++) {
-          total += listOfBalances[i];
-        }
-        totalBranchesByCateg.value =
-            double.parse(Converters.formatNumberDigits(total));
-      });
-    }
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalBranchesByCateg.value =
+          double.parse(Converters.formatNumberDigits(total));
+    });
+
+    // }
   }
 
   // Future getBranchByCat1({bool? isStart}) async {
@@ -625,6 +634,42 @@ class _BranchesSalesByCatDashboardState
   //     print("balLengthhhh ${barData.length}");
   //   });
   // }
+  void _startTimer() {
+    const storage = FlutterSecureStorage();
+
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        await getBranchByCat().then((value) async {
+          setState(() {
+            isLoading = true;
+          });
+
+          await Future.delayed(const Duration(milliseconds: 1));
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        _timer!.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _stopTimer(); // Stop timer when the widget is disposed
+
+    super.dispose();
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel(); // Cancel the timer
+      _timer = null; // Reset timer reference
+    }
+  }
 
   void getBranch() async {
     BranchController().getBranch().then((value) {

@@ -26,14 +26,30 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   bool isLoading = false;
   Widget buildWidget = const Row();
   LineChartData get sampleData2 => LineChartData(
-      lineTouchData: lineTouchData2,
+      lineTouchData: LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          getTooltipColor: defaultLineTooltipColor,
+          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+            return touchedSpots.map((spot) {
+              return LineTooltipItem(
+                '${spot.y}',
+                const TextStyle(color: Colors.black),
+              );
+            }).toList();
+          },
+        ),
+      ),
       gridData: gridData,
       titlesData: titlesData2,
       borderData: borderData,
       lineBarsData: lineBarsData2,
       baselineY: 1);
 
-  LineTouchData get lineTouchData2 => const LineTouchData(enabled: true);
+// Default color function
+  Color defaultLineTooltipColor(LineBarSpot spot) {
+    // Default color logic; for example, returning a specific color or based on spot index
+    return Colors.green.shade100;
+  }
 
   FlTitlesData get titlesData2 => FlTitlesData(
         bottomTitles: AxisTitles(
