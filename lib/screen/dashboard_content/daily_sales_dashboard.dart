@@ -24,6 +24,7 @@ import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/pages_constants.dart';
 import '../../utils/constants/responsive.dart';
+import '../../utils/func/converters.dart';
 import 'filter_dialog/filter_dialog_daily_sales.dart';
 
 class DailySalesDashboard extends StatefulWidget {
@@ -90,6 +91,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   int counter = 0;
   bool isLoading = true;
   List<String> branches = [];
+  ValueNotifier totalDailySale = ValueNotifier(0);
 
   @override
   void didChangeDependencies() {
@@ -154,10 +156,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _locale.dailySales,
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: totalDailySale,
+                          builder: ((context, value, child) {
+                            return Text(
+                              "${_locale.dailySales} (${totalDailySale.value})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                            );
+                          })),
                       Text(
                         _locale.localeName == "en"
                             ? fromDateController.text
@@ -417,6 +423,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
               name: temp, percent: double.parse(elemant.dailySale.toString())),
         );
       }
+
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
+      ;
     });
 
     print("BBBBBBBBBbbarLength ${barData.length}");
@@ -480,6 +493,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                 percent: double.parse(elemant.dailySale.toString())),
           );
         }
+
+        double total = 0;
+        for (int i = 0; i < listOfBalances.length; i++) {
+          total += listOfBalances[i];
+        }
+        totalDailySale.value =
+            double.parse(Converters.formatNumberDigits(total));
+        ;
       });
     }
   }

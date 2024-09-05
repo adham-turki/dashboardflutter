@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -58,6 +59,8 @@ class _BranchesSalesByCatDashboardState
   ];
 
   String lastFromDate = "";
+  String lastToDate = "";
+
   String lastCategories = "";
   String lastBranchCode = "";
   List<double> listOfBalances = [];
@@ -107,6 +110,7 @@ class _BranchesSalesByCatDashboardState
   int count = 0;
   bool isLoading = true;
   List<String> branches = [];
+  ValueNotifier totalBranchesByCateg = ValueNotifier(0);
 
   @override
   void didChangeDependencies() {
@@ -199,10 +203,14 @@ class _BranchesSalesByCatDashboardState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _locale.branchesSalesByCategories,
-                        style: TextStyle(fontSize: isDesktop ? 16 : 13),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: totalBranchesByCateg,
+                          builder: ((context, value, child) {
+                            return Text(
+                              "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                            );
+                          })),
                       Text(
                         _locale.localeName == "en"
                             ? "${fromDateController.text}  -  ${toDateController.text}"
@@ -224,7 +232,6 @@ class _BranchesSalesByCatDashboardState
                             fontSize: isDesktop ? height * .018 : height * .017,
                             width: isDesktop ? width * 0.13 : width * 0.25,
                             onPressed: () {
-                              print("isLoaaaaading $isLoading");
                               if (isLoading == false) {
                                 showDialog(
                                   context: context,
@@ -466,13 +473,18 @@ class _BranchesSalesByCatDashboardState
 
   Future<void> getBranchByCat({bool? isStart}) async {
     var selectedFromDate = fromDateController.text;
+    var selectedToDate = toDateController.text;
+
     final selectedCategoriesValue = selectedCategories;
     final selectedBranchCodeValue = selectedBranchCode;
 
     if (selectedFromDate != lastFromDate ||
         getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
-        selectedBranchCodeValue != lastBranchCode) {
+        selectedBranchCodeValue != lastBranchCode ||
+        selectedToDate != lastToDate) {
       lastFromDate = selectedFromDate;
+      lastToDate = selectedToDate;
+
       lastCategories = getCategoryByCode(selectedCategories, _locale);
       lastBranchCode = selectedBranchCode;
 
@@ -487,8 +499,7 @@ class _BranchesSalesByCatDashboardState
 
       SearchCriteria searchCriteria = SearchCriteria(
         fromDate: selectedFromDate,
-        toDate:
-            toDateController.text.isEmpty ? todayDate : toDateController.text,
+        toDate: selectedToDate,
         byCategory: selectedCategories,
         branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
       );
@@ -539,6 +550,13 @@ class _BranchesSalesByCatDashboardState
             );
           }
         }
+
+        double total = 0;
+        for (int i = 0; i < listOfBalances.length; i++) {
+          total += listOfBalances[i];
+        }
+        totalBranchesByCateg.value =
+            double.parse(Converters.formatNumberDigits(total));
       });
     }
   }

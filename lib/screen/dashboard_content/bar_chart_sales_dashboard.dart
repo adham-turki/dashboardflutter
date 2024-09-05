@@ -74,6 +74,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   String txtKey = "";
   int count = 0;
   bool isLoading = false;
+  ValueNotifier totalBranchesSale = ValueNotifier(0);
 
   @override
   void didChangeDependencies() {
@@ -141,10 +142,14 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _locale.salesByBranches,
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: totalBranchesSale,
+                          builder: ((context, value, child) {
+                            return Text(
+                              "${_locale.salesByBranches} (${totalBranchesSale.value})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                            );
+                          })),
                       Text(
                         _locale.localeName == "en"
                             ? "${fromDateController.text}  -  ${toDateController.text}"
@@ -431,6 +436,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           BarData(name: element.namee!, percent: a),
         );
       }
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalBranchesSale.value =
+          double.parse(Converters.formatNumberDigits(total));
     });
     print(
         "baaaaaaaaaaaaaaal ${listOfBalances.length}  ${listOfPeriods.length}");
@@ -483,6 +494,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
               BarData(name: element.namee!, percent: a),
             );
           }
+          double total = 0;
+          for (int i = 0; i < listOfBalances.length; i++) {
+            total += listOfBalances[i];
+          }
+          totalBranchesSale.value =
+              double.parse(Converters.formatNumberDigits(total));
         });
       }
     }
