@@ -8,19 +8,19 @@ class PayloadModel {
   factory PayloadModel.fromJson(Map<String, dynamic> json) {
     return PayloadModel(
       sub: json['sub'],
-      roles: List<String>.from(json['roles']),
+      // roles: List<String>.from(json['roles']),
       exp: json['exp'],
       iat: json['iat'],
-      group: json['group'],
+      // group: json['group'],
     );
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['sub'] = sub;
-    data['roles'] = roles;
+    // data['roles'] = roles;
     data['exp'] = exp;
     data['iat'] = iat;
-    data['group'] = group;
+    // data['group'] = group;
     return data;
   }
 }

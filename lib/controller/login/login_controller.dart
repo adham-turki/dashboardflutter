@@ -28,7 +28,7 @@ class LoginController {
       await storage.write(key: 'user', value: userModel.userName);
       print("tokeeeen : :$token");
 
-      // await getExpDate(token, storage);
+      await getExpDate(token, storage);
       return true;
     } else {
       if (response.statusCode == 400 || response.statusCode == 406) {
@@ -42,14 +42,10 @@ class LoginController {
   }
 
   Future<void> getExpDate(String token, FlutterSecureStorage storage) async {
-    print("tokeeeen22 : :$token");
-
     final encodedPayload = token.split('.')[1];
-    print("encodedPayload : :$encodedPayload");
 
     final payloadData =
         utf8.fuse(base64).decode(base64.normalize(encodedPayload));
-    print("payloadData : :$payloadData");
 
     final payLoad = PayloadModel.fromJson(jsonDecode(payloadData));
     DateTime expDateTime =
