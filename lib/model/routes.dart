@@ -45,6 +45,13 @@ class AppRoutes {
   static Future<String?> _redirect(BuildContext context) async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'jwt');
+    String? expDate = await storage.read(key: "expDate");
+    if (expDate != null) {
+      DateTime tempExpDate = DateTime.parse(expDate!);
+      if (DateTime.now().isAfter(tempExpDate)) {
+        return loginScreenRoute;
+      }
+    }
     if (token != null) {
       // Clear the current page index
       context.read<ScreenContentProvider>().setPage(0, "");
@@ -57,6 +64,13 @@ class AppRoutes {
   static Future<String?> _redirect2(BuildContext context) async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'jwt');
+    String? expDate = await storage.read(key: "expDate");
+    if (expDate != null) {
+      DateTime tempExpDate = DateTime.parse(expDate);
+      if (DateTime.now().isAfter(tempExpDate)) {
+        return loginScreenRoute;
+      }
+    }
     return token == null ? loginRoute : mainScreenRoute;
   }
 }
