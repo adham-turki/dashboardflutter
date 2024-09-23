@@ -1795,7 +1795,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   widget.onSelectedValueChanged1("");
                 });
               },
-              bordeText: _locale.orderBy + " 1",
+              bordeText: "${_locale.orderBy} 1",
               items: firstList,
               // label: "",
               width: isDesktop ? width * .7 : width * .7,
@@ -1818,19 +1818,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     // print("valvalvalvalval111 $value");
 
                     selectedValue1 = value!;
-                    // print("valvalvalvalval222 $selectedValue1");
-                    // if (ordersMap[selectedValue1] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue1]!);
 
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal1 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
-                    //   }
-                    // }
                     readProvider.setVal1(selectedValue1);
                     //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
@@ -1865,7 +1853,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 });
               },
               showClearIcon: true,
-              bordeText: _locale.orderBy + " 2",
+              bordeText: "${_locale.orderBy} 2",
               // label: "",
               // width: isDesktop ? null : width * .55,
               items: firstList,
@@ -1883,17 +1871,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                 } else {
                   setState(() {
                     selectedValue2 = value!;
-                    // if (ordersMap[selectedValue2] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue2]!);
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal2 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal2]);
-                    //   }
-                    // }
 
                     readProvider.setVal2(selectedValue2);
 
@@ -1927,7 +1904,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   widget.onSelectedValueChanged3("");
                 });
               },
-              bordeText: _locale.orderBy + " 3",
+              bordeText: "${_locale.orderBy} 3",
               // width: isDesktop ? null : width * .55,
               width: width * 0.7,
               height: isDesktop ? height * 0.045 : height * 0.045,
@@ -1945,19 +1922,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 } else {
                   setState(() {
                     selectedValue3 = value!;
-                    // if (ordersMap[selectedValue3] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue3]!);
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal3 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal3]);
-                    //   }
-                    // }
 
-                    // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
                     readProvider.setVal3(selectedValue3);
 
                     widget.onSelectedValueChanged3(selectedValue3);
@@ -1990,7 +1955,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   widget.onSelectedValueChanged4("");
                 });
               },
-              bordeText: _locale.orderBy + " 4",
+              bordeText: "${_locale.orderBy} 4",
               items: firstList,
               // hint: selectedValue4,
               valSelected: selectedValue4 != "",
@@ -2284,572 +2249,18 @@ class _RightWidgetState extends State<RightWidget> {
       // crossAxisAlignment: CrossAxisAlignment.center,
 
       children: [
-        // CardComponent(
-        //   // title:
-        //   //         _locale.branch,
-        //   multipleVal: valueMultipleBranches,
-        //   fromDropDown: DropDown(
-        //     onClearIconPressed: (() {
-        //       selectedFromBranches = "";
-        //     }),
-        //     bordeText: _locale.branch,
-        //     // showSearchBox: true,
-        //     // label: _locale.from,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     // items: branchesList,
-        //     // hint: selectedFromBranches.isNotEmpty
-        //     //     ? selectedFromBranches
-        //     //     : _locale.select,
-        //     valSelected: selectedFromBranches != "",
-        //     initialValue:
-        //         selectedFromBranches.isNotEmpty ? selectedFromBranches : null,
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         selectedFromBranches = "";
-        //         selectedFromBranchesCode = "";
-        //         getBranchList();
-        //       } else {
-        //         setState(() {
-        //           selectedFromBranches = value.toString();
-        //           selectedFromBranchesCode = value.codeToString();
-        //           getBranchList();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchBranches(text);
-        //       return salesReportController.getSalesBranchesMethod(
-        //           dropDownSearchCriteria.toJsonBranch());
-        //     },
-        //   ),
-        //   toDropDown: DropDown(
-        //     bordeText: _locale.branch,
-        //     // showSearchBox: true,
-        //     // label: _locale.to,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     // items: branchesList,
-        //     // hint: selectedToBranches.isNotEmpty
-        //     //     ? selectedToBranches
-        //     //     : _locale.select,
-        //     initialValue:
-        //         selectedToBranches.isNotEmpty ? selectedToBranches : null,
-        //     valSelected: selectedToBranchesCode != "",
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         setState(() {
-        //           selectedToBranches = "";
-        //           selectedToBranchesCode = "";
-        //           getBranchList();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           selectedToBranches = value.toString();
-        //           selectedToBranchesCode = value.codeToString();
-        //           getBranchList();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchBranches(text);
-        //       return salesReportController.getSalesBranchesMethod(
-        //           dropDownSearchCriteria.toJsonBranch());
-        //     },
-        //   ),
-        //   selectAll: Checkbox(
-        //       value: valueSelectAllBranches,
-        //       onChanged: (val) {
-        //         valueSelectAllBranches = val!;
-        //         readProvider.setCheckAllBranch(valueSelectAllBranches);
-
-        //         readProvider.setCodesBranch([]);
-
-        //         setState(() {});
-        //       }),
-        //   multipleCheckBox: Checkbox(
-        //       value: valueMultipleBranches,
-        //       onChanged: (val) {
-        //         valueMultipleBranches = val!;
-        //         readProvider.setCheckMultipleBranch(valueMultipleBranches);
-
-        //         readProvider.setCodesBranch([]);
-        //         readProvider.setBranchList([]);
-        //         readProvider.setFromBranch("");
-        //         readProvider.setToBranch("");
-        //         selectedFromBranches = "";
-        //         selectedToBranches = "";
-        //         setState(() {});
-        //       }),
-        //   multipleSearch: SimpleDropdownSearch(
-        //     // list: branchesList,
-        //     enabled: !valueSelectAllBranches,
-        //     hintString: readProvider.getBranchList == null
-        //         ? []
-        //         : readProvider.getBranchList!,
-        //     onChanged: (val) {
-        //       setState(() {
-        //         readProvider.setCodesBranch(getCodesList(val));
-        //         readProvider.setBranchList(getStringList(val));
-        //       });
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchCriteria(text);
-        //       return salesReportController
-        //           .getSalesBranchesMethod(dropDownSearchCriteria.toJson());
-        //     },
-        //     bordeText: '',
-        //   ),
-        // ),
-
         SizedBox(
           height: height * .01,
         ),
-        // CardComponent(
-        //   // title:
-        //   //     '                                                                   ' +
-        //   //         _locale.stockCategoryLevel("2"),
-        //   multipleVal: valueMultipleStkCategory2,
-        //   fromDropDown: DropDown(
-        //     bordeText: _locale.stockCategoryLevel("2"),
-        //     // showSearchBox: true,
-        //     // label: _locale.from,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     // items: stkCategory2List,
-        //     // hint: selectedFromStkCategory2.isNotEmpty
-        //     //     ? selectedFromStkCategory2
-        //     //     : _locale.select,
-        //     initialValue: selectedFromStkCategory2.isNotEmpty
-        //         ? selectedFromStkCategory2
-        //         : null,
-        //     valSelected: selectedFromStkCategory2Code != "",
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         setState(() {
-        //           selectedFromStkCategory2 = "";
-        //           selectedFromStkCategory2Code = "";
-        //           getCategory2List();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           selectedFromStkCategory2 = value.toString();
-        //           selectedFromStkCategory2Code = value.codeToString();
-        //           getCategory2List();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchCriteriaPage(text);
-        //       return salesReportController.getSalesStkCountCateg2Method(
-        //           dropDownSearchCriteria.toJson2());
-        //     },
-        //   ),
-        //   toDropDown: DropDown(
-        //     bordeText: _locale.stockCategoryLevel("2"),
-        //     // showSearchBox: true,
-        //     // label: _locale.to,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     // hint: selectedToStkCategory2.isNotEmpty
-        //     //     ? selectedToStkCategory2
-        //     //     : _locale.select,
-        //     initialValue: selectedToStkCategory2.isNotEmpty
-        //         ? selectedToStkCategory2
-        //         : null,
-        //     valSelected: selectedToStkCategory2Code != "",
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         setState(() {
-        //           selectedToStkCategory2 = "";
-        //           selectedToStkCategory2Code = "";
-        //           getCategory2List();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           selectedToStkCategory2 = value.toString();
-        //           selectedToStkCategory2Code = value.codeToString();
-        //           getCategory2List();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchCriteriaPage(text);
-        //       return salesReportController.getSalesStkCountCateg2Method(
-        //           dropDownSearchCriteria.toJson2());
-        //     },
-        //   ),
-        //   selectAll: Checkbox(
-        //       value: valueSelectAllStkCategory2,
-        //       onChanged: (val) {
-        //         valueSelectAllStkCategory2 = val!;
-        //         readProvider
-        //             .setCheckAllStockCategory2(valueSelectAllStkCategory2);
-
-        //         readProvider.setCodesStockCategory2([]);
-
-        //         setState(() {});
-        //       }),
-        //   multipleCheckBox: Checkbox(
-        //       value: valueMultipleStkCategory2,
-        //       onChanged: (val) {
-        //         valueMultipleStkCategory2 = val!;
-        //         readProvider
-        //             .setCheckMultipleStockCategory2(valueMultipleStkCategory2);
-
-        //         readProvider.setCodesStockCategory2([]);
-        //         readProvider.setStkCat2List([]);
-        //         readProvider.setFromCateg2("");
-        //         readProvider.setToCateg2("");
-        //         selectedFromStkCategory2 = "";
-        //         selectedToStkCategory2 = "";
-        //         setState(() {});
-        //       }),
-        //   multipleSearch: SimpleDropdownSearch(
-        //     // list: stkCategory2List,
-        //     enabled: !valueSelectAllStkCategory2,
-        //     hintString: readProvider.getStkCat2List == null
-        //         ? []
-        //         : readProvider.getStkCat2List!,
-        //     onChanged: (val) {
-        //       setState(() {
-        //         // readProvider.setCodesStockCategory2(getCodesList(val));
-        //         readProvider.setStkCat2List(getStringList(val));
-        //       });
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchCriteriaPage(text);
-        //       return salesReportController.getSalesStkCountCateg2Method(
-        //           dropDownSearchCriteria.toJson2());
-        //     },
-        //     bordeText: '',
-        //   ),
-        // ),
         SizedBox(
           height: height * .01,
         ),
-        // CardComponent(
-        //     // title: _locale.supplier(""),
-        //     multipleVal: valueMultipleSupplier,
-        //     fromDropDown: DropDown(
-        //       bordeText: _locale.supplier(""),
-        //       // showSearchBox: true,
-        //       // label: _locale.from,
-        //       valSelected: selectedFromSupplierCode != "",
-        //       width: isDesktop ? width * .14 : width * .35,
-        //       height: isDesktop ? height * 0.045 : height * 0.35,
-        //       // items: suppliersList,
-        //       // hint: selectedFromSupplier.isNotEmpty
-        //       //     ? selectedFromSupplier
-        //       //     : _locale.select,
-        //       initialValue:
-        //           selectedFromSupplier.isNotEmpty ? selectedFromSupplier : null,
-        //       onChanged: (value) {
-        //         if (value == null) {
-        //           setState(() {
-        //             selectedFromSupplier = "";
-        //             selectedFromSupplierCode = "";
-        //             getSupplierList();
-        //           });
-        //         } else {
-        //           setState(() {
-        //             selectedFromSupplier = value.toString();
-        //             selectedFromSupplierCode = value.codeToString();
-        //             getSupplierList();
-        //           });
-        //         }
-        //       },
-        //       onSearch: (text) {
-        //         DropDownSearchCriteria dropDownSearchCriteria =
-        //             getSearchBranches(text);
-        //         return salesReportController.getSalesSuppliersMethod(
-        //             dropDownSearchCriteria.toJsonBranch());
-        //       },
-        //     ),
-        //     toDropDown: DropDown(
-        //       bordeText: _locale.supplier(""),
-        //       // showSearchBox: true,
-        //       // label: _locale.to,
-        //       height: isDesktop ? height * 0.045 : height * 0.35,
-        //       width: isDesktop ? width * .14 : width * .35,
-        //       // hint: selectedToSupplier.isNotEmpty
-        //       //     ? selectedToSupplier
-        //       //     : _locale.select,
-        //       initialValue:
-        //           selectedToSupplier.isNotEmpty ? selectedToSupplier : null,
-        //       valSelected: selectedToSupplierCode != "",
-        //       onChanged: (value) {
-        //         if (value == null) {
-        //           setState(() {
-        //             selectedToSupplier = "";
-        //             selectedToSupplierCode = "";
-        //             getSupplierList();
-        //           });
-        //         } else {
-        //           setState(() {
-        //             selectedToSupplier = value.toString();
-        //             selectedToSupplierCode = value.codeToString();
-        //             getSupplierList();
-        //           });
-        //         }
-        //       },
-        //       onSearch: (text) {
-        //         DropDownSearchCriteria dropDownSearchCriteria =
-        //             getSearchBranches(text);
-        //         return salesReportController.getSalesSuppliersMethod(
-        //             dropDownSearchCriteria.toJsonBranch());
-        //       },
-        //     ),
-        //     selectAll: Checkbox(
-        //         value: valueSelectAllSupplier,
-        //         onChanged: (val) {
-        //           valueSelectAllSupplier = val!;
-        //           readProvider.setCheckAllSupplier(valueSelectAllSupplier);
-
-        //           readProvider.setCodesSupplier([]);
-        //           setState(() {});
-        //         }),
-        //     multipleCheckBox: Checkbox(
-        //         value: valueMultipleSupplier,
-        //         onChanged: (val) {
-        //           valueMultipleSupplier = val!;
-        //           readProvider.setCheckMultipleSupplier(valueMultipleSupplier);
-
-        //           readProvider.setCodesSupplier([]);
-        //           readProvider.setSupplierList([]);
-        //           readProvider.setFromSupp("");
-        //           readProvider.setToSupp("");
-        //           selectedFromSupplier = "";
-        //           selectedToSupplier = "";
-        //           setState(() {});
-        //         }),
-        //     multipleSearch: SimpleDropdownSearch(
-        //       // list: suppliersList,
-        //       enabled: !valueSelectAllSupplier,
-        //       hintString: readProvider.getSupplierList == null
-        //           ? []
-        //           : readProvider.getSupplierList!,
-        //       onChanged: (val) {
-        //         setState(() {
-        //           readProvider.setCodesSupplier(getCodesList(val));
-        //           readProvider.setSupplierList(getStringList(val));
-        //         });
-        //       },
-        //       onSearch: (text) {
-        //         DropDownSearchCriteria dropDownSearchCriteria =
-        //             getSearchBranches(text);
-        //         return salesReportController.getSalesSuppliersMethod(
-        //             dropDownSearchCriteria.toJsonBranch());
-        //       },
-        //       bordeText: '',
-        //     )),
         SizedBox(
           height: height * .01,
         ),
-        // CardComponent(
-        //   // title: _locale.customerCategory,
-        //   multipleVal: valueMultipleCustomerCategory,
-        //   fromDropDown: DropDown(
-        //     bordeText: _locale.customerCategory,
-        //     // showSearchBox: true,
-        //     // label: _locale.from,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     // hint: selectedFromCustomerCategory.isNotEmpty
-        //     //     ? selectedFromCustomerCategory
-        //     //     : _locale.select,
-        //     initialValue: selectedFromCustomerCategory.isNotEmpty
-        //         ? selectedFromCustomerCategory
-        //         : null,
-        //     valSelected: selectedFromCustomerCategoryCode != "",
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         setState(() {
-        //           selectedFromCustomerCategory = "";
-        //           selectedFromCustomerCategoryCode = "";
-        //           getCustomerCategoryList();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           selectedFromCustomerCategory = value.toString();
-        //           selectedFromCustomerCategoryCode = value.codeToString();
-        //           getCustomerCategoryList();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchBranches(text);
-        //       return salesReportController.getSalesCustomersCategMethod(
-        //           dropDownSearchCriteria.toJsonBranch());
-        //     },
-        //   ),
-        //   toDropDown: DropDown(
-        //     // showBorder: selectedToCustomerCategoryCode != "" ? true : false,
-        //     bordeText: _locale.customerCategory,
-        //     // showSearchBox: true,
-        //     // label: _locale.to,
-        //     height: isDesktop ? height * 0.045 : height * 0.35,
-        //     width: isDesktop ? width * .14 : width * .35,
-        //     // hint: selectedToCustomerCategory.isNotEmpty
-        //     //     ? selectedToCustomerCategory
-        //     //     : _locale.select,
-        //     initialValue: selectedToCustomerCategory.isNotEmpty
-        //         ? selectedToCustomerCategory
-        //         : null,
-        //     valSelected: selectedToCustomerCategoryCode != "",
-        //     onChanged: (value) {
-        //       if (value == null) {
-        //         setState(() {
-        //           selectedToCustomerCategory = "";
-        //           selectedToCustomerCategoryCode = "";
-        //           getCustomerCategoryList();
-        //         });
-        //       } else {
-        //         setState(() {
-        //           selectedToCustomerCategory = value.toString();
-        //           selectedToCustomerCategoryCode = value.codeToString();
-        //           getCustomerCategoryList();
-        //         });
-        //       }
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchBranches(text);
-        //       return salesReportController.getSalesCustomersCategMethod(
-        //           dropDownSearchCriteria.toJsonBranch());
-        //     },
-        //   ),
-        //   selectAll: Checkbox(
-        //       value: valueSelectAllCustomerCategory,
-        //       onChanged: (val) {
-        //         valueSelectAllCustomerCategory = val!;
-        //         readProvider.setCheckAllCustomerCategory(
-        //             valueSelectAllCustomerCategory);
-
-        //         readProvider.setCodesCustomerCategory([]);
-        //         setState(() {});
-        //       }),
-        //   multipleCheckBox: Checkbox(
-        //       value: valueMultipleCustomerCategory,
-        //       onChanged: (val) {
-        //         valueMultipleCustomerCategory = val!;
-        //         readProvider.setCheckMultipleCustomerCategory(
-        //             valueMultipleCustomerCategory);
-
-        //         readProvider.setCodesCustomerCategory([]);
-        //         readProvider.setCustCateg([]);
-        //         readProvider.setFromCustCateg("");
-        //         readProvider.setToCustCateg("");
-        //         selectedFromCustomerCategory = "";
-        //         selectedToCustomerCategory = "";
-        //         setState(() {});
-        //       }),
-        //   multipleSearch: SimpleDropdownSearch(
-        //     // list: customerCategoryList,
-        //     enabled: !valueSelectAllCustomerCategory,
-        //     hintString: readProvider.getCustCateg == null
-        //         ? []
-        //         : readProvider.getCustCateg!,
-        //     onChanged: (val) {
-        //       setState(() {
-        //         readProvider.setCodesCustomerCategory(getCodesList(val));
-        //         readProvider.setCustCateg(getStringList(val));
-        //       });
-        //     },
-        //     onSearch: (text) {
-        //       DropDownSearchCriteria dropDownSearchCriteria =
-        //           getSearchBranches(text);
-        //       return salesReportController.getSalesCustomersCategMethod(
-        //           dropDownSearchCriteria.toJsonBranch());
-        //     },
-        //     bordeText: '',
-        //   ),
-        // ),
         SizedBox(
           height: height * .01,
         ),
-        // Container(
-        //   width: isDesktop ? width * 0.39 : width * 0.9,
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(5.0),
-        //     border: Border.all(
-        //       color: Colors.grey,
-        //     ),
-        //   ),
-        //   padding: const EdgeInsets.all(5.0),
-        //   child: isDesktop
-        //       ? Row(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           children: [
-        //             CustomTextField2(
-        //               width: width * 0.45,
-        //               text: Text(_locale.campaignNo),
-        //               controller: campaignNoController,
-        //               onSubmitted: (text) {
-        //                 readProvider.setCampaignNo(campaignNoController.text);
-        //               },
-        //               onChanged: (value) {
-        //                 readProvider.setCampaignNo(campaignNoController.text);
-        //               },
-        //             ),
-        //             CustomTextField2(
-        //               width: width * 0.45,
-        //               text: Text(_locale.modelNo),
-        //               // text: const Text("model No,"),
-        //               controller: modelNoController,
-        //               onSubmitted: (text) {
-        //                 readProvider.setModelNo(modelNoController.text);
-        //               },
-        //               onChanged: (value) {
-        //                 readProvider.setModelNo(modelNoController.text);
-        //               },
-        //             ),
-        //           ],
-        //         )
-        //       : Column(
-        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //           crossAxisAlignment: CrossAxisAlignment.start,
-        //           children: [
-        //             Padding(
-        //               padding: const EdgeInsets.all(2.0),
-        //               child: CustomTextField2(
-        //                 text: Text(_locale.campaignNo),
-        //                 width: width * 0.4,
-        //                 // label: _locale.campaignNo,
-        //                 controller: campaignNoController,
-        //                 onSubmitted: (text) {
-        //                   readProvider.setCampaignNo(campaignNoController.text);
-        //                 },
-        //                 onChanged: (value) {
-        //                   readProvider.setCampaignNo(campaignNoController.text);
-        //                 },
-        //               ),
-        //             ),
-        //             Padding(
-        //               padding: const EdgeInsets.all(2.0),
-        //               child: CustomTextField2(
-        //                 text: Text(_locale.modelNo),
-        //                 width: width * 0.4,
-        //                 // label: _locale.modelNo,
-        //                 controller: modelNoController,
-        //                 onSubmitted: (text) {
-        //                   readProvider.setModelNo(modelNoController.text);
-        //                 },
-        //                 onChanged: (value) {
-        //                   readProvider.setModelNo(modelNoController.text);
-        //                 },
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        // ),
       ],
     );
   }

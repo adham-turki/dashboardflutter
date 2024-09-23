@@ -92,6 +92,9 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       // _locale.diffBetCostAndSale,
       // _locale.profitPercent
     ];
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+    isDesktop = Responsive.isDesktop(context);
     polCols = SalesCostReportModel.getColumns(
         AppLocalizations.of(context)!, orderByColumns, reportsResult, context);
     // await getResult().then(
@@ -128,7 +131,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         polCols[i].titleTextAlign = PlutoColumnTextAlign.center;
         polCols[i].textAlign = PlutoColumnTextAlign.center;
 
-        stateManager!.columns[i].title = polCols[i].title;
         stateManager!.columns[i].width = polCols[i].width;
         stateManager!.columns[i].titleTextAlign = polCols[i].titleTextAlign;
         stateManager!.columns[i].textAlign = polCols[i].textAlign;
@@ -138,7 +140,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       //   stateManager!!.rows[i].cells['intStatus']!.value =
       //       getStatusNameDependsLang(
       //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
-      // }
+      //
       stateManager!.notifyListeners(true);
     }
 
@@ -734,16 +736,16 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                     polCols[i].textAlign =
                                         PlutoColumnTextAlign.center;
 
-                                    stateManager!.columns[i].title =
-                                        polCols[i].title;
-                                    stateManager!.columns[i].width =
-                                        polCols[i].width;
-                                    stateManager!.columns[i].titleTextAlign =
-                                        polCols[i].titleTextAlign;
-                                    stateManager!.columns[i].textAlign =
-                                        polCols[i].textAlign;
-                                    stateManager!.columns[i].titleSpan =
-                                        polCols[i].titleSpan;
+                                    // stateManager!.columns[i].title =
+                                    //     polCols[i].title;
+                                    // stateManager!.columns[i].width =
+                                    //     polCols[i].width;
+                                    // stateManager!.columns[i].titleTextAlign =
+                                    //     polCols[i].titleTextAlign;
+                                    // stateManager!.columns[i].textAlign =
+                                    //     polCols[i].textAlign;
+                                    // stateManager!.columns[i].titleSpan =
+                                    //     polCols[i].titleSpan;
                                   }
                                   // for (int i = 0; i < stateManager!!.rows.length; i++) {
                                   //   stateManager!!.rows[i].cells['intStatus']!.value =
