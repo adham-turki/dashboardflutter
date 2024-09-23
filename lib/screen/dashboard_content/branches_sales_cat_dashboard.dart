@@ -1,12 +1,15 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
@@ -58,6 +61,8 @@ class _BranchesSalesByCatDashboardState
   ];
 
   String lastFromDate = "";
+  String lastToDate = "";
+
   String lastCategories = "";
   String lastBranchCode = "";
   List<double> listOfBalances = [];
@@ -107,6 +112,8 @@ class _BranchesSalesByCatDashboardState
   int count = 0;
   bool isLoading = true;
   List<String> branches = [];
+  ValueNotifier totalBranchesByCateg = ValueNotifier(0);
+  Timer? _timer;
 
   @override
   void didChangeDependencies() {
@@ -157,6 +164,8 @@ class _BranchesSalesByCatDashboardState
       setState(() {});
     });
     getAllCodeReports();
+    _startTimer();
+
     super.initState();
   }
 
@@ -188,7 +197,6 @@ class _BranchesSalesByCatDashboardState
                 const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
             child: Container(
               height: isDesktop ? height * 0.44 : height * 0.48,
-              width: double.infinity,
               padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
               decoration: BoxDecoration(
                 color: whiteColor,
@@ -200,10 +208,14 @@ class _BranchesSalesByCatDashboardState
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _locale.branchesSalesByCategories,
-                        style: TextStyle(fontSize: isDesktop ? 16 : 13),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: totalBranchesByCateg,
+                          builder: ((context, value, child) {
+                            return Text(
+                              "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                            );
+                          })),
                       Text(
                         _locale.localeName == "en"
                             ? "${fromDateController.text}  -  ${toDateController.text}"
@@ -225,7 +237,6 @@ class _BranchesSalesByCatDashboardState
                             fontSize: isDesktop ? height * .018 : height * .017,
                             width: isDesktop ? width * 0.13 : width * 0.25,
                             onPressed: () {
-                              print("isLoaaaaading $isLoading");
                               if (isLoading == false) {
                                 showDialog(
                                   context: context,
@@ -278,10 +289,14 @@ class _BranchesSalesByCatDashboardState
                                   },
                                 ).then((value) async {
                                   setState(() {
+                                    _timer!.cancel();
+
                                     isLoading = true;
                                   });
                                   getBranchByCat().then((value) {
                                     setState(() {
+                                      _startTimer();
+
                                       isLoading = false;
                                     });
                                   });
@@ -298,7 +313,7 @@ class _BranchesSalesByCatDashboardState
                         )
                       : selectedChart == Line_Chart
                           ? SizedBox(
-                              height: height * .3,
+                              height: height * .4,
                               child: LineDashboardChart(
                                   isMax: false,
                                   balances: listOfBalances,
@@ -467,81 +482,92 @@ class _BranchesSalesByCatDashboardState
 
   Future<void> getBranchByCat({bool? isStart}) async {
     var selectedFromDate = fromDateController.text;
+    var selectedToDate = toDateController.text;
+
     final selectedCategoriesValue = selectedCategories;
     final selectedBranchCodeValue = selectedBranchCode;
 
-    if (selectedFromDate != lastFromDate ||
-        getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
-        selectedBranchCodeValue != lastBranchCode) {
-      lastFromDate = selectedFromDate;
-      lastCategories = getCategoryByCode(selectedCategories, _locale);
-      lastBranchCode = selectedBranchCode;
+    // if (selectedFromDate != lastFromDate ||
+    //     getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
+    //     selectedBranchCodeValue != lastBranchCode ||
+    //     selectedToDate != lastToDate) {
+    lastFromDate = selectedFromDate;
+    lastToDate = selectedToDate;
 
-      // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
-      //   if (selectedFromDate.isEmpty) {
-      //     selectedFromDate = todayDate;
-      //   }
-      //   if (toDateController.text.isEmpty) {
-      //     toDateController.text = todayDate;
-      //   }
-      // }
+    lastCategories = getCategoryByCode(selectedCategories, _locale);
+    lastBranchCode = selectedBranchCode;
 
-      SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: selectedFromDate,
-        toDate:
-            toDateController.text.isEmpty ? todayDate : toDateController.text,
-        byCategory: selectedCategories,
-        branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
-      );
-      setSearchCriteria(searchCriteria);
-      pieData = [];
-      barData = [];
-      listOfBalances = [];
-      listOfPeriods = [];
+    // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
+    //   if (selectedFromDate.isEmpty) {
+    //     selectedFromDate = todayDate;
+    //   }
+    //   if (toDateController.text.isEmpty) {
+    //     toDateController.text = todayDate;
+    //   }
+    // }
 
-      await salesCategoryController
-          .getSalesByCategory(searchCriteria, isStart: isStart)
-          .then((value) {
-        for (var element in value) {
-          // print("adasdasdasdasdasdas");
-          double bal = element.creditAmt! - element.debitAmt!;
+    SearchCriteria searchCriteria = SearchCriteria(
+      fromDate: selectedFromDate,
+      toDate: selectedToDate,
+      byCategory: selectedCategories,
+      branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
+    );
+    setSearchCriteria(searchCriteria);
+    pieData = [];
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
 
-          if (bal != 0.0) {
-            temp = true;
-          } else if (bal == 0.0) {
-            temp = false;
-          }
-          listOfBalances.add(bal);
-          listOfPeriods.add(
-            element.categoryName!.isNotEmpty
-                ? element.categoryName!
-                : _locale.general,
-          );
-          if (temp) {
-            dataMap[element.categoryName!] =
-                formatDoubleToTwoDecimalPlaces(bal);
+    await salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
+      for (var element in value) {
+        // print("adasdasdasdasdasdas");
+        double bal = element.creditAmt! - element.debitAmt!;
 
-            pieData.add(
-              PieChartModel(
-                title: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                value: formatDoubleToTwoDecimalPlaces(bal),
-                color: getRandomColor(colorNewList),
-              ),
-            );
-            barData.add(
-              BarData(
-                name: element.categoryName!.isNotEmpty
-                    ? element.categoryName!
-                    : _locale.general,
-                percent: formatDoubleToTwoDecimalPlaces(bal),
-              ),
-            );
-          }
+        if (bal != 0.0) {
+          temp = true;
+        } else if (bal == 0.0) {
+          temp = false;
         }
-      });
-    }
+        listOfBalances.add(bal);
+        listOfPeriods.add(
+          element.categoryName!.isNotEmpty
+              ? element.categoryName!
+              : _locale.general,
+        );
+        if (temp) {
+          dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
+
+          pieData.add(
+            PieChartModel(
+              title: element.categoryName!.isNotEmpty
+                  ? element.categoryName!
+                  : _locale.general,
+              value: formatDoubleToTwoDecimalPlaces(bal),
+              color: getRandomColor(colorNewList),
+            ),
+          );
+          barData.add(
+            BarData(
+              name: element.categoryName!.isNotEmpty
+                  ? element.categoryName!
+                  : _locale.general,
+              percent: formatDoubleToTwoDecimalPlaces(bal),
+            ),
+          );
+        }
+      }
+
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalBranchesByCateg.value =
+          double.parse(Converters.formatNumberDigits(total));
+    });
+
+    // }
   }
 
   // Future getBranchByCat1({bool? isStart}) async {
@@ -608,6 +634,42 @@ class _BranchesSalesByCatDashboardState
   //     print("balLengthhhh ${barData.length}");
   //   });
   // }
+  void _startTimer() {
+    const storage = FlutterSecureStorage();
+
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        await getBranchByCat().then((value) async {
+          setState(() {
+            isLoading = true;
+          });
+
+          await Future.delayed(const Duration(milliseconds: 1));
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        _timer!.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _stopTimer(); // Stop timer when the widget is disposed
+
+    super.dispose();
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel(); // Cancel the timer
+      _timer = null; // Reset timer reference
+    }
+  }
 
   void getBranch() async {
     BranchController().getBranch().then((value) {

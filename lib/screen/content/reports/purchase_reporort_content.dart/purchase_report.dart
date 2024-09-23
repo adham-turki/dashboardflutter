@@ -58,8 +58,8 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
   bool hidefilter = false;
   late PlutoGridStateManager stateManager;
   ValueNotifier pageLis = ValueNotifier(1);
-  ValueNotifier isLoading = ValueNotifier(true);
-  ValueNotifier isLoadingData = ValueNotifier(true);
+  ValueNotifier isLoading = ValueNotifier(false);
+  ValueNotifier isLoadingData = ValueNotifier(false);
   ValueNotifier itemsNumberDisplayed = ValueNotifier(0);
   int count = 0;
   List<PlutoRow> rowList = [];
@@ -883,7 +883,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
   PlutoInfinityScrollRows lazyLoadingfooter(
       PlutoGridStateManager stateManager) {
     return PlutoInfinityScrollRows(
-      initialFetch: true,
+      initialFetch: false,
       fetchWithSorting: false,
       fetchWithFiltering: false,
       fetch: fetch,

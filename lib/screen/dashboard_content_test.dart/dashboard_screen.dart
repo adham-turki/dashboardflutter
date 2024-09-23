@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:bi_replicate/components/dashboard_components/card_content.dart';
 import 'package:bi_replicate/screen/dashboard_content/branches_sales_cat_dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../controller/vouch_header_transiet_controller.dart';
 import '../../model/vouch_header_transiet_model.dart';
 import '../../utils/constants/responsive.dart';
@@ -23,6 +26,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double height = 0;
   bool isDesktop = false;
   late AppLocalizations locale;
+  Timer? _timer;
+
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
   String fromDateEn =
@@ -40,7 +45,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
         vouchHeaderTransietModel = value!;
       });
     });
+    _startTimer();
+
     super.didChangeDependencies();
+  }
+
+  void _startTimer() {
+    const storage = FlutterSecureStorage();
+
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        VouchHeaderTransietController().getBranch().then((value) {
+          setState(() {
+            vouchHeaderTransietModel = value!;
+          });
+        });
+      } else {
+        _timer!.cancel();
+      }
+    });
   }
 
   @override
@@ -119,9 +144,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: height * 0.144,
                           content: CardContent(
                             title: locale.numOfCustomers,
-                            dates: locale.localeName == "en"
-                                ? "$fromDateEn - $toDateEn"
-                                : "$fromDateAr - $toDateAr",
                             value: Converters.formatNumber(
                                     vouchHeaderTransietModel.numOfCustomers
                                         .toDouble())

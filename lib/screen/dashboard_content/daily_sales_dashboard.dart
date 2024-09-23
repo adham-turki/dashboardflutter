@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
@@ -24,6 +25,7 @@ import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/pages_constants.dart';
 import '../../utils/constants/responsive.dart';
+import '../../utils/func/converters.dart';
 import 'filter_dialog/filter_dialog_daily_sales.dart';
 
 class DailySalesDashboard extends StatefulWidget {
@@ -90,6 +92,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   int counter = 0;
   bool isLoading = true;
   List<String> branches = [];
+  ValueNotifier totalDailySale = ValueNotifier(0);
+  Timer? _timer;
 
   @override
   void didChangeDependencies() {
@@ -121,7 +125,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
     });
-
+    _startTimer();
     super.initState();
   }
 
@@ -154,10 +158,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _locale.dailySales,
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                      ),
+                      ValueListenableBuilder(
+                          valueListenable: totalDailySale,
+                          builder: ((context, value, child) {
+                            return Text(
+                              "${_locale.dailySales} (${totalDailySale.value})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                            );
+                          })),
                       Text(
                         _locale.localeName == "en"
                             ? fromDateController.text
@@ -223,10 +231,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                   },
                                 ).then((value) async {
                                   setState(() {
+                                    _timer!.cancel();
                                     isLoading = true;
                                   });
                                   getDailySales().then((value) {
                                     setState(() {
+                                      _startTimer();
                                       isLoading = false;
                                     });
                                   });
@@ -417,6 +427,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
               name: temp, percent: double.parse(elemant.dailySale.toString())),
         );
       }
+
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
     });
 
     print("BBBBBBBBBbbarLength ${barData.length}");
@@ -427,60 +443,103 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     var selectedFromDate = fromDateController.text;
     final selectedStatus = statusVar;
     final selectedBranchCodeValue = selectedBranchCode;
+    // if (selectedFromDate != lastFromDate ||
+    //     getVoucherStatusByCode(_locale, selectedStatus) != lastStatus ||
+    //     selectedBranchCodeValue != lastBranchCode) {
 
-    if (selectedFromDate != lastFromDate ||
-        getVoucherStatusByCode(_locale, selectedStatus) != lastStatus ||
-        selectedBranchCodeValue != lastBranchCode) {
-      lastFromDate = selectedFromDate;
-      lastStatus = getVoucherStatusByCode(_locale, statusVar);
-      lastBranchCode = selectedBranchCode;
+    lastFromDate = selectedFromDate;
+    lastStatus = getVoucherStatusByCode(_locale, statusVar);
+    lastBranchCode = selectedBranchCode;
 
-      if (selectedFromDate.isEmpty) {
-        selectedFromDate = todayDate;
-      }
-      SearchCriteria searchCriteria = SearchCriteria(
-        fromDate: selectedFromDate,
-        voucherStatus: stat,
-        branch: selectedBranchCode,
-      );
-      barDataDailySales = [];
-      dataMap.clear();
-      barData = [];
-      listOfBalances = [];
-      listOfPeriods = [];
-      await dailySalesController
-          .getDailySale(searchCriteria, isStart: isStart)
-          .then((response) {
-        for (var elemant in response) {
-          String temp = elemant.date ?? "NO DATE";
+    if (selectedFromDate.isEmpty) {
+      selectedFromDate = todayDate;
+    }
+    SearchCriteria searchCriteria = SearchCriteria(
+      fromDate: selectedFromDate,
+      voucherStatus: stat,
+      branch: selectedBranchCode,
+    );
+    barDataDailySales = [];
+    dataMap.clear();
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
+    await dailySalesController
+        .getDailySale(searchCriteria, isStart: isStart)
+        .then((response) {
+      for (var elemant in response) {
+        String temp = elemant.date ?? "NO DATE";
 
-          if (double.parse(elemant.dailySale.toString()) != 0.0) {
-            boolTemp = true;
-          } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
-            boolTemp = false;
-          }
-
-          listOfBalances.add(double.parse(elemant.dailySale.toString()));
-          listOfPeriods.add(temp);
-          if (boolTemp) {
-            dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-                double.parse(elemant.dailySale.toString()));
-            barDataDailySales.add(PieChartModel(
-                title: temp,
-                value: double.parse(elemant.dailySale.toString()) == 0.0
-                    ? 1.0
-                    : formatDoubleToTwoDecimalPlaces(
-                        double.parse(elemant.dailySale.toString())),
-                color: getRandomColor(colorNewList)));
-          }
-
-          barData.add(
-            BarData(
-                name: temp,
-                percent: double.parse(elemant.dailySale.toString())),
-          );
+        if (double.parse(elemant.dailySale.toString()) != 0.0) {
+          boolTemp = true;
+        } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
+          boolTemp = false;
         }
-      });
+
+        listOfBalances.add(double.parse(elemant.dailySale.toString()));
+        listOfPeriods.add(temp);
+        if (boolTemp) {
+          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
+              double.parse(elemant.dailySale.toString()));
+          barDataDailySales.add(PieChartModel(
+              title: temp,
+              value: double.parse(elemant.dailySale.toString()) == 0.0
+                  ? 1.0
+                  : formatDoubleToTwoDecimalPlaces(
+                      double.parse(elemant.dailySale.toString())),
+              color: getRandomColor(colorNewList)));
+        }
+
+        barData.add(
+          BarData(
+              name: temp, percent: double.parse(elemant.dailySale.toString())),
+        );
+      }
+
+      double total = 0;
+      for (int i = 0; i < listOfBalances.length; i++) {
+        total += listOfBalances[i];
+      }
+      totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
+    });
+
+    // }
+  }
+
+  void _startTimer() {
+    const storage = FlutterSecureStorage();
+
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        await getDailySales().then((value) async {
+          setState(() {
+            isLoading = true;
+          });
+
+          await Future.delayed(const Duration(milliseconds: 1));
+          setState(() {
+            isLoading = false;
+          });
+        });
+      } else {
+        _timer!.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _stopTimer(); // Stop timer when the widget is disposed
+
+    super.dispose();
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer!.cancel(); // Cancel the timer
+      _timer = null; // Reset timer reference
     }
   }
 

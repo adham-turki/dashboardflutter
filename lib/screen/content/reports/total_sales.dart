@@ -65,8 +65,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   ValueNotifier isDownload = ValueNotifier(false);
   List<PlutoRow> rowList = [];
   ValueNotifier pageLis = ValueNotifier(1);
-  ValueNotifier isLoading = ValueNotifier(true);
-  ValueNotifier isLoadingData = ValueNotifier(true);
+  ValueNotifier isLoading = ValueNotifier(false);
+  ValueNotifier isLoadingData = ValueNotifier(false);
   ValueNotifier itemsNumberDisplayed = ValueNotifier(0);
   ValueNotifier<List<PlutoRow>> tableListener = ValueNotifier([]);
   int count = 0;
@@ -711,7 +711,7 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
   PlutoInfinityScrollRows lazyLoadingfooter(
       PlutoGridStateManager stateManager) {
     return PlutoInfinityScrollRows(
-      initialFetch: true,
+      initialFetch: false,
       fetchWithSorting: false,
       fetchWithFiltering: false,
       fetch: fetch,
