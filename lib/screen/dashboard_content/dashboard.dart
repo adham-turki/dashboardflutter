@@ -56,10 +56,10 @@ class _DashboardContentState extends State<DashboardContent> {
     bool isMobile = Responsive.isMobile(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
-    return SafeArea(
+    return const SafeArea(
       child: Column(
         children: [
-          const Row(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(

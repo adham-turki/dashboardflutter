@@ -1,23 +1,12 @@
-// import '../../../../../widget/custom_textfield.dart';
-// import '../../../../../widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../components/custom_date.dart';
-import '../../../../../components/search_table/date_time_component.dart';
-
-import '../../../../../controller/error_controller.dart';
 import '../../../../../controller/reports/report_controller.dart';
-
 import '../../../../../model/criteria/drop_down_search_criteria.dart';
 import '../../../../../model/sales_adminstration/branch_model.dart';
-
 import '../../../../../provider/sales_search_provider.dart';
-import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/constants/constants.dart';
 import '../../../../../utils/constants/responsive.dart';
-import '../../../../../utils/func/converters.dart';
 import '../../../../../utils/func/dates_controller.dart';
 import '../../../../../widget/custom_textfield2.dart';
 import '../../../../../widget/drop_down/drop_down_clear.dart';
@@ -250,18 +239,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
     isMobile = Responsive.isMobile(context);
-
-    // String todayDate = DatesController().formatDateReverse(
-    //     DatesController().formatDate(DatesController().todayDate()));
-
-    // fromDate.text = readProvider.getFromDate!.isNotEmpty
-    //     ? DatesController()
-    //         .formatDateReverse(readProvider.getFromDate.toString())
-    //     : todayDate;
-
-    // toDate.text = readProvider.getToDate!.isNotEmpty
-    //     ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-    //     : todayDate;
 
     selectedFromStkCategory1 = readProvider.getFromCateg1!;
 
@@ -941,24 +918,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                   });
                 } else {
                   setState(() {
-                    // print("valvalvalvalval111 $value");
-
                     selectedValue1 = value!;
-                    // print("valvalvalvalval222 $selectedValue1");
-                    // if (ordersMap[selectedValue1] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue1]!);
 
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal1 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
-                    //   }
-                    // }
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 }
@@ -1974,19 +1936,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                 } else {
                   setState(() {
                     selectedValue4 = value!;
-                    // if (ordersMap[selectedValue4] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue4]!);
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal4 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal4]);
-                    //   }
-                    // }
 
-                    // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
                     readProvider.setVal4(selectedValue4);
 
                     widget.onSelectedValueChanged4(selectedValue4);
@@ -2209,16 +2159,6 @@ class _RightWidgetState extends State<RightWidget> {
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
     isMobile = Responsive.isMobile(context);
-    // String todayDate = DatesController().formatDateReverse(
-    //     DatesController().formatDate(DatesController().todayDate()));
-    // widget.fromDate.text = readProvider.getFromDate!.isNotEmpty
-    //     ? DatesController()
-    //         .formatDateReverse(readProvider.getFromDate.toString())
-    //     : todayDate;
-
-    // widget.toDate.text = readProvider.getToDate!.isNotEmpty
-    //     ? DatesController().formatDateReverse(readProvider.getToDate.toString())
-    //     : todayDate;
 
     selectedFromStkCategory2 = readProvider.getFromCateg2!;
     selectedToStkCategory2 = readProvider.getToCateg2!;
