@@ -212,7 +212,7 @@ class _BranchesSalesByCatDashboardState
                           valueListenable: totalBranchesByCateg,
                           builder: ((context, value, child) {
                             return Text(
-                              "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
+                              "${_locale.branchesSalesByCategories} (${Converters.formatNumber(totalBranchesByCateg.value)})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             );
                           })),

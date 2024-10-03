@@ -151,7 +151,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                           valueListenable: totalBranchesSale,
                           builder: ((context, value, child) {
                             return Text(
-                              "${_locale.salesByBranches} (${totalBranchesSale.value})",
+                              "${_locale.salesByBranches} (${Converters.formatNumber(totalBranchesSale.value)})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             );
                           })),

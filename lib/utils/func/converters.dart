@@ -13,8 +13,24 @@ class Converters {
     return myFormat.format(num);
   }
 
+  static String formatNumberEn(double num) {
+    NumberFormat myFormat =
+        NumberFormat.decimalPattern('en'); // Using 'en' for comma separation
+    return myFormat.format(num);
+  }
+
   static formatNumberDigits(double num) {
     NumberFormat myFormat = NumberFormat("#.####");
+    return myFormat.format(num);
+  }
+
+  static String formatNumberWithDigits(double num, {int decimalPlaces = 4}) {
+    // Create a custom pattern that combines locale formatting and decimal precision
+    String pattern =
+        "#,##0.${"#" * decimalPlaces}"; // This will format the number with up to `decimalPlaces` decimal points
+    NumberFormat myFormat =
+        NumberFormat(pattern, 'ar'); // 'ar' is for Arabic locale
+
     return myFormat.format(num);
   }
 

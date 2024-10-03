@@ -163,7 +163,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                           valueListenable: totalDailySale,
                           builder: ((context, value, child) {
                             return Text(
-                              "${_locale.dailySales} (${totalDailySale.value})",
+                              "${_locale.dailySales} (${Converters.formatNumber(totalDailySale.value)})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             );
                           })),
@@ -411,7 +411,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           boolTemp = false;
         }
 
-        listOfBalances.add(double.parse(elemant.dailySale.toString()));
+        listOfBalances.add(elemant.dailySale ?? 0.0);
         listOfPeriods.add(temp);
         if (boolTemp) {
           dataMap[temp] = formatDoubleToTwoDecimalPlaces(
@@ -435,6 +435,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
+
       totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
     });
 
