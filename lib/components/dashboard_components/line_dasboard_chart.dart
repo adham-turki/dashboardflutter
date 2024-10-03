@@ -210,7 +210,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                             ? width * 0.6
                             : (!widget.isMax && periods.length < 6)
                                 ? width * 0.3
-                                : width * (periods.length / 15),
+                                : width * (periods.length / 30),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
+import 'package:intl/intl.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
@@ -401,7 +402,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       lastFromDate = selectedFromDate;
       // Update the data
       for (var elemant in response) {
-        String temp = elemant.date ?? "NO DATE";
+        String temp =
+            DatesController().formatDateWithoutYear(elemant.date!) ?? "NO DATE";
+
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
         } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
@@ -468,7 +471,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
       for (var elemant in response) {
-        String temp = elemant.date ?? "NO DATE";
+        String temp =
+            DatesController().formatDateWithoutYear(elemant.date!) ?? "NO DATE";
 
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;

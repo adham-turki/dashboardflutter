@@ -14,6 +14,10 @@ class DatesController {
     final DateFormat dateFormatter = DateFormat("yyyy-MM-dd");
     return dateFormatter.format(firstDayCurrentWeek);
   }
+  String formatDateWithoutYear(String date) {
+    DateTime parsedDate = DateFormat("yyyy-MM-dd").parse(date);
+    return DateFormat("dd-MM").format(parsedDate);
+  }
 
   String currentMonth() {
     DateTime firstDayCurrentMonth = DateTime(today.year, today.month, 1);
