@@ -135,11 +135,14 @@ class PurchaseCostReportModel {
     return PlutoRow(cells: purchaseReport);
   }
 
-  static List<PlutoColumn> getColumns(
-      AppLocalizations localizations,
-      List<String> colsName,
-      ReportsResult? reportsResult,
-      BuildContext context) {
+  static List<PlutoColumn> getColumns(AppLocalizations localizations,
+      List<String> colsName, ReportsResult? reportsResult, BuildContext context,
+      {bool isOrderBy = false,
+      bool isOne = false,
+      bool isTwo = false,
+      bool isThree = false,
+      bool isFour = false,
+      bool isSupplier = false}) {
     double width = MediaQuery.of(context).size.width;
 
     bool isDesktop = Responsive.isDesktop(context);
@@ -157,7 +160,17 @@ class PurchaseCostReportModel {
         width: isDesktop
             ? fieldsName[i] == 'dash'
                 ? width * .04
-                : width * .13
+                : isOne
+                    ? width * 0.19
+                    : isTwo
+                        ? width * 0.155
+                        : isThree
+                            ? width * 0.133
+                            : isFour
+                                ? width * 0.115
+                                : isSupplier
+                                    ? width * 0.088
+                                    : width * .13
             : width * 0.36,
         backgroundColor: columnColors,
         footerRenderer: fieldsName[i] == 'averagePrice' && reportsResult != null

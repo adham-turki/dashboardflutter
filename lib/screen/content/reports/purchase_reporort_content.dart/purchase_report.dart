@@ -274,7 +274,6 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
           selectedValues.add(selectedValueFromDropdown4);
         }
       }
-      print("selectedValuesselectedValues:${selectedValues}");
       List<String> columns = ['#'];
       columns.addAll(selectedValues);
       columns.addAll([
@@ -283,28 +282,58 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
         _locale.total,
       ]);
       // setState(() {
+
       orderByColumns = columns;
       stateManager.removeColumns(stateManager!.columns);
+      // if (readProvider.getOrders!.isNotEmpty) {
+      //   for (int i = 0;
+      //       i <
+      //           PurchaseCostReportModel.getColumns(
+      //                   AppLocalizations.of(context)!,
+      //                   orderByColumns,
+      //                   reportsResult,
+      //                   context)
+      //               .length;
+      //       i++) {
+      //     stateManager!.insertColumns(i, [
+      //       PurchaseCostReportModel.getColumns(
+      //           _locale, orderByColumns, reportsResult, context)[i]
+      //     ]);
+      //   }
+      // }
+
       if (readProvider.getOrders!.isNotEmpty) {
-        print("inside ifffff");
-        for (int i = 0;
-            i <
-                PurchaseCostReportModel.getColumns(
-                        AppLocalizations.of(context)!,
-                        orderByColumns,
-                        reportsResult,
-                        context)
-                    .length;
-            i++) {
-          print("orderByColumnsorderByColumns 111:${orderByColumns[i]}");
-          stateManager!.insertColumns(i, [
-            PurchaseCostReportModel.getColumns(
-                _locale, orderByColumns, reportsResult, context)[i]
-          ]);
-          print("orderByColumnsorderByColumns 2222:${orderByColumns[i]}");
+        List<PlutoColumn> newColumns;
+
+        if (orderByColumns.length == 5) {
+          newColumns = PurchaseCostReportModel.getColumns(
+              _locale, orderByColumns, reportsResult, context,
+              isOne: true);
+        } else if (orderByColumns.length == 6) {
+          newColumns = PurchaseCostReportModel.getColumns(
+              _locale, orderByColumns, reportsResult, context,
+              isTwo: true);
+        } else if (orderByColumns.length == 7) {
+          newColumns = PurchaseCostReportModel.getColumns(
+              _locale, orderByColumns, reportsResult, context,
+              isThree: true);
+        } else if (orderByColumns.length == 8) {
+          newColumns = PurchaseCostReportModel.getColumns(
+              _locale, orderByColumns, reportsResult, context,
+              isFour: true);
+        } else {
+          newColumns = PurchaseCostReportModel.getColumns(
+              _locale, orderByColumns, reportsResult, context,
+              isSupplier: true);
         }
+
+        // Insert the generated columns into the state manager
+        for (int i = 0; i < newColumns.length; i++) {
+          stateManager!.insertColumns(i, [newColumns[i]]);
+        }
+
+// });
       } else {
-        print("inisde elseeee");
         List<String> temp = [
           '#',
           _locale.branch,
@@ -854,7 +883,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
     int page = request.page;
 
     ReportController purchaseReportController = ReportController();
-    // List<SalesCostReportModel> newList = purchaseList;
+    // List<PurchaseCostReportModel> newList = purchaseList;
     readProvider.setPage(page);
     dynamic body = readProvider.toJson();
     purchaseList = [];

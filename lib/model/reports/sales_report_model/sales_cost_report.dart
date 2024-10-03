@@ -186,7 +186,7 @@ class SalesCostReportModel {
             ? fieldsName[i] == 'dash'
                 ? width * .04
                 : isOne
-                    ? width * 0.18
+                    ? width * 0.19
                     : isTwo
                         ? width * 0.155
                         : isThree

@@ -340,9 +340,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
           ]);
         }
       }
-
-      // setState(() {
-      // setState(() {
       orderByColumns = columns;
       stateManager!.removeColumns(stateManager!.columns);
 
