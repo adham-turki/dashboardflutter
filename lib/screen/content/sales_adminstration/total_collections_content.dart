@@ -539,8 +539,11 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         } else if (element.collection == 0.0) {
           boolTemp = false;
         }
+        double collection = element.collection!;
+        double roundedCollection = double.parse(collection.toStringAsFixed(1));
+
         setState(() {
-          listOfBalances.add(element.collection!);
+          listOfBalances.add(roundedCollection);
           listOfPeriods.add(element.name!);
           if (boolTemp) {
             dataMap[element.name!] =

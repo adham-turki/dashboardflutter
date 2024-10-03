@@ -13,6 +13,15 @@ class Converters {
     return myFormat.format(num);
   }
 
+  static formatNumberWithCommasAndRounding(double num) {
+    // Round the number to 1 decimal place
+    double roundedNum = double.parse(num.toStringAsFixed(1));
+
+    // Format the rounded number with commas in Arabic locale
+    NumberFormat myFormat = NumberFormat.decimalPattern('ar');
+    return myFormat.format(roundedNum);
+  }
+
   static formatNumberRounded(double num) {
     // Round the number to 1 decimal place
     double roundedNum = double.parse(num.toStringAsFixed(1));

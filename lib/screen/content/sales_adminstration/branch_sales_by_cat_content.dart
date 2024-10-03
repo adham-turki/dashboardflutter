@@ -24,7 +24,6 @@ import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/pages_constants.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
-import '../../../utils/func/converters.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
@@ -630,8 +629,90 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         .then((value) {
       for (var element in value) {
         // creditAmt - debitAmt
-        double bal = Converters.formatNumberRounded(
-            element.creditAmt! - element.debitAmt!);
+        double bal = element.creditAmt! - element.debitAmt!;
+
+        // **Round the value to 1 decimal place for chart purposes**
+        double roundedBal = double.parse(bal.toStringAsFixed(1));
+
+        // Generate a random color
+        Color randomColor = getRandomColor(
+            colorNewList, usedColors); // Use the getRandomColor function
+        if (roundedBal != 0.0) {
+          temp = true;
+        } else if (roundedBal == 0.0) {
+          temp = false;
+        }
+        setState(() {
+          // Use the rounded balance in chart data
+          listOfBalances.add(roundedBal);
+          listOfPeriods.add(element.categoryName!);
+
+          if (temp) {
+            dataMap[element.categoryName!] =
+                formatDoubleToTwoDecimalPlaces(roundedBal);
+
+            pieData.add(PieChartModel(
+                title: element.categoryName! == ""
+                    ? _locale.general
+                    : element.categoryName!,
+                value: formatDoubleToTwoDecimalPlaces(roundedBal),
+                color: randomColor)); // Set random color
+          }
+
+          barData.add(
+            BarChartData(
+              element.categoryName! == ""
+                  ? _locale.general
+                  : element.categoryName!,
+              roundedBal,
+            ), // Use roundedBal for the bar chart
+          );
+        });
+      }
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  void getBranchByCat1({bool? isStart}) {
+    setState(() {
+      isLoading = true;
+    });
+    listOfBalances = [];
+    pieData = [];
+    barData = [];
+    dataMap.clear();
+    int cat = getCategoryNum(selectedCategories, _locale);
+    if (_fromDateController.text.isEmpty || _toDateController.text.isEmpty) {
+      setState(() {
+        if (_fromDateController.text.isEmpty) {
+          _fromDateController.text = todayDate;
+        }
+        if (_toDateController.text.isEmpty) {
+          _toDateController.text = todayDate;
+        }
+      });
+    }
+    String startDate = DatesController().formatDate(_fromDateController.text);
+    String endDate = DatesController().formatDate(_toDateController.text);
+    SearchCriteria searchCriteria = SearchCriteria(
+        fromDate: startDate,
+        toDate: endDate,
+        byCategory: cat,
+        branch: selectedBranchCode);
+    setSearchCriteria(searchCriteria);
+    pieData = [];
+    barData = [];
+    listOfBalances = [];
+    listOfPeriods = [];
+
+    salesCategoryController
+        .getSalesByCategory(searchCriteria, isStart: isStart)
+        .then((value) {
+      for (var element in value) {
+        // creditAmt - debitAmt
+        double bal = element.creditAmt! - element.debitAmt!;
 
         // Generate a random color
         Color randomColor = getRandomColor(
