@@ -205,107 +205,268 @@ class _BranchesSalesByCatDashboardState
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ValueListenableBuilder(
-                          valueListenable: totalBranchesByCateg,
-                          builder: ((context, value, child) {
-                            return Text(
-                              "${_locale.branchesSalesByCategories} (${Converters.formatNumberRounded(totalBranchesByCateg.value)})",
-                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                            );
-                          })),
-                      Text(
-                        _locale.localeName == "en"
-                            ? "${fromDateController.text}  -  ${toDateController.text}"
-                            : "$fromDate  -  $toDate",
-                        style: TextStyle(fontSize: isDesktop ? 15 : 13),
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width < 800
-                              ? MediaQuery.of(context).size.width * 0.06
-                              : MediaQuery.of(context).size.width * 0.03,
-                          child: blueButton1(
-                            icon: Icon(
-                              Icons.filter_list_sharp,
-                              color: whiteColor,
-                              size: isDesktop ? height * 0.035 : height * 0.03,
+                  isDesktop
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ValueListenableBuilder(
+                                valueListenable: totalBranchesByCateg,
+                                builder: ((context, value, child) {
+                                  return Text(
+                                    "${_locale.branchesSalesByCategories} (${Converters.formatNumberRounded(totalBranchesByCateg.value)})",
+                                    style: TextStyle(
+                                        fontSize: isDesktop ? 15 : 18),
+                                  );
+                                })),
+                            Text(
+                              _locale.localeName == "en"
+                                  ? "${fromDateController.text}  -  ${toDateController.text}"
+                                  : "$fromDate  -  $toDate",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 13),
                             ),
-                            textColor: const Color.fromARGB(255, 255, 255, 255),
-                            height: isDesktop ? height * .015 : height * .03,
-                            fontSize: isDesktop ? height * .018 : height * .017,
-                            width: isDesktop ? width * 0.13 : width * 0.25,
-                            onPressed: () {
-                              if (isLoading == false) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return FilterDialogSalesByCategory(
-                                      selectedChart: getChartByCode(
-                                          selectedChart, _locale),
-                                      selectedBranchCodeF:
-                                          selectedBranchCode == ""
-                                              ? _locale.all
-                                              : selectedBranchCode,
-                                      selectedPeriod: getPeriodByCode(
-                                          selectedPeriod, _locale),
-                                      fromDate: fromDateController.text,
-                                      toDate: toDateController.text,
-                                      selectedCategory: getCategoryByCode(
-                                          selectedCategories, _locale),
-                                      branches: branches,
-                                      onFilter: (selectedPeriodF,
-                                          fromDate,
-                                          toDate,
-                                          selectedCategoriesF,
-                                          selectedBranchCodeF,
-                                          chart) {
-                                        fromDateController.text = fromDate;
-                                        toDateController.text = toDate;
-                                        selectedCategories = getCategoryNum(
-                                            selectedCategoriesF, _locale);
-                                        selectedBranchCode =
-                                            selectedBranchCodeF == _locale.all
-                                                ? ""
-                                                : selectedBranchCodeF;
-                                        selectedPeriod = getPeriodByName(
-                                            selectedPeriodF, _locale);
-                                        selectedChart =
-                                            getChartByName(chart, _locale);
-                                        SearchCriteria searchCriteria =
-                                            SearchCriteria(
-                                          fromDate: fromDateController.text,
-                                          toDate: toDateController.text.isEmpty
-                                              ? todayDate
-                                              : toDateController.text,
-                                          byCategory: getCategoryNum(
-                                              selectedCategoriesF, _locale),
-                                          branch: selectedBranchCode,
-                                        );
-                                        setSearchCriteria(searchCriteria);
-                                      },
-                                    );
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width < 800
+                                    ? MediaQuery.of(context).size.width * 0.06
+                                    : MediaQuery.of(context).size.width * 0.03,
+                                child: blueButton1(
+                                  icon: Icon(
+                                    Icons.filter_list_sharp,
+                                    color: whiteColor,
+                                    size: isDesktop
+                                        ? height * 0.035
+                                        : height * 0.03,
+                                  ),
+                                  textColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  height:
+                                      isDesktop ? height * .015 : height * .03,
+                                  fontSize:
+                                      isDesktop ? height * .018 : height * .017,
+                                  width:
+                                      isDesktop ? width * 0.13 : width * 0.25,
+                                  onPressed: () {
+                                    if (isLoading == false) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return FilterDialogSalesByCategory(
+                                            selectedChart: getChartByCode(
+                                                selectedChart, _locale),
+                                            selectedBranchCodeF:
+                                                selectedBranchCode == ""
+                                                    ? _locale.all
+                                                    : selectedBranchCode,
+                                            selectedPeriod: getPeriodByCode(
+                                                selectedPeriod, _locale),
+                                            fromDate: fromDateController.text,
+                                            toDate: toDateController.text,
+                                            selectedCategory: getCategoryByCode(
+                                                selectedCategories, _locale),
+                                            branches: branches,
+                                            onFilter: (selectedPeriodF,
+                                                fromDate,
+                                                toDate,
+                                                selectedCategoriesF,
+                                                selectedBranchCodeF,
+                                                chart) {
+                                              fromDateController.text =
+                                                  fromDate;
+                                              toDateController.text = toDate;
+                                              selectedCategories =
+                                                  getCategoryNum(
+                                                      selectedCategoriesF,
+                                                      _locale);
+                                              selectedBranchCode =
+                                                  selectedBranchCodeF ==
+                                                          _locale.all
+                                                      ? ""
+                                                      : selectedBranchCodeF;
+                                              selectedPeriod = getPeriodByName(
+                                                  selectedPeriodF, _locale);
+                                              selectedChart = getChartByName(
+                                                  chart, _locale);
+                                              SearchCriteria searchCriteria =
+                                                  SearchCriteria(
+                                                fromDate:
+                                                    fromDateController.text,
+                                                toDate: toDateController
+                                                        .text.isEmpty
+                                                    ? todayDate
+                                                    : toDateController.text,
+                                                byCategory: getCategoryNum(
+                                                    selectedCategoriesF,
+                                                    _locale),
+                                                branch: selectedBranchCode,
+                                              );
+                                              setSearchCriteria(searchCriteria);
+                                            },
+                                          );
+                                        },
+                                      ).then((value) async {
+                                        setState(() {
+                                          _timer!.cancel();
+
+                                          isLoading = true;
+                                        });
+                                        getBranchByCat().then((value) {
+                                          setState(() {
+                                            _startTimer();
+
+                                            isLoading = false;
+                                          });
+                                        });
+                                      });
+                                    }
                                   },
-                                ).then((value) async {
-                                  setState(() {
-                                    _timer!.cancel();
+                                )),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ValueListenableBuilder(
+                                    valueListenable: totalBranchesByCateg,
+                                    builder: ((context, value, child) {
+                                      return Text(
+                                        "${_locale.branchesSalesByCategories}   (${Converters.formatNumberRounded(totalBranchesByCateg.value)})",
+                                        style: TextStyle(
+                                            fontSize: isDesktop ? 15 : 18),
+                                      );
+                                    })),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _locale.localeName == "en"
+                                      ? "${fromDateController.text}  -  ${toDateController.text}"
+                                      : "$fromDate  -  $toDate",
+                                  style:
+                                      TextStyle(fontSize: isDesktop ? 15 : 18),
+                                ),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 800
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.03,
+                                    child: blueButton1(
+                                      icon: Icon(
+                                        Icons.filter_list_sharp,
+                                        color: whiteColor,
+                                        size: isDesktop
+                                            ? height * 0.035
+                                            : height * 0.03,
+                                      ),
+                                      textColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      height: isDesktop
+                                          ? height * .015
+                                          : height * .03,
+                                      fontSize: isDesktop
+                                          ? height * .018
+                                          : height * .017,
+                                      width: isDesktop
+                                          ? width * 0.13
+                                          : width * 0.25,
+                                      onPressed: () {
+                                        if (isLoading == false) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return FilterDialogSalesByCategory(
+                                                selectedChart: getChartByCode(
+                                                    selectedChart, _locale),
+                                                selectedBranchCodeF:
+                                                    selectedBranchCode == ""
+                                                        ? _locale.all
+                                                        : selectedBranchCode,
+                                                selectedPeriod: getPeriodByCode(
+                                                    selectedPeriod, _locale),
+                                                fromDate:
+                                                    fromDateController.text,
+                                                toDate: toDateController.text,
+                                                selectedCategory:
+                                                    getCategoryByCode(
+                                                        selectedCategories,
+                                                        _locale),
+                                                branches: branches,
+                                                onFilter: (selectedPeriodF,
+                                                    fromDate,
+                                                    toDate,
+                                                    selectedCategoriesF,
+                                                    selectedBranchCodeF,
+                                                    chart) {
+                                                  fromDateController.text =
+                                                      fromDate;
+                                                  toDateController.text =
+                                                      toDate;
+                                                  selectedCategories =
+                                                      getCategoryNum(
+                                                          selectedCategoriesF,
+                                                          _locale);
+                                                  selectedBranchCode =
+                                                      selectedBranchCodeF ==
+                                                              _locale.all
+                                                          ? ""
+                                                          : selectedBranchCodeF;
+                                                  selectedPeriod =
+                                                      getPeriodByName(
+                                                          selectedPeriodF,
+                                                          _locale);
+                                                  selectedChart =
+                                                      getChartByName(
+                                                          chart, _locale);
+                                                  SearchCriteria
+                                                      searchCriteria =
+                                                      SearchCriteria(
+                                                    fromDate:
+                                                        fromDateController.text,
+                                                    toDate: toDateController
+                                                            .text.isEmpty
+                                                        ? todayDate
+                                                        : toDateController.text,
+                                                    byCategory: getCategoryNum(
+                                                        selectedCategoriesF,
+                                                        _locale),
+                                                    branch: selectedBranchCode,
+                                                  );
+                                                  setSearchCriteria(
+                                                      searchCriteria);
+                                                },
+                                              );
+                                            },
+                                          ).then((value) async {
+                                            setState(() {
+                                              _timer!.cancel();
 
-                                    isLoading = true;
-                                  });
-                                  getBranchByCat().then((value) {
-                                    setState(() {
-                                      _startTimer();
+                                              isLoading = true;
+                                            });
+                                            getBranchByCat().then((value) {
+                                              setState(() {
+                                                _startTimer();
 
-                                      isLoading = false;
-                                    });
-                                  });
-                                });
-                              }
-                            },
-                          )),
-                    ],
-                  ),
+                                                isLoading = false;
+                                              });
+                                            });
+                                          });
+                                        }
+                                      },
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
                   isLoading
                       ? const Padding(
                           padding: EdgeInsets.only(bottom: 150),

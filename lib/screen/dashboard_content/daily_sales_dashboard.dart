@@ -156,97 +156,237 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ValueListenableBuilder(
-                          valueListenable: totalDailySale,
-                          builder: ((context, value, child) {
-                            return Text(
-                              "${_locale.dailySales} (${Converters.formatNumberRounded(totalDailySale.value)})",
+                  isDesktop
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ValueListenableBuilder(
+                                valueListenable: totalDailySale,
+                                builder: ((context, value, child) {
+                                  return Text(
+                                    "${_locale.dailySales} (${Converters.formatNumberRounded(totalDailySale.value)})",
+                                    style: TextStyle(
+                                        fontSize: isDesktop ? 15 : 18),
+                                  );
+                                })),
+                            Text(
+                              _locale.localeName == "en"
+                                  ? fromDateController.text
+                                  : fromDate,
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                            );
-                          })),
-                      Text(
-                        _locale.localeName == "en"
-                            ? fromDateController.text
-                            : fromDate,
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width < 800
-                              ? MediaQuery.of(context).size.width * 0.06
-                              : MediaQuery.of(context).size.width * 0.03,
-                          child: blueButton1(
-                            icon: Icon(
-                              Icons.filter_list_sharp,
-                              color: whiteColor,
-                              size: isDesktop ? height * 0.035 : height * 0.03,
                             ),
-                            textColor: const Color.fromARGB(255, 255, 255, 255),
-                            height: isDesktop ? height * .01 : height * .039,
-                            fontSize: isDesktop ? height * .018 : height * .017,
-                            width: isDesktop ? width * 0.08 : width * 0.27,
-                            onPressed: () {
-                              if (isLoading == false) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return FilterDialogDailySales(
-                                      selectedChart: getChartByCode(
-                                          selectedChart, _locale),
-                                      selectedStatus: getVoucherStatusByCode(
-                                          _locale, statusVar),
-                                      selectedBranchCodeF:
-                                          selectedBranchCode == ""
-                                              ? _locale.all
-                                              : selectedBranchCode,
-                                      fromDate: fromDateController.text,
-                                      branches: branches,
-                                      onFilter: (
-                                        fromDate,
-                                        selectedStatus,
-                                        chart,
-                                        selectedBranchCodeF,
-                                      ) {
-                                        fromDateController.text = fromDate;
-                                        statusVar = getVoucherStatus(
-                                            _locale, selectedStatus);
-                                        selectedChart =
-                                            getChartByName(chart, _locale);
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width < 800
+                                    ? MediaQuery.of(context).size.width * 0.06
+                                    : MediaQuery.of(context).size.width * 0.03,
+                                child: blueButton1(
+                                  icon: Icon(
+                                    Icons.filter_list_sharp,
+                                    color: whiteColor,
+                                    size: isDesktop
+                                        ? height * 0.035
+                                        : height * 0.03,
+                                  ),
+                                  textColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  height:
+                                      isDesktop ? height * .01 : height * .039,
+                                  fontSize:
+                                      isDesktop ? height * .018 : height * .017,
+                                  width:
+                                      isDesktop ? width * 0.08 : width * 0.27,
+                                  onPressed: () {
+                                    if (isLoading == false) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return FilterDialogDailySales(
+                                            selectedChart: getChartByCode(
+                                                selectedChart, _locale),
+                                            selectedStatus:
+                                                getVoucherStatusByCode(
+                                                    _locale, statusVar),
+                                            selectedBranchCodeF:
+                                                selectedBranchCode == ""
+                                                    ? _locale.all
+                                                    : selectedBranchCode,
+                                            fromDate: fromDateController.text,
+                                            branches: branches,
+                                            onFilter: (
+                                              fromDate,
+                                              selectedStatus,
+                                              chart,
+                                              selectedBranchCodeF,
+                                            ) {
+                                              fromDateController.text =
+                                                  fromDate;
+                                              statusVar = getVoucherStatus(
+                                                  _locale, selectedStatus);
+                                              selectedChart = getChartByName(
+                                                  chart, _locale);
 
-                                        selectedBranchCode =
-                                            selectedBranchCodeF == _locale.all
-                                                ? ""
-                                                : selectedBranchCodeF;
+                                              selectedBranchCode =
+                                                  selectedBranchCodeF ==
+                                                          _locale.all
+                                                      ? ""
+                                                      : selectedBranchCodeF;
 
-                                        SearchCriteria searchCriteria =
-                                            SearchCriteria(
-                                          fromDate: fromDateController.text,
-                                          voucherStatus: -100,
-                                          branch: "",
-                                        );
-                                        setSearchCriteria(searchCriteria);
-                                      },
-                                    );
+                                              SearchCriteria searchCriteria =
+                                                  SearchCriteria(
+                                                fromDate:
+                                                    fromDateController.text,
+                                                voucherStatus: -100,
+                                                branch: "",
+                                              );
+                                              setSearchCriteria(searchCriteria);
+                                            },
+                                          );
+                                        },
+                                      ).then((value) async {
+                                        setState(() {
+                                          _timer!.cancel();
+                                          isLoading = true;
+                                        });
+                                        getDailySales().then((value) {
+                                          setState(() {
+                                            _startTimer();
+                                            isLoading = false;
+                                          });
+                                        });
+                                      });
+                                    }
                                   },
-                                ).then((value) async {
-                                  setState(() {
-                                    _timer!.cancel();
-                                    isLoading = true;
-                                  });
-                                  getDailySales().then((value) {
-                                    setState(() {
-                                      _startTimer();
-                                      isLoading = false;
-                                    });
-                                  });
-                                });
-                              }
-                            },
-                          )),
-                    ],
-                  ),
+                                )),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ValueListenableBuilder(
+                                    valueListenable: totalDailySale,
+                                    builder: ((context, value, child) {
+                                      return Text(
+                                        "${_locale.dailySales}  (${Converters.formatNumberRounded(totalDailySale.value)})",
+                                        style: TextStyle(
+                                            fontSize: isDesktop ? 15 : 18),
+                                      );
+                                    })),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _locale.localeName == "en"
+                                      ? fromDateController.text
+                                      : fromDate,
+                                  style:
+                                      TextStyle(fontSize: isDesktop ? 15 : 18),
+                                ),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 800
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.03,
+                                    child: blueButton1(
+                                      icon: Icon(
+                                        Icons.filter_list_sharp,
+                                        color: whiteColor,
+                                        size: isDesktop
+                                            ? height * 0.035
+                                            : height * 0.03,
+                                      ),
+                                      textColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      height: isDesktop
+                                          ? height * .01
+                                          : height * .039,
+                                      fontSize: isDesktop
+                                          ? height * .018
+                                          : height * .017,
+                                      width: isDesktop
+                                          ? width * 0.08
+                                          : width * 0.27,
+                                      onPressed: () {
+                                        if (isLoading == false) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return FilterDialogDailySales(
+                                                selectedChart: getChartByCode(
+                                                    selectedChart, _locale),
+                                                selectedStatus:
+                                                    getVoucherStatusByCode(
+                                                        _locale, statusVar),
+                                                selectedBranchCodeF:
+                                                    selectedBranchCode == ""
+                                                        ? _locale.all
+                                                        : selectedBranchCode,
+                                                fromDate:
+                                                    fromDateController.text,
+                                                branches: branches,
+                                                onFilter: (
+                                                  fromDate,
+                                                  selectedStatus,
+                                                  chart,
+                                                  selectedBranchCodeF,
+                                                ) {
+                                                  fromDateController.text =
+                                                      fromDate;
+                                                  statusVar = getVoucherStatus(
+                                                      _locale, selectedStatus);
+                                                  selectedChart =
+                                                      getChartByName(
+                                                          chart, _locale);
+
+                                                  selectedBranchCode =
+                                                      selectedBranchCodeF ==
+                                                              _locale.all
+                                                          ? ""
+                                                          : selectedBranchCodeF;
+
+                                                  SearchCriteria
+                                                      searchCriteria =
+                                                      SearchCriteria(
+                                                    fromDate:
+                                                        fromDateController.text,
+                                                    voucherStatus: -100,
+                                                    branch: "",
+                                                  );
+                                                  setSearchCriteria(
+                                                      searchCriteria);
+                                                },
+                                              );
+                                            },
+                                          ).then((value) async {
+                                            setState(() {
+                                              _timer!.cancel();
+                                              isLoading = true;
+                                            });
+                                            getDailySales().then((value) {
+                                              setState(() {
+                                                _startTimer();
+                                                isLoading = false;
+                                              });
+                                            });
+                                          });
+                                        }
+                                      },
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
                   isLoading
                       ? const Padding(
                           padding: EdgeInsets.only(bottom: 150),

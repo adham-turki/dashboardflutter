@@ -144,88 +144,217 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ValueListenableBuilder(
-                          valueListenable: totalBranchesSale,
-                          builder: ((context, value, child) {
-                            return Text(
-                              "${_locale.salesByBranches} (${Converters.formatNumberRounded(totalBranchesSale.value)})",
+                  isDesktop
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ValueListenableBuilder(
+                                valueListenable: totalBranchesSale,
+                                builder: ((context, value, child) {
+                                  return Text(
+                                    "${_locale.salesByBranches} (${Converters.formatNumberRounded(totalBranchesSale.value)})",
+                                    style: TextStyle(
+                                        fontSize: isDesktop ? 15 : 18),
+                                  );
+                                })),
+                            Text(
+                              _locale.localeName == "en"
+                                  ? "${fromDateController.text}  -  ${toDateController.text}"
+                                  : "$fromDate  -  $toDate",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                            );
-                          })),
-                      Text(
-                        _locale.localeName == "en"
-                            ? "${fromDateController.text}  -  ${toDateController.text}"
-                            : "$fromDate  -  $toDate",
-                        style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                      ),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width < 800
-                              ? MediaQuery.of(context).size.width * 0.06
-                              : MediaQuery.of(context).size.width * 0.03,
-                          child: blueButton1(
-                            icon: Icon(
-                              Icons.filter_list_sharp,
-                              color: whiteColor,
-                              size: isDesktop ? height * 0.035 : height * 0.03,
                             ),
-                            textColor: const Color.fromARGB(255, 255, 255, 255),
-                            height: isDesktop ? height * .01 : height * .039,
-                            fontSize: isDesktop ? height * .018 : height * .017,
-                            width: isDesktop ? width * 0.08 : width * 0.27,
-                            onPressed: () {
-                              if (isLoading == false) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return FilterDialogSalesByBranches(
-                                      selectedChart: getChartByCode(
-                                          selectedChart, _locale),
-                                      selectedPeriod:
-                                          getPeriodByCode(period, _locale),
-                                      fromDate: fromDateController.text,
-                                      toDate: toDateController.text,
-                                      onFilter: (selectedPeriod, fromDate,
-                                          toDate, chart) {
-                                        fromDateController.text = fromDate;
-                                        toDateController.text = toDate;
-                                        period = getPeriodByName(
-                                            selectedPeriod, _locale);
-                                        selectedChart =
-                                            getChartByName(chart, _locale);
-                                        SearchCriteria searchCriteria =
-                                            SearchCriteria(
-                                          fromDate: fromDateController.text,
-                                          toDate: toDateController.text.isEmpty
-                                              ? todayDate
-                                              : toDateController.text,
-                                          voucherStatus: -100,
-                                        );
-                                        setSearchCriteria(searchCriteria);
-                                      },
-                                    );
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width < 800
+                                    ? MediaQuery.of(context).size.width * 0.06
+                                    : MediaQuery.of(context).size.width * 0.03,
+                                child: blueButton1(
+                                  icon: Icon(
+                                    Icons.filter_list_sharp,
+                                    color: whiteColor,
+                                    size: isDesktop
+                                        ? height * 0.035
+                                        : height * 0.03,
+                                  ),
+                                  textColor:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  height:
+                                      isDesktop ? height * .01 : height * .039,
+                                  fontSize:
+                                      isDesktop ? height * .018 : height * .017,
+                                  width:
+                                      isDesktop ? width * 0.08 : width * 0.27,
+                                  onPressed: () {
+                                    if (isLoading == false) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return FilterDialogSalesByBranches(
+                                            selectedChart: getChartByCode(
+                                                selectedChart, _locale),
+                                            selectedPeriod: getPeriodByCode(
+                                                period, _locale),
+                                            fromDate: fromDateController.text,
+                                            toDate: toDateController.text,
+                                            onFilter: (selectedPeriod, fromDate,
+                                                toDate, chart) {
+                                              fromDateController.text =
+                                                  fromDate;
+                                              toDateController.text = toDate;
+                                              period = getPeriodByName(
+                                                  selectedPeriod, _locale);
+                                              selectedChart = getChartByName(
+                                                  chart, _locale);
+                                              SearchCriteria searchCriteria =
+                                                  SearchCriteria(
+                                                fromDate:
+                                                    fromDateController.text,
+                                                toDate: toDateController
+                                                        .text.isEmpty
+                                                    ? todayDate
+                                                    : toDateController.text,
+                                                voucherStatus: -100,
+                                              );
+                                              setSearchCriteria(searchCriteria);
+                                            },
+                                          );
+                                        },
+                                      ).then((value) async {
+                                        setState(() {
+                                          _timer!.cancel();
+
+                                          isLoading = true;
+                                        });
+                                        getSalesByBranch().then((value) {
+                                          setState(() {
+                                            _startTimer();
+
+                                            isLoading = false;
+                                          });
+                                        });
+                                      });
+                                    }
                                   },
-                                ).then((value) async {
-                                  setState(() {
-                                    _timer!.cancel();
+                                )),
+                          ],
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                ValueListenableBuilder(
+                                    valueListenable: totalBranchesSale,
+                                    builder: ((context, value, child) {
+                                      return Text(
+                                        "${_locale.salesByBranches}   (${Converters.formatNumberRounded(totalBranchesSale.value)})",
+                                        style: TextStyle(
+                                            fontSize: isDesktop ? 15 : 18),
+                                      );
+                                    })),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _locale.localeName == "en"
+                                      ? "${fromDateController.text}  -  ${toDateController.text}"
+                                      : "$fromDate  -  $toDate",
+                                  style:
+                                      TextStyle(fontSize: isDesktop ? 15 : 18),
+                                ),
+                                SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width < 800
+                                            ? MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.06
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.03,
+                                    child: blueButton1(
+                                      icon: Icon(
+                                        Icons.filter_list_sharp,
+                                        color: whiteColor,
+                                        size: isDesktop
+                                            ? height * 0.035
+                                            : height * 0.03,
+                                      ),
+                                      textColor: const Color.fromARGB(
+                                          255, 255, 255, 255),
+                                      height: isDesktop
+                                          ? height * .01
+                                          : height * .039,
+                                      fontSize: isDesktop
+                                          ? height * .018
+                                          : height * .017,
+                                      width: isDesktop
+                                          ? width * 0.08
+                                          : width * 0.27,
+                                      onPressed: () {
+                                        if (isLoading == false) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return FilterDialogSalesByBranches(
+                                                selectedChart: getChartByCode(
+                                                    selectedChart, _locale),
+                                                selectedPeriod: getPeriodByCode(
+                                                    period, _locale),
+                                                fromDate:
+                                                    fromDateController.text,
+                                                toDate: toDateController.text,
+                                                onFilter: (selectedPeriod,
+                                                    fromDate, toDate, chart) {
+                                                  fromDateController.text =
+                                                      fromDate;
+                                                  toDateController.text =
+                                                      toDate;
+                                                  period = getPeriodByName(
+                                                      selectedPeriod, _locale);
+                                                  selectedChart =
+                                                      getChartByName(
+                                                          chart, _locale);
+                                                  SearchCriteria
+                                                      searchCriteria =
+                                                      SearchCriteria(
+                                                    fromDate:
+                                                        fromDateController.text,
+                                                    toDate: toDateController
+                                                            .text.isEmpty
+                                                        ? todayDate
+                                                        : toDateController.text,
+                                                    voucherStatus: -100,
+                                                  );
+                                                  setSearchCriteria(
+                                                      searchCriteria);
+                                                },
+                                              );
+                                            },
+                                          ).then((value) async {
+                                            setState(() {
+                                              _timer!.cancel();
 
-                                    isLoading = true;
-                                  });
-                                  getSalesByBranch().then((value) {
-                                    setState(() {
-                                      _startTimer();
+                                              isLoading = true;
+                                            });
+                                            getSalesByBranch().then((value) {
+                                              setState(() {
+                                                _startTimer();
 
-                                      isLoading = false;
-                                    });
-                                  });
-                                });
-                              }
-                            },
-                          )),
-                    ],
-                  ),
+                                                isLoading = false;
+                                              });
+                                            });
+                                          });
+                                        }
+                                      },
+                                    )),
+                              ],
+                            )
+                          ],
+                        ),
                   isLoading
                       ? const Padding(
                           padding: EdgeInsets.only(bottom: 150),
