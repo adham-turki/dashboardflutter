@@ -24,6 +24,7 @@ import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/pages_constants.dart';
 import '../../../utils/constants/responsive.dart';
 import '../../../utils/constants/styles.dart';
+import '../../../utils/func/converters.dart';
 import '../../../utils/func/dates_controller.dart';
 import '../../../widget/drop_down/custom_dropdown.dart';
 
@@ -629,7 +630,8 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         .then((value) {
       for (var element in value) {
         // creditAmt - debitAmt
-        double bal = element.creditAmt! - element.debitAmt!;
+        double bal = Converters.formatNumberRounded(
+            element.creditAmt! - element.debitAmt!);
 
         // Generate a random color
         Color randomColor = getRandomColor(

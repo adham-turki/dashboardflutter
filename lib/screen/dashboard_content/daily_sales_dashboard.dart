@@ -163,7 +163,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                           valueListenable: totalDailySale,
                           builder: ((context, value, child) {
                             return Text(
-                              "${_locale.dailySales} (${Converters.formatNumber(totalDailySale.value)})",
+                              "${_locale.dailySales} (${Converters.formatNumberRounded(totalDailySale.value)})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             );
                           })),

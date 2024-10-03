@@ -364,7 +364,8 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
               isFour: true);
         } else {
           newColumns = SalesCostReportModel.getColumns(
-              _locale, orderByColumns, reportsResult, context,isSupplier: true);
+              _locale, orderByColumns, reportsResult, context,
+              isSupplier: true);
         }
 
         // Insert the generated columns into the state manager
@@ -732,11 +733,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                 //     : width * double.parse("0.${orderByColumns.length}6")
                 // : width * 0.7,
                 height: hidefilter == true
-                    ? height * 0.84
+                    ? height * 0.848
                     : _currentIndex == 1
                         ? height * 0.6
                         : _currentIndex == 0
-                            ? height * 0.56
+                            ? height * 0.574
                             : height * 0.4,
                 child: TableComponentNew(
                   columnHeight: 70,
