@@ -890,11 +890,11 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                 //     : width * double.parse("0.${orderByColumns.length}6")
                 // : width * 0.7,
                 height: hidefilter == true
-                    ? height * 0.77
+                    ? height * 0.84
                     : _currentIndex == 1
                         ? height * 0.6
                         : _currentIndex == 0
-                            ? height * 0.55
+                            ? height * 0.56
                             : height * 0.4,
                 child: TableComponentNew(
                   columnHeight: 70,
@@ -902,7 +902,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                   plCols: polCols,
                   polRows: [],
                   footerBuilder: (stateManager) {
-                    return lazyLoadingfooter(stateManager!);
+                    return lazyLoadingfooter(stateManager);
                   },
                   onLoaded: (PlutoGridOnLoadedEvent event) {
                     stateManager = event.stateManager;

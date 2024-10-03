@@ -807,11 +807,11 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 // : width * 0.7,
                 // height: height * 0.5,
                 height: hidefilter == true
-                    ? height * 0.77
+                    ? height * 0.84
                     : _currentIndex == 1
                         ? height * 0.6
                         : _currentIndex == 0
-                            ? height * 0.5
+                            ? height * 0.56
                             : height * 0.4,
                 child: TableComponentNew(
                   columnHeight: 70,
