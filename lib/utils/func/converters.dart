@@ -23,12 +23,16 @@ class Converters {
   }
 
   static formatNumberRounded(double num) {
-    // Round the number to 1 decimal place
-    double roundedNum = double.parse(num.toStringAsFixed(1));
+    // double roundedNum = double.parse(num.toStringAsFixed(1));
 
-    // Format the number in Arabic locale
+    // NumberFormat myFormat = NumberFormat.decimalPattern('ar');
+    // return myFormat.format(roundedNum);
+    // Convert the number to an integer (remove the decimal part)
+    int integerNum = num.toInt();
+
+    // Format the integer number in Arabic locale
     NumberFormat myFormat = NumberFormat.decimalPattern('ar');
-    return myFormat.format(roundedNum);
+    return myFormat.format(integerNum);
   }
 
   static formatNumberDigits(double num) {
