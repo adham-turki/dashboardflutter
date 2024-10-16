@@ -423,342 +423,336 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
 
     return DefaultTabController(
       length: 2,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            hidefilter == false
-                ? Column(
-                    children: [
-                      Center(
-                        child: SizedBox(
-                          width: isDesktop ? width * 0.7 : width * 0.9,
-                          height: height * 0.045,
-                          child: TabBar(
-                            unselectedLabelColor: Colors.grey,
-                            labelColor: Colors.black,
-                            indicatorColor: primary,
-                            tabs: [
-                              Tab(
-                                child: Text(
-                                    maxLines: 1, _locale.critiriaAndOrderBy),
-                              ),
-                              // Tab(
-                              //   child: Text(maxLines: 1, _locale.orderBy),
-                              // ),
-                              Tab(
-                                child: Text(maxLines: 1, _locale.setUPSetting),
-                              ),
-                            ],
-                            onTap: (index) {
-                              setState(() {
-                                _currentIndex = index;
-                              });
-                            },
-                          ),
+      child: Column(
+        children: [
+          hidefilter == false
+              ? Column(
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: isDesktop ? width * 0.7 : width * 0.9,
+                        height: height * 0.045,
+                        child: TabBar(
+                          unselectedLabelColor: Colors.grey,
+                          labelColor: Colors.black,
+                          indicatorColor: primary,
+                          tabs: [
+                            Tab(
+                              child:
+                                  Text(maxLines: 1, _locale.critiriaAndOrderBy),
+                            ),
+                            // Tab(
+                            //   child: Text(maxLines: 1, _locale.orderBy),
+                            // ),
+                            Tab(
+                              child: Text(maxLines: 1, _locale.setUPSetting),
+                            ),
+                          ],
+                          onTap: (index) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
                         ),
                       ),
-                      _currentIndex == 0
-                          ? CriteriaWidget(
-                              onSelectedValueChanged1: updateSelectedValue1,
-                              onSelectedValueChanged2: updateSelectedValue2,
-                              onSelectedValueChanged3: updateSelectedValue3,
-                              onSelectedValueChanged4: updateSelectedValue4)
-                          : SetupWidget(),
-                    ],
-                  )
-                : SizedBox.shrink(),
-            // SizedBox(
-            //   height: isDesktop ? height * 0.0001 : height * 0.05,
-            // ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: height * 0.04,
-                // width: width * 0.7,
-                child: DottedBorder(
-                  color: Colors.blue,
-                  strokeWidth: 1,
-                  dashPattern: const [
-                    2,
-                    2,
+                    ),
+                    _currentIndex == 0
+                        ? CriteriaWidget(
+                            onSelectedValueChanged1: updateSelectedValue1,
+                            onSelectedValueChanged2: updateSelectedValue2,
+                            onSelectedValueChanged3: updateSelectedValue3,
+                            onSelectedValueChanged4: updateSelectedValue4)
+                        : SetupWidget(),
                   ],
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Tooltip(
-                            message: hidefilter == true
-                                ? _locale.showFilters
-                                : _locale.hideFilters,
-                            child: IconButton(
+                )
+              : SizedBox.shrink(),
+          // SizedBox(
+          //   height: isDesktop ? height * 0.0001 : height * 0.05,
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: height * 0.04,
+              // width: width * 0.7,
+              child: DottedBorder(
+                color: Colors.blue,
+                strokeWidth: 1,
+                dashPattern: const [
+                  2,
+                  2,
+                ],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Tooltip(
+                          message: hidefilter == true
+                              ? _locale.showFilters
+                              : _locale.hideFilters,
+                          child: IconButton(
+                            padding: const EdgeInsets.only(top: 3),
+                            onPressed: () {
+                              setState(() {
+                                hidefilter = !hidefilter;
+                                isHide = true;
+                              });
+                            },
+                            icon: hidefilter == false
+                                ? Icon(
+                                    Icons.arrow_circle_up_sharp,
+                                    size: height * 0.025,
+                                  )
+                                : Icon(
+                                    Icons.arrow_circle_down_sharp,
+                                    size: height * 0.025,
+                                  ),
+                          ),
+                        ),
+                        Text(_locale.chooseFilter),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    const VerticalDivider(
+                      color: primary,
+                      width: 1,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          alignment: Alignment.center,
+                          color: primary,
+                          onPressed: () async {
+                            // context.read<SalesCriteraProvider>().setFromDate(
+                            //     DatesController().formatDate(fromDate.text));
+                            // context
+                            //     .read<SalesCriteraProvider>()
+                            //     .setToDate(DatesController().formatDate(toDate.text));
+
+                            DateTime from = DateTime.parse(DatesController()
+                                .formatDateReverse(DatesController()
+                                    .formatDate(readProvider.getFromDate()!)));
+                            DateTime to = DateTime.parse(DatesController()
+                                .formatDateReverse(DatesController()
+                                    .formatDate(readProvider.getToDate()!)));
+
+                            if (from.isAfter(to)) {
+                              ErrorController.openErrorDialog(
+                                  1, _locale.startDateAfterEndDate);
+                            } else {
+                              setState(() {
+                                hidefilter = !hidefilter;
+                              });
+                              // }
+                              // dynamic body = readProvider.toJson();
+
+                              pageLis.value = 1;
+
+                              readProvider.setPage(pageLis.value);
+                              dynamic body = readProvider.toJson();
+                              stateManager!.setShowLoading(true);
+                              await generateColumns();
+                              // if (pageLis.value == 1) {
+                              reportsResult = await ReportController()
+                                  .getSalesResultMehtod(body, isStart: true);
+                              stateManager!.removeAllRows();
+
+                              List<SalesCostReportModel> result = [];
+                              ReportController purchaseReportController =
+                                  ReportController();
+
+                              await purchaseReportController
+                                  .postSalesCostReportMethod(body)
+                                  .then((value) {
+                                result = value;
+                                stateManager!.setShowLoading(false);
+                              });
+
+                              List<PlutoColumn> columns =
+                                  SalesCostReportModel.getColumns(
+                                      AppLocalizations.of(context)!,
+                                      orderByColumns,
+                                      reportsResult,
+                                      context);
+                              if (stateManager != null) {
+                                int maxNumber = 1;
+
+                                for (int i = 0; i < polCols.length; i++) {
+                                  int length =
+                                      polCols[i].title.split(" ").length;
+                                  if (length > maxNumber) {
+                                    maxNumber = length;
+                                  }
+                                  String title = specialColumnsWidth(
+                                          polCols, i, _locale)
+                                      ? polCols[i].title
+                                      : longSentenceWidth(polCols, i, _locale)
+                                          ? '${polCols[i].title.split(' ').take(2).join(' ')}\n${polCols[i].title.split(' ').skip(2).join(' ')}'
+                                          : polCols[i].title.replaceAll(" ",
+                                              "\n"); // _locale.lastPricePurchase
+                                  polCols[i].titleSpan = TextSpan(
+                                    children: [
+                                      WidgetSpan(
+                                        child: Text(
+                                          title,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                  polCols[i].titleTextAlign =
+                                      PlutoColumnTextAlign.center;
+                                  polCols[i].textAlign =
+                                      PlutoColumnTextAlign.center;
+                                }
+
+                                stateManager!.notifyListeners(true);
+                              }
+
+                              for (int i = 0; i < columns.length; i++) {
+                                stateManager!.columns[i].footerRenderer =
+                                    columns[i].footerRenderer;
+                              }
+                              setState(() {});
+                              stateManager!.notifyListeners(true);
+                              List<PlutoRow> rowsToAdd =
+                                  result.map((item) => item.toPluto()).toList();
+                              stateManager!.appendRows(rowsToAdd);
+                              pageLis.value = pageLis.value + 1;
+                              reportsResult = await ReportController()
+                                  .getSalesResultMehtod(body);
+                              // setState(() {});
+                            }
+                          },
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.black,
+                            size: height * 0.025,
+                          ),
+                          // style: customButtonStyle(
+                          //     Size(width * 0.13, height * 0.045), 16, primary2),
+                        ),
+                        Tooltip(
+                          message: _locale.reset,
+                          child: IconButton(
                               padding: const EdgeInsets.only(top: 3),
                               onPressed: () {
+                                isReset.value = true;
                                 setState(() {
-                                  hidefilter = !hidefilter;
-                                  isHide = true;
+                                  readProvider.emptyProvider();
+                                  salesList = [];
+                                  finalRow = [];
+                                });
+                                Future.delayed(Duration(milliseconds: 20), () {
+                                  // setState(() {
+                                  isReset.value = false;
+                                  // });
                                 });
                               },
-                              icon: hidefilter == false
-                                  ? Icon(
-                                      Icons.arrow_circle_up_sharp,
-                                      size: height * 0.025,
-                                    )
-                                  : Icon(
-                                      Icons.arrow_circle_down_sharp,
-                                      size: height * 0.025,
-                                    ),
-                            ),
-                          ),
-                          Text(_locale.chooseFilter),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      const VerticalDivider(
-                        color: primary,
-                        width: 1,
-                        thickness: 1,
-                        indent: 0,
-                        endIndent: 0,
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
+                              icon: Icon(
+                                Icons.refresh,
+                                color: Colors.black,
+                                size: height * 0.025,
+                              )),
+                        ),
+                        Tooltip(
+                          message: _locale.exportToExcel,
+                          child: IconButton(
+                              padding: const EdgeInsets.only(top: 3),
+                              onPressed: () {
+                                isDownload.value = true;
 
-                      Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        // crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            alignment: Alignment.center,
-                            color: primary,
-                            onPressed: () async {
-                              // context.read<SalesCriteraProvider>().setFromDate(
-                              //     DatesController().formatDate(fromDate.text));
-                              // context
-                              //     .read<SalesCriteraProvider>()
-                              //     .setToDate(DatesController().formatDate(toDate.text));
-
-                              DateTime from = DateTime.parse(DatesController()
-                                  .formatDateReverse(DatesController()
-                                      .formatDate(
-                                          readProvider.getFromDate()!)));
-                              DateTime to = DateTime.parse(DatesController()
-                                  .formatDateReverse(DatesController()
-                                      .formatDate(readProvider.getToDate()!)));
-
-                              if (from.isAfter(to)) {
-                                ErrorController.openErrorDialog(
-                                    1, _locale.startDateAfterEndDate);
-                              } else {
-                                setState(() {
-                                  hidefilter = !hidefilter;
-                                });
-                                // }
-                                // dynamic body = readProvider.toJson();
-
-                                pageLis.value = 1;
-
-                                readProvider.setPage(pageLis.value);
-                                dynamic body = readProvider.toJson();
-                                stateManager!.setShowLoading(true);
-                                await generateColumns();
-                                // if (pageLis.value == 1) {
-                                reportsResult = await ReportController()
-                                    .getSalesResultMehtod(body, isStart: true);
-                                stateManager!.removeAllRows();
-
-                                List<SalesCostReportModel> result = [];
-                                ReportController purchaseReportController =
-                                    ReportController();
-
-                                await purchaseReportController
-                                    .postSalesCostReportMethod(body)
-                                    .then((value) {
-                                  result = value;
-                                  stateManager!.setShowLoading(false);
-                                });
-
-                                List<PlutoColumn> columns =
-                                    SalesCostReportModel.getColumns(
-                                        AppLocalizations.of(context)!,
-                                        orderByColumns,
-                                        reportsResult,
-                                        context);
-                                if (stateManager != null) {
-                                  int maxNumber = 1;
-
-                                  for (int i = 0; i < polCols.length; i++) {
-                                    int length =
-                                        polCols[i].title.split(" ").length;
-                                    if (length > maxNumber) {
-                                      maxNumber = length;
-                                    }
-                                    String title = specialColumnsWidth(
-                                            polCols, i, _locale)
-                                        ? polCols[i].title
-                                        : longSentenceWidth(polCols, i, _locale)
-                                            ? '${polCols[i].title.split(' ').take(2).join(' ')}\n${polCols[i].title.split(' ').skip(2).join(' ')}'
-                                            : polCols[i].title.replaceAll(" ",
-                                                "\n"); // _locale.lastPricePurchase
-                                    polCols[i].titleSpan = TextSpan(
-                                      children: [
-                                        WidgetSpan(
-                                          child: Text(
-                                            title,
-                                            style:
-                                                const TextStyle(fontSize: 10),
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                    polCols[i].titleTextAlign =
-                                        PlutoColumnTextAlign.center;
-                                    polCols[i].textAlign =
-                                        PlutoColumnTextAlign.center;
-                                  }
-
-                                  stateManager!.notifyListeners(true);
-                                }
-
-                                for (int i = 0; i < columns.length; i++) {
-                                  stateManager!.columns[i].footerRenderer =
-                                      columns[i].footerRenderer;
-                                }
-                                setState(() {});
-                                stateManager!.notifyListeners(true);
-                                List<PlutoRow> rowsToAdd = result
-                                    .map((item) => item.toPluto())
-                                    .toList();
-                                stateManager!.appendRows(rowsToAdd);
-                                pageLis.value = pageLis.value + 1;
-                                reportsResult = await ReportController()
-                                    .getSalesResultMehtod(body);
-                                // setState(() {});
-                              }
-                            },
-                            icon: Icon(
-                              Icons.search,
-                              color: Colors.black,
-                              size: height * 0.025,
-                            ),
-                            // style: customButtonStyle(
-                            //     Size(width * 0.13, height * 0.045), 16, primary2),
-                          ),
-                          Tooltip(
-                            message: _locale.reset,
-                            child: IconButton(
-                                padding: const EdgeInsets.only(top: 3),
-                                onPressed: () {
-                                  isReset.value = true;
-                                  setState(() {
-                                    readProvider.emptyProvider();
-                                    salesList = [];
-                                    finalRow = [];
-                                  });
-                                  Future.delayed(Duration(milliseconds: 20),
-                                      () {
-                                    // setState(() {
-                                    isReset.value = false;
-                                    // });
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.refresh,
-                                  color: Colors.black,
-                                  size: height * 0.025,
-                                )),
-                          ),
-                          Tooltip(
-                            message: _locale.exportToExcel,
-                            child: IconButton(
-                                padding: const EdgeInsets.only(top: 3),
-                                onPressed: () {
-                                  isDownload.value = true;
-
-                                  if (reportsResult!.count == 0) {
-                                    // ErrorController.openErrorDialog(
-                                    //     406, _locale.error406);
+                                if (reportsResult!.count == 0) {
+                                  // ErrorController.openErrorDialog(
+                                  //     406, _locale.error406);
+                                  isDownload.value = false;
+                                } else {
+                                  SearchCriteria searchCriteria =
+                                      SearchCriteria(
+                                    fromDate: readProvider.fromDate,
+                                    toDate: readProvider.toDate,
+                                    voucherStatus: -100,
+                                    columns: getColumnsName(
+                                        _locale, orderByColumns, true),
+                                    customColumns: getCustomColumnsName(
+                                        _locale, orderByColumns, true),
+                                  );
+                                  Map<String, dynamic> body =
+                                      readProvider.toJson();
+                                  ReportController()
+                                      .exportToExcelApi(searchCriteria, body)
+                                      .then((value) {
+                                    saveExcelFile(
+                                        value, "${_locale.salesreport}.xlsx");
                                     isDownload.value = false;
-                                  } else {
-                                    SearchCriteria searchCriteria =
-                                        SearchCriteria(
-                                      fromDate: readProvider.fromDate,
-                                      toDate: readProvider.toDate,
-                                      voucherStatus: -100,
-                                      columns: getColumnsName(
-                                          _locale, orderByColumns, true),
-                                      customColumns: getCustomColumnsName(
-                                          _locale, orderByColumns, true),
-                                    );
-                                    Map<String, dynamic> body =
-                                        readProvider.toJson();
-                                    ReportController()
-                                        .exportToExcelApi(searchCriteria, body)
-                                        .then((value) {
-                                      saveExcelFile(
-                                          value, "${_locale.salesreport}.xlsx");
-                                      isDownload.value = false;
-                                    });
-                                  }
-                                  // }
-                                },
-                                icon: Icon(
-                                  Icons.description,
-                                  color: Colors.black,
-                                  size: height * 0.025,
-                                )),
-                          ),
-                        ],
-                      ),
-                      // SizedBox(),
-                    ],
-                  ),
+                                  });
+                                }
+                                // }
+                              },
+                              icon: Icon(
+                                Icons.description,
+                                color: Colors.black,
+                                size: height * 0.025,
+                              )),
+                        ),
+                      ],
+                    ),
+                    // SizedBox(),
+                  ],
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: isDesktop ? height * 0.0001 : height * 0.05,
-            // ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                // width: isDesktop
-                // ? orderByColumns.length > 6
-                //     ? width * 0.8
-                //     : width * double.parse("0.${orderByColumns.length}6")
-                // : width * 0.7,
-                height: hidefilter == true
-                    ? height * 0.848
-                    : _currentIndex == 1
-                        ? height * 0.6
-                        : _currentIndex == 0
-                            ? height * 0.574
-                            : height * 0.4,
-                child: TableComponentNew(
-                  columnHeight: 70,
-                  // key: UniqueKey(),
-                  plCols: polCols,
-                  polRows: [],
-                  footerBuilder: (stateManager) {
-                    return lazyLoadingfooter(stateManager);
-                  },
-                  onLoaded: (PlutoGridOnLoadedEvent event) {
-                    stateManager = event.stateManager;
-                    if (isLoading.value) {
-                      stateManager!.setShowLoading(true);
-                    }
-                    stateManager!.setShowColumnFilter(true);
-                  },
-                ),
+          ),
+          // SizedBox(
+          //   height: isDesktop ? height * 0.0001 : height * 0.05,
+          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              // width: isDesktop
+              // ? orderByColumns.length > 6
+              //     ? width * 0.8
+              //     : width * double.parse("0.${orderByColumns.length}6")
+              // : width * 0.7,
+              height: hidefilter == true
+                  ? height * 0.848
+                  : _currentIndex == 1
+                      ? height * 0.6
+                      : _currentIndex == 0
+                          ? height * 0.574
+                          : height * 0.4,
+              child: TableComponentNew(
+                columnHeight: 70,
+                // key: UniqueKey(),
+                plCols: polCols,
+                polRows: [],
+                footerBuilder: (stateManager) {
+                  return lazyLoadingfooter(stateManager);
+                },
+                onLoaded: (PlutoGridOnLoadedEvent event) {
+                  stateManager = event.stateManager;
+                  if (isLoading.value) {
+                    stateManager!.setShowLoading(true);
+                  }
+                  stateManager!.setShowColumnFilter(true);
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

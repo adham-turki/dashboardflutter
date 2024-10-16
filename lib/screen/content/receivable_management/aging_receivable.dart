@@ -97,91 +97,80 @@ class _AgingReceivableState extends State<AgingReceivable> {
 
     isDesktop = Responsive.isDesktop(context);
 
-    return SingleChildScrollView(
-      child: Container(
-        // height: height,
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: isDesktop ? width * 0.7 : width * 0.9,
-              decoration: borderDecoration,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: isDesktop ? desktopCriteria() : mobileCriteria(),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: isDesktop ? width * 0.7 : width * 0.9,
-                height: isDesktop ? height * 0.6 : height * 0.6,
-                decoration: borderDecoration,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              selectedChart == _locale.lineChart
-                                  ? _locale.lineChart
-                                  : selectedChart == _locale.pieChart
-                                      ? _locale.pieChart
-                                      : _locale.barChart,
-                              style: TextStyle(fontSize: isDesktop ? 24 : 14),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width * 0.4,
-                            child: Text(
-                              "${_locale.transactionBalance} = $balance",
-                              style: twelve400TextStyle(Colors.black),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    isLoading
-                        ? const Padding(
-                            padding: EdgeInsets.all(150),
-                            child: CircularProgressIndicator(),
-                          )
-                        : selectedChart == _locale.lineChart
-                            ? BalanceLineChart(
-                                yAxisText: _locale.balances,
-                                xAxisText: _locale.periods,
-                                balances: listOfBalances,
-                                periods: listOfPeriods)
-                            : selectedChart == _locale.pieChart
-                                ? Center(
-                                    child: PieChartComponent(
-                                      radiusNormal:
-                                          isDesktop ? height * 0.17 : 70,
-                                      radiusHover:
-                                          isDesktop ? height * 0.17 : 80,
-                                      width: isDesktop
-                                          ? width * 0.42
-                                          : width * 0.1,
-                                      height: isDesktop
-                                          ? height * 0.42
-                                          : height * 0.4,
-                                      dataList: pieData,
-                                    ),
-                                  )
-                                : BalanceBarChart(data: barData),
-                    const SizedBox(), //Footer
-                  ],
-                ),
-              ),
-            ),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: isDesktop ? width * 0.7 : width * 0.9,
+          decoration: borderDecoration,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: isDesktop ? desktopCriteria() : mobileCriteria(),
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: isDesktop ? width * 0.7 : width * 0.9,
+            height: isDesktop ? height * 0.6 : height * 0.6,
+            decoration: borderDecoration,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          selectedChart == _locale.lineChart
+                              ? _locale.lineChart
+                              : selectedChart == _locale.pieChart
+                                  ? _locale.pieChart
+                                  : _locale.barChart,
+                          style: TextStyle(fontSize: isDesktop ? 24 : 14),
+                        ),
+                      ),
+                      SizedBox(
+                        width: width * 0.4,
+                        child: Text(
+                          "${_locale.transactionBalance} = $balance",
+                          style: twelve400TextStyle(Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                isLoading
+                    ? const Padding(
+                        padding: EdgeInsets.all(150),
+                        child: CircularProgressIndicator(),
+                      )
+                    : selectedChart == _locale.lineChart
+                        ? BalanceLineChart(
+                            yAxisText: _locale.balances,
+                            xAxisText: _locale.periods,
+                            balances: listOfBalances,
+                            periods: listOfPeriods)
+                        : selectedChart == _locale.pieChart
+                            ? Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.1,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.4,
+                                  dataList: pieData,
+                                ),
+                              )
+                            : BalanceBarChart(data: barData),
+                const SizedBox(), //Footer
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

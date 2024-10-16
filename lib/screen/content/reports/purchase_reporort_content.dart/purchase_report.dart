@@ -415,11 +415,10 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
 
     return DefaultTabController(
       length: 2,
-      child: SingleChildScrollView(
-          child: Column(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+      child: Column(
+          // mainAxisAlignment: MainAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             // SizedBox(
             //   height: height * 0.04,
             //   child: DottedBorder(
@@ -860,7 +859,7 @@ class _PurchasesReportScreenState extends State<PurchasesReportScreen> {
                 ),
               ),
             ),
-          ])),
+          ]),
     );
   }
 

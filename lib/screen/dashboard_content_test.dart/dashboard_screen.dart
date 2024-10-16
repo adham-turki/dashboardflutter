@@ -74,11 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-          child: isDesktop ? desktopDashboard() : mobileDashboard()),
-    );
+    return isDesktop ? desktopDashboard() : mobileDashboard();
   }
 
   Widget desktopDashboard() {

@@ -26,6 +26,7 @@ import 'package:provider/provider.dart';
 import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
 import 'screen/dashboard_content/dashboard.dart';
 import 'widget/new_sideMenue/side_menu.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -38,6 +39,16 @@ class _HomePageState extends State<HomePage> {
   double width = 0;
   double height = 0;
   int index = 0;
+  late AppLocalizations locale;
+  late ScreenContentProvider provider;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    locale = AppLocalizations.of(context)!;
+    provider = context.read<ScreenContentProvider>();
+  }
+
   @override
   Widget build(BuildContext context) {
     isDesktop = Responsive.isDesktop(context);
@@ -48,7 +59,34 @@ class _HomePageState extends State<HomePage> {
           ? null
           : AppBar(
               backgroundColor: primary,
-              title: const Text("BI"),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // const Text("BI"),
+                  Consumer<ScreenContentProvider>(
+                      builder: ((context, value, child) {
+                    return SizedBox(
+                      width: 150,
+                      child: Text(
+                        maxLines: 2,
+                        getPage(),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  })),
+
+                  Text(
+                    "${locale.baseCurrency}: ${locale.ils}",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
             ),
       drawer: isDesktop ? null : const SideMenu(),
       body: Row(
@@ -60,30 +98,25 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, value, build) {
               return Column(
                 children: [
-                  SizedBox(
-                    // width: isDesktop ? width * 0.835 : width,
-                    height: isDesktop
-                        ? context.read<ScreenContentProvider>().getPage() == 0
-                            ? height * 0.07
-                            : height * 0.055
-                        : height * 0.085,
-                    child: ContentHeader(
-                        page: context.read<ScreenContentProvider>().getPage()),
-                  ),
-                  SizedBox(
-                    //  height: isDesktop ? height * 0.85 : height * 0.7,
-                    height: context.read<ScreenContentProvider>().getPage() == 0
-                        ? isDesktop
-                            ? height * 0.93
-                            : height * 0.8
-                        : isDesktop
-                            ? height * 0.92
-                            : height * 0.8,
-                    // width: isDesktop ? width * 0.835 : width * 0.95,
+                  isDesktop
+                      ? SizedBox(
+                          // width: isDesktop ? width * 0.835 : width,
+                          height: isDesktop
+                              ? provider.getPage() == 0
+                                  ? height * 0.07
+                                  : height * 0.055
+                              : height * 0.085,
+                          child: ContentHeader(page: provider.getPage()),
+                        )
+                      : const SizedBox.shrink(),
+                  Expanded(
                     child: SingleChildScrollView(
                       child: Consumer<ScreenContentProvider>(
                           builder: (context, value, build) {
-                        return contentPage();
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: contentPage(),
+                        );
                       }),
                     ),
                   ),
@@ -98,7 +131,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget contentPage() {
-    index = context.read<ScreenContentProvider>().getPage();
+    index = provider.getPage();
     switch (index) {
       case 0:
         return const DashboardScreen();
@@ -143,6 +176,54 @@ class _HomePageState extends State<HomePage> {
         return const JournalReportsScreen();
       default:
         return Container();
+    }
+  }
+
+  String getPage() {
+    int index = provider.getPage();
+    switch (index) {
+      case 0:
+        return locale.dashboard;
+      case 1:
+        return locale.salesByBranches;
+      case 2:
+        return locale.branchesSalesByCategories;
+      case 3:
+        return locale.dailySales;
+      case 4:
+        return locale.totalCollections;
+      case 5:
+        return locale.cashFlows;
+      case 6:
+        return locale.expenses;
+      case 7:
+        return locale.inventoryPerformance;
+      case 8:
+        return locale.monthlyComparsionOFReceivableAndPayables;
+      case 9:
+        return locale.agingReceivable;
+      case 10:
+        return locale.chequesAndBank;
+      case 11:
+        return locale.outStandingCheques;
+      case 12:
+        return locale.totalSales;
+      case 13:
+        return locale.salesreport;
+      case 14:
+        return locale.purchasesReport;
+      case 15:
+        return locale.users;
+      case 16:
+        return locale.userPermit;
+      case 17:
+        return locale.setup;
+      case 18:
+        return locale.changePassword;
+      case 19:
+        return locale.journalReports;
+      default:
+        return "";
     }
   }
 }

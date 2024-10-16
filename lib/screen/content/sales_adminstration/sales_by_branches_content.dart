@@ -113,81 +113,70 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
     isDesktop = Responsive.isDesktop(context);
 
-    return SingleChildScrollView(
-      child: Container(
-        // height: height * 1.7,
-        decoration: const BoxDecoration(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: isDesktop ? width * 0.7 : width * 0.9,
-              decoration: borderDecoration,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: isDesktop ? desktopCriteria() : mobileCriteria(),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: isDesktop ? width * 0.7 : width * 0.9,
-                height: isDesktop ? height * 0.6 : height * 0.6,
-                decoration: borderDecoration,
-                child: Column(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: isDesktop ? width * 0.7 : width * 0.9,
+          decoration: borderDecoration,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: isDesktop ? desktopCriteria() : mobileCriteria(),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: isDesktop ? width * 0.7 : width * 0.9,
+            height: isDesktop ? height * 0.6 : height * 0.6,
+            decoration: borderDecoration,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            selectedChart == _locale.lineChart
-                                ? _locale.lineChart
-                                : selectedChart == _locale.pieChart
-                                    ? _locale.pieChart
-                                    : _locale.barChart,
-                            style: TextStyle(fontSize: isDesktop ? 24 : 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                    isLoading
-                        ? const Padding(
-                            padding: EdgeInsets.all(150),
-                            child: CircularProgressIndicator(),
-                          )
-                        : selectedChart == _locale.barChart
-                            ? BalanceBarChart(data: barData)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        selectedChart == _locale.lineChart
+                            ? _locale.lineChart
                             : selectedChart == _locale.pieChart
-                                ? Center(
-                                    child: PieChartComponent(
-                                      radiusNormal:
-                                          isDesktop ? height * 0.17 : 70,
-                                      radiusHover:
-                                          isDesktop ? height * 0.17 : 80,
-                                      width: isDesktop
-                                          ? width * 0.42
-                                          : width * 0.4,
-                                      height: isDesktop
-                                          ? height * 0.42
-                                          : height * 0.4,
-                                      dataList: pieData,
-                                    ),
-                                  )
-                                : BalanceLineChart(
-                                    yAxisText: _locale.balances,
-                                    xAxisText: _locale.periods,
-                                    balances: listOfBalances,
-                                    periods: listOfPeriods),
-                    const SizedBox(), //Footer
+                                ? _locale.pieChart
+                                : _locale.barChart,
+                        style: TextStyle(fontSize: isDesktop ? 24 : 18),
+                      ),
+                    ),
                   ],
                 ),
-              ),
+                isLoading
+                    ? const Padding(
+                        padding: EdgeInsets.all(150),
+                        child: CircularProgressIndicator(),
+                      )
+                    : selectedChart == _locale.barChart
+                        ? BalanceBarChart(data: barData)
+                        : selectedChart == _locale.pieChart
+                            ? Center(
+                                child: PieChartComponent(
+                                  radiusNormal: isDesktop ? height * 0.17 : 70,
+                                  radiusHover: isDesktop ? height * 0.17 : 80,
+                                  width: isDesktop ? width * 0.42 : width * 0.4,
+                                  height:
+                                      isDesktop ? height * 0.42 : height * 0.4,
+                                  dataList: pieData,
+                                ),
+                              )
+                            : BalanceLineChart(
+                                yAxisText: _locale.balances,
+                                xAxisText: _locale.periods,
+                                balances: listOfBalances,
+                                periods: listOfPeriods),
+                const SizedBox(), //Footer
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
