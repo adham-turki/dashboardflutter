@@ -1,6 +1,8 @@
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 
+import '../../utils/constants/colors.dart';
+
 class CardContent extends StatefulWidget {
   final String title;
   final String value;
@@ -31,70 +33,61 @@ class _CardContentState extends State<CardContent> {
 
     bool isMobile = Responsive.isMobile(context);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: isMobile
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    if (dates.isNotEmpty)
-                      Text(
-                        dates,
-                        style: const TextStyle(fontSize: 10),
-                      ),
-                  ],
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                    if (dates.isNotEmpty)
-                      Text(
-                        dates,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                  ],
-                ),
-        ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: isMobile ? 14 : 28.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                      fontSize: isMobile ? 12 : 25,
-                      fontWeight: FontWeight.bold),
-                ),
-                Icon(
-                  icon,
-                  size: isMobile ? 20 : 50,
-                ),
-              ],
-            ),
-          ),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  isMobile
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                            if (dates.isNotEmpty)
+                              Text(
+                                dates,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                          ],
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(fontSize: 18),
+                            ),
+                            if (dates.isNotEmpty)
+                              Text(
+                                dates,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                          ],
+                        ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        value,
+                        style: TextStyle(
+                            fontSize: isMobile ? 15 : 25,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Icon(
+                        icon,
+                        color: primary,
+                        size: isMobile ? 25 : 50,
+                      ),
+                    ],
+                  ),
+                ],
+              )),
         ),
-        // Container(
-        //   height: 15,
-        //   decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //         bottomLeft: Radius.circular(radius),
-        //         bottomRight: Radius.circular(radius)),
-        //     color: color,
-        //   ),
-        // ),
       ],
     );
   }

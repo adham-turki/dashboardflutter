@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                         maxLines: 2,
                         getPage(),
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     "${locale.baseCurrency}: ${locale.ils}",
                     style: const TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

@@ -202,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             Expanded(
               child: CustomCards(
-                height: height * 0.144,
+                height: height * 0.155,
                 content: CardContent(
                   title: locale.totalSales,
                   dates: locale.localeName == "ar"
@@ -220,7 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Expanded(
               child: CustomCards(
-                height: height * 0.144,
+                height: height * 0.155,
                 content: CardContent(
                   title: locale.totalReturnSal,
                   dates: locale.localeName == "ar"
@@ -238,7 +238,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             Expanded(
               child: CustomCards(
-                height: height * 0.144,
+                height: height * 0.155,
                 content: CardContent(
                   title: locale.numOfCustomers,
                   dates: locale.localeName == "ar"
