@@ -134,7 +134,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         title: "${data.title}\n${Converters.formatNumber(data.value!)}",
         color: data.color,
         radius: radius,
-        titleStyle: TextStyle(color: Colors.white, fontSize: isMobile ? 9 : 15),
+        titleStyle: const TextStyle(color: Colors.white, fontSize: 15),
         borderSide: isTouched
             ? BorderSide(
                 color: borderColor,
@@ -164,7 +164,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         ),
         child: Text(
           data.title ?? "NONE",
-          style: TextStyle(color: Colors.white, fontSize: isMobile ? 9 : 15),
+          style: TextStyle(color: Colors.white, fontSize: 15),
         ),
       ),
     );
@@ -199,8 +199,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
           color: data.color!,
           isSquare: true,
           text: "${data.title!} (${Converters.formatNumber(data.value!)})",
-          size: isMobile ? 9 : 16,
-          textSize: isMobile ? 9 : 16,
+          size: 16,
+          textSize: 16,
         ),
       );
     });
