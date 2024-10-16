@@ -11,7 +11,9 @@ class SalesCategoryModel {
         : salesCategory['creditAmt'];
     debitAmt = salesCategory['debitAmt'].toString() == "null"
         ? 0.0
-        : salesCategory['debitAmt'];
+        : (salesCategory['debitAmt'] is int)
+            ? (salesCategory['debitAmt'] as int).toDouble()
+            : (salesCategory['debitAmt'] as double);
     categoryName = salesCategory['categoryName'].toString() == "null"
         ? ""
         : salesCategory['categoryName'];

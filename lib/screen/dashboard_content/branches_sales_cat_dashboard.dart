@@ -213,7 +213,7 @@ class _BranchesSalesByCatDashboardState
                                 valueListenable: totalBranchesByCateg,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.branchesSalesByCategories} (${Converters.formatNumberRounded(totalBranchesByCateg.value)})",
+                                    "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -331,7 +331,7 @@ class _BranchesSalesByCatDashboardState
                                     valueListenable: totalBranchesByCateg,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.branchesSalesByCategories}   (${Converters.formatNumberRounded(totalBranchesByCateg.value)})",
+                                        "${_locale.branchesSalesByCategories}   (${totalBranchesByCateg.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -720,12 +720,12 @@ class _BranchesSalesByCatDashboardState
         }
       }
 
-      double total = 0;
+      double total = 0.0;
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalBranchesByCateg.value =
-          double.parse(Converters.formatNumberDigits(total));
+      totalBranchesByCateg.value = Converters.formatNumberRounded(
+          double.parse(Converters.formatNumberDigits(total)));
     });
 
     // }

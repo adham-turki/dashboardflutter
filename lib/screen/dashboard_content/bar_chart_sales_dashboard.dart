@@ -152,7 +152,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 valueListenable: totalBranchesSale,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.salesByBranches} (${Converters.formatNumberRounded(totalBranchesSale.value)})",
+                                    "${_locale.salesByBranches} (${totalBranchesSale.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -247,7 +247,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     valueListenable: totalBranchesSale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.salesByBranches}   (${Converters.formatNumberRounded(totalBranchesSale.value)})",
+                                        "${_locale.salesByBranches}   (${totalBranchesSale.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -578,8 +578,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalBranchesSale.value =
-          double.parse(Converters.formatNumberDigits(total));
+      totalBranchesSale.value = Converters.formatNumberRounded(
+          double.parse(Converters.formatNumberDigits(total)));
     });
     print(
         "baaaaaaaaaaaaaaal ${listOfBalances.length}  ${listOfPeriods.length}");
@@ -673,8 +673,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         for (int i = 0; i < listOfBalances.length; i++) {
           total += listOfBalances[i];
         }
-        totalBranchesSale.value =
-            double.parse(Converters.formatNumberDigits(total));
+        totalBranchesSale.value = Converters.formatNumberRounded(
+            double.parse(Converters.formatNumberDigits(total)));
       });
       // }
     }

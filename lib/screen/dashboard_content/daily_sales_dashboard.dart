@@ -164,7 +164,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 valueListenable: totalDailySale,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.dailySales} (${Converters.formatNumberRounded(totalDailySale.value)})",
+                                    "${_locale.dailySales} (${totalDailySale.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -269,7 +269,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                     valueListenable: totalDailySale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.dailySales}  (${Converters.formatNumberRounded(totalDailySale.value)})",
+                                        "${_locale.dailySales}  (${totalDailySale.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -576,7 +576,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         total += listOfBalances[i];
       }
 
-      totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
+      totalDailySale.value = Converters.formatNumberRounded(
+          double.parse(Converters.formatNumberDigits(total)));
     });
 
     print("BBBBBBBBBbbarLength ${barData.length}");
@@ -645,7 +646,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalDailySale.value = double.parse(Converters.formatNumberDigits(total));
+      totalDailySale.value = Converters.formatNumberRounded(
+          double.parse(Converters.formatNumberDigits(total)));
     });
 
     // }
