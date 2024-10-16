@@ -355,7 +355,7 @@ class _BranchesSalesByCatDashboardState
                                             ? MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.06
+                                                0.12
                                             : MediaQuery.of(context)
                                                     .size
                                                     .width *
@@ -366,7 +366,7 @@ class _BranchesSalesByCatDashboardState
                                         color: whiteColor,
                                         size: isDesktop
                                             ? height * 0.035
-                                            : height * 0.03,
+                                            : height * 0.055,
                                       ),
                                       textColor: const Color.fromARGB(
                                           255, 255, 255, 255),
