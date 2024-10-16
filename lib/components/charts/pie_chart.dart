@@ -65,7 +65,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
       children: [
         SizedBox(
           width: width,
-          height: isMobile ? 280 : 260,
+          height: isMobile ? 220 : 260,
           child: PieChart(
             PieChartData(
               centerSpaceRadius: 1,
@@ -114,8 +114,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
   @override
   Widget build(BuildContext context) {
     isMobile = Responsive.isMobile(context);
-    radiusNormal = isMobile ? 120 : 100;
-    radiusHover = isMobile ? 130 : 110;
+    radiusNormal = isMobile ? 80 : 100;
+    radiusHover = isMobile ? 90 : 110;
     getBuildWidget();
     return isLoading
         ? const Center(
