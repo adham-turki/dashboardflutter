@@ -19,8 +19,10 @@ class _PieDashboardChartState extends State<PieDashboardChart> {
   @override
   Widget build(BuildContext context) {
     bool isMobile = Responsive.isMobile(context);
+    dataList = [];
 
     dataList = widget.dataList;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(

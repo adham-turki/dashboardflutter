@@ -55,7 +55,11 @@ class _PieChartComponentState extends State<PieChartComponent> {
 
   getBuildWidget() {
     List<PieChartModel> dataList = widget.dataList;
+    print("widget.lidt.dataaaa0000 ${dataList.length}");
+
     bool isEmpty = dataList.isEmpty ? true : false;
+    print("widget.lidt.dataaaa0000Empty ${isEmpty}");
+
     setState(() {
       isLoading = true;
     });
@@ -63,53 +67,57 @@ class _PieChartComponentState extends State<PieChartComponent> {
     buildWidget = SizedBox(
       height: height * 0.4,
       width: width,
-      child: Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: isMobile ? height * 0.27 : height * 0.23,
-              child: PieChart(
-                PieChartData(
-                  centerSpaceRadius: 1,
-                  pieTouchData: PieTouchData(
-                    enabled: true,
-                    touchCallback: (event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse
-                            .touchedSection!.touchedSectionIndex;
-                      });
-                    },
-                  ),
-                  sections: isEmpty ? noDataList() : showList(dataList),
-                ),
-                swapAnimationDuration: Duration(milliseconds: duration),
-              ),
-            ),
-            Container(
-              height: isMobile ? height * 0.08 : height * 0.08,
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.black38),
-              ),
-              child: ScrollConfiguration(
-                behavior: CustomScrollBehavior(),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: showIndicators(dataList),
+      child: Column(
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  height: isMobile ? height * 0.27 : height * 0.23,
+                  child: PieChart(
+                    PieChartData(
+                      centerSpaceRadius: 1,
+                      pieTouchData: PieTouchData(
+                        enabled: true,
+                        touchCallback: (event, pieTouchResponse) {
+                          setState(() {
+                            if (!event.isInterestedForInteractions ||
+                                pieTouchResponse == null ||
+                                pieTouchResponse.touchedSection == null) {
+                              touchedIndex = -1;
+                              return;
+                            }
+                            touchedIndex = pieTouchResponse
+                                .touchedSection!.touchedSectionIndex;
+                          });
+                        },
+                      ),
+                      sections: isEmpty ? noDataList() : showList(dataList),
+                    ),
+                    swapAnimationDuration: Duration(milliseconds: duration),
                   ),
                 ),
-              ),
+                Container(
+                  height: isMobile ? height * 0.08 : height * 0.08,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black38),
+                  ),
+                  child: ScrollConfiguration(
+                    behavior: CustomScrollBehavior(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: showIndicators(dataList),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
     setState(() {
@@ -122,6 +130,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
     isMobile = Responsive.isMobile(context);
     radiusNormal = isMobile ? height * 0.17 : height * 0.19;
     radiusHover = isMobile ? height * 0.18 : height * 0.2;
+
     getBuildWidget();
     return isLoading
         ? const Center(
@@ -131,7 +140,9 @@ class _PieChartComponentState extends State<PieChartComponent> {
   }
 
   List<PieChartSectionData> showList(List<PieChartModel> dataList) {
-    return List.generate(dataList.length, (i) {
+    print("widget.lidt.dataaaa333 ${dataList.length}");
+
+    List<PieChartSectionData> list = List.generate(dataList.length, (i) {
       bool isTouched = i == touchedIndex;
       final radius = isTouched ? radiusHover : radiusNormal;
       PieChartModel data = dataList[i];
@@ -152,6 +163,9 @@ class _PieChartComponentState extends State<PieChartComponent> {
         badgePositionPercentageOffset: 2,
       );
     });
+    print("widget.lidt.dataaaa444 ${list.length}");
+
+    return list;
   }
 
   Padding badgeLabel(PieChartModel data) {

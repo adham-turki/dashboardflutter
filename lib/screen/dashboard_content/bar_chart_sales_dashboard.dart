@@ -42,7 +42,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   double width = 0;
   final dropdownKey = GlobalKey<DropdownButton2State>();
   double height = 0;
-  bool temp = false;
+  // bool temp = false;
   SalesBranchesController salesBranchesController = SalesBranchesController();
 
   TextEditingController fromDateController = TextEditingController();
@@ -559,22 +559,26 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       for (var element in value) {
         double a = (element.totalSales! + element.retSalesDis!) -
             (element.salesDis! + element.totalReturnSales!);
+
         a = Converters().formateDouble(a);
-        if (a != 0.0) {
-          temp = true;
-        } else if (a == 0.0) {
-          temp = false;
-        }
+        // if (a != 0.0) {
+        //   temp = true;
+        // } else if (a == 0.0) {
+        //   temp = false;
+        // }
         listOfBalances.add(a);
         listOfPeriods.add(element.namee!);
-        if (temp) {
-          dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
-          pieData.add(PieChartModel(
-            title: element.namee!,
-            value: formatDoubleToTwoDecimalPlaces(a),
-            color: getNextColor(),
-          ));
+        // if (temp) {
+        if (a < 0) {
+          a = 0.0;
         }
+        dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+        pieData.add(PieChartModel(
+          title: element.namee!,
+          value: formatDoubleToTwoDecimalPlaces(a),
+          color: getNextColor(),
+        ));
+        // }
         barData.add(
           BarData(name: element.namee!, percent: a),
         );
@@ -654,22 +658,26 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         for (var element in value) {
           double a = (element.totalSales! + element.retSalesDis!) -
               (element.salesDis! + element.totalReturnSales!);
+
           a = Converters().formateDouble(a);
-          if (a != 0.0) {
-            temp = true;
-          } else if (a == 0.0) {
-            temp = false;
-          }
+          // if (a != 0.0) {
+          //   temp = true;
+          // } else if (a == 0.0) {
+          //   temp = false;
+          // }
           listOfBalances.add(a);
           listOfPeriods.add(element.namee!);
-          if (temp) {
-            dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
-            pieData.add(PieChartModel(
-              title: element.namee!,
-              value: formatDoubleToTwoDecimalPlaces(a),
-              color: getNextColor(),
-            ));
+          // if (temp) {
+          if (a < 0) {
+            a = 0.0;
           }
+          dataMap[element.namee!] = formatDoubleToTwoDecimalPlaces(a);
+          pieData.add(PieChartModel(
+            title: element.namee!,
+            value: formatDoubleToTwoDecimalPlaces(a),
+            color: getNextColor(),
+          ));
+          // }
           barData.add(
             BarData(name: element.namee!, percent: a),
           );

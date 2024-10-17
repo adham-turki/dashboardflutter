@@ -8,8 +8,10 @@ class SalesCategoryModel {
   SalesCategoryModel.fromJson(Map<String, dynamic> salesCategory) {
     creditAmt = salesCategory['creditAmt'].toString() == "null"
         ? 0.0
-        : salesCategory['creditAmt'];
-    debitAmt = salesCategory['debitAmt'].toString() == "null"
+        : (salesCategory['creditAmt'] is int)
+            ? (salesCategory['creditAmt'] as int).toDouble()
+            : (salesCategory['creditAmt'] as double);
+    debitAmt = salesCategory['creditAmt'].toString() == "null"
         ? 0.0
         : (salesCategory['debitAmt'] is int)
             ? (salesCategory['debitAmt'] as int).toDouble()
