@@ -477,6 +477,7 @@ class _BranchesSalesByCatDashboardState
                               height: height * .4,
                               child: LineDashboardChart(
                                   isMax: false,
+                                  isMedium: true,
                                   balances: listOfBalances,
                                   periods: listOfPeriods),
                             )
@@ -492,6 +493,7 @@ class _BranchesSalesByCatDashboardState
                               : BarDashboardChart(
                                   barChartData: barData,
                                   isMax: false,
+                                  isMedium: true,
                                 )
                 ],
               ),

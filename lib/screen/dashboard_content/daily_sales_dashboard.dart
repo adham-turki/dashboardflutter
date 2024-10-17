@@ -405,11 +405,13 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                               ? BarDashboardChart(
                                   barChartData: barData,
                                   isMax: true,
+                                  isMedium: false,
                                 )
                               : SizedBox(
                                   height: height * 0.4,
                                   child: LineDashboardChart(
                                       isMax: true,
+                                      isMedium: false,
                                       balances: listOfBalances,
                                       periods: listOfPeriods),
                                 )

@@ -10,9 +10,13 @@ import '../charts.dart';
 class BarDashboardChart extends StatefulWidget {
   final List<BarData> barChartData;
   final bool isMax;
+  final bool isMedium;
 
   const BarDashboardChart(
-      {super.key, required this.barChartData, required this.isMax});
+      {super.key,
+      required this.barChartData,
+      required this.isMax,
+      required this.isMedium});
 
   @override
   State<BarDashboardChart> createState() => _BarDashboardChartState();
@@ -94,16 +98,20 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                 const EdgeInsets.only(right: 50, bottom: 15, top: 20, left: 0),
             child: SizedBox(
               width: isMobile
-                  ? (widget.isMax && dataList.length < 6)
-                      ? width * 0.8
-                      : (!widget.isMax && dataList.length < 6)
-                          ? width * 0.4
-                          : width * (dataList.length / 4)
-                  : (widget.isMax && dataList.length < 6)
-                      ? width * .6
-                      : (!widget.isMax && dataList.length < 6)
-                          ? width * 0.3
-                          : width * (dataList.length / 15),
+                  ? dataList.length < 10
+                      ? width * 0.85
+                      : widget.isMedium
+                          ? width * (dataList.length / 7)
+                          : width * (dataList.length / 10)
+                  : (widget.isMax && dataList.length <= 28)
+                      ? width * 0.66
+                      : (widget.isMedium && dataList.length <= 15)
+                          ? width * 0.52
+                          : dataList.length <= 8
+                              ? width * 0.33
+                              : widget.isMax
+                                  ? width * (dataList.length / 42)
+                                  : width * (dataList.length / 28.5),
               height: height * 0.35,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,9 +171,10 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                                   axisSide: meta.axisSide,
                                   child: Text(
                                     widget.barChartData[value.ceil()].name!
+                                        .replaceFirst(" ", "\n")
                                         .replaceFirst(" ", "\n"),
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 14),
+                                    style: const TextStyle(fontSize: 12),
                                   ),
                                 );
                               },

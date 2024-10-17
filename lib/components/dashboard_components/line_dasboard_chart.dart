@@ -9,11 +9,14 @@ class LineDashboardChart extends StatefulWidget {
   final List<double> balances;
   final List<String> periods;
   final bool isMax;
+  final bool isMedium;
+
   const LineDashboardChart(
       {super.key,
       required this.balances,
       required this.periods,
-      required this.isMax});
+      required this.isMax,
+      required this.isMedium});
 
   @override
   State<LineDashboardChart> createState() => _LineDashboardChartState();
@@ -105,13 +108,13 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      fontSize: 14,
+      fontSize: 12,
     );
     int index = value.round();
 
     String title = periods.isNotEmpty ? periods[index] : 0.toString();
     Widget text = Text(
-      title.replaceFirst(" ", "\n"),
+      title.replaceFirst(" ", "\n").replaceFirst(" ", "\n"),
       style: style,
       textAlign: TextAlign.center,
     );
@@ -201,16 +204,20 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
                     right: 50, bottom: 15, top: 15, left: 0),
                 child: SizedBox(
                     width: isMobile
-                        ? (widget.isMax && periods.length < 6)
-                            ? width * 0.8
-                            : (!widget.isMax && periods.length < 6)
-                                ? width * 0.4
-                                : width * (periods.length / 4)
-                        : (widget.isMax && periods.length < 6)
-                            ? width * 0.6
-                            : (!widget.isMax && periods.length < 6)
-                                ? width * 0.3
-                                : width * (periods.length / 30),
+                        ? periods.length < 10
+                            ? width * 0.85
+                            : widget.isMedium
+                                ? width * (periods.length / 7)
+                                : width * (periods.length / 10)
+                        : (widget.isMax && periods.length <= 28)
+                            ? width * 0.66
+                            : (widget.isMedium && periods.length <= 15)
+                                ? width * 0.52
+                                : periods.length <= 8
+                                    ? width * 0.33
+                                    : widget.isMax
+                                        ? width * (periods.length / 42)
+                                        : width * (periods.length / 28.5),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

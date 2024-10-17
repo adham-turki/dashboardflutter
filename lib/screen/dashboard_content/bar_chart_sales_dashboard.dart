@@ -365,6 +365,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                               child: BarDashboardChart(
                                 barChartData: barData,
                                 isMax: false,
+                                isMedium: false,
                               ),
                             )
                           : selectedChart == Line_Chart
@@ -373,6 +374,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     height: height * 0.4,
                                     child: LineDashboardChart(
                                         isMax: false,
+                                        isMedium: false,
                                         balances: listOfBalances,
                                         periods: listOfPeriods),
                                   ),
