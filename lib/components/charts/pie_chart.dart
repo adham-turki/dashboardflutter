@@ -60,51 +60,57 @@ class _PieChartComponentState extends State<PieChartComponent> {
       isLoading = true;
     });
 
-    buildWidget = Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        SizedBox(
-          width: width,
-          height: isMobile ? 220 : 260,
-          child: PieChart(
-            PieChartData(
-              centerSpaceRadius: 1,
-              pieTouchData: PieTouchData(
-                enabled: true,
-                touchCallback: (event, pieTouchResponse) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  });
-                },
-              ),
-              sections: isEmpty ? noDataList() : showList(dataList),
-            ),
-            swapAnimationDuration: Duration(milliseconds: duration),
-          ),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.black38),
-          ),
-          child: ScrollConfiguration(
-            behavior: CustomScrollBehavior(),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: showIndicators(dataList),
+    buildWidget = SizedBox(
+      height: height * 0.4,
+      width: width,
+      child: Expanded(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              height: isMobile ? height * 0.27 : height * 0.23,
+              child: PieChart(
+                PieChartData(
+                  centerSpaceRadius: 1,
+                  pieTouchData: PieTouchData(
+                    enabled: true,
+                    touchCallback: (event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                      });
+                    },
+                  ),
+                  sections: isEmpty ? noDataList() : showList(dataList),
+                ),
+                swapAnimationDuration: Duration(milliseconds: duration),
               ),
             ),
-          ),
+            Container(
+              height: isMobile ? height * 0.08 : height * 0.08,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.black38),
+              ),
+              child: ScrollConfiguration(
+                behavior: CustomScrollBehavior(),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: showIndicators(dataList),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
     setState(() {
       isLoading = false;
@@ -114,8 +120,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
   @override
   Widget build(BuildContext context) {
     isMobile = Responsive.isMobile(context);
-    radiusNormal = isMobile ? 80 : 100;
-    radiusHover = isMobile ? 90 : 110;
+    radiusNormal = isMobile ? height * 0.17 : height * 0.19;
+    radiusHover = isMobile ? height * 0.18 : height * 0.2;
     getBuildWidget();
     return isLoading
         ? const Center(
@@ -134,7 +140,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         title: "${data.title}\n${Converters.formatNumber(data.value!)}",
         color: data.color,
         radius: radius,
-        titleStyle: const TextStyle(color: Colors.white, fontSize: 15),
+        titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
         borderSide: isTouched
             ? BorderSide(
                 color: borderColor,
@@ -164,7 +170,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         ),
         child: Text(
           data.title ?? "NONE",
-          style: TextStyle(color: Colors.white, fontSize: 15),
+          style: const TextStyle(color: Colors.white, fontSize: 15),
         ),
       ),
     );

@@ -35,58 +35,63 @@ class _CardContentState extends State<CardContent> {
     return Column(
       children: [
         Expanded(
-          child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Column(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              isMobile
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        // crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          if (dates.isNotEmpty)
+                            Text(
+                              dates,
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        if (dates.isNotEmpty)
+                          Text(
+                            dates,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                      ],
+                    ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  isMobile
-                      ? Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            if (dates.isNotEmpty)
-                              Text(
-                                dates,
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            if (dates.isNotEmpty)
-                              Text(
-                                dates,
-                                style: const TextStyle(fontSize: 16),
-                              ),
-                          ],
-                        ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        value,
-                        style: TextStyle(
-                            fontSize: isMobile ? 15 : 25,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Icon(
-                        icon,
-                        color: primary,
-                        size: isMobile ? 25 : 50,
-                      ),
-                    ],
+                  Text(
+                    value,
+                    style: TextStyle(
+                        fontSize: isMobile ? 15 : 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    icon,
+                    color: primary,
+                    size: isMobile ? 25 : 50,
                   ),
                 ],
-              )),
+              ),
+            ],
+          ),
         ),
       ],
     );

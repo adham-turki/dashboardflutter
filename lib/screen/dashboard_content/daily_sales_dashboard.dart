@@ -285,7 +285,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                       ? fromDateController.text
                                       : fromDate,
                                   style:
-                                      TextStyle(fontSize: isDesktop ? 15 : 18),
+                                      TextStyle(fontSize: isDesktop ? 15 : 10),
                                 ),
                                 SizedBox(
                                     width:
@@ -394,8 +394,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                         )
                       : selectedChart == Pie_Chart
                           ? Center(
-                              child: PieDashboardChart(
-                                dataList: barDataDailySales,
+                              child: SizedBox(
+                                height: height * 0.4,
+                                child: PieDashboardChart(
+                                  dataList: barDataDailySales,
+                                ),
                               ),
                             )
                           : selectedChart == Bar_Chart

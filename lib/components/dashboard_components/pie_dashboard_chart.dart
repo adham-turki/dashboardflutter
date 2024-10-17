@@ -1,6 +1,8 @@
+import 'package:bi_replicate/screen/dashboard_content/dashboard.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/chart/pie_chart_model.dart';
+import '../../utils/constants/responsive.dart';
 import '../charts/pie_chart.dart';
 
 class PieDashboardChart extends StatefulWidget {
@@ -16,17 +18,20 @@ class _PieDashboardChartState extends State<PieDashboardChart> {
   List<PieChartModel> dataList = [];
   @override
   Widget build(BuildContext context) {
+    bool isMobile = Responsive.isMobile(context);
+
     dataList = widget.dataList;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.0),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: isMobile ? 0 : 14.0),
           ),
           PieChartComponent(
-            // height: 300,
+            // height: height * 0.4,
             dataList: dataList,
           ),
         ],

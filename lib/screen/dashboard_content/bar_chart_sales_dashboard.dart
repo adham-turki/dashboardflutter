@@ -262,7 +262,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                       ? "${fromDateController.text}  -  ${toDateController.text}"
                                       : "$fromDate  -  $toDate",
                                   style:
-                                      TextStyle(fontSize: isDesktop ? 15 : 18),
+                                      TextStyle(fontSize: isDesktop ? 15 : 10),
                                 ),
                                 SizedBox(
                                     width:
@@ -378,8 +378,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                   ),
                                 )
                               : Center(
-                                  child: PieDashboardChart(
-                                    dataList: pieData,
+                                  child: SizedBox(
+                                    height: height * 0.4,
+                                    child: PieDashboardChart(
+                                      dataList: pieData,
+                                    ),
                                   ),
                                 )
                 ],

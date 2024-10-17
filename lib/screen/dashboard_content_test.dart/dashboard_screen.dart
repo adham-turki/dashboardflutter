@@ -91,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Expanded(
                         child: CustomCards(
-                          height: height * 0.144,
+                          height: height * 0.216,
                           content: CardContent(
                             title: locale.totalSales,
                             dates: locale.localeName == "en"
@@ -114,7 +114,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     children: [
                       Expanded(
                         child: CustomCards(
-                          height: height * 0.144,
+                          height: height * 0.216,
                           content: CardContent(
                             title: locale.totalReturnSal,
                             dates: locale.localeName == "en"
@@ -130,26 +130,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: height * 0.009,
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: CustomCards(
-                          height: height * 0.144,
-                          content: CardContent(
-                            title: locale.numOfCustomers,
-                            value: Converters.formatNumber(
-                                    vouchHeaderTransietModel.numOfCustomers
-                                        .toDouble())
-                                .toString(),
-                            icon: Icons.people,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // SizedBox(
+                  //   height: height * 0.009,
+                  // ),
+                  // Row(
+                  //   children: [
+                  //     Expanded(
+                  //       child: CustomCards(
+                  //         height: height * 0.144,
+                  //         content: CardContent(
+                  //           title: locale.numOfCustomers,
+                  //           value: Converters.formatNumber(
+                  //                   vouchHeaderTransietModel.numOfCustomers
+                  //                       .toDouble())
+                  //               .toString(),
+                  //           icon: Icons.people,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),
@@ -216,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             SizedBox(
-              width: width * 0.003,
+              width: width * 0.01,
             ),
             Expanded(
               child: CustomCards(
@@ -233,24 +233,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              width: width * 0.003,
-            ),
-            Expanded(
-              child: CustomCards(
-                height: 150,
-                content: CardContent(
-                  title: locale.numOfCustomers,
-                  dates: locale.localeName == "ar"
-                      ? "$fromDateEn - $toDateEn"
-                      : "$fromDateEn - $toDateEn",
-                  value: Converters.formatNumber(
-                          vouchHeaderTransietModel.numOfCustomers.toDouble())
-                      .toString(),
-                  icon: Icons.people,
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   width: width * 0.003,
+            // ),
+            // Expanded(
+            //   child: CustomCards(
+            //     height: 150,
+            //     content: CardContent(
+            //       title: locale.numOfCustomers,
+            //       dates: locale.localeName == "ar"
+            //           ? "$fromDateEn - $toDateEn"
+            //           : "$fromDateEn - $toDateEn",
+            //       value: Converters.formatNumber(
+            //               vouchHeaderTransietModel.numOfCustomers.toDouble())
+            //           .toString(),
+            //       icon: Icons.people,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         SizedBox(
