@@ -10,9 +10,18 @@ List<MenuModel> getMenu(AppLocalizations locale) {
     MenuModel(
       title: locale.dashboard,
       icon: Icons.dashboard,
-      isParent: false,
-      subMenuList: [],
-      pageNumber: 0,
+      isParent: true,
+      subMenuList: [
+        SubMenuModel(
+          title: locale.dashboard,
+          pageNumber: 0,
+        ),
+        SubMenuModel(
+          title: locale.salesReports,
+          pageNumber: 20,
+        ),
+      ],
+      pageNumber: -1,
     ),
     MenuModel(
       isParent: true,

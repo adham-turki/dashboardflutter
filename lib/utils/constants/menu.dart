@@ -9,8 +9,8 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
     SideTabModel(
       text: locale.dashboard,
       icon: Icons.dashboard,
-      isParent: false,
-      subMenu: [],
+      isParent: true,
+      subMenu: [SideSubTabModel(text: locale.salesReports, value: 20)],
       value: 0,
     ),
     SideTabModel(

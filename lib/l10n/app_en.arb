@@ -272,5 +272,15 @@
     "critiriaAndOrderBy": "Critiria and order by",
     "contains": "Contains",
     "expiredSessionLoginDialog": "Your session has expired.please log in again",
-    "businessIntelligenceSystem": "Business Intelligence System"
+    "businessIntelligenceSystem": "Business Intelligence System",
+    "salesReports": "Sales Reports",
+    "salesByCashier": "Sales By Cashier",
+    "salesByComputer": "Sales By Computer",
+    "salesByPaymentTypes": "Sales By Payment Types",
+    "salesByHours": "Sales By Hours",
+    "selectBranch": "Salect Branch",
+    "selectShiftType": "Salect Shift Type",
+    "salesReportsSearch": "Sales Reports Search",
+    "opened": "Opened",
+    "closed": "Closed"
 }

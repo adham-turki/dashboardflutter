@@ -248,5 +248,15 @@
     "chooseFilter": "اختيار الفلاتر",
     "contains": "يحتوي",
     "expiredSessionLoginDialog": "انتهت صلاحية الجلسة، يرجى تسجيل الدخول مجدداً",
-    "businessIntelligenceSystem": "نظام ذكاء الأعمال"
+    "businessIntelligenceSystem": "نظام ذكاء الأعمال",
+    "salesReports": "تقارير المبيعات",
+    "salesByCashier": "المبيعات حسب الكاشير",
+    "salesByComputer": "المبيعات حسب نوع الجهاز",
+    "salesByPaymentTypes": "المبيعات حسب أنواع الدفع",
+    "salesByHours": "المبيعات حسب الساعات",
+    "selectBranch": "اختر فرع",
+    "selectShiftType": "اختر نوع الشفت",
+    "salesReportsSearch": "بحث تقارير المبيعات",
+    "opened": "مفتوح",
+    "closed": "مغلق"
 }
