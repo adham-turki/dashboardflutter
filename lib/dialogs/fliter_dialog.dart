@@ -1,3 +1,4 @@
+import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/widget/custom_drop_down_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -92,7 +93,9 @@ class _FilterDialogState extends State<FilterDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                width: screenWidth * 0.16,
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.76,
                 height: screenHeight * 0.1,
                 child: CustomDropDownSearch(
                   isMandatory: true,
@@ -112,7 +115,9 @@ class _FilterDialogState extends State<FilterDialog> {
                 ),
               ),
               SizedBox(
-                width: screenWidth * 0.16,
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.76,
                 height: screenHeight * 0.1,
                 child: CustomDropDownSearch(
                   isMandatory: true,
@@ -155,7 +160,9 @@ class _FilterDialogState extends State<FilterDialog> {
               // ),
 
               SizedBox(
-                width: screenWidth * 0.16,
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.76,
                 height: screenHeight * 0.1,
                 child: _buildDateField(
                   label: _locale.fromDate,
@@ -164,7 +171,9 @@ class _FilterDialogState extends State<FilterDialog> {
               ),
 
               SizedBox(
-                width: screenWidth * 0.16,
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.76,
                 height: screenHeight * 0.1,
                 child: _buildDateField(
                   label: _locale.toDate,
