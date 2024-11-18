@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/dashboard_bar_data.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -72,6 +73,19 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
     return Colors.blue.shade200;
   }
 
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
+
+    return Text(
+      Converters.formatTitleNumber(value),
+      style: style,
+      textAlign: TextAlign.left,
+    );
+  }
+
   getBuildWidget() {
     setState(() {
       isLoading = true;
@@ -127,7 +141,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                           getTooltipColor: myCustomTooltipColor,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
                             return BarTooltipItem(
-                              '${rod.toY}', // Tooltip text
+                              Converters.formatNumber(rod.toY), // Tooltip text
                               const TextStyle(
                                 color: Colors.black, // Text color
                               ),
@@ -148,18 +162,12 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
                           leftTitles: AxisTitles(
                             drawBelowEverything: true,
                             sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 100,
-                              interval: widget.barChartData.isEmpty
-                                  ? 300000
-                                  : getMax() / 6,
-                              getTitlesWidget: (value, meta) {
-                                return Text(
-                                  value.ceil().toString(),
-                                  textAlign: TextAlign.left,
-                                );
-                              },
-                            ),
+                                showTitles: true,
+                                reservedSize: 100,
+                                interval: widget.barChartData.isEmpty
+                                    ? 300000
+                                    : getMax() / 6,
+                                getTitlesWidget: leftTitleWidgets),
                           ),
                           bottomTitles: AxisTitles(
                             sideTitles: SideTitles(

@@ -35,7 +35,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
           getTooltipItems: (List<LineBarSpot> touchedSpots) {
             return touchedSpots.map((spot) {
               return LineTooltipItem(
-                '${spot.y}',
+                Converters.formatNumber(spot.y),
                 const TextStyle(color: Colors.black),
               );
             }).toList();
@@ -52,6 +52,19 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
   Color defaultLineTooltipColor(LineBarSpot spot) {
     // Default color logic; for example, returning a specific color or based on spot index
     return Colors.green.shade100;
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
+
+    return Text(
+      Converters.formatTitleNumber(value),
+      style: style,
+      textAlign: TextAlign.left,
+    );
   }
 
   FlTitlesData get titlesData2 => FlTitlesData(
@@ -75,20 +88,20 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
 
   Set<int> duplicateValue = {};
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
-    if (duplicateValue.contains(value.ceil() - 1) ||
-        duplicateValue.contains(value.ceil() + 1)) {
-      return const Text("");
-    }
-    const style = TextStyle(
-      fontSize: 14,
-    );
-    String text;
+  // Widget leftTitleWidgets(double value, TitleMeta meta) {
+  //   if (duplicateValue.contains(value.ceil() - 1) ||
+  //       duplicateValue.contains(value.ceil() + 1)) {
+  //     return const Text("");
+  //   }
+  //   const style = TextStyle(
+  //     fontSize: 14,
+  //   );
+  //   String text;
 
-    text = value.ceil().toString();
-    duplicateValue.add(value.ceil());
-    return Text(text, style: style, textAlign: TextAlign.center);
-  }
+  //   text = value.ceil().toString();
+  //   duplicateValue.add(value.ceil());
+  //   return Text(text, style: style, textAlign: TextAlign.center);
+  // }
 
   Widget topTitleWidgets(double value, TitleMeta meta) {
     return const Text("");

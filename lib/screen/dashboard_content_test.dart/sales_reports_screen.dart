@@ -411,6 +411,16 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 aspectRatio: 1.6,
                 child: BarChart(
                   BarChartData(
+                      barTouchData: BarTouchData(
+                        touchTooltipData: BarTouchTooltipData(
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            return BarTooltipItem(
+                              Converters.formatNumber(rod.toY),
+                              const TextStyle(color: Colors.white),
+                            );
+                          },
+                        ),
+                      ),
                       titlesData: FlTitlesData(
                         rightTitles: AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
@@ -529,6 +539,19 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   aspectRatio: isDesktop ? 3 : 1,
                   child: LineChart(
                     LineChartData(
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          // getTooltipColor: defaultLineTooltipColor,
+                          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                            return touchedSpots.map((spot) {
+                              return LineTooltipItem(
+                                Converters.formatNumber(spot.y),
+                                const TextStyle(color: Colors.white),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ),
                       titlesData: FlTitlesData(
                         topTitles: const AxisTitles(
                           sideTitles: SideTitles(showTitles: false),
