@@ -200,7 +200,10 @@ class _FilterDialogState extends State<FilterDialog> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(_locale.ok),
+              child: Text(
+                _locale.ok,
+                style: TextStyle(fontSize: screenHeight * 0.02),
+              ),
             ),
             ElevatedButton(
               onPressed: () {
@@ -214,7 +217,10 @@ class _FilterDialogState extends State<FilterDialog> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text(_locale.cancel),
+              child: Text(
+                _locale.cancel,
+                style: TextStyle(fontSize: screenHeight * 0.02),
+              ),
             ),
           ],
         ),

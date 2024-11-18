@@ -602,12 +602,13 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         child: SizedBox(
           width: 50,
           child: Text(
-            title == _locale.salesByComputer
+            (title == _locale.salesByComputer ||
+                    title == _locale.salesByCashier)
                 ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranch}"
                 : totalSales[value].displayGroupName,
             style: const TextStyle(
               fontStyle: FontStyle.italic,
-              fontSize: 10,
+              fontSize: 8,
               color: Colors.black,
             ),
           ),
