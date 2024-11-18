@@ -16,14 +16,14 @@ class TotalSalesController {
     var api = totalSalesByCashier;
     try {
       var response = await http.post(
-        Uri.http(ApiModel.url, api),
+        Uri.parse("${ApiModel.url}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiModel.url, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -44,16 +44,15 @@ class TotalSalesController {
     var api = totalSalesByComputer;
 
     try {
-      print(Uri.http(ApiModel.url, api));
       var response = await http.post(
-        Uri.http(ApiModel.url, api),
+        Uri.parse("${ApiModel.url}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiModel.url, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -74,16 +73,15 @@ class TotalSalesController {
     var api = totalSalesByHours;
 
     try {
-      print(Uri.http(ApiModel.url, api));
       var response = await http.post(
-        Uri.http(ApiModel.url, api),
+        Uri.parse("${ApiModel.url}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiModel.url, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -104,16 +102,15 @@ class TotalSalesController {
     var api = totalSalesByPayType;
 
     try {
-      print(Uri.http(ApiModel.url, api));
       var response = await http.post(
-        Uri.http(ApiModel.url, api),
+        Uri.parse("${ApiModel.url}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiModel.url, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -133,13 +130,13 @@ class TotalSalesController {
     var api = getBranches;
     try {
       var response = await http.get(
-        Uri.http(ApiModel.url, api),
+        Uri.parse("${ApiModel.url}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
       );
-      print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiModel.url, api)}");
       print("API Response: ${response.statusCode}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

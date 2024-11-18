@@ -1,3 +1,3 @@
 class ApiModel {
-  static String url = "qservice.scopef.com:9500";
+  static String url = "https://bravox.scopef.com:9006";
 }
