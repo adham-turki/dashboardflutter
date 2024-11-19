@@ -1,12 +1,16 @@
 class SearchCriteria {
   final String branch;
   final String shiftStatus;
+  final String transType;
+  final String cashier;
   final String fromDate;
   final String toDate;
 
   SearchCriteria({
     required this.branch,
     required this.shiftStatus,
+    required this.transType,
+    required this.cashier,
     required this.fromDate,
     required this.toDate,
   });
@@ -15,6 +19,8 @@ class SearchCriteria {
     return SearchCriteria(
       branch: json['branch'] ?? 'all',
       shiftStatus: json['shiftStatus'] ?? 'all',
+      transType: json['transType'] ?? 'all',
+      cashier: json['cashier'] ?? 'all',
       fromDate: json['fromDate'] ?? '',
       toDate: json['toDate'] ?? '',
     );
@@ -24,6 +30,8 @@ class SearchCriteria {
     return {
       'branch': branch,
       'shiftStatus': shiftStatus,
+      'transType': transType,
+      'cashier': cashier,
       'fromDate': fromDate,
       'toDate': toDate,
     };

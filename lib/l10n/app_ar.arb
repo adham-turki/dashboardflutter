@@ -258,5 +258,8 @@
     "selectShiftType": "اختر نوع الشفت",
     "salesReportsSearch": "بحث تقارير المبيعات",
     "opened": "مفتوح",
-    "closed": "مغلق"
+    "closed": "مغلق",
+    "cashierLogs": "تجاوزات الكاشير",
+    "selectTransType": "اختر نوع التجاوز",
+    "selectCashier": "اختر كاشير"
 }

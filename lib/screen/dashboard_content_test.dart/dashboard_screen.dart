@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bi_replicate/components/dashboard_components/card_content.dart';
 import 'package:bi_replicate/constants/constants.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
+import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/branches_sales_cat_dashboard.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double totalPricesPayTypesCount = 0.0;
   List<BranchSalesViewModel> totalSalesByPayTypes = [];
   SearchCriteria searchCriteria = SearchCriteria(
-      branch: "all", shiftStatus: "all", fromDate: "", toDate: "");
+      branch: "all",
+      shiftStatus: "all",
+      transType: "all",
+      cashier: "all",
+      fromDate: "",
+      toDate: "");
   int colorIndex = 0;
   DateTime now = DateTime.now();
   String formattedFromDate = "";
@@ -77,6 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     searchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
     fetchSalesByPayTypes();
@@ -377,12 +385,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 blueButton1(
                   onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (context) {
                           return FilterDialog(
+                              cashiers: cashiers,
                               branches: value,
                               filter: searchCriteria,
                               hint: title);

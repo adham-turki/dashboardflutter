@@ -1,5 +1,6 @@
 import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
+import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 
 import 'package:bi_replicate/model/sales_view_model.dart';
@@ -31,7 +32,12 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   String formattedFromDate = "";
   String formattedToDate = "";
   SearchCriteria searchCriteria = SearchCriteria(
-      branch: "all", shiftStatus: "all", fromDate: "", toDate: "");
+      branch: "all",
+      shiftStatus: "all",
+      cashier: "",
+      transType: "",
+      fromDate: "",
+      toDate: "");
   List<BranchSalesViewModel> totalSalesByCashier = [];
   List<BranchSalesViewModel> totalSalesByComputer = [];
   List<BranchSalesViewModel> totalSalesByHours = [];
@@ -59,6 +65,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     searchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
     fetchData();
@@ -237,13 +245,13 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                                "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})")
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                    "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})")
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                        "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})")
                                     : SizedBox.shrink()
                       ],
                     ),
@@ -261,12 +269,17 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 ),
                 blueButton1(
                   onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (context) {
                           return FilterDialog(
+                              cashiers: cashiers,
                               branches: value,
                               filter: searchCriteria,
                               hint: title);
@@ -336,16 +349,16 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                                "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})")
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                    "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})")
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                        "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})")
                                     : title == _locale.salesByHours
                                         ? Text(
-                                            "(${Converters.formatNumber(totalPricesHoursCount)})")
+                                            "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})")
                                         : SizedBox.shrink()
                       ],
                     ),
@@ -363,12 +376,17 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 ),
                 blueButton1(
                   onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
                         context: context,
                         barrierDismissible: false,
                         builder: (context) {
                           return FilterDialog(
+                              cashiers: cashiers,
                               branches: value,
                               filter: searchCriteria,
                               hint: title);
@@ -464,14 +482,17 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                                "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})")
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                    "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})")
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
-                                    : SizedBox.shrink()
+                                        "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})")
+                                    : title == _locale.salesByHours
+                                        ? Text(
+                                            "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})")
+                                        : SizedBox.shrink()
                       ],
                     ),
                     // title == "Sales By Cashier"
@@ -488,12 +509,17 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 ),
                 blueButton1(
                   onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
                         barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return FilterDialog(
+                              cashiers: cashiers,
                               branches: value,
                               filter: searchCriteria,
                               hint: title);
@@ -611,10 +637,10 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranchName}"
                 : totalSales[value].displayGroupName,
             style: const TextStyle(
-              fontStyle: FontStyle.italic,
-              fontSize: 8,
-              color: Colors.black,
-            ),
+                fontStyle: FontStyle.italic,
+                fontSize: 8,
+                color: Colors.black,
+                fontWeight: FontWeight.bold),
           ),
         ),
       );

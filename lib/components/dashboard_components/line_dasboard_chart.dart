@@ -120,16 +120,17 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
       );
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    const style = TextStyle(
-      fontSize: 12,
-    );
+    const style = TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
     int index = value.round();
 
     String title = periods.isNotEmpty ? periods[index] : 0.toString();
-    Widget text = Text(
-      title.replaceFirst(" ", "\n").replaceFirst(" ", "\n"),
-      style: style,
-      textAlign: TextAlign.center,
+    Widget text = Transform.rotate(
+      angle: -30 * 3.14159 / 180, // 90 degrees in radians
+      child: Text(
+        title.replaceFirst(" ", "\n").replaceFirst(" ", "\n"),
+        style: style,
+        textAlign: TextAlign.center,
+      ),
     );
 
     return SideTitleWidget(

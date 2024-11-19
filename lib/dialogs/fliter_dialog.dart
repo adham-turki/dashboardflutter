@@ -1,3 +1,6 @@
+import 'package:bi_replicate/constants/constants.dart';
+import 'package:bi_replicate/model/cashier_model.dart';
+import 'package:bi_replicate/model/trans_type_constants.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/widget/custom_drop_down_search.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +13,14 @@ import '../model/sales/search_crit.dart';
 class FilterDialog extends StatefulWidget {
   final SearchCriteria filter;
   final List<BranchModel> branches;
+  final List<CashierModel> cashiers;
   final String hint;
 
   FilterDialog(
-      {required this.filter, required this.branches, required this.hint});
+      {required this.filter,
+      required this.branches,
+      required this.cashiers,
+      required this.hint});
 
   @override
   _FilterDialogState createState() => _FilterDialogState();
@@ -23,6 +30,11 @@ class _FilterDialogState extends State<FilterDialog> {
   String _selectedBranch = "";
   String _selectedBranchName = "";
   String _selectedShiftStatus = "";
+
+  String _selectedCashier = "";
+  String _selectedCashierCode = "";
+  int _selectedTransactionType = -1;
+  String _selectedTransactionDesc = "";
   TextEditingController _fromDateController = TextEditingController();
   TextEditingController _toDateController = TextEditingController();
   double screenWidth = 0.0;
@@ -32,11 +44,19 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
+    transTypeList.insert(
+        0, TransTypeConstants(description: _locale.all, id: -1));
+    widget.cashiers.insert(
+        0,
+        CashierModel(
+          txtCode: "all",
+          txtNamee: _locale.all,
+        ));
     widget.branches.insert(
         0,
         BranchModel(
             txtCode: "all",
-            txtNamee: _locale.localeName == "en" ? "all" : "الكل",
+            txtNamee: _locale.all,
             txtCostcentercode: "",
             txtPrefix: "",
             txtWarehouse: "",
@@ -46,9 +66,13 @@ class _FilterDialogState extends State<FilterDialog> {
         ? "open"
         : widget.filter.shiftStatus == "1"
             ? "closed"
-            : _locale.localeName == "en"
-                ? "all"
-                : "الكل";
+            : _locale.all;
+
+    _selectedTransactionDesc = widget.filter.transType == "all"
+        ? _locale.all
+        : widget.filter.transType;
+    _selectedCashier =
+        widget.filter.cashier == "all" ? _locale.all : widget.filter.cashier;
     if (widget.branches.isNotEmpty) {
       for (var i = 0; i < widget.branches.length; i++) {
         if (widget.branches[i].txtCode == _selectedBranch) {
@@ -88,58 +112,129 @@ class _FilterDialogState extends State<FilterDialog> {
       ),
       content: Container(
         color: Colors.white,
-        width: MediaQuery.of(context).size.width * 0.3,
+        // width: MediaQuery.of(context).size.width * 0.3,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: Responsive.isDesktop(context)
-                    ? screenWidth * 0.16
-                    : screenWidth * 0.76,
-                height: screenHeight * 0.1,
-                child: CustomDropDownSearch(
-                  isMandatory: true,
-                  bordeText: _locale.selectBranch,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedBranch = value.txtCode ?? "";
-                      _selectedBranchName = value.txtNamee ?? "";
-                    });
-                    print("_selectedBranch: $_selectedBranch");
-                    print("_selectedBranchName: $_selectedBranchName");
-                  },
-                  items: widget.branches,
-                  initialValue: _selectedBranchName == ""
-                      ? "Select Branch"
-                      : _selectedBranchName,
-                ),
-              ),
-              if (widget.hint != _locale.salesByHours)
-                SizedBox(
-                  width: Responsive.isDesktop(context)
-                      ? screenWidth * 0.16
-                      : screenWidth * 0.76,
-                  height: screenHeight * 0.1,
-                  child: CustomDropDownSearch(
-                    isMandatory: true,
-                    bordeText: _locale.selectShiftType,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedShiftStatus = value;
-                      });
-                    },
-                    items: <String>[
-                      _locale.localeName == "en" ? "all" : "الكل",
-                      _locale.opened,
-                      _locale.closed
-                    ],
-                    initialValue: _selectedShiftStatus == ""
-                        ? "Select Shift"
-                        : _selectedShiftStatus,
+              Row(
+                children: [
+                  SizedBox(
+                    height: screenHeight * 0.22,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SizedBox(
+                          width: Responsive.isDesktop(context)
+                              ? screenWidth * 0.16
+                              : screenWidth * 0.76,
+                          height: screenHeight * 0.1,
+                          child: CustomDropDownSearch(
+                            isMandatory: true,
+                            bordeText: _locale.selectBranch,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedBranch = value.txtCode ?? "";
+                                _selectedBranchName = value.txtNamee ?? "";
+                              });
+                              print("_selectedBranch: $_selectedBranch");
+                              print(
+                                  "_selectedBranchName: $_selectedBranchName");
+                            },
+                            items: widget.branches,
+                            initialValue: _selectedBranchName == ""
+                                ? "Select Branch"
+                                : _selectedBranchName,
+                          ),
+                        ),
+                        if (widget.hint != _locale.salesByHours)
+                          SizedBox(
+                            width: Responsive.isDesktop(context)
+                                ? screenWidth * 0.16
+                                : screenWidth * 0.76,
+                            height: screenHeight * 0.1,
+                            child: CustomDropDownSearch(
+                              isMandatory: true,
+                              bordeText: _locale.selectShiftType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedShiftStatus = value;
+                                });
+                              },
+                              items: <String>[
+                                _locale.all,
+                                _locale.opened,
+                                _locale.closed
+                              ],
+                              initialValue: _selectedShiftStatus == ""
+                                  ? "Select Shift"
+                                  : _selectedShiftStatus,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    width: screenWidth * 0.01,
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.22,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        if (widget.hint == _locale.cashierLogs)
+                          SizedBox(
+                            width: Responsive.isDesktop(context)
+                                ? screenWidth * 0.16
+                                : screenWidth * 0.76,
+                            height: screenHeight * 0.1,
+                            child: CustomDropDownSearch(
+                              isMandatory: true,
+                              bordeText: _locale.selectCashier,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedCashier = value.txtNamee ?? "";
+                                  _selectedCashierCode = value.txtCode ?? "";
+                                });
+                              },
+                              items: widget.cashiers,
+                              initialValue: _selectedCashier == ""
+                                  ? "Select Cashier"
+                                  : _selectedCashier,
+                            ),
+                          ),
+                        if (widget.hint == _locale.cashierLogs)
+                          SizedBox(
+                            width: Responsive.isDesktop(context)
+                                ? screenWidth * 0.16
+                                : screenWidth * 0.76,
+                            height: screenHeight * 0.1,
+                            child: CustomDropDownSearch(
+                              isMandatory: true,
+                              bordeText: _locale.selectTransType,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedTransactionType = value.id;
+                                  _selectedTransactionDesc = value.description;
+                                });
+                                print(
+                                    "_selectedTransactionType: $_selectedTransactionType");
+                                print(
+                                    "_selectedTransactionDesc: $_selectedTransactionDesc");
+                              },
+                              items: transTypeList,
+                              initialValue: _selectedTransactionDesc == ""
+                                  ? "Select Transaction Type"
+                                  : _selectedTransactionDesc,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
               // _buildDropdown(
               //   label: 'Branch',
               //   value: _selectedBranch,
@@ -200,6 +295,14 @@ class _FilterDialogState extends State<FilterDialog> {
                       : _selectedShiftStatus == "closed"
                           ? "1"
                           : "all",
+                  transType: _selectedTransactionType == -1
+                      ? "all"
+                      : "$_selectedTransactionType",
+                  cashier: _selectedCashierCode == ""
+                      ? "all"
+                      : _selectedCashierCode == _locale.all
+                          ? "all"
+                          : _selectedCashierCode,
                   fromDate: _fromDateController.text,
                   toDate: _toDateController.text,
                 );
