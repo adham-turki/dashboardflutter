@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/dashboard_bar_data.dart';
+import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -53,10 +54,10 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
       x: x,
       barRods: [
         BarChartRodData(
-          toY: value,
-          color: color,
-          width: 6,
-        ),
+            toY: value,
+            color: primary,
+            borderRadius: BorderRadius.all(Radius.zero),
+            width: 20),
       ],
       showingTooltipIndicators: touchedGroupIndex == x ? [0] : [],
     );
