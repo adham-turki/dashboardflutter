@@ -10,8 +10,10 @@ import '../model/sales/search_crit.dart';
 class FilterDialog extends StatefulWidget {
   final SearchCriteria filter;
   final List<BranchModel> branches;
+  final String hint;
 
-  FilterDialog({required this.filter, required this.branches});
+  FilterDialog(
+      {required this.filter, required this.branches, required this.hint});
 
   @override
   _FilterDialogState createState() => _FilterDialogState();
@@ -114,29 +116,30 @@ class _FilterDialogState extends State<FilterDialog> {
                       : _selectedBranchName,
                 ),
               ),
-              SizedBox(
-                width: Responsive.isDesktop(context)
-                    ? screenWidth * 0.16
-                    : screenWidth * 0.76,
-                height: screenHeight * 0.1,
-                child: CustomDropDownSearch(
-                  isMandatory: true,
-                  bordeText: _locale.selectShiftType,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedShiftStatus = value;
-                    });
-                  },
-                  items: <String>[
-                    _locale.localeName == "en" ? "all" : "الكل",
-                    _locale.opened,
-                    _locale.closed
-                  ],
-                  initialValue: _selectedShiftStatus == ""
-                      ? "Select Shift"
-                      : _selectedShiftStatus,
+              if (widget.hint != _locale.salesByHours)
+                SizedBox(
+                  width: Responsive.isDesktop(context)
+                      ? screenWidth * 0.16
+                      : screenWidth * 0.76,
+                  height: screenHeight * 0.1,
+                  child: CustomDropDownSearch(
+                    isMandatory: true,
+                    bordeText: _locale.selectShiftType,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedShiftStatus = value;
+                      });
+                    },
+                    items: <String>[
+                      _locale.localeName == "en" ? "all" : "الكل",
+                      _locale.opened,
+                      _locale.closed
+                    ],
+                    initialValue: _selectedShiftStatus == ""
+                        ? "Select Shift"
+                        : _selectedShiftStatus,
+                  ),
                 ),
-              ),
               // _buildDropdown(
               //   label: 'Branch',
               //   value: _selectedBranch,

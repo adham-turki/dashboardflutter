@@ -155,150 +155,148 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
 
-    return Container(
-      color: Colors.grey[100],
-      height: height,
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  isDesktop ? desktopView() : mobileView(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget desktopView() {
+    return SingleChildScrollView(
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          isDesktop ? desktopView() : mobileView(),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    dailySalesChart(
+                        totalSalesByCashier, _locale.salesByCashier),
+                    dailySalesChart(
+                        totalSalesByComputer, _locale.salesByComputer),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  children: [
+                    pieChart(pieData, _locale.salesByPaymentTypes),
+                    // cashierTotalSales(),
+                    hourTotalBarChart(barChartData, _locale.salesByHours),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 
-  Widget desktopView() {
-    return SizedBox(
-      width: width,
-      height: height,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      dailySalesChart(
-                          totalSalesByCashier, _locale.salesByCashier),
-                      dailySalesChart(
-                          totalSalesByComputer, _locale.salesByComputer),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    children: [
-                      pieChart(pieData, _locale.salesByPaymentTypes),
-                      // cashierTotalSales(),
-                      hourTotalBarChart(barChartData, _locale.salesByHours),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget pieChart(List<PieChartModel> pieData, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    return SizedBox(
+      height: height * 0.465,
       child: Card(
-        elevation: 1,
+        elevation: 2,
         color: Colors.white,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SelectableText(
-                            title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: height * 0.02),
-                          ),
-                          title == _locale.salesByCashier
-                              ? Text(
-                                  "(${Converters.formatNumber(totalPricesCashierCount)})")
-                              : title == _locale.salesByComputer
-                                  ? Text(
-                                      "(${Converters.formatNumber(totalPricesComputerCount)})")
-                                  : title == _locale.salesByPaymentTypes
-                                      ? Text(
-                                          "(${Converters.formatNumber(totalPricesPayTypesCount)})")
-                                      : SizedBox.shrink()
-                        ],
-                      ),
-                      // title == "Sales By Cashier"
-                      //     ? Text(
-                      //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                      //     : title == "Sales By Computer"
-                      //         ? Text(
-                      //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                      //         : title == "Sales By Payment Types"
-                      //             ? Text(
-                      //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                      //             : SizedBox.shrink()
-                    ],
-                  ),
-                  blueButton1(
-                    onPressed: () async {
-                      await TotalSalesController()
-                          .getAllBranches()
-                          .then((value) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return FilterDialog(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(
+                          title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: height * 0.02),
+                        ),
+                        title == _locale.salesByCashier
+                            ? Text(
+                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                            : title == _locale.salesByComputer
+                                ? Text(
+                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                : title == _locale.salesByPaymentTypes
+                                    ? Text(
+                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                    : SizedBox.shrink()
+                      ],
+                    ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                blueButton1(
+                  onPressed: () async {
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return FilterDialog(
                               branches: value,
                               filter: searchCriteria,
-                            );
-                          },
-                        ).then((value) {
-                          if (value != false) {
-                            searchCriteria = value;
-                            if (title == _locale.salesByCashier) {
-                              fetchSalesByCashier();
-                            } else if (title == _locale.salesByComputer) {
-                              fetchSalesByComputer();
-                            } else if (title == _locale.salesByPaymentTypes) {
-                              fetchSalesByPayTypes();
-                            }
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          searchCriteria = value;
+                          if (title == _locale.salesByCashier) {
+                            fetchSalesByCashier();
+                          } else if (title == _locale.salesByComputer) {
+                            fetchSalesByComputer();
+                          } else if (title == _locale.salesByPaymentTypes) {
+                            fetchSalesByPayTypes();
                           }
-                        });
+                        }
                       });
-                    },
-                    textColor: const Color.fromARGB(255, 255, 255, 255),
-                    icon: Icon(
-                      Icons.filter_list_sharp,
-                      color: Colors.white,
-                      size: isDesktop ? height * 0.035 : height * 0.03,
-                    ),
-                  )
-                ],
-              ),
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
             ),
             Center(
               child: SizedBox(
-                height: height * 0.4,
+                height: height * 0.37,
                 child: PieDashboardChart(
                   dataList: pieData,
                 ),
@@ -311,8 +309,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget hourTotalBarChart(List<BarChartGroupData> barChartData, String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+    return SizedBox(
+      height: height * 0.465,
       child: Card(
         elevation: 2,
         color: Colors.white,
@@ -322,122 +320,114 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SelectableText(
-                            title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: height * 0.02),
-                          ),
-                          title == _locale.salesByCashier
-                              ? Text(
-                                  "(${Converters.formatNumber(totalPricesCashierCount)})")
-                              : title == _locale.salesByComputer
-                                  ? Text(
-                                      "(${Converters.formatNumber(totalPricesComputerCount)})")
-                                  : title == _locale.salesByPaymentTypes
-                                      ? Text(
-                                          "(${Converters.formatNumber(totalPricesPayTypesCount)})")
-                                      : title == _locale.salesByHours
-                                          ? Text(
-                                              "(${Converters.formatNumber(totalPricesHoursCount)})")
-                                          : SizedBox.shrink()
-                        ],
-                      ),
-                      // title == "Sales By Cashier"
-                      //     ? Text(
-                      //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                      //     : title == "Sales By Computer"
-                      //         ? Text(
-                      //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                      //         : title == "Sales By Payment Types"
-                      //             ? Text(
-                      //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                      //             : SizedBox.shrink()
-                    ],
-                  ),
-                  blueButton1(
-                    onPressed: () async {
-                      await TotalSalesController()
-                          .getAllBranches()
-                          .then((value) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return FilterDialog(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(
+                          title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: height * 0.02),
+                        ),
+                        title == _locale.salesByCashier
+                            ? Text(
+                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                            : title == _locale.salesByComputer
+                                ? Text(
+                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                : title == _locale.salesByPaymentTypes
+                                    ? Text(
+                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                    : title == _locale.salesByHours
+                                        ? Text(
+                                            "(${Converters.formatNumber(totalPricesHoursCount)})")
+                                        : SizedBox.shrink()
+                      ],
+                    ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                blueButton1(
+                  onPressed: () async {
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return FilterDialog(
                               branches: value,
                               filter: searchCriteria,
-                            );
-                          },
-                        ).then((value) {
-                          if (value != false) {
-                            searchCriteria = value;
-                            if (title == _locale.salesByCashier) {
-                              fetchSalesByCashier();
-                            } else if (title == _locale.salesByComputer) {
-                              fetchSalesByComputer();
-                            } else if (title == _locale.salesByPaymentTypes) {
-                              fetchSalesByPayTypes();
-                            } else if (title == _locale.salesByHours) {
-                              fetchSalesByHours();
-                            }
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          searchCriteria = value;
+                          if (title == _locale.salesByCashier) {
+                            fetchSalesByCashier();
+                          } else if (title == _locale.salesByComputer) {
+                            fetchSalesByComputer();
+                          } else if (title == _locale.salesByPaymentTypes) {
+                            fetchSalesByPayTypes();
+                          } else if (title == _locale.salesByHours) {
+                            fetchSalesByHours();
                           }
-                        });
+                        }
                       });
-                    },
-                    textColor: const Color.fromARGB(255, 255, 255, 255),
-                    icon: Icon(
-                      Icons.filter_list_sharp,
-                      color: Colors.white,
-                      size: isDesktop ? height * 0.035 : height * 0.03,
-                    ),
-                  )
-                ],
-              ),
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 20, 5),
-              child: AspectRatio(
-                aspectRatio: 1.6,
-                child: BarChart(
-                  BarChartData(
-                      barTouchData: BarTouchData(
-                        touchTooltipData: BarTouchTooltipData(
-                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                            return BarTooltipItem(
-                              Converters.formatNumber(rod.toY),
-                              const TextStyle(color: Colors.white),
-                            );
-                          },
-                        ),
+            SizedBox(
+              height: height * 0.35,
+              child: BarChart(
+                BarChartData(
+                    barTouchData: BarTouchData(
+                      touchTooltipData: BarTouchTooltipData(
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          return BarTooltipItem(
+                            Converters.formatNumber(rod.toY),
+                            const TextStyle(color: Colors.white),
+                          );
+                        },
                       ),
-                      titlesData: FlTitlesData(
-                        rightTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          getTitlesWidget: (value, meta) =>
-                              leftTitleWidgets(value),
-                          showTitles: true,
-                          reservedSize: 35,
-                        )),
-                        topTitles: AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
+                    ),
+                    titlesData: FlTitlesData(
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
                       ),
-                      barGroups: barChartData),
-                ),
+                      leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                        getTitlesWidget: (value, meta) =>
+                            leftTitleWidgets(value),
+                        showTitles: true,
+                        reservedSize: 35,
+                      )),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                    ),
+                    barGroups: barChartData),
               ),
             ),
           ],
@@ -447,8 +437,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget dailySalesChart(List<BranchSalesViewModel> totalSales, String title) {
-    return Padding(
-      padding: const EdgeInsets.all(5),
+    return SizedBox(
+      height: height * 0.465,
       child: Card(
         elevation: 2, // Remove shadow effect
         color: Colors.white, // Set background to transparent
@@ -456,149 +446,140 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
           borderRadius:
               BorderRadius.zero, // Remove corner radius for a flat edge
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SelectableText(
-                            title,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: height * 0.02),
-                          ),
-                          title == _locale.salesByCashier
-                              ? Text(
-                                  "(${Converters.formatNumber(totalPricesCashierCount)})")
-                              : title == _locale.salesByComputer
-                                  ? Text(
-                                      "(${Converters.formatNumber(totalPricesComputerCount)})")
-                                  : title == _locale.salesByPaymentTypes
-                                      ? Text(
-                                          "(${Converters.formatNumber(totalPricesPayTypesCount)})")
-                                      : SizedBox.shrink()
-                        ],
-                      ),
-                      // title == "Sales By Cashier"
-                      //     ? Text(
-                      //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                      //     : title == "Sales By Computer"
-                      //         ? Text(
-                      //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                      //         : title == "Sales By Payment Types"
-                      //             ? Text(
-                      //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                      //             : SizedBox.shrink()
-                    ],
-                  ),
-                  blueButton1(
-                    onPressed: () async {
-                      await TotalSalesController()
-                          .getAllBranches()
-                          .then((value) {
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return FilterDialog(
-                              branches: value,
-                              filter: searchCriteria,
-                            );
-                          },
-                        ).then((value) {
-                          if (value != false) {
-                            searchCriteria = value;
-                            if (title == _locale.salesByCashier) {
-                              fetchSalesByCashier();
-                            } else if (title == _locale.salesByComputer) {
-                              fetchSalesByComputer();
-                            }
-                          }
-                        });
-                      });
-                    },
-                    textColor: const Color.fromARGB(255, 255, 255, 255),
-                    icon: Icon(
-                      Icons.filter_list_sharp,
-                      color: Colors.white,
-                      size: isDesktop ? height * 0.035 : height * 0.03,
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 20, 20, 5),
-                child: AspectRatio(
-                  aspectRatio: isDesktop ? 3 : 1,
-                  child: LineChart(
-                    LineChartData(
-                      lineTouchData: LineTouchData(
-                        touchTooltipData: LineTouchTooltipData(
-                          // getTooltipColor: defaultLineTooltipColor,
-                          getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                            return touchedSpots.map((spot) {
-                              return LineTooltipItem(
-                                Converters.formatNumber(spot.y),
-                                const TextStyle(color: Colors.white),
-                              );
-                            }).toList();
-                          },
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(
+                          title,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: height * 0.02),
                         ),
-                      ),
-                      titlesData: FlTitlesData(
-                        topTitles: const AxisTitles(
-                          sideTitles: SideTitles(showTitles: false),
-                        ),
-                        rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false)),
-                        leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                          getTitlesWidget: (value, meta) =>
-                              leftTitleWidgets(value),
-                          showTitles: true,
-                          reservedSize: 35,
-                        )),
-                        bottomTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                            showTitles: true,
-                            interval: 1,
-                            getTitlesWidget: (value, meta) => groupNameTitle(
-                                value.toInt(), totalSales, title),
-                          ),
-                        ),
-                      ),
-                      borderData: FlBorderData(
-                          border: Border.all(
-                              color: const Color.fromARGB(255, 125, 125, 125))),
-                      lineBarsData: [
-                        LineChartBarData(
-                          belowBarData: BarAreaData(
-                              show: true, color: Colors.blue.withOpacity(0.5)),
-                          isCurved: true,
-                          preventCurveOverShooting: true,
-                          spots: totalSales.asMap().entries.map((entry) {
-                            int index = entry.key;
-                            double totalSales =
-                                double.parse(entry.value.displayTotalSales);
-                            print("totalSales: ${totalSales}");
-
-                            return FlSpot(index.toDouble(), totalSales);
-                          }).toList(),
-                        ),
+                        title == _locale.salesByCashier
+                            ? Text(
+                                "(${Converters.formatNumber(totalPricesCashierCount)})")
+                            : title == _locale.salesByComputer
+                                ? Text(
+                                    "(${Converters.formatNumber(totalPricesComputerCount)})")
+                                : title == _locale.salesByPaymentTypes
+                                    ? Text(
+                                        "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                    : SizedBox.shrink()
                       ],
                     ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                blueButton1(
+                  onPressed: () async {
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return FilterDialog(
+                              branches: value,
+                              filter: searchCriteria,
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          searchCriteria = value;
+                          if (title == _locale.salesByCashier) {
+                            fetchSalesByCashier();
+                          } else if (title == _locale.salesByComputer) {
+                            fetchSalesByComputer();
+                          }
+                        }
+                      });
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
                   ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: height * 0.35,
+              child: LineChart(
+                LineChartData(
+                  lineTouchData: LineTouchData(
+                    touchTooltipData: LineTouchTooltipData(
+                      // getTooltipColor: defaultLineTooltipColor,
+                      getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                        return touchedSpots.map((spot) {
+                          return LineTooltipItem(
+                            "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displayBranchName}\n${Converters.formatNumber(spot.y)}",
+                            const TextStyle(color: Colors.white),
+                          );
+                        }).toList();
+                      },
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    topTitles: const AxisTitles(
+                      sideTitles: SideTitles(showTitles: false),
+                    ),
+                    rightTitles: const AxisTitles(
+                        sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                      getTitlesWidget: (value, meta) => leftTitleWidgets(value),
+                      showTitles: true,
+                      reservedSize: 35,
+                    )),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        interval: 1,
+                        getTitlesWidget: (value, meta) =>
+                            groupNameTitle(value.toInt(), totalSales, title),
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 125, 125, 125))),
+                  lineBarsData: [
+                    LineChartBarData(
+                      belowBarData: BarAreaData(
+                          show: true, color: Colors.blue.withOpacity(0.5)),
+                      isCurved: true,
+                      preventCurveOverShooting: true,
+                      spots: totalSales.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        double totalSales =
+                            double.parse(entry.value.displayTotalSales);
+                        print("totalSales: ${totalSales}");
+
+                        return FlSpot(index.toDouble(), totalSales);
+                      }).toList(),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -627,7 +608,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
           child: Text(
             (title == _locale.salesByComputer ||
                     title == _locale.salesByCashier)
-                ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranch}"
+                ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranchName}"
                 : totalSales[value].displayGroupName,
             style: const TextStyle(
               fontStyle: FontStyle.italic,
