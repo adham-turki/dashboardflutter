@@ -70,9 +70,9 @@ class _FilterDialogState extends State<FilterDialog> {
             txtJcode: ""));
     _selectedBranch = widget.filter.branch;
     _selectedShiftStatus = widget.filter.shiftStatus == "0"
-        ? "open"
+        ? _locale.opened
         : widget.filter.shiftStatus == "1"
-            ? "closed"
+            ? _locale.closed
             : _locale.all;
 
     _selectedTransactionDesc = widget.filter.transType == "all"
@@ -366,9 +366,9 @@ class _FilterDialogState extends State<FilterDialog> {
               onPressed: () {
                 SearchCriteria updatedFilter = SearchCriteria(
                   branch: _selectedBranch,
-                  shiftStatus: _selectedShiftStatus == "open"
+                  shiftStatus: _selectedShiftStatus == _locale.opened
                       ? "0"
-                      : _selectedShiftStatus == "closed"
+                      : _selectedShiftStatus == _locale.closed
                           ? "1"
                           : "all",
                   transType: _selectedTransactionType == -1
