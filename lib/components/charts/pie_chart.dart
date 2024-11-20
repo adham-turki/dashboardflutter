@@ -65,7 +65,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
     });
 
     buildWidget = SizedBox(
-      height: height * 0.4,
+      height: isMobile ? height * 0.4 : height * 0.37,
       width: width,
       child: Column(
         children: [
@@ -74,7 +74,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: isMobile ? height * 0.27 : height * 0.23,
+                  height: isMobile ? height * 0.27 : height * 0.2,
                   child: PieChart(
                     PieChartData(
                       centerSpaceRadius: 1,
@@ -128,8 +128,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
   @override
   Widget build(BuildContext context) {
     isMobile = Responsive.isMobile(context);
-    radiusNormal = isMobile ? height * 0.17 : height * 0.19;
-    radiusHover = isMobile ? height * 0.18 : height * 0.2;
+    radiusNormal = isMobile ? height * 0.17 : height * 0.18;
+    radiusHover = isMobile ? height * 0.18 : height * 0.19;
 
     getBuildWidget();
     return isLoading
@@ -151,7 +151,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         title: "${data.title}\n${Converters.formatNumber(data.value!)}",
         color: data.color,
         radius: radius,
-        titleStyle: const TextStyle(color: Colors.white, fontSize: 14),
+        titleStyle: const TextStyle(color: Colors.white, fontSize: 10),
         borderSide: isTouched
             ? BorderSide(
                 color: borderColor,
@@ -219,8 +219,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
           color: data.color!,
           isSquare: true,
           text: "${data.title!} (${Converters.formatNumber(data.value!)})",
-          size: 16,
-          textSize: 16,
+          size: 10,
+          textSize: 10,
         ),
       );
     });

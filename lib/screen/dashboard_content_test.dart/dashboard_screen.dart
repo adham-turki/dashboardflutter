@@ -198,7 +198,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Expanded(
               flex: 2,
               child: CustomCards(
-                height: height * 0.45,
+                height: height * 0.47,
                 content: const DailySalesDashboard(),
               ),
             ),
@@ -217,7 +217,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Expanded(
               flex: 2,
               child: CustomCards(
-                height: height * 0.45,
+                height: height * 0.47,
                 content: const BalanceBarChartDashboard(),
               ),
             ),
@@ -227,7 +227,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Expanded(
               flex: 3,
               child: CustomCards(
-                height: height * 0.45,
+                height: height * 0.47,
                 content: const BranchesSalesByCatDashboard(),
               ),
             ),
@@ -348,7 +348,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Expanded(
       flex: 1,
       child: CustomCards(
-        height: height * 0.45,
+        height: height * 0.47,
         content: Column(
           children: [
             Row(
@@ -361,7 +361,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         SelectableText(
                           title,
-                          style: TextStyle(fontSize: height * 0.015),
+                          style: TextStyle(fontSize: isDesktop ? 15 : 18),
                         ),
                         title == locale.salesByPaymentTypes
                             ? Text(
@@ -382,12 +382,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == locale.salesByPaymentTypes)
-                    Text(
-                      "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
-                      // style: TextStyle(fontSize: height * 0.015)
-                    ),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByPaymentTypes)
+                //     Text(
+                //         "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
+                //         style: TextStyle(fontSize: height * 0.015)),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -426,16 +425,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == locale.salesByPaymentTypes)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
+            // if (!Responsive.isDesktop(context))
+            if (title == locale.salesByPaymentTypes)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                      "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
+                      style:
+                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
+                ],
+              ),
             Center(
               child: SizedBox(
                 height: height * 0.37,

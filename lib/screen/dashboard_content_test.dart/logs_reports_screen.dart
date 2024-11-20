@@ -182,13 +182,11 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                   children: [
                     Row(
                       children: [
-                        SelectableText(
-                          title,
-                          style: TextStyle(fontSize: height * 0.015),
-                        ),
+                        SelectableText(title,
+                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         title == _locale.cashierLogs
                             ? Text(
-                                "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})")
+                                " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})")
                             : SizedBox.shrink()
                       ],
                     ),
@@ -204,9 +202,11 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
-                if (title == _locale.cashierLogs)
-                  Text(
-                      "(${cashierLogsSearchCriteria.fromDate} - ${cashierLogsSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.cashierLogs)
+                    Text(
+                        "(${cashierLogsSearchCriteria.fromDate} - ${cashierLogsSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -245,6 +245,16 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                 )
               ],
             ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.cashierLogs)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${cashierLogsSearchCriteria.fromDate} - ${cashierLogsSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
             Scrollbar(
               controller: _scrollController,
               thumbVisibility: true,
