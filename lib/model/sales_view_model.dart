@@ -6,6 +6,9 @@ class BranchSalesViewModel {
   final String displayTotalSales;
   final String displayGroupCode;
   final String displayGroupName;
+  final String displayTransType;
+  final String displayLogsCount;
+  final String displaytransTypeName;
 
   BranchSalesViewModel({
     required this.displayBranch,
@@ -13,6 +16,9 @@ class BranchSalesViewModel {
     required this.displayTotalSales,
     required this.displayGroupCode,
     required this.displayGroupName,
+    required this.displayTransType,
+    required this.displayLogsCount,
+    required this.displaytransTypeName,
   });
 
   factory BranchSalesViewModel.fromDBModel(BranchSalesDBModel dbModel) {
@@ -22,6 +28,9 @@ class BranchSalesViewModel {
       displayTotalSales: dbModel.totalSales.toStringAsFixed(2),
       displayGroupCode: dbModel.groupCode,
       displayGroupName: dbModel.groupName,
+      displayTransType: dbModel.transType.toString(),
+      displayLogsCount: dbModel.logsCount.toString(),
+      displaytransTypeName: dbModel.transTypeName,
     );
   }
 }

@@ -20,6 +20,7 @@ List<MenuModel> getMenu(AppLocalizations locale) {
           title: locale.salesReports,
           pageNumber: 20,
         ),
+        SubMenuModel(title: locale.logsReports, pageNumber: 21)
       ],
       pageNumber: -1,
     ),

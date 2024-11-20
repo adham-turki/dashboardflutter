@@ -11,6 +11,34 @@ import '../model/sales/branch_model.dart';
 import '../model/sales/sales_db_model.dart';
 
 class TotalSalesController {
+  Future<List<BranchSalesDBModel>> getCashierLogs(
+      SearchCriteria searchCriteria) async {
+    List<BranchSalesDBModel> list = [];
+    var api = cashierLogs;
+    try {
+      var response = await http.post(
+        Uri.parse("${ApiModel.url}/${api}"),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        },
+        body: json.encode(searchCriteria.toJson()),
+      );
+      print("API Request: ${Uri.parse("${ApiModel.url}/${api}")}");
+      print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          list.add(BranchSalesDBModel.fromJson(data));
+        }
+      }
+      return list;
+    } catch (e) {
+      print("asasdasdas: $e");
+      return list;
+    }
+  }
+
   Future<List<BranchSalesDBModel>> getTotalSalesByCashier(
       SearchCriteria searchCriteria) async {
     List<BranchSalesDBModel> list = [];

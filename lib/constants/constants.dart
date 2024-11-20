@@ -10,7 +10,7 @@ final colorListDashboard = <Color>[
   const Color(0xFF558B2F), // Light Green
   Colors.teal,
 ];
-final List<TransTypeConstants> transTypeList = [
+final List<TransTypeConstants> constTransTypeList = [
   const TransTypeConstants(id: 0, description: "مردود مبيعات"), // Return Sales
   const TransTypeConstants(id: 1, description: "محذوفات"), // Deleted
   const TransTypeConstants(

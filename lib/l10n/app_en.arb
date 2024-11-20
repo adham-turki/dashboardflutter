@@ -285,5 +285,6 @@
     "closed": "Closed",
     "cashierLogs": "Cashier Logs",
     "selectTransType": "Select Transaction Type",
-    "selectCashier": "Select Cashier"
+    "selectCashier": "Select Cashier",
+    "logsReports": "Logs Reports"
 }

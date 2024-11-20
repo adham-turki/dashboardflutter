@@ -261,5 +261,6 @@
     "closed": "مغلق",
     "cashierLogs": "تجاوزات الكاشير",
     "selectTransType": "اختر نوع التجاوز",
-    "selectCashier": "اختر كاشير"
+    "selectCashier": "اختر كاشير",
+    "logsReports": "تقارير التجاوزات"
 }

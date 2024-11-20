@@ -18,6 +18,7 @@ import 'package:bi_replicate/screen/content/settings/change_pass/change_password
 import 'package:bi_replicate/screen/content/settings/users_content/users_content.dart';
 import 'package:bi_replicate/screen/content/settings/users_permit/user_permissions_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/dashboard_screen.dart';
+import 'package:bi_replicate/screen/dashboard_content_test.dart/logs_reports_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/sales_reports_screen.dart';
 import 'package:bi_replicate/screen/journal_reports_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
@@ -177,6 +178,8 @@ class _HomePageState extends State<HomePage> {
         return const JournalReportsScreen();
       case 20:
         return const SalesReportsScreen();
+      case 21:
+        return const LogsReportsScreen();
       default:
         return Container();
     }
@@ -227,6 +230,8 @@ class _HomePageState extends State<HomePage> {
         return locale.journalReports;
       case 20:
         return locale.salesReports;
+      case 21:
+        return locale.logsReports;
       default:
         return "";
     }

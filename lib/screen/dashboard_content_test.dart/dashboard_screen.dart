@@ -51,7 +51,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<PieChartModel> pieData = [];
   double totalPricesPayTypesCount = 0.0;
   List<BranchSalesViewModel> totalSalesByPayTypes = [];
-  SearchCriteria searchCriteria = SearchCriteria(
+  SearchCriteria payTypesSearchCriteria = SearchCriteria(
       branch: "all",
       shiftStatus: "all",
       transType: "all",
@@ -80,7 +80,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     formattedFromDate =
         DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
-    searchCriteria = SearchCriteria(
+    payTypesSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
         transType: "all",
@@ -196,7 +196,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // ),
 
             Expanded(
-              flex: 3,
+              flex: 2,
               child: CustomCards(
                 height: height * 0.45,
                 content: const DailySalesDashboard(),
@@ -361,13 +361,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       children: [
                         SelectableText(
                           title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: height * 0.02),
+                          style: TextStyle(fontSize: height * 0.015),
                         ),
                         title == locale.salesByPaymentTypes
                             ? Text(
-                                "(${Converters.formatNumber(totalPricesPayTypesCount)})")
+                                "(${Converters.formatNumber(totalPricesPayTypesCount)})",
+                              )
                             : SizedBox.shrink()
                       ],
                     ),
@@ -383,6 +382,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
+                if (Responsive.isDesktop(context))
+                  if (title == locale.salesByPaymentTypes)
+                    Text(
+                      "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
+                      // style: TextStyle(fontSize: height * 0.015)
+                    ),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -397,13 +402,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           return FilterDialog(
                               cashiers: cashiers,
                               branches: value,
-                              filter: searchCriteria,
+                              filter: title == locale.salesByPaymentTypes
+                                  ? payTypesSearchCriteria
+                                  : payTypesSearchCriteria,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          searchCriteria = value;
                           if (title == locale.salesByPaymentTypes) {
+                            payTypesSearchCriteria = value;
                             fetchSalesByPayTypes();
                           }
                         }
@@ -419,6 +426,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               ],
             ),
+            if (!Responsive.isDesktop(context))
+              if (title == locale.salesByPaymentTypes)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
             Center(
               child: SizedBox(
                 height: height * 0.37,
@@ -438,7 +455,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     totalPricesPayTypesCount = 0.0;
     totalSalesByPayTypes.clear();
     await TotalSalesController()
-        .getTotalSalesByPaymentTypes(searchCriteria)
+        .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));

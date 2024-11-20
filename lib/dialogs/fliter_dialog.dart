@@ -39,13 +39,20 @@ class _FilterDialogState extends State<FilterDialog> {
   TextEditingController _toDateController = TextEditingController();
   double screenWidth = 0.0;
   double screenHeight = 0.0;
-
+  List<TransTypeConstants> transTypeList = [];
   late AppLocalizations _locale;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
-    transTypeList.insert(
-        0, TransTypeConstants(description: _locale.all, id: -1));
+    transTypeList = [];
+    transTypeList = constTransTypeList;
+    if (transTypeList.isNotEmpty) {
+      if (transTypeList[0].description != _locale.all) {
+        transTypeList.insert(
+            0, TransTypeConstants(description: _locale.all, id: -1));
+      }
+    }
+
     widget.cashiers.insert(
         0,
         CashierModel(
@@ -70,7 +77,10 @@ class _FilterDialogState extends State<FilterDialog> {
 
     _selectedTransactionDesc = widget.filter.transType == "all"
         ? _locale.all
-        : widget.filter.transType;
+        : getDescriptionById(int.parse(widget.filter.transType));
+    _selectedTransactionType = widget.filter.transType == "all"
+        ? -1
+        : int.parse(widget.filter.transType);
     _selectedCashier =
         widget.filter.cashier == "all" ? _locale.all : widget.filter.cashier;
     if (widget.branches.isNotEmpty) {
@@ -79,17 +89,23 @@ class _FilterDialogState extends State<FilterDialog> {
           _selectedBranchName = widget.branches[i].txtNamee;
         }
       }
+      _fromDateController = TextEditingController(text: widget.filter.fromDate);
+      _toDateController = TextEditingController(text: widget.filter.toDate);
       super.didChangeDependencies();
     }
+  }
 
-    @override
-    void initState() {
-      super.initState();
-      print("widget.branches: ${widget.branches.length}");
-    }
+  @override
+  void initState() {
+    super.initState();
+    print("widget.branches: ${widget.branches.length}");
+  }
 
-    _fromDateController = TextEditingController(text: widget.filter.fromDate);
-    _toDateController = TextEditingController(text: widget.filter.toDate);
+  String getDescriptionById(int id) {
+    final item = constTransTypeList.firstWhere(
+      (element) => element.id == id,
+    );
+    return item.description;
   }
 
   @override
@@ -128,7 +144,7 @@ class _FilterDialogState extends State<FilterDialog> {
                         SizedBox(
                           width: Responsive.isDesktop(context)
                               ? screenWidth * 0.16
-                              : screenWidth * 0.76,
+                              : screenWidth * 0.6,
                           height: screenHeight * 0.1,
                           child: CustomDropDownSearch(
                             isMandatory: true,
@@ -152,7 +168,7 @@ class _FilterDialogState extends State<FilterDialog> {
                           SizedBox(
                             width: Responsive.isDesktop(context)
                                 ? screenWidth * 0.16
-                                : screenWidth * 0.76,
+                                : screenWidth * 0.6,
                             height: screenHeight * 0.1,
                             child: CustomDropDownSearch(
                               isMandatory: true,
@@ -175,66 +191,126 @@ class _FilterDialogState extends State<FilterDialog> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: screenWidth * 0.01,
-                  ),
+                  if (Responsive.isDesktop(context))
+                    SizedBox(
+                      width: screenWidth * 0.01,
+                    ),
+                  if (Responsive.isDesktop(context))
+                    SizedBox(
+                      height: screenHeight * 0.22,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          if (widget.hint == _locale.cashierLogs)
+                            SizedBox(
+                              width: Responsive.isDesktop(context)
+                                  ? screenWidth * 0.16
+                                  : screenWidth * 0.66,
+                              height: screenHeight * 0.1,
+                              child: CustomDropDownSearch(
+                                isMandatory: true,
+                                bordeText: _locale.selectCashier,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedCashier = value.txtNamee ?? "";
+                                    _selectedCashierCode = value.txtCode ?? "";
+                                  });
+                                },
+                                items: widget.cashiers,
+                                initialValue: _selectedCashier == ""
+                                    ? "Select Cashier"
+                                    : _selectedCashier,
+                              ),
+                            ),
+                          if (widget.hint == _locale.cashierLogs)
+                            SizedBox(
+                              width: Responsive.isDesktop(context)
+                                  ? screenWidth * 0.16
+                                  : screenWidth * 0.66,
+                              height: screenHeight * 0.1,
+                              child: CustomDropDownSearch(
+                                isMandatory: true,
+                                bordeText: _locale.selectTransType,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _selectedTransactionType = value.id;
+                                    _selectedTransactionDesc =
+                                        value.description;
+                                  });
+                                  print(
+                                      "_selectedTransactionType: $_selectedTransactionType");
+                                  print(
+                                      "_selectedTransactionDesc: $_selectedTransactionDesc");
+                                },
+                                items: transTypeList,
+                                initialValue: _selectedTransactionDesc == ""
+                                    ? "Select Transaction Type"
+                                    : _selectedTransactionDesc,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                ],
+              ),
+              if (!Responsive.isDesktop(context))
+                SizedBox(
+                  width: screenWidth * 0.01,
+                ),
+              if (!Responsive.isDesktop(context))
+                if (widget.hint == _locale.cashierLogs)
                   SizedBox(
                     height: screenHeight * 0.22,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        if (widget.hint == _locale.cashierLogs)
-                          SizedBox(
-                            width: Responsive.isDesktop(context)
-                                ? screenWidth * 0.16
-                                : screenWidth * 0.76,
-                            height: screenHeight * 0.1,
-                            child: CustomDropDownSearch(
-                              isMandatory: true,
-                              bordeText: _locale.selectCashier,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedCashier = value.txtNamee ?? "";
-                                  _selectedCashierCode = value.txtCode ?? "";
-                                });
-                              },
-                              items: widget.cashiers,
-                              initialValue: _selectedCashier == ""
-                                  ? "Select Cashier"
-                                  : _selectedCashier,
-                            ),
+                        SizedBox(
+                          width: Responsive.isDesktop(context)
+                              ? screenWidth * 0.16
+                              : screenWidth * 0.66,
+                          height: screenHeight * 0.1,
+                          child: CustomDropDownSearch(
+                            isMandatory: true,
+                            bordeText: _locale.selectCashier,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedCashier = value.txtNamee ?? "";
+                                _selectedCashierCode = value.txtCode ?? "";
+                              });
+                            },
+                            items: widget.cashiers,
+                            initialValue: _selectedCashier == ""
+                                ? "Select Cashier"
+                                : _selectedCashier,
                           ),
-                        if (widget.hint == _locale.cashierLogs)
-                          SizedBox(
-                            width: Responsive.isDesktop(context)
-                                ? screenWidth * 0.16
-                                : screenWidth * 0.76,
-                            height: screenHeight * 0.1,
-                            child: CustomDropDownSearch(
-                              isMandatory: true,
-                              bordeText: _locale.selectTransType,
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedTransactionType = value.id;
-                                  _selectedTransactionDesc = value.description;
-                                });
-                                print(
-                                    "_selectedTransactionType: $_selectedTransactionType");
-                                print(
-                                    "_selectedTransactionDesc: $_selectedTransactionDesc");
-                              },
-                              items: transTypeList,
-                              initialValue: _selectedTransactionDesc == ""
-                                  ? "Select Transaction Type"
-                                  : _selectedTransactionDesc,
-                            ),
+                        ),
+                        SizedBox(
+                          width: Responsive.isDesktop(context)
+                              ? screenWidth * 0.16
+                              : screenWidth * 0.66,
+                          height: screenHeight * 0.1,
+                          child: CustomDropDownSearch(
+                            isMandatory: true,
+                            bordeText: _locale.selectTransType,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedTransactionType = value.id;
+                                _selectedTransactionDesc = value.description;
+                              });
+                              print(
+                                  "_selectedTransactionType: $_selectedTransactionType");
+                              print(
+                                  "_selectedTransactionDesc: $_selectedTransactionDesc");
+                            },
+                            items: transTypeList,
+                            initialValue: _selectedTransactionDesc == ""
+                                ? "Select Transaction Type"
+                                : _selectedTransactionDesc,
                           ),
+                        ),
                       ],
                     ),
                   ),
-                ],
-              ),
-
               // _buildDropdown(
               //   label: 'Branch',
               //   value: _selectedBranch,
@@ -260,7 +336,7 @@ class _FilterDialogState extends State<FilterDialog> {
               SizedBox(
                 width: Responsive.isDesktop(context)
                     ? screenWidth * 0.16
-                    : screenWidth * 0.76,
+                    : screenWidth * 0.66,
                 height: screenHeight * 0.1,
                 child: _buildDateField(
                   label: _locale.fromDate,
@@ -271,7 +347,7 @@ class _FilterDialogState extends State<FilterDialog> {
               SizedBox(
                 width: Responsive.isDesktop(context)
                     ? screenWidth * 0.16
-                    : screenWidth * 0.76,
+                    : screenWidth * 0.66,
                 height: screenHeight * 0.1,
                 child: _buildDateField(
                   label: _locale.toDate,

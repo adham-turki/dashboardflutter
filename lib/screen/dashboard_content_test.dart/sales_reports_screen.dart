@@ -31,7 +31,28 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   int colorIndex = 0;
   String formattedFromDate = "";
   String formattedToDate = "";
-  SearchCriteria searchCriteria = SearchCriteria(
+  SearchCriteria cashierSearchCriteria = SearchCriteria(
+      branch: "all",
+      shiftStatus: "all",
+      cashier: "",
+      transType: "",
+      fromDate: "",
+      toDate: "");
+  SearchCriteria desktopSearchCriteria = SearchCriteria(
+      branch: "all",
+      shiftStatus: "all",
+      cashier: "",
+      transType: "",
+      fromDate: "",
+      toDate: "");
+  SearchCriteria payTypesSearchCriteria = SearchCriteria(
+      branch: "all",
+      shiftStatus: "all",
+      cashier: "",
+      transType: "",
+      fromDate: "",
+      toDate: "");
+  SearchCriteria hoursSearchCriteria = SearchCriteria(
       branch: "all",
       shiftStatus: "all",
       cashier: "",
@@ -44,6 +65,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   List<BranchSalesViewModel> totalSalesByPayTypes = [];
   List<PieChartModel> pieData = [];
   List<BarChartGroupData> barChartData = [];
+  final ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController1 = ScrollController();
 
   double totalPricesCashierCount = 0.0;
   double totalPricesComputerCount = 0.0;
@@ -62,7 +85,28 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     formattedFromDate =
         DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
-    searchCriteria = SearchCriteria(
+    cashierSearchCriteria = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: formattedFromDate,
+        toDate: formattedToDate);
+    payTypesSearchCriteria = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: formattedFromDate,
+        toDate: formattedToDate);
+    hoursSearchCriteria = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: formattedFromDate,
+        toDate: formattedToDate);
+    desktopSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
         transType: "all",
@@ -86,7 +130,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     totalPricesHoursCount = 0.0;
     barChartData.clear();
     await TotalSalesController()
-        .getTotalSalesByHours(searchCriteria)
+        .getTotalSalesByHours(hoursSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
         totalSalesByHours.add(BranchSalesViewModel.fromDBModel(value[i]));
@@ -109,7 +153,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     totalSalesByCashier.clear();
     totalPricesCashierCount = 0.0;
     await TotalSalesController()
-        .getTotalSalesByCashier(searchCriteria)
+        .getTotalSalesByCashier(cashierSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
         totalSalesByCashier.add(BranchSalesViewModel.fromDBModel(value[i]));
@@ -125,7 +169,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     totalPricesPayTypesCount = 0.0;
     totalSalesByPayTypes.clear();
     await TotalSalesController()
-        .getTotalSalesByPaymentTypes(searchCriteria)
+        .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));
@@ -146,7 +190,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     totalSalesByComputer.clear();
     totalPricesComputerCount = 0.0;
     await TotalSalesController()
-        .getTotalSalesByComputer(searchCriteria)
+        .getTotalSalesByComputer(desktopSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
         totalSalesByComputer.add(BranchSalesViewModel.fromDBModel(value[i]));
@@ -239,9 +283,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       children: [
                         SelectableText(
                           title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: height * 0.02),
+                          style: TextStyle(fontSize: height * 0.015),
                         ),
                         title == _locale.salesByCashier
                             ? Text(
@@ -267,6 +309,22 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByCashier)
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByComputer)
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByHours)
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByPaymentTypes)
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -281,17 +339,25 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           return FilterDialog(
                               cashiers: cashiers,
                               branches: value,
-                              filter: searchCriteria,
+                              filter: title == _locale.salesByCashier
+                                  ? cashierSearchCriteria
+                                  : title == _locale.salesByComputer
+                                      ? desktopSearchCriteria
+                                      : title == _locale.salesByPaymentTypes
+                                          ? payTypesSearchCriteria
+                                          : hoursSearchCriteria,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          searchCriteria = value;
                           if (title == _locale.salesByCashier) {
+                            cashierSearchCriteria = value;
                             fetchSalesByCashier();
                           } else if (title == _locale.salesByComputer) {
+                            desktopSearchCriteria = value;
                             fetchSalesByComputer();
                           } else if (title == _locale.salesByPaymentTypes) {
+                            payTypesSearchCriteria = value;
                             fetchSalesByPayTypes();
                           }
                         }
@@ -307,6 +373,46 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 )
               ],
             ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByCashier)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByComputer)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByHours)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByPaymentTypes)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
             Center(
               child: SizedBox(
                 height: height * 0.37,
@@ -343,9 +449,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       children: [
                         SelectableText(
                           title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: height * 0.02),
+                          style: TextStyle(fontSize: height * 0.015),
                         ),
                         title == _locale.salesByCashier
                             ? Text(
@@ -359,7 +463,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                     : title == _locale.salesByHours
                                         ? Text(
                                             "(${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})")
-                                        : SizedBox.shrink()
+                                        : SizedBox.shrink(),
                       ],
                     ),
                     // title == "Sales By Cashier"
@@ -374,6 +478,22 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByCashier)
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByComputer)
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByHours)
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByPaymentTypes)
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -388,19 +508,28 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           return FilterDialog(
                               cashiers: cashiers,
                               branches: value,
-                              filter: searchCriteria,
+                              filter: title == _locale.salesByCashier
+                                  ? cashierSearchCriteria
+                                  : title == _locale.salesByComputer
+                                      ? desktopSearchCriteria
+                                      : title == _locale.salesByPaymentTypes
+                                          ? payTypesSearchCriteria
+                                          : hoursSearchCriteria,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          searchCriteria = value;
                           if (title == _locale.salesByCashier) {
+                            cashierSearchCriteria = value;
                             fetchSalesByCashier();
                           } else if (title == _locale.salesByComputer) {
+                            desktopSearchCriteria = value;
                             fetchSalesByComputer();
                           } else if (title == _locale.salesByPaymentTypes) {
+                            payTypesSearchCriteria = value;
                             fetchSalesByPayTypes();
                           } else if (title == _locale.salesByHours) {
+                            hoursSearchCriteria = value;
                             fetchSalesByHours();
                           }
                         }
@@ -416,6 +545,46 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 )
               ],
             ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByCashier)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByComputer)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByHours)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByPaymentTypes)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
             SizedBox(
               height: height * 0.35,
               child: BarChart(
@@ -476,9 +645,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       children: [
                         SelectableText(
                           title,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: height * 0.02),
+                          style: TextStyle(fontSize: height * 0.015),
                         ),
                         title == _locale.salesByCashier
                             ? Text(
@@ -507,6 +674,22 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                     //             : SizedBox.shrink()
                   ],
                 ),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByCashier)
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByComputer)
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByHours)
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesByPaymentTypes)
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -521,16 +704,29 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           return FilterDialog(
                               cashiers: cashiers,
                               branches: value,
-                              filter: searchCriteria,
+                              filter: title == _locale.salesByCashier
+                                  ? cashierSearchCriteria
+                                  : title == _locale.salesByComputer
+                                      ? desktopSearchCriteria
+                                      : title == _locale.salesByPaymentTypes
+                                          ? payTypesSearchCriteria
+                                          : hoursSearchCriteria,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          searchCriteria = value;
                           if (title == _locale.salesByCashier) {
+                            cashierSearchCriteria = value;
                             fetchSalesByCashier();
                           } else if (title == _locale.salesByComputer) {
+                            desktopSearchCriteria = value;
                             fetchSalesByComputer();
+                          } else if (title == _locale.salesByPaymentTypes) {
+                            payTypesSearchCriteria = value;
+                            fetchSalesByPayTypes();
+                          } else if (title == _locale.salesByHours) {
+                            hoursSearchCriteria = value;
+                            fetchSalesByHours();
                           }
                         }
                       });
@@ -545,63 +741,127 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 )
               ],
             ),
-            SizedBox(
-              height: height * 0.35,
-              child: LineChart(
-                LineChartData(
-                  lineTouchData: LineTouchData(
-                    touchTooltipData: LineTouchTooltipData(
-                      // getTooltipColor: defaultLineTooltipColor,
-                      getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                        return touchedSpots.map((spot) {
-                          return LineTooltipItem(
-                            "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displayBranchName}\n${Converters.formatNumber(spot.y)}",
-                            const TextStyle(color: Colors.white),
-                          );
-                        }).toList();
-                      },
-                    ),
-                  ),
-                  titlesData: FlTitlesData(
-                    topTitles: const AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false)),
-                    leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                      getTitlesWidget: (value, meta) => leftTitleWidgets(value),
-                      showTitles: true,
-                      reservedSize: 35,
-                    )),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: 1,
-                        getTitlesWidget: (value, meta) =>
-                            groupNameTitle(value.toInt(), totalSales, title),
-                      ),
-                    ),
-                  ),
-                  borderData: FlBorderData(
-                      border: Border.all(
-                          color: const Color.fromARGB(255, 125, 125, 125))),
-                  lineBarsData: [
-                    LineChartBarData(
-                      belowBarData: BarAreaData(
-                          show: true, color: Colors.blue.withOpacity(0.5)),
-                      isCurved: true,
-                      preventCurveOverShooting: true,
-                      spots: totalSales.asMap().entries.map((entry) {
-                        int index = entry.key;
-                        double totalSales =
-                            double.parse(entry.value.displayTotalSales);
-                        print("totalSales: ${totalSales}");
-
-                        return FlSpot(index.toDouble(), totalSales);
-                      }).toList(),
-                    ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByCashier)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
                   ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByComputer)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByHours)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesByPaymentTypes)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            Scrollbar(
+              controller: title == _locale.salesByCashier
+                  ? _scrollController
+                  : _scrollController1,
+              thumbVisibility: true,
+              thickness: 8,
+              trackVisibility: true,
+              radius: const Radius.circular(4),
+              child: SingleChildScrollView(
+                reverse: _locale.localeName == "ar" ? true : false,
+                controller: title == _locale.salesByCashier
+                    ? _scrollController
+                    : _scrollController1,
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: height * 0.35,
+                  width: Responsive.isDesktop(context)
+                      ? totalSales.length > 20
+                          ? width * (totalSales.length / 10)
+                          : width * 0.65
+                      : totalSales.length > 20
+                          ? width * (totalSales.length / 10)
+                          : width * 0.65,
+                  child: LineChart(
+                    LineChartData(
+                      lineTouchData: LineTouchData(
+                        touchTooltipData: LineTouchTooltipData(
+                          // getTooltipColor: defaultLineTooltipColor,
+                          getTooltipItems: (List<LineBarSpot> touchedSpots) {
+                            return touchedSpots.map((spot) {
+                              return LineTooltipItem(
+                                "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displayBranchName}\n${Converters.formatNumber(spot.y)}",
+                                const TextStyle(color: Colors.white),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ),
+                      titlesData: FlTitlesData(
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false)),
+                        leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                          getTitlesWidget: (value, meta) =>
+                              leftTitleWidgets(value),
+                          showTitles: true,
+                          reservedSize: 35,
+                        )),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            interval: 1,
+                            getTitlesWidget: (value, meta) => groupNameTitle(
+                                value.toInt(), totalSales, title),
+                          ),
+                        ),
+                      ),
+                      borderData: FlBorderData(
+                          border: Border.all(
+                              color: const Color.fromARGB(255, 125, 125, 125))),
+                      lineBarsData: [
+                        LineChartBarData(
+                          belowBarData: BarAreaData(
+                              show: true, color: Colors.blue.withOpacity(0.5)),
+                          isCurved: true,
+                          preventCurveOverShooting: true,
+                          spots: totalSales.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            double totalSales =
+                                double.parse(entry.value.displayTotalSales);
+                            print("totalSales: ${totalSales}");
+
+                            return FlSpot(index.toDouble(), totalSales);
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
