@@ -266,7 +266,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   Widget pieChart(List<PieChartModel> pieData, String title) {
     return SizedBox(
-      height: height * 0.465,
+      height: height * 0.47,
       child: Card(
         elevation: 2,
         color: Colors.white,
@@ -438,7 +438,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   Widget hourTotalBarChart(List<BarChartGroupData> barChartData, String title) {
     return SizedBox(
-      height: height * 0.465,
+      height: height * 0.47,
       child: Card(
         elevation: 2,
         color: Colors.white,
@@ -645,7 +645,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   Widget dailySalesChart(List<BranchSalesViewModel> totalSales, String title) {
     return SizedBox(
-      height: height * 0.465,
+      height: height * 0.47,
       child: Card(
         elevation: 2, // Remove shadow effect
         color: Colors.white, // Set background to transparent
