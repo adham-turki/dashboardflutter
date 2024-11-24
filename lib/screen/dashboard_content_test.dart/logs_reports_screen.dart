@@ -84,6 +84,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   fetchSalesCostBasedStockCat() async {
     salesCostBasedStkCatList.clear();
     salesCostBasedStkCatCount = 0.0;
+    data.clear();
     await TotalSalesController()
         .getSalesCostBasedStockCat(salesCostSearchCriteria)
         .then((value) {
@@ -98,13 +99,16 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
             double.parse(salesCostBasedStkCatList[i].total),
             double.parse(salesCostBasedStkCatList[i].stockTransBalance)));
       }
-      maxValue = data
-          .map((e) => e.y1)
-          .reduce((value, element) => value > element ? value : element);
-      minValue = data
-          .map((e) => e.y1)
-          .reduce((value, element) => value < element ? value : element);
-      interval = ((maxValue - minValue) / 10);
+      if (data.isNotEmpty) {
+        maxValue = data
+            .map((e) => e.y1)
+            .reduce((value, element) => value > element ? value : element);
+        minValue = data
+            .map((e) => e.y1)
+            .reduce((value, element) => value < element ? value : element);
+        interval = ((maxValue - minValue) / 10);
+      }
+
       print("salesCostBasedStkCatList: ${salesCostBasedStkCatList.length}");
       setState(() {});
     });
@@ -139,9 +143,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         shiftStatus: "all",
         transType: "all",
         cashier: "all",
-        fromDate: "5/11/2024"
-        //  salesCostFormattedFromDate
-        ,
+        fromDate: salesCostFormattedFromDate,
         toDate: salesCostFormattedToDate);
     fetchData();
     super.initState();
@@ -475,14 +477,14 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                               branches: value,
                               filter: title == _locale.cashierLogs
                                   ? cashierLogsSearchCriteria
-                                  : cashierLogsSearchCriteria,
+                                  : salesCostSearchCriteria,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          if (title == _locale.cashierLogs) {
-                            cashierLogsSearchCriteria = value;
-                            fetchSalesByCashierLogs();
+                          if (title == _locale.salesCostBasedStockCat) {
+                            salesCostSearchCriteria = value;
+                            fetchSalesCostBasedStockCat();
                           }
                         }
                       });
