@@ -431,7 +431,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                      "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
+                      "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
                       style:
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],

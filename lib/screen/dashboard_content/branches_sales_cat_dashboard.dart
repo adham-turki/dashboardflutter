@@ -220,8 +220,8 @@ class _BranchesSalesByCatDashboardState
                                 })),
                             Text(
                               _locale.localeName == "en"
-                                  ? "${fromDateController.text}  -  ${toDateController.text}"
-                                  : "$fromDate  -  $toDate",
+                                  ? "(${fromDateController.text}  -  ${toDateController.text})"
+                                  : "($fromDate  -  $toDate)",
                               style: TextStyle(fontSize: isDesktop ? 15 : 13),
                             ),
                             SizedBox(
@@ -344,8 +344,8 @@ class _BranchesSalesByCatDashboardState
                               children: [
                                 Text(
                                   _locale.localeName == "en"
-                                      ? "${fromDateController.text}  -  ${toDateController.text}"
-                                      : "$fromDate  -  $toDate",
+                                      ? "(${fromDateController.text}  -  ${toDateController.text})"
+                                      : "($fromDate  -  $toDate)",
                                   style:
                                       TextStyle(fontSize: isDesktop ? 15 : 10),
                                 ),

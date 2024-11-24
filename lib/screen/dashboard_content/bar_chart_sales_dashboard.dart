@@ -159,8 +159,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 })),
                             Text(
                               _locale.localeName == "en"
-                                  ? "${fromDateController.text}  -  ${toDateController.text}"
-                                  : "$fromDate  -  $toDate",
+                                  ? "(${fromDateController.text}  -  ${toDateController.text})"
+                                  : "($fromDate  -  $toDate)",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             ),
                             SizedBox(

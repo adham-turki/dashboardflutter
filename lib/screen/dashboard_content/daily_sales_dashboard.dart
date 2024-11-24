@@ -171,8 +171,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 })),
                             Text(
                               _locale.localeName == "en"
-                                  ? fromDateController.text
-                                  : fromDate,
+                                  ? "(${fromDateController.text})"
+                                  : "($fromDate)",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             ),
                             SizedBox(
@@ -282,8 +282,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                               children: [
                                 Text(
                                   _locale.localeName == "en"
-                                      ? fromDateController.text
-                                      : fromDate,
+                                      ? "(${fromDateController.text})"
+                                      : "($fromDate)",
                                   style:
                                       TextStyle(fontSize: isDesktop ? 15 : 10),
                                 ),
