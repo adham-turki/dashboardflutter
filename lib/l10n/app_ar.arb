@@ -262,5 +262,6 @@
     "cashierLogs": "تجاوزات الكاشير",
     "selectTransType": "اختر نوع التجاوز",
     "selectCashier": "اختر كاشير",
-    "logsReports": "تقارير التجاوزات"
+    "logsReports": "تقارير التجاوزات",
+    "salesCostBasedStockCat": "مجمل الأرباح حسب مجموعات البضاعة"
 }

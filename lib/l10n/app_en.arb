@@ -286,5 +286,6 @@
     "cashierLogs": "Cashier Logs",
     "selectTransType": "Select Transaction Type",
     "selectCashier": "Select Cashier",
-    "logsReports": "Logs Reports"
+    "logsReports": "Logs Reports",
+    "salesCostBasedStockCat": "Sales Cost Based on Stock Category"
 }

@@ -4,5 +4,6 @@ var totalSalesByHours = "totalSales/byHours";
 var totalSalesByComputer = "totalSales/byComputer";
 var totalSalesByPayType = "totalSales/byPayType";
 var cashierLogs = "reports/logbyCachier";
+var salesCostBasedStockCat = "reports/getCostVSSalesStkCat";
 var getBranches = "general/branchs";
 var getCashiers = "general/users";

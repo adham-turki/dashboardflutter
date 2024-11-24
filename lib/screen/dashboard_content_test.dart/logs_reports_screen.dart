@@ -1,4 +1,7 @@
 import 'package:bi_replicate/constants/api_constants.dart';
+import 'package:bi_replicate/model/chart/chart_data_model.dart';
+import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
+import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_view_model.dart';
 import 'package:bi_replicate/model/sales_view_model.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 
@@ -12,6 +15,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
 
@@ -27,10 +31,20 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double width = 0;
   double height = 0;
   DateTime now = DateTime.now();
+  DateTime yesterday = DateTime.now().subtract(const Duration(days: 1));
   int colorIndex = 0;
   String formattedFromDate = "";
   String formattedToDate = "";
+  String salesCostFormattedFromDate = "";
+  String salesCostFormattedToDate = "";
   SearchCriteria cashierLogsSearchCriteria = SearchCriteria(
+      branch: "all",
+      shiftStatus: "all",
+      cashier: "",
+      transType: "",
+      fromDate: "",
+      toDate: "");
+  SearchCriteria salesCostSearchCriteria = SearchCriteria(
       branch: "all",
       shiftStatus: "all",
       cashier: "",
@@ -39,9 +53,16 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
       toDate: "");
   late AppLocalizations _locale;
   final ScrollController _scrollController = ScrollController();
-
+  List<ChartData> data = [];
+  late TooltipBehavior _tooltip;
   List<BranchSalesViewModel> totalCashierLogsList = [];
   double totalCashierLogs = 0.0;
+  List<SalesCostBasedStockCategoryViewModel> salesCostBasedStkCatList = [];
+  double salesCostBasedStkCatCount = 0.0;
+  final ScrollController _scrollController1 = ScrollController();
+  double minValue = 0;
+  double maxValue = 0;
+  double interval = 0;
 
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
@@ -54,7 +75,37 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         totalCashierLogs +=
             double.parse(totalCashierLogsList[i].displayLogsCount);
       }
+
       print("totalCashierLogsList: ${totalCashierLogsList.length}");
+      setState(() {});
+    });
+  }
+
+  fetchSalesCostBasedStockCat() async {
+    salesCostBasedStkCatList.clear();
+    salesCostBasedStkCatCount = 0.0;
+    await TotalSalesController()
+        .getSalesCostBasedStockCat(salesCostSearchCriteria)
+        .then((value) {
+      for (var i = 0; i < value.length; i++) {
+        salesCostBasedStkCatList
+            .add(SalesCostBasedStockCategoryViewModel.fromDBModel(value[i]));
+        salesCostBasedStkCatCount +=
+            double.parse(salesCostBasedStkCatList[i].total);
+        data.add(ChartData(
+            salesCostBasedStkCatList[i].stkGroupName,
+            salesCostBasedStkCatList[i].percentageName,
+            double.parse(salesCostBasedStkCatList[i].total),
+            double.parse(salesCostBasedStkCatList[i].stockTransBalance)));
+      }
+      maxValue = data
+          .map((e) => e.y1)
+          .reduce((value, element) => value > element ? value : element);
+      minValue = data
+          .map((e) => e.y1)
+          .reduce((value, element) => value < element ? value : element);
+      interval = ((maxValue - minValue) / 10);
+      print("salesCostBasedStkCatList: ${salesCostBasedStkCatList.length}");
       setState(() {});
     });
   }
@@ -68,9 +119,14 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   @override
   void initState() {
     print("asdasdasdasda");
+
+    _tooltip = TooltipBehavior(enable: true);
     formattedFromDate =
         DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+    salesCostFormattedFromDate = DateFormat('dd/MM/yyyy').format(yesterday);
+    salesCostFormattedToDate = DateFormat('dd/MM/yyyy').format(now);
+
     cashierLogsSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
@@ -78,13 +134,22 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
+    salesCostSearchCriteria = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: "5/11/2024"
+        //  salesCostFormattedFromDate
+        ,
+        toDate: salesCostFormattedToDate);
     fetchData();
     super.initState();
   }
 
   fetchData() async {
     await fetchSalesByCashierLogs();
-
+    await fetchSalesCostBasedStockCat();
     setState(() {});
   }
 
@@ -129,6 +194,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                     children: [
                       dailySalesChart(
                           totalCashierLogsList, _locale.cashierLogs),
+                      salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
             ],
@@ -153,6 +219,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                     children: [
                       dailySalesChart(
                           totalCashierLogsList, _locale.cashierLogs),
+                      salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
             ],
@@ -335,6 +402,181 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget salesCostChart(List<ChartData> data, String title) {
+    return SizedBox(
+      height: height * 0.465,
+      child: Card(
+        elevation: 2, // Remove shadow effect
+        color: Colors.white, // Set background to transparent
+        shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.zero, // Remove corner radius for a flat edge
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(title,
+                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
+                        if (Responsive.isDesktop(context))
+                          title == _locale.salesCostBasedStockCat
+                              ? Text(
+                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(salesCostBasedStkCatCount)))})")
+                              : SizedBox.shrink()
+                      ],
+                    ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.cashierLogs)
+                    Text(
+                        "(${cashierLogsSearchCriteria.fromDate} - ${cashierLogsSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.salesCostBasedStockCat)
+                    Text(
+                        "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                blueButton1(
+                  onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return FilterDialog(
+                              cashiers: cashiers,
+                              branches: value,
+                              filter: title == _locale.cashierLogs
+                                  ? cashierLogsSearchCriteria
+                                  : cashierLogsSearchCriteria,
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          if (title == _locale.cashierLogs) {
+                            cashierLogsSearchCriteria = value;
+                            fetchSalesByCashierLogs();
+                          }
+                        }
+                      });
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
+            ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesCostBasedStockCat)
+                title == _locale.salesCostBasedStockCat
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(salesCostBasedStkCatCount)))})"),
+                        ],
+                      )
+                    : SizedBox.shrink(),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.salesCostBasedStockCat)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (data.isNotEmpty)
+              Scrollbar(
+                controller: _scrollController1,
+                thumbVisibility: true,
+                thickness: 8,
+                trackVisibility: true,
+                radius: const Radius.circular(4),
+                child: SingleChildScrollView(
+                  reverse: _locale.localeName == "ar" ? true : false,
+                  controller: _scrollController1,
+                  scrollDirection: Axis.horizontal,
+                  child: SizedBox(
+                    height: height * 0.35,
+                    width: Responsive.isDesktop(context)
+                        ? data.length > 20
+                            ? width * (data.length / 10)
+                            : width * 0.65
+                        : data.length > 10
+                            ? width * (data.length / 5)
+                            : width * 0.65,
+                    child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        primaryYAxis: NumericAxis(
+                            minimum: minValue,
+                            maximum: maxValue,
+                            interval: interval),
+                        tooltipBehavior: _tooltip,
+                        series: <CartesianSeries<ChartData, String>>[
+                          ColumnSeries<ChartData, String>(
+                              dataSource: data,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y,
+                              // name: data.first.x,
+                              color: Color.fromRGBO(184, 2, 2, 1)),
+                          ColumnSeries<ChartData, String>(
+                              dataSource: data,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y1,
+                              // name: data.first.x,
+                              color: Color.fromRGBO(1, 102, 184, 1)),
+                          LineSeries<ChartData, String>(
+                              dataSource: data,
+                              dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y1,
+                              enableTooltip: true,
+                              dataLabelMapper: (datum, index) {
+                                return datum.perc;
+                              },
+                              color: Color.fromRGBO(26, 138, 6, 1))
+                        ]),
+                  ),
+                ),
+              )
           ],
         ),
       ),
