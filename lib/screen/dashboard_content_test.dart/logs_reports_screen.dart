@@ -553,7 +553,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             : width * 0.65
                         : data.length > 10
                             ? width * (data.length / 5)
-                            : width * 0.65,
+                            : width * 0.95,
                     child: SfCartesianChart(
                         primaryXAxis: CategoryAxis(),
                         primaryYAxis: NumericAxis(
@@ -561,6 +561,13 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             maximum: maxValue,
                             title: AxisTitle(text: _locale.totalCost),
                             interval: interval),
+                        legend: Legend(
+                          isVisible: true,
+                          position: LegendPosition
+                              .bottom, // Position the legend below the chart
+                          overflowMode:
+                              LegendItemOverflowMode.wrap, // Handle overflow
+                        ),
                         axes: <ChartAxis>[
                           CategoryAxis(
                             name: 'secondaryXAxis',
