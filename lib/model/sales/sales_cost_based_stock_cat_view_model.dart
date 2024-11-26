@@ -23,7 +23,7 @@ class SalesCostBasedStockCategoryViewModel {
       stockTransBalance: dbModel.stockTransBalance.toStringAsFixed(2),
       stockBalance: dbModel.stockBalance.toStringAsFixed(2),
       total: dbModel.total.toStringAsFixed(2),
-      percentage: "${dbModel.percentage.toStringAsFixed(2)}%",
+      percentage: dbModel.percentage.toStringAsFixed(2),
       stkGroupName: dbModel.stkGroupName,
       percentageName: dbModel.percentageName,
     );

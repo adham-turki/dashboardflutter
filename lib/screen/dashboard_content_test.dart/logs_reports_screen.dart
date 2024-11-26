@@ -63,6 +63,9 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double minValue = 0;
   double maxValue = 0;
   double interval = 0;
+  double secondaryMinValue = 0;
+  double secondaryMaxValue = 0;
+  double secondaryInterval = 0;
 
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
@@ -96,6 +99,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         data.add(ChartData(
             salesCostBasedStkCatList[i].stkGroupName,
             salesCostBasedStkCatList[i].percentageName,
+            double.parse(salesCostBasedStkCatList[i].percentage),
             double.parse(salesCostBasedStkCatList[i].total),
             double.parse(salesCostBasedStkCatList[i].stockTransBalance)));
       }
@@ -107,6 +111,16 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
             .map((e) => e.y1)
             .reduce((value, element) => value < element ? value : element);
         interval = ((maxValue - minValue) / 10);
+        secondaryMaxValue = data
+            .map((e) => e.percD)
+            .reduce((value, element) => value > element ? value : element);
+        secondaryMinValue = data
+            .map((e) => e.percD)
+            .reduce((value, element) => value < element ? value : element);
+        secondaryInterval = ((secondaryMaxValue - secondaryMinValue) / 10);
+        print("secondaryMaxValue: ${secondaryMaxValue}");
+        print("secondaryMinValue: ${secondaryMinValue}");
+        print("secondaryInterval: ${secondaryInterval}");
       }
 
       print("salesCostBasedStkCatList: ${salesCostBasedStkCatList.length}");
@@ -546,6 +560,19 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             minimum: minValue,
                             maximum: maxValue,
                             interval: interval),
+                        axes: <ChartAxis>[
+                          CategoryAxis(
+                            name: 'secondaryXAxis',
+                            opposedPosition: true,
+                          ),
+                          NumericAxis(
+                            name: 'secondaryYAxis',
+                            opposedPosition: true,
+                            minimum: secondaryMinValue,
+                            maximum: secondaryMaxValue,
+                            interval: secondaryInterval,
+                          ),
+                        ],
                         tooltipBehavior: _tooltip,
                         series: <CartesianSeries<ChartData, String>>[
                           ColumnSeries<ChartData, String>(
@@ -553,13 +580,13 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                               xValueMapper: (ChartData data, _) => data.x,
                               yValueMapper: (ChartData data, _) => data.y,
                               // name: data.first.x,
-                              color: Color.fromRGBO(184, 2, 2, 1)),
+                              color: const Color.fromRGBO(184, 2, 2, 1)),
                           ColumnSeries<ChartData, String>(
                               dataSource: data,
                               xValueMapper: (ChartData data, _) => data.x,
                               yValueMapper: (ChartData data, _) => data.y1,
                               // name: data.first.x,
-                              color: Color.fromRGBO(1, 102, 184, 1)),
+                              color: const Color.fromRGBO(1, 102, 184, 1)),
                           LineSeries<ChartData, String>(
                               dataSource: data,
                               dataLabelSettings: const DataLabelSettings(
@@ -568,13 +595,15 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600),
                               ),
-                              xValueMapper: (ChartData data, _) => data.x,
-                              yValueMapper: (ChartData data, _) => data.y1,
+                              xValueMapper: (ChartData data, _) => data.perc,
+                              yValueMapper: (ChartData data, _) => data.percD,
                               enableTooltip: true,
+                              xAxisName: 'secondaryXAxis',
+                              yAxisName: 'secondaryYAxis',
                               dataLabelMapper: (datum, index) {
                                 return datum.perc;
                               },
-                              color: Color.fromRGBO(26, 138, 6, 1))
+                              color: const Color.fromRGBO(26, 138, 6, 1))
                         ]),
                   ),
                 ),
