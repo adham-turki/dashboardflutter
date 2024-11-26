@@ -263,5 +263,9 @@
     "selectTransType": "اختر نوع التجاوز",
     "selectCashier": "اختر كاشير",
     "logsReports": "تقارير التجاوزات",
-    "salesCostBasedStockCat": "مجمل الأرباح حسب مجموعات البضاعة"
+    "salesCostBasedStockCat": "مجمل الأرباح حسب مجموعات البضاعة",
+    "perc": "النسبة",
+    "profitPerc": "نسبة الربح",
+    "profit": "الربح",
+    "salesCost": "قيمة المبيعات"
 }

@@ -287,5 +287,9 @@
     "selectTransType": "Select Transaction Type",
     "selectCashier": "Select Cashier",
     "logsReports": "Logs Reports",
-    "salesCostBasedStockCat": "Sales Cost Based on Stock Category"
+    "salesCostBasedStockCat": "Sales Cost Based on Stock Category",
+    "perc": "Percentage",
+    "profitPerc": "Profit Percentage",
+    "profit": "Profit",
+    "salesCost": "Sales Cost"
 }

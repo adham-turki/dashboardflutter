@@ -559,6 +559,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         primaryYAxis: NumericAxis(
                             minimum: minValue,
                             maximum: maxValue,
+                            title: AxisTitle(text: _locale.totalCost),
                             interval: interval),
                         axes: <ChartAxis>[
                           CategoryAxis(
@@ -567,6 +568,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                           ),
                           NumericAxis(
                             name: 'secondaryYAxis',
+                            title: AxisTitle(text: _locale.profitPercent),
                             opposedPosition: true,
                             minimum: secondaryMinValue,
                             maximum: secondaryMaxValue,
@@ -579,13 +581,13 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                               dataSource: data,
                               xValueMapper: (ChartData data, _) => data.x,
                               yValueMapper: (ChartData data, _) => data.y,
-                              // name: data.first.x,
+                              name: _locale.profit,
                               color: const Color.fromRGBO(184, 2, 2, 1)),
                           ColumnSeries<ChartData, String>(
                               dataSource: data,
                               xValueMapper: (ChartData data, _) => data.x,
                               yValueMapper: (ChartData data, _) => data.y1,
-                              // name: data.first.x,
+                              name: _locale.salesCost,
                               color: const Color.fromRGBO(1, 102, 184, 1)),
                           LineSeries<ChartData, String>(
                               dataSource: data,
@@ -598,6 +600,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                               xValueMapper: (ChartData data, _) => data.perc,
                               yValueMapper: (ChartData data, _) => data.percD,
                               enableTooltip: true,
+                              name: _locale.profitPercent,
                               xAxisName: 'secondaryXAxis',
                               yAxisName: 'secondaryYAxis',
                               dataLabelMapper: (datum, index) {
