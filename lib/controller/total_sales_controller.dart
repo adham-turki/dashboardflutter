@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bi_replicate/constants/api_constants.dart';
 import 'package:bi_replicate/model/api_model.dart';
+import 'package:bi_replicate/model/api_url.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/search_crit.dart';
@@ -18,14 +19,14 @@ class TotalSalesController {
     var api = cashierLogs;
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.parse("${ApiModel.url}/${api}")}");
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -46,14 +47,14 @@ class TotalSalesController {
     var api = totalSalesByCashier;
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      //print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -75,14 +76,14 @@ class TotalSalesController {
 
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      //print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -104,14 +105,14 @@ class TotalSalesController {
 
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      //print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -133,14 +134,14 @@ class TotalSalesController {
 
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      //print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -162,14 +163,14 @@ class TotalSalesController {
 
     try {
       var response = await http.post(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      print("API Request: ${Uri.parse("${ApiModel.url}/${api}")}");
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
 
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
@@ -190,13 +191,13 @@ class TotalSalesController {
     var api = getBranches;
     try {
       var response = await http.get(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
         },
       );
-      //print("API Request: ${Uri.http(ApiModel.url, api)}");
+      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Response: ${response.statusCode}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -217,7 +218,7 @@ class TotalSalesController {
     var api = getCashiers;
     try {
       var response = await http.get(
-        Uri.parse("${ApiModel.url}/${api}"),
+        Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
