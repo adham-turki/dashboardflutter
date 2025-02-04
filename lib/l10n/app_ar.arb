@@ -267,5 +267,8 @@
     "perc": "النسبة",
     "profitPerc": "نسبة الربح",
     "profit": "مجمل الربح",
-    "salesCost": "قيمة المبيعات"
+    "salesCost": "قيمة المبيعات",
+    "diffCashByShifts": "مجموع فروقات اغلاق الكاش حسب الكاشير",
+    "numOfDiffTimes": "عدد مرات وجود الفروقات",
+    "valueOfTotalDiff": "قيمة مجموع الفروقات"
 }

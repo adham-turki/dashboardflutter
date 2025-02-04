@@ -4,8 +4,11 @@ import 'package:bi_replicate/constants/api_constants.dart';
 import 'package:bi_replicate/model/api_model.dart';
 import 'package:bi_replicate/model/api_url.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
+import 'package:bi_replicate/model/diff_cash_shift_report_by_cashier_model.dart';
+import 'package:bi_replicate/model/diff_cash_shift_report_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/search_crit.dart';
+import 'package:bi_replicate/model/total_profit_report_model.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -238,6 +241,161 @@ class TotalSalesController {
     } catch (e) {
       print("e: $e");
       return cashiersList;
+    }
+  }
+
+  Future<List<DiffCashShiftReportByCashierModel>>
+      getDiffCashShiftReportByCashierReportList(
+          SearchCriteria searchCriteria) async {
+    List<DiffCashShiftReportByCashierModel> list = [];
+    var api = diffCashShiftReportByCashier;
+
+    try {
+      var response = await http.post(
+        Uri.parse("${ApiURL.urlServer}/${api}"),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        },
+        body: json.encode(searchCriteria.toJson()),
+      );
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
+
+      print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+      print("response.statusCode: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          list.add(DiffCashShiftReportByCashierModel.fromJson(data));
+        }
+        print("list.length: ${list.length}");
+      }
+      return list;
+    } catch (e) {
+      print("asasdasdas: $e");
+      return list;
+    }
+  }
+
+  Future<List<DiffCashShiftReportModel>> getDiffCashShiftReportList(
+      SearchCriteria searchCriteria) async {
+    List<DiffCashShiftReportModel> list = [];
+    var api = getDiffCashShiftReport;
+
+    try {
+      var response = await http.post(
+        Uri.parse("${ApiURL.urlServer}/${api}"),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        },
+        body: json.encode(searchCriteria.toJson()),
+      );
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
+
+      print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+      print("response.statusCode: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          list.add(DiffCashShiftReportModel.fromJson(data));
+        }
+        print("list.length: ${list.length}");
+      }
+      return list;
+    } catch (e) {
+      print("asasdasdas: $e");
+      return list;
+    }
+  }
+
+  // Future<List<TotalProfitReportModel>> getTotalProfitsReportList(
+  //     SearchCriteria searchCriteria) async {
+  //   List<TotalProfitReportModel> list = [];
+  //   var api = totalProfits;
+
+  //   try {
+  //     var response = await http.post(
+  //       Uri.parse("${ApiURL.urlServer}/${api}"),
+  //       headers: {
+  //         "Accept": "application/json",
+  //         "content-type": "application/json",
+  //       },
+  //       body: json.encode(searchCriteria.toJson()),
+  //     );
+  //     print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
+
+  //     print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+  //     if (response.statusCode == 200) {
+  //       var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+  //       for (var data in jsonData) {
+  //         list.add(TotalProfitReportModel.fromJson(data));
+  //       }
+  //     }
+  //     return list;
+  //   } catch (e) {
+  //     print("asasdasdas: $e");
+  //     return list;
+  //   }
+  // }
+
+  Future<List<TotalProfitReportModel>> getTotalProfitsByBranchReportList(
+      SearchCriteria searchCriteria) async {
+    List<TotalProfitReportModel> list = [];
+    var api = totalProfitsByBranch;
+
+    try {
+      var response = await http.post(
+        Uri.parse("${ApiURL.urlServer}/${api}"),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        },
+        body: json.encode(searchCriteria.toJson()),
+      );
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
+
+      print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          list.add(TotalProfitReportModel.fromJson(data));
+        }
+      }
+      return list;
+    } catch (e) {
+      print("asasdasdas: $e");
+      return list;
+    }
+  }
+
+  Future<List<TotalProfitReportModel>> getTotalProfitsByCategoryReportList(
+      SearchCriteria searchCriteria) async {
+    List<TotalProfitReportModel> list = [];
+    var api = totalProfitsByCategory;
+
+    try {
+      var response = await http.post(
+        Uri.parse("${ApiURL.urlServer}/${api}"),
+        headers: {
+          "Accept": "application/json",
+          "content-type": "application/json",
+        },
+        body: json.encode(searchCriteria.toJson()),
+      );
+      print("API Request: ${Uri.parse("${ApiURL.urlServer}/${api}")}");
+
+      print("API Request Body: ${json.encode(searchCriteria.toJson())}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          list.add(TotalProfitReportModel.fromJson(data));
+        }
+      }
+      return list;
+    } catch (e) {
+      print("asasdasdas: $e");
+      return list;
     }
   }
 }

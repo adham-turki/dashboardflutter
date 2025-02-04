@@ -291,5 +291,8 @@
     "perc": "Percentage",
     "profitPerc": "Profit Percentage",
     "profit": "Profit",
-    "salesCost": "Sales Cost"
+    "salesCost": "Sales Cost",
+    "diffCashByShifts": "Total Cash Closing Differences By Cashier",
+    "numOfDiffTimes": "Number of differences times",
+    "valueOfTotalDiff": "Value of Total differences"
 }

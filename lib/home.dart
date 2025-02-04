@@ -19,6 +19,7 @@ import 'package:bi_replicate/screen/content/settings/users_content/users_content
 import 'package:bi_replicate/screen/content/settings/users_permit/user_permissions_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/dashboard_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/logs_reports_screen.dart';
+import 'package:bi_replicate/screen/dashboard_content_test.dart/reports_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/sales_reports_screen.dart';
 import 'package:bi_replicate/screen/journal_reports_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
@@ -180,6 +181,8 @@ class _HomePageState extends State<HomePage> {
         return const SalesReportsScreen();
       case 21:
         return const LogsReportsScreen();
+      case 22:
+        return const ReportsScreen();
       default:
         return Container();
     }
@@ -232,6 +235,8 @@ class _HomePageState extends State<HomePage> {
         return locale.salesReports;
       case 21:
         return locale.logsReports;
+      case 22:
+        return locale.reports;
       default:
         return "";
     }
