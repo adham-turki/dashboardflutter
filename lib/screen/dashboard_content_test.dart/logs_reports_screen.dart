@@ -3,6 +3,7 @@ import 'package:bi_replicate/model/chart/chart_data_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_view_model.dart';
 import 'package:bi_replicate/model/sales_view_model.dart';
+import 'package:bi_replicate/model/total_profit_report_model.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -59,6 +60,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double totalCashierLogs = 0.0;
   List<SalesCostBasedStockCategoryViewModel> salesCostBasedStkCatList = [];
   double salesCostBasedStkCatCount = 0.0;
+  List<TotalProfitReportModel> totalProfitsByCategoryList = [];
+  double totalProfitsByCategoryCount = 0.0;
   final ScrollController _scrollController1 = ScrollController();
   double minValue = 0;
   double maxValue = 0;
@@ -85,43 +88,42 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   }
 
   fetchSalesCostBasedStockCat() async {
-    salesCostBasedStkCatList.clear();
-    salesCostBasedStkCatCount = 0.0;
+    totalProfitsByCategoryList.clear();
+    totalProfitsByCategoryCount = 0.0;
     data.clear();
     await TotalSalesController()
-        .getSalesCostBasedStockCat(salesCostSearchCriteria)
+        .getTotalProfitsByCategoryReportList(salesCostSearchCriteria)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
-        salesCostBasedStkCatList
-            .add(SalesCostBasedStockCategoryViewModel.fromDBModel(value[i]));
-        salesCostBasedStkCatCount +=
-            double.parse(salesCostBasedStkCatList[i].total);
+        totalProfitsByCategoryList.add(value[i]);
+        totalProfitsByCategoryCount +=
+            (totalProfitsByCategoryList[i].totalProfit);
         data.add(ChartData(
-            salesCostBasedStkCatList[i].stkGroupName,
-            salesCostBasedStkCatList[i].percentageName,
-            double.parse(salesCostBasedStkCatList[i].percentage),
-            double.parse(salesCostBasedStkCatList[i].total),
-            double.parse(salesCostBasedStkCatList[i].stockTransBalance)));
+            totalProfitsByCategoryList[i].name,
+            "${totalProfitsByCategoryList[i].percentage}",
+            (totalProfitsByCategoryList[i].percentage),
+            (totalProfitsByCategoryList[i].totalProfit),
+            (totalProfitsByCategoryList[i].totalSales)));
       }
-      if (data.isNotEmpty) {
-        maxValue = data
-            .map((e) => e.y1)
-            .reduce((value, element) => value > element ? value : element);
-        minValue = data
-            .map((e) => e.y1)
-            .reduce((value, element) => value < element ? value : element);
-        interval = ((maxValue - minValue) / 10);
-        secondaryMaxValue = data
-            .map((e) => e.percD)
-            .reduce((value, element) => value > element ? value : element);
-        secondaryMinValue = data
-            .map((e) => e.percD)
-            .reduce((value, element) => value < element ? value : element);
-        secondaryInterval = ((secondaryMaxValue - secondaryMinValue) / 10);
-        print("secondaryMaxValue: ${secondaryMaxValue}");
-        print("secondaryMinValue: ${secondaryMinValue}");
-        print("secondaryInterval: ${secondaryInterval}");
-      }
+      // if (data.isNotEmpty) {
+      //   maxValue = data
+      //       .map((e) => e.y1)
+      //       .reduce((value, element) => value > element ? value : element);
+      //   minValue = data
+      //       .map((e) => e.y1)
+      //       .reduce((value, element) => value < element ? value : element);
+      //   interval = ((maxValue - minValue) / 10);
+      //   secondaryMaxValue = data
+      //       .map((e) => e.percD)
+      //       .reduce((value, element) => value > element ? value : element);
+      //   secondaryMinValue = data
+      //       .map((e) => e.percD)
+      //       .reduce((value, element) => value < element ? value : element);
+      //   secondaryInterval = ((secondaryMaxValue - secondaryMinValue) / 10);
+      //   print("secondaryMaxValue: ${secondaryMaxValue}");
+      //   print("secondaryMinValue: ${secondaryMinValue}");
+      //   print("secondaryInterval: ${secondaryInterval}");
+      // }
 
       print("salesCostBasedStkCatList: ${salesCostBasedStkCatList.length}");
       setState(() {});
@@ -449,7 +451,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedStockCat
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(salesCostBasedStkCatCount)))})")
+                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -520,7 +522,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(salesCostBasedStkCatCount)))})"),
+                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -557,10 +559,11 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                     child: SfCartesianChart(
                         primaryXAxis: CategoryAxis(),
                         primaryYAxis: NumericAxis(
-                            minimum: minValue,
-                            maximum: maxValue,
-                            title: AxisTitle(text: _locale.totalCost),
-                            interval: interval),
+                          // minimum: minValue,
+                          // maximum: maxValue,
+                          title: AxisTitle(text: _locale.totalCost),
+                          // interval: interval
+                        ),
                         legend: Legend(
                           isVisible: true,
                           position: LegendPosition
@@ -577,9 +580,9 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             name: 'secondaryYAxis',
                             title: AxisTitle(text: _locale.profitPercent),
                             opposedPosition: true,
-                            minimum: secondaryMinValue,
-                            maximum: secondaryMaxValue,
-                            interval: secondaryInterval,
+                            // minimum: secondaryMinValue,
+                            // maximum: secondaryMaxValue,
+                            // interval: secondaryInterval,
                           ),
                         ],
                         tooltipBehavior: _tooltip,

@@ -30,7 +30,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   int colorIndex = 0;
   String formattedFromDate = "";
   String formattedToDate = "";
-  SearchCriteria diffCashShiftReportCrit = SearchCriteria(
+  SearchCriteria diffClosedCashShiftReportCrit = SearchCriteria(
       branch: "all",
       shiftStatus: "all",
       cashier: "",
@@ -45,12 +45,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
       fromDate: "",
       toDate: "");
   List<ChartData> data = [];
+  List<ChartData> data1 = [];
   late TooltipBehavior _tooltip;
-  List<DiffCashShiftReportModel> diffCashShiftReportList = [];
-  double totalDiffCashShiftReport = 0.0;
+  late TooltipBehavior _tooltip1;
+  List<DiffCashShiftReportModel> diffClosedCashShiftReportList = [];
+  double totalDiffClosedCashShiftReport = 0.0;
   List<DiffCashShiftReportByCashierModel> diffCashShiftByCashierReportList = [];
   double totalDiffCashShiftByCashierReport = 0.0;
   final ScrollController _scrollController1 = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
   double minValue = 0;
   double maxValue = 0;
   double interval = 0;
@@ -66,27 +69,24 @@ class _ReportsScreenState extends State<ReportsScreen> {
     print("asdasdasdasda");
 
     _tooltip = TooltipBehavior(enable: true);
+    _tooltip1 = TooltipBehavior(enable: true);
     formattedFromDate =
         DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
 
-    diffCashShiftReportCrit = SearchCriteria(
+    diffClosedCashShiftReportCrit = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
         transType: "all",
         cashier: "all",
-        fromDate: "01/01/2017"
-        // formattedFromDate
-        ,
+        fromDate: formattedFromDate,
         toDate: formattedToDate);
     diffCashShiftByCashierReportCrit = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
         transType: "all",
         cashier: "all",
-        fromDate: "01/01/2017"
-        // formattedFromDate
-        ,
+        fromDate: formattedFromDate,
         toDate: formattedToDate);
     fetchData();
     super.initState();
@@ -119,8 +119,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   fetchData() async {
-    await fetchDiffCashShiftReportList();
-
+    await fetchDiffClosedCashShiftReportList();
+    await fetchDiffCashShiftByCashierReportList();
     setState(() {});
   }
 
@@ -137,7 +137,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      diffCashChart(data, _locale.diffCashByShifts),
+                      diffCashChart(data1, _locale.diffCashByShifts),
+                      diffClosedCashChart(data, _locale.diffClosedCashByShifts),
                       // salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
@@ -161,7 +162,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      diffCashChart(data, _locale.diffCashByShifts),
+                      diffCashChart(data1, _locale.diffCashByShifts),
+
+                      diffClosedCashChart(data, _locale.diffClosedCashByShifts),
                       // salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
@@ -173,28 +176,45 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   fetchDiffCashShiftByCashierReportList() async {
+    diffCashShiftByCashierReportList.clear();
+    totalDiffCashShiftByCashierReport = 0.0;
+    data1.clear();
     await TotalSalesController()
         .getDiffCashShiftReportByCashierReportList(
             diffCashShiftByCashierReportCrit)
         .then((value) {
-      for (var i = 0; i < value.length; i++) {}
+      for (var i = 0; i < value.length; i++) {
+        diffCashShiftByCashierReportList.add(value[i]);
+
+        totalDiffCashShiftByCashierReport += value[i].diffAmount;
+        data1.add(ChartData(
+            diffCashShiftByCashierReportList[i].user,
+            "${diffCashShiftByCashierReportList[i].shift}",
+            0.0,
+            (diffCashShiftByCashierReportList[i].diffAmount),
+            0.0));
+      }
+      print(
+          "diffCashShiftByCashierReportList: ${diffCashShiftByCashierReportList.length}");
+      setState(() {});
     });
   }
 
-  fetchDiffCashShiftReportList() async {
-    diffCashShiftReportList.clear();
-    totalDiffCashShiftReport = 0.0;
+  fetchDiffClosedCashShiftReportList() async {
+    diffClosedCashShiftReportList.clear();
+    totalDiffClosedCashShiftReport = 0.0;
+    data.clear();
     await TotalSalesController()
-        .getDiffCashShiftReportList(diffCashShiftReportCrit)
+        .getDiffCashShiftReportList(diffClosedCashShiftReportCrit)
         .then((value) {
       for (var i = 0; i < value.length; i++) {
-        diffCashShiftReportList.add(value[i]);
-        totalDiffCashShiftReport += value[i].diffSum;
+        diffClosedCashShiftReportList.add(value[i]);
+        totalDiffClosedCashShiftReport += value[i].diffSum;
         data.add(ChartData(
-            diffCashShiftReportList[i].branch,
-            diffCashShiftReportList[i].user,
-            (diffCashShiftReportList[i].diffCount).toDouble(),
-            (diffCashShiftReportList[i].diffSum),
+            diffClosedCashShiftReportList[i].branchName,
+            diffClosedCashShiftReportList[i].user,
+            (diffClosedCashShiftReportList[i].diffCount).toDouble(),
+            (diffClosedCashShiftReportList[i].diffSum),
             0.0));
       }
       // if (data.isNotEmpty) {
@@ -210,12 +230,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
       //   print("minValue: ${minValue}");
       //   print("interval: ${interval}");
       // }
-      print("diffCashShiftReportList: ${diffCashShiftReportList.length}");
+      print("diffCashShiftReportList: ${diffClosedCashShiftReportList.length}");
       setState(() {});
     });
   }
 
-  Widget diffCashChart(List<ChartData> data, String title) {
+  Widget diffClosedCashChart(List<ChartData> data, String title) {
     return SizedBox(
       height: height * 0.465,
       child: Card(
@@ -238,9 +258,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         SelectableText(title,
                             style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         if (Responsive.isDesktop(context))
-                          title == _locale.diffCashByShifts
+                          title == _locale.diffClosedCashByShifts
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftReport)))})")
+                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -257,9 +277,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
                 if (Responsive.isDesktop(context))
-                  if (title == _locale.diffCashByShifts)
+                  if (title == _locale.diffClosedCashByShifts)
                     Text(
-                        "(${diffCashShiftReportCrit.fromDate} - ${diffCashShiftReportCrit.toDate})",
+                        "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
                         style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
@@ -271,13 +291,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           return FilterDialog(
                               cashiers: [],
                               branches: value,
-                              filter: diffCashShiftReportCrit,
+                              filter: diffClosedCashShiftReportCrit,
                               hint: title);
                         },
                       ).then((value) {
                         if (value != false) {
-                          diffCashShiftReportCrit = value;
-                          fetchDiffCashShiftReportList();
+                          diffClosedCashShiftReportCrit = value;
+                          fetchDiffClosedCashShiftReportList();
                         }
                       });
                     });
@@ -292,23 +312,23 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ],
             ),
             if (!Responsive.isDesktop(context))
-              if (title == _locale.diffCashByShifts)
-                title == _locale.diffCashByShifts
+              if (title == _locale.diffClosedCashByShifts)
+                title == _locale.diffClosedCashByShifts
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftReport)))})"),
+                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
             if (!Responsive.isDesktop(context))
-              if (title == _locale.diffCashByShifts)
+              if (title == _locale.diffClosedCashByShifts)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                        "(${diffCashShiftReportCrit.fromDate} - ${diffCashShiftReportCrit.toDate})",
+                        "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
@@ -402,6 +422,204 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 return datum.percD.toString();
                               },
                               color: Color.fromARGB(255, 255, 0, 0)),
+                        ]),
+                  ),
+                ),
+              )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget diffCashChart(List<ChartData> data, String title) {
+    return SizedBox(
+      height: height * 0.465,
+      child: Card(
+        elevation: 2, // Remove shadow effect
+        color: Colors.white, // Set background to transparent
+        shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.zero, // Remove corner radius for a flat edge
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(title,
+                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
+                        if (Responsive.isDesktop(context))
+                          title == _locale.diffCashByShifts
+                              ? Text(
+                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})")
+                              : SizedBox.shrink()
+                      ],
+                    ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                if (Responsive.isDesktop(context))
+                  if (title == _locale.diffCashByShifts)
+                    Text(
+                        "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
+                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                blueButton1(
+                  onPressed: () async {
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return FilterDialog(
+                              cashiers: [],
+                              branches: value,
+                              filter: diffCashShiftByCashierReportCrit,
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          diffCashShiftByCashierReportCrit = value;
+                          fetchDiffCashShiftByCashierReportList();
+                        }
+                      });
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
+            ),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.diffCashByShifts)
+                title == _locale.diffCashByShifts
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})"),
+                        ],
+                      )
+                    : SizedBox.shrink(),
+            if (!Responsive.isDesktop(context))
+              if (title == _locale.diffCashByShifts)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
+                        style: TextStyle(fontSize: height * 0.013)),
+                  ],
+                ),
+            if (data.isNotEmpty)
+              Scrollbar(
+                controller: _scrollController2,
+                thumbVisibility: true,
+                thickness: 8,
+                trackVisibility: true,
+                radius: const Radius.circular(4),
+                child: SingleChildScrollView(
+                  reverse: _locale.localeName == "ar" ? true : false,
+                  controller: _scrollController2,
+                  scrollDirection: Axis.horizontal,
+                  child: SizedBox(
+                    height: height * 0.35,
+                    width: Responsive.isDesktop(context)
+                        ? data.length > 20
+                            ? width * (data.length / 10)
+                            : width * 0.65
+                        : data.length > 10
+                            ? width * (data.length / 5)
+                            : width * 0.95,
+                    child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        // primaryYAxis: NumericAxis(
+                        //     minimum: minValue,
+                        //     maximum: maxValue,
+                        //     title: AxisTitle(text: _locale.totalCost),
+                        //     interval: interval),
+                        legend: Legend(
+                          isVisible: true,
+                          position: LegendPosition
+                              .bottom, // Position the legend below the chart
+                          overflowMode:
+                              LegendItemOverflowMode.wrap, // Handle overflow
+                        ),
+                        axes: <ChartAxis>[
+                          CategoryAxis(
+                              // name: 'secondaryXAxis',
+                              // opposedPosition: true,
+                              ),
+                        ],
+                        tooltipBehavior: _tooltip1,
+                        series: <CartesianSeries<ChartData, String>>[
+                          // ColumnSeries<ChartData, String>(
+                          //     dataSource: data,
+                          //     xValueMapper: (ChartData data, _) => data.x,
+                          //     yValueMapper: (ChartData data, _) => data.y,
+                          //     name: _locale.profit,
+                          //     color: const Color.fromRGBO(184, 2, 2, 1)),
+                          // ColumnSeries<ChartData, String>(
+                          //     dataSource: data,
+                          //     xValueMapper: (ChartData data, _) => data.x,
+                          //     yValueMapper: (ChartData data, _) => data.y1,
+                          //     name: _locale.salesCost,
+                          //     color: const Color.fromRGBO(1, 102, 184, 1)),
+                          LineSeries<ChartData, String>(
+                              dataSource: data,
+                              dataLabelSettings: const DataLabelSettings(
+                                isVisible: true,
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              xValueMapper: (ChartData data, _) =>
+                                  "${data.x}\n${data.perc}",
+                              yValueMapper: (ChartData data, _) => data.y,
+                              enableTooltip: true,
+                              name: _locale.differenceValue,
+                              // xAxisName: 'secondaryXAxis',
+                              // yAxisName: 'secondaryYAxis',
+                              dataLabelMapper: (datum, index) {
+                                return "${datum.y.toString()}\n${datum.x.toString()}";
+                              },
+                              color: Colors.blue),
+                          // LineSeries<ChartData, String>(
+                          //     dataSource: data,
+                          //     dataLabelSettings: const DataLabelSettings(
+                          //       isVisible: true,
+                          //       textStyle: TextStyle(
+                          //           color: Colors.black,
+                          //           fontWeight: FontWeight.w600),
+                          //     ),
+                          //     xValueMapper: (ChartData data, _) => data.perc,
+                          //     yValueMapper: (ChartData data, _) => data.percD,
+                          //     enableTooltip: true,
+                          //     name: _locale.numOfDiffTimes,
+                          //     // xAxisName: 'secondaryXAxis',
+                          //     // yAxisName: 'secondaryYAxis',
+                          //     dataLabelMapper: (datum, index) {
+                          //       return datum.percD.toString();
+                          //     },
+                          //     color: Color.fromARGB(255, 255, 0, 0)),
                         ]),
                   ),
                 ),
