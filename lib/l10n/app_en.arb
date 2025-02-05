@@ -288,6 +288,7 @@
     "selectCashier": "Select Cashier",
     "logsReports": "Logs Reports",
     "salesCostBasedStockCat": "Sales Cost Based on Stock Category",
+    "salesCostBasedBranch": "Sales Cost Based on Branch",
     "perc": "Percentage",
     "profitPerc": "Profit Percentage",
     "profit": "Profit",
@@ -296,5 +297,7 @@
     "diffCashByShifts": "Shift Differences By Cashier",
     "numOfDiffTimes": "Number of differences times",
     "valueOfTotalDiff": "Value of Total differences",
-    "differenceValue": "Difference Value"
+    "differenceValue": "Difference Value",
+    "differencesReports": "Differences Reports",
+    "profitReports": "Profit Reports"
 }

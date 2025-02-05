@@ -21,7 +21,8 @@ List<MenuModel> getMenu(AppLocalizations locale) {
           pageNumber: 20,
         ),
         SubMenuModel(title: locale.logsReports, pageNumber: 21),
-        SubMenuModel(title: locale.reports, pageNumber: 22)
+        SubMenuModel(title: locale.differencesReports, pageNumber: 22),
+        SubMenuModel(title: locale.profitReports, pageNumber: 23)
       ],
       pageNumber: -1,
     ),

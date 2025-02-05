@@ -13,7 +13,8 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [
         SideSubTabModel(text: locale.salesReports, value: 20),
         SideSubTabModel(text: locale.logsReports, value: 21),
-        SideSubTabModel(text: locale.reports, value: 22)
+        SideSubTabModel(text: locale.differencesReports, value: 22),
+        SideSubTabModel(text: locale.profitReports, value: 23)
       ],
       value: 0,
     ),

@@ -167,7 +167,8 @@ class _FilterDialogState extends State<FilterDialog> {
                         if (widget.hint != _locale.salesByHours &&
                             widget.hint != _locale.salesCostBasedStockCat &&
                             widget.hint != _locale.diffClosedCashByShifts &&
-                            widget.hint != _locale.diffCashByShifts)
+                            widget.hint != _locale.diffCashByShifts &&
+                            widget.hint != _locale.salesCostBasedBranch)
                           SizedBox(
                             width: Responsive.isDesktop(context)
                                 ? screenWidth * 0.16

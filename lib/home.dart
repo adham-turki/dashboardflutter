@@ -21,6 +21,7 @@ import 'package:bi_replicate/screen/dashboard_content_test.dart/dashboard_screen
 import 'package:bi_replicate/screen/dashboard_content_test.dart/logs_reports_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/reports_screen.dart';
 import 'package:bi_replicate/screen/dashboard_content_test.dart/sales_reports_screen.dart';
+import 'package:bi_replicate/screen/dashboard_content_test.dart/second_reports_screen.dart';
 import 'package:bi_replicate/screen/journal_reports_screen.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -183,6 +184,8 @@ class _HomePageState extends State<HomePage> {
         return const LogsReportsScreen();
       case 22:
         return const ReportsScreen();
+      case 23:
+        return const SecondReportsScreen();
       default:
         return Container();
     }
@@ -236,7 +239,9 @@ class _HomePageState extends State<HomePage> {
       case 21:
         return locale.logsReports;
       case 22:
-        return locale.reports;
+        return locale.differencesReports;
+      case 23:
+        return locale.profitReports;
       default:
         return "";
     }

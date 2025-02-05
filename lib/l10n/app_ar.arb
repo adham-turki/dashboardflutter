@@ -264,6 +264,7 @@
     "selectCashier": "اختر كاشير",
     "logsReports": "تقارير التجاوزات",
     "salesCostBasedStockCat": "مجمل الأرباح حسب مجموعات البضاعة",
+    "salesCostBasedBranch": "مجمل الأرباح حسب الفرع",
     "perc": "النسبة",
     "profitPerc": "نسبة الربح",
     "profit": "مجمل الربح",
@@ -272,5 +273,7 @@
     "diffCashByShifts": "فروقات الشفت حسب الكاشير",
     "numOfDiffTimes": "عدد مرات وجود الفروقات",
     "valueOfTotalDiff": "قيمة مجموع الفروقات",
-    "differenceValue": "قيمة الفرق"
+    "differenceValue": "قيمة الفرق",
+    "differencesReports": "تقارير الفروقات",
+    "profitReports": "تقارير الأرباح"
 }
