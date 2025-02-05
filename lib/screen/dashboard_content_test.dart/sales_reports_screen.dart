@@ -833,64 +833,70 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         : totalSales.length > 20
                             ? width * (totalSales.length / 10)
                             : width * 0.65,
-                    child: LineChart(
-                      LineChartData(
-                        lineTouchData: LineTouchData(
-                          touchTooltipData: LineTouchTooltipData(
-                            // getTooltipColor: defaultLineTooltipColor,
-                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                              return touchedSpots.map((spot) {
-                                return LineTooltipItem(
-                                  "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displayBranchName}\n${Converters.formatNumber(spot.y)}",
-                                  const TextStyle(color: Colors.white),
-                                );
-                              }).toList();
-                            },
-                          ),
-                        ),
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                            getTitlesWidget: (value, meta) =>
-                                leftTitleWidgets(value),
-                            showTitles: true,
-                            reservedSize: 35,
-                          )),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) => groupNameTitle(
-                                  value.toInt(), totalSales, title),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 20.0),
+                      child: LineChart(
+                        LineChartData(
+                          lineTouchData: LineTouchData(
+                            touchTooltipData: LineTouchTooltipData(
+                              // getTooltipColor: defaultLineTooltipColor,
+                              getTooltipItems:
+                                  (List<LineBarSpot> touchedSpots) {
+                                return touchedSpots.map((spot) {
+                                  return LineTooltipItem(
+                                    "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displayBranchName}\n${Converters.formatNumber(spot.y)}",
+                                    const TextStyle(color: Colors.white),
+                                  );
+                                }).toList();
+                              },
                             ),
                           ),
-                        ),
-                        borderData: FlBorderData(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 125, 125, 125))),
-                        lineBarsData: [
-                          LineChartBarData(
-                            belowBarData: BarAreaData(
-                                show: true,
-                                color: Colors.blue.withOpacity(0.5)),
-                            isCurved: true,
-                            preventCurveOverShooting: true,
-                            spots: totalSales.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              double totalSales =
-                                  double.parse(entry.value.displayTotalSales);
-                              print("totalSales: ${totalSales}");
-
-                              return FlSpot(index.toDouble(), totalSales);
-                            }).toList(),
+                          titlesData: FlTitlesData(
+                            topTitles: const AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                              getTitlesWidget: (value, meta) =>
+                                  leftTitleWidgets(value),
+                              showTitles: true,
+                              reservedSize: 35,
+                            )),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                interval: 1,
+                                getTitlesWidget: (value, meta) =>
+                                    groupNameTitle(
+                                        value.toInt(), totalSales, title),
+                              ),
+                            ),
                           ),
-                        ],
+                          borderData: FlBorderData(
+                              border: Border.all(
+                                  color: const Color.fromARGB(
+                                      255, 125, 125, 125))),
+                          lineBarsData: [
+                            LineChartBarData(
+                              belowBarData: BarAreaData(
+                                  show: true,
+                                  color: Colors.blue.withOpacity(0.5)),
+                              isCurved: true,
+                              preventCurveOverShooting: true,
+                              spots: totalSales.asMap().entries.map((entry) {
+                                int index = entry.key;
+                                double totalSales =
+                                    double.parse(entry.value.displayTotalSales);
+                                print("totalSales: ${totalSales}");
+
+                                return FlSpot(index.toDouble(), totalSales);
+                              }).toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -942,23 +948,36 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget mobileView() {
-    return SizedBox(
-      height: 800,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            // XCard(),
-            // XCard(),
-            // XCard(),
-            // XCard(),
-            // XCard(),
-            dailySalesChart(totalSalesByCashier, _locale.salesByCashier),
-            dailySalesChart(totalSalesByComputer, _locale.salesByComputer),
-            pieChart(pieData, _locale.salesByPaymentTypes),
-            hourTotalBarChart(barChartData, _locale.salesByHours),
-            // cashierTotalSales(),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      dailySalesChart(
+                          totalSalesByCashier, _locale.salesByCashier),
+                      dailySalesChart(
+                          totalSalesByComputer, _locale.salesByComputer),
+                      pieChart(pieData, _locale.salesByPaymentTypes),
+                      hourTotalBarChart(barChartData, _locale.salesByHours),
+                    ],
+                  ))
+            ],
+          )
+          // XCard(),
+          // XCard(),
+          // XCard(),
+          // XCard(),
+          // XCard(),
+
+          // cashierTotalSales(),
+        ],
       ),
     );
   }

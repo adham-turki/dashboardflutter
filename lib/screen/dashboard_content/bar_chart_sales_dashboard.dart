@@ -164,7 +164,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                               style: TextStyle(fontSize: isDesktop ? 15 : 18),
                             ),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width < 800
+                                width: !isDesktop
                                     ? MediaQuery.of(context).size.width * 0.06
                                     : MediaQuery.of(context).size.width * 0.03,
                                 child: blueButton1(
@@ -265,16 +265,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                       TextStyle(fontSize: isDesktop ? 15 : 10),
                                 ),
                                 SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width < 800
-                                            ? MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.12
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.03,
+                                    width: !isDesktop
+                                        ? MediaQuery.of(context).size.width *
+                                            0.12
+                                        : MediaQuery.of(context).size.width *
+                                            0.03,
                                     child: blueButton1(
                                       icon: Icon(
                                         Icons.filter_list_sharp,
