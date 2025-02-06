@@ -18,6 +18,7 @@ class ApiService {
     // ApiURL.urlServer = "";
 
     String? token = await storage.read(key: 'jwt');
+
     if (ApiURL.urlServer == "") {
       await ApiService().getUrl();
     }

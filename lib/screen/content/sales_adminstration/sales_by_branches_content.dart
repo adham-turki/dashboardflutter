@@ -235,7 +235,7 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
       barData = [];
       listOfBalances = [];
       listOfPeriods = [];
-      salesBranchesController
+      await salesBranchesController
           .getSalesByBranches(searchCriteria, isStart: isStart)
           .then((value) {
         for (var element in value) {

@@ -4,6 +4,7 @@ import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dar
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_view_model.dart';
 import 'package:bi_replicate/model/sales_view_model.dart';
 import 'package:bi_replicate/model/total_profit_report_model.dart';
+import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -16,6 +17,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
@@ -90,8 +92,18 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
     print("asdasdasdasda");
 
     _tooltip = TooltipBehavior(enable: true);
-    formattedFromDate =
-        DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+    if (now.day == 1) {
+      // If today is the first day of the month, set formattedFromDate to the first day of the previous month
+      DateTime firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
+      formattedFromDate =
+          DateFormat('dd/MM/yyyy').format(firstDayOfPreviousMonth);
+    } else {
+      // Otherwise, format the first day of the current month
+      formattedFromDate =
+          DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+    }
+    // formattedFromDate =
+    //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
 
     cashierLogsSearchCriteria = SearchCriteria(
@@ -293,10 +305,10 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                   width: Responsive.isDesktop(context)
                       ? totalSales.length > 20
                           ? width * (totalSales.length / 10)
-                          : width * 0.65
+                          : width * 0.82
                       : totalSales.length > 20
                           ? width * (totalSales.length / 10)
-                          : width * 0.65,
+                          : width * 0.82,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 20.0),

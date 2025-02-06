@@ -461,7 +461,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     return double.parse(formatNumber(number));
   }
 
-  void getDailySales({bool? isStart}) {
+  Future<void> getDailySales({bool? isStart}) async {
     setState(() {
       isLoading = true;
     });
@@ -485,7 +485,7 @@ class _DailySalesContentState extends State<DailySalesContent> {
     if (isStart != true) {
       setSearchCriteria(searchCriteria);
     }
-    dailySalesController
+    await dailySalesController
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
       for (var elemant in response) {

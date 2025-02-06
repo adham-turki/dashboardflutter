@@ -1,6 +1,7 @@
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/diff_cash_shift_report_by_cashier_model.dart';
 import 'package:bi_replicate/model/diff_cash_shift_report_model.dart';
+import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/chart/chart_data_model.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
 import 'package:flutter/cupertino.dart';
@@ -70,8 +72,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     _tooltip = TooltipBehavior(enable: true);
     _tooltip1 = TooltipBehavior(enable: true);
-    formattedFromDate =
-        DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+
+    if (now.day == 1) {
+      // If today is the first day of the month, set formattedFromDate to the first day of the previous month
+      DateTime firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
+      formattedFromDate =
+          DateFormat('dd/MM/yyyy').format(firstDayOfPreviousMonth);
+    } else {
+      // Otherwise, format the first day of the current month
+      formattedFromDate =
+          DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+    }
+    // formattedFromDate =
+    //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
 
     diffClosedCashShiftReportCrit = SearchCriteria(
@@ -333,99 +346,103 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
             if (data.isNotEmpty)
-              Scrollbar(
-                controller: _scrollController1,
-                thumbVisibility: true,
-                thickness: 8,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: SingleChildScrollView(
-                  reverse: _locale.localeName == "ar" ? true : false,
+              Consumer<ScreenContentProvider>(builder: (context, value, child) {
+                return Scrollbar(
                   controller: _scrollController1,
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    height: height * 0.35,
-                    width: Responsive.isDesktop(context)
-                        ? data.length > 20
-                            ? width * (data.length / 10)
-                            : width * 0.65
-                        : data.length > 10
-                            ? width * (data.length / 5)
-                            : width * 0.95,
-                    child: SfCartesianChart(
-                        primaryXAxis: CategoryAxis(),
-                        // primaryYAxis: NumericAxis(
-                        //     minimum: minValue,
-                        //     maximum: maxValue,
-                        //     title: AxisTitle(text: _locale.totalCost),
-                        //     interval: interval),
-                        legend: Legend(
-                          isVisible: true,
-                          position: LegendPosition
-                              .bottom, // Position the legend below the chart
-                          overflowMode:
-                              LegendItemOverflowMode.wrap, // Handle overflow
-                        ),
-                        axes: <ChartAxis>[
-                          CategoryAxis(
-                              // name: 'secondaryXAxis',
-                              // opposedPosition: true,
-                              ),
-                        ],
-                        tooltipBehavior: _tooltip,
-                        series: <CartesianSeries<ChartData, String>>[
-                          // ColumnSeries<ChartData, String>(
-                          //     dataSource: data,
-                          //     xValueMapper: (ChartData data, _) => data.x,
-                          //     yValueMapper: (ChartData data, _) => data.y,
-                          //     name: _locale.profit,
-                          //     color: const Color.fromRGBO(184, 2, 2, 1)),
-                          // ColumnSeries<ChartData, String>(
-                          //     dataSource: data,
-                          //     xValueMapper: (ChartData data, _) => data.x,
-                          //     yValueMapper: (ChartData data, _) => data.y1,
-                          //     name: _locale.salesCost,
-                          //     color: const Color.fromRGBO(1, 102, 184, 1)),
-                          LineSeries<ChartData, String>(
-                              dataSource: data,
-                              dataLabelSettings: const DataLabelSettings(
-                                isVisible: true,
-                                textStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              xValueMapper: (ChartData data, _) => data.perc,
-                              yValueMapper: (ChartData data, _) => data.y,
-                              enableTooltip: true,
-                              name: _locale.valueOfTotalDiff,
-                              // xAxisName: 'secondaryXAxis',
-                              // yAxisName: 'secondaryYAxis',
-                              dataLabelMapper: (datum, index) {
-                                return "${datum.y.toString()}\n${datum.x.toString()}";
-                              },
-                              color: const Color.fromRGBO(26, 138, 6, 1)),
-                          LineSeries<ChartData, String>(
-                              dataSource: data,
-                              dataLabelSettings: const DataLabelSettings(
-                                isVisible: true,
-                                textStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              xValueMapper: (ChartData data, _) => data.perc,
-                              yValueMapper: (ChartData data, _) => data.percD,
-                              enableTooltip: true,
-                              name: _locale.numOfDiffTimes,
-                              // xAxisName: 'secondaryXAxis',
-                              // yAxisName: 'secondaryYAxis',
-                              dataLabelMapper: (datum, index) {
-                                return datum.percD.toString();
-                              },
-                              color: Color.fromARGB(255, 255, 0, 0)),
-                        ]),
+                  thumbVisibility: true,
+                  thickness: 8,
+                  trackVisibility: true,
+                  radius: const Radius.circular(4),
+                  child: SingleChildScrollView(
+                    reverse: _locale.localeName == "ar" ? true : false,
+                    controller: _scrollController1,
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      height: height * 0.35,
+                      width: Responsive.isDesktop(context)
+                          ? data.length > 20
+                              ? width * (data.length / 10)
+                              : !value.getIsColapsed()
+                                  ? width * 0.82
+                                  : width * 0.92
+                          : data.length > 10
+                              ? width * (data.length / 5)
+                              : width * 0.95,
+                      child: SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          // primaryYAxis: NumericAxis(
+                          //     minimum: minValue,
+                          //     maximum: maxValue,
+                          //     title: AxisTitle(text: _locale.totalCost),
+                          //     interval: interval),
+                          legend: Legend(
+                            isVisible: true,
+                            position: LegendPosition
+                                .bottom, // Position the legend below the chart
+                            overflowMode:
+                                LegendItemOverflowMode.wrap, // Handle overflow
+                          ),
+                          axes: <ChartAxis>[
+                            CategoryAxis(
+                                // name: 'secondaryXAxis',
+                                // opposedPosition: true,
+                                ),
+                          ],
+                          tooltipBehavior: _tooltip,
+                          series: <CartesianSeries<ChartData, String>>[
+                            // ColumnSeries<ChartData, String>(
+                            //     dataSource: data,
+                            //     xValueMapper: (ChartData data, _) => data.x,
+                            //     yValueMapper: (ChartData data, _) => data.y,
+                            //     name: _locale.profit,
+                            //     color: const Color.fromRGBO(184, 2, 2, 1)),
+                            // ColumnSeries<ChartData, String>(
+                            //     dataSource: data,
+                            //     xValueMapper: (ChartData data, _) => data.x,
+                            //     yValueMapper: (ChartData data, _) => data.y1,
+                            //     name: _locale.salesCost,
+                            //     color: const Color.fromRGBO(1, 102, 184, 1)),
+                            LineSeries<ChartData, String>(
+                                dataSource: data,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                xValueMapper: (ChartData data, _) => data.perc,
+                                yValueMapper: (ChartData data, _) => data.y,
+                                enableTooltip: true,
+                                name: _locale.valueOfTotalDiff,
+                                // xAxisName: 'secondaryXAxis',
+                                // yAxisName: 'secondaryYAxis',
+                                dataLabelMapper: (datum, index) {
+                                  return "${datum.y.toString()}\n${datum.x.toString()}";
+                                },
+                                color: const Color.fromRGBO(26, 138, 6, 1)),
+                            LineSeries<ChartData, String>(
+                                dataSource: data,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                xValueMapper: (ChartData data, _) => data.perc,
+                                yValueMapper: (ChartData data, _) => data.percD,
+                                enableTooltip: true,
+                                name: _locale.numOfDiffTimes,
+                                // xAxisName: 'secondaryXAxis',
+                                // yAxisName: 'secondaryYAxis',
+                                dataLabelMapper: (datum, index) {
+                                  return datum.percD.toString();
+                                },
+                                color: Color.fromARGB(255, 255, 0, 0)),
+                          ]),
+                    ),
                   ),
-                ),
-              )
+                );
+              })
           ],
         ),
       ),
@@ -530,100 +547,104 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   ],
                 ),
             if (data.isNotEmpty)
-              Scrollbar(
-                controller: _scrollController2,
-                thumbVisibility: true,
-                thickness: 8,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: SingleChildScrollView(
-                  reverse: _locale.localeName == "ar" ? true : false,
+              Consumer<ScreenContentProvider>(builder: (context, value, child) {
+                return Scrollbar(
                   controller: _scrollController2,
-                  scrollDirection: Axis.horizontal,
-                  child: SizedBox(
-                    height: height * 0.35,
-                    width: Responsive.isDesktop(context)
-                        ? data.length > 20
-                            ? width * (data.length / 10)
-                            : width * 0.65
-                        : data.length > 10
-                            ? width * (data.length / 5)
-                            : width * 0.95,
-                    child: SfCartesianChart(
-                        primaryXAxis: CategoryAxis(),
-                        // primaryYAxis: NumericAxis(
-                        //     minimum: minValue,
-                        //     maximum: maxValue,
-                        //     title: AxisTitle(text: _locale.totalCost),
-                        //     interval: interval),
-                        legend: Legend(
-                          isVisible: true,
-                          position: LegendPosition
-                              .bottom, // Position the legend below the chart
-                          overflowMode:
-                              LegendItemOverflowMode.wrap, // Handle overflow
-                        ),
-                        axes: <ChartAxis>[
-                          CategoryAxis(
-                              // name: 'secondaryXAxis',
-                              // opposedPosition: true,
-                              ),
-                        ],
-                        tooltipBehavior: _tooltip1,
-                        series: <CartesianSeries<ChartData, String>>[
-                          // ColumnSeries<ChartData, String>(
-                          //     dataSource: data,
-                          //     xValueMapper: (ChartData data, _) => data.x,
-                          //     yValueMapper: (ChartData data, _) => data.y,
-                          //     name: _locale.profit,
-                          //     color: const Color.fromRGBO(184, 2, 2, 1)),
-                          // ColumnSeries<ChartData, String>(
-                          //     dataSource: data,
-                          //     xValueMapper: (ChartData data, _) => data.x,
-                          //     yValueMapper: (ChartData data, _) => data.y1,
-                          //     name: _locale.salesCost,
-                          //     color: const Color.fromRGBO(1, 102, 184, 1)),
-                          LineSeries<ChartData, String>(
-                              dataSource: data,
-                              dataLabelSettings: const DataLabelSettings(
-                                isVisible: true,
-                                textStyle: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              xValueMapper: (ChartData data, _) =>
-                                  "${data.x}\n${data.perc}",
-                              yValueMapper: (ChartData data, _) => data.y,
-                              enableTooltip: true,
-                              name: _locale.differenceValue,
-                              // xAxisName: 'secondaryXAxis',
-                              // yAxisName: 'secondaryYAxis',
-                              dataLabelMapper: (datum, index) {
-                                return "${datum.y.toString()}\n${datum.x.toString()}";
-                              },
-                              color: Colors.blue),
-                          // LineSeries<ChartData, String>(
-                          //     dataSource: data,
-                          //     dataLabelSettings: const DataLabelSettings(
-                          //       isVisible: true,
-                          //       textStyle: TextStyle(
-                          //           color: Colors.black,
-                          //           fontWeight: FontWeight.w600),
-                          //     ),
-                          //     xValueMapper: (ChartData data, _) => data.perc,
-                          //     yValueMapper: (ChartData data, _) => data.percD,
-                          //     enableTooltip: true,
-                          //     name: _locale.numOfDiffTimes,
-                          //     // xAxisName: 'secondaryXAxis',
-                          //     // yAxisName: 'secondaryYAxis',
-                          //     dataLabelMapper: (datum, index) {
-                          //       return datum.percD.toString();
-                          //     },
-                          //     color: Color.fromARGB(255, 255, 0, 0)),
-                        ]),
+                  thumbVisibility: true,
+                  thickness: 8,
+                  trackVisibility: true,
+                  radius: const Radius.circular(4),
+                  child: SingleChildScrollView(
+                    reverse: _locale.localeName == "ar" ? true : false,
+                    controller: _scrollController2,
+                    scrollDirection: Axis.horizontal,
+                    child: SizedBox(
+                      height: height * 0.35,
+                      width: Responsive.isDesktop(context)
+                          ? data.length > 20
+                              ? width * (data.length / 10)
+                              : !value.getIsColapsed()
+                                  ? width * 0.82
+                                  : width * 0.92
+                          : data.length > 10
+                              ? width * (data.length / 5)
+                              : width * 0.95,
+                      child: SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          // primaryYAxis: NumericAxis(
+                          //     minimum: minValue,
+                          //     maximum: maxValue,
+                          //     title: AxisTitle(text: _locale.totalCost),
+                          //     interval: interval),
+                          legend: Legend(
+                            isVisible: true,
+                            position: LegendPosition
+                                .bottom, // Position the legend below the chart
+                            overflowMode:
+                                LegendItemOverflowMode.wrap, // Handle overflow
+                          ),
+                          axes: <ChartAxis>[
+                            CategoryAxis(
+                                // name: 'secondaryXAxis',
+                                // opposedPosition: true,
+                                ),
+                          ],
+                          tooltipBehavior: _tooltip1,
+                          series: <CartesianSeries<ChartData, String>>[
+                            // ColumnSeries<ChartData, String>(
+                            //     dataSource: data,
+                            //     xValueMapper: (ChartData data, _) => data.x,
+                            //     yValueMapper: (ChartData data, _) => data.y,
+                            //     name: _locale.profit,
+                            //     color: const Color.fromRGBO(184, 2, 2, 1)),
+                            // ColumnSeries<ChartData, String>(
+                            //     dataSource: data,
+                            //     xValueMapper: (ChartData data, _) => data.x,
+                            //     yValueMapper: (ChartData data, _) => data.y1,
+                            //     name: _locale.salesCost,
+                            //     color: const Color.fromRGBO(1, 102, 184, 1)),
+                            LineSeries<ChartData, String>(
+                                dataSource: data,
+                                dataLabelSettings: const DataLabelSettings(
+                                  isVisible: true,
+                                  textStyle: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                xValueMapper: (ChartData data, _) =>
+                                    "${data.x}\n${data.perc}",
+                                yValueMapper: (ChartData data, _) => data.y,
+                                enableTooltip: true,
+                                name: _locale.differenceValue,
+                                // xAxisName: 'secondaryXAxis',
+                                // yAxisName: 'secondaryYAxis',
+                                dataLabelMapper: (datum, index) {
+                                  return "${datum.y.toString()}\n${datum.x.toString()}";
+                                },
+                                color: Colors.blue),
+                            // LineSeries<ChartData, String>(
+                            //     dataSource: data,
+                            //     dataLabelSettings: const DataLabelSettings(
+                            //       isVisible: true,
+                            //       textStyle: TextStyle(
+                            //           color: Colors.black,
+                            //           fontWeight: FontWeight.w600),
+                            //     ),
+                            //     xValueMapper: (ChartData data, _) => data.perc,
+                            //     yValueMapper: (ChartData data, _) => data.percD,
+                            //     enableTooltip: true,
+                            //     name: _locale.numOfDiffTimes,
+                            //     // xAxisName: 'secondaryXAxis',
+                            //     // yAxisName: 'secondaryYAxis',
+                            //     dataLabelMapper: (datum, index) {
+                            //       return datum.percD.toString();
+                            //     },
+                            //     color: Color.fromARGB(255, 255, 0, 0)),
+                          ]),
+                    ),
                   ),
-                ),
-              )
+                );
+              })
           ],
         ),
       ),

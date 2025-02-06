@@ -587,7 +587,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  void getBranchByCat({bool? isStart}) {
+  Future<void> getBranchByCat({bool? isStart}) async {
     setState(() {
       isLoading = true;
     });
@@ -619,7 +619,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     listOfBalances = [];
     listOfPeriods = [];
 
-    salesCategoryController
+    await salesCategoryController
         .getSalesByCategory(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {
@@ -670,7 +670,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     });
   }
 
-  void getBranchByCat1({bool? isStart}) {
+  Future<void> getBranchByCat1({bool? isStart}) async {
     setState(() {
       isLoading = true;
     });
@@ -702,7 +702,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     listOfBalances = [];
     listOfPeriods = [];
 
-    salesCategoryController
+    await salesCategoryController
         .getSalesByCategory(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {

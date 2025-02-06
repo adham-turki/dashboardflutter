@@ -494,7 +494,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     return double.parse(number.toStringAsFixed(2));
   }
 
-  getTotalCollections({bool? isStart}) {
+  getTotalCollections({bool? isStart}) async {
     setState(() {
       isLoading = true;
     });
@@ -520,7 +520,7 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: startDate, toDate: endDate, voucherStatus: status);
     setSearchCriteria(searchCriteria);
-    totalCollectionController
+    await totalCollectionController
         .getTotalCollectionMethod(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {

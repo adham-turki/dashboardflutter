@@ -9,6 +9,7 @@ import 'package:bi_replicate/model/diff_cash_shift_report_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/search_crit.dart';
 import 'package:bi_replicate/model/total_profit_report_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -16,8 +17,11 @@ import '../model/sales/branch_model.dart';
 import '../model/sales/sales_db_model.dart';
 
 class TotalSalesController {
+  final storage = const FlutterSecureStorage();
+
   Future<List<BranchSalesDBModel>> getCashierLogs(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<BranchSalesDBModel> list = [];
     var api = cashierLogs;
     try {
@@ -26,6 +30,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -46,6 +51,7 @@ class TotalSalesController {
 
   Future<List<BranchSalesDBModel>> getTotalSalesByCashier(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<BranchSalesDBModel> list = [];
     var api = totalSalesByCashier;
     try {
@@ -54,6 +60,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -74,6 +81,7 @@ class TotalSalesController {
 
   Future<List<BranchSalesDBModel>> getTotalSalesByComputer(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<BranchSalesDBModel> list = [];
     var api = totalSalesByComputer;
 
@@ -83,6 +91,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -103,6 +112,7 @@ class TotalSalesController {
 
   Future<List<BranchSalesDBModel>> getTotalSalesByHours(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<BranchSalesDBModel> list = [];
     var api = totalSalesByHours;
 
@@ -112,6 +122,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -132,6 +143,7 @@ class TotalSalesController {
 
   Future<List<BranchSalesDBModel>> getTotalSalesByPaymentTypes(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<BranchSalesDBModel> list = [];
     var api = totalSalesByPayType;
 
@@ -141,6 +153,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -161,6 +174,7 @@ class TotalSalesController {
 
   Future<List<SalesCostBasedStockCategoryDBModel>> getSalesCostBasedStockCat(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<SalesCostBasedStockCategoryDBModel> list = [];
     var api = salesCostBasedStockCat;
 
@@ -170,6 +184,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -192,12 +207,15 @@ class TotalSalesController {
   Future<List<BranchModel>> getAllBranches() async {
     List<BranchModel> branchesList = [];
     var api = getBranches;
+    String? token = await storage.read(key: 'jwt');
+
     try {
       var response = await http.get(
         Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
       );
       //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
@@ -219,12 +237,15 @@ class TotalSalesController {
   Future<List<CashierModel>> getAllCashiers() async {
     List<CashierModel> cashiersList = [];
     var api = getCashiers;
+    String? token = await storage.read(key: 'jwt');
+
     try {
       var response = await http.get(
         Uri.parse("${ApiURL.urlServer}/${api}"),
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
       );
       print("API Response: ${response.statusCode}");
@@ -249,6 +270,7 @@ class TotalSalesController {
           SearchCriteria searchCriteria) async {
     List<DiffCashShiftReportByCashierModel> list = [];
     var api = diffCashShiftReportByCashier;
+    String? token = await storage.read(key: 'jwt');
 
     try {
       var response = await http.post(
@@ -256,6 +278,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -281,6 +304,7 @@ class TotalSalesController {
       SearchCriteria searchCriteria) async {
     List<DiffCashShiftReportModel> list = [];
     var api = getDiffCashShiftReport;
+    String? token = await storage.read(key: 'jwt');
 
     try {
       var response = await http.post(
@@ -288,6 +312,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -341,6 +366,7 @@ class TotalSalesController {
 
   Future<List<TotalProfitReportModel>> getTotalProfitsByBranchReportList(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<TotalProfitReportModel> list = [];
     var api = totalProfitsByBranch;
 
@@ -350,6 +376,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );
@@ -371,6 +398,7 @@ class TotalSalesController {
 
   Future<List<TotalProfitReportModel>> getTotalProfitsByCategoryReportList(
       SearchCriteria searchCriteria) async {
+    String? token = await storage.read(key: 'jwt');
     List<TotalProfitReportModel> list = [];
     var api = totalProfitsByCategory;
 
@@ -380,6 +408,7 @@ class TotalSalesController {
         headers: {
           "Accept": "application/json",
           "content-type": "application/json",
+          "Authorization": "Bearer $token",
         },
         body: json.encode(searchCriteria.toJson()),
       );

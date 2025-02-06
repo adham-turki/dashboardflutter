@@ -179,6 +179,9 @@ class _SideMenuState extends State<SideMenu> {
                         splashRadius: 1,
                         iconSize: width * 0.015,
                         onPressed: () {
+                          context
+                              .read<ScreenContentProvider>()
+                              .setIsColapsed(!isCollapsed);
                           setState(() {
                             isCollapsed
                                 ? isCollapsed = false

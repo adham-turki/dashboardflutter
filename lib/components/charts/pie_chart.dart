@@ -39,17 +39,17 @@ class _PieChartComponentState extends State<PieChartComponent> {
   bool isMobile = false;
   bool isLoading = false;
   Widget buildWidget = const Row();
+  double total = 0.0;
 
   @override
   void didChangeDependencies() {
-    // getBuildWidget();
     super.didChangeDependencies();
   }
 
   @override
   void initState() {
     setAttributes();
-
+    // getBuildWidget();
     super.initState();
   }
 
@@ -140,7 +140,11 @@ class _PieChartComponentState extends State<PieChartComponent> {
   }
 
   List<PieChartSectionData> showList(List<PieChartModel> dataList) {
-    print("widget.lidt.dataaaa333 ${dataList.length}");
+    total = 0.0;
+    for (var i = 0; i < dataList.length; i++) {
+      total += (dataList[i].value ?? 0.0);
+    }
+    print("$total - ${dataList.length}");
 
     List<PieChartSectionData> list = List.generate(dataList.length, (i) {
       bool isTouched = i == touchedIndex;
@@ -148,7 +152,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
       PieChartModel data = dataList[i];
       return PieChartSectionData(
         value: data.value,
-        title: "${data.title}\n${Converters.formatNumber(data.value!)}",
+        title:
+            "${data.title}\n${Converters.formatNumber(data.value!)}\n${Converters.formatNumber((((data.value ?? 1.0) / total) * 100))}%",
         color: data.color,
         radius: radius,
         titleStyle: const TextStyle(color: Colors.white, fontSize: 10),

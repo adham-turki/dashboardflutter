@@ -251,7 +251,7 @@
     "businessIntelligenceSystem": "نظام ذكاء الأعمال",
     "salesReports": "تقارير المبيعات",
     "salesByCashier": "المبيعات حسب الكاشير",
-    "salesByComputer": "المبيعات حسب نوع الجهاز",
+    "salesByComputer": "المبيعات حسب اسم الجهاز",
     "salesByPaymentTypes": "المبيعات حسب أنواع الدفع",
     "salesByHours": "المبيعات حسب الساعات",
     "selectBranch": "اختر فرع",
