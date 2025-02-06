@@ -150,8 +150,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      diffCashChart(data1, _locale.diffCashByShifts),
                       diffClosedCashChart(data, _locale.diffClosedCashByShifts),
+                      diffCashChart(data1, _locale.diffCashByShifts),
                       // salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
@@ -175,9 +175,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      diffCashChart(data1, _locale.diffCashByShifts),
-
                       diffClosedCashChart(data, _locale.diffClosedCashByShifts),
+                      diffCashChart(data1, _locale.diffCashByShifts),
                       // salesCostChart(data, _locale.salesCostBasedStockCat)
                     ],
                   ))
