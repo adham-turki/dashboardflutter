@@ -1,23 +1,19 @@
-import 'package:bi_replicate/constants/api_constants.dart';
+import 'dart:async';
+
 import 'package:bi_replicate/model/chart/chart_data_model.dart';
-import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_view_model.dart';
 import 'package:bi_replicate/model/sales_view_model.dart';
-import 'package:bi_replicate/model/total_profit_report_model.dart';
-import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 
 import 'package:bi_replicate/utils/constants/responsive.dart';
-import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
-import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
@@ -63,7 +59,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double secondaryMinValue = 0;
   double secondaryMaxValue = 0;
   double secondaryInterval = 0;
-
+  final storage = const FlutterSecureStorage();
+  Timer? _timer;
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
     totalCashierLogs = 0.0;
@@ -115,12 +112,25 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         toDate: formattedToDate);
 
     fetchData();
+    startTimer();
     super.initState();
   }
 
   fetchData() async {
     await fetchSalesByCashierLogs();
     setState(() {});
+  }
+
+  startTimer() {
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        fetchData();
+      } else {
+        _timer!.cancel();
+      }
+    });
   }
 
   @override
@@ -290,92 +300,100 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            Scrollbar(
-              controller: _scrollController,
-              thumbVisibility: true,
-              thickness: 8,
-              trackVisibility: true,
-              radius: const Radius.circular(4),
-              child: SingleChildScrollView(
-                reverse: _locale.localeName == "ar" ? true : false,
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  height: height * 0.35,
-                  width: Responsive.isDesktop(context)
-                      ? totalSales.length > 20
-                          ? width * (totalSales.length / 10)
-                          : width * 0.82
-                      : totalSales.length > 20
-                          ? width * (totalSales.length / 10)
-                          : width * 0.82,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 20.0),
-                    child: LineChart(
-                      LineChartData(
-                        lineTouchData: LineTouchData(
-                          touchTooltipData: LineTouchTooltipData(
-                            // getTooltipColor: defaultLineTooltipColor,
-                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                              return touchedSpots.map((spot) {
-                                return LineTooltipItem(
-                                  "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displaytransTypeName}\n${Converters.formatNumber(spot.y)}",
-                                  const TextStyle(color: Colors.white),
-                                );
-                              }).toList();
-                            },
-                          ),
-                        ),
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                            getTitlesWidget: (value, meta) =>
-                                leftTitleWidgets(value),
-                            showTitles: true,
-                            reservedSize: 35,
-                          )),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) => groupNameTitle(
-                                  value.toInt(), totalSales, title),
+            totalCashierLogsList.isNotEmpty
+                ? Scrollbar(
+                    controller: _scrollController,
+                    thumbVisibility: true,
+                    thickness: 8,
+                    trackVisibility: true,
+                    radius: const Radius.circular(4),
+                    child: SingleChildScrollView(
+                      reverse: _locale.localeName == "ar" ? true : false,
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        height: height * 0.35,
+                        width: Responsive.isDesktop(context)
+                            ? totalSales.length > 20
+                                ? width * (totalSales.length / 10)
+                                : width * 0.82
+                            : totalSales.length > 20
+                                ? width * (totalSales.length / 10)
+                                : width * 0.82,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 20.0),
+                          child: LineChart(
+                            LineChartData(
+                              lineTouchData: LineTouchData(
+                                touchTooltipData: LineTouchTooltipData(
+                                  // getTooltipColor: defaultLineTooltipColor,
+                                  getTooltipItems:
+                                      (List<LineBarSpot> touchedSpots) {
+                                    return touchedSpots.map((spot) {
+                                      return LineTooltipItem(
+                                        "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displaytransTypeName}\n${Converters.formatNumber(spot.y)}",
+                                        const TextStyle(color: Colors.white),
+                                      );
+                                    }).toList();
+                                  },
+                                ),
+                              ),
+                              titlesData: FlTitlesData(
+                                topTitles: const AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                rightTitles: const AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false)),
+                                leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  getTitlesWidget: (value, meta) =>
+                                      leftTitleWidgets(value),
+                                  showTitles: true,
+                                  reservedSize: 35,
+                                )),
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    interval: 1,
+                                    getTitlesWidget: (value, meta) =>
+                                        groupNameTitle(
+                                            value.toInt(), totalSales, title),
+                                  ),
+                                ),
+                              ),
+                              borderData: FlBorderData(
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 125, 125, 125))),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  belowBarData: BarAreaData(
+                                      show: true,
+                                      color: Colors.blue.withOpacity(0.5)),
+                                  isCurved: true,
+                                  preventCurveOverShooting: true,
+                                  spots:
+                                      totalSales.asMap().entries.map((entry) {
+                                    int index = entry.key;
+                                    double totalSales = double.parse(
+                                        entry.value.displayLogsCount);
+                                    print("totalSales: ${totalSales}");
+
+                                    return FlSpot(index.toDouble(), totalSales);
+                                  }).toList(),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        borderData: FlBorderData(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 125, 125, 125))),
-                        lineBarsData: [
-                          LineChartBarData(
-                            belowBarData: BarAreaData(
-                                show: true,
-                                color: Colors.blue.withOpacity(0.5)),
-                            isCurved: true,
-                            preventCurveOverShooting: true,
-                            spots: totalSales.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              double totalSales =
-                                  double.parse(entry.value.displayLogsCount);
-                              print("totalSales: ${totalSales}");
-
-                              return FlSpot(index.toDouble(), totalSales);
-                            }).toList(),
-                          ),
-                        ],
                       ),
                     ),
+                  )
+                : SizedBox(
+                    height: height * 0.35,
+                    child: Center(child: Text(_locale.noDataAvailable)),
                   ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
@@ -410,6 +428,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                 fontStyle: FontStyle.italic,
                 fontSize: 8,
                 color: Colors.black,
+                fontFamily: 'Times New Roman',
                 fontWeight: FontWeight.bold),
           ),
         ),

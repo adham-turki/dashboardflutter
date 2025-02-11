@@ -28,7 +28,7 @@ class CustomDate extends StatefulWidget {
   final TimeOfDay? timeControllerToCompareWith;
   DateTime? firstDate;
   DateTime? lastDate;
-
+  bool isForwardSlashFormat;
   bool isInitiaDate;
   CustomDate(
       {super.key,
@@ -49,7 +49,8 @@ class CustomDate extends StatefulWidget {
       this.date,
       this.readOnly,
       this.firstDate,
-      this.lastDate});
+      this.lastDate,
+      this.isForwardSlashFormat = false});
 
   @override
   State<CustomDate> createState() => _CustomDateState();

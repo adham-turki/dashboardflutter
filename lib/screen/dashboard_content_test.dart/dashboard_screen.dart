@@ -433,7 +433,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Text(
                       "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
                       style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
+                          TextStyle(fontSize: isDesktop ? 10 : height * 0.013)),
                 ],
               ),
             Center(

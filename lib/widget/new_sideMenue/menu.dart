@@ -26,46 +26,46 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       ],
       pageNumber: -1,
     ),
-    MenuModel(
-      isParent: true,
-      title: locale.salesAdminstration,
-      icon: Icons.assignment_ind_outlined,
-      subMenuList: [
-        SubMenuModel(
-          title: locale.salesByBranches,
-          pageNumber: 1,
-        ),
-        SubMenuModel(
-          title: locale.branchesSalesByCategories,
-          pageNumber: 2,
-        ),
-        SubMenuModel(
-          title: locale.dailySales,
-          pageNumber: 3,
-        ),
-        SubMenuModel(
-          title: locale.totalCollections,
-          pageNumber: 4,
-        ),
-      ],
-      pageNumber: -1,
-    ),
-    MenuModel(
-      isParent: true,
-      title: locale.financialPerformance,
-      icon: Icons.monetization_on,
-      subMenuList: [
-        SubMenuModel(
-          title: locale.cashFlows,
-          pageNumber: 5,
-        ),
-        SubMenuModel(
-          title: locale.expenses,
-          pageNumber: 6,
-        ),
-      ],
-      pageNumber: -1,
-    ),
+    // MenuModel(
+    //   isParent: true,
+    //   title: locale.salesAdminstration,
+    //   icon: Icons.assignment_ind_outlined,
+    //   subMenuList: [
+    //     SubMenuModel(
+    //       title: locale.salesByBranches,
+    //       pageNumber: 1,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.branchesSalesByCategories,
+    //       pageNumber: 2,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.dailySales,
+    //       pageNumber: 3,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.totalCollections,
+    //       pageNumber: 4,
+    //     ),
+    //   ],
+    //   pageNumber: -1,
+    // ),
+    // MenuModel(
+    //   isParent: true,
+    //   title: locale.financialPerformance,
+    //   icon: Icons.monetization_on,
+    //   subMenuList: [
+    //     SubMenuModel(
+    //       title: locale.cashFlows,
+    //       pageNumber: 5,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.expenses,
+    //       pageNumber: 6,
+    //     ),
+    //   ],
+    //   pageNumber: -1,
+    // ),
     MenuModel(
       title: locale.inventoryPerformance,
       icon: Icons.inventory,
@@ -89,22 +89,22 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       ],
       pageNumber: -1,
     ),
-    MenuModel(
-      isParent: true,
-      title: locale.chequesManagement,
-      icon: Icons.read_more,
-      subMenuList: [
-        SubMenuModel(
-          title: locale.chequesAndBank,
-          pageNumber: 10,
-        ),
-        SubMenuModel(
-          title: locale.outStandingCheques,
-          pageNumber: 11,
-        ),
-      ],
-      pageNumber: -1,
-    ),
+    // MenuModel(
+    //   isParent: true,
+    //   title: locale.chequesManagement,
+    //   icon: Icons.read_more,
+    //   subMenuList: [
+    //     SubMenuModel(
+    //       title: locale.chequesAndBank,
+    //       pageNumber: 10,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.outStandingCheques,
+    //       pageNumber: 11,
+    //     ),
+    //   ],
+    //   pageNumber: -1,
+    // ),
     MenuModel(
       isParent: true,
       title: locale.reports,

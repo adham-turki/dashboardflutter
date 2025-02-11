@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
@@ -11,6 +13,7 @@ import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 import '../../controller/total_sales_controller.dart';
@@ -73,6 +76,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   double totalPricesHoursCount = 0.0;
   double totalPricesPayTypesCount = 0.0;
   late AppLocalizations _locale;
+  final storage = const FlutterSecureStorage();
+  Timer? _timer;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -123,6 +129,18 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await fetchSalesByPayTypes();
     await fetchSalesByHours();
     setState(() {});
+  }
+
+  startTimer() {
+    const duration = Duration(minutes: 5);
+    _timer = Timer.periodic(duration, (Timer t) async {
+      String? token = await storage.read(key: "jwt");
+      if (token != null) {
+        fetchData();
+      } else {
+        _timer!.cancel();
+      }
+    });
   }
 
   fetchSalesByHours() async {
@@ -419,7 +437,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   Text(
                       "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
                       style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
+                          TextStyle(fontSize: isDesktop ? 10 : height * 0.013)),
                 ],
               ),
             Center(

@@ -18,46 +18,46 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       ],
       value: 0,
     ),
-    SideTabModel(
-      isParent: true,
-      text: locale.salesAdminstration,
-      icon: Icons.assignment_ind_outlined,
-      subMenu: [
-        SideSubTabModel(
-          text: locale.salesByBranches,
-          value: 1,
-        ),
-        SideSubTabModel(
-          text: locale.branchesSalesByCategories,
-          value: 2,
-        ),
-        SideSubTabModel(
-          text: locale.dailySales,
-          value: 3,
-        ),
-        SideSubTabModel(
-          text: locale.totalCollections,
-          value: 4,
-        ),
-      ],
-      value: -1,
-    ),
-    SideTabModel(
-      isParent: true,
-      text: locale.financialPerformance,
-      icon: Icons.monetization_on,
-      subMenu: [
-        SideSubTabModel(
-          text: locale.cashFlows,
-          value: 5,
-        ),
-        SideSubTabModel(
-          text: locale.expenses,
-          value: 6,
-        ),
-      ],
-      value: -1,
-    ),
+    // SideTabModel(
+    //   isParent: true,
+    //   text: locale.salesAdminstration,
+    //   icon: Icons.assignment_ind_outlined,
+    //   subMenu: [
+    //     SideSubTabModel(
+    //       text: locale.salesByBranches,
+    //       value: 1,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.branchesSalesByCategories,
+    //       value: 2,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.dailySales,
+    //       value: 3,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.totalCollections,
+    //       value: 4,
+    //     ),
+    //   ],
+    //   value: -1,
+    // ),
+    // SideTabModel(
+    //   isParent: true,
+    //   text: locale.financialPerformance,
+    //   icon: Icons.monetization_on,
+    //   subMenu: [
+    //     SideSubTabModel(
+    //       text: locale.cashFlows,
+    //       value: 5,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.expenses,
+    //       value: 6,
+    //     ),
+    //   ],
+    //   value: -1,
+    // ),
     SideTabModel(
       text: locale.inventoryPerformance,
       icon: Icons.inventory,
@@ -81,22 +81,22 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       ],
       value: -1,
     ),
-    SideTabModel(
-      isParent: true,
-      text: locale.chequesManagement,
-      icon: Icons.read_more,
-      subMenu: [
-        SideSubTabModel(
-          text: locale.chequesAndBank,
-          value: 10,
-        ),
-        SideSubTabModel(
-          text: locale.outStandingCheques,
-          value: 11,
-        ),
-      ],
-      value: -1,
-    ),
+    // SideTabModel(
+    //   isParent: true,
+    //   text: locale.chequesManagement,
+    //   icon: Icons.read_more,
+    //   subMenu: [
+    //     SideSubTabModel(
+    //       text: locale.chequesAndBank,
+    //       value: 10,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.outStandingCheques,
+    //       value: 11,
+    //     ),
+    //   ],
+    //   value: -1,
+    // ),
     // SideTabModel(
     //   isParent: true,
     //   text: "General Ledger",

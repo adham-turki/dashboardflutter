@@ -161,7 +161,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                               _locale.localeName == "en"
                                   ? "(${fromDateController.text}  -  ${toDateController.text})"
                                   : "($fromDate  -  $toDate)",
-                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
+                              style: TextStyle(fontSize: isDesktop ? 12 : 18),
                             ),
                             SizedBox(
                                 width: !isDesktop
