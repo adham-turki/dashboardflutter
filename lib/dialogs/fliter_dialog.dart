@@ -165,6 +165,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   SizedBox(
                     width: screenWidth * 0.35,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         SizedBox(
@@ -195,6 +196,8 @@ class _FilterDialogState extends State<FilterDialog> {
                     child: Row(
                       mainAxisAlignment: (widget.hint != _locale.salesByHours &&
                               widget.hint != _locale.salesCostBasedStockCat &&
+                              widget.hint != _locale.diffClosedCashByShifts &&
+                              widget.hint != _locale.diffCashByShifts &&
                               widget.hint != _locale.salesCostBasedBranch)
                           ? MainAxisAlignment.spaceAround
                           : MainAxisAlignment.center,
@@ -224,6 +227,8 @@ class _FilterDialogState extends State<FilterDialog> {
                         ),
                         (widget.hint != _locale.salesByHours &&
                                 widget.hint != _locale.salesCostBasedStockCat &&
+                                widget.hint != _locale.diffClosedCashByShifts &&
+                                widget.hint != _locale.diffCashByShifts &&
                                 widget.hint != _locale.salesCostBasedBranch)
                             ? SizedBox(
                                 width: Responsive.isDesktop(context)
@@ -260,9 +265,15 @@ class _FilterDialogState extends State<FilterDialog> {
                     SizedBox(
                       // height: screenHeight * 0.22,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: (widget.hint == _locale.cashierLogs)
+                            ? MainAxisAlignment.spaceAround
+                            : MainAxisAlignment.center,
                         children: [
-                          (widget.hint == _locale.cashierLogs)
+                          (widget.hint == _locale.cashierLogs ||
+                                  widget.hint ==
+                                      _locale.diffClosedCashByShifts ||
+                                  widget.hint == _locale.diffCashByShifts)
                               ? SizedBox(
                                   width: Responsive.isDesktop(context)
                                       ? screenWidth * 0.16
