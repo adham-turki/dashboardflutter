@@ -381,7 +381,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         controller: _scrollController1,
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          height: height * 0.35,
+                          height: height * 0.38,
                           width: Responsive.isDesktop(context)
                               ? data.length > 20
                                   ? width * (data.length / 10)
@@ -395,8 +395,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               primaryXAxis: CategoryAxis(
                                 majorGridLines: MajorGridLines(
                                     width: 1.5, color: Colors.grey),
-                                labelStyle:
-                                    TextStyle(fontWeight: FontWeight.bold),
+                                labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 10),
                                 majorTickLines: MajorTickLines(size: 10),
                                 labelPlacement: LabelPlacement.onTicks,
                                 labelRotation:
@@ -412,15 +412,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                 isVisible: true,
                                 position: LegendPosition
                                     .bottom, // Position the legend below the chart
-                                overflowMode: LegendItemOverflowMode
-                                    .wrap, // Handle overflow
+                                // overflowMode: LegendItemOverflowMode.wrap,
                               ),
                               axes: <ChartAxis>[
                                 CategoryAxis(
                                   majorGridLines: MajorGridLines(
                                       width: 1.5, color: Colors.grey),
-                                  labelStyle:
-                                      TextStyle(fontWeight: FontWeight.bold),
+                                  labelStyle: TextStyle(
+                                      fontWeight: FontWeight.bold, fontSize: 8),
                                   majorTickLines: MajorTickLines(size: 10),
                                   labelPlacement: LabelPlacement.onTicks,
                                   labelRotation: -30, // Rotating
@@ -491,7 +490,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     );
                   })
                 : SizedBox(
-                    height: height * 0.35,
+                    height: height * 0.38,
                     child: Center(child: Text(_locale.noDataAvailable)),
                   )
           ],
@@ -614,7 +613,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         controller: _scrollController2,
                         scrollDirection: Axis.horizontal,
                         child: SizedBox(
-                          height: height * 0.35,
+                          height: height * 0.38,
                           width: Responsive.isDesktop(context)
                               ? data.length > 20
                                   ? width * (data.length / 10)
@@ -716,7 +715,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     );
                   })
                 : SizedBox(
-                    height: height * 0.35,
+                    height: height * 0.38,
                     child: Center(child: Text(_locale.noDataAvailable)),
                   )
           ],
