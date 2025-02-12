@@ -65,7 +65,7 @@
     "leastOfInventoryPerformance": "أقل الأصناف مبيعاً",
     "code": "الكود",
     "name": "الاسم",
-    "currentQty": "رصيد الكميات",
+    "currentQty": "رصيد الصنف",
     "soldQnty": "الكمية المباعة",
     "chequesPayable": "مبالغ الشيكات",
     "bankSettlement": "تسوية البنك",

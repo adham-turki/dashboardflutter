@@ -110,10 +110,10 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       title: locale.reports,
       icon: Icons.note_sharp,
       subMenuList: [
-        SubMenuModel(
-          title: locale.totalSales,
-          pageNumber: 12,
-        ),
+        // SubMenuModel(
+        //   title: locale.totalSales,
+        //   pageNumber: 12,
+        // ),
         SubMenuModel(
           title: locale.salesreport,
           pageNumber: 13,

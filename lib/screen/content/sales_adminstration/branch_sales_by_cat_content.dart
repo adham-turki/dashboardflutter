@@ -387,18 +387,18 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     });
                   },
                 ),
-                CustomDropDown(
-                  items: periods,
-                  label: _locale.period,
-                  initialValue: selectedPeriod,
-                  onChanged: (value) {
-                    setState(() {
-                      checkPeriods(value);
-                      selectedPeriod = value!;
-                      getBranchByCat();
-                    });
-                  },
-                ),
+                // CustomDropDown(
+                //   items: periods,
+                //   label: _locale.period,
+                //   initialValue: selectedPeriod,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       checkPeriods(value);
+                //       selectedPeriod = value!;
+                //       getBranchByCat();
+                //     });
+                //   },
+                // ),
                 CustomDropDown(
                   items: categories,
                   label: _locale.byCategory,
@@ -491,19 +491,19 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             });
           },
         ),
-        CustomDropDown(
-          width: widthMobile * 0.81,
-          items: periods,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getBranchByCat();
-            });
-          },
-        ),
+        // CustomDropDown(
+        //   width: widthMobile * 0.81,
+        //   items: periods,
+        //   label: _locale.period,
+        //   initialValue: selectedPeriod,
+        //   onChanged: (value) {
+        //     setState(() {
+        //       checkPeriods(value);
+        //       selectedPeriod = value!;
+        //       getBranchByCat();
+        //     });
+        //   },
+        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: categories,

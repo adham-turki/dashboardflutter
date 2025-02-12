@@ -465,7 +465,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                     xAxisName: 'secondaryXAxis',
                                     yAxisName: 'secondaryYAxis',
                                     dataLabelMapper: (datum, index) {
-                                      return datum.perc;
+                                      return "${datum.perc}%";
                                     },
                                     color: const Color.fromRGBO(26, 138, 6, 1))
                               ]),
@@ -668,7 +668,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                     xAxisName: 'secondaryXAxis',
                                     yAxisName: 'secondaryYAxis',
                                     dataLabelMapper: (datum, index) {
-                                      return datum.perc;
+                                      return "${datum.perc}%";
                                     },
                                     color: const Color.fromRGBO(26, 138, 6, 1))
                               ]),

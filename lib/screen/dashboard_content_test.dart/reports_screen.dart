@@ -392,7 +392,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   ? width * (data.length / 5)
                                   : width * 0.95,
                           child: SfCartesianChart(
-                              primaryXAxis: CategoryAxis(),
+                              primaryXAxis: CategoryAxis(
+                                majorGridLines: MajorGridLines(
+                                    width: 1.5, color: Colors.grey),
+                                labelStyle:
+                                    TextStyle(fontWeight: FontWeight.bold),
+                                majorTickLines: MajorTickLines(size: 10),
+                                labelPlacement: LabelPlacement.onTicks,
+                                labelRotation:
+                                    -30, // Rotating labels by -30 degrees
+                              ),
+
                               // primaryYAxis: NumericAxis(
                               //     minimum: minValue,
                               //     maximum: maxValue,
@@ -407,9 +417,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               ),
                               axes: <ChartAxis>[
                                 CategoryAxis(
-                                    // name: 'secondaryXAxis',
-                                    // opposedPosition: true,
-                                    ),
+                                  majorGridLines: MajorGridLines(
+                                      width: 1.5, color: Colors.grey),
+                                  labelStyle:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                  majorTickLines: MajorTickLines(size: 10),
+                                  labelPlacement: LabelPlacement.onTicks,
+                                  labelRotation: -30, // Rotating
+                                ),
                               ],
                               tooltipBehavior: _tooltip,
                               series: <CartesianSeries<ChartData, String>>[
@@ -434,14 +449,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     xValueMapper: (ChartData data, _) =>
-                                        data.perc,
+                                        "${data.perc}\n${data.x.toString()}",
                                     yValueMapper: (ChartData data, _) => data.y,
                                     enableTooltip: true,
                                     name: _locale.valueOfTotalDiff,
                                     // xAxisName: 'secondaryXAxis',
                                     // yAxisName: 'secondaryYAxis',
                                     dataLabelMapper: (datum, index) {
-                                      return "${datum.y.toString()}\n${datum.x.toString()}";
+                                      return Converters.formatNumberRounded(
+                                          double.parse(
+                                              Converters.formatNumberDigits(
+                                                  datum.y)));
                                     },
                                     color: const Color.fromRGBO(26, 138, 6, 1)),
                                 LineSeries<ChartData, String>(
@@ -453,7 +471,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                           fontWeight: FontWeight.w600),
                                     ),
                                     xValueMapper: (ChartData data, _) =>
-                                        data.perc,
+                                        "${data.perc}\n${data.x.toString()}",
                                     yValueMapper: (ChartData data, _) =>
                                         data.percD,
                                     enableTooltip: true,
@@ -461,7 +479,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     // xAxisName: 'secondaryXAxis',
                                     // yAxisName: 'secondaryYAxis',
                                     dataLabelMapper: (datum, index) {
-                                      return datum.percD.toString();
+                                      return Converters.formatNumberRounded(
+                                          double.parse(
+                                              Converters.formatNumberDigits(
+                                                  datum.percD)));
                                     },
                                     color: Color.fromARGB(255, 255, 0, 0)),
                               ]),
@@ -604,7 +625,15 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   ? width * (data.length / 5)
                                   : width * 0.95,
                           child: SfCartesianChart(
-                              primaryXAxis: CategoryAxis(),
+                              primaryXAxis: CategoryAxis(
+                                majorGridLines: MajorGridLines(
+                                    width: 1.5, color: Colors.grey),
+                                labelStyle:
+                                    TextStyle(fontWeight: FontWeight.bold),
+                                majorTickLines: MajorTickLines(size: 10),
+                                labelPlacement: LabelPlacement.onTicks,
+                                labelRotation: -30, // Rotating
+                              ),
                               // primaryYAxis: NumericAxis(
                               //     minimum: minValue,
                               //     maximum: maxValue,
@@ -619,9 +648,16 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               ),
                               axes: <ChartAxis>[
                                 CategoryAxis(
-                                    // name: 'secondaryXAxis',
-                                    // opposedPosition: true,
-                                    ),
+                                  majorGridLines: MajorGridLines(
+                                      width: 1.5, color: Colors.grey),
+                                  labelStyle:
+                                      TextStyle(fontWeight: FontWeight.bold),
+                                  majorTickLines: MajorTickLines(size: 10),
+                                  labelPlacement: LabelPlacement.onTicks,
+                                  labelRotation: -30, // Rotating
+                                  // name: 'secondaryXAxis',
+                                  // opposedPosition: true,
+                                ),
                               ],
                               tooltipBehavior: _tooltip1,
                               series: <CartesianSeries<ChartData, String>>[
@@ -653,7 +689,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                     // xAxisName: 'secondaryXAxis',
                                     // yAxisName: 'secondaryYAxis',
                                     dataLabelMapper: (datum, index) {
-                                      return "${datum.y.toString()}\n${datum.x.toString()}";
+                                      return "${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(datum.y)))}\n${datum.x.toString()}";
                                     },
                                     color: Colors.blue),
                                 // LineSeries<ChartData, String>(

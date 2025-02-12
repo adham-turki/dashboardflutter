@@ -153,18 +153,18 @@ class _FilterDialogSalesByCategoryState
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: periods,
-                          label: _locale.period,
-                          initialValue: selectedPeriod,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value!;
-                            });
-                          },
-                        ),
+                        // CustomDropDown(
+                        //   width: width * 0.165,
+                        //   items: periods,
+                        //   label: _locale.period,
+                        //   initialValue: selectedPeriod,
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       checkPeriods(value);
+                        //       selectedPeriod = value!;
+                        //     });
+                        //   },
+                        // ),
                         CustomDropDown(
                           width: width * 0.165,
                           items: categories,
@@ -193,18 +193,18 @@ class _FilterDialogSalesByCategoryState
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomDropDown(
-                          items: periods,
-                          label: _locale.period,
-                          initialValue: selectedPeriod,
-                          width: width,
-                          onChanged: (value) {
-                            setState(() {
-                              checkPeriods(value);
-                              selectedPeriod = value!;
-                            });
-                          },
-                        ),
+                        // CustomDropDown(
+                        //   items: periods,
+                        //   label: _locale.period,
+                        //   initialValue: selectedPeriod,
+                        //   width: width,
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       checkPeriods(value);
+                        //       selectedPeriod = value!;
+                        //     });
+                        //   },
+                        // ),
                         CustomDropDown(
                           items: categories,
                           width: width,

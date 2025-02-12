@@ -157,20 +157,20 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              items: periods,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) async {
-                checkPeriods(value);
-                selectedPeriod = value;
-                reportsResult =
-                    await controller.getChequeResultMethod(criteria);
+            // CustomDropDown(
+            //   hint: periods[0],
+            //   label: _locale.period,
+            //   items: periods,
+            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+            //   onChanged: (value) async {
+            //     checkPeriods(value);
+            //     selectedPeriod = value;
+            //     reportsResult =
+            //         await controller.getChequeResultMethod(criteria);
 
-                setState(() {});
-              },
-            ),
+            //     setState(() {});
+            //   },
+            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -285,21 +285,21 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              items: periods,
-              width: widthMobile * 0.81,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) async {
-                checkPeriods(value);
-                selectedPeriod = value;
-                reportsResult =
-                    await controller.getChequeResultMethod(criteria);
+            // CustomDropDown(
+            //   hint: periods[0],
+            //   label: _locale.period,
+            //   items: periods,
+            //   width: widthMobile * 0.81,
+            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+            //   onChanged: (value) async {
+            //     checkPeriods(value);
+            //     selectedPeriod = value;
+            //     reportsResult =
+            //         await controller.getChequeResultMethod(criteria);
 
-                setState(() {});
-              },
-            ),
+            //     setState(() {});
+            //   },
+            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],

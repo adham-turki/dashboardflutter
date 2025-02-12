@@ -316,18 +316,18 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomDropDown(
-                  items: periods,
-                  label: _locale.period,
-                  initialValue: selectedPeriod,
-                  onChanged: (value) {
-                    setState(() {
-                      checkPeriods(value);
-                      selectedPeriod = value!;
-                      getTotalCollections();
-                    });
-                  },
-                ),
+                // CustomDropDown(
+                //   items: periods,
+                //   label: _locale.period,
+                //   initialValue: selectedPeriod,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       checkPeriods(value);
+                //       selectedPeriod = value!;
+                //       getTotalCollections();
+                //     });
+                //   },
+                // ),
                 CustomDropDown(
                   items: status,
                   label: _locale.status,
@@ -420,19 +420,19 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             });
           },
         ),
-        CustomDropDown(
-          width: widthMobile * 0.81,
-          items: periods,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getTotalCollections();
-            });
-          },
-        ),
+        // CustomDropDown(
+        //   width: widthMobile * 0.81,
+        //   items: periods,
+        //   label: _locale.period,
+        //   initialValue: selectedPeriod,
+        //   onChanged: (value) {
+        //     setState(() {
+        //       checkPeriods(value);
+        //       selectedPeriod = value!;
+        //       getTotalCollections();
+        //     });
+        //   },
+        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: status,

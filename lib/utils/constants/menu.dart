@@ -158,10 +158,10 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       text: locale.reports,
       icon: Icons.note_sharp,
       subMenu: [
-        SideSubTabModel(
-          text: locale.totalSales,
-          value: 12,
-        ),
+        // SideSubTabModel(
+        //   text: locale.totalSales,
+        //   value: 12,
+        // ),
         SideSubTabModel(
           text: locale.salesreport,
           value: 13,

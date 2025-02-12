@@ -367,36 +367,36 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              DropDown(
-                // item/: periods[0],/
-                bordeText: _locale.period,
-                items: periods,
-                width: isDesktop ? width * .14 : width * .35,
-                height: isDesktop ? height * 0.045 : height * 0.35,
-                initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
-                    ? periods.first
-                    : reportsProvider.getTotalSalesPeriodIndex() == 0
-                        ? _locale.daily
-                        : reportsProvider.getTotalSalesPeriodIndex() == 1
-                            ? _locale.weekly
-                            : reportsProvider.getTotalSalesPeriodIndex() == 2
-                                ? _locale.monthly
-                                : reportsProvider.getTotalSalesPeriodIndex() ==
-                                        3
-                                    ? _locale.yearly
-                                    : periods.first,
-                onChanged: (value) async {
-                  checkPeriods(value);
-                  selectedPeriod = value;
-                  getPeriodByIndex();
-                  // reportsResult = await totalSalesController
-                  //     .getTotalSalesResultMehtod(criteria);
-                  setState(() {});
-                },
-              ),
-              SizedBox(
-                width: width * 0.01,
-              ),
+              // DropDown(
+              //   // item/: periods[0],/
+              //   bordeText: _locale.period,
+              //   items: periods,
+              //   width: isDesktop ? width * .14 : width * .35,
+              //   height: isDesktop ? height * 0.045 : height * 0.35,
+              //   initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
+              //       ? periods.first
+              //       : reportsProvider.getTotalSalesPeriodIndex() == 0
+              //           ? _locale.daily
+              //           : reportsProvider.getTotalSalesPeriodIndex() == 1
+              //               ? _locale.weekly
+              //               : reportsProvider.getTotalSalesPeriodIndex() == 2
+              //                   ? _locale.monthly
+              //                   : reportsProvider.getTotalSalesPeriodIndex() ==
+              //                           3
+              //                       ? _locale.yearly
+              //                       : periods.first,
+              //   onChanged: (value) async {
+              //     checkPeriods(value);
+              //     selectedPeriod = value;
+              //     getPeriodByIndex();
+              //     // reportsResult = await totalSalesController
+              //     //     .getTotalSalesResultMehtod(criteria);
+              //     setState(() {});
+              //   },
+              // ),
+              // SizedBox(
+              //   width: width * 0.01,
+              // ),
               DropDown(
                 bordeText: _locale.status,
                 // hint: status[0],
@@ -487,36 +487,36 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 height: height * 0.01,
               ),
-              DropDown(
-                // item/: periods[0],/
-                bordeText: _locale.period,
-                items: periods,
-                width: isDesktop ? width * .14 : width * .7,
-                height: isDesktop ? height * 0.045 : height * 0.045,
-                initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
-                    ? periods.first
-                    : reportsProvider.getTotalSalesPeriodIndex() == 0
-                        ? _locale.daily
-                        : reportsProvider.getTotalSalesPeriodIndex() == 1
-                            ? _locale.weekly
-                            : reportsProvider.getTotalSalesPeriodIndex() == 2
-                                ? _locale.monthly
-                                : reportsProvider.getTotalSalesPeriodIndex() ==
-                                        3
-                                    ? _locale.yearly
-                                    : periods.first,
-                onChanged: (value) async {
-                  checkPeriods(value);
-                  selectedPeriod = value;
-                  getPeriodByIndex();
-                  // reportsResult = await totalSalesController
-                  //     .getTotalSalesResultMehtod(criteria);
-                  setState(() {});
-                },
-              ),
-              SizedBox(
-                height: height * 0.01,
-              ),
+              // DropDown(
+              //   // item/: periods[0],/
+              //   bordeText: _locale.period,
+              //   items: periods,
+              //   width: isDesktop ? width * .14 : width * .7,
+              //   height: isDesktop ? height * 0.045 : height * 0.045,
+              //   initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
+              //       ? periods.first
+              //       : reportsProvider.getTotalSalesPeriodIndex() == 0
+              //           ? _locale.daily
+              //           : reportsProvider.getTotalSalesPeriodIndex() == 1
+              //               ? _locale.weekly
+              //               : reportsProvider.getTotalSalesPeriodIndex() == 2
+              //                   ? _locale.monthly
+              //                   : reportsProvider.getTotalSalesPeriodIndex() ==
+              //                           3
+              //                       ? _locale.yearly
+              //                       : periods.first,
+              //   onChanged: (value) async {
+              //     checkPeriods(value);
+              //     selectedPeriod = value;
+              //     getPeriodByIndex();
+              //     // reportsResult = await totalSalesController
+              //     //     .getTotalSalesResultMehtod(criteria);
+              //     setState(() {});
+              //   },
+              // ),
+              // SizedBox(
+              //   height: height * 0.01,
+              // ),
               DropDown(
                 bordeText: _locale.status,
                 // hint: status[0],

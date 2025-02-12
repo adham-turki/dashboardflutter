@@ -379,18 +379,18 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CustomDropDown(
-                  items: periods,
-                  label: _locale.period,
-                  initialValue: selectedPeriod,
-                  onChanged: (value) {
-                    setState(() {
-                      checkPeriods(value);
-                      selectedPeriod = value!;
-                      getCashFlows();
-                    });
-                  },
-                ),
+                // CustomDropDown(
+                //   items: periods,
+                //   label: _locale.period,
+                //   initialValue: selectedPeriod,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       checkPeriods(value);
+                //       selectedPeriod = value!;
+                //       getCashFlows();
+                //     });
+                //   },
+                // ),
                 CustomDropDown(
                   items: status,
                   label: _locale.status,
@@ -482,19 +482,19 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             });
           },
         ),
-        CustomDropDown(
-          width: widthMobile * 0.81,
-          items: periods,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getCashFlows();
-            });
-          },
-        ),
+        // CustomDropDown(
+        //   width: widthMobile * 0.81,
+        //   items: periods,
+        //   label: _locale.period,
+        //   initialValue: selectedPeriod,
+        //   onChanged: (value) {
+        //     setState(() {
+        //       checkPeriods(value);
+        //       selectedPeriod = value!;
+        //       getCashFlows();
+        //     });
+        //   },
+        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: status,

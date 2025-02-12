@@ -266,20 +266,20 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              items: periods,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) {
-                setState(() {
-                  checkPeriods(value);
-                  selectedPeriod = value;
-                });
-              },
-            ),
+            // CustomDropDown(
+            //   hint: periods[0],
+            //   label: _locale.period,
+            //   items: periods,
+            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       checkPeriods(value);
+            //       selectedPeriod = value;
+            //     });
+            //   },
+            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -294,21 +294,27 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 });
               },
             ),
-            CustomTextField(
-              focusNode: focusNode,
-              controller: numberOfrow,
-              initialValue: numberOfrow.text,
-              label: _locale.itemsNumber,
-              onSubmitted: (value) {
-                setState(() {
+            SizedBox(
+              width: width * 0.01,
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.15,
+              child: CustomTextField(
+                focusNode: focusNode,
+                controller: numberOfrow,
+                initialValue: numberOfrow.text,
+                label: _locale.itemsNumber,
+                onSubmitted: (value) {
+                  setState(() {
+                    hintValue = value;
+                    criteria.rownum = int.parse(numberOfrow.text);
+                  });
+                },
+                onChanged: (value) {
                   hintValue = value;
                   criteria.rownum = int.parse(numberOfrow.text);
-                });
-              },
-              onChanged: (value) {
-                hintValue = value;
-                criteria.rownum = int.parse(numberOfrow.text);
-              },
+                },
+              ),
             ),
           ],
         ),
@@ -365,19 +371,19 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomDropDown(
-              hint: periods[0],
-              label: _locale.period,
-              width: widthMobile * 0.81,
-              items: periods,
-              initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-              onChanged: (value) {
-                setState(() {
-                  checkPeriods(value);
-                  selectedPeriod = value;
-                });
-              },
-            ),
+            // CustomDropDown(
+            //   hint: periods[0],
+            //   label: _locale.period,
+            //   width: widthMobile * 0.81,
+            //   items: periods,
+            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       checkPeriods(value);
+            //       selectedPeriod = value;
+            //     });
+            //   },
+            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],

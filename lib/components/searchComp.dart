@@ -169,40 +169,40 @@ class _SearchComponentState extends State<SearchComponent> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: screenWidth / 2.2,
-                                height: screenHeight * 0.1,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.centerLeft,
-                                      width: (screenWidth / 2.2) / 4.8,
-                                      height: screenHeight * 0.1,
-                                      child: Text(
-                                        _locale.period,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: screenWidth * 0.014),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: (screenWidth / 2.2) / 1.4,
-                                      height: screenHeight * 0.2,
-                                      child: CustomDropDown(
-                                        label: "",
-                                        items: periods,
-                                        hint: _locale.select,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            checkPeriods(value);
-                                            selectedPeriod = value!;
-                                          });
-                                        },
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
+                              // SizedBox(
+                              //   width: screenWidth / 2.2,
+                              //   height: screenHeight * 0.1,
+                              //   child: Row(
+                              //     children: [
+                              //       Container(
+                              //         alignment: Alignment.centerLeft,
+                              //         width: (screenWidth / 2.2) / 4.8,
+                              //         height: screenHeight * 0.1,
+                              //         child: Text(
+                              //           _locale.period,
+                              //           style: TextStyle(
+                              //               fontWeight: FontWeight.w600,
+                              //               fontSize: screenWidth * 0.014),
+                              //         ),
+                              //       ),
+                              //       SizedBox(
+                              //         width: (screenWidth / 2.2) / 1.4,
+                              //         height: screenHeight * 0.2,
+                              //         child: CustomDropDown(
+                              //           label: "",
+                              //           items: periods,
+                              //           hint: _locale.select,
+                              //           onChanged: (value) {
+                              //             setState(() {
+                              //               checkPeriods(value);
+                              //               selectedPeriod = value!;
+                              //             });
+                              //           },
+                              //         ),
+                              //       )
+                              //     ],
+                              //   ),
+                              // ),
                               SizedBox(
                                 width: screenWidth / 2.2,
                                 height: screenHeight * 0.1,

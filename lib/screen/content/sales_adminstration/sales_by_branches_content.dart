@@ -301,19 +301,19 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        CustomDropDown(
-          items: periods,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          hint: "",
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getSalesByBranch();
-            });
-          },
-        ),
+        // CustomDropDown(
+        //   items: periods,
+        //   label: _locale.period,
+        //   initialValue: selectedPeriod,
+        //   hint: "",
+        //   onChanged: (value) {
+        //     setState(() {
+        //       checkPeriods(value);
+        //       selectedPeriod = value!;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
         CustomDate(
           date: fromDate,
           dateController: _fromDateController,
@@ -472,20 +472,20 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     double widthMobile = width;
     return Column(
       children: [
-        CustomDropDown(
-          items: periods,
-          width: widthMobile * 0.81,
-          label: _locale.period,
-          initialValue: selectedPeriod,
-          hint: "",
-          onChanged: (value) {
-            setState(() {
-              checkPeriods(value);
-              selectedPeriod = value!;
-              getSalesByBranch();
-            });
-          },
-        ),
+        // CustomDropDown(
+        //   items: periods,
+        //   width: widthMobile * 0.81,
+        //   label: _locale.period,
+        //   initialValue: selectedPeriod,
+        //   hint: "",
+        //   onChanged: (value) {
+        //     setState(() {
+        //       checkPeriods(value);
+        //       selectedPeriod = value!;
+        //       getSalesByBranch();
+        //     });
+        //   },
+        // ),
         SizedBox(
           width: widthMobile * 0.81,
           child: CustomDate(
