@@ -45,6 +45,11 @@ class _FilterDialogState extends State<FilterDialog> {
   late AppLocalizations _locale;
   @override
   void didChangeDependencies() {
+    _fromDateController =
+        TextEditingController(text: formatDateString(widget.filter.fromDate));
+    _toDateController =
+        TextEditingController(text: formatDateString(widget.filter.toDate));
+    print("widget.branches: ${widget.branches.length}");
     _locale = AppLocalizations.of(context)!;
     transTypeList = [];
     transTypeList = constTransTypeList;
@@ -93,10 +98,6 @@ class _FilterDialogState extends State<FilterDialog> {
       }
       print("formatDateString: ${formatDateString(widget.filter.fromDate)}");
       print("formatDateString:1 ${formatDateString(widget.filter.toDate)}");
-      _fromDateController =
-          TextEditingController(text: formatDateString(widget.filter.fromDate));
-      _toDateController =
-          TextEditingController(text: formatDateString(widget.filter.toDate));
 
       super.didChangeDependencies();
     }
@@ -122,7 +123,6 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   void initState() {
     super.initState();
-    print("widget.branches: ${widget.branches.length}");
   }
 
   String getDescriptionById(int id) {
@@ -822,7 +822,7 @@ class _FilterDialogState extends State<FilterDialog> {
           lastDate: DateTime.now(),
           isForwardSlashFormat: true,
           dateControllerToCompareWith: dateControllerToCompareWith,
-          isInitiaDate: true,
+          isInitiaDate: label == _locale.fromDate ? true : false,
           onValue: (isValid, value) {
             if (isValid) {
               setState(() {
