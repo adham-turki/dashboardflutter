@@ -834,6 +834,7 @@ class _BranchesSalesByCatDashboardState
 
   void getBranch() async {
     BranchController().getBranch().then((value) {
+      branches.add(_locale.all);
       value.forEach((k, v) {
         if (mounted) {
           setState(() {

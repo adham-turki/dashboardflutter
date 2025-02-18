@@ -817,7 +817,7 @@ class _FilterDialogState extends State<FilterDialog> {
           dateWidth: Responsive.isDesktop(context)
               ? screenWidth * 0.14
               : screenWidth * 0.66,
-          label: _locale.fromDate,
+          label: label,
           dateController: controller,
           lastDate: DateTime.now(),
           isForwardSlashFormat: true,

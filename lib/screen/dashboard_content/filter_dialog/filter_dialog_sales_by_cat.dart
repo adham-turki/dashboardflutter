@@ -116,6 +116,7 @@ class _FilterDialogSalesByCategoryState
         ? DatesController().formatDateReverse(widget.fromDate!)
         : currentMonth;
     selectedCategories = widget.selectedCategory ?? "";
+
     branches = widget.branches ?? [_locale.all];
 
     selectedBranch = widget.selectedBranchCodeF == null

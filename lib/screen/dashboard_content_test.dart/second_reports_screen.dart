@@ -65,6 +65,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   final ScrollController _scrollController1 = ScrollController();
   final storage = const FlutterSecureStorage();
   Timer? _timer;
+  bool isLoading = false;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -209,9 +210,11 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     totalProfitsByCategoryList.clear();
     totalProfitsByCategoryCount = 0.0;
     data.clear();
+    isLoading = true;
     await TotalSalesController()
         .getTotalProfitsByCategoryReportList(salesCostSearchCriteria)
         .then((value) {
+      isLoading = false;
       for (var i = 0; i < value.length; i++) {
         totalProfitsByCategoryList.add(value[i]);
         totalProfitsByCategoryCount +=
@@ -252,9 +255,11 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     salesCostBasedBranchReportList.clear();
     totalsalesCostBasedBranchReport = 0.0;
     data1.clear();
+    isLoading = true;
     await TotalSalesController()
         .getTotalProfitsByBranchReportList(salesCostBasedBranchReportCrit)
         .then((value) {
+      isLoading = false;
       for (var i = 0; i < value.length; i++) {
         salesCostBasedBranchReportList.add(value[i]);
 
@@ -376,107 +381,116 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            (data1.isNotEmpty)
-                ? Consumer<ScreenContentProvider>(
-                    builder: (context, value, child) {
-                    return Scrollbar(
-                      controller: _scrollController1,
-                      thumbVisibility: true,
-                      thickness: 8,
-                      trackVisibility: true,
-                      radius: const Radius.circular(4),
-                      child: SingleChildScrollView(
-                        reverse: _locale.localeName == "ar" ? true : false,
-                        controller: _scrollController1,
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          height: height * 0.35,
-                          width: Responsive.isDesktop(context)
-                              ? data1.length > 20
-                                  ? width * (data1.length / 10)
-                                  : !value.getIsColapsed()
-                                      ? width * 0.82
-                                      : width * 0.92
-                              : data1.length > 10
-                                  ? width * (data1.length / 5)
-                                  : width * 0.95,
-                          child: SfCartesianChart(
-                              primaryXAxis: CategoryAxis(),
-                              primaryYAxis: NumericAxis(
-                                // minimum: minValue,
-                                // maximum: maxValue,
-                                title: AxisTitle(text: _locale.totalCost),
-                                // interval: interval
-                              ),
-                              legend: Legend(
-                                isVisible: true,
-                                position: LegendPosition
-                                    .bottom, // Position the legend below the chart
-                                overflowMode: LegendItemOverflowMode
-                                    .wrap, // Handle overflow
-                              ),
-                              axes: <ChartAxis>[
-                                CategoryAxis(
-                                  name: 'secondaryXAxis',
-                                  opposedPosition: true,
-                                ),
-                                NumericAxis(
-                                  name: 'secondaryYAxis',
-                                  title: AxisTitle(text: _locale.profitPercent),
-                                  opposedPosition: true,
-                                  // minimum: secondaryMinValue,
-                                  // maximum: secondaryMaxValue,
-                                  // interval: secondaryInterval,
-                                ),
-                              ],
-                              tooltipBehavior: _tooltip1,
-                              series: <CartesianSeries<ChartData, String>>[
-                                ColumnSeries<ChartData, String>(
-                                    dataSource: data1,
-                                    xValueMapper: (ChartData data1, _) =>
-                                        data1.x,
-                                    yValueMapper: (ChartData data1, _) =>
-                                        data1.y,
-                                    name: _locale.profit,
-                                    color: const Color.fromRGBO(184, 2, 2, 1)),
-                                ColumnSeries<ChartData, String>(
-                                    dataSource: data1,
-                                    xValueMapper: (ChartData data1, _) =>
-                                        data1.x,
-                                    yValueMapper: (ChartData data1, _) =>
-                                        data1.y1,
-                                    name: _locale.salesCost,
-                                    color:
-                                        const Color.fromRGBO(1, 102, 184, 1)),
-                                LineSeries<ChartData, String>(
-                                    dataSource: data1,
-                                    dataLabelSettings: const DataLabelSettings(
-                                      isVisible: true,
-                                      textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    xValueMapper: (ChartData data1, _) =>
-                                        data1.perc,
-                                    yValueMapper: (ChartData data1, _) =>
-                                        data1.percD,
-                                    enableTooltip: true,
-                                    name: _locale.profitPercent,
-                                    xAxisName: 'secondaryXAxis',
-                                    yAxisName: 'secondaryYAxis',
-                                    dataLabelMapper: (datum, index) {
-                                      return "${datum.perc}%";
-                                    },
-                                    color: const Color.fromRGBO(26, 138, 6, 1))
-                              ]),
-                        ),
-                      ),
-                    );
-                  })
-                : SizedBox(
+            isLoading
+                ? SizedBox(
                     height: height * 0.35,
-                    child: Center(child: Text(_locale.noDataAvailable)),
-                  )
+                    child: const Center(child: CircularProgressIndicator()))
+                : (data1.isNotEmpty)
+                    ? Consumer<ScreenContentProvider>(
+                        builder: (context, value, child) {
+                        return Scrollbar(
+                          controller: _scrollController1,
+                          thumbVisibility: true,
+                          thickness: 8,
+                          trackVisibility: true,
+                          radius: const Radius.circular(4),
+                          child: SingleChildScrollView(
+                            reverse: _locale.localeName == "ar" ? true : false,
+                            controller: _scrollController1,
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              height: height * 0.35,
+                              width: Responsive.isDesktop(context)
+                                  ? data1.length > 20
+                                      ? width * (data1.length / 10)
+                                      : !value.getIsColapsed()
+                                          ? width * 0.82
+                                          : width * 0.92
+                                  : data1.length > 10
+                                      ? width * (data1.length / 5)
+                                      : width * 0.95,
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(),
+                                  primaryYAxis: NumericAxis(
+                                    // minimum: minValue,
+                                    // maximum: maxValue,
+                                    title: AxisTitle(text: _locale.totalCost),
+                                    // interval: interval
+                                  ),
+                                  legend: Legend(
+                                    isVisible: true,
+                                    position: LegendPosition
+                                        .bottom, // Position the legend below the chart
+                                    overflowMode: LegendItemOverflowMode
+                                        .wrap, // Handle overflow
+                                  ),
+                                  axes: <ChartAxis>[
+                                    CategoryAxis(
+                                      name: 'secondaryXAxis',
+                                      opposedPosition: true,
+                                    ),
+                                    NumericAxis(
+                                      name: 'secondaryYAxis',
+                                      title: AxisTitle(
+                                          text: _locale.profitPercent),
+                                      opposedPosition: true,
+                                      // minimum: secondaryMinValue,
+                                      // maximum: secondaryMaxValue,
+                                      // interval: secondaryInterval,
+                                    ),
+                                  ],
+                                  tooltipBehavior: _tooltip1,
+                                  series: <CartesianSeries<ChartData, String>>[
+                                    ColumnSeries<ChartData, String>(
+                                        dataSource: data1,
+                                        xValueMapper: (ChartData data1, _) =>
+                                            data1.x,
+                                        yValueMapper: (ChartData data1, _) =>
+                                            data1.y,
+                                        name: _locale.profit,
+                                        color:
+                                            const Color.fromRGBO(184, 2, 2, 1)),
+                                    ColumnSeries<ChartData, String>(
+                                        dataSource: data1,
+                                        xValueMapper: (ChartData data1, _) =>
+                                            data1.x,
+                                        yValueMapper: (ChartData data1, _) =>
+                                            data1.y1,
+                                        name: _locale.salesCost,
+                                        color: const Color.fromRGBO(
+                                            1, 102, 184, 1)),
+                                    LineSeries<ChartData, String>(
+                                        dataSource: data1,
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                          isVisible: true,
+                                          textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        xValueMapper: (ChartData data1, _) =>
+                                            double.parse(data1.perc)
+                                                .toStringAsFixed(2),
+                                        yValueMapper: (ChartData data1, _) =>
+                                            data1.percD,
+                                        enableTooltip: true,
+                                        name: _locale.profitPercent,
+                                        xAxisName: 'secondaryXAxis',
+                                        yAxisName: 'secondaryYAxis',
+                                        dataLabelMapper: (datum, index) {
+                                          return "${double.parse(datum.perc).toStringAsFixed(2)}%";
+                                        },
+                                        color:
+                                            const Color.fromRGBO(26, 138, 6, 1))
+                                  ]),
+                            ),
+                          ),
+                        );
+                      })
+                    : SizedBox(
+                        height: height * 0.35,
+                        child: Center(child: Text(_locale.noDataAvailable)),
+                      )
           ],
         ),
       ),
@@ -582,104 +596,116 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            (data.isNotEmpty)
-                ? Consumer<ScreenContentProvider>(
-                    builder: (context, value, child) {
-                    return Scrollbar(
-                      controller: _scrollController,
-                      thumbVisibility: true,
-                      thickness: 8,
-                      trackVisibility: true,
-                      radius: const Radius.circular(4),
-                      child: SingleChildScrollView(
-                        reverse: _locale.localeName == "ar" ? true : false,
-                        controller: _scrollController,
-                        scrollDirection: Axis.horizontal,
-                        child: SizedBox(
-                          height: height * 0.35,
-                          width: Responsive.isDesktop(context)
-                              ? data.length > 20
-                                  ? width * (data.length / 10)
-                                  : !value.getIsColapsed()
-                                      ? width * 0.82
-                                      : width * 0.92
-                              : data.length > 10
-                                  ? width * (data.length / 5)
-                                  : width * 0.95,
-                          child: SfCartesianChart(
-                              primaryXAxis: CategoryAxis(),
-                              primaryYAxis: NumericAxis(
-                                // minimum: minValue,
-                                // maximum: maxValue,
-                                title: AxisTitle(text: _locale.totalCost),
-                                // interval: interval
-                              ),
-                              legend: Legend(
-                                isVisible: true,
-                                position: LegendPosition
-                                    .bottom, // Position the legend below the chart
-                                overflowMode: LegendItemOverflowMode
-                                    .wrap, // Handle overflow
-                              ),
-                              axes: <ChartAxis>[
-                                CategoryAxis(
-                                  name: 'secondaryXAxis',
-                                  opposedPosition: true,
-                                ),
-                                NumericAxis(
-                                  name: 'secondaryYAxis',
-                                  title: AxisTitle(text: _locale.profitPercent),
-                                  opposedPosition: true,
-                                  // minimum: secondaryMinValue,
-                                  // maximum: secondaryMaxValue,
-                                  // interval: secondaryInterval,
-                                ),
-                              ],
-                              tooltipBehavior: _tooltip,
-                              series: <CartesianSeries<ChartData, String>>[
-                                ColumnSeries<ChartData, String>(
-                                    dataSource: data,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) => data.y,
-                                    name: _locale.profit,
-                                    color: const Color.fromRGBO(184, 2, 2, 1)),
-                                ColumnSeries<ChartData, String>(
-                                    dataSource: data,
-                                    xValueMapper: (ChartData data, _) => data.x,
-                                    yValueMapper: (ChartData data, _) =>
-                                        data.y1,
-                                    name: _locale.salesCost,
-                                    color:
-                                        const Color.fromRGBO(1, 102, 184, 1)),
-                                LineSeries<ChartData, String>(
-                                    dataSource: data,
-                                    dataLabelSettings: const DataLabelSettings(
-                                      isVisible: true,
-                                      textStyle: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    xValueMapper: (ChartData data, _) =>
-                                        data.perc,
-                                    yValueMapper: (ChartData data, _) =>
-                                        data.percD,
-                                    enableTooltip: true,
-                                    name: _locale.profitPercent,
-                                    xAxisName: 'secondaryXAxis',
-                                    yAxisName: 'secondaryYAxis',
-                                    dataLabelMapper: (datum, index) {
-                                      return "${datum.perc}%";
-                                    },
-                                    color: const Color.fromRGBO(26, 138, 6, 1))
-                              ]),
-                        ),
-                      ),
-                    );
-                  })
-                : SizedBox(
+            isLoading
+                ? SizedBox(
                     height: height * 0.35,
-                    child: Center(child: Text(_locale.noDataAvailable)),
-                  )
+                    child: const Center(child: CircularProgressIndicator()))
+                : (data.isNotEmpty)
+                    ? Consumer<ScreenContentProvider>(
+                        builder: (context, value, child) {
+                        return Scrollbar(
+                          controller: _scrollController,
+                          thumbVisibility: true,
+                          thickness: 8,
+                          trackVisibility: true,
+                          radius: const Radius.circular(4),
+                          child: SingleChildScrollView(
+                            reverse: _locale.localeName == "ar" ? true : false,
+                            controller: _scrollController,
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              height: height * 0.35,
+                              width: Responsive.isDesktop(context)
+                                  ? data.length > 20
+                                      ? width * (data.length / 10)
+                                      : !value.getIsColapsed()
+                                          ? width * 0.82
+                                          : width * 0.92
+                                  : data.length > 10
+                                      ? width * (data.length / 5)
+                                      : width * 0.95,
+                              child: SfCartesianChart(
+                                  primaryXAxis: CategoryAxis(),
+                                  primaryYAxis: NumericAxis(
+                                    // minimum: minValue,
+                                    // maximum: maxValue,
+                                    title: AxisTitle(text: _locale.totalCost),
+                                    // interval: interval
+                                  ),
+                                  legend: Legend(
+                                    isVisible: true,
+                                    position: LegendPosition
+                                        .bottom, // Position the legend below the chart
+                                    overflowMode: LegendItemOverflowMode
+                                        .wrap, // Handle overflow
+                                  ),
+                                  axes: <ChartAxis>[
+                                    CategoryAxis(
+                                      name: 'secondaryXAxis',
+                                      opposedPosition: true,
+                                    ),
+                                    NumericAxis(
+                                      name: 'secondaryYAxis',
+                                      title: AxisTitle(
+                                          text: _locale.profitPercent),
+                                      opposedPosition: true,
+                                      // minimum: secondaryMinValue,
+                                      // maximum: secondaryMaxValue,
+                                      // interval: secondaryInterval,
+                                    ),
+                                  ],
+                                  tooltipBehavior: _tooltip,
+                                  series: <CartesianSeries<ChartData, String>>[
+                                    ColumnSeries<ChartData, String>(
+                                        dataSource: data,
+                                        xValueMapper: (ChartData data, _) =>
+                                            data.x,
+                                        yValueMapper: (ChartData data, _) =>
+                                            data.y,
+                                        name: _locale.profit,
+                                        color:
+                                            const Color.fromRGBO(184, 2, 2, 1)),
+                                    ColumnSeries<ChartData, String>(
+                                        dataSource: data,
+                                        xValueMapper: (ChartData data, _) =>
+                                            data.x,
+                                        yValueMapper: (ChartData data, _) =>
+                                            data.y1,
+                                        name: _locale.salesCost,
+                                        color: const Color.fromRGBO(
+                                            1, 102, 184, 1)),
+                                    LineSeries<ChartData, String>(
+                                        dataSource: data,
+                                        dataLabelSettings:
+                                            const DataLabelSettings(
+                                          isVisible: true,
+                                          textStyle: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                        xValueMapper: (ChartData data, _) =>
+                                            double.parse(data.perc)
+                                                .toStringAsFixed(2),
+                                        yValueMapper: (ChartData data, _) =>
+                                            data.percD,
+                                        enableTooltip: true,
+                                        name: _locale.profitPercent,
+                                        xAxisName: 'secondaryXAxis',
+                                        yAxisName: 'secondaryYAxis',
+                                        dataLabelMapper: (datum, index) {
+                                          return "${double.parse(datum.perc).toStringAsFixed(2)}%";
+                                        },
+                                        color:
+                                            const Color.fromRGBO(26, 138, 6, 1))
+                                  ]),
+                            ),
+                          ),
+                        );
+                      })
+                    : SizedBox(
+                        height: height * 0.35,
+                        child: Center(child: Text(_locale.noDataAvailable)),
+                      )
           ],
         ),
       ),

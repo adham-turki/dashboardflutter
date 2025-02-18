@@ -61,12 +61,15 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double secondaryInterval = 0;
   final storage = const FlutterSecureStorage();
   Timer? _timer;
+  bool isLoading = false;
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
     totalCashierLogs = 0.0;
+    isLoading = true;
     await TotalSalesController()
         .getCashierLogs(cashierLogsSearchCriteria)
         .then((value) {
+      isLoading = false;
       for (var i = 0; i < value.length; i++) {
         totalCashierLogsList.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalCashierLogs +=
@@ -300,100 +303,109 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            totalCashierLogsList.isNotEmpty
-                ? Scrollbar(
-                    controller: _scrollController,
-                    thumbVisibility: true,
-                    thickness: 8,
-                    trackVisibility: true,
-                    radius: const Radius.circular(4),
-                    child: SingleChildScrollView(
-                      reverse: _locale.localeName == "ar" ? true : false,
-                      controller: _scrollController,
-                      scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        height: height * 0.35,
-                        width: Responsive.isDesktop(context)
-                            ? totalSales.length > 20
-                                ? width * (totalSales.length / 10)
-                                : width * 0.82
-                            : totalSales.length > 20
-                                ? width * (totalSales.length / 10)
-                                : width * 0.82,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 20.0),
-                          child: LineChart(
-                            LineChartData(
-                              lineTouchData: LineTouchData(
-                                touchTooltipData: LineTouchTooltipData(
-                                  // getTooltipColor: defaultLineTooltipColor,
-                                  getTooltipItems:
-                                      (List<LineBarSpot> touchedSpots) {
-                                    return touchedSpots.map((spot) {
-                                      return LineTooltipItem(
-                                        "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displaytransTypeName}\n${Converters.formatNumber(spot.y)}",
-                                        const TextStyle(color: Colors.white),
-                                      );
-                                    }).toList();
-                                  },
-                                ),
-                              ),
-                              titlesData: FlTitlesData(
-                                topTitles: const AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
-                                ),
-                                rightTitles: const AxisTitles(
-                                    sideTitles: SideTitles(showTitles: false)),
-                                leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                  getTitlesWidget: (value, meta) =>
-                                      leftTitleWidgets(value),
-                                  showTitles: true,
-                                  reservedSize: 35,
-                                )),
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    interval: 1,
-                                    getTitlesWidget: (value, meta) =>
-                                        groupNameTitle(
-                                            value.toInt(), totalSales, title),
+            isLoading
+                ? SizedBox(
+                    height: height * 0.35,
+                    child: const Center(child: CircularProgressIndicator()))
+                : totalCashierLogsList.isNotEmpty
+                    ? Scrollbar(
+                        controller: _scrollController,
+                        thumbVisibility: true,
+                        thickness: 8,
+                        trackVisibility: true,
+                        radius: const Radius.circular(4),
+                        child: SingleChildScrollView(
+                          reverse: _locale.localeName == "ar" ? true : false,
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          child: SizedBox(
+                            height: height * 0.35,
+                            width: Responsive.isDesktop(context)
+                                ? totalSales.length > 20
+                                    ? width * (totalSales.length / 10)
+                                    : width * 0.82
+                                : totalSales.length > 20
+                                    ? width * (totalSales.length / 10)
+                                    : width * 0.82,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 20.0),
+                              child: LineChart(
+                                LineChartData(
+                                  lineTouchData: LineTouchData(
+                                    touchTooltipData: LineTouchTooltipData(
+                                      // getTooltipColor: defaultLineTooltipColor,
+                                      getTooltipItems:
+                                          (List<LineBarSpot> touchedSpots) {
+                                        return touchedSpots.map((spot) {
+                                          return LineTooltipItem(
+                                            "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displaytransTypeName}\n${Converters.formatNumber(spot.y)}",
+                                            const TextStyle(
+                                                color: Colors.white),
+                                          );
+                                        }).toList();
+                                      },
+                                    ),
                                   ),
+                                  titlesData: FlTitlesData(
+                                    topTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    rightTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
+                                    leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                      getTitlesWidget: (value, meta) =>
+                                          leftTitleWidgets(value),
+                                      showTitles: true,
+                                      reservedSize: 35,
+                                    )),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        interval: 1,
+                                        getTitlesWidget: (value, meta) =>
+                                            groupNameTitle(value.toInt(),
+                                                totalSales, title),
+                                      ),
+                                    ),
+                                  ),
+                                  borderData: FlBorderData(
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 125, 125, 125))),
+                                  lineBarsData: [
+                                    LineChartBarData(
+                                      belowBarData: BarAreaData(
+                                          show: true,
+                                          color: Colors.blue.withOpacity(0.5)),
+                                      isCurved: true,
+                                      preventCurveOverShooting: true,
+                                      spots: totalSales
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        int index = entry.key;
+                                        double totalSales = double.parse(
+                                            entry.value.displayLogsCount);
+                                        print("totalSales: ${totalSales}");
+
+                                        return FlSpot(
+                                            index.toDouble(), totalSales);
+                                      }).toList(),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              borderData: FlBorderData(
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 125, 125, 125))),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  belowBarData: BarAreaData(
-                                      show: true,
-                                      color: Colors.blue.withOpacity(0.5)),
-                                  isCurved: true,
-                                  preventCurveOverShooting: true,
-                                  spots:
-                                      totalSales.asMap().entries.map((entry) {
-                                    int index = entry.key;
-                                    double totalSales = double.parse(
-                                        entry.value.displayLogsCount);
-                                    print("totalSales: ${totalSales}");
-
-                                    return FlSpot(index.toDouble(), totalSales);
-                                  }).toList(),
-                                ),
-                              ],
                             ),
                           ),
                         ),
+                      )
+                    : SizedBox(
+                        height: height * 0.35,
+                        child: Center(child: Text(_locale.noDataAvailable)),
                       ),
-                    ),
-                  )
-                : SizedBox(
-                    height: height * 0.35,
-                    child: Center(child: Text(_locale.noDataAvailable)),
-                  ),
           ],
         ),
       ),

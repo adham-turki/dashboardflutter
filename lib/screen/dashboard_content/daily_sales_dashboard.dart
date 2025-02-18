@@ -720,6 +720,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   void getBranch() async {
     BranchController().getBranch().then((value) {
+      branches.add(_locale.all);
       value.forEach((k, v) {
         if (mounted) {
           branches.add(k);

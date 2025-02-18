@@ -20,6 +20,12 @@ class SalesCategoryController {
       if (response.statusCode == statusOk) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var salesCategory in jsonData) {
+          print(
+              "SalesCategoryModel.fromJson(salesCategory): ${SalesCategoryModel.fromJson(salesCategory).categoryName}");
+          print(
+              "SalesCategoryModel.fromJson(salesCategory): ${SalesCategoryModel.fromJson(salesCategory).creditAmt}");
+          print(
+              "SalesCategoryModel.fromJson(salesCategory): ${SalesCategoryModel.fromJson(salesCategory).debitAmt}");
           salesCategoryList.add(SalesCategoryModel.fromJson(salesCategory));
         }
       }
