@@ -62,10 +62,13 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   final storage = const FlutterSecureStorage();
   Timer? _timer;
   bool isLoading = false;
+  double maxY = 0.0;
+
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
     totalCashierLogs = 0.0;
     isLoading = true;
+    maxY = 0.0;
     await TotalSalesController()
         .getCashierLogs(cashierLogsSearchCriteria)
         .then((value) {
@@ -74,6 +77,9 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         totalCashierLogsList.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalCashierLogs +=
             double.parse(totalCashierLogsList[i].displayLogsCount);
+        if (double.parse(totalCashierLogsList[i].displayLogsCount) > maxY) {
+          maxY = double.parse(totalCashierLogsList[i].displayLogsCount);
+        }
       }
 
       print("totalCashierLogsList: ${totalCashierLogsList.length}");
@@ -324,14 +330,15 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                                 ? totalSales.length > 20
                                     ? width * (totalSales.length / 10)
                                     : width * 0.82
-                                : totalSales.length > 20
-                                    ? width * (totalSales.length / 10)
+                                : totalSales.length > 5
+                                    ? width * (totalSales.length / 6)
                                     : width * 0.82,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 20.0),
+                                  horizontal: 50.0, vertical: 20.0),
                               child: LineChart(
                                 LineChartData(
+                                  maxY: maxY * 1.3,
                                   lineTouchData: LineTouchData(
                                     touchTooltipData: LineTouchTooltipData(
                                       // getTooltipColor: defaultLineTooltipColor,
@@ -431,17 +438,19 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
       return Transform.rotate(
         angle: -30 * 3.14159 / 180, // 90 degrees in radians
         child: SizedBox(
-          width: 50,
-          child: Text(
-            (title == _locale.cashierLogs)
-                ? "${totalSales[value].displayGroupName} / ${totalSales[value].displaytransTypeName}"
-                : totalSales[value].displayGroupName,
-            style: const TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 8,
-                color: Colors.black,
-                fontFamily: 'Times New Roman',
-                fontWeight: FontWeight.bold),
+          width: 200,
+          child: Center(
+            child: Text(
+              (title == _locale.salesByComputer ||
+                      title == _locale.salesByCashier)
+                  ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranchName}"
+                  : totalSales[value].displayGroupName,
+              style: const TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 10,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       );

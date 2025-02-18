@@ -843,11 +843,11 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           ? width * (totalSales.length / 10)
                           : width * 0.82
                       : totalSales.length > 5
-                          ? width * (totalSales.length / 8)
+                          ? width * (totalSales.length / 6)
                           : width * 0.82,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 40.0, vertical: 20.0),
+                        horizontal: 50.0, vertical: 40.0),
                     child: LineChart(
                       LineChartData(
                         maxY: maxY * 1.3,
@@ -939,17 +939,19 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
       return Transform.rotate(
         angle: -30 * 3.14159 / 180, // 90 degrees in radians
         child: SizedBox(
-          width: 50,
-          child: Text(
-            (title == _locale.salesByComputer ||
-                    title == _locale.salesByCashier)
-                ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranchName}"
-                : totalSales[value].displayGroupName,
-            style: const TextStyle(
-                fontStyle: FontStyle.italic,
-                fontSize: 8,
-                color: Colors.black,
-                fontWeight: FontWeight.bold),
+          width: 200,
+          child: Center(
+            child: Text(
+              (title == _locale.salesByComputer ||
+                      title == _locale.salesByCashier)
+                  ? "${totalSales[value].displayGroupName} / ${totalSales[value].displayBranchName}"
+                  : totalSales[value].displayGroupName,
+              style: const TextStyle(
+                  fontStyle: FontStyle.italic,
+                  fontSize: 10,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       );
