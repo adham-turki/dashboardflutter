@@ -449,7 +449,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                             data1.y,
                                         name: _locale.profit,
                                         color:
-                                            const Color.fromRGBO(184, 2, 2, 1)),
+                                            Color.fromARGB(255, 14, 185, 11)),
                                     ColumnSeries<ChartData, String>(
                                         dataSource: data1,
                                         xValueMapper: (ChartData data1, _) =>
@@ -478,7 +478,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                         xAxisName: 'secondaryXAxis',
                                         yAxisName: 'secondaryYAxis',
                                         dataLabelMapper: (datum, index) {
-                                          return "${double.parse(datum.perc).toStringAsFixed(2)}%";
+                                          return "${double.parse(datum.perc).toStringAsFixed(0)}%";
                                         },
                                         color:
                                             const Color.fromRGBO(26, 138, 6, 1))
@@ -664,7 +664,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                             data.y,
                                         name: _locale.profit,
                                         color:
-                                            const Color.fromRGBO(184, 2, 2, 1)),
+                                            Color.fromARGB(255, 14, 185, 11)),
                                     ColumnSeries<ChartData, String>(
                                         dataSource: data,
                                         xValueMapper: (ChartData data, _) =>
@@ -693,7 +693,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                                         xAxisName: 'secondaryXAxis',
                                         yAxisName: 'secondaryYAxis',
                                         dataLabelMapper: (datum, index) {
-                                          return "${double.parse(datum.perc).toStringAsFixed(2)}%";
+                                          return "${double.parse(datum.perc).toStringAsFixed(0)}%";
                                         },
                                         color:
                                             const Color.fromRGBO(26, 138, 6, 1))

@@ -9,14 +9,62 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
     SideTabModel(
       text: locale.dashboard,
       icon: Icons.dashboard,
-      isParent: true,
+      isParent: false,
       subMenu: [
-        SideSubTabModel(text: locale.salesReports, value: 20),
-        SideSubTabModel(text: locale.logsReports, value: 21),
-        SideSubTabModel(text: locale.differencesReports, value: 22),
-        SideSubTabModel(text: locale.profitReports, value: 23)
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
       ],
       value: 0,
+    ),
+    SideTabModel(
+      text: locale.salesReports,
+      icon: Icons.sell_outlined,
+      isParent: false,
+      subMenu: [
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
+      ],
+      value: 20,
+    ),
+    SideTabModel(
+      text: locale.logsReports,
+      icon: Icons.dashboard,
+      isParent: false,
+      subMenu: [
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
+      ],
+      value: 21,
+    ),
+    SideTabModel(
+      text: locale.differencesReports,
+      icon: Icons.save,
+      isParent: false,
+      subMenu: [
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
+      ],
+      value: 22,
+    ),
+    SideTabModel(
+      text: locale.profitReports,
+      icon: Icons.attach_money,
+      isParent: false,
+      subMenu: [
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
+      ],
+      value: 23,
     ),
     // SideTabModel(
     //   isParent: true,
@@ -65,22 +113,22 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       subMenu: [],
       value: 7,
     ),
-    SideTabModel(
-      isParent: true,
-      text: locale.receivableManagement,
-      icon: Icons.moving_outlined,
-      subMenu: [
-        SideSubTabModel(
-          text: locale.monthlyComparsionOFReceivableAndPayables,
-          value: 8,
-        ),
-        SideSubTabModel(
-          text: locale.agingReceivable,
-          value: 9,
-        ),
-      ],
-      value: -1,
-    ),
+    // SideTabModel(
+    //   isParent: true,
+    //   text: locale.receivableManagement,
+    //   icon: Icons.moving_outlined,
+    //   subMenu: [
+    //     SideSubTabModel(
+    //       text: locale.monthlyComparsionOFReceivableAndPayables,
+    //       value: 8,
+    //     ),
+    //     SideSubTabModel(
+    //       text: locale.agingReceivable,
+    //       value: 9,
+    //     ),
+    //   ],
+    //   value: -1,
+    // ),
     // SideTabModel(
     //   isParent: true,
     //   text: locale.chequesManagement,

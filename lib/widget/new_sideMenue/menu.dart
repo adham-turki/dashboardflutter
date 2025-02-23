@@ -10,21 +10,49 @@ List<MenuModel> getMenu(AppLocalizations locale) {
     MenuModel(
       title: locale.dashboard,
       icon: Icons.dashboard,
-      isParent: true,
+      isParent: false,
       subMenuList: [
-        SubMenuModel(
-          title: locale.dashboard,
-          pageNumber: 0,
-        ),
-        SubMenuModel(
-          title: locale.salesReports,
-          pageNumber: 20,
-        ),
-        SubMenuModel(title: locale.logsReports, pageNumber: 21),
-        SubMenuModel(title: locale.differencesReports, pageNumber: 22),
-        SubMenuModel(title: locale.profitReports, pageNumber: 23)
+        // SubMenuModel(
+        //   title: locale.dashboard,
+        //   pageNumber: 0,
+        // ),
+        // SubMenuModel(
+        //   title: locale.salesReports,
+        //   pageNumber: 20,
+        // ),
+        // SubMenuModel(title: locale.logsReports, pageNumber: 21),
+        // SubMenuModel(title: locale.differencesReports, pageNumber: 22),
+        // SubMenuModel(title: locale.profitReports, pageNumber: 23)
       ],
-      pageNumber: -1,
+      pageNumber: 0,
+    ),
+    MenuModel(
+      title: locale.salesReports,
+      icon: Icons.sell_outlined,
+      isParent: false,
+      subMenuList: [],
+      pageNumber: 20,
+    ),
+    MenuModel(
+      title: locale.logsReports,
+      icon: Icons.save,
+      isParent: false,
+      subMenuList: [],
+      pageNumber: 21,
+    ),
+    MenuModel(
+      title: locale.differencesReports,
+      icon: Icons.difference_outlined,
+      isParent: false,
+      subMenuList: [],
+      pageNumber: 22,
+    ),
+    MenuModel(
+      title: locale.profitReports,
+      icon: Icons.attach_money,
+      isParent: false,
+      subMenuList: [],
+      pageNumber: 23,
     ),
     // MenuModel(
     //   isParent: true,
@@ -73,22 +101,22 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       subMenuList: [],
       pageNumber: 7,
     ),
-    MenuModel(
-      isParent: true,
-      title: locale.receivableManagement,
-      icon: Icons.moving_outlined,
-      subMenuList: [
-        SubMenuModel(
-          title: locale.monthlyComparsionOFReceivableAndPayables,
-          pageNumber: 8,
-        ),
-        SubMenuModel(
-          title: locale.agingReceivable,
-          pageNumber: 9,
-        ),
-      ],
-      pageNumber: -1,
-    ),
+    // MenuModel(
+    //   isParent: true,
+    //   title: locale.receivableManagement,
+    //   icon: Icons.moving_outlined,
+    //   subMenuList: [
+    //     SubMenuModel(
+    //       title: locale.monthlyComparsionOFReceivableAndPayables,
+    //       pageNumber: 8,
+    //     ),
+    //     SubMenuModel(
+    //       title: locale.agingReceivable,
+    //       pageNumber: 9,
+    //     ),
+    //   ],
+    //   pageNumber: -1,
+    // ),
     // MenuModel(
     //   isParent: true,
     //   title: locale.chequesManagement,
