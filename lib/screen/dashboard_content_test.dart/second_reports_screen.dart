@@ -65,7 +65,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   final ScrollController _scrollController1 = ScrollController();
   final storage = const FlutterSecureStorage();
   Timer? _timer;
-  bool isLoading = false;
+  bool isLoading = true;
+  bool isLoading2 = true;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -255,11 +256,11 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     salesCostBasedBranchReportList.clear();
     totalsalesCostBasedBranchReport = 0.0;
     data1.clear();
-    isLoading = true;
+    isLoading2 = true;
     await TotalSalesController()
         .getTotalProfitsByBranchReportList(salesCostBasedBranchReportCrit)
         .then((value) {
-      isLoading = false;
+      isLoading2 = false;
       for (var i = 0; i < value.length; i++) {
         salesCostBasedBranchReportList.add(value[i]);
 
@@ -381,7 +382,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            isLoading
+            isLoading2
                 ? SizedBox(
                     height: height * 0.35,
                     child: const Center(child: CircularProgressIndicator()))

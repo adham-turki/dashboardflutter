@@ -66,6 +66,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   final storage = const FlutterSecureStorage();
   Timer? _timer;
   bool isLoading = false;
+  bool isLoading1 = false;
 
   @override
   void didChangeDependencies() {
@@ -211,12 +212,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
     diffCashShiftByCashierReportList.clear();
     totalDiffCashShiftByCashierReport = 0.0;
     data1.clear();
-    isLoading = true;
+    isLoading1 = true;
     await TotalSalesController()
         .getDiffCashShiftReportByCashierReportList(
             diffCashShiftByCashierReportCrit)
         .then((value) {
-      isLoading = false;
+      isLoading1 = false;
       for (var i = 0; i < value.length; i++) {
         diffCashShiftByCashierReportList.add(value[i]);
 
@@ -614,7 +615,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         style: TextStyle(fontSize: height * 0.013)),
                   ],
                 ),
-            isLoading
+            isLoading1
                 ? SizedBox(
                     height: height * 0.35,
                     child: const Center(child: CircularProgressIndicator()))
