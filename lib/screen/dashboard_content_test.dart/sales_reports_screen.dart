@@ -311,8 +311,10 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 flex: 1,
                 child: Column(
                   children: [
-                    // pieChart(pieData, _locale.salesByPaymentTypes),
-                    salesByPaymentTypesBarChart(_locale.salesByPaymentTypes),
+                    totalSalesByPayTypes.length <= 3
+                        ? pieChart(pieData, _locale.salesByPaymentTypes)
+                        : salesByPaymentTypesBarChart(
+                            _locale.salesByPaymentTypes),
                     // cashierTotalSales(),
                     hourTotalBarChart(barChartData, _locale.salesByHours),
                   ],
@@ -483,14 +485,21 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 10 : height * 0.013)),
                 ],
               ),
-            Center(
-              child: SizedBox(
-                height: height * 0.37,
-                child: PieDashboardChart(
-                  dataList: pieData,
-                ),
-              ),
-            ),
+            (title == _locale.salesByPaymentTypes && isLoading2)
+                ? SizedBox(
+                    height: height * 0.35,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Center(
+                    child: SizedBox(
+                      height: height * 0.37,
+                      child: PieDashboardChart(
+                        dataList: pieData,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
@@ -1042,9 +1051,10 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           _locale.salesByCashier, maxYByCashier),
                       dailySalesChart(totalSalesByComputer,
                           _locale.salesByComputer, maxYByComputer),
-                      // pieChart(pieData, _locale.salesByPaymentTypes),
-                      salesByPaymentTypesBarChart(_locale.salesByPaymentTypes),
-
+                      totalSalesByPayTypes.length <= 3
+                          ? pieChart(pieData, _locale.salesByPaymentTypes)
+                          : salesByPaymentTypesBarChart(
+                              _locale.salesByPaymentTypes),
                       hourTotalBarChart(barChartData, _locale.salesByHours),
                     ],
                   ))

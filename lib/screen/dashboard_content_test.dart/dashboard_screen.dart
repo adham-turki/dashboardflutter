@@ -209,8 +209,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(
               width: width * 0.003,
             ),
-            // pieChart(pieData, locale.salesByPaymentTypes),
-            salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
+            totalSalesByPayTypes.length <= 3
+                ? pieChart(pieData, locale.salesByPaymentTypes)
+                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -303,8 +304,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // ),
         Row(
           children: [
-            // pieChart(pieData, locale.salesByPaymentTypes),
-            salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
+            totalSalesByPayTypes.length <= 3
+                ? pieChart(pieData, locale.salesByPaymentTypes)
+                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -442,14 +444,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           TextStyle(fontSize: isDesktop ? 10 : height * 0.013)),
                 ],
               ),
-            Center(
-              child: SizedBox(
-                height: height * 0.37,
-                child: PieDashboardChart(
-                  dataList: pieData,
-                ),
-              ),
-            ),
+            (title == locale.salesByPaymentTypes && isLoading)
+                ? SizedBox(
+                    height: height * 0.35,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Center(
+                    child: SizedBox(
+                      height: height * 0.37,
+                      child: PieDashboardChart(
+                        dataList: pieData,
+                      ),
+                    ),
+                  ),
           ],
         ),
       ),
