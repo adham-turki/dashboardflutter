@@ -68,6 +68,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   List<BranchSalesViewModel> totalSalesByPayTypes = [];
   List<PieChartModel> pieData = [];
   List<BarChartGroupData> barChartData = [];
+  List<BarChartGroupData> barChartData1 = [];
   final ScrollController _scrollController = ScrollController();
   final ScrollController _scrollController1 = ScrollController();
 
@@ -190,10 +191,13 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     });
   }
 
+  List<String> xLabels = [];
+
   fetchSalesByPayTypes() async {
     pieData.clear();
     totalPricesPayTypesCount = 0.0;
     totalSalesByPayTypes.clear();
+    barChartData1.clear();
     await TotalSalesController()
         .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
@@ -207,6 +211,20 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
               double.parse(totalSalesByPayTypes[i].displayTotalSales)),
           color: getNextColor(),
         ));
+        xLabels = totalSalesByPayTypes.map((e) => e.displayGroupName).toList();
+
+        barChartData1 = List.generate(totalSalesByPayTypes.length, (index) {
+          return BarChartGroupData(
+            x: index, // Use index as x-value
+            barRods: [
+              BarChartRodData(
+                toY:
+                    double.parse(totalSalesByPayTypes[index].displayTotalSales),
+                borderRadius: BorderRadius.all(Radius.zero),
+              ),
+            ],
+          );
+        });
       }
       setState(() {});
     });
@@ -284,7 +302,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 flex: 1,
                 child: Column(
                   children: [
-                    pieChart(pieData, _locale.salesByPaymentTypes),
+                    // pieChart(pieData, _locale.salesByPaymentTypes),
+                    salesByPaymentTypesBarChart(_locale.salesByPaymentTypes),
                     // cashierTotalSales(),
                     hourTotalBarChart(barChartData, _locale.salesByHours),
                   ],
@@ -977,7 +996,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           _locale.salesByCashier, maxYByCashier),
                       dailySalesChart(totalSalesByComputer,
                           _locale.salesByComputer, maxYByComputer),
-                      pieChart(pieData, _locale.salesByPaymentTypes),
+                      // pieChart(pieData, _locale.salesByPaymentTypes),
+                      salesByPaymentTypesBarChart(_locale.salesByPaymentTypes),
+
                       hourTotalBarChart(barChartData, _locale.salesByHours),
                     ],
                   ))
@@ -1024,5 +1045,164 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     final color = colorListDashboard[colorIndex];
     colorIndex = (colorIndex + 1) % colorListDashboard.length;
     return color;
+  }
+
+  Widget salesByPaymentTypesBarChart(String title) {
+    return SizedBox(
+      height: height * 0.47,
+      child: Card(
+        elevation: 2,
+        color: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.zero, // Remove corner radius for a flat edge
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(
+                          title,
+                          style: TextStyle(fontSize: height * 0.015),
+                        ),
+                        Text(
+                            " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
+                      ],
+                    ),
+                    // title == "Sales By Cashier"
+                    //     ? Text(
+                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                    //     : title == "Sales By Computer"
+                    //         ? Text(
+                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                    //         : title == "Sales By Payment Types"
+                    //             ? Text(
+                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                    //             : SizedBox.shrink()
+                  ],
+                ),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByCashier)
+                //     Text(
+                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByComputer)
+                //     Text(
+                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByHours)
+                //     Text(
+                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByPaymentTypes)
+                //     Text(
+                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
+                blueButton1(
+                  onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return FilterDialog(
+                              cashiers: cashiers,
+                              branches: value,
+                              filter: title == _locale.salesByPaymentTypes
+                                  ? payTypesSearchCriteria
+                                  : payTypesSearchCriteria,
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          if (title == _locale.salesByPaymentTypes) {
+                            payTypesSearchCriteria = value;
+                            fetchSalesByPayTypes();
+                          }
+                        }
+                      });
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
+            ),
+            // if (!Responsive.isDesktop(context))
+
+            if (title == _locale.salesByPaymentTypes)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                      "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
+                      style:
+                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
+                ],
+              ),
+            SizedBox(
+              height: height * 0.35,
+              child: BarChart(
+                BarChartData(
+                    barTouchData: BarTouchData(
+                      touchTooltipData: BarTouchTooltipData(
+                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                          return BarTooltipItem(
+                            Converters.formatNumber(rod.toY),
+                            const TextStyle(color: Colors.white),
+                          );
+                        },
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      rightTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40,
+                          getTitlesWidget: (value, meta) {
+                            int index = value.toInt();
+                            if (index >= 0 && index < xLabels.length) {
+                              return Text(xLabels[index],
+                                  style: TextStyle(fontSize: 12));
+                            }
+                            return Text("");
+                          },
+                        ),
+                      ),
+                      leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                        getTitlesWidget: (value, meta) =>
+                            leftTitleWidgets(value),
+                        showTitles: true,
+                        reservedSize: 35,
+                      )),
+                      topTitles: AxisTitles(
+                        sideTitles: SideTitles(showTitles: false),
+                      ),
+                    ),
+                    barGroups: barChartData1),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

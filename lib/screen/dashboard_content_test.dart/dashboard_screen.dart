@@ -6,6 +6,7 @@ import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/branches_sales_cat_dashboard.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -60,6 +61,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       toDate: "");
   int colorIndex = 0;
   DateTime now = DateTime.now();
+  List<BarChartGroupData> barChartData = [];
   String formattedFromDate = "";
   String formattedToDate = "";
   @override
@@ -205,7 +207,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(
               width: width * 0.003,
             ),
-            pieChart(pieData, locale.salesByPaymentTypes),
+            // pieChart(pieData, locale.salesByPaymentTypes),
+            salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -298,7 +301,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // ),
         Row(
           children: [
-            pieChart(pieData, locale.salesByPaymentTypes),
+            // pieChart(pieData, locale.salesByPaymentTypes),
+            salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -450,10 +454,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  List<String> xLabels = [];
   fetchSalesByPayTypes() async {
     pieData.clear();
     totalPricesPayTypesCount = 0.0;
     totalSalesByPayTypes.clear();
+    barChartData.clear();
+
     await TotalSalesController()
         .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
@@ -467,6 +474,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
               double.parse(totalSalesByPayTypes[i].displayTotalSales)),
           color: getNextColor(),
         ));
+        xLabels = totalSalesByPayTypes.map((e) => e.displayGroupName).toList();
+
+        barChartData = List.generate(totalSalesByPayTypes.length, (index) {
+          return BarChartGroupData(
+            x: index, // Use index as x-value
+            barRods: [
+              BarChartRodData(
+                toY:
+                    double.parse(totalSalesByPayTypes[index].displayTotalSales),
+                borderRadius: BorderRadius.all(Radius.zero),
+              ),
+            ],
+          );
+        });
+        // barChartData.add(BarChartGroupData(
+        //     x: int.parse(totalSalesByPayTypes[i].displayGroupName),
+        //     barRods: [
+        //       BarChartRodData(
+        //         toY: double.parse(totalSalesByPayTypes[i].displayTotalSales),
+        //         borderRadius: BorderRadius.all(Radius.zero),
+        //       )
+        //     ]));
       }
       setState(() {});
     });
@@ -480,5 +509,183 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final color = colorListDashboard[colorIndex];
     colorIndex = (colorIndex + 1) % colorListDashboard.length;
     return color;
+  }
+
+  Widget salesByPaymentTypesBarChart(String title) {
+    return Expanded(
+      flex: 1,
+      child: SizedBox(
+        height: height * 0.47,
+        child: Card(
+          elevation: 2,
+          color: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.zero, // Remove corner radius for a flat edge
+          ),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          SelectableText(
+                            title,
+                            style: TextStyle(fontSize: height * 0.015),
+                          ),
+                          Text(
+                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                              style: TextStyle(fontSize: isDesktop ? 15 : 18)),
+                        ],
+                      ),
+                      // title == "Sales By Cashier"
+                      //     ? Text(
+                      //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
+                      //     : title == "Sales By Computer"
+                      //         ? Text(
+                      //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
+                      //         : title == "Sales By Payment Types"
+                      //             ? Text(
+                      //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
+                      //             : SizedBox.shrink()
+                    ],
+                  ),
+                  // if (Responsive.isDesktop(context))
+                  //   if (title == locale.salesByCashier)
+                  //     Text(
+                  //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                  // if (Responsive.isDesktop(context))
+                  //   if (title == locale.salesByComputer)
+                  //     Text(
+                  //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                  // if (Responsive.isDesktop(context))
+                  //   if (title == locale.salesByHours)
+                  //     Text(
+                  //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                  // if (Responsive.isDesktop(context))
+                  //   if (title == locale.salesByPaymentTypes)
+                  //     Text(
+                  //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
+                  blueButton1(
+                    onPressed: () async {
+                      List<CashierModel> cashiers = [];
+                      if (title == locale.cashierLogs) {
+                        cashiers =
+                            await TotalSalesController().getAllCashiers();
+                      }
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return FilterDialog(
+                                cashiers: cashiers,
+                                branches: value,
+                                filter: title == locale.salesByPaymentTypes
+                                    ? payTypesSearchCriteria
+                                    : payTypesSearchCriteria,
+                                hint: title);
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            if (title == locale.salesByPaymentTypes) {
+                              payTypesSearchCriteria = value;
+                              fetchSalesByPayTypes();
+                            }
+                          }
+                        });
+                      });
+                    },
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: Colors.white,
+                      size: isDesktop ? height * 0.035 : height * 0.03,
+                    ),
+                  )
+                ],
+              ),
+              // if (!Responsive.isDesktop(context))
+
+              if (title == locale.salesByPaymentTypes)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
+                        style: TextStyle(
+                            fontSize: isDesktop ? 14 : height * 0.013)),
+                  ],
+                ),
+              SizedBox(
+                height: height * 0.35,
+                child: BarChart(
+                  BarChartData(
+                      barTouchData: BarTouchData(
+                        touchTooltipData: BarTouchTooltipData(
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                            return BarTooltipItem(
+                              "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                              const TextStyle(color: Colors.white),
+                            );
+                          },
+                        ),
+                      ),
+                      titlesData: FlTitlesData(
+                        rightTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 40,
+                            getTitlesWidget: (value, meta) {
+                              int index = value.toInt();
+                              if (index >= 0 && index < xLabels.length) {
+                                return Text(xLabels[index],
+                                    style: TextStyle(fontSize: 12));
+                              }
+                              return Text("");
+                            },
+                          ),
+                        ),
+                        leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                          getTitlesWidget: (value, meta) =>
+                              leftTitleWidgets(value),
+                          showTitles: true,
+                          reservedSize: 35,
+                        )),
+                        topTitles: AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                      ),
+                      barGroups: barChartData),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget leftTitleWidgets(double value) {
+    const style = TextStyle(
+      fontWeight: FontWeight.bold,
+      fontSize: 10,
+    );
+
+    return Text(
+      Converters.formatTitleNumber(value),
+      style: style,
+      textAlign: TextAlign.left,
+    );
   }
 }
