@@ -71,6 +71,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   List<BarChartGroupData> barChartData1 = [];
   final ScrollController _scrollController = ScrollController();
   final ScrollController _scrollController1 = ScrollController();
+  final ScrollController _scrollController2 = ScrollController();
 
   double totalPricesCashierCount = 0.0;
   double totalPricesComputerCount = 0.0;
@@ -859,10 +860,10 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   height: height * 0.35,
                   width: Responsive.isDesktop(context)
                       ? totalSales.length > 20
-                          ? width * (totalSales.length / 10)
+                          ? width * (totalSales.length / 16)
                           : width * 0.82
                       : totalSales.length > 5
-                          ? width * (totalSales.length / 6)
+                          ? width * (totalSales.length / 8)
                           : width * 0.82,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -1154,50 +1155,73 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            SizedBox(
-              height: height * 0.35,
-              child: BarChart(
-                BarChartData(
-                    barTouchData: BarTouchData(
-                      touchTooltipData: BarTouchTooltipData(
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          return BarTooltipItem(
-                            Converters.formatNumber(rod.toY),
-                            const TextStyle(color: Colors.white),
-                          );
-                        },
-                      ),
+            Scrollbar(
+              controller: _scrollController2,
+              thumbVisibility: true,
+              thickness: 8,
+              trackVisibility: true,
+              radius: const Radius.circular(4),
+              child: SingleChildScrollView(
+                reverse: _locale.localeName == "ar" ? true : false,
+                controller: _scrollController2,
+                scrollDirection: Axis.horizontal,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height: height * 0.35,
+                    width: Responsive.isDesktop(context)
+                        ? barChartData1.length > 20
+                            ? width * (barChartData1.length / 10)
+                            : width * 0.3
+                        : barChartData1.length > 5
+                            ? width * (barChartData1.length / 5)
+                            : width * 0.95,
+                    child: BarChart(
+                      BarChartData(
+                          barTouchData: BarTouchData(
+                            touchTooltipData: BarTouchTooltipData(
+                              getTooltipItem:
+                                  (group, groupIndex, rod, rodIndex) {
+                                return BarTooltipItem(
+                                  "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                  const TextStyle(color: Colors.white),
+                                );
+                              },
+                            ),
+                          ),
+                          titlesData: FlTitlesData(
+                            rightTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                reservedSize: 40,
+                                getTitlesWidget: (value, meta) {
+                                  int index = value.toInt();
+                                  if (index >= 0 && index < xLabels.length) {
+                                    return Text(xLabels[index],
+                                        style: TextStyle(fontSize: 12));
+                                  }
+                                  return Text("");
+                                },
+                              ),
+                            ),
+                            leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                              getTitlesWidget: (value, meta) =>
+                                  leftTitleWidgets(value),
+                              showTitles: true,
+                              reservedSize: 35,
+                            )),
+                            topTitles: AxisTitles(
+                              sideTitles: SideTitles(showTitles: false),
+                            ),
+                          ),
+                          barGroups: barChartData1),
                     ),
-                    titlesData: FlTitlesData(
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 40,
-                          getTitlesWidget: (value, meta) {
-                            int index = value.toInt();
-                            if (index >= 0 && index < xLabels.length) {
-                              return Text(xLabels[index],
-                                  style: TextStyle(fontSize: 12));
-                            }
-                            return Text("");
-                          },
-                        ),
-                      ),
-                      leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        getTitlesWidget: (value, meta) =>
-                            leftTitleWidgets(value),
-                        showTitles: true,
-                        reservedSize: 35,
-                      )),
-                      topTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                    ),
-                    barGroups: barChartData1),
+                  ),
+                ),
               ),
             ),
           ],

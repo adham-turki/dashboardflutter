@@ -328,10 +328,10 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             height: height * 0.35,
                             width: Responsive.isDesktop(context)
                                 ? totalSales.length > 20
-                                    ? width * (totalSales.length / 10)
+                                    ? width * (totalSales.length / 16)
                                     : width * 0.82
                                 : totalSales.length > 5
-                                    ? width * (totalSales.length / 6)
+                                    ? width * (totalSales.length / 8)
                                     : width * 0.82,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

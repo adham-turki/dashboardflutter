@@ -34,15 +34,20 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
   final ScrollController _scrollController = ScrollController();
   bool isLoading = false;
   Widget buildWidget = const Row();
+  List<DashboardBarData> sortedDataList = [];
 
   void convertBarDataToDashboardBarData() {
     dataList = [];
+    sortedDataList = [];
     List<BarData> barDat = widget.barChartData;
     for (int i = 0; i < barDat.length; i++) {
       DashboardBarData dashboardBarData = DashboardBarData(
           getRandomColor(), barDat[i].percent!, barDat[i].percent!);
       dataList.add(dashboardBarData);
     }
+    sortedDataList = List.from(dataList)
+      ..sort((a, b) => b.value.compareTo(a.value));
+    dataList = sortedDataList;
   }
 
   BarChartGroupData generateBarGroup(
