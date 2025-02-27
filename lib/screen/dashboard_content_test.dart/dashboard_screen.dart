@@ -65,6 +65,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String formattedFromDate = "";
   String formattedToDate = "";
   ScrollController _scrollController2 = ScrollController();
+  bool isLoading = true;
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
@@ -465,6 +466,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     await TotalSalesController()
         .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
+      isLoading = false;
       for (var i = 0; i < value.length; i++) {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesPayTypesCount +=
@@ -624,75 +626,83 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             fontSize: isDesktop ? 14 : height * 0.013)),
                   ],
                 ),
-              Scrollbar(
-                controller: _scrollController2,
-                thumbVisibility: true,
-                thickness: 8,
-                trackVisibility: true,
-                radius: const Radius.circular(4),
-                child: SingleChildScrollView(
-                  reverse: locale.localeName == "ar" ? true : false,
-                  controller: _scrollController2,
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
+              (title == locale.salesByPaymentTypes && isLoading)
+                  ? SizedBox(
                       height: height * 0.35,
-                      width: Responsive.isDesktop(context)
-                          ? barChartData.length > 20
-                              ? width * (barChartData.length / 10)
-                              : width * 0.3
-                          : barChartData.length > 5
-                              ? width * (barChartData.length / 5)
-                              : width * 0.95,
-                      child: BarChart(
-                        BarChartData(
-                            barTouchData: BarTouchData(
-                              touchTooltipData: BarTouchTooltipData(
-                                getTooltipItem:
-                                    (group, groupIndex, rod, rodIndex) {
-                                  return BarTooltipItem(
-                                    "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
-                                    const TextStyle(color: Colors.white),
-                                  );
-                                },
-                              ),
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Scrollbar(
+                      controller: _scrollController2,
+                      thumbVisibility: true,
+                      thickness: 8,
+                      trackVisibility: true,
+                      radius: const Radius.circular(4),
+                      child: SingleChildScrollView(
+                        reverse: locale.localeName == "ar" ? true : false,
+                        controller: _scrollController2,
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: height * 0.35,
+                            width: Responsive.isDesktop(context)
+                                ? barChartData.length > 20
+                                    ? width * (barChartData.length / 10)
+                                    : width * 0.3
+                                : barChartData.length > 5
+                                    ? width * (barChartData.length / 5)
+                                    : width * 0.95,
+                            child: BarChart(
+                              BarChartData(
+                                  barTouchData: BarTouchData(
+                                    touchTooltipData: BarTouchTooltipData(
+                                      getTooltipItem:
+                                          (group, groupIndex, rod, rodIndex) {
+                                        return BarTooltipItem(
+                                          "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                          const TextStyle(color: Colors.white),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  titlesData: FlTitlesData(
+                                    rightTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        reservedSize: 40,
+                                        getTitlesWidget: (value, meta) {
+                                          int index = value.toInt();
+                                          if (index >= 0 &&
+                                              index < xLabels.length) {
+                                            return Text(xLabels[index],
+                                                style: TextStyle(fontSize: 12));
+                                          }
+                                          return Text("");
+                                        },
+                                      ),
+                                    ),
+                                    leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                      getTitlesWidget: (value, meta) =>
+                                          leftTitleWidgets(value),
+                                      showTitles: true,
+                                      reservedSize: 35,
+                                    )),
+                                    topTitles: AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                  ),
+                                  barGroups: barChartData),
                             ),
-                            titlesData: FlTitlesData(
-                              rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                              bottomTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                                  showTitles: true,
-                                  reservedSize: 40,
-                                  getTitlesWidget: (value, meta) {
-                                    int index = value.toInt();
-                                    if (index >= 0 && index < xLabels.length) {
-                                      return Text(xLabels[index],
-                                          style: TextStyle(fontSize: 12));
-                                    }
-                                    return Text("");
-                                  },
-                                ),
-                              ),
-                              leftTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                getTitlesWidget: (value, meta) =>
-                                    leftTitleWidgets(value),
-                                showTitles: true,
-                                reservedSize: 35,
-                              )),
-                              topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false),
-                              ),
-                            ),
-                            barGroups: barChartData),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

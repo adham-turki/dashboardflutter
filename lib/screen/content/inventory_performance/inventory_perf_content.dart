@@ -533,6 +533,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
   Future<PlutoLazyPaginationResponse> fetch(
       PlutoLazyPaginationRequest request) async {
+    counterFirstTbl = 0;
+    counterSecTbl = 0;
     List<PlutoRow> topList = [];
     List<InventoryPerformanceModel> invList = [];
     if (countDec == 0) {

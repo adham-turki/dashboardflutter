@@ -82,6 +82,10 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   late AppLocalizations _locale;
   final storage = const FlutterSecureStorage();
   Timer? _timer;
+  bool isLoading = true;
+  bool isLoading1 = true;
+  bool isLoading2 = true;
+  bool isLoading3 = true;
 
   @override
   void didChangeDependencies() {
@@ -154,6 +158,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await TotalSalesController()
         .getTotalSalesByHours(hoursSearchCriteria)
         .then((value) {
+      isLoading3 = false;
       for (var i = 0; i < value.length; i++) {
         totalSalesByHours.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesHoursCount +=
@@ -178,6 +183,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await TotalSalesController()
         .getTotalSalesByCashier(cashierSearchCriteria)
         .then((value) {
+      isLoading = false;
       for (var i = 0; i < value.length; i++) {
         totalSalesByCashier.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesCashierCount +=
@@ -202,6 +208,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await TotalSalesController()
         .getTotalSalesByPaymentTypes(payTypesSearchCriteria)
         .then((value) {
+      isLoading2 = false;
       for (var i = 0; i < value.length; i++) {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesPayTypesCount +=
@@ -239,6 +246,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await TotalSalesController()
         .getTotalSalesByComputer(desktopSearchCriteria)
         .then((value) {
+      isLoading1 = false;
       for (var i = 0; i < value.length; i++) {
         totalSalesByComputer.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesComputerCount +=
@@ -658,38 +666,53 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            SizedBox(
-              height: height * 0.35,
-              child: BarChart(
-                BarChartData(
-                    barTouchData: BarTouchData(
-                      touchTooltipData: BarTouchTooltipData(
-                        getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                          return BarTooltipItem(
-                            Converters.formatNumber(rod.toY),
-                            const TextStyle(color: Colors.white),
-                          );
-                        },
-                      ),
+            (title == _locale.salesByPaymentTypes && isLoading2)
+                ? SizedBox(
+                    height: height * 0.35,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
                     ),
-                    titlesData: FlTitlesData(
-                      rightTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
+                  )
+                : (title == _locale.salesByHours && isLoading3)
+                    ? SizedBox(
+                        height: height * 0.35,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : SizedBox(
+                        height: height * 0.35,
+                        child: BarChart(
+                          BarChartData(
+                              barTouchData: BarTouchData(
+                                touchTooltipData: BarTouchTooltipData(
+                                  getTooltipItem:
+                                      (group, groupIndex, rod, rodIndex) {
+                                    return BarTooltipItem(
+                                      Converters.formatNumber(rod.toY),
+                                      const TextStyle(color: Colors.white),
+                                    );
+                                  },
+                                ),
+                              ),
+                              titlesData: FlTitlesData(
+                                rightTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                                leftTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                  getTitlesWidget: (value, meta) =>
+                                      leftTitleWidgets(value),
+                                  showTitles: true,
+                                  reservedSize: 35,
+                                )),
+                                topTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false),
+                                ),
+                              ),
+                              barGroups: barChartData),
+                        ),
                       ),
-                      leftTitles: AxisTitles(
-                          sideTitles: SideTitles(
-                        getTitlesWidget: (value, meta) =>
-                            leftTitleWidgets(value),
-                        showTitles: true,
-                        reservedSize: 35,
-                      )),
-                      topTitles: AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                    ),
-                    barGroups: barChartData),
-              ),
-            ),
           ],
         ),
       ),
@@ -840,101 +863,123 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       style: TextStyle(fontSize: height * 0.013)),
                 ],
               ),
-          Scrollbar(
-            controller: title == _locale.salesByCashier
-                ? _scrollController
-                : _scrollController1,
-            thumbVisibility: true,
-            thickness: 8,
-            trackVisibility: true,
-            radius: const Radius.circular(4),
-            child: SingleChildScrollView(
-              reverse: _locale.localeName == "ar" ? true : false,
-              controller: title == _locale.salesByCashier
-                  ? _scrollController
-                  : _scrollController1,
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
+          (title == _locale.salesByCashier && isLoading)
+              ? SizedBox(
                   height: height * 0.35,
-                  width: Responsive.isDesktop(context)
-                      ? totalSales.length > 20
-                          ? width * (totalSales.length / 16)
-                          : width * 0.82
-                      : totalSales.length > 5
-                          ? width * (totalSales.length / 8)
-                          : width * 0.82,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50.0, vertical: 40.0),
-                    child: LineChart(
-                      LineChartData(
-                        maxY: maxY * 1.3,
-                        lineTouchData: LineTouchData(
-                          touchTooltipData: LineTouchTooltipData(
-                            // getTooltipColor: defaultLineTooltipColor,
-                            getTooltipItems: (List<LineBarSpot> touchedSpots) {
-                              return touchedSpots.map((spot) {
-                                return LineTooltipItem(
-                                  "${totalSales[spot.spotIndex].displayGroupName} / ${totalSales[spot.spotIndex].displayBranchName} / ${Converters.formatNumber(spot.y)}",
-                                  const TextStyle(color: Colors.white),
-                                );
-                              }).toList();
-                            },
-                          ),
-                        ),
-                        titlesData: FlTitlesData(
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
-                          rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false)),
-                          leftTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                            getTitlesWidget: (value, meta) =>
-                                leftTitleWidgets(value),
-                            showTitles: true,
-                            reservedSize: 35,
-                          )),
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) => groupNameTitle(
-                                  value.toInt(), totalSales, title),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : (title == _locale.salesByComputer && isLoading1)
+                  ? SizedBox(
+                      height: height * 0.35,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : Scrollbar(
+                      controller: title == _locale.salesByCashier
+                          ? _scrollController
+                          : _scrollController1,
+                      thumbVisibility: true,
+                      thickness: 8,
+                      trackVisibility: true,
+                      radius: const Radius.circular(4),
+                      child: SingleChildScrollView(
+                        reverse: _locale.localeName == "ar" ? true : false,
+                        controller: title == _locale.salesByCashier
+                            ? _scrollController
+                            : _scrollController1,
+                        scrollDirection: Axis.horizontal,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: height * 0.35,
+                            width: Responsive.isDesktop(context)
+                                ? totalSales.length > 20
+                                    ? width * (totalSales.length / 16)
+                                    : width * 0.82
+                                : totalSales.length > 5
+                                    ? width * (totalSales.length / 8)
+                                    : width * 0.82,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50.0, vertical: 40.0),
+                              child: LineChart(
+                                LineChartData(
+                                  maxY: maxY * 1.3,
+                                  lineTouchData: LineTouchData(
+                                    touchTooltipData: LineTouchTooltipData(
+                                      // getTooltipColor: defaultLineTooltipColor,
+                                      getTooltipItems:
+                                          (List<LineBarSpot> touchedSpots) {
+                                        return touchedSpots.map((spot) {
+                                          return LineTooltipItem(
+                                            "${totalSales[spot.spotIndex].displayGroupName} / ${totalSales[spot.spotIndex].displayBranchName} / ${Converters.formatNumber(spot.y)}",
+                                            const TextStyle(
+                                                color: Colors.white),
+                                          );
+                                        }).toList();
+                                      },
+                                    ),
+                                  ),
+                                  titlesData: FlTitlesData(
+                                    topTitles: const AxisTitles(
+                                      sideTitles: SideTitles(showTitles: false),
+                                    ),
+                                    rightTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
+                                    leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                      getTitlesWidget: (value, meta) =>
+                                          leftTitleWidgets(value),
+                                      showTitles: true,
+                                      reservedSize: 35,
+                                    )),
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        interval: 1,
+                                        getTitlesWidget: (value, meta) =>
+                                            groupNameTitle(value.toInt(),
+                                                totalSales, title),
+                                      ),
+                                    ),
+                                  ),
+                                  borderData: FlBorderData(
+                                      border: Border.all(
+                                          color: const Color.fromARGB(
+                                              255, 125, 125, 125))),
+                                  lineBarsData: [
+                                    LineChartBarData(
+                                      belowBarData: BarAreaData(
+                                          show: true,
+                                          color: Colors.blue.withOpacity(0.5)),
+                                      isCurved: true,
+                                      preventCurveOverShooting: true,
+                                      isStrokeJoinRound: true,
+                                      spots: totalSales
+                                          .asMap()
+                                          .entries
+                                          .map((entry) {
+                                        int index = entry.key;
+                                        double totalSales = double.parse(
+                                            entry.value.displayTotalSales);
+                                        print("totalSales: ${totalSales}");
+
+                                        return FlSpot(
+                                            index.toDouble(), totalSales);
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                        borderData: FlBorderData(
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 125, 125, 125))),
-                        lineBarsData: [
-                          LineChartBarData(
-                            belowBarData: BarAreaData(
-                                show: true,
-                                color: Colors.blue.withOpacity(0.5)),
-                            isCurved: true,
-                            preventCurveOverShooting: true,
-                            isStrokeJoinRound: true,
-                            spots: totalSales.asMap().entries.map((entry) {
-                              int index = entry.key;
-                              double totalSales =
-                                  double.parse(entry.value.displayTotalSales);
-                              print("totalSales: ${totalSales}");
-
-                              return FlSpot(index.toDouble(), totalSales);
-                            }).toList(),
-                          ),
-                        ],
                       ),
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -1155,75 +1200,94 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            Scrollbar(
-              controller: _scrollController2,
-              thumbVisibility: true,
-              thickness: 8,
-              trackVisibility: true,
-              radius: const Radius.circular(4),
-              child: SingleChildScrollView(
-                reverse: _locale.localeName == "ar" ? true : false,
-                controller: _scrollController2,
-                scrollDirection: Axis.horizontal,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SizedBox(
+            (title == _locale.salesByPaymentTypes && isLoading2)
+                ? SizedBox(
                     height: height * 0.35,
-                    width: Responsive.isDesktop(context)
-                        ? barChartData1.length > 20
-                            ? width * (barChartData1.length / 10)
-                            : width * 0.3
-                        : barChartData1.length > 5
-                            ? width * (barChartData1.length / 5)
-                            : width * 0.95,
-                    child: BarChart(
-                      BarChartData(
-                          barTouchData: BarTouchData(
-                            touchTooltipData: BarTouchTooltipData(
-                              getTooltipItem:
-                                  (group, groupIndex, rod, rodIndex) {
-                                return BarTooltipItem(
-                                  "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
-                                  const TextStyle(color: Colors.white),
-                                );
-                              },
-                            ),
-                          ),
-                          titlesData: FlTitlesData(
-                            rightTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 40,
-                                getTitlesWidget: (value, meta) {
-                                  int index = value.toInt();
-                                  if (index >= 0 && index < xLabels.length) {
-                                    return Text(xLabels[index],
-                                        style: TextStyle(fontSize: 12));
-                                  }
-                                  return Text("");
-                                },
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : (title == _locale.salesByHours && isLoading3)
+                    ? SizedBox(
+                        height: height * 0.35,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Scrollbar(
+                        controller: _scrollController2,
+                        thumbVisibility: true,
+                        thickness: 8,
+                        trackVisibility: true,
+                        radius: const Radius.circular(4),
+                        child: SingleChildScrollView(
+                          reverse: _locale.localeName == "ar" ? true : false,
+                          controller: _scrollController2,
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              height: height * 0.35,
+                              width: Responsive.isDesktop(context)
+                                  ? barChartData1.length > 20
+                                      ? width * (barChartData1.length / 10)
+                                      : width * 0.3
+                                  : barChartData1.length > 5
+                                      ? width * (barChartData1.length / 5)
+                                      : width * 0.95,
+                              child: BarChart(
+                                BarChartData(
+                                    barTouchData: BarTouchData(
+                                      touchTooltipData: BarTouchTooltipData(
+                                        getTooltipItem:
+                                            (group, groupIndex, rod, rodIndex) {
+                                          return BarTooltipItem(
+                                            "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                            const TextStyle(
+                                                color: Colors.white),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      rightTitles: AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize: 40,
+                                          getTitlesWidget: (value, meta) {
+                                            int index = value.toInt();
+                                            if (index >= 0 &&
+                                                index < xLabels.length) {
+                                              return Text(xLabels[index],
+                                                  style:
+                                                      TextStyle(fontSize: 12));
+                                            }
+                                            return Text("");
+                                          },
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                        getTitlesWidget: (value, meta) =>
+                                            leftTitleWidgets(value),
+                                        showTitles: true,
+                                        reservedSize: 35,
+                                      )),
+                                      topTitles: AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                    ),
+                                    barGroups: barChartData1),
                               ),
                             ),
-                            leftTitles: AxisTitles(
-                                sideTitles: SideTitles(
-                              getTitlesWidget: (value, meta) =>
-                                  leftTitleWidgets(value),
-                              showTitles: true,
-                              reservedSize: 35,
-                            )),
-                            topTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
                           ),
-                          barGroups: barChartData1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+                        ),
+                      ),
           ],
         ),
       ),
