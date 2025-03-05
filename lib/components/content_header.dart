@@ -33,11 +33,11 @@ class _ContentHeaderState extends State<ContentHeader> {
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
-    VouchHeaderTransietController().getBranch().then((value) {
-      setState(() {
-        vouchHeaderTransietModel = value!;
-      });
-    });
+    // VouchHeaderTransietController().getBranch().then((value) {
+    //   setState(() {
+    //     vouchHeaderTransietModel = value!;
+    //   });
+    // });
     todayDate = DatesController().formatDate(DatesController().todayDate());
     currentMonth =
         DatesController().formatDate(DatesController().twoYearsAgo());
@@ -157,99 +157,99 @@ class _ContentHeaderState extends State<ContentHeader> {
     );
   }
 
-  Row cardsMobileView() {
-    return Row(
-      // crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(
-          width: 2,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.paidSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalSales,
-          icon: Icons.attach_money, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 2,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.returnSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalReturnSal,
-          icon: Icons
-              .assignment_return_outlined, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 2,
-        ),
-        CustomCard(
-          gradientColor: const [
-            Color.fromRGBO(71, 65, 193, 1),
-            Color(0xff7e4fe4)
-          ],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.numOfCustomers.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.numOfCustomers,
-          icon: Icons.bar_chart, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 2,
-        ),
-      ],
-    );
-  }
+  // Row cardsMobileView() {
+  //   return Row(
+  //     // crossAxisAlignment: CrossAxisAlignment.center,
+  //     mainAxisAlignment: MainAxisAlignment.center,
+  //     children: [
+  //       const SizedBox(
+  //         width: 2,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.paidSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalSales,
+  //         icon: Icons.attach_money, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 2,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.returnSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalReturnSal,
+  //         icon: Icons
+  //             .assignment_return_outlined, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 2,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [
+  //           Color.fromRGBO(71, 65, 193, 1),
+  //           Color(0xff7e4fe4)
+  //         ],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.numOfCustomers.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.numOfCustomers,
+  //         icon: Icons.bar_chart, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 2,
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Row cardsDesktopView() {
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        CustomCard(
-          gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.paidSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalSales,
-          icon: Icons.attach_money, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.returnSales.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.totalReturnSal,
-          icon: Icons
-              .assignment_return_outlined, // Provide the actual path to the icon
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CustomCard(
-          gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
-          title: Converters.formatNumber(
-                  vouchHeaderTransietModel.numOfCustomers.toDouble())
-              .toString(),
-          subtitle: '',
-          label: locale.numOfCustomers,
-          icon: Icons.bar_chart, // Provide the actual path to the icon
-        ),
-      ],
-    );
-  }
+  // Row cardsDesktopView() {
+  //   return Row(
+  //     // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: [
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff1cacff), Color(0xff30c4ff)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.paidSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalSales,
+  //         icon: Icons.attach_money, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xfffd8236), Color(0xffffce6c)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.returnSales.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.totalReturnSal,
+  //         icon: Icons
+  //             .assignment_return_outlined, // Provide the actual path to the icon
+  //       ),
+  //       const SizedBox(
+  //         width: 10,
+  //       ),
+  //       CustomCard(
+  //         gradientColor: const [Color(0xff4741c1), Color(0xff7e4fe4)],
+  //         title: Converters.formatNumber(
+  //                 vouchHeaderTransietModel.numOfCustomers.toDouble())
+  //             .toString(),
+  //         subtitle: '',
+  //         label: locale.numOfCustomers,
+  //         icon: Icons.bar_chart, // Provide the actual path to the icon
+  //       ),
+  //     ],
+  //   );
+  // }
 
   String getPage() {
     int index = context.read<ScreenContentProvider>().getPage();

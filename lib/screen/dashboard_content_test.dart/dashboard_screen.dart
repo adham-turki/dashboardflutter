@@ -69,12 +69,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
-    VouchHeaderTransietController().getBranch().then((value) {
-      setState(() {
-        vouchHeaderTransietModel = value!;
-      });
-    });
-    _startTimer();
+    // VouchHeaderTransietController().getBranch().then((value) {
+    //   setState(() {
+    //     vouchHeaderTransietModel = value!;
+    //   });
+    // });
+    // _startTimer();
 
     super.didChangeDependencies();
   }

@@ -41,12 +41,12 @@ class _DashboardContentState extends State<DashboardContent> {
   @override
   void didChangeDependencies() async {
     locale = AppLocalizations.of(context)!;
-    VouchHeaderTransietController().getBranch().then((value) {
-      setState(() {
-        vouchHeaderTransietModel = value!;
-      });
-    });
-    setState(() {});
+    // VouchHeaderTransietController().getBranch().then((value) {
+    //   setState(() {
+    //     vouchHeaderTransietModel = value!;
+    //   });
+    // });
+    // setState(() {});
     super.didChangeDependencies();
   }
 
