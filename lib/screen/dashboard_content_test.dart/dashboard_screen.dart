@@ -418,6 +418,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         if (value != false) {
                           if (title == locale.salesByPaymentTypes) {
                             payTypesSearchCriteria = value;
+                            isLoading = true;
+                            setState(() {});
                             fetchSalesByPayTypes();
                           }
                         }
@@ -608,6 +610,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           if (value != false) {
                             if (title == locale.salesByPaymentTypes) {
                               payTypesSearchCriteria = value;
+                              isLoading = true;
+                              setState(() {});
                               fetchSalesByPayTypes();
                             }
                           }

@@ -284,6 +284,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         if (value != false) {
                           if (title == _locale.cashierLogs) {
                             cashierLogsSearchCriteria = value;
+                            isLoading = true;
+                            setState(() {});
                             fetchSalesByCashierLogs();
                           }
                         }

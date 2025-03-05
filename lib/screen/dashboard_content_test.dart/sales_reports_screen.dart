@@ -426,6 +426,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                             fetchSalesByComputer();
                           } else if (title == _locale.salesByPaymentTypes) {
                             payTypesSearchCriteria = value;
+                            isLoading2 = true;
+                            setState(() {});
                             fetchSalesByPayTypes();
                           }
                         }
@@ -613,9 +615,13 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                             fetchSalesByComputer();
                           } else if (title == _locale.salesByPaymentTypes) {
                             payTypesSearchCriteria = value;
+                            isLoading2 = true;
+                            setState(() {});
                             fetchSalesByPayTypes();
                           } else if (title == _locale.salesByHours) {
                             hoursSearchCriteria = value;
+                            isLoading3 = true;
+                            setState(() {});
                             fetchSalesByHours();
                           }
                         }
@@ -814,6 +820,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           fetchSalesByComputer();
                         } else if (title == _locale.salesByPaymentTypes) {
                           payTypesSearchCriteria = value;
+                          isLoading2 = true;
+                          setState(() {});
                           fetchSalesByPayTypes();
                         } else if (title == _locale.salesByHours) {
                           hoursSearchCriteria = value;
@@ -1183,6 +1191,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         if (value != false) {
                           if (title == _locale.salesByPaymentTypes) {
                             payTypesSearchCriteria = value;
+                            isLoading2 = true;
+                            setState(() {});
                             fetchSalesByPayTypes();
                           }
                         }

@@ -338,6 +338,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       ).then((value) {
                         if (value != false) {
                           diffClosedCashShiftReportCrit = value;
+                          isLoading = true;
+                          setState(() {});
                           fetchDiffClosedCashShiftReportList();
                         }
                       });
@@ -580,6 +582,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       ).then((value) {
                         if (value != false) {
                           diffCashShiftByCashierReportCrit = value;
+                          isLoading1 = true;
+                          setState(() {});
                           fetchDiffCashShiftByCashierReportList();
                         }
                       });

@@ -345,6 +345,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                       ).then((value) {
                         if (value != false) {
                           if (title == _locale.salesCostBasedBranch) {
+                            isLoading2 = true;
+                            setState(() {});
                             salesCostBasedBranchReportCrit = value;
                             fetchsalesCostBasedBranchReportList();
                           }
@@ -560,6 +562,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                       ).then((value) {
                         if (value != false) {
                           if (title == _locale.salesCostBasedStockCat) {
+                            isLoading = true;
+                            setState(() {});
                             salesCostSearchCriteria = value;
                             fetchSalesCostBasedStockCat();
                           }
