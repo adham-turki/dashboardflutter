@@ -227,6 +227,9 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
             (totalProfitsByCategoryList[i].totalProfit),
             (totalProfitsByCategoryList[i].totalSales)));
       }
+      if (data.isNotEmpty) {
+        data.sort((a, b) => b.y.compareTo(a.y));
+      }
       // if (data.isNotEmpty) {
       //   maxValue = data
       //       .map((e) => e.y1)
@@ -272,6 +275,10 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
             (salesCostBasedBranchReportList[i].totalProfit),
             (salesCostBasedBranchReportList[i].totalSales)));
       }
+      if (data1.isNotEmpty) {
+        data1.sort((a, b) => b.y.compareTo(a.y));
+      }
+
       print(
           "salesCostBasedBranchReportList: ${salesCostBasedBranchReportList.length}");
       setState(() {});
