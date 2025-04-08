@@ -157,7 +157,7 @@ class TotalSalesController {
         },
         body: json.encode(searchCriteria.toJson()),
       );
-      //print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
+      print("API Request: ${Uri.http(ApiURL.urlServer, api)}");
       print("API Request Body: ${json.encode(searchCriteria.toJson())}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));

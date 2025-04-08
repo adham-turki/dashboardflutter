@@ -693,9 +693,7 @@ class _BranchesSalesByCatDashboardState
         }
         listOfBalances.add(bal);
         listOfPeriods.add(
-          element.categoryName!.isNotEmpty
-              ? element.categoryName!
-              : _locale.general,
+          element.categoryName!.isNotEmpty ? element.categoryName! : "-",
         );
         if (temp) {
           dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
@@ -704,7 +702,7 @@ class _BranchesSalesByCatDashboardState
             PieChartModel(
               title: element.categoryName!.isNotEmpty
                   ? element.categoryName!
-                  : _locale.general,
+                  : "-",
               value: formatDoubleToTwoDecimalPlaces(bal),
               color: getRandomColor(colorNewList),
             ),
@@ -713,7 +711,7 @@ class _BranchesSalesByCatDashboardState
             BarData(
               name: element.categoryName!.isNotEmpty
                   ? element.categoryName!
-                  : _locale.general,
+                  : "-",
               percent: formatDoubleToTwoDecimalPlaces(bal),
             ),
           );

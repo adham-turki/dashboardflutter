@@ -45,9 +45,21 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
           getRandomColor(), barDat[i].percent!, barDat[i].percent!);
       dataList.add(dashboardBarData);
     }
-    sortedDataList = List.from(dataList)
-      ..sort((a, b) => b.value.compareTo(a.value));
-    dataList = sortedDataList;
+
+    // dataList = sortedDataList;
+    sortDashboardBarData(dataList, false);
+    sortDashboardBarData2(widget.barChartData, false);
+  }
+
+  void sortDashboardBarData(List<DashboardBarData> dataList, bool ascending) {
+    dataList.sort((a, b) =>
+        ascending ? a.value.compareTo(b.value) : b.value.compareTo(a.value));
+  }
+
+  void sortDashboardBarData2(List<BarData> dataList, bool ascending) {
+    dataList.sort((a, b) => ascending
+        ? (a.percent ?? 0.0).compareTo(b.percent ?? 0.0)
+        : (b.percent ?? 0.0).compareTo(a.percent ?? 0.0));
   }
 
   BarChartGroupData generateBarGroup(

@@ -17,7 +17,8 @@ class Converters {
       return "${(total / 1000000000).toStringAsFixed(1)}B"; // For numbers in the billions (e.g., 3.0B for 3000000000)
     }
 
-    return total.toString(); // For numbers smaller than 1000, return as-is
+    return total
+        .toStringAsFixed(2); // For numbers smaller than 1000, return as-is
   }
 
   static formatNumber(double num) {

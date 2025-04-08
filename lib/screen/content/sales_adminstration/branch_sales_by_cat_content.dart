@@ -647,18 +647,15 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 formatDoubleToTwoDecimalPlaces(roundedBal);
 
             pieData.add(PieChartModel(
-                title: element.categoryName! == ""
-                    ? _locale.general
-                    : element.categoryName!,
+                title:
+                    element.categoryName! == "" ? "-" : element.categoryName!,
                 value: formatDoubleToTwoDecimalPlaces(roundedBal),
                 color: randomColor)); // Set random color
           }
 
           barData.add(
             BarChartData(
-              element.categoryName! == ""
-                  ? _locale.general
-                  : element.categoryName!,
+              element.categoryName! == "" ? "-" : element.categoryName!,
               roundedBal,
             ), // Use roundedBal for the bar chart
           );
@@ -725,18 +722,15 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                 formatDoubleToTwoDecimalPlaces(bal);
 
             pieData.add(PieChartModel(
-                title: element.categoryName! == ""
-                    ? _locale.general
-                    : element.categoryName!,
+                title:
+                    element.categoryName! == "" ? "-" : element.categoryName!,
                 value: formatDoubleToTwoDecimalPlaces(bal),
                 color: randomColor)); // Set random color
           }
 
           barData.add(
             BarChartData(
-              element.categoryName! == ""
-                  ? _locale.general
-                  : element.categoryName!,
+              element.categoryName! == "" ? "-" : element.categoryName!,
               bal,
             ), // Set random color
           );
