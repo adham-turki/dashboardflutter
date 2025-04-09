@@ -216,6 +216,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
     );
   }
 
+  bool filterPressed = false;
+
   Widget dailySalesChart(List<BranchSalesViewModel> totalSales, String title) {
     return SizedBox(
       height: height * 0.465,
@@ -263,34 +265,46 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
-                    List<CashierModel> cashiers = [];
-                    if (title == _locale.cashierLogs) {
-                      cashiers = await TotalSalesController().getAllCashiers();
-                    }
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return FilterDialog(
-                              cashiers: cashiers,
-                              branches: value,
-                              filter: title == _locale.cashierLogs
-                                  ? cashierLogsSearchCriteria
-                                  : cashierLogsSearchCriteria,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          if (title == _locale.cashierLogs) {
-                            cashierLogsSearchCriteria = value;
-                            isLoading = true;
-                            setState(() {});
-                            fetchSalesByCashierLogs();
-                          }
-                        }
+                    if (!filterPressed) {
+                      setState(() {
+                        filterPressed = true;
                       });
-                    });
+
+                      List<CashierModel> cashiers = [];
+                      if (title == _locale.cashierLogs) {
+                        cashiers =
+                            await TotalSalesController().getAllCashiers();
+                      }
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        setState(() {
+                          filterPressed = false;
+                        });
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return FilterDialog(
+                                cashiers: cashiers,
+                                branches: value,
+                                filter: title == _locale.cashierLogs
+                                    ? cashierLogsSearchCriteria
+                                    : cashierLogsSearchCriteria,
+                                hint: title);
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            if (title == _locale.cashierLogs) {
+                              cashierLogsSearchCriteria = value;
+                              isLoading = true;
+                              setState(() {});
+                              fetchSalesByCashierLogs();
+                            }
+                          }
+                        });
+                      });
+                    }
                   },
                   textColor: const Color.fromARGB(255, 255, 255, 255),
                   icon: Icon(

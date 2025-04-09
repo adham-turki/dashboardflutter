@@ -272,6 +272,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     });
   }
 
+  bool filterPressed = false;
   Widget diffClosedCashChart(List<ChartData> data, String title) {
     return SizedBox(
       height: height * 0.465,
@@ -320,30 +321,40 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
-                    List<CashierModel> cashiers = [];
-
-                    cashiers = await TotalSalesController().getAllCashiers();
-
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return FilterDialog(
-                              cashiers: cashiers,
-                              branches: value,
-                              filter: diffClosedCashShiftReportCrit,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          diffClosedCashShiftReportCrit = value;
-                          isLoading = true;
-                          setState(() {});
-                          fetchDiffClosedCashShiftReportList();
-                        }
+                    if (!filterPressed) {
+                      setState(() {
+                        filterPressed = true;
                       });
-                    });
+                      List<CashierModel> cashiers = [];
+
+                      cashiers = await TotalSalesController().getAllCashiers();
+
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        setState(() {
+                          filterPressed = false;
+                        });
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return FilterDialog(
+                                cashiers: cashiers,
+                                branches: value,
+                                filter: diffClosedCashShiftReportCrit,
+                                hint: title);
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            diffClosedCashShiftReportCrit = value;
+                            isLoading = true;
+                            setState(() {});
+                            fetchDiffClosedCashShiftReportList();
+                          }
+                        });
+                      });
+                    }
                   },
                   textColor: const Color.fromARGB(255, 255, 255, 255),
                   icon: Icon(
@@ -517,6 +528,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     );
   }
 
+  bool filterPressed2 = false;
   Widget diffCashChart(List<ChartData> data, String title) {
     return SizedBox(
       height: height * 0.465,
@@ -565,29 +577,41 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
-                    List<CashierModel> cashiers = [];
-
-                    cashiers = await TotalSalesController().getAllCashiers();
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return FilterDialog(
-                              cashiers: cashiers,
-                              branches: value,
-                              filter: diffCashShiftByCashierReportCrit,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          diffCashShiftByCashierReportCrit = value;
-                          isLoading1 = true;
-                          setState(() {});
-                          fetchDiffCashShiftByCashierReportList();
-                        }
+                    if (!filterPressed2) {
+                      setState(() {
+                        filterPressed2 = true;
                       });
-                    });
+
+                      List<CashierModel> cashiers = [];
+
+                      cashiers = await TotalSalesController().getAllCashiers();
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        setState(() {
+                          filterPressed2 = false;
+                        });
+
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return FilterDialog(
+                                cashiers: cashiers,
+                                branches: value,
+                                filter: diffCashShiftByCashierReportCrit,
+                                hint: title);
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            diffCashShiftByCashierReportCrit = value;
+                            isLoading1 = true;
+                            setState(() {});
+                            fetchDiffCashShiftByCashierReportList();
+                          }
+                        });
+                      });
+                    }
                   },
                   textColor: const Color.fromARGB(255, 255, 255, 255),
                   icon: Icon(

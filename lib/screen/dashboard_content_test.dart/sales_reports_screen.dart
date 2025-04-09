@@ -429,6 +429,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         if (value != false) {
                           if (title == _locale.salesByCashier) {
                             cashierSearchCriteria = value;
+                            setState(() {
+                              isLoading = true;
+                            });
                             fetchSalesByCashier();
                           } else if (title == _locale.salesByComputer) {
                             desktopSearchCriteria = value;
@@ -824,9 +827,15 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       if (value != false) {
                         if (title == _locale.salesByCashier) {
                           cashierSearchCriteria = value;
+                          setState(() {
+                            isLoading = true;
+                          });
                           fetchSalesByCashier();
                         } else if (title == _locale.salesByComputer) {
                           desktopSearchCriteria = value;
+                          setState(() {
+                            isLoading1 = true;
+                          });
                           fetchSalesByComputer();
                         } else if (title == _locale.salesByPaymentTypes) {
                           payTypesSearchCriteria = value;
@@ -835,6 +844,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           fetchSalesByPayTypes();
                         } else if (title == _locale.salesByHours) {
                           hoursSearchCriteria = value;
+
                           fetchSalesByHours();
                         }
                       }
