@@ -151,6 +151,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     });
   }
 
+  double maxYHours = 0.0;
+
   fetchSalesByHours() async {
     totalSalesByHours.clear();
     totalPricesHoursCount = 0.0;
@@ -163,6 +165,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         totalSalesByHours.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesHoursCount +=
             double.parse(totalSalesByHours[i].displayTotalSales);
+        if (double.parse(totalSalesByHours[i].displayTotalSales) > maxYHours) {
+          maxYHours = double.parse(totalSalesByHours[i].displayTotalSales);
+        }
         barChartData.add(BarChartGroupData(
             x: int.parse(totalSalesByHours[i].displayGroupName),
             barRods: [
@@ -199,6 +204,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   List<String> xLabels = [];
+  double maxY = 0.0;
 
   fetchSalesByPayTypes() async {
     pieData.clear();
@@ -213,6 +219,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesPayTypesCount +=
             double.parse(totalSalesByPayTypes[i].displayTotalSales);
+        if (double.parse(totalSalesByPayTypes[i].displayTotalSales) > maxY) {
+          maxY = double.parse(totalSalesByPayTypes[i].displayTotalSales);
+        }
         pieData.add(PieChartModel(
           title: totalSalesByPayTypes[i].displayGroupName,
           value: formatDoubleToTwoDecimalPlaces(
@@ -699,6 +708,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         height: height * 0.35,
                         child: BarChart(
                           BarChartData(
+                              maxY: maxYHours * 1.4,
                               barTouchData: BarTouchData(
                                 touchTooltipData: BarTouchTooltipData(
                                   getTooltipItem:
@@ -1253,10 +1263,11 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                       ? width * (barChartData1.length / 10)
                                       : width * 0.3
                                   : barChartData1.length > 5
-                                      ? width * (barChartData1.length / 5)
+                                      ? width * (barChartData1.length / 2)
                                       : width * 0.95,
                               child: BarChart(
                                 BarChartData(
+                                    maxY: maxY * 1.4,
                                     barTouchData: BarTouchData(
                                       touchTooltipData: BarTouchTooltipData(
                                         getTooltipItem:
@@ -1282,9 +1293,19 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                             int index = value.toInt();
                                             if (index >= 0 &&
                                                 index < xLabels.length) {
-                                              return Text(xLabels[index],
-                                                  style:
-                                                      TextStyle(fontSize: 12));
+                                              return Transform.rotate(
+                                                angle: -30 *
+                                                    3.14159 /
+                                                    180, // 90 degrees in radians
+                                                child: SizedBox(
+                                                  width: 200,
+                                                  child: Center(
+                                                    child: Text(xLabels[index],
+                                                        style: TextStyle(
+                                                            fontSize: 12)),
+                                                  ),
+                                                ),
+                                              );
                                             }
                                             return Text("");
                                           },

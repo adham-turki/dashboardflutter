@@ -39,7 +39,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool isDesktop = false;
   late AppLocalizations locale;
   Timer? _timer;
-
+  double maxY = 0.0;
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
   String fromDateEn =
@@ -482,6 +482,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         totalSalesByPayTypes.add(BranchSalesViewModel.fromDBModel(value[i]));
         totalPricesPayTypesCount +=
             double.parse(totalSalesByPayTypes[i].displayTotalSales);
+        if (double.parse(totalSalesByPayTypes[i].displayTotalSales) > maxY) {
+          maxY = double.parse(totalSalesByPayTypes[i].displayTotalSales);
+        }
         pieData.add(PieChartModel(
           title: totalSalesByPayTypes[i].displayGroupName,
           value: formatDoubleToTwoDecimalPlaces(
@@ -669,6 +672,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     : width * 0.95,
                             child: BarChart(
                               BarChartData(
+                                  maxY: maxY * 1.4,
                                   barTouchData: BarTouchData(
                                     touchTooltipData: BarTouchTooltipData(
                                       getTooltipItem:
@@ -692,8 +696,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                           int index = value.toInt();
                                           if (index >= 0 &&
                                               index < xLabels.length) {
-                                            return Text(xLabels[index],
-                                                style: TextStyle(fontSize: 12));
+                                            return Transform.rotate(
+                                              angle: -30 *
+                                                  3.14159 /
+                                                  180, // 90 degrees in radians
+                                              child: SizedBox(
+                                                width: 200,
+                                                child: Center(
+                                                  child: Text(xLabels[index],
+                                                      style: TextStyle(
+                                                          fontSize: 12)),
+                                                ),
+                                              ),
+                                            );
                                           }
                                           return Text("");
                                         },
