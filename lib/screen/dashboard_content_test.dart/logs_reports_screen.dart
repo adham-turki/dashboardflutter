@@ -51,8 +51,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   double totalCashierLogs = 0.0;
   List<SalesCostBasedStockCategoryViewModel> salesCostBasedStkCatList = [];
   double salesCostBasedStkCatCount = 0.0;
+  List<BarChartGroupData> barChartDataLogs = [];
 
-  final ScrollController _scrollController1 = ScrollController();
   double minValue = 0;
   double maxValue = 0;
   double interval = 0;
@@ -63,6 +63,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   Timer? _timer;
   bool isLoading = false;
   double maxY = 0.0;
+  List<String> xLabelsLogs = [];
 
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
@@ -80,6 +81,20 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         if (double.parse(totalCashierLogsList[i].displayLogsCount) > maxY) {
           maxY = double.parse(totalCashierLogsList[i].displayLogsCount);
         }
+        xLabelsLogs =
+            totalCashierLogsList.map((e) => e.displayGroupName).toList();
+
+        barChartDataLogs = List.generate(totalCashierLogsList.length, (index) {
+          return BarChartGroupData(
+            x: index, // Use index as x-value
+            barRods: [
+              BarChartRodData(
+                toY: double.parse(totalCashierLogsList[index].displayLogsCount),
+                borderRadius: BorderRadius.all(Radius.zero),
+              ),
+            ],
+          );
+        });
       }
 
       print("totalCashierLogsList: ${totalCashierLogsList.length}");
@@ -90,6 +105,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
+    cashierLogsSearchCriteria.chartType == _locale.barChart;
     super.didChangeDependencies();
   }
 
@@ -181,8 +197,10 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      dailySalesChart(
-                          totalCashierLogsList, _locale.cashierLogs),
+                      cashierLogsSearchCriteria.chartType == _locale.barChart
+                          ? barChart(_locale.cashierLogs, barChartDataLogs)
+                          : dailySalesChart(
+                              totalCashierLogsList, _locale.cashierLogs),
                     ],
                   ))
             ],
@@ -473,5 +491,214 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
     } else {
       return const Text('');
     }
+  }
+
+  Widget barChart(String title, List<BarChartGroupData> enteredBarChartData) {
+    return SizedBox(
+      height: height * 0.47,
+      child: Card(
+        elevation: 2,
+        color: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.zero, // Remove corner radius for a flat edge
+        ),
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        SelectableText(
+                          title,
+                          style: TextStyle(fontSize: height * 0.015),
+                        ),
+                        Text(
+                            " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})",
+                            style: TextStyle(fontSize: isDesktop ? 15 : 18))
+                      ],
+                    ),
+                  ],
+                ),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByCashier)
+                //     Text(
+                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByComputer)
+                //     Text(
+                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByHours)
+                //     Text(
+                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
+                // if (Responsive.isDesktop(context))
+                //   if (title == locale.salesByPaymentTypes)
+                //     Text(
+                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
+                blueButton1(
+                  onPressed: () async {
+                    List<CashierModel> cashiers = [];
+                    if (title == _locale.cashierLogs) {
+                      cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    await TotalSalesController().getAllBranches().then((value) {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return FilterDialog(
+                              cashiers: cashiers,
+                              branches: value,
+                              filter: title == _locale.cashierLogs
+                                  ? cashierLogsSearchCriteria
+                                  : cashierLogsSearchCriteria,
+                              hint: title);
+                        },
+                      ).then((value) {
+                        if (value != false) {
+                          if (title == _locale.cashierLogs) {
+                            cashierLogsSearchCriteria = value;
+                            isLoading = true;
+                            setState(() {});
+                            fetchSalesByCashierLogs();
+                          }
+                        }
+                      });
+                    });
+                  },
+                  textColor: const Color.fromARGB(255, 255, 255, 255),
+                  icon: Icon(
+                    Icons.filter_list_sharp,
+                    color: Colors.white,
+                    size: isDesktop ? height * 0.035 : height * 0.03,
+                  ),
+                )
+              ],
+            ),
+            // if (!Responsive.isDesktop(context))
+
+            if (title == _locale.cashierLogs)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                      "(${cashierLogsSearchCriteria.fromDate} - ${cashierLogsSearchCriteria.toDate})",
+                      style:
+                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
+                ],
+              ),
+            (title == _locale.cashierLogs && isLoading)
+                ? SizedBox(
+                    height: height * 0.35,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : Scrollbar(
+                    controller: title == _locale.cashierLogs
+                        ? _scrollController
+                        : _scrollController,
+                    thumbVisibility: true,
+                    thickness: 8,
+                    trackVisibility: true,
+                    radius: const Radius.circular(4),
+                    child: SingleChildScrollView(
+                      reverse: _locale.localeName == "ar" ? true : false,
+                      controller: title == _locale.cashierLogs
+                          ? _scrollController
+                          : _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: height * 0.35,
+                          width: Responsive.isDesktop(context)
+                              ? enteredBarChartData.length > 20
+                                  ? width * (enteredBarChartData.length / 10)
+                                  : width * 0.3
+                              : enteredBarChartData.length > 5
+                                  ? width * (enteredBarChartData.length / 2)
+                                  : width * 0.95,
+                          child: BarChart(
+                            BarChartData(
+                                maxY: title == _locale.cashierLogs
+                                    ? maxY * 1.4
+                                    : maxY * 1.4,
+                                barTouchData: BarTouchData(
+                                  touchTooltipData: BarTouchTooltipData(
+                                    getTooltipItem:
+                                        (group, groupIndex, rod, rodIndex) {
+                                      return BarTooltipItem(
+                                        title == _locale.cashierLogs
+                                            ? "${Converters.formatNumber(rod.toY)}\n${xLabelsLogs[groupIndex]}"
+                                            : "",
+                                        const TextStyle(color: Colors.white),
+                                      );
+                                    },
+                                  ),
+                                ),
+                                titlesData: FlTitlesData(
+                                  rightTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      reservedSize: 40,
+                                      getTitlesWidget: (value, meta) {
+                                        int index = value.toInt();
+                                        if (index >= 0 &&
+                                            index <
+                                                (title == _locale.cashierLogs
+                                                        ? xLabelsLogs
+                                                        : [])
+                                                    .length) {
+                                          return Transform.rotate(
+                                            angle: -30 *
+                                                3.14159 /
+                                                180, // 90 degrees in radians
+                                            child: SizedBox(
+                                              width: 200,
+                                              child: Center(
+                                                child: Text(
+                                                    title == _locale.cashierLogs
+                                                        ? xLabelsLogs[index]
+                                                        : "",
+                                                    style: TextStyle(
+                                                        fontSize: 12)),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                        return Text("");
+                                      },
+                                    ),
+                                  ),
+                                  leftTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                    getTitlesWidget: (value, meta) =>
+                                        leftTitleWidgets(value),
+                                    showTitles: true,
+                                    reservedSize: 35,
+                                  )),
+                                  topTitles: AxisTitles(
+                                    sideTitles: SideTitles(showTitles: false),
+                                  ),
+                                ),
+                                barGroups: enteredBarChartData),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 }

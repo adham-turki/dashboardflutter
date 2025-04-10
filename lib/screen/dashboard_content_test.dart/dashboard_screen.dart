@@ -69,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
+    payTypesSearchCriteria.chartType = locale.pieChart;
     // VouchHeaderTransietController().getBranch().then((value) {
     //   setState(() {
     //     vouchHeaderTransietModel = value!;
@@ -209,9 +210,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SizedBox(
               width: width * 0.003,
             ),
-            totalSalesByPayTypes.length <= 3
+            payTypesSearchCriteria.chartType == locale.pieChart
                 ? pieChart(pieData, locale.salesByPaymentTypes)
-                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
+                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
+            // totalSalesByPayTypes.length <= 3
+            //     ? pieChart(pieData, locale.salesByPaymentTypes)
+            //     : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -304,9 +308,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         // ),
         Row(
           children: [
-            totalSalesByPayTypes.length <= 3
+            payTypesSearchCriteria.chartType == locale.pieChart
                 ? pieChart(pieData, locale.salesByPaymentTypes)
-                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
+                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
           ],
         ),
         SizedBox(

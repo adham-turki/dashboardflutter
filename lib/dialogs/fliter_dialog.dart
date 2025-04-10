@@ -32,7 +32,7 @@ class _FilterDialogState extends State<FilterDialog> {
   String _selectedBranch = "";
   String _selectedBranchName = "";
   String _selectedShiftStatus = "";
-
+  String selectedChartType = "";
   String _selectedCashier = "";
   String _selectedCashierCode = "";
   int _selectedTransactionType = -1;
@@ -43,6 +43,7 @@ class _FilterDialogState extends State<FilterDialog> {
   double screenHeight = 0.0;
   List<TransTypeConstants> transTypeList = [];
   late AppLocalizations _locale;
+  List<String> charts = [];
   @override
   void didChangeDependencies() {
     _fromDateController =
@@ -51,6 +52,12 @@ class _FilterDialogState extends State<FilterDialog> {
         TextEditingController(text: formatDateString(widget.filter.toDate));
     print("widget.branches: ${widget.branches.length}");
     _locale = AppLocalizations.of(context)!;
+    charts = [
+      if (widget.hint != _locale.salesByPaymentTypes) _locale.lineChart,
+      _locale.barChart,
+      if (widget.hint == _locale.salesByPaymentTypes) _locale.pieChart,
+    ];
+
     transTypeList = [];
     transTypeList = constTransTypeList;
     if (transTypeList.isNotEmpty) {
@@ -90,6 +97,7 @@ class _FilterDialogState extends State<FilterDialog> {
         : int.parse(widget.filter.transType);
     _selectedCashier =
         widget.filter.cashier == "all" ? _locale.all : widget.filter.cashier;
+    selectedChartType = widget.filter.chartType ?? charts[0];
     if (widget.branches.isNotEmpty) {
       for (var i = 0; i < widget.branches.length; i++) {
         if (widget.branches[i].txtCode == _selectedBranch) {
@@ -160,25 +168,26 @@ class _FilterDialogState extends State<FilterDialog> {
             ElevatedButton(
               onPressed: () {
                 SearchCriteria updatedFilter = SearchCriteria(
-                  branch: _selectedBranch,
-                  shiftStatus: _selectedShiftStatus == _locale.opened
-                      ? "0"
-                      : _selectedShiftStatus == _locale.closed
-                          ? "1"
-                          : "all",
-                  transType: _selectedTransactionType == -1
-                      ? "all"
-                      : "$_selectedTransactionType",
-                  cashier: _selectedCashierCode == ""
-                      ? "all"
-                      : _selectedCashierCode == _locale.all
-                          ? "all"
-                          : _selectedCashierCode,
-                  fromDate:
-                      formatDateStringToForwardSlash(_fromDateController.text),
-                  toDate:
-                      formatDateStringToForwardSlash(_toDateController.text),
-                );
+                    branch: _selectedBranch,
+                    shiftStatus: _selectedShiftStatus == _locale.opened
+                        ? "0"
+                        : _selectedShiftStatus == _locale.closed
+                            ? "1"
+                            : "all",
+                    transType: _selectedTransactionType == -1
+                        ? "all"
+                        : "$_selectedTransactionType",
+                    cashier: _selectedCashierCode == ""
+                        ? "all"
+                        : _selectedCashierCode == _locale.all
+                            ? "all"
+                            : _selectedCashierCode,
+                    fromDate: formatDateStringToForwardSlash(
+                        _fromDateController.text),
+                    toDate:
+                        formatDateStringToForwardSlash(_toDateController.text),
+                    chartType: selectedChartType);
+                print("selectedChartType: ${selectedChartType}");
                 Navigator.of(context).pop(updatedFilter);
               },
               style: ElevatedButton.styleFrom(
@@ -239,7 +248,7 @@ class _FilterDialogState extends State<FilterDialog> {
                         width: Responsive.isDesktop(context)
                             ? screenWidth * 0.16
                             : screenWidth * 0.66,
-                        height: screenHeight * 0.15,
+                        height: screenHeight * 0.1,
                         child: _buildDateField(
                             label: _locale.fromDate,
                             controller: _fromDateController,
@@ -497,6 +506,28 @@ class _FilterDialogState extends State<FilterDialog> {
             //     });
             //   },
             // ),
+            if (widget.hint != _locale.salesCostBasedBranch &&
+                widget.hint != _locale.salesCostBasedStockCat &&
+                widget.hint != _locale.diffClosedCashByShifts &&
+                widget.hint != _locale.diffCashByShifts)
+              SizedBox(
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.66,
+                height: screenHeight * 0.1,
+                child: CustomDropDownSearch(
+                  isMandatory: true,
+                  bordeText: _locale.chartType,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedChartType = value;
+                    });
+                  },
+                  items: charts,
+                  initialValue:
+                      _selectedBranchName == "" ? charts[0] : selectedChartType,
+                ),
+              ),
           ],
         ),
       ),
@@ -676,6 +707,29 @@ class _FilterDialogState extends State<FilterDialog> {
                               )
                             : const SizedBox.shrink(),
                       ],
+                    ),
+                  ),
+                if (widget.hint != _locale.salesCostBasedBranch &&
+                    widget.hint != _locale.salesCostBasedStockCat &&
+                    widget.hint != _locale.diffClosedCashByShifts &&
+                    widget.hint != _locale.diffCashByShifts)
+                  SizedBox(
+                    width: Responsive.isDesktop(context)
+                        ? screenWidth * 0.16
+                        : screenWidth * 0.66,
+                    height: screenHeight * 0.1,
+                    child: CustomDropDownSearch(
+                      isMandatory: true,
+                      bordeText: _locale.chartType,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedChartType = value;
+                        });
+                      },
+                      items: charts,
+                      initialValue: _selectedBranchName == ""
+                          ? charts[0]
+                          : selectedChartType,
                     ),
                   ),
               ],

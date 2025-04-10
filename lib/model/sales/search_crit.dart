@@ -5,15 +5,16 @@ class SearchCriteria {
   final String cashier;
   final String fromDate;
   final String toDate;
+  String? chartType;
 
-  SearchCriteria({
-    required this.branch,
-    required this.shiftStatus,
-    required this.transType,
-    required this.cashier,
-    required this.fromDate,
-    required this.toDate,
-  });
+  SearchCriteria(
+      {required this.branch,
+      required this.shiftStatus,
+      required this.transType,
+      required this.cashier,
+      required this.fromDate,
+      required this.toDate,
+      this.chartType});
 
   factory SearchCriteria.fromJson(Map<String, dynamic> json) {
     return SearchCriteria(
