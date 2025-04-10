@@ -223,8 +223,10 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      dailySalesChart(
-                          totalCashierLogsList, _locale.cashierLogs),
+                      cashierLogsSearchCriteria.chartType == _locale.barChart
+                          ? barChart(_locale.cashierLogs, barChartDataLogs)
+                          : dailySalesChart(
+                              totalCashierLogsList, _locale.cashierLogs),
                     ],
                   ))
             ],
