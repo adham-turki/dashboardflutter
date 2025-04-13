@@ -1651,14 +1651,14 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
               children: [
                 Column(
                   children: [
-                    Row(
+                    Column(
                       children: [
                         SelectableText(title,
                             style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedBranch
                               ? Text(
-                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))} ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
+                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),

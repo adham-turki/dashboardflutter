@@ -59,8 +59,10 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   late TooltipBehavior _tooltip;
   List<TotalProfitReportModel> totalProfitsByCategoryList = [];
   double totalProfitsByCategoryCount = 0.0;
+  double totalProfitsByCategoryCountSales = 0.0;
   List<TotalProfitReportModel> salesCostBasedBranchReportList = [];
   double totalsalesCostBasedBranchReport = 0.0;
+  double totalsalesCostBasedBranchReportProfit = 0.0;
   final ScrollController _scrollController = ScrollController();
   final ScrollController _scrollController1 = ScrollController();
   final storage = const FlutterSecureStorage();
@@ -210,6 +212,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   fetchSalesCostBasedStockCat() async {
     totalProfitsByCategoryList.clear();
     totalProfitsByCategoryCount = 0.0;
+    totalProfitsByCategoryCountSales = 0.0;
     data.clear();
     isLoading = true;
     await TotalSalesController()
@@ -220,6 +223,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
         totalProfitsByCategoryList.add(value[i]);
         totalProfitsByCategoryCount +=
             (totalProfitsByCategoryList[i].totalProfit);
+        totalProfitsByCategoryCountSales +=
+            (totalProfitsByCategoryList[i].totalSales);
         data.add(ChartData(
             totalProfitsByCategoryList[i].name,
             "${totalProfitsByCategoryList[i].percentage}",
@@ -258,6 +263,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   fetchsalesCostBasedBranchReportList() async {
     salesCostBasedBranchReportList.clear();
     totalsalesCostBasedBranchReport = 0.0;
+    totalsalesCostBasedBranchReportProfit = 0.0;
     data1.clear();
     isLoading2 = true;
     await TotalSalesController()
@@ -266,8 +272,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
       isLoading2 = false;
       for (var i = 0; i < value.length; i++) {
         salesCostBasedBranchReportList.add(value[i]);
-
-        totalsalesCostBasedBranchReport += value[i].totalProfit;
+        totalsalesCostBasedBranchReportProfit += value[i].totalProfit;
+        totalsalesCostBasedBranchReport += value[i].totalSales;
         data1.add(ChartData(
             salesCostBasedBranchReportList[i].name,
             "${salesCostBasedBranchReportList[i].percentage}",
@@ -310,7 +316,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedBranch
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
+                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -377,7 +383,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
+                              " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -532,7 +538,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedStockCat
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))})")
+                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -594,7 +600,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))})"),
+                              " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
                         ],
                       )
                     : SizedBox.shrink(),
