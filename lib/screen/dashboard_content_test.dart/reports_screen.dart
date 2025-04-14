@@ -298,7 +298,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.diffClosedCashByShifts
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})")
+                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffClosedCashShiftReport)})',
+                                )
+                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -372,7 +374,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
+                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffClosedCashShiftReport)})',
+                          )
+                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -554,7 +558,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.diffCashByShifts
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})")
+                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
+                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -629,7 +634,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})"),
+                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
+                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),

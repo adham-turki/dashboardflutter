@@ -138,6 +138,8 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     String fromDate = fromDateController.text.isEmpty
         ? ""
         : DatesController().formatDateReverse(fromDateController.text);
+    print("asadasdasdasd: ${(totalDailySale.value.toString())}");
+    print("${double.parse(totalDailySale.value.toString())}");
     return Container(
       decoration: const BoxDecoration(),
       child: Column(
@@ -164,7 +166,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 valueListenable: totalDailySale,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.dailySales} (${totalDailySale.value})",
+                                    "${_locale.dailySales} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})'",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -269,7 +271,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                     valueListenable: totalDailySale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.dailySales}  (${totalDailySale.value})",
+                                        "${_locale.dailySales}  '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})'",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -576,8 +578,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         total += listOfBalances[i];
       }
 
-      totalDailySale.value = Converters.formatNumberRounded(
-          double.parse(Converters.formatNumberDigits(total)));
+      totalDailySale.value = total;
+      //  Converters.formatNumberRounded(
+      //     double.parse(Converters.formatNumberDigits(total)));
     });
 
     print("BBBBBBBBBbbarLength ${barData.length}");
@@ -646,8 +649,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalDailySale.value = Converters.formatNumberRounded(
-          double.parse(Converters.formatNumberDigits(total)));
+      totalDailySale.value = total;
+      // Converters.formatNumberRounded(
+      // double.parse(Converters.formatNumberDigits(total)));
     });
 
     // }

@@ -61,7 +61,7 @@ class _LineDashboardChartState extends State<LineDashboardChart> {
     );
 
     return Text(
-      Converters.formatTitleNumber(value),
+      "\u200E${Converters.formatTitleNumber(value)}",
       style: style,
       textAlign: TextAlign.left,
     );

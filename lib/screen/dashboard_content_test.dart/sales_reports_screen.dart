@@ -12,6 +12,7 @@ import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -486,16 +487,19 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
+                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 13 : 16))
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
+                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
+                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 13 : 16))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 13 : 16))
                                     : SizedBox.shrink()
@@ -673,21 +677,25 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
+                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 15 : 18))
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
+                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
+                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18))
                                     : title == _locale.salesByHours
                                         ? Text(
-                                            " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
+                                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
+                                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                             style: TextStyle(
                                                 fontSize: isDesktop ? 15 : 18))
                                         : SizedBox.shrink(),
@@ -892,20 +900,24 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   ),
                   title == _locale.salesByCashier
                       ? Text(
-                          " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
+                          '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
+                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                           style: TextStyle(fontSize: isDesktop ? 13 : 16))
                       : title == _locale.salesByComputer
                           ? Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
+                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
+                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18))
                           : title == _locale.salesByPaymentTypes
                               ? Text(
-                                  " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                                  // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                   style:
                                       TextStyle(fontSize: isDesktop ? 15 : 18))
                               : title == _locale.salesByHours
                                   ? Text(
-                                      " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
+                                      '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
+                                      // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                       style: TextStyle(
                                           fontSize: isDesktop ? 15 : 18))
                                   : SizedBox.shrink()
@@ -1190,7 +1202,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     );
 
     return Text(
-      Converters.formatTitleNumber(value),
+      "\u200E${Converters.formatTitleNumber(value)}",
       style: style,
       textAlign: TextAlign.left,
     );
@@ -1333,21 +1345,25 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         ),
                         title == _locale.salesByCashier
                             ? Text(
-                                " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
+                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 15 : 18))
                             : title == _locale.salesByComputer
                                 ? Text(
-                                    " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
+                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
+                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
-                                        " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18))
                                     : title == _locale.salesByHours
                                         ? Text(
-                                            " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
+                                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
+                                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                             style: TextStyle(
                                                 fontSize: isDesktop ? 15 : 18))
                                         : SizedBox.shrink(),
@@ -1658,7 +1674,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedBranch
                               ? Text(
-                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
+                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
+                              // ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -1720,7 +1737,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              "(${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))} ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
+                              // textDirection: ui.TextDirection.ltr,
+                              "(${_locale.profit}: '\u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}', ${_locale.sales}: '\u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)}')")
+                          // ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))} ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),

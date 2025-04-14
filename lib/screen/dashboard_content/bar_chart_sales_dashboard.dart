@@ -9,6 +9,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
@@ -152,7 +153,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                 valueListenable: totalBranchesSale,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.salesByBranches} (${totalBranchesSale.value})",
+                                    "${_locale.salesByBranches} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})'",
+                                    // "${_locale.salesByBranches} (${totalBranchesSale.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -247,7 +249,8 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     valueListenable: totalBranchesSale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.salesByBranches}   (${totalBranchesSale.value})",
+                                        "${_locale.salesByBranches} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})'",
+                                        // "${_locale.salesByBranches}   (${totalBranchesSale.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -582,8 +585,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalBranchesSale.value = Converters.formatNumberRounded(
-          double.parse(Converters.formatNumberDigits(total)));
+      totalBranchesSale.value = total;
+      // Converters.formatNumberRounded(
+      //     double.parse(Converters.formatNumberDigits(total)));
     });
     print(
         "baaaaaaaaaaaaaaal ${listOfBalances.length}  ${listOfPeriods.length}");
@@ -681,8 +685,9 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         for (int i = 0; i < listOfBalances.length; i++) {
           total += listOfBalances[i];
         }
-        totalBranchesSale.value = Converters.formatNumberRounded(
-            double.parse(Converters.formatNumberDigits(total)));
+        totalBranchesSale.value = total;
+        // Converters.formatNumberRounded(
+        //     double.parse(Converters.formatNumberDigits(total)));
       });
       // }
     }

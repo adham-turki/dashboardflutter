@@ -262,7 +262,9 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         title == _locale.cashierLogs
                             ? Text(
-                                " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})")
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalCashierLogs)})',
+                              )
+                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})")
                             : SizedBox.shrink()
                       ],
                     ),
@@ -462,7 +464,7 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
     );
 
     return Text(
-      Converters.formatTitleNumber(value),
+      "\u200E${Converters.formatTitleNumber(value)}",
       style: style,
       textAlign: TextAlign.left,
     );
@@ -520,7 +522,8 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                           style: TextStyle(fontSize: height * 0.015),
                         ),
                         Text(
-                            " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})",
+                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalCashierLogs)})',
+                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})",
                             style: TextStyle(fontSize: isDesktop ? 15 : 18))
                       ],
                     ),

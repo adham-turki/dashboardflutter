@@ -377,7 +377,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         title == locale.salesByPaymentTypes
                             ? Text(
-                                "(${Converters.formatNumber(totalPricesPayTypesCount)})",
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                                // "(${Converters.formatNumber(totalPricesPayTypesCount)})",
                               )
                             : SizedBox.shrink()
                       ],
@@ -559,7 +560,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             style: TextStyle(fontSize: height * 0.015),
                           ),
                           Text(
-                              " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
+                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
+                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         ],
                       ),
@@ -749,7 +751,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     return Text(
-      Converters.formatTitleNumber(value),
+      "\u200E${Converters.formatTitleNumber(value)}",
       style: style,
       textAlign: TextAlign.left,
     );

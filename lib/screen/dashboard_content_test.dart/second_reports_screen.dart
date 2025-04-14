@@ -316,7 +316,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedBranch
                               ? Text(
-                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
+                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
+                              // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -383,7 +384,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
+                              " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
+                          // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -538,7 +540,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.salesCostBasedStockCat
                               ? Text(
-                                  " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
+                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})")
+                              // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
                               : SizedBox.shrink()
                       ],
                     ),
@@ -600,7 +603,8 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
+                              " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})")
+                          // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
                         ],
                       )
                     : SizedBox.shrink(),

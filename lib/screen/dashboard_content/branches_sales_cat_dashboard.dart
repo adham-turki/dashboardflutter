@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:intl/intl.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/bar_chart_data_model.dart';
 import '../../../model/chart/pie_chart_model.dart';
@@ -213,7 +214,8 @@ class _BranchesSalesByCatDashboardState
                                 valueListenable: totalBranchesByCateg,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
+                                    "${_locale.branchesSalesByCategories} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})'",
+                                    // "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -331,7 +333,8 @@ class _BranchesSalesByCatDashboardState
                                     valueListenable: totalBranchesByCateg,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.branchesSalesByCategories}   (${totalBranchesByCateg.value})",
+                                        "${_locale.branchesSalesByCategories} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})'",
+                                        // "${_locale.branchesSalesByCategories}   (${totalBranchesByCateg.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
@@ -722,8 +725,9 @@ class _BranchesSalesByCatDashboardState
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-      totalBranchesByCateg.value = Converters.formatNumberRounded(
-          double.parse(Converters.formatNumberDigits(total)));
+      totalBranchesByCateg.value = total;
+      // Converters.formatNumberRounded(
+      //     double.parse(Converters.formatNumberDigits(total)));
     });
 
     // }

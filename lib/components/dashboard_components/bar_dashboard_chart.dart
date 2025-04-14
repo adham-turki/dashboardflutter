@@ -98,7 +98,7 @@ class _BarDashboardChartState extends State<BarDashboardChart> {
     );
 
     return Text(
-      Converters.formatTitleNumber(value),
+      "\u200E${Converters.formatTitleNumber(value)}",
       style: style,
       textAlign: TextAlign.left,
     );
