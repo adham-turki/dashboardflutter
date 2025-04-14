@@ -345,7 +345,7 @@ class _CustomDateState extends State<CustomDate> {
     return Padding(
       padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 15),
       child: SizedBox(
-        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.2,
+        width: Responsive.isDesktop(context) ? width * 0.026 : width * 0.15,
         // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
         child: Center(
           child: TextFormField(

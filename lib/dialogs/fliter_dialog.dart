@@ -239,7 +239,7 @@ class _FilterDialogState extends State<FilterDialog> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: screenWidth * 0.9,
+                  width: screenWidth,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
