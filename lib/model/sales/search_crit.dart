@@ -6,6 +6,7 @@ class SearchCriteria {
   final String fromDate;
   final String toDate;
   String? chartType;
+  String? computer;
 
   SearchCriteria(
       {required this.branch,
@@ -14,7 +15,8 @@ class SearchCriteria {
       required this.cashier,
       required this.fromDate,
       required this.toDate,
-      this.chartType});
+      this.chartType,
+      this.computer});
 
   factory SearchCriteria.fromJson(Map<String, dynamic> json) {
     return SearchCriteria(
@@ -35,6 +37,7 @@ class SearchCriteria {
       'cashier': cashier,
       'fromDate': fromDate,
       'toDate': toDate,
+      'computer': computer
     };
   }
 }

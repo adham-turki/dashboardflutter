@@ -1,6 +1,7 @@
 import 'package:bi_replicate/components/custom_date.dart';
 import 'package:bi_replicate/constants/constants.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
+import 'package:bi_replicate/model/computer_model.dart';
 import 'package:bi_replicate/model/trans_type_constants.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/func/dates_controller.dart';
@@ -17,12 +18,14 @@ class FilterDialog extends StatefulWidget {
   final List<BranchModel> branches;
   final List<CashierModel> cashiers;
   final String hint;
+  List<ComputerModel>? computers;
 
   FilterDialog(
       {required this.filter,
       required this.branches,
       required this.cashiers,
-      required this.hint});
+      required this.hint,
+      this.computers});
 
   @override
   _FilterDialogState createState() => _FilterDialogState();
@@ -44,6 +47,7 @@ class _FilterDialogState extends State<FilterDialog> {
   List<TransTypeConstants> transTypeList = [];
   late AppLocalizations _locale;
   List<String> charts = [];
+  String selectedComputer = "";
   @override
   void didChangeDependencies() {
     _fromDateController =
@@ -66,6 +70,14 @@ class _FilterDialogState extends State<FilterDialog> {
             0, TransTypeConstants(description: _locale.all, id: -1));
       }
     }
+    if ((widget.computers ?? []).isNotEmpty) {
+      if ((widget.computers ?? [])[0].computer != "all") {
+        widget.computers!.insert(0, ComputerModel(computer: "all"));
+      }
+    }
+    if ((widget.computers ?? []).isNotEmpty) {
+      selectedComputer = (widget.computers ?? [])[0].computer ?? "";
+    }
 
     widget.cashiers.insert(
         0,
@@ -82,6 +94,7 @@ class _FilterDialogState extends State<FilterDialog> {
             txtPrefix: "",
             txtWarehouse: "",
             txtJcode: ""));
+    selectedComputer = widget.filter.computer ?? "";
     _selectedBranch = widget.filter.branch;
     _selectedShiftStatus = widget.filter.shiftStatus == "0"
         ? _locale.opened
@@ -186,7 +199,9 @@ class _FilterDialogState extends State<FilterDialog> {
                         _fromDateController.text),
                     toDate:
                         formatDateStringToForwardSlash(_toDateController.text),
-                    chartType: selectedChartType);
+                    chartType: selectedChartType,
+                    computer:
+                        selectedComputer == "" ? "all" : selectedComputer);
                 print("selectedChartType: ${selectedChartType}");
                 Navigator.of(context).pop(updatedFilter);
               },
@@ -347,7 +362,8 @@ class _FilterDialogState extends State<FilterDialog> {
                       children: [
                         (widget.hint == _locale.cashierLogs ||
                                 widget.hint == _locale.diffClosedCashByShifts ||
-                                widget.hint == _locale.diffCashByShifts)
+                                widget.hint == _locale.diffCashByShifts ||
+                                widget.hint == _locale.salesByCashier)
                             ? SizedBox(
                                 width: Responsive.isDesktop(context)
                                     ? screenWidth * 0.16
@@ -459,7 +475,8 @@ class _FilterDialogState extends State<FilterDialog> {
                 ),
             if (!Responsive.isDesktop(context))
               if (widget.hint == _locale.diffClosedCashByShifts ||
-                  widget.hint == _locale.diffCashByShifts)
+                  widget.hint == _locale.diffCashByShifts ||
+                  widget.hint == _locale.salesByCashier)
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -526,6 +543,26 @@ class _FilterDialogState extends State<FilterDialog> {
                   items: charts,
                   initialValue:
                       _selectedBranchName == "" ? charts[0] : selectedChartType,
+                ),
+              ),
+            if (widget.hint == _locale.salesByComputer)
+              SizedBox(
+                width: Responsive.isDesktop(context)
+                    ? screenWidth * 0.16
+                    : screenWidth * 0.66,
+                height: screenHeight * 0.1,
+                child: CustomDropDownSearch(
+                  isMandatory: true,
+                  bordeText: _locale.computers,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedComputer = value.computer;
+                    });
+                  },
+                  items: widget.computers ?? [],
+                  initialValue: selectedComputer == ""
+                      ? widget.computers![0].computer
+                      : selectedComputer,
                 ),
               ),
           ],
@@ -656,7 +693,8 @@ class _FilterDialogState extends State<FilterDialog> {
                       children: [
                         (widget.hint == _locale.cashierLogs ||
                                 widget.hint == _locale.diffClosedCashByShifts ||
-                                widget.hint == _locale.diffCashByShifts)
+                                widget.hint == _locale.diffCashByShifts ||
+                                widget.hint == _locale.salesByCashier)
                             ? SizedBox(
                                 width: Responsive.isDesktop(context)
                                     ? screenWidth * 0.16
@@ -730,6 +768,26 @@ class _FilterDialogState extends State<FilterDialog> {
                       initialValue: _selectedBranchName == ""
                           ? charts[0]
                           : selectedChartType,
+                    ),
+                  ),
+                if (widget.hint == _locale.salesByComputer)
+                  SizedBox(
+                    width: Responsive.isDesktop(context)
+                        ? screenWidth * 0.16
+                        : screenWidth * 0.66,
+                    height: screenHeight * 0.1,
+                    child: CustomDropDownSearch(
+                      isMandatory: true,
+                      bordeText: _locale.computers,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedComputer = value.computer;
+                        });
+                      },
+                      items: widget.computers ?? [],
+                      initialValue: selectedComputer == ""
+                          ? widget.computers![0].computer
+                          : selectedComputer,
                     ),
                   ),
               ],

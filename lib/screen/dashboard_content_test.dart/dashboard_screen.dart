@@ -211,11 +211,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: width * 0.003,
             ),
             payTypesSearchCriteria.chartType == locale.pieChart
-                ? pieChart(pieData, locale.salesByPaymentTypes)
+                ? totalSalesByPayTypes.length <= 3
+                    ? pieChart(pieData, locale.salesByPaymentTypes)
+                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
                 : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
-            // totalSalesByPayTypes.length <= 3
-            //     ? pieChart(pieData, locale.salesByPaymentTypes)
-            //     : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
           ],
         ),
         SizedBox(
@@ -309,7 +308,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           children: [
             payTypesSearchCriteria.chartType == locale.pieChart
-                ? pieChart(pieData, locale.salesByPaymentTypes)
+                ? totalSalesByPayTypes.length <= 3
+                    ? pieChart(pieData, locale.salesByPaymentTypes)
+                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
                 : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
           ],
         ),

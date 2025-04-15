@@ -4,6 +4,7 @@ import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
+import 'package:bi_replicate/model/computer_model.dart';
 
 import 'package:bi_replicate/model/sales_view_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
@@ -536,8 +537,12 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
-                    if (title == _locale.cashierLogs) {
+                    if (title == _locale.salesByCashier) {
                       cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    List<ComputerModel> computers = [];
+                    if (title == _locale.salesByComputer) {
+                      computers = await TotalSalesController().getComputers("");
                     }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
@@ -546,6 +551,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         builder: (context) {
                           return FilterDialog(
                               cashiers: cashiers,
+                              computers: computers,
                               branches: value,
                               filter: title == _locale.salesByCashier
                                   ? cashierSearchCriteria
@@ -732,8 +738,12 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
-                    if (title == _locale.cashierLogs) {
+                    if (title == _locale.salesByCashier) {
                       cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    List<ComputerModel> computers = [];
+                    if (title == _locale.salesByComputer) {
+                      computers = await TotalSalesController().getComputers("");
                     }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
@@ -742,6 +752,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         builder: (context) {
                           return FilterDialog(
                               cashiers: cashiers,
+                              computers: computers,
                               branches: value,
                               filter: title == _locale.salesByCashier
                                   ? cashierSearchCriteria
@@ -942,8 +953,12 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
               blueButton1(
                 onPressed: () async {
                   List<CashierModel> cashiers = [];
-                  if (title == _locale.cashierLogs) {
+                  if (title == _locale.salesByCashier) {
                     cashiers = await TotalSalesController().getAllCashiers();
+                  }
+                  List<ComputerModel> computers = [];
+                  if (title == _locale.salesByComputer) {
+                    computers = await TotalSalesController().getComputers("");
                   }
                   await TotalSalesController().getAllBranches().then((value) {
                     showDialog(
@@ -952,6 +967,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       builder: (context) {
                         return FilterDialog(
                             cashiers: cashiers,
+                            computers: computers,
                             branches: value,
                             filter: title == _locale.salesByCashier
                                 ? cashierSearchCriteria
@@ -1390,8 +1406,12 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
-                    if (title == _locale.cashierLogs) {
+                    if (title == _locale.salesByCashier) {
                       cashiers = await TotalSalesController().getAllCashiers();
+                    }
+                    List<ComputerModel> computers = [];
+                    if (title == _locale.salesByComputer) {
+                      computers = await TotalSalesController().getComputers("");
                     }
                     await TotalSalesController().getAllBranches().then((value) {
                       showDialog(
@@ -1401,6 +1421,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           return FilterDialog(
                               cashiers: cashiers,
                               branches: value,
+                              computers: computers,
                               filter: title == _locale.salesByPaymentTypes
                                   ? payTypesSearchCriteria
                                   : title == _locale.salesByCashier

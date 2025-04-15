@@ -4,10 +4,12 @@ import 'package:bi_replicate/constants/api_constants.dart';
 import 'package:bi_replicate/model/api_model.dart';
 import 'package:bi_replicate/model/api_url.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
+import 'package:bi_replicate/model/computer_model.dart';
 import 'package:bi_replicate/model/diff_cash_shift_report_by_cashier_model.dart';
 import 'package:bi_replicate/model/diff_cash_shift_report_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_db_model.dart';
 import 'package:bi_replicate/model/sales/search_crit.dart';
+import 'package:bi_replicate/model/stock_model.dart';
 import 'package:bi_replicate/model/total_profit_report_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -234,20 +236,111 @@ class TotalSalesController {
     }
   }
 
-  Future<List<CashierModel>> getAllCashiers() async {
-    List<CashierModel> cashiersList = [];
-    var api = getCashiers;
+  Future<List<StockModel>> getStocks(int page, String input) async {
+    List<StockModel> stocks = [];
+    var api = getStocksAPI;
     String? token = await storage.read(key: 'jwt');
 
     try {
-      var response = await http.get(
-        Uri.parse("${ApiURL.urlServer}/${api}"),
-        headers: {
-          "Accept": "application/json",
-          "content-type": "application/json",
-          "Authorization": "Bearer $token",
-        },
-      );
+      var response = await http.post(Uri.parse("${ApiURL.urlServer}/${api}"),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({"nameCode": input, "page": page}));
+      print("API Response: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          print("stocks: ${data['computer']}");
+          stocks.add(StockModel(
+              txtComname: data['txtStkcode'],
+              txtNamea: data['txtNamea'],
+              txtNamee: data['txtNamee'],
+              txtStkcode: data['txtComname']));
+        }
+      }
+      print("stocks: ${stocks.length}");
+      return stocks;
+    } catch (e) {
+      print("e: $e");
+      return stocks;
+    }
+  }
+
+  Future<List<ComputerModel>> getComputers(String input) async {
+    List<ComputerModel> computersList = [];
+    var api = getComputersAPI;
+    String? token = await storage.read(key: 'jwt');
+
+    try {
+      var response = await http.post(Uri.parse("${ApiURL.urlServer}/${api}"),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({"computer": input}));
+      print("API Response: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          print("computers: ${data['computer']}");
+          computersList.add(ComputerModel(computer: data['computer']));
+        }
+      }
+      print("computers: ${computersList.length}");
+      return computersList;
+    } catch (e) {
+      print("e: $e");
+      return computersList;
+    }
+  }
+
+  Future<List<CashierModel>> getAllPOSCashiers(String input) async {
+    List<CashierModel> cashiersList = [];
+    var api = getPOSCashiers;
+    String? token = await storage.read(key: 'jwt');
+
+    try {
+      var response = await http.post(Uri.parse("${ApiURL.urlServer}/${api}"),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({"cashier": input}));
+      print("API Response: ${response.statusCode}");
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var data in jsonData) {
+          print("cashiersList111: ${data['txtCode']} - ${data['txtNamee']}");
+          cashiersList.add(CashierModel(
+              txtCode: data['txtCode'], txtNamee: data['txtNamee']));
+        }
+      }
+      print("cashiersList: ${cashiersList.length}");
+      return cashiersList;
+    } catch (e) {
+      print("e: $e");
+      return cashiersList;
+    }
+  }
+
+  Future<List<CashierModel>> getAllCashiers() async {
+    List<CashierModel> cashiersList = [];
+    var api = getPOSCashiers;
+    String? token = await storage.read(key: 'jwt');
+
+    try {
+      var response = await http.post(Uri.parse("${ApiURL.urlServer}/${api}"),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json",
+            "Authorization": "Bearer $token",
+          },
+          body: json.encode({"cashier": ""}));
       print("API Response: ${response.statusCode}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
