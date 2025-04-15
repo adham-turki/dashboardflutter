@@ -211,7 +211,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               width: width * 0.003,
             ),
             payTypesSearchCriteria.chartType == locale.pieChart
-                ? totalSalesByPayTypes.length <= 3
+                ? totalSalesByPayTypes.length <= 4
                     ? pieChart(pieData, locale.salesByPaymentTypes)
                     : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
                 : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
@@ -308,7 +308,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Row(
           children: [
             payTypesSearchCriteria.chartType == locale.pieChart
-                ? totalSalesByPayTypes.length <= 3
+                ? totalSalesByPayTypes.length <= 4
                     ? pieChart(pieData, locale.salesByPaymentTypes)
                     : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
                 : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),

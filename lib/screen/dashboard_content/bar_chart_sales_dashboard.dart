@@ -377,14 +377,22 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                         periods: listOfPeriods),
                                   ),
                                 )
-                              : Center(
-                                  child: SizedBox(
-                                    height: height * 0.4,
-                                    child: PieDashboardChart(
-                                      dataList: pieData,
-                                    ),
-                                  ),
-                                )
+                              : barData.length <= 4
+                                  ? Center(
+                                      child: SizedBox(
+                                        height: height * 0.4,
+                                        child: PieDashboardChart(
+                                          dataList: pieData,
+                                        ),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: BarDashboardChart(
+                                        barChartData: barData,
+                                        isMax: false,
+                                        isMedium: false,
+                                      ),
+                                    )
                 ],
               ),
             ),
