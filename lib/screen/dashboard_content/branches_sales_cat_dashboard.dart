@@ -214,7 +214,7 @@ class _BranchesSalesByCatDashboardState
                                 valueListenable: totalBranchesByCateg,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.branchesSalesByCategories} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})'",
+                                    "${_locale.branchesSalesByCategories} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})",
                                     // "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
@@ -333,7 +333,7 @@ class _BranchesSalesByCatDashboardState
                                     valueListenable: totalBranchesByCateg,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.branchesSalesByCategories} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})'",
+                                        "${_locale.branchesSalesByCategories} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})",
                                         // "${_locale.branchesSalesByCategories}   (${totalBranchesByCateg.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),

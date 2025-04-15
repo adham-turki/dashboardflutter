@@ -1759,7 +1759,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         children: [
                           Text(
                               // textDirection: ui.TextDirection.ltr,
-                              "(${_locale.profit}: '\u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}', ${_locale.sales}: '\u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)}')")
+                              "(${_locale.profit}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
                           // ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))} ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )

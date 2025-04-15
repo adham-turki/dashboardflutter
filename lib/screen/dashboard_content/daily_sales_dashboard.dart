@@ -166,7 +166,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                 valueListenable: totalDailySale,
                                 builder: ((context, value, child) {
                                   return Text(
-                                    "${_locale.dailySales} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})'",
+                                    "${_locale.dailySales} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18),
                                   );
@@ -271,7 +271,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                                     valueListenable: totalDailySale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.dailySales}  '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})'",
+                                        "${_locale.dailySales}  (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),
                                       );
