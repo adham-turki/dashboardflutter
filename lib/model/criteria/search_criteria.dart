@@ -8,6 +8,7 @@ class SearchCriteria {
   int? page;
   List<String>? columns;
   List<String>? customColumns;
+  List<String>? codesStock;
 
   SearchCriteria(
       {this.fromDate,
@@ -18,7 +19,8 @@ class SearchCriteria {
       this.branch,
       this.page,
       this.columns,
-      this.customColumns});
+      this.customColumns,
+      this.codesStock});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> searchCriteria = <String, dynamic>{};
@@ -30,7 +32,7 @@ class SearchCriteria {
     searchCriteria['byCategory'] = byCategory;
     searchCriteria['branch'] = branch;
     searchCriteria['page'] = page;
-
+    searchCriteria['codesStock'] = codesStock;
     return searchCriteria;
   }
 

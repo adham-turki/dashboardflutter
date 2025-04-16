@@ -1,3 +1,6 @@
+import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
+import 'package:bi_replicate/model/stock_model.dart';
+import 'package:bi_replicate/widget/test_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -6,6 +9,7 @@ import '../../../components/custom_date.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
+import '../../../controller/total_sales_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/inventory_performance/inventory_performance_model.dart';
 import '../../../utils/constants/colors.dart';
@@ -51,9 +55,17 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   FocusNode focusNode = FocusNode();
   int countInc = 0;
   int countDec = 0;
-
+  List<StockModel> stocks = [];
+  List<String> stocksCodes = [];
+  List<StockModel> tempStocks = [];
+  List<String> tempStocksCodes = [];
+  List<String> branches = [];
+  String selectedBranch = "";
+  String selectedBranchCode = "";
   @override
   void initState() {
+    getBranch(isStart: true);
+
     fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
 
@@ -87,7 +99,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     selectedPeriod = periods[0];
     numberOfrow.text = 10.toString();
     focusNode.requestFocus();
-
+    branches = [_locale.all];
+    selectedBranch = branches[0];
     super.didChangeDependencies();
   }
 
@@ -100,6 +113,19 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   void dispose() {
     focusNode.dispose();
     super.dispose();
+  }
+
+  void getBranch({bool? isStart}) async {
+    BranchController().getBranch(isStart: isStart).then((value) {
+      value.forEach((k, v) {
+        if (mounted) {
+          setState(() {
+            branches.add(k);
+          });
+        }
+      });
+      setBranchesMap(_locale, value);
+    });
   }
 
   @override
@@ -121,142 +147,148 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             )
           ],
         ),
-        isDesktop
-            ? Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SelectableText(
-                          maxLines: 1,
-                          _locale.topOfInventoryPerformance,
-                          style: eighteen500TextStyle(colorNewList[0]),
-                        ),
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SizedBox(
-                          width: width * 0.37,
-                          height: height * 0.6,
-                          child: TableComponent(
-                            key: UniqueKey(),
-                            rowHeight: 30,
-                            plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)!, context),
-                            polRows: polTopRows,
-                            footerBuilder: (stateManager) {
-                              return lazyPaginationFooter(stateManager);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SelectableText(
-                          maxLines: 1,
-                          _locale.leastOfInventoryPerformance,
-                          style: eighteen500TextStyle(colorNewList[2]),
-                        ),
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SizedBox(
-                          width: width * 0.37,
-                          height: height * 0.6,
-                          child: TableComponent(
-                            key: UniqueKey(),
-                            rowHeight: 30,
-                            plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)!, context),
-                            polRows: [],
-                            footerBuilder: (stateManager) {
-                              return lazyPaginationFooterLeast(stateManager);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SelectableText(
-                          maxLines: 1,
-                          _locale.topOfInventoryPerformance,
-                          style: eighteen500TextStyle(colorNewList[0]),
-                        ),
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SizedBox(
-                          width: isDesktop ? width * 0.7 : width * 0.9,
-                          height: height * 0.7,
-                          child: TableComponent(
-                            key: UniqueKey(),
-                            rowHeight: 30,
-                            plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)!, context),
-                            polRows: polTopRows,
-                            footerBuilder: (stateManager) {
-                              return lazyPaginationFooter(stateManager);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SelectableText(
-                          maxLines: 1,
-                          _locale.leastOfInventoryPerformance,
-                          style: eighteen500TextStyle(colorNewList[2]),
-                        ),
-                        SizedBox(
-                          height: height * .03,
-                        ),
-                        SizedBox(
-                          width: isDesktop ? width * 0.7 : width * 0.9,
-                          height: height * 0.7,
-                          child: TableComponent(
-                            key: UniqueKey(),
-                            rowHeight: 30,
-                            plCols: InventoryPerformanceModel.getColumns(
-                                AppLocalizations.of(context)!, context),
-                            polRows: [],
-                            footerBuilder: (stateManager) {
-                              return lazyPaginationFooterLeast(stateManager);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+        isDesktop ? desktopView(context) : mobileView(context),
+      ],
+    );
+  }
+
+  Widget mobileView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: height * .03,
+              ),
+              SelectableText(
+                maxLines: 1,
+                _locale.topOfInventoryPerformance,
+                style: eighteen500TextStyle(colorNewList[0]),
+              ),
+              SizedBox(
+                height: height * .03,
+              ),
+              SizedBox(
+                width: isDesktop ? width * 0.7 : width * 0.9,
+                height: height * 0.7,
+                child: TableComponent(
+                  key: UniqueKey(),
+                  rowHeight: 30,
+                  plCols: InventoryPerformanceModel.getColumns(
+                      AppLocalizations.of(context)!, context),
+                  polRows: polTopRows,
+                  footerBuilder: (stateManager) {
+                    return lazyPaginationFooter(stateManager);
+                  },
                 ),
               ),
-      ],
+            ],
+          ),
+          Column(
+            children: [
+              SizedBox(
+                height: height * .03,
+              ),
+              SelectableText(
+                maxLines: 1,
+                _locale.leastOfInventoryPerformance,
+                style: eighteen500TextStyle(colorNewList[2]),
+              ),
+              SizedBox(
+                height: height * .03,
+              ),
+              SizedBox(
+                width: isDesktop ? width * 0.7 : width * 0.9,
+                height: height * 0.7,
+                child: TableComponent(
+                  key: UniqueKey(),
+                  rowHeight: 30,
+                  plCols: InventoryPerformanceModel.getColumns(
+                      AppLocalizations.of(context)!, context),
+                  polRows: [],
+                  footerBuilder: (stateManager) {
+                    return lazyPaginationFooterLeast(stateManager);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget desktopView(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: height * .03,
+              ),
+              SelectableText(
+                maxLines: 1,
+                _locale.topOfInventoryPerformance,
+                style: eighteen500TextStyle(colorNewList[0]),
+              ),
+              SizedBox(
+                height: height * .03,
+              ),
+              SizedBox(
+                width: width * 0.37,
+                height: height * 0.6,
+                child: TableComponent(
+                  key: UniqueKey(),
+                  rowHeight: 30,
+                  plCols: InventoryPerformanceModel.getColumns(
+                      AppLocalizations.of(context)!, context),
+                  polRows: polTopRows,
+                  footerBuilder: (stateManager) {
+                    return lazyPaginationFooter(stateManager);
+                  },
+                ),
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              SizedBox(
+                height: height * .03,
+              ),
+              SelectableText(
+                maxLines: 1,
+                _locale.leastOfInventoryPerformance,
+                style: eighteen500TextStyle(colorNewList[2]),
+              ),
+              SizedBox(
+                height: height * .03,
+              ),
+              SizedBox(
+                width: width * 0.37,
+                height: height * 0.6,
+                child: TableComponent(
+                  key: UniqueKey(),
+                  rowHeight: 30,
+                  plCols: InventoryPerformanceModel.getColumns(
+                      AppLocalizations.of(context)!, context),
+                  polRows: [],
+                  footerBuilder: (stateManager) {
+                    return lazyPaginationFooterLeast(stateManager);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -293,6 +325,79 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                   criteria.voucherStatus = status;
                 });
               },
+            ),
+            SizedBox(
+              width: width * 0.01,
+            ),
+            SizedBox(
+              width: width * 0.18,
+              height: height * 0.08,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_locale.stocks),
+                  TestDropdown(
+                      isEnabled: true,
+                      icon: const Icon(Icons.search),
+                      cleanPrevSelectedItem: true,
+                      onItemAddedOrRemoved: (value) {
+                        for (int i = 0; i < value.length; i++) {
+                          tempStocks.add(value[i]);
+                          tempStocksCodes.add(tempStocks[i].txtStkcode ?? "");
+                          print(
+                              "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
+                          print("asdasdsadTemp1: ${tempStocksCodes[i]}");
+                        }
+                      },
+                      onChanged: (value) {
+                        print("asdasdasddeeee: ${value.length}");
+                        print("asdasdasddeeee");
+                        if (value.isNotEmpty) {
+                          stocks.clear();
+                          stocksCodes.clear();
+                          tempStocks.clear();
+                          tempStocksCodes.clear();
+                          for (int i = 0; i < value.length; i++) {
+                            stocks.add(value[i]);
+                            stocksCodes.add(stocks[i].txtStkcode ?? "");
+                            print(
+                                "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
+                            print("asdasdsad1: ${stocksCodes[i]}");
+                          }
+                          criteria.codesStock = stocksCodes;
+                          setState(() {});
+                        }
+                      },
+                      stringValue: "${_locale.select} ${_locale.stock}",
+                      borderText: "",
+                      onClearIconPressed: () {
+                        // dealsProvider.clearStockCateg();
+                        // hintCategory = "";
+                      },
+                      onPressed: () {},
+                      onSearch: (text) async {
+                        List<StockModel> value =
+                            await TotalSalesController().getStocks(0, text);
+                        print("value1: ${value.length}");
+                        value = value
+                            .where((stock) => !tempStocks.any(
+                                (temp) => temp.txtStkcode == stock.txtStkcode))
+                            .toList();
+                        print("value1111: ${value.length}");
+                        // for (var i = 0; i < value.length; i++) {
+                        //   print("asddddd1:${value[i].txtStkcode}");
+                        //   print("asddddd21:${tempStocks.length}");
+                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                        //     value.removeAt(i);
+                        //     print(
+                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                        //   }
+                        // }
+                        return value;
+                      }),
+                ],
+              ),
             ),
             SizedBox(
               width: width * 0.01,
@@ -357,6 +462,21 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               isInitiaDate: false,
               timeControllerToCompareWith: null,
             ),
+            SizedBox(
+              width: width * 0.01,
+            ),
+            CustomDropDown(
+              items: branches,
+              label: _locale.branch,
+              initialValue: selectedBranch,
+              onChanged: (value) {
+                setState(() {
+                  selectedBranch = value.toString();
+                  selectedBranchCode = branchesMap[value.toString()]!;
+                  criteria.branch = selectedBranchCode;
+                });
+              },
+            ),
           ],
         ),
       ],
@@ -414,6 +534,89 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               onChanged: (value) {
                 hintValue = value;
                 criteria.rownum = int.parse(numberOfrow.text);
+              },
+            ),
+            SizedBox(
+              width: width * 0.81,
+              height: height * 0.1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_locale.stocks),
+                  TestDropdown(
+                      isEnabled: true,
+                      icon: const Icon(Icons.search),
+                      cleanPrevSelectedItem: true,
+                      onItemAddedOrRemoved: (value) {
+                        for (int i = 0; i < value.length; i++) {
+                          tempStocks.add(value[i]);
+                          tempStocksCodes.add(tempStocks[i].txtStkcode ?? "");
+                          print(
+                              "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
+                          print("asdasdsadTemp1: ${tempStocksCodes[i]}");
+                        }
+                      },
+                      onChanged: (value) {
+                        print("asdasdasddeeee: ${value.length}");
+                        print("asdasdasddeeee");
+                        if (value.isNotEmpty) {
+                          stocks.clear();
+                          stocksCodes.clear();
+                          tempStocks.clear();
+                          tempStocksCodes.clear();
+                          for (int i = 0; i < value.length; i++) {
+                            stocks.add(value[i]);
+                            stocksCodes.add(stocks[i].txtStkcode ?? "");
+                            print(
+                                "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
+                            print("asdasdsad1: ${stocksCodes[i]}");
+                          }
+                          criteria.codesStock = stocksCodes;
+                          setState(() {});
+                        }
+                      },
+                      stringValue: "${_locale.select} ${_locale.stock}",
+                      borderText: "",
+                      onClearIconPressed: () {
+                        // dealsProvider.clearStockCateg();
+                        // hintCategory = "";
+                      },
+                      onPressed: () {},
+                      onSearch: (text) async {
+                        List<StockModel> value =
+                            await TotalSalesController().getStocks(0, text);
+                        print("value1: ${value.length}");
+                        value = value
+                            .where((stock) => !tempStocks.any(
+                                (temp) => temp.txtStkcode == stock.txtStkcode))
+                            .toList();
+                        print("value1111: ${value.length}");
+                        // for (var i = 0; i < value.length; i++) {
+                        //   print("asddddd1:${value[i].txtStkcode}");
+                        //   print("asddddd21:${tempStocks.length}");
+                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                        //     value.removeAt(i);
+                        //     print(
+                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                        //   }
+                        // }
+                        return value;
+                      }),
+                ],
+              ),
+            ),
+            CustomDropDown(
+              width: width * 0.81,
+              items: branches,
+              label: _locale.branch,
+              initialValue: selectedBranch,
+              onChanged: (value) {
+                setState(() {
+                  selectedBranch = value.toString();
+                  selectedBranchCode = branchesMap[value.toString()]!;
+                  criteria.branch = selectedBranchCode;
+                });
               },
             ),
           ],

@@ -276,5 +276,7 @@
     "differenceValue": "قيمة الفرق",
     "differencesReports": "تقارير الفروقات",
     "profitReports": "تقارير الأرباح",
-    "computers": "الأجهزة"
+    "computers": "الأجهزة",
+    "deselectAll": "الغاء تحديد الكل",
+    "stocks": "الأصناف"
 }

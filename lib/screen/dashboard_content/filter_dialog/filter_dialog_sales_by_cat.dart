@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:bi_replicate/controller/total_sales_controller.dart';
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
+import 'package:bi_replicate/widget/test_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,7 @@ import '../../../controller/settings/user_settings/user_report_settings_controll
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/settings/user_settings/code_reports_model.dart';
 import '../../../model/settings/user_settings/user_report_settings.dart';
+import '../../../model/stock_model.dart';
 import '../../../utils/constants/app_utils.dart';
 import '../../../utils/constants/maps.dart';
 import '../../../utils/constants/pages_constants.dart';
@@ -27,13 +30,15 @@ class FilterDialogSalesByCategory extends StatefulWidget {
   final String? toDate;
   final String? selectedCategory;
   final List<String>? branches;
+  final List<StockModel>? stocksCodes;
   final Function(
       String selectedPeriod,
       String fromDate,
       String toDate,
       String selectedCategoriesF,
       String selectedBranchCodeF,
-      String chart) onFilter;
+      String chart,
+      List<String> stocksCodes) onFilter;
 
   const FilterDialogSalesByCategory(
       {super.key,
@@ -44,6 +49,7 @@ class FilterDialogSalesByCategory extends StatefulWidget {
       this.fromDate,
       this.toDate,
       this.selectedCategory,
+      this.stocksCodes,
       this.branches});
 
   @override
@@ -79,7 +85,10 @@ class _FilterDialogSalesByCategoryState
   List<String> branches = [];
   var selectedBranch = "";
   BranchController branchController = BranchController();
-
+  List<StockModel> stocks = [];
+  List<String> stocksCodes = [];
+  List<StockModel> tempStocks = [];
+  List<String> tempStocksCodes = [];
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -189,6 +198,82 @@ class _FilterDialogSalesByCategoryState
                             });
                           },
                         ),
+                        SizedBox(
+                          width: width * 0.16,
+                          height: height * 0.08,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_locale.stocks),
+                              TestDropdown(
+                                  isEnabled: true,
+                                  icon: const Icon(Icons.search),
+                                  cleanPrevSelectedItem: true,
+                                  onItemAddedOrRemoved: (value) {
+                                    for (int i = 0; i < value.length; i++) {
+                                      tempStocks.add(value[i]);
+                                      tempStocksCodes
+                                          .add(tempStocks[i].txtStkcode ?? "");
+                                      print(
+                                          "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
+                                      print(
+                                          "asdasdsadTemp1: ${tempStocksCodes[i]}");
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    print("asdasdasddeeee: ${value.length}");
+                                    print("asdasdasddeeee");
+                                    if (value.isNotEmpty) {
+                                      stocks.clear();
+                                      stocksCodes.clear();
+                                      tempStocks.clear();
+                                      tempStocksCodes.clear();
+                                      for (int i = 0; i < value.length; i++) {
+                                        stocks.add(value[i]);
+                                        stocksCodes
+                                            .add(stocks[i].txtStkcode ?? "");
+                                        print(
+                                            "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
+                                        print("asdasdsad1: ${stocksCodes[i]}");
+                                      }
+                                      setState(() {});
+                                    }
+                                  },
+                                  stringValue:
+                                      "${_locale.select} ${_locale.stock}",
+                                  borderText: "",
+                                  onClearIconPressed: () {
+                                    // dealsProvider.clearStockCateg();
+                                    // hintCategory = "";
+                                  },
+                                  onPressed: () {},
+                                  onSearch: (text) async {
+                                    List<StockModel> value =
+                                        await TotalSalesController()
+                                            .getStocks(0, text);
+                                    print("value1: ${value.length}");
+                                    value = value
+                                        .where((stock) => !tempStocks.any(
+                                            (temp) =>
+                                                temp.txtStkcode ==
+                                                stock.txtStkcode))
+                                        .toList();
+                                    print("value1111: ${value.length}");
+                                    // for (var i = 0; i < value.length; i++) {
+                                    //   print("asddddd1:${value[i].txtStkcode}");
+                                    //   print("asddddd21:${tempStocks.length}");
+                                    //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                                    //     value.removeAt(i);
+                                    //     print(
+                                    //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                                    //   }
+                                    // }
+                                    return value;
+                                  }),
+                            ],
+                          ),
+                        ),
                       ],
                     )
                   : Column(
@@ -206,6 +291,7 @@ class _FilterDialogSalesByCategoryState
                         //     });
                         //   },
                         // ),
+
                         CustomDropDown(
                           items: categories,
                           width: width,
@@ -317,6 +403,82 @@ class _FilterDialogSalesByCategoryState
                             timeControllerToCompareWith: null,
                           ),
                         ),
+                        SizedBox(
+                          width: width * 0.65,
+                          height: height * 0.08,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_locale.stocks),
+                              TestDropdown(
+                                  isEnabled: true,
+                                  icon: const Icon(Icons.search),
+                                  cleanPrevSelectedItem: true,
+                                  onItemAddedOrRemoved: (value) {
+                                    for (int i = 0; i < value.length; i++) {
+                                      tempStocks.add(value[i]);
+                                      tempStocksCodes
+                                          .add(tempStocks[i].txtStkcode ?? "");
+                                      print(
+                                          "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
+                                      print(
+                                          "asdasdsadTemp1: ${tempStocksCodes[i]}");
+                                    }
+                                  },
+                                  onChanged: (value) {
+                                    print("asdasdasddeeee: ${value.length}");
+                                    print("asdasdasddeeee");
+                                    if (value.isNotEmpty) {
+                                      stocks.clear();
+                                      stocksCodes.clear();
+                                      tempStocks.clear();
+                                      tempStocksCodes.clear();
+                                      for (int i = 0; i < value.length; i++) {
+                                        stocks.add(value[i]);
+                                        stocksCodes
+                                            .add(stocks[i].txtStkcode ?? "");
+                                        print(
+                                            "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
+                                        print("asdasdsad1: ${stocksCodes[i]}");
+                                      }
+                                      setState(() {});
+                                    }
+                                  },
+                                  stringValue:
+                                      "${_locale.select} ${_locale.stock}",
+                                  borderText: "",
+                                  onClearIconPressed: () {
+                                    // dealsProvider.clearStockCateg();
+                                    // hintCategory = "";
+                                  },
+                                  onPressed: () {},
+                                  onSearch: (text) async {
+                                    List<StockModel> value =
+                                        await TotalSalesController()
+                                            .getStocks(0, text);
+                                    print("value1: ${value.length}");
+                                    value = value
+                                        .where((stock) => !tempStocks.any(
+                                            (temp) =>
+                                                temp.txtStkcode ==
+                                                stock.txtStkcode))
+                                        .toList();
+                                    print("value1111: ${value.length}");
+                                    // for (var i = 0; i < value.length; i++) {
+                                    //   print("asddddd1:${value[i].txtStkcode}");
+                                    //   print("asddddd21:${tempStocks.length}");
+                                    //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                                    //     value.removeAt(i);
+                                    //     print(
+                                    //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                                    //   }
+                                    // }
+                                    return value;
+                                  }),
+                            ],
+                          ),
+                        ),
                         CustomDropDown(
                           items: charts,
                           hint: "",
@@ -372,7 +534,8 @@ class _FilterDialogSalesByCategoryState
                         DatesController().formatDate(_toDateController.text),
                         selectedCategories,
                         selectedBranchCode,
-                        selectedChart);
+                        selectedChart,
+                        stocksCodes);
 
                     context.read<DatesProvider>().setDatesController(
                         _fromDateController, _toDateController);

@@ -249,7 +249,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                     valueListenable: totalBranchesSale,
                                     builder: ((context, value, child) {
                                       return Text(
-                                        "${_locale.salesByBranches} '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})'",
+                                        "${_locale.salesByBranches} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})",
                                         // "${_locale.salesByBranches}   (${totalBranchesSale.value})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18),

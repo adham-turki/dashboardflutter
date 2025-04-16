@@ -10,15 +10,15 @@ class Converters {
 
   static String formatTitleNumber(double total) {
     if (total >= 1000 && total < 1000000) {
-      return "${(total / 1000).toStringAsFixed(1)}k"; // For numbers in the thousands (e.g., 1.5k for 1500)
+      return "${(total / 1000).toStringAsFixed(0)}k"; // For numbers in the thousands (e.g., 1.5k for 1500)
     } else if (total >= 1000000 && total < 1000000000) {
-      return "${(total / 1000000).toStringAsFixed(1)}M"; // For numbers in the millions (e.g., 2.5M for 2500000)
+      return "${(total / 1000000).toStringAsFixed(0)}M"; // For numbers in the millions (e.g., 2.5M for 2500000)
     } else if (total >= 1000000000) {
-      return "${(total / 1000000000).toStringAsFixed(1)}B"; // For numbers in the billions (e.g., 3.0B for 3000000000)
+      return "${(total / 1000000000).toStringAsFixed(0)}B"; // For numbers in the billions (e.g., 3.0B for 3000000000)
     }
 
     return total
-        .toStringAsFixed(2); // For numbers smaller than 1000, return as-is
+        .toStringAsFixed(0); // For numbers smaller than 1000, return as-is
   }
 
   static formatNumber(double num) {

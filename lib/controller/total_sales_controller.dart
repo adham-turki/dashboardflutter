@@ -242,23 +242,25 @@ class TotalSalesController {
     String? token = await storage.read(key: 'jwt');
 
     try {
-      var response = await http.post(Uri.parse("${ApiURL.urlServer}/${api}"),
+      var response = await http.post(Uri.parse("${ApiURL.urlServer}${api}"),
           headers: {
             "Accept": "application/json",
             "content-type": "application/json",
             "Authorization": "Bearer $token",
           },
           body: json.encode({"nameCode": input, "page": page}));
+      print("API : ${Uri.parse("${ApiURL.urlServer}${api}")}");
+      print("API Body: ${json.encode({"nameCode": input, "page": page})}");
       print("API Response: ${response.statusCode}");
       if (response.statusCode == 200) {
         var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
         for (var data in jsonData) {
-          print("stocks: ${data['computer']}");
+          print("stocks: ${data['txtStkcode']}");
           stocks.add(StockModel(
-              txtComname: data['txtStkcode'],
+              txtComname: data['txtComname'],
               txtNamea: data['txtNamea'],
               txtNamee: data['txtNamee'],
-              txtStkcode: data['txtComname']));
+              txtStkcode: data['txtStkcode']));
         }
       }
       print("stocks: ${stocks.length}");

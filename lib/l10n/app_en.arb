@@ -300,5 +300,7 @@
     "differenceValue": "Difference Value",
     "differencesReports": "Differences Reports",
     "profitReports": "Profit Reports",
-    "computers": "Computers"
+    "computers": "Computers",
+    "deselectAll": "De Select All",
+    "stocks": "Stocks"
 }

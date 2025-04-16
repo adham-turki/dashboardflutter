@@ -275,7 +275,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   bool filterPressed = false;
   Widget diffClosedCashChart(List<ChartData> data, String title) {
     return SizedBox(
-      height: height * 0.465,
+      height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
       child: Card(
         elevation: 2, // Remove shadow effect
         color: Colors.white, // Set background to transparent
@@ -524,7 +524,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   bool filterPressed2 = false;
   Widget diffCashChart(List<ChartData> data, String title) {
     return SizedBox(
-      height: height * 0.465,
+      height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
       child: Card(
         elevation: 2, // Remove shadow effect
         color: Colors.white, // Set background to transparent

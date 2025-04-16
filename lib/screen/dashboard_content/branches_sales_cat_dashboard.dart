@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
+import 'package:bi_replicate/model/stock_model.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,7 @@ class _BranchesSalesByCatDashboardState
   List<String> branches = [];
   ValueNotifier totalBranchesByCateg = ValueNotifier(0);
   Timer? _timer;
+  List<String> stocksCodes1 = [];
 
   @override
   void didChangeDependencies() {
@@ -270,7 +272,9 @@ class _BranchesSalesByCatDashboardState
                                                 toDate,
                                                 selectedCategoriesF,
                                                 selectedBranchCodeF,
-                                                chart) {
+                                                chart,
+                                                stocksCodes) {
+                                              stocksCodes1 = stocksCodes;
                                               fromDateController.text =
                                                   fromDate;
                                               toDateController.text = toDate;
@@ -299,6 +303,7 @@ class _BranchesSalesByCatDashboardState
                                                     selectedCategoriesF,
                                                     _locale),
                                                 branch: selectedBranchCode,
+                                                codesStock: stocksCodes1,
                                               );
                                               setSearchCriteria(searchCriteria);
                                             },
@@ -404,7 +409,9 @@ class _BranchesSalesByCatDashboardState
                                                     toDate,
                                                     selectedCategoriesF,
                                                     selectedBranchCodeF,
-                                                    chart) {
+                                                    chart,
+                                                    stocksCodes) {
+                                                  stocksCodes1 = stocksCodes;
                                                   fromDateController.text =
                                                       fromDate;
                                                   toDateController.text =
@@ -438,6 +445,7 @@ class _BranchesSalesByCatDashboardState
                                                         selectedCategoriesF,
                                                         _locale),
                                                     branch: selectedBranchCode,
+                                                    codesStock: stocksCodes1,
                                                   );
                                                   setSearchCriteria(
                                                       searchCriteria);
@@ -671,11 +679,11 @@ class _BranchesSalesByCatDashboardState
     // }
 
     SearchCriteria searchCriteria = SearchCriteria(
-      fromDate: selectedFromDate,
-      toDate: selectedToDate,
-      byCategory: selectedCategories,
-      branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
-    );
+        fromDate: selectedFromDate,
+        toDate: selectedToDate,
+        byCategory: selectedCategories,
+        branch: selectedBranchCode == "الكل" ? "" : selectedBranchCode,
+        codesStock: stocksCodes1);
     setSearchCriteria(searchCriteria);
     pieData = [];
     barData = [];

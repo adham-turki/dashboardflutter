@@ -28,4 +28,9 @@ class StockModel {
       'txtComname': txtComname,
     };
   }
+
+  @override
+  String toString() {
+    return txtNamea ?? txtNamee ?? "";
+  }
 }
