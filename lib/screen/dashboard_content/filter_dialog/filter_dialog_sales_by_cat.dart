@@ -200,9 +200,9 @@ class _FilterDialogSalesByCategoryState
                         ),
                         SizedBox(
                           width: width * 0.16,
-                          height: height * 0.08,
+                          height: 100,
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(_locale.stocks),
@@ -233,9 +233,6 @@ class _FilterDialogSalesByCategoryState
                                         stocks.add(value[i]);
                                         stocksCodes
                                             .add(stocks[i].txtStkcode ?? "");
-                                        print(
-                                            "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
-                                        print("asdasdsad1: ${stocksCodes[i]}");
                                       }
                                       setState(() {});
                                     }

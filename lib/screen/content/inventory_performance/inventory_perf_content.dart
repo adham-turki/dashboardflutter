@@ -10,6 +10,7 @@ import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
 import '../../../controller/inventory_performance/inventory_performance_controller.dart';
 import '../../../controller/total_sales_controller.dart';
+import '../../../model/branch_model.dart';
 import '../../../model/criteria/search_criteria.dart';
 import '../../../model/inventory_performance/inventory_performance_model.dart';
 import '../../../utils/constants/colors.dart';
@@ -60,8 +61,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   List<StockModel> tempStocks = [];
   List<String> tempStocksCodes = [];
   List<String> branches = [];
-  String selectedBranch = "";
-  String selectedBranchCode = "";
+  // String selectedBranch = "";
+  // String selectedBranchCode = "";
+  List<BranchModel> branchesList = [];
+  List<String> branchesCodes = [];
+  List<BranchModel> tempBranches = [];
+  List<String> tempBranchesCodes = [];
   @override
   void initState() {
     getBranch(isStart: true);
@@ -99,8 +104,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     selectedPeriod = periods[0];
     numberOfrow.text = 10.toString();
     focusNode.requestFocus();
-    branches = [_locale.all];
-    selectedBranch = branches[0];
+    // branches = [_locale.all];
+    // selectedBranch = branches[0];
     super.didChangeDependencies();
   }
 
@@ -120,6 +125,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       value.forEach((k, v) {
         if (mounted) {
           setState(() {
+            // branchesList.add(BranchModel(
+            //     txtCode: v,
+            //     txtNamee: k,
+            //     txtCostcentercode: "",
+            //     txtPrefix: "",
+            //     txtWarehouse: "",
+            //     txtJcode: ""));
             branches.add(k);
           });
         }
@@ -331,7 +343,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             ),
             SizedBox(
               width: width * 0.18,
-              height: height * 0.08,
+              height: 85,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -369,7 +381,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           setState(() {});
                         }
                       },
-                      stringValue: "${_locale.select} ${_locale.stock}",
+                      stringValue: stocks.isEmpty
+                          ? "${_locale.select} ${_locale.stocks}"
+                          : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       onClearIconPressed: () {
                         // dealsProvider.clearStockCateg();
@@ -465,18 +479,89 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
             SizedBox(
               width: width * 0.01,
             ),
-            CustomDropDown(
-              items: branches,
-              label: _locale.branch,
-              initialValue: selectedBranch,
-              onChanged: (value) {
-                setState(() {
-                  selectedBranch = value.toString();
-                  selectedBranchCode = branchesMap[value.toString()]!;
-                  criteria.branch = selectedBranchCode;
-                });
-              },
+            SizedBox(
+              width: width * 0.18,
+              height: 85,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_locale.branch),
+                  TestDropdown(
+                      isEnabled: true,
+                      icon: const Icon(Icons.search),
+                      cleanPrevSelectedItem: true,
+                      onItemAddedOrRemoved: (value) {
+                        for (int i = 0; i < value.length; i++) {
+                          tempBranches.add(value[i]);
+                          tempBranchesCodes.add(tempBranches[i].txtCode ?? "");
+                          print("asdasdsadTemp: ${tempBranches[i].txtNamee}");
+                          print("asdasdsadTemp1: ${tempBranchesCodes[i]}");
+                        }
+                      },
+                      onChanged: (value) {
+                        print("asdasdasddeeee: ${value.length}");
+                        print("asdasdasddeeee");
+                        if (value.isNotEmpty) {
+                          branchesList.clear();
+                          branchesCodes.clear();
+                          tempBranches.clear();
+                          tempBranchesCodes.clear();
+                          for (int i = 0; i < value.length; i++) {
+                            branchesList.add(value[i]);
+                            branchesCodes.add(branchesList[i].txtCode ?? "");
+                            print("asdasdsad: ${branchesList[i].txtNamee}");
+                            print("asdasdsad1: ${branchesCodes[i]}");
+                          }
+                          criteria.codesBranch = branchesCodes;
+                          setState(() {});
+                        }
+                      },
+                      stringValue: branchesList.isEmpty
+                          ? "${_locale.select} ${_locale.branch}"
+                          : branchesList.map((b) => b.txtNamee).join(', '),
+                      borderText: "",
+                      showSearchBox: false,
+                      onClearIconPressed: () {
+                        // dealsProvider.clearStockCateg();
+                        // hintCategory = "";
+                      },
+                      onPressed: () {},
+                      onSearch: (text) async {
+                        List<BranchModel> value =
+                            await BranchController().getBranchesList();
+                        print("value1: ${value.length}");
+                        value = value
+                            .where((stock) => !tempBranches
+                                .any((temp) => temp.txtCode == stock.txtCode))
+                            .toList();
+                        print("value1111: ${value.length}");
+                        // for (var i = 0; i < value.length; i++) {
+                        //   print("asddddd1:${value[i].txtStkcode}");
+                        //   print("asddddd21:${tempStocks.length}");
+                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                        //     value.removeAt(i);
+                        //     print(
+                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                        //   }
+                        // }
+                        return value;
+                      }),
+                ],
+              ),
             ),
+            // CustomDropDown(
+            //   items: branches,
+            //   label: _locale.branch,
+            //   initialValue: selectedBranch,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       selectedBranch = value.toString();
+            //       selectedBranchCode = branchesMap[value.toString()]!;
+            //       criteria.branch = selectedBranchCode;
+            //     });
+            //   },
+            // ),
           ],
         ),
       ],
@@ -576,7 +661,9 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           setState(() {});
                         }
                       },
-                      stringValue: "${_locale.select} ${_locale.stock}",
+                      stringValue: stocks.isEmpty
+                          ? "${_locale.select} ${_locale.stocks}"
+                          : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       onClearIconPressed: () {
                         // dealsProvider.clearStockCateg();
@@ -606,19 +693,90 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                 ],
               ),
             ),
-            CustomDropDown(
+            SizedBox(
               width: width * 0.81,
-              items: branches,
-              label: _locale.branch,
-              initialValue: selectedBranch,
-              onChanged: (value) {
-                setState(() {
-                  selectedBranch = value.toString();
-                  selectedBranchCode = branchesMap[value.toString()]!;
-                  criteria.branch = selectedBranchCode;
-                });
-              },
+              height: height * 0.1,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(_locale.branch),
+                  TestDropdown(
+                      isEnabled: true,
+                      icon: const Icon(Icons.search),
+                      cleanPrevSelectedItem: true,
+                      onItemAddedOrRemoved: (value) {
+                        for (int i = 0; i < value.length; i++) {
+                          tempBranches.add(value[i]);
+                          tempBranchesCodes.add(tempBranches[i].txtCode ?? "");
+                          print("asdasdsadTemp: ${tempBranches[i].txtNamee}");
+                          print("asdasdsadTemp1: ${tempBranchesCodes[i]}");
+                        }
+                      },
+                      onChanged: (value) {
+                        print("asdasdasddeeee: ${value.length}");
+                        print("asdasdasddeeee");
+                        if (value.isNotEmpty) {
+                          branchesList.clear();
+                          branchesCodes.clear();
+                          tempBranches.clear();
+                          tempBranchesCodes.clear();
+                          for (int i = 0; i < value.length; i++) {
+                            branchesList.add(value[i]);
+                            branchesCodes.add(branchesList[i].txtCode ?? "");
+                            print("asdasdsad: ${branchesList[i].txtNamee}");
+                            print("asdasdsad1: ${branchesCodes[i]}");
+                          }
+                          criteria.codesBranch = branchesCodes;
+                          setState(() {});
+                        }
+                      },
+                      stringValue: branchesList.isEmpty
+                          ? "${_locale.select} ${_locale.branch}"
+                          : branchesList.map((b) => b.txtNamee).join(', '),
+                      borderText: "",
+                      showSearchBox: false,
+                      onClearIconPressed: () {
+                        // dealsProvider.clearStockCateg();
+                        // hintCategory = "";
+                      },
+                      onPressed: () {},
+                      onSearch: (text) async {
+                        List<BranchModel> value =
+                            await BranchController().getBranchesList();
+                        print("value1: ${value.length}");
+                        value = value
+                            .where((stock) => !tempBranches
+                                .any((temp) => temp.txtCode == stock.txtCode))
+                            .toList();
+                        print("value1111: ${value.length}");
+                        // for (var i = 0; i < value.length; i++) {
+                        //   print("asddddd1:${value[i].txtStkcode}");
+                        //   print("asddddd21:${tempStocks.length}");
+                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
+                        //     value.removeAt(i);
+                        //     print(
+                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
+                        //   }
+                        // }
+                        return value;
+                      }),
+                ],
+              ),
             ),
+            // CustomDropDown(
+            //   width: width * 0.81,
+            //   items: branches,
+            //   label: _locale.branch,
+            //   initialValue: selectedBranch,
+            //   onChanged: (value) {
+            //     setState(() {
+            //       selectedBranch = value.toString();
+            //       selectedBranchCode = branchesMap[value.toString()]!;
+            //       criteria.branch = selectedBranchCode;
+            //     });
+            //   },
+            // ),
           ],
         ),
         Column(
