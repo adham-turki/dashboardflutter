@@ -385,10 +385,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           ? "${_locale.select} ${_locale.stocks}"
                           : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
-                      onClearIconPressed: () {
-                        // dealsProvider.clearStockCateg();
-                        // hintCategory = "";
-                      },
                       onPressed: () {},
                       onSearch: (text) async {
                         List<StockModel> value =
@@ -522,10 +518,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           : branchesList.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       showSearchBox: false,
-                      onClearIconPressed: () {
-                        // dealsProvider.clearStockCateg();
-                        // hintCategory = "";
-                      },
                       onPressed: () {},
                       onSearch: (text) async {
                         List<BranchModel> value =
@@ -665,10 +657,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           ? "${_locale.select} ${_locale.stocks}"
                           : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
-                      onClearIconPressed: () {
-                        // dealsProvider.clearStockCateg();
-                        // hintCategory = "";
-                      },
                       onPressed: () {},
                       onSearch: (text) async {
                         List<StockModel> value =
@@ -736,10 +724,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           : branchesList.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       showSearchBox: false,
-                      onClearIconPressed: () {
-                        // dealsProvider.clearStockCateg();
-                        // hintCategory = "";
-                      },
                       onPressed: () {},
                       onSearch: (text) async {
                         List<BranchModel> value =
