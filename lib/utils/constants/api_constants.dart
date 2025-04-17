@@ -6,6 +6,7 @@ const getBrands = "branchSalesByCategories/getBrands";
 const getCategorie1 = "branchSalesByCategories/getCategories1";
 const getCategorie2 = "branchSalesByCategories/getCategories2";
 const getSalesApi = "branchSalesByCategories/getSales";
+const getBranchSalesByStocksApi = "branchSalesByStocks/getSales";
 const getTotalCollection = "totalCollection/getRecieptList";
 const getDailySales = "dailySales/getList2";
 const getCashFlows = "cashFlows/getChartCash";

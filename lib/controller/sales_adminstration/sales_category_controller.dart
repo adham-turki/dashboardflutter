@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bi_replicate/model/branch_sales_by_stocks_model.dart';
 import 'package:bi_replicate/service/api_service.dart';
 
 import '../../model/criteria/search_criteria.dart';
@@ -25,5 +26,25 @@ class SalesCategoryController {
       }
     });
     return salesCategoryList;
+  }
+
+  Future<List<BranchSalesByStocksModel>> getSalesByStocks(
+      SearchCriteria searchCriteria,
+      {bool? isStart}) async {
+    var api = getBranchSalesByStocksApi;
+    List<BranchSalesByStocksModel> salesByStocksList = [];
+
+    await ApiService()
+        .postRequest(api, searchCriteria.toJson(), isStart: isStart)
+        .then((response) {
+      if (response.statusCode == statusOk) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        for (var salesCategory in jsonData) {
+          salesByStocksList
+              .add(BranchSalesByStocksModel.fromJson(salesCategory));
+        }
+      }
+    });
+    return salesByStocksList;
   }
 }

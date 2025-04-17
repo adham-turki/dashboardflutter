@@ -278,5 +278,9 @@
     "profitReports": "تقارير الأرباح",
     "computers": "الأجهزة",
     "deselectAll": "الغاء تحديد الكل",
-    "stocks": "الأصناف"
+    "stocks": "الأصناف",
+    "increaseDiffSum": "الزيادة",
+    "decreaseDiffSum": "النقصان",
+    "otherReports": "تقارير أخرى",
+    "branchesSalesByStocks": "مبيعات الفرع حسب الأصناف"
 }

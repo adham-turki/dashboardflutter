@@ -302,5 +302,9 @@
     "profitReports": "Profit Reports",
     "computers": "Computers",
     "deselectAll": "De Select All",
-    "stocks": "Stocks"
+    "stocks": "Stocks",
+    "increaseDiffSum": "Increase",
+    "decreaseDiffSum": "Decrease",
+    "otherReports": "Other Reports",
+    "branchesSalesByStocks": "Branch Sales By Stocks"
 }

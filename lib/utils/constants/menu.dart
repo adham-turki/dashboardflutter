@@ -66,6 +66,18 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       ],
       value: 23,
     ),
+    SideTabModel(
+      text: locale.otherReports,
+      icon: Icons.widgets,
+      isParent: false,
+      subMenu: [
+        // SideSubTabModel(text: locale.salesReports, value: 20),
+        // SideSubTabModel(text: locale.logsReports, value: 21),
+        // SideSubTabModel(text: locale.differencesReports, value: 22),
+        // SideSubTabModel(text: locale.profitReports, value: 23)
+      ],
+      value: 24,
+    ),
     // SideTabModel(
     //   isParent: true,
     //   text: locale.salesAdminstration,

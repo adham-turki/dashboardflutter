@@ -54,6 +54,13 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       subMenuList: [],
       pageNumber: 23,
     ),
+    MenuModel(
+      title: locale.otherReports,
+      icon: Icons.widgets,
+      isParent: false,
+      subMenuList: [],
+      pageNumber: 24,
+    ),
     // MenuModel(
     //   isParent: true,
     //   title: locale.salesAdminstration,

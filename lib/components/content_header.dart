@@ -302,6 +302,8 @@ class _ContentHeaderState extends State<ContentHeader> {
         return locale.differencesReports;
       case 23:
         return locale.profitReports;
+      case 24:
+        return locale.otherReports;
       default:
         return "";
     }

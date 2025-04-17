@@ -55,7 +55,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
   late TooltipBehavior _tooltip;
   late TooltipBehavior _tooltip1;
   List<DiffCashShiftReportModel> diffClosedCashShiftReportList = [];
-  double totalDiffClosedCashShiftReport = 0.0;
+  double totalDiffIncreaseClosedCashShiftReport = 0.0;
+  double totalDiffDecreaseClosedCashShiftReport = 0.0;
   List<DiffCashShiftReportByCashierModel> diffCashShiftByCashierReportList = [];
   double totalDiffCashShiftByCashierReport = 0.0;
   final ScrollController _scrollController1 = ScrollController();
@@ -237,7 +238,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   fetchDiffClosedCashShiftReportList() async {
     diffClosedCashShiftReportList.clear();
-    totalDiffClosedCashShiftReport = 0.0;
+    totalDiffIncreaseClosedCashShiftReport = 0.0;
+    totalDiffDecreaseClosedCashShiftReport = 0.0;
     data.clear();
     isLoading = true;
     await TotalSalesController()
@@ -246,13 +248,14 @@ class _ReportsScreenState extends State<ReportsScreen> {
       isLoading = false;
       for (var i = 0; i < value.length; i++) {
         diffClosedCashShiftReportList.add(value[i]);
-        totalDiffClosedCashShiftReport += value[i].diffSum;
+        totalDiffIncreaseClosedCashShiftReport += value[i].increaseDiffSum;
+        totalDiffDecreaseClosedCashShiftReport += value[i].decreaseDiffSum;
         data.add(ChartData(
             diffClosedCashShiftReportList[i].branchName,
             diffClosedCashShiftReportList[i].user,
             (diffClosedCashShiftReportList[i].diffCount).toDouble(),
-            (diffClosedCashShiftReportList[i].diffSum),
-            0.0));
+            (diffClosedCashShiftReportList[i].increaseDiffSum),
+            (diffClosedCashShiftReportList[i].decreaseDiffSum)));
       }
       // if (data.isNotEmpty) {
       //   maxValue = data
@@ -298,7 +301,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         if (Responsive.isDesktop(context))
                           title == _locale.diffClosedCashByShifts
                               ? Text(
-                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffClosedCashShiftReport)})',
+                                  ' (${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}, ${_locale.decreaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
                                 )
                               // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})")
                               : SizedBox.shrink()
@@ -374,7 +377,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffClosedCashShiftReport)})',
+                            '(${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}), ${_locale.decreaseDiffSum}: (\u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
                           )
                           // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
                         ],
@@ -487,7 +490,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           "${data.perc}\n${data.x.toString()}",
                       yValueMapper: (ChartData data, _) => data.y,
                       enableTooltip: true,
-                      name: _locale.valueOfTotalDiff,
+                      name: _locale.increaseDiffSum,
                       // xAxisName: 'secondaryXAxis',
                       // yAxisName: 'secondaryYAxis',
                       dataLabelMapper: (datum, index) {
@@ -495,6 +498,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
                             Converters.formatNumberDigits(datum.y)));
                       },
                       color: const Color.fromRGBO(26, 138, 6, 1)),
+                  LineSeries<ChartData, String>(
+                      dataSource: data,
+                      dataLabelSettings: const DataLabelSettings(
+                        isVisible: true,
+                        textStyle: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.w600),
+                      ),
+                      xValueMapper: (ChartData data, _) =>
+                          "${data.perc}\n${data.x.toString()}",
+                      yValueMapper: (ChartData data, _) => data.y1,
+                      enableTooltip: true,
+                      name: _locale.decreaseDiffSum,
+                      // xAxisName: 'secondaryXAxis',
+                      // yAxisName: 'secondaryYAxis',
+                      dataLabelMapper: (datum, index) {
+                        return Converters.formatNumberRounded(double.parse(
+                            Converters.formatNumberDigits(datum.y1)));
+                      },
+                      color: Color.fromARGB(255, 255, 2, 2)),
                   LineSeries<ChartData, String>(
                       dataSource: data,
                       dataLabelSettings: const DataLabelSettings(
@@ -513,7 +535,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         return Converters.formatNumberRounded(double.parse(
                             Converters.formatNumberDigits(datum.percD)));
                       },
-                      color: Color.fromARGB(255, 255, 0, 0)),
+                      color: Color.fromARGB(255, 39, 128, 243)),
                 ]),
           ),
         ),

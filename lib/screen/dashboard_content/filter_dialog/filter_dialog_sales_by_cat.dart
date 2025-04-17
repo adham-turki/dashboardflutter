@@ -92,7 +92,6 @@ class _FilterDialogSalesByCategoryState
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
-
     periods = [
       _locale.daily,
       _locale.weekly,
@@ -105,7 +104,11 @@ class _FilterDialogSalesByCategoryState
       _locale.categories("2"),
       _locale.classifications
     ];
-    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    charts = [
+      _locale.lineChart,
+      // _locale.pieChart,
+      _locale.barChart
+    ];
     selectedChart = widget.selectedChart!;
 
     selectedCategories = categories[1];
@@ -115,13 +118,13 @@ class _FilterDialogSalesByCategoryState
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().twoYearsAgo()));
+        DatesController().formatDate(DatesController().currentMonth()));
 
-    _toDateController.text = widget.toDate != null
+    _toDateController.text = (widget.toDate ?? "") != ""
         ? DatesController().formatDateReverse(widget.toDate!)
         : todayDate;
 
-    _fromDateController.text = widget.fromDate != null
+    _fromDateController.text = (widget.fromDate ?? "") != ""
         ? DatesController().formatDateReverse(widget.fromDate!)
         : currentMonth;
     selectedCategories = widget.selectedCategory ?? "";
@@ -256,6 +259,7 @@ class _FilterDialogSalesByCategoryState
                                                 temp.txtStkcode ==
                                                 stock.txtStkcode))
                                         .toList();
+
                                     print("value1111: ${value.length}");
                                     // for (var i = 0; i < value.length; i++) {
                                     //   print("asddddd1:${value[i].txtStkcode}");
@@ -525,6 +529,10 @@ class _FilterDialogSalesByCategoryState
                     ErrorController.openErrorDialog(
                         1, _locale.startDateAfterEndDate);
                   } else {
+                    // if (stocksCodes.isEmpty) {
+                    //   stocksCodes = [""];
+                    // }
+
                     widget.onFilter(
                         selectedPeriod,
                         DatesController().formatDate(_fromDateController.text),
