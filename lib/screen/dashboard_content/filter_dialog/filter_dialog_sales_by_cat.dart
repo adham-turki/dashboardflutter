@@ -240,8 +240,11 @@ class _FilterDialogSalesByCategoryState
                                       setState(() {});
                                     }
                                   },
-                                  stringValue:
-                                      "${_locale.select} ${_locale.stock}",
+                                  stringValue: stocks.isEmpty
+                                      ? "${_locale.select} ${_locale.stocks}"
+                                      : stocks
+                                          .map((b) => b.txtNamee)
+                                          .join(', '),
                                   borderText: "",
                                   onClearIconPressed: () {
                                     // dealsProvider.clearStockCateg();
@@ -446,8 +449,11 @@ class _FilterDialogSalesByCategoryState
                                       setState(() {});
                                     }
                                   },
-                                  stringValue:
-                                      "${_locale.select} ${_locale.stock}",
+                                  stringValue: stocks.isEmpty
+                                      ? "${_locale.select} ${_locale.stocks}"
+                                      : stocks
+                                          .map((b) => b.txtNamee)
+                                          .join(', '),
                                   borderText: "",
                                   onClearIconPressed: () {
                                     // dealsProvider.clearStockCateg();
