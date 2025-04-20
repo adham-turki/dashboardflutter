@@ -30,6 +30,19 @@ class _FormComponentState extends State<FormComponent> {
   double height = 0;
   double width = 0;
   late AppLocalizations _locale;
+  FocusNode aliasFocus = FocusNode();
+  @override
+  void initState() {
+    aliasFocus.requestFocus();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    aliasFocus.dispose();
+    super.dispose();
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -152,6 +165,7 @@ class _FormComponentState extends State<FormComponent> {
                     ? TextDirection.rtl
                     : TextDirection.ltr,
                 child: LoginTextField(
+                  focusNode: aliasFocus,
                   hint: _locale.aliasName,
                   controller: widget.aliasName,
                   onSubmitted: (value) {

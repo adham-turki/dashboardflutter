@@ -18,6 +18,7 @@ class LoginTextField extends StatefulWidget {
   Icon? customIcon;
   dynamic customIconSuffix;
   bool? showText;
+  FocusNode? focusNode;
   LoginTextField(
       {Key? key,
       this.onValidator,
@@ -34,7 +35,8 @@ class LoginTextField extends StatefulWidget {
       this.customIcon,
       this.customIconSuffix,
       this.obscureText,
-      this.showText})
+      this.showText,
+      this.focusNode})
       : super(key: key);
 
   @override
@@ -86,6 +88,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
             //   ],
             // ),
             child: TextFormField(
+              focusNode: widget.focusNode ?? null,
               obscureText: widget.obscureText ?? false,
               style: const TextStyle(color: Colors.white),
               controller: _textEditingController,
