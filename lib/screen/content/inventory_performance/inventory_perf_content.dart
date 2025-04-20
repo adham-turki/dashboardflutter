@@ -353,6 +353,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       isEnabled: true,
                       icon: const Icon(Icons.search),
                       cleanPrevSelectedItem: true,
+                      onClearIconPressed: () {
+                        stocks.clear();
+                        stocksCodes.clear();
+                        tempStocks.clear();
+                        tempStocksCodes.clear();
+                      },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
                           tempStocks.add(value[i]);
@@ -363,8 +369,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         }
                       },
                       onChanged: (value) {
-                        print("asdasdasddeeee: ${value.length}");
-                        print("asdasdasddeeee");
                         if (value.isNotEmpty) {
                           stocks.clear();
                           stocksCodes.clear();
@@ -373,11 +377,15 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           for (int i = 0; i < value.length; i++) {
                             stocks.add(value[i]);
                             stocksCodes.add(stocks[i].txtStkcode ?? "");
-                            print(
-                                "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
-                            print("asdasdsad1: ${stocksCodes[i]}");
                           }
                           criteria.codesStock = stocksCodes;
+                          setState(() {});
+                        } else {
+                          stocks.clear();
+                          stocksCodes.clear();
+                          tempStocks.clear();
+                          tempStocksCodes.clear();
+                          criteria.codesStock = [];
                           setState(() {});
                         }
                       },
@@ -386,6 +394,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       onPressed: () {},
+                      selectedList: [],
                       onSearch: (text) async {
                         List<StockModel> value =
                             await TotalSalesController().getStocks(0, text);
@@ -487,18 +496,21 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       isEnabled: true,
                       icon: const Icon(Icons.search),
                       cleanPrevSelectedItem: true,
+                      onClearIconPressed: () {
+                        branchesList.clear();
+                        branchesCodes.clear();
+                        tempBranches.clear();
+                        tempBranchesCodes.clear();
+                      },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
                           tempBranches.add(value[i]);
                           tempBranchesCodes.add(tempBranches[i].txtCode ?? "");
-                          print("asdasdsadTemp: ${tempBranches[i].txtNamee}");
-                          print("asdasdsadTemp1: ${tempBranchesCodes[i]}");
                         }
                       },
                       onChanged: (value) {
-                        print("asdasdasddeeee: ${value.length}");
-                        print("asdasdasddeeee");
                         if (value.isNotEmpty) {
+                          print("innnnnnnnnnnn:111");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -506,10 +518,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           for (int i = 0; i < value.length; i++) {
                             branchesList.add(value[i]);
                             branchesCodes.add(branchesList[i].txtCode ?? "");
-                            print("asdasdsad: ${branchesList[i].txtNamee}");
-                            print("asdasdsad1: ${branchesCodes[i]}");
                           }
                           criteria.codesBranch = branchesCodes;
+                          setState(() {});
+                        } else {
+                          print("innnnnnnnnnnn:222");
+                          branchesList.clear();
+                          branchesCodes.clear();
+                          tempBranches.clear();
+                          tempBranchesCodes.clear();
+                          criteria.codesBranch = [];
                           setState(() {});
                         }
                       },
@@ -519,24 +537,17 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       borderText: "",
                       showSearchBox: false,
                       onPressed: () {},
+                      selectedList: [],
                       onSearch: (text) async {
                         List<BranchModel> value =
                             await BranchController().getBranchesList();
                         print("value1: ${value.length}");
                         value = value
-                            .where((stock) => !tempBranches
-                                .any((temp) => temp.txtCode == stock.txtCode))
+                            .where((branch) => !tempBranches
+                                .any((temp) => temp.txtCode == branch.txtCode))
                             .toList();
                         print("value1111: ${value.length}");
-                        // for (var i = 0; i < value.length; i++) {
-                        //   print("asddddd1:${value[i].txtStkcode}");
-                        //   print("asddddd21:${tempStocks.length}");
-                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                        //     value.removeAt(i);
-                        //     print(
-                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                        //   }
-                        // }
+
                         return value;
                       }),
                 ],
@@ -625,18 +636,19 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       isEnabled: true,
                       icon: const Icon(Icons.search),
                       cleanPrevSelectedItem: true,
+                      onClearIconPressed: () {
+                        stocks.clear();
+                        stocksCodes.clear();
+                        tempStocks.clear();
+                        tempStocksCodes.clear();
+                      },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
                           tempStocks.add(value[i]);
                           tempStocksCodes.add(tempStocks[i].txtStkcode ?? "");
-                          print(
-                              "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
-                          print("asdasdsadTemp1: ${tempStocksCodes[i]}");
                         }
                       },
                       onChanged: (value) {
-                        print("asdasdasddeeee: ${value.length}");
-                        print("asdasdasddeeee");
                         if (value.isNotEmpty) {
                           stocks.clear();
                           stocksCodes.clear();
@@ -651,6 +663,13 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           }
                           criteria.codesStock = stocksCodes;
                           setState(() {});
+                        } else {
+                          stocks.clear();
+                          stocksCodes.clear();
+                          tempStocks.clear();
+                          tempStocksCodes.clear();
+                          criteria.codesStock = [];
+                          setState(() {});
                         }
                       },
                       stringValue: stocks.isEmpty
@@ -658,6 +677,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           : stocks.map((b) => b.txtNamee).join(', '),
                       borderText: "",
                       onPressed: () {},
+                      selectedList: [],
                       onSearch: (text) async {
                         List<StockModel> value =
                             await TotalSalesController().getStocks(0, text);
@@ -693,6 +713,12 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       isEnabled: true,
                       icon: const Icon(Icons.search),
                       cleanPrevSelectedItem: true,
+                      onClearIconPressed: () {
+                        branchesList.clear();
+                        branchesCodes.clear();
+                        tempBranches.clear();
+                        tempBranchesCodes.clear();
+                      },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
                           tempBranches.add(value[i]);
@@ -702,9 +728,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         }
                       },
                       onChanged: (value) {
-                        print("asdasdasddeeee: ${value.length}");
-                        print("asdasdasddeeee");
                         if (value.isNotEmpty) {
+                          print("innnnnnnnnnnn:000");
+                          print("asdasdasddeeee: ${value.length}");
+                          print("asdasdasddeeee");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -717,6 +744,14 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           }
                           criteria.codesBranch = branchesCodes;
                           setState(() {});
+                        } else {
+                          print("innnnnnnnnnnn:111");
+                          branchesList.clear();
+                          branchesCodes.clear();
+                          tempBranches.clear();
+                          tempBranchesCodes.clear();
+                          criteria.codesBranch = [];
+                          setState(() {});
                         }
                       },
                       stringValue: branchesList.isEmpty
@@ -725,6 +760,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       borderText: "",
                       showSearchBox: false,
                       onPressed: () {},
+                      selectedList: [],
                       onSearch: (text) async {
                         List<BranchModel> value =
                             await BranchController().getBranchesList();

@@ -91,7 +91,7 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
     totalSalesByStocks = 0.0;
     salesByStocksList.clear();
     barChartData.clear();
-
+    maxY = 0.0;
     await SalesCategoryController()
         .getSalesByStocks(salesByStocksSearchCriteria)
         .then((value) {

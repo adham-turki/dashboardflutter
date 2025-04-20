@@ -265,27 +265,27 @@ class _TestDropdownState extends State<TestDropdown> {
               ),
         Row(
           children: [
-            // (widget.list != null && items.isNotEmpty) ||
-            //         (widget.stringValue != null &&
-            //             widget.stringValue!.isNotEmpty)
-            //     ? IconButton(
-            //         padding: const EdgeInsets.only(bottom: 2, top: 2),
-            //         icon: const Icon(Icons.close),
-            //         onPressed: (() {
-            //           if (widget.onClearIconPressed != null) {
-            //             items = [];
+            (widget.list != null && items.isNotEmpty) ||
+                    (widget.stringValue != null &&
+                        widget.stringValue!.isNotEmpty)
+                ? IconButton(
+                    padding: const EdgeInsets.only(bottom: 2, top: 2),
+                    icon: const Icon(Icons.close),
+                    onPressed: (() {
+                      if (widget.onClearIconPressed != null) {
+                        items = [];
 
-            //             if (widget.stringValue != null) {
-            //               widget.stringValue = "";
-            //             }
+                        if (widget.stringValue != null) {
+                          widget.stringValue = "";
+                        }
 
-            //             widget.onClearIconPressed!();
-            //           }
-            //           setState(() {});
-            //         }),
-            //         color: const Color.fromARGB(235, 158, 158, 158),
-            //       )
-            //     : Container(),
+                        widget.onClearIconPressed!();
+                      }
+                      setState(() {});
+                    }),
+                    color: const Color.fromARGB(235, 158, 158, 158),
+                  )
+                : Container(),
             widget.icon != null
                 ? const Padding(
                     padding:
