@@ -358,6 +358,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         stocksCodes.clear();
                         tempStocks.clear();
                         tempStocksCodes.clear();
+                        setState(() {});
                       },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
@@ -501,6 +502,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         branchesCodes.clear();
                         tempBranches.clear();
                         tempBranchesCodes.clear();
+                        setState(() {});
                       },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
@@ -641,6 +643,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         stocksCodes.clear();
                         tempStocks.clear();
                         tempStocksCodes.clear();
+                        setState(() {});
                       },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
@@ -718,6 +721,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         branchesCodes.clear();
                         tempBranches.clear();
                         tempBranchesCodes.clear();
+                        setState(() {});
                       },
                       onItemAddedOrRemoved: (value) {
                         for (int i = 0; i < value.length; i++) {
