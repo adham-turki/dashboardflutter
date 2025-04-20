@@ -10,6 +10,7 @@ class InventoryPerformanceModel {
   String? name;
   double? intQty;
   double? outQty;
+  double? curQty;
   List? dataInc;
   static double allOutQty = 0;
   InventoryPerformanceModel(this.code, this.name, this.intQty, this.outQty);
@@ -24,9 +25,13 @@ class InventoryPerformanceModel {
     intQty = inventoryPerformance['inQnty'].toString() == "null"
         ? 0.0
         : double.parse(inventoryPerformance['inQnty'].toString());
+
     outQty = inventoryPerformance['outQnty'].toString() == 'null'
         ? 0.0
         : (double.parse(inventoryPerformance['outQnty'].toString()));
+    curQty = inventoryPerformance['curQty'].toString() == 'null'
+        ? 0.0
+        : (double.parse(inventoryPerformance['curQty'].toString()));
   }
 
   PlutoRow toPluto(int counter) {
@@ -38,6 +43,7 @@ class InventoryPerformanceModel {
 
     inventoryPerformance['inQnty'] = PlutoCell(value: intQty ?? 0);
     inventoryPerformance['outQnty'] = PlutoCell(value: outQty ?? 0);
+    inventoryPerformance['curQty'] = PlutoCell(value: curQty ?? 0);
     return PlutoRow(cells: inventoryPerformance);
   }
 
@@ -71,7 +77,7 @@ class InventoryPerformanceModel {
       ),
       PlutoColumn(
         title: localizations.currentQty,
-        field: "inQnty",
+        field: "curQty",
         type: PlutoColumnType.number(),
         width: isDesktop ? width * 0.0782 : width * 0.3,
         backgroundColor: colColor,

@@ -19,8 +19,9 @@ class TotalSalesModel {
   double? totalAmount;
   double? count;
   String? stockBarCode;
+  double? curQty;
   TotalSalesModel(this.code, this.name, this.inQnty, this.outQnty, this.netSold,
-      this.debit, this.credit, this.totalAmount);
+      this.debit, this.credit, this.totalAmount, this.curQty);
 
   TotalSalesModel.fromJson(Map<String, dynamic> totalSales) {
     code = totalSales['code'].toString() == "null"
@@ -50,6 +51,8 @@ class TotalSalesModel {
     stockBarCode = totalSales['stockBarCode'].toString() == "null"
         ? ""
         : totalSales['stockBarCode'];
+    curQty =
+        totalSales['curQty'].toString() == "null" ? 0.0 : totalSales['curQty'];
   }
 
   PlutoRow toPluto(int counter) {
@@ -57,6 +60,7 @@ class TotalSalesModel {
     totalSales['code'] = PlutoCell(value: code ?? "");
     totalSales['name'] = PlutoCell(value: name ?? "");
     totalSales['inQnty'] = PlutoCell(value: inQnty ?? 0);
+    totalSales['curQty'] = PlutoCell(value: curQty ?? 0);
     totalSales['outQnty'] = PlutoCell(value: outQnty ?? 0);
     totalSales['netSold'] = PlutoCell(value: netSold ?? 0);
     totalSales['debit'] = PlutoCell(value: debit ?? 0);
@@ -142,6 +146,21 @@ class TotalSalesModel {
             ? (rendererContext) {
                 return TotalSalesModel.footerRenderer(
                     rendererContext, reportResult.inQnty!);
+              }
+            : (rendererContext) {
+                return footerRenderer(rendererContext, 0);
+              },
+      ),
+      PlutoColumn(
+        title: localizations.returnQty,
+        field: "curQty",
+        type: PlutoColumnType.number(),
+        width: isDesktop ? width * 0.07 : width * 0.3,
+        backgroundColor: columnColors,
+        footerRenderer: reportResult != null
+            ? (rendererContext) {
+                return TotalSalesModel.footerRenderer(
+                    rendererContext, reportResult.curQty!);
               }
             : (rendererContext) {
                 return footerRenderer(rendererContext, 0);

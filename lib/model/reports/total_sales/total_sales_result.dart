@@ -6,6 +6,7 @@ class TotalSalesResult {
   double? credit;
   double? totalAmount;
   int? count;
+  double? curQty;
   TotalSalesResult();
   TotalSalesResult.fromJson(Map<String, dynamic> totalSales) {
     inQnty =
@@ -25,5 +26,7 @@ class TotalSalesResult {
         ? 0.0
         : totalSales['totalAmount'];
     count = totalSales['count'].toString() == "null" ? 0 : totalSales['count'];
+    curQty =
+        totalSales['curQty'].toString() == "null" ? 0.0 : totalSales['curQty'];
   }
 }
