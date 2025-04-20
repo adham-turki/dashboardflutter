@@ -15,3 +15,5 @@ var totalProfits = "totalProfitReport";
 var totalProfitsByBranch = "totalProfitReport/byBranch";
 var totalProfitsByCategory = "totalProfitReport/byCategory";
 var diffCashShiftReportByCashier = "diffCashShiftReportByCashier";
+var customerPointsByBranchApi = "customerPoints/byBranch";
+var customerPointsByCustomerApi = "customerPoints/byCustomer";
