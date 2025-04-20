@@ -377,7 +377,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                         periods: listOfPeriods),
                                   ),
                                 )
-                              : barData.length <= 4
+                              : barData.length < 4
                                   ? Center(
                                       child: SizedBox(
                                         height: height * 0.4,

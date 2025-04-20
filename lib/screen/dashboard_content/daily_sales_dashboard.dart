@@ -390,14 +390,20 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
                           child: CircularProgressIndicator(),
                         )
                       : selectedChart == Pie_Chart
-                          ? Center(
-                              child: SizedBox(
-                                height: height * 0.4,
-                                child: PieDashboardChart(
-                                  dataList: barDataDailySales,
-                                ),
-                              ),
-                            )
+                          ? barDataDailySales.length < 4
+                              ? Center(
+                                  child: SizedBox(
+                                    height: height * 0.4,
+                                    child: PieDashboardChart(
+                                      dataList: barDataDailySales,
+                                    ),
+                                  ),
+                                )
+                              : BarDashboardChart(
+                                  barChartData: barData,
+                                  isMax: true,
+                                  isMedium: false,
+                                )
                           : selectedChart == Bar_Chart
                               ? BarDashboardChart(
                                   barChartData: barData,

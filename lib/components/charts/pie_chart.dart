@@ -74,7 +74,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  height: isMobile ? height * 0.27 : height * 0.2,
+                  height: isMobile ? height * 0.27 : height * 0.14,
                   child: PieChart(
                     PieChartData(
                       centerSpaceRadius: 1,
@@ -128,7 +128,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
   @override
   Widget build(BuildContext context) {
     isMobile = Responsive.isMobile(context);
-    radiusNormal = isMobile ? height * 0.17 : height * 0.18;
+    radiusNormal = isMobile ? height * 0.17 : height * 0.16;
     radiusHover = isMobile ? height * 0.18 : height * 0.19;
 
     getBuildWidget();
@@ -164,8 +164,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
                 width: 5,
               )
             : null,
-        // badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
-        badgePositionPercentageOffset: 2,
+        badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
+        badgePositionPercentageOffset: 1.5,
       );
     });
     print("widget.lidt.dataaaa444 ${list.length}");
@@ -177,6 +177,8 @@ class _PieChartComponentState extends State<PieChartComponent> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
+        width: width * 0.2,
+        height: height * 0.08,
         decoration: BoxDecoration(
           color: data.color,
           borderRadius: BorderRadius.circular(4),
@@ -187,9 +189,21 @@ class _PieChartComponentState extends State<PieChartComponent> {
             ),
           ],
         ),
-        child: Text(
-          data.title ?? "NONE",
-          style: const TextStyle(color: Colors.white, fontSize: 15),
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                (data.title ?? "NONE").length > 13
+                    ? (data.title ?? "NONE").substring(0, 12)
+                    : (data.title ?? "NONE"),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+              Text(
+                "${data.value ?? 0.0}",
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              )
+            ],
+          ),
         ),
       ),
     );
