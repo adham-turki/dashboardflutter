@@ -312,5 +312,7 @@
     "byCustomers": "By Customers",
     "usedPoints": "Used Points",
     "remainingPoints": "Remaining Points",
-    "numOfResults": "Number of Results"
+    "numOfResults": "Number of Results",
+    "topPoints": "Top Points",
+    "topUsedPoints": "Top Used Points"
 }

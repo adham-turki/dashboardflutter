@@ -3,7 +3,9 @@ import 'package:bi_replicate/controller/customer_points_controller.dart';
 import 'package:bi_replicate/model/criteria/customer_points_crit_model.dart';
 import 'package:bi_replicate/model/customer_model.dart';
 import 'package:bi_replicate/model/customer_points_by_customer.dart';
+import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
+import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/widget/custom_textfield.dart';
 import 'package:bi_replicate/widget/test_drop_down.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,13 +64,48 @@ class _CustomerPointsByCustomersScreenState
       children: [
         buildHeaderContent(),
         SizedBox(
+          height: height * 0.02,
+        ),
+        SizedBox(
           width: isDesktop ? width * 0.8 : width * 0.9,
           child: isDesktop
               ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    tableComponentTopPoints(context),
-                    tableComponentTopUsedPoints(context),
+                    Column(
+                      children: [
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topPoints,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: height * 0.02,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        tableComponentTopPoints(context),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topUsedPoints,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: height * 0.02,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        tableComponentTopUsedPoints(context),
+                      ],
+                    ),
                   ],
                 )
               : Column(
