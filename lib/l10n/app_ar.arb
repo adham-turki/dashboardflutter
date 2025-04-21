@@ -287,5 +287,6 @@
     "byBranches": "نقاط الزبائن حسب الفروع",
     "byCustomers": "نقاط الزبائن حسب الزبائن",
     "usedPoints": "النقاط المستخدمة",
-    "remainingPoints": "النقاط المتبقية"
+    "remainingPoints": "النقاط المتبقية",
+    "numOfResults": "عدد النتائج"
 }

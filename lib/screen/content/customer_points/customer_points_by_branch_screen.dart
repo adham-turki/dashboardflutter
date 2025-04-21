@@ -187,7 +187,7 @@ class _CustomerPointsByBranchScreenState
                   focusNode: focusNode,
                   controller: numberOfrow,
                   initialValue: numberOfrow.text,
-                  label: _locale.itemsNumber,
+                  label: _locale.numOfResults,
                   onSubmitted: (value) {
                     setState(() {
                       criteria.count = int.parse(numberOfrow.text);
@@ -337,7 +337,7 @@ class _CustomerPointsByBranchScreenState
                   focusNode: focusNode,
                   controller: numberOfrow,
                   initialValue: numberOfrow.text,
-                  label: _locale.itemsNumber,
+                  label: _locale.numOfResults,
                   onSubmitted: (value) {
                     setState(() {
                       criteria.count = int.parse(numberOfrow.text);

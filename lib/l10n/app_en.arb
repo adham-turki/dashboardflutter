@@ -311,5 +311,6 @@
     "byBranches": "By Branches",
     "byCustomers": "By Customers",
     "usedPoints": "Used Points",
-    "remainingPoints": "Remaining Points"
+    "remainingPoints": "Remaining Points",
+    "numOfResults": "Number of Results"
 }

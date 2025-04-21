@@ -116,7 +116,7 @@ class _CustomerPointsByCustomersScreenState
                   focusNode: focusNode,
                   controller: numberOfrow,
                   initialValue: numberOfrow.text,
-                  label: _locale.itemsNumber,
+                  label: _locale.numOfResults,
                   onSubmitted: (value) {
                     setState(() {
                       criteria.count = int.parse(numberOfrow.text);
@@ -172,7 +172,7 @@ class _CustomerPointsByCustomersScreenState
                             customersCodes.clear();
                             tempCustomers.clear();
                             tempCustomersCodes.clear();
-                            criteria.codesBranch = [];
+                            criteria.codesCust = [];
 
                             setState(() {});
                           }
@@ -181,7 +181,7 @@ class _CustomerPointsByCustomersScreenState
                             ? "${_locale.select} ${_locale.customer}"
                             : customersList.map((b) => b.text).join(', '),
                         borderText: "",
-                        showSearchBox: false,
+                        showSearchBox: true,
                         onPressed: () {},
                         selectedList: [],
                         onSearch: (text) async {
@@ -190,8 +190,8 @@ class _CustomerPointsByCustomersScreenState
                                   .getCustomers(text);
                           print("value1: ${value.length}");
                           value = value
-                              .where((branch) => !tempCustomers
-                                  .any((temp) => temp.value == branch.value))
+                              .where((cust) => !tempCustomers
+                                  .any((temp) => temp.value == cust.value))
                               .toList();
                           print("value1111: ${value.length}");
 
@@ -222,7 +222,7 @@ class _CustomerPointsByCustomersScreenState
                   focusNode: focusNode,
                   controller: numberOfrow,
                   initialValue: numberOfrow.text,
-                  label: _locale.itemsNumber,
+                  label: _locale.numOfResults,
                   onSubmitted: (value) {
                     setState(() {
                       criteria.count = int.parse(numberOfrow.text);
@@ -239,7 +239,7 @@ class _CustomerPointsByCustomersScreenState
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_locale.branch),
+                    Text(_locale.customer),
                     TestDropdown(
                         isEnabled: true,
                         icon: const Icon(Icons.search),
@@ -277,7 +277,7 @@ class _CustomerPointsByCustomersScreenState
                             customersCodes.clear();
                             tempCustomers.clear();
                             tempCustomersCodes.clear();
-                            criteria.codesBranch = [];
+                            criteria.codesCust = [];
 
                             setState(() {});
                           }
@@ -286,7 +286,7 @@ class _CustomerPointsByCustomersScreenState
                             ? "${_locale.select} ${_locale.customer}"
                             : customersList.map((b) => b.text).join(', '),
                         borderText: "",
-                        showSearchBox: false,
+                        showSearchBox: true,
                         onPressed: () {},
                         selectedList: [],
                         onSearch: (text) async {
@@ -295,8 +295,8 @@ class _CustomerPointsByCustomersScreenState
                                   .getCustomers(text);
                           print("value1: ${value.length}");
                           value = value
-                              .where((branch) => !tempCustomers
-                                  .any((temp) => temp.value == branch.value))
+                              .where((cust) => !tempCustomers
+                                  .any((temp) => temp.value == cust.value))
                               .toList();
                           print("value1111: ${value.length}");
 
