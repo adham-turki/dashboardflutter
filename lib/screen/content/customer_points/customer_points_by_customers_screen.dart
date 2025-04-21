@@ -217,7 +217,7 @@ class _CustomerPointsByCustomersScreenState
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               SizedBox(
-                width: width * 0.7,
+                width: width * 0.73,
                 child: CustomTextField(
                   focusNode: focusNode,
                   controller: numberOfrow,
