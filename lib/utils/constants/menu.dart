@@ -78,6 +78,22 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
       ],
       value: 24,
     ),
+    SideTabModel(
+      isParent: true,
+      text: locale.customerPoints,
+      icon: Icons.person,
+      subMenu: [
+        SideSubTabModel(
+          text: locale.byBranches,
+          value: 25,
+        ),
+        SideSubTabModel(
+          text: locale.byCustomers,
+          value: 26,
+        ),
+      ],
+      value: -1,
+    ),
     // SideTabModel(
     //   isParent: true,
     //   text: locale.salesAdminstration,

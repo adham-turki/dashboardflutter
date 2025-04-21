@@ -61,6 +61,26 @@ List<MenuModel> getMenu(AppLocalizations locale) {
       subMenuList: [],
       pageNumber: 24,
     ),
+    MenuModel(
+      isParent: true,
+      title: locale.customerPoints,
+      icon: Icons.person,
+      subMenuList: [
+        // SubMenuModel(
+        //   title: locale.totalSales,
+        //   pageNumber: 12,
+        // ),
+        SubMenuModel(
+          title: locale.byBranches,
+          pageNumber: 25,
+        ),
+        SubMenuModel(
+          title: locale.byCustomers,
+          pageNumber: 26,
+        ),
+      ],
+      pageNumber: -1,
+    ),
     // MenuModel(
     //   isParent: true,
     //   title: locale.salesAdminstration,

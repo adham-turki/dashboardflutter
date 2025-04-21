@@ -306,5 +306,10 @@
     "increaseDiffSum": "Increase",
     "decreaseDiffSum": "Decrease",
     "otherReports": "Other Reports",
-    "branchesSalesByStocks": "Branch Sales By Stocks"
+    "branchesSalesByStocks": "Branch Sales By Stocks",
+    "customerPoints": "Customer Points",
+    "byBranches": "By Branches",
+    "byCustomers": "By Customers",
+    "usedPoints": "Used Points",
+    "remainingPoints": "Remaining Points"
 }

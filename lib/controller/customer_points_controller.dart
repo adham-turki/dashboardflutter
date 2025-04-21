@@ -7,42 +7,103 @@ import 'package:bi_replicate/model/customers_points_by_branch_model.dart';
 import 'package:bi_replicate/service/api_service.dart';
 import 'package:bi_replicate/utils/constants/values.dart';
 
+import '../model/customer_model.dart';
+
 class CustomerPointsController {
   Future<List<CustomerPointsByBranch>> getCustomerPointsByBranchList(
       CustomerPointsSearchCriteria searchCriteria) async {
     List<CustomerPointsByBranch> list = [];
-    await ApiService()
-        .postRequest(
-      customerPointsByBranchApi,
-      searchCriteria.toJson(),
-    )
-        .then((response) {
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        for (var elemant in jsonData) {
-          list.add(CustomerPointsByBranch.fromJson(elemant));
+    try {
+      print("searchCriteria.toJson(): ${searchCriteria.toJson()}");
+      await ApiService()
+          .postRequest(
+        customerPointsByBranchApi,
+        searchCriteria.toJson(),
+      )
+          .then((response) {
+        if (response.statusCode == statusOk) {
+          var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+          for (var elemant in jsonData) {
+            list.add(CustomerPointsByBranch.fromJson(elemant));
+          }
         }
-      }
-    });
+      });
+    } catch (e, t) {
+      print("exxxxxxxxxx: $e ,$t");
+      return [];
+    }
     return list;
   }
 
-  Future<List<CustomerPointsByCustomerModel>> getCustomerPointsByCustomerList(
-      CustomerPointsSearchCriteria searchCriteria) async {
+  Future<List<CustomerPointsByCustomerModel>>
+      getTopPointsCustomerPointsByCustomerList(
+          CustomerPointsSearchCriteria searchCriteria) async {
     List<CustomerPointsByCustomerModel> list = [];
-    await ApiService()
-        .postRequest(
-      customerPointsByCustomerApi,
-      searchCriteria.toJson(),
-    )
-        .then((response) {
-      if (response.statusCode == statusOk) {
-        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
-        for (var elemant in jsonData) {
-          list.add(CustomerPointsByCustomerModel.fromJson(elemant));
+    try {
+      await ApiService()
+          .postRequest(
+        topCustomerPointsByCustomerApi,
+        searchCriteria.toJsonForByCustomers(),
+      )
+          .then((response) {
+        if (response.statusCode == statusOk) {
+          var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+          for (var elemant in jsonData) {
+            list.add(CustomerPointsByCustomerModel.fromJson(elemant));
+          }
         }
-      }
-    });
+      });
+    } catch (e) {
+      return list;
+    }
+    return list;
+  }
+
+  Future<List<CustomerPointsByCustomerModel>>
+      getTopUsedPointsCustomerPointsByCustomerList(
+          CustomerPointsSearchCriteria searchCriteria) async {
+    List<CustomerPointsByCustomerModel> list = [];
+    try {
+      await ApiService()
+          .postRequest(
+        topUsedCustomerPointsByCustomerApi,
+        searchCriteria.toJsonForByCustomers(),
+      )
+          .then((response) {
+        if (response.statusCode == statusOk) {
+          var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+          for (var elemant in jsonData) {
+            list.add(CustomerPointsByCustomerModel.fromJson(elemant));
+          }
+        }
+      });
+    } catch (e) {
+      return list;
+    }
+    return list;
+  }
+
+  Future<List<CustomerModel>> getCustomers(String name) async {
+    List<CustomerModel> list = [];
+    try {
+      await ApiService().postRequest(
+        getCustomerListApi,
+        {"page": 1, "nameCode": name},
+      ).then((response) {
+        if (response.statusCode == statusOk) {
+          var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+
+          // Safely extract the list under 'resultAjax'
+          final List<dynamic> results = jsonData['resultAjax'] ?? [];
+
+          for (var element in results) {
+            list.add(CustomerModel.fromJson(element));
+          }
+        }
+      });
+    } catch (e) {
+      return list;
+    }
     return list;
   }
 }

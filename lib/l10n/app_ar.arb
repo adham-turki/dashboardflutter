@@ -282,5 +282,10 @@
     "increaseDiffSum": "الزيادة",
     "decreaseDiffSum": "النقصان",
     "otherReports": "تقارير أخرى",
-    "branchesSalesByStocks": "مبيعات الفرع حسب الأصناف"
+    "branchesSalesByStocks": "مبيعات الفرع حسب الأصناف",
+    "customerPoints": "نقاط الزبائن",
+    "byBranches": "نقاط الزبائن حسب الفروع",
+    "byCustomers": "نقاط الزبائن حسب الزبائن",
+    "usedPoints": "النقاط المستخدمة",
+    "remainingPoints": "النقاط المتبقية"
 }

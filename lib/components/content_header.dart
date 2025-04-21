@@ -304,6 +304,10 @@ class _ContentHeaderState extends State<ContentHeader> {
         return locale.profitReports;
       case 24:
         return locale.otherReports;
+      case 25:
+        return locale.byBranches;
+      case 26:
+        return locale.byCustomers;
       default:
         return "";
     }

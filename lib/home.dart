@@ -2,6 +2,8 @@ import 'package:bi_replicate/components/content_header.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/out_standing_cheques.dart';
+import 'package:bi_replicate/screen/content/customer_points/customer_points_by_branch_screen.dart';
+import 'package:bi_replicate/screen/content/customer_points/customer_points_by_customers_screen.dart';
 import 'package:bi_replicate/screen/content/financial_performance/cash_flows_content.dart';
 import 'package:bi_replicate/screen/content/financial_performance/expenses_content.dart';
 import 'package:bi_replicate/screen/content/inventory_performance/inventory_perf_content.dart';
@@ -189,6 +191,10 @@ class _HomePageState extends State<HomePage> {
         return const SecondReportsScreen();
       case 24:
         return const OtherReportsScreen();
+      case 25:
+        return const CustomerPointsByBranchScreen();
+      case 26:
+        return const CustomerPointsByCustomersScreen();
       default:
         return Container();
     }
@@ -247,6 +253,10 @@ class _HomePageState extends State<HomePage> {
         return locale.profitReports;
       case 24:
         return locale.otherReports;
+      case 25:
+        return locale.byBranches;
+      case 26:
+        return locale.byCustomers;
       default:
         return "";
     }

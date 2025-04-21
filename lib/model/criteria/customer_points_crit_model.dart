@@ -36,4 +36,11 @@ class CustomerPointsSearchCriteria {
       'toDate': toDate,
     };
   }
+
+  Map<String, dynamic> toJsonForByCustomers() {
+    return {
+      'count': count,
+      'codesCust': codesCust,
+    };
+  }
 }
