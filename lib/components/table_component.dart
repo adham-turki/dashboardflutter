@@ -68,9 +68,17 @@ class _TableComponentState extends State<TableComponent> {
     height = MediaQuery.of(context).size.height;
     List<PlutoColumn> polCols = widget.plCols;
     List<PlutoRow> polRows = widget.polRows;
+    print("heightttttttttttttttttt: $height");
+    print("widthhhhhhhhhhhh: $width");
     // print("fetch(): ${polRows.length}");
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
+        columnSize: width > 1300
+            ? const PlutoGridColumnSizeConfig(
+                autoSizeMode: PlutoAutoSizeMode.scale,
+                resizeMode: PlutoResizeMode.normal,
+              )
+            : const PlutoGridColumnSizeConfig(),
         scrollbar: PlutoGridScrollbarConfig(
           onlyDraggingThumb: false,
           scrollbarThicknessWhileDragging: 20,

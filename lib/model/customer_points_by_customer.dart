@@ -1,6 +1,7 @@
 import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -62,20 +63,32 @@ class CustomerPointsByCustomerModel {
     bool isDesktop = Responsive.isDesktop(context);
     List<PlutoColumn> list = [
       PlutoColumn(
+        titleSpan: titleSpanWidget("#"),
         title: "#",
         field: "counter",
         type: PlutoColumnType.text(),
         width: isDesktop ? width * 0.05 : width * 0.1,
         backgroundColor: colColor,
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
       ),
       PlutoColumn(
+        titleSpan: titleSpanWidget(localizations.code),
         title: localizations.code,
         field: "custCode",
         type: PlutoColumnType.text(),
         width: isDesktop ? width * 0.1 : width * 0.3,
         backgroundColor: colColor,
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
       ),
       PlutoColumn(
+        titleSpan: titleSpanWidget(localizations.name),
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
         title: localizations.name,
         field: "custName",
         type: PlutoColumnType.text(),
@@ -83,6 +96,10 @@ class CustomerPointsByCustomerModel {
         backgroundColor: colColor,
       ),
       PlutoColumn(
+        titleSpan: titleSpanWidget(localizations.customerPoints),
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
         title: localizations.customerPoints,
         field: "custPoints",
         type: PlutoColumnType.number(),
@@ -90,6 +107,10 @@ class CustomerPointsByCustomerModel {
         backgroundColor: colColor,
       ),
       PlutoColumn(
+        titleSpan: titleSpanWidget(localizations.usedPoints),
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
         title: localizations.usedPoints,
         field: "usedPoints",
         type: PlutoColumnType.number(),
@@ -97,6 +118,10 @@ class CustomerPointsByCustomerModel {
         backgroundColor: colColor,
       ),
       PlutoColumn(
+        renderer: (context) {
+          return toolTipWidget(context);
+        },
+        titleSpan: titleSpanWidget(localizations.remainingPoints),
         title: localizations.remainingPoints,
         field: "remainingPoints",
         type: PlutoColumnType.number(),
@@ -106,5 +131,32 @@ class CustomerPointsByCustomerModel {
     ];
 
     return list;
+  }
+
+  static Tooltip toolTipWidget(PlutoColumnRendererContext context) {
+    return Tooltip(
+      message: context.cell.value.toString(),
+      child: Text(
+        context.cell.value.toString(),
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ),
+    );
+  }
+
+  static TextSpan titleSpanWidget(String title) {
+    return TextSpan(
+      children: [
+        WidgetSpan(
+          child: Tooltip(
+            message: title,
+            child: Text(
+              title,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
