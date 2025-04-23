@@ -9,6 +9,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../utils/constants/responsive.dart';
 import 'custom_label.dart';
 
+// ignore: must_be_immutable
 class CustomDatePicker extends StatefulWidget {
   final String label;
   final double? padding;
@@ -180,12 +181,12 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                         : widget.date,
                     minimumYear: widget.label == _locale.fromDate
                         ? DateTime(1900).year
-                        : widget.date!.year,
+                        : widget.date.year,
                     maximumDate: widget.label == _locale.fromDate
                         ? widget.date
                         : nowDate,
                     maximumYear: widget.label == _locale.fromDate
-                        ? widget.date!.year
+                        ? widget.date.year
                         : nowDate.year,
                     initialDateTime: date ?? nowDate,
                     mode: CupertinoDatePickerMode.date,

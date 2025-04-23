@@ -93,8 +93,7 @@ class _ExpensesContentState extends State<ExpensesContent> {
         DatesController().formatDate(DatesController().todayDate()));
 
     _fromDateController.text = todayDate;
-    // selectedChart = _locale.lineChart;
-    // selectedStatus = _locale.all;
+
     status = [
       _locale.all,
       _locale.posted,
@@ -115,7 +114,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
     selectedChart = charts[0];
     selectedStatus = status[0];
     selectedPeriod = periods[0];
-    // getExpenses(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -127,7 +125,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
     isDesktop = Responsive.isDesktop(context);
 
     return Container(
-      // height: height,
       decoration: const BoxDecoration(),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -264,7 +261,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -277,19 +273,11 @@ class _ExpensesContentState extends State<ExpensesContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         _fromDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -300,8 +288,6 @@ class _ExpensesContentState extends State<ExpensesContent> {
         codeReportsList = value;
         setPageName();
         getAllUserReportSettings();
-
-        print("codeReportsList Length: ${codeReportsList.length}");
       });
     });
   }
@@ -322,16 +308,12 @@ class _ExpensesContentState extends State<ExpensesContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
     String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
@@ -339,22 +321,11 @@ class _ExpensesContentState extends State<ExpensesContent> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 

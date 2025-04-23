@@ -1,7 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-
-import '../../utils/constants/responsive.dart';
 import '../custom_label.dart';
 
 // ignore: must_be_immutable
@@ -93,7 +91,6 @@ class _CustomDropDownState extends State<CustomDropDown> {
 
   Widget _customDropDownPrograms(BuildContext context, dynamic item) {
     double height = MediaQuery.of(context).size.height;
-    bool isDesktop = Responsive.isDesktop(context);
     return Container(
         child: (item == null)
             ? Padding(

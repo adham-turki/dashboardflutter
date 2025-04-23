@@ -7,7 +7,6 @@ import 'package:bi_replicate/controller/settings/user_settings/user_report_setti
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/model/settings/user_settings/code_reports_model.dart';
 import 'package:bi_replicate/model/settings/user_settings/user_report_settings.dart';
-import 'package:bi_replicate/utils/constants/api_constants.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
@@ -95,7 +94,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = charts[0];
     selectedPeriod = periods[0];
-    print("currentPageCode:::: ${currentPageCode}");
 
     super.didChangeDependencies();
   }
@@ -196,36 +194,16 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         }
       });
     } else {
-      // Map<String, dynamic> dataMap = json.decode('{$startSearchCriteria}');
-      // SearchCriteria searchCriteria1 = SearchCriteria(
-      //   fromDate: dataMap['fromDate'],
-      //   toDate: dataMap['toDate'],
-      //   voucherStatus: dataMap['voucherStatus'],
-      //   rownum: dataMap['rownum'],
-      //   byCategory: dataMap['byCategory'],
-      //   branch: dataMap['branch'],
-      //   page: dataMap['page'],
-      // );
-      // print("searchCriteria1: ${searchCriteria1.toJson()}");
-      print("criiiiiiiiiiiiiiiiter: ${startSearchCriteria}");
-      print(
-          "searchCriteriaa!.fromDate!: ${DatesController().formatDateReverse(searchCriteriaa!.fromDate!)}");
-      print("_fromDateController.text: ${_fromDateController.text}");
-
       SearchCriteria searchCriteria = SearchCriteria(
-          fromDate:
-              // searchCriteriaa!.fromDate!,
-              DatesController().formatDate(_fromDateController.text.isEmpty
+          fromDate: DatesController().formatDate(
+              _fromDateController.text.isEmpty
                   ? todayDate
                   : _fromDateController.text),
           toDate: DatesController().formatDate(_toDateController.text.isEmpty
               ? todayDate
               : _toDateController.text),
           voucherStatus: -100);
-      // _fromDateController.text =
-      //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-      // _toDateController.text =
-      //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
+
       setState(() {
         isLoading = true;
       });
@@ -301,19 +279,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // CustomDropDown(
-        //   items: periods,
-        //   label: _locale.period,
-        //   initialValue: selectedPeriod,
-        //   hint: "",
-        //   onChanged: (value) {
-        //     setState(() {
-        //       checkPeriods(value);
-        //       selectedPeriod = value!;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         CustomDate(
           date: fromDate,
           dateController: _fromDateController,
@@ -391,7 +356,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -404,7 +368,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("start search sales by branches : ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -412,8 +375,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
         _toDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -427,7 +388,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -440,7 +400,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          print("/ ${codeReportsList[i].toJson()}");
         });
       }
     }
@@ -472,20 +431,6 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
     double widthMobile = width;
     return Column(
       children: [
-        // CustomDropDown(
-        //   items: periods,
-        //   width: widthMobile * 0.81,
-        //   label: _locale.period,
-        //   initialValue: selectedPeriod,
-        //   hint: "",
-        //   onChanged: (value) {
-        //     setState(() {
-        //       checkPeriods(value);
-        //       selectedPeriod = value!;
-        //       getSalesByBranch();
-        //     });
-        //   },
-        // ),
         SizedBox(
           width: widthMobile * 0.81,
           child: CustomDate(
@@ -552,33 +497,17 @@ class _SalesByBranchesContentState extends State<SalesByBranchesContent> {
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
-        // txtJsoncrit: json.encode(searchCriteria.toJson()),
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 }

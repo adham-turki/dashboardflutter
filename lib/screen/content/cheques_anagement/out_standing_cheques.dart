@@ -46,10 +46,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       DatesController().formatDate(DatesController().todayDate()));
   String firstDayCurrentMonth = DatesController().formatDateReverse(
       DatesController().formatDate(DatesController().currentMonth()));
-  // String netMonth = DatesController().formatDateReverse(DatesController()
-  //     .formatDate(DateTime(DatesController().today.year,
-  //             DatesController().today.month + 1, DatesController().today.day)
-  //         .toString()));
+
   List<String> columnsName = [];
   List<String> columnsNameMap = [];
 
@@ -113,7 +110,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          // height: isDesktop ? height * 0.35 : height * 0.6,
           width: isDesktop ? width * 0.7 : width * 0.9,
           decoration: borderDecoration,
           child: isDesktop ? desktopCritiria(context) : mobileCritiria(context),
@@ -157,20 +153,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // CustomDropDown(
-            //   hint: periods[0],
-            //   label: _locale.period,
-            //   items: periods,
-            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-            //   onChanged: (value) async {
-            //     checkPeriods(value);
-            //     selectedPeriod = value;
-            //     reportsResult =
-            //         await controller.getChequeResultMethod(criteria);
-
-            //     setState(() {});
-            //   },
-            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -242,15 +224,7 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                     textColor: Colors.white,
                     borderRadius: 5.0,
                     onPressed: () {
-                      // DateTime from = DateTime.parse(fromDate.text);
-                      // DateTime to = DateTime.parse(toDate.text);
-
-                      // if (from.isAfter(to)) {
-                      //   ErrorController.openErrorDialog(
-                      //       1, _locale.startDateAfterEndDate);
-                      // } else {
                       if (reportsResult!.count == 0) {
-                        // ErrorController.openErrorDialog(406, _locale.error406);
                       } else {
                         int status = getVoucherStatus(_locale, selectedStatus);
                         SearchCriteria searchCriteria = SearchCriteria(
@@ -266,7 +240,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
                           saveExcelFile(value, "${_locale.cheques}.xlsx");
                         });
                       }
-                      // }
                     },
                   )),
             ),
@@ -285,21 +258,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // CustomDropDown(
-            //   hint: periods[0],
-            //   label: _locale.period,
-            //   items: periods,
-            //   width: widthMobile * 0.81,
-            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-            //   onChanged: (value) async {
-            //     checkPeriods(value);
-            //     selectedPeriod = value;
-            //     reportsResult =
-            //         await controller.getChequeResultMethod(criteria);
-
-            //     setState(() {});
-            //   },
-            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -508,7 +466,6 @@ class _OutStandingChequesContentState extends State<OutStandingChequesContent> {
 
     int totalPage =
         reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
-    print("total: ${totalPage}");
     for (int i = 0; i < invList.length; i++) {
       topList.add(invList[i].toPluto());
     }

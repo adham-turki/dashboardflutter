@@ -11,6 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../../utils/constants/responsive.dart';
 import 'expenses_account_dropdown_setup_widget.dart';
 
+// ignore: must_be_immutable
 class ExpensesAccountSetupWidget extends StatefulWidget {
   int? type;
   ExpensesAccountSetupWidget({Key? key, this.type}) : super(key: key);

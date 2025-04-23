@@ -146,17 +146,9 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
         stateManager.columns[i].textAlign = polCols[i].textAlign;
         stateManager.columns[i].titleSpan = polCols[i].titleSpan;
       }
-      // for (int i = 0; i < stateManager!!.rows.length; i++) {
-      //   stateManager!!.rows[i].cells['intStatus']!.value =
-      //       getStatusNameDependsLang(
-      //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
-      // }
+
       stateManager.notifyListeners(true);
     }
-    // reportsResult = await totalSalesController
-    //     .getTotalSalesResultMehtod(criteria, isStart: true);
-    // fromDate.text = '2023-01-01'; // Replace with your desired initial date
-    // toDate.text = todayDate;
 
     super.didChangeDependencies();
   }
@@ -191,7 +183,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
           height: height * 0.02,
         ),
         SizedBox(
-          // width: MediaQuery.of(context).size.width * 0.2,
           child: ValueListenableBuilder(
             valueListenable: isDownload,
             builder: (context, value, child) {
@@ -245,7 +236,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                         pageLis.value = pageLis.value + 1;
                         reportsResult = await totalSalesController
                             .getTotalSalesResultMehtod(body);
-                        // if (pageLis.value == 1) {
 
                         reportsResult = await totalSalesController
                             .getTotalSalesResultMehtod(criteria, isStart: true);
@@ -259,7 +249,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                               columns[i].footerRenderer;
                         }
                         setState(() {});
-                        // }
                       }
                     },
                   ),
@@ -273,8 +262,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                             isDownload.value = true;
 
                             if (reportsResult!.count == 0) {
-                              // ErrorController.openErrorDialog(
-                              //     406, _locale.error406);
                               isDownload.value = false;
                             } else {
                               int status =
@@ -332,11 +319,9 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: SizedBox(
-            // width: isDesktop ? width * 0.7 : width * 0.9,
             height: height * 0.7,
             child: TableComponentNew(
               columnHeight: 50,
-              // key: UniqueKey(),
               plCols: polCols,
               polRows: [],
               footerBuilder: (stateManager) {
@@ -367,39 +352,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // DropDown(
-              //   // item/: periods[0],/
-              //   bordeText: _locale.period,
-              //   items: periods,
-              //   width: isDesktop ? width * .14 : width * .35,
-              //   height: isDesktop ? height * 0.045 : height * 0.35,
-              //   initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
-              //       ? periods.first
-              //       : reportsProvider.getTotalSalesPeriodIndex() == 0
-              //           ? _locale.daily
-              //           : reportsProvider.getTotalSalesPeriodIndex() == 1
-              //               ? _locale.weekly
-              //               : reportsProvider.getTotalSalesPeriodIndex() == 2
-              //                   ? _locale.monthly
-              //                   : reportsProvider.getTotalSalesPeriodIndex() ==
-              //                           3
-              //                       ? _locale.yearly
-              //                       : periods.first,
-              //   onChanged: (value) async {
-              //     checkPeriods(value);
-              //     selectedPeriod = value;
-              //     getPeriodByIndex();
-              //     // reportsResult = await totalSalesController
-              //     //     .getTotalSalesResultMehtod(criteria);
-              //     setState(() {});
-              //   },
-              // ),
-              // SizedBox(
-              //   width: width * 0.01,
-              // ),
               DropDown(
                 bordeText: _locale.status,
-                // hint: status[0],
                 items: status,
                 initialValue: reportsProvider.getTotalSalesStatusIndex() == -1
                     ? _locale.all
@@ -417,9 +371,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   int status = getVoucherStatus(_locale, selectedStatus);
                   getStatusByIndex();
                   criteria.voucherStatus = status;
-                  // reportsResult = await totalSalesController
-                  //     .getTotalSalesResultMehtod(criteria);
-                  // setState(() {});
                 },
               ),
               SizedBox(
@@ -487,39 +438,8 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
               SizedBox(
                 height: height * 0.01,
               ),
-              // DropDown(
-              //   // item/: periods[0],/
-              //   bordeText: _locale.period,
-              //   items: periods,
-              //   width: isDesktop ? width * .14 : width * .7,
-              //   height: isDesktop ? height * 0.045 : height * 0.045,
-              //   initialValue: reportsProvider.getTotalSalesPeriodIndex() == -1
-              //       ? periods.first
-              //       : reportsProvider.getTotalSalesPeriodIndex() == 0
-              //           ? _locale.daily
-              //           : reportsProvider.getTotalSalesPeriodIndex() == 1
-              //               ? _locale.weekly
-              //               : reportsProvider.getTotalSalesPeriodIndex() == 2
-              //                   ? _locale.monthly
-              //                   : reportsProvider.getTotalSalesPeriodIndex() ==
-              //                           3
-              //                       ? _locale.yearly
-              //                       : periods.first,
-              //   onChanged: (value) async {
-              //     checkPeriods(value);
-              //     selectedPeriod = value;
-              //     getPeriodByIndex();
-              //     // reportsResult = await totalSalesController
-              //     //     .getTotalSalesResultMehtod(criteria);
-              //     setState(() {});
-              //   },
-              // ),
-              // SizedBox(
-              //   height: height * 0.01,
-              // ),
               DropDown(
                 bordeText: _locale.status,
-                // hint: status[0],
                 items: status,
                 initialValue: reportsProvider.getTotalSalesStatusIndex() == -1
                     ? _locale.all
@@ -537,9 +457,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
                   int status = getVoucherStatus(_locale, selectedStatus);
                   getStatusByIndex();
                   criteria.voucherStatus = status;
-                  // reportsResult = await totalSalesController
-                  //     .getTotalSalesResultMehtod(criteria);
-                  // setState(() {});
                 },
               ),
               SizedBox(
@@ -665,48 +582,6 @@ class _TotalSalesContentState extends State<TotalSalesContent> {
       html.Url.revokeObjectUrl(url);
     } else {}
   }
-
-  // PlutoLazyPagination lazyPaginationFooter(PlutoGridStateManager stateManager) {
-  //   return PlutoLazyPagination(
-  //     initialPage: 1,
-  //     initialFetch: true,
-  //     pageSizeToMove: 1,
-  //     fetchWithSorting: false,
-  //     fetchWithFiltering: false,
-  //     fetch: (request) {
-  //       return fetch1(request);
-  //     },
-  //     stateManager: stateManager,
-  //   );
-  // }
-
-  // Future<PlutoLazyPaginationResponse> fetch1(
-  //     PlutoLazyPaginationRequest request) async {
-  //   int page = request.page;
-
-  //   //To send the number of page to the JSON Object
-  //   criteria.page = page;
-
-  //   List<PlutoRow> topList = [];
-  //   List<TotalSalesModel> invList = [];
-
-  //   int totalPage =
-  //       reportsResult != null ? (reportsResult!.count! / 10).ceil() : 1;
-
-  //   if (reportsResult != null && reportsResult!.count != 0) {
-  //     await totalSalesController.getTotalSalesMethod(criteria).then((value) {
-  //       invList = value;
-  //     });
-  //   }
-  //   for (int i = 0; i < invList.length; i++) {
-  //     topList.add(invList[i].toPluto());
-  //   }
-
-  //   return PlutoLazyPaginationResponse(
-  //     totalPage: totalPage,
-  //     rows: reportsResult == null ? [] : topList,
-  //   );
-  // }
 
   PlutoInfinityScrollRows lazyLoadingfooter(
       PlutoGridStateManager stateManager) {

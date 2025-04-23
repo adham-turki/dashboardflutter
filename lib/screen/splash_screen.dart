@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SplashScreen extends StatefulWidget {
   bool? isVisible;
   SplashScreen({Key? key, this.isVisible}) : super(key: key);

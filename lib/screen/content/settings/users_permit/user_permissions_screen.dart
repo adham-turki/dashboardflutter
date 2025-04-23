@@ -56,7 +56,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
     return Column(
       children: [
         CustomDropDown(
-          // items: usersList,
           showSearchBox: true,
           hint:
               selectedFromUsers.isNotEmpty ? selectedFromUsers : _locale.select,
@@ -155,17 +154,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        IconButton(
-            onPressed: () async {
-              // showDialog(
-              //   barrierDismissible: false,
-              //   context: context,
-              //   builder: (context) {
-              //     return addDialog();
-              //   },
-              // );
-            },
-            icon: const Icon(Icons.add)),
+        IconButton(onPressed: () async {}, icon: const Icon(Icons.add)),
         IconButton(
             onPressed: () {
               UserPermitModel permitModel =
@@ -190,9 +179,8 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
 
   editDialog(UserPermitModel userPermitModel) {
     allowedValue = userPermitModel.bolAllowed;
-    arabicNameController.text = userPermitModel.reportNamea ?? "";
-    // passwordController.text = usersModel.password ?? "";
-    englishNameController.text = userPermitModel.reportNamee ?? "";
+    arabicNameController.text = userPermitModel.reportNamea;
+    englishNameController.text = userPermitModel.reportNamee;
     return AlertDialog(
       title: Text(_locale.editUser),
       content: SizedBox(
@@ -232,8 +220,7 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
         ),
         TextButton(
           onPressed: () async {
-            UserPermitModel userPermitModell =
-                userPermitModel ?? userPermitsList[0];
+            UserPermitModel userPermitModell = userPermitModel;
             UserPermitCriteria userPermitCriteria = UserPermitCriteria(
                 txtKey: userPermitModell.key,
                 txtUserCode: selectedFromUsersCode,
@@ -252,7 +239,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
                 ).then((value) {
                   Navigator.pop(context);
                 });
-                // ErrorController.openErrorDialog(200, _locale.addedSuccess);
                 fetchData();
               }
             });
@@ -292,7 +278,6 @@ class _UserPermissionsScreenState extends State<UserPermissionsScreen> {
             ).then((value) {});
             fetchData();
           }
-          // setState(() {});
         }).then((value) {});
       }
     });

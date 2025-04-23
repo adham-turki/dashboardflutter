@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../../../widget/custom_btn.dart';
 import '../../../../../widget/drop_down/custom_dropdown.dart';
 
+// ignore: must_be_immutable
 class ExpensesAccountDropDown extends StatefulWidget {
   List<String> accountsName;
   Function(String, int) addAccount;

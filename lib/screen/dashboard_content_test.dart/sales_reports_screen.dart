@@ -110,8 +110,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   @override
   void initState() {
-    print("asdasdasdasda");
-
     _tooltip1 = TooltipBehavior(enable: true);
     if (now.day == 1) {
       // If today is the first day of the month, set formattedFromDate to the first day of the previous month
@@ -123,8 +121,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
       formattedFromDate =
           DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     }
-    // formattedFromDate =
-    //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
 
     salesCostBasedBranchReportCrit = SearchCriteria(
@@ -172,7 +169,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   fetchData() async {
     await fetchSalesByCashier();
     await fetchSalesByComputer();
-    // await fetchSalesByPayTypes();
     await fetchsalesCostBasedBranchReportList();
     await fetchSalesByHours();
     setState(() {});
@@ -216,8 +212,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         data1.sort((a, b) => b.y.compareTo(a.y));
       }
 
-      print(
-          "salesCostBasedBranchReportList: ${salesCostBasedBranchReportList.length}");
       setState(() {});
     });
   }
@@ -444,13 +438,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 flex: 2,
                 child: Column(
                   children: [
-                    // payTypesSearchCriteria.chartType == _locale.pieChart
-                    //     ? pieChart(pieData, _locale.salesByPaymentTypes)
-                    //     : salesByPaymentTypesBarChart(
-                    //         _locale.salesByPaymentTypes, barChartData1),
                     salesCostBasedBranchChart(
                         data1, _locale.salesCostBasedBranch),
-
                     hoursSearchCriteria.chartType == _locale.lineChart
                         ? dailySalesChart(
                             totalSalesByHours, _locale.salesByHours, maxYHours)
@@ -489,51 +478,22 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         title == _locale.salesByCashier
                             ? Text(
                                 '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 13 : 16))
                             : title == _locale.salesByComputer
                                 ? Text(
                                     '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 13 : 16))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
                                         '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 13 : 16))
                                     : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByCashier)
-                //     Text(
-                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByComputer)
-                //     Text(
-                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByHours)
-                //     Text(
-                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByPaymentTypes)
-                //     Text(
-                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -592,7 +552,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 )
               ],
             ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByCashier)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -603,7 +562,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByComputer)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -614,7 +572,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByHours)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -625,7 +582,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByPaymentTypes)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -684,57 +640,27 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         title == _locale.salesByCashier
                             ? Text(
                                 '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 15 : 18))
                             : title == _locale.salesByComputer
                                 ? Text(
                                     '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
                                         '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18))
                                     : title == _locale.salesByHours
                                         ? Text(
                                             '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                             style: TextStyle(
                                                 fontSize: isDesktop ? 15 : 18))
                                         : SizedBox.shrink(),
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByCashier)
-                //     Text(
-                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByComputer)
-                //     Text(
-                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByHours)
-                //     Text(
-                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == _locale.salesByPaymentTypes)
-                //     Text(
-                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -795,7 +721,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                 )
               ],
             ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByCashier)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -806,7 +731,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByComputer)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -817,7 +741,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByHours)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -828,7 +751,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
                 ],
               ),
-            // if (!Responsive.isDesktop(context))
             if (title == _locale.salesByPaymentTypes)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -912,23 +834,19 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   title == _locale.salesByCashier
                       ? Text(
                           '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                           style: TextStyle(fontSize: isDesktop ? 13 : 16))
                       : title == _locale.salesByComputer
                           ? Text(
                               '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18))
                           : title == _locale.salesByPaymentTypes
                               ? Text(
                                   '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                  // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                   style:
                                       TextStyle(fontSize: isDesktop ? 15 : 18))
                               : title == _locale.salesByHours
                                   ? Text(
                                       '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                      // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                       style: TextStyle(
                                           fontSize: isDesktop ? 15 : 18))
                                   : SizedBox.shrink()
@@ -982,8 +900,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                       if (value != false) {
                         if (title == _locale.salesByCashier) {
                           cashierSearchCriteria = value;
-                          print(
-                              "cashierSearchCriteria.chartType: ${cashierSearchCriteria.chartType}");
+
                           setState(() {
                             isLoading = true;
                           });
@@ -1128,7 +1045,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                           lineTouchData: LineTouchData(
                                             touchTooltipData:
                                                 LineTouchTooltipData(
-                                              // getTooltipColor: defaultLineTooltipColor,
                                               getTooltipItems:
                                                   (List<LineBarSpot>
                                                       touchedSpots) {
@@ -1191,8 +1107,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                                 double totalSales =
                                                     double.parse(entry.value
                                                         .displayTotalSales);
-                                                print(
-                                                    "totalSales: ${totalSales}");
 
                                                 return FlSpot(index.toDouble(),
                                                     totalSales);
@@ -1274,14 +1188,8 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                               _locale.salesByComputer, barChartDataComputer)
                           : dailySalesChart(totalSalesByComputer,
                               _locale.salesByComputer, maxYByComputer),
-
-                      // payTypesSearchCriteria.chartType == _locale.pieChart
-                      //     ? pieChart(pieData, _locale.salesByPaymentTypes)
-                      //     : salesByPaymentTypesBarChart(
-                      //         _locale.salesByPaymentTypes, barChartData1),
                       salesCostBasedBranchChart(
                           data1, _locale.salesCostBasedBranch),
-                      // cashierTotalSales(),
                       hoursSearchCriteria.chartType == _locale.lineChart
                           ? dailySalesChart(totalSalesByHours,
                               _locale.salesByHours, maxYHours)
@@ -1291,13 +1199,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   ))
             ],
           )
-          // XCard(),
-          // XCard(),
-          // XCard(),
-          // XCard(),
-          // XCard(),
-
-          // cashierTotalSales(),
         ],
       ),
     );
@@ -1309,9 +1210,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
     );
-
-    // Get the current month
-    final currentMonth = DateTime.now().month;
 
     // Format the label as "day/month"
     final day = (value.toInt() + 1).toString();
@@ -1362,24 +1260,20 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         title == _locale.salesByCashier
                             ? Text(
                                 '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                                // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesCashierCount)))})",
                                 style: TextStyle(fontSize: isDesktop ? 15 : 18))
                             : title == _locale.salesByComputer
                                 ? Text(
                                     '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                    // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesComputerCount)))})",
                                     style: TextStyle(
                                         fontSize: isDesktop ? 15 : 18))
                                 : title == _locale.salesByPaymentTypes
                                     ? Text(
                                         '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                        // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                                         style: TextStyle(
                                             fontSize: isDesktop ? 15 : 18))
                                     : title == _locale.salesByHours
                                         ? Text(
                                             '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesHoursCount)))})",
                                             style: TextStyle(
                                                 fontSize: isDesktop ? 15 : 18))
                                         : SizedBox.shrink(),
@@ -1387,22 +1281,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                     ),
                   ],
                 ),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByCashier)
-                //     Text(
-                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByComputer)
-                //     Text(
-                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByHours)
-                //     Text(
-                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByPaymentTypes)
-                //     Text(
-                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -1439,8 +1317,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           } else if (title == _locale.salesByCashier) {
                             cashierSearchCriteria = value;
                             isLoading = true;
-                            print(
-                                "cashierSearchCriteria.chartType: ${cashierSearchCriteria.chartType}");
+
                             setState(() {});
                             fetchSalesByCashier();
                           } else if (title == _locale.salesByComputer) {
@@ -1696,20 +1573,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                           title == _locale.salesCostBasedBranch
                               ? Text(
                                   " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                              // ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
                 if (Responsive.isDesktop(context))
@@ -1758,9 +1624,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                              // textDirection: ui.TextDirection.ltr,
                               "(${_locale.profit}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                          // ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))} ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -1806,10 +1670,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                               child: SfCartesianChart(
                                   primaryXAxis: CategoryAxis(),
                                   primaryYAxis: NumericAxis(
-                                    // minimum: minValue,
-                                    // maximum: maxValue,
                                     title: AxisTitle(text: _locale.totalCost),
-                                    // interval: interval
                                   ),
                                   legend: Legend(
                                     isVisible: true,
@@ -1828,9 +1689,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                       title: AxisTitle(
                                           text: _locale.profitPercent),
                                       opposedPosition: true,
-                                      // minimum: secondaryMinValue,
-                                      // maximum: secondaryMaxValue,
-                                      // interval: secondaryInterval,
                                     ),
                                   ],
                                   tooltipBehavior: _tooltip1,

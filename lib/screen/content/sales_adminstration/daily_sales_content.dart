@@ -64,7 +64,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
     'Save as JPEG',
     'Save as PNG',
   ];
-  // final dataMap = <String, double>{};
   List<CodeReportsModel> codeReportsList = [];
   List<UserReportSettingsModel> userReportSettingsList = [];
   String startSearchCriteria = "";
@@ -304,7 +303,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
@@ -316,32 +314,17 @@ class _DailySalesContentState extends State<DailySalesContent> {
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -468,7 +451,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
     listOfBalances = [];
     listOfPeriods = [];
 
-    // dataMap.clear();
     pieData = [];
     barData = [];
     int status = getVoucherStatus(_locale, selectedStatus);
@@ -498,8 +480,6 @@ class _DailySalesContentState extends State<DailySalesContent> {
         listOfBalances.add(double.parse(elemant.dailySale.toString()));
         listOfPeriods.add(temp);
         if (boolTemp) {
-          // dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-          // elemant.dailySale!);
           pieData.add(PieChartModel(
               title: temp,
               value: double.parse(elemant.dailySale.toString()) == 0.0

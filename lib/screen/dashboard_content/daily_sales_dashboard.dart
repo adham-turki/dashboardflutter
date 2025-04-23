@@ -26,7 +26,6 @@ import '../../utils/constants/app_utils.dart';
 import '../../utils/constants/maps.dart';
 import '../../utils/constants/pages_constants.dart';
 import '../../utils/constants/responsive.dart';
-import '../../utils/func/converters.dart';
 import 'filter_dialog/filter_dialog_daily_sales.dart';
 
 class DailySalesDashboard extends StatefulWidget {
@@ -138,8 +137,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     String fromDate = fromDateController.text.isEmpty
         ? ""
         : DatesController().formatDateReverse(fromDateController.text);
-    print("asadasdasdasd: ${(totalDailySale.value.toString())}");
-    print("${double.parse(totalDailySale.value.toString())}");
     return Container(
       decoration: const BoxDecoration(),
       child: Column(
@@ -550,8 +547,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       lastFromDate = selectedFromDate;
       // Update the data
       for (var elemant in response) {
-        String temp =
-            DatesController().formatDateWithoutYear(elemant.date!) ?? "NO DATE";
+        String temp = DatesController().formatDateWithoutYear(elemant.date!);
 
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
@@ -585,21 +581,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       }
 
       totalDailySale.value = total;
-      //  Converters.formatNumberRounded(
-      //     double.parse(Converters.formatNumberDigits(total)));
     });
-
-    print("BBBBBBBBBbbarLength ${barData.length}");
   }
 
   Future<void> getDailySales({bool? isStart}) async {
     int stat = statusVar;
     var selectedFromDate = fromDateController.text;
-    final selectedStatus = statusVar;
-    final selectedBranchCodeValue = selectedBranchCode;
-    // if (selectedFromDate != lastFromDate ||
-    //     getVoucherStatusByCode(_locale, selectedStatus) != lastStatus ||
-    //     selectedBranchCodeValue != lastBranchCode) {
 
     lastFromDate = selectedFromDate;
     lastStatus = getVoucherStatusByCode(_locale, statusVar);
@@ -622,8 +609,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         .getDailySale(searchCriteria, isStart: isStart)
         .then((response) {
       for (var elemant in response) {
-        String temp =
-            DatesController().formatDateWithoutYear(elemant.date!) ?? "NO DATE";
+        String temp = DatesController().formatDateWithoutYear(elemant.date!);
 
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;

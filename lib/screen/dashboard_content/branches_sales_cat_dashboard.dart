@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
-import 'package:bi_replicate/model/stock_model.dart';
-import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -515,10 +512,6 @@ class _BranchesSalesByCatDashboardState
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        // Adding double quotes around keys and values to make it valid JSON
-        print("startSearchCriteria3434343434 ${startSearchCriteria}");
-        print(
-            "startSearchCriteria3434343434 matchGroup 0  ${startSearchCriteria}");
         startSearchCriteria = startSearchCriteria.replaceAll('الكل', '');
 
         startSearchCriteria = startSearchCriteria
@@ -526,8 +519,6 @@ class _BranchesSalesByCatDashboardState
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(
-                "startSearchCriteria3434343434 matchGroup 1 ${match.group(1)}");
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -539,9 +530,6 @@ class _BranchesSalesByCatDashboardState
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        // print("start search sales dashboard : ${startSearchCriteria}");
-        print("startSearchCriteria3434343434 ${startSearchCriteria}");
-
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
@@ -602,39 +590,23 @@ class _BranchesSalesByCatDashboardState
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    // print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -656,27 +628,11 @@ class _BranchesSalesByCatDashboardState
     var selectedFromDate = fromDateController.text;
     var selectedToDate = toDateController.text;
 
-    final selectedCategoriesValue = selectedCategories;
-    final selectedBranchCodeValue = selectedBranchCode;
-
-    // if (selectedFromDate != lastFromDate ||
-    //     getCategoryByCode(selectedCategoriesValue, _locale) != lastCategories ||
-    //     selectedBranchCodeValue != lastBranchCode ||
-    //     selectedToDate != lastToDate) {
     lastFromDate = selectedFromDate;
     lastToDate = selectedToDate;
 
     lastCategories = getCategoryByCode(selectedCategories, _locale);
     lastBranchCode = selectedBranchCode;
-
-    // if (selectedFromDate.isEmpty || toDateController.text.isEmpty) {
-    //   if (selectedFromDate.isEmpty) {
-    //     selectedFromDate = todayDate;
-    //   }
-    //   if (toDateController.text.isEmpty) {
-    //     toDateController.text = todayDate;
-    //   }
-    // }
 
     SearchCriteria searchCriteria = SearchCriteria(
         fromDate: selectedFromDate,
@@ -694,7 +650,6 @@ class _BranchesSalesByCatDashboardState
         .getSalesByCategory(searchCriteria, isStart: isStart)
         .then((value) {
       for (var element in value) {
-        // print("adasdasdasdasdasdas");
         double bal = element.creditAmt! - element.debitAmt!;
 
         if (bal != 0.0) {
@@ -734,77 +689,9 @@ class _BranchesSalesByCatDashboardState
         total += listOfBalances[i];
       }
       totalBranchesByCateg.value = total;
-      // Converters.formatNumberRounded(
-      //     double.parse(Converters.formatNumberDigits(total)));
     });
-
-    // }
   }
 
-  // Future getBranchByCat1({bool? isStart}) async {
-  //   listOfBalances = [];
-  //   pieData = [];
-  //   barData = [];
-  //   dataMap.clear();
-  //   int cat = getCategoryNum(selectedCategories, _locale);
-  //   if (fromDateController.text.isEmpty || toDateController.text.isEmpty) {
-  //     if (fromDateController.text.isEmpty) {
-  //       fromDateController.text = todayDate;
-  //     }
-  //     if (toDateController.text.isEmpty) {
-  //       toDateController.text = todayDate;
-  //     }
-  //   }
-
-  //   SearchCriteria searchCriteria = SearchCriteria(
-  //       fromDate: fromDateController.text.isEmpty
-  //           ? todayDate
-  //           : fromDateController.text,
-  //       toDate:
-  //           toDateController.text.isEmpty ? todayDate : toDateController.text,
-  //       byCategory: cat,
-  //       branch: selectedBranchCode);
-  //   pieData = [];
-  //   barData = [];
-  //   listOfBalances = [];
-  //   listOfPeriods = [];
-
-  //   await salesCategoryController
-  //       .getSalesByCategory(searchCriteria, isStart: isStart)
-  //       .then((value) {
-  //     for (var element in value) {
-  //       double bal = element.creditAmt! - element.debitAmt!;
-
-  //       if (bal != 0.0) {
-  //         temp = true;
-  //       } else if (bal == 0.0) {
-  //         temp = false;
-  //       }
-  //       listOfBalances.add(bal);
-  //       listOfPeriods.add(element.categoryName!);
-  //       if (temp) {
-  //         dataMap[element.categoryName!] = formatDoubleToTwoDecimalPlaces(bal);
-
-  //         pieData.add(PieChartModel(
-  //             title: element.categoryName! == ""
-  //                 ? _locale.general
-  //                 : element.categoryName!,
-  //             value: formatDoubleToTwoDecimalPlaces(bal),
-  //             color: getRandomColor(colorNewList))); // Set random color
-  //       }
-
-  //       barData.add(
-  //         BarData(
-  //           name: element.categoryName! == ""
-  //               ? _locale.general
-  //               : element.categoryName!,
-  //           percent: bal,
-  //         ),
-  //       );
-  //     }
-  //     print("balLengthhhh ${barData.length}");
-  //   });
-  // }
   void _startTimer() {
     const storage = FlutterSecureStorage();
 

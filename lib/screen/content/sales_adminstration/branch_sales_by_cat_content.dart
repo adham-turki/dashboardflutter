@@ -2,14 +2,12 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:uuid/uuid.dart';
 import '../../../components/charts.dart';
 import '../../../components/charts/pie_chart.dart';
 import '../../../components/custom_date.dart';
-import '../../../controller/error_controller.dart';
 import '../../../controller/sales_adminstration/branch_controller.dart';
 import '../../../controller/sales_adminstration/sales_category_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,13 +40,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
   final storage = const FlutterSecureStorage();
   final dropdownKey = GlobalKey<DropdownButton2State>();
 
-  // final TextEditingController _fromDateDayController = TextEditingController();
-  // final TextEditingController _fromDateMonthController =
-  //     TextEditingController();
-  // final TextEditingController _fromDateYearController = TextEditingController();
-  // final TextEditingController _toDateDayController = TextEditingController();
-  // final TextEditingController _toDateMonthController = TextEditingController();
-  // final TextEditingController _toDateYearController = TextEditingController();
   final TextEditingController _fromDateController = TextEditingController();
   final TextEditingController _toDateController = TextEditingController();
   SalesCategoryController salesCategoryController = SalesCategoryController();
@@ -120,7 +111,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     selectedChart = charts[0];
     selectedPeriod = periods[0];
     selectedCategories = categories[1];
-    // getBranchByCat(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -129,8 +119,7 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
     getAllCodeReports();
 
     getBranch(isStart: true);
-    // _fromDateController.addListener(() {});
-    // _toDateController.addListener(() {});
+
     super.initState();
   }
 
@@ -237,7 +226,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -250,7 +238,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print("start search sales by category: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -258,11 +245,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
         _toDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -276,8 +258,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -300,39 +280,23 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -387,18 +351,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
                     });
                   },
                 ),
-                // CustomDropDown(
-                //   items: periods,
-                //   label: _locale.period,
-                //   initialValue: selectedPeriod,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       checkPeriods(value);
-                //       selectedPeriod = value!;
-                //       getBranchByCat();
-                //     });
-                //   },
-                // ),
                 CustomDropDown(
                   items: categories,
                   label: _locale.byCategory,
@@ -491,19 +443,6 @@ class _BranchSalesByCatContentState extends State<BranchSalesByCatContent> {
             });
           },
         ),
-        // CustomDropDown(
-        //   width: widthMobile * 0.81,
-        //   items: periods,
-        //   label: _locale.period,
-        //   initialValue: selectedPeriod,
-        //   onChanged: (value) {
-        //     setState(() {
-        //       checkPeriods(value);
-        //       selectedPeriod = value!;
-        //       getBranchByCat();
-        //     });
-        //   },
-        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: categories,

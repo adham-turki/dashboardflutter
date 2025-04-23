@@ -2,8 +2,6 @@ import 'package:bi_replicate/components/custom_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-import '../../../../../components/search_table/date_time_component.dart';
-import '../../../../../controller/error_controller.dart';
 import '../../../../../controller/reports/report_controller.dart';
 import '../../../../../model/criteria/drop_down_search_criteria.dart';
 import '../../../../../model/sales_adminstration/branch_model.dart';
@@ -14,6 +12,7 @@ import '../../../../../widget/custom_textfield2.dart';
 import '../../../../../widget/drop_down/drop_down_clear.dart';
 import '../../../../../widget/test_drop_down.dart';
 
+// ignore: must_be_immutable
 class CriteriaWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged1;
   final Function(String) onSelectedValueChanged2;
@@ -33,12 +32,9 @@ class CriteriaWidget extends StatefulWidget {
 }
 
 class _CriteriaWidgetState extends State<CriteriaWidget> {
-  // TextEditingController fromDate = TextEditingController();
-  // TextEditingController toDate = TextEditingController();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  // bool isMobile = false;
   bool isMobile = false;
   @override
   void initState() {
@@ -72,8 +68,6 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
                         onSelectedValueChanged3: widget.onSelectedValueChanged3,
                         onSelectedValueChanged4:
                             widget.onSelectedValueChanged4),
-                    // RightWidget(),
-                    // MiddleWidget(),
                   ],
                 )
               : Column(
@@ -84,17 +78,13 @@ class _CriteriaWidgetState extends State<CriteriaWidget> {
                         onSelectedValueChanged3: widget.onSelectedValueChanged3,
                         onSelectedValueChanged4:
                             widget.onSelectedValueChanged4),
-                    // SizedBox(
-                    //   height: height * .01,
-                    // ),
-                    // RightWidget(),
-                    //MiddleWidget(),
                   ],
                 )),
     );
   }
 }
 
+// ignore: must_be_immutable
 class LeftWidget extends StatefulWidget {
   final Function(String) onSelectedValueChanged1;
   final Function(String) onSelectedValueChanged2;
@@ -151,12 +141,10 @@ class _LeftWidgetState extends State<LeftWidget> {
   double width = 0;
   double height = 0;
   bool isDesktop = false;
-  // bool isMobile = false;
   bool isMobile = false;
   String todayDate = "";
   String currentMonth = "";
 
-  //right widget
   var selectedFromStkCategory2 = "";
   var selectedToStkCategory2 = "";
 
@@ -221,7 +209,6 @@ class _LeftWidgetState extends State<LeftWidget> {
 
     readProvider = context.read<PurchaseCriteraProvider>();
     firstList = [
-      // "",
       _locale.branch,
       _locale.stockCategoryLevel("1"),
       _locale.stockCategoryLevel("2"),
@@ -235,7 +222,6 @@ class _LeftWidgetState extends State<LeftWidget> {
       _locale.invoice
     ];
 
-    // ordersMap[""] = 0;
     ordersMap[_locale.branch] = 1;
     ordersMap[_locale.stockCategoryLevel("1")] = 2;
     ordersMap[_locale.stockCategoryLevel("2")] = 3;
@@ -265,7 +251,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     isDesktop = Responsive.isDesktop(context);
-    // isMobile = Responsive.isMobile(context);
     isMobile = Responsive.isMobile(context);
 
     selectedFromStkCategory2 = readProvider.getFromCateg2!;
@@ -295,8 +280,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     selectedValue4 = readProvider.getVal4!;
     ordersList = readProvider.getOrders == null ? [] : readProvider.getOrders!;
 
-    String todayDate = DatesController().formatDateReverse(
-        DatesController().formatDate(DatesController().todayDate()));
     if (readProvider.isHideFilter == true) {
       readProvider.setFromDate(DatesController().formatDate(fromDate.text));
 
@@ -446,7 +429,6 @@ class _LeftWidgetState extends State<LeftWidget> {
 
                       return newList;
                     },
-                    // bordeText: '',
                   ),
                 );
               }),
@@ -463,7 +445,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintStockCatLevel3,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStockCategory3
                         .map((e) => e.branchName!)
@@ -586,7 +567,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintBranches,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesBranch
                         .map((e) => e.branchName!)
@@ -652,7 +632,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hinCodesStockCategory2,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStockCategory2
                         .map((e) => e.branchName!)
@@ -715,7 +694,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintCodeSuppliers,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesSupplier
                         .map((e) => e.branchName!)
@@ -777,7 +755,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintStock,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStock
                         .map((e) => e.branchName!)
@@ -832,10 +809,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               height: height * .01,
             ),
             CustomTextField2(
-              // isReport: true,
               width: width * 0.7,
               text: Text(_locale.campaignNo),
-              // label: _locale.campaignNo,
               controller: campaignNoController,
               onSubmitted: (text) {
                 readProvider.setCampaignNo(campaignNoController.text);
@@ -848,10 +823,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               height: height * .01,
             ),
             CustomTextField2(
-              // isReport: true,
               width: width * 0.7,
               text: Text(_locale.modelNo),
-              // label: _locale.modelNo,
               controller: modelNoController,
               onSubmitted: (text) {
                 readProvider.setModelNo(modelNoController.text);
@@ -886,7 +859,6 @@ class _LeftWidgetState extends State<LeftWidget> {
               },
               bordeText: _locale.orderBy + " 1",
               items: firstList,
-              // label: "",
               width: isDesktop ? width * .13 : width * .7,
               height: isDesktop
                   ? height * 0.045
@@ -899,29 +871,13 @@ class _LeftWidgetState extends State<LeftWidget> {
                     selectedValue1 = "";
 
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 } else {
                   setState(() {
-                    // print("valvalvalvalval111 $value");
-
                     selectedValue1 = value!;
-                    // print("valvalvalvalval222 $selectedValue1");
-                    // if (ordersMap[selectedValue1] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue1]!);
 
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal1 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
-                    //   }
-                    // }
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 }
@@ -941,7 +897,6 @@ class _LeftWidgetState extends State<LeftWidget> {
               children: [
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue2.isNotEmpty &&
@@ -965,10 +920,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     });
                   },
                   bordeText: _locale.orderBy + " 2",
-                  // label: "",
-                  // width: isDesktop ? null : width * .55,
                   items: firstList,
-                  // hint: selectedValue2,
                   initialValue:
                       selectedValue2.isNotEmpty ? selectedValue2 : null,
                   width: isDesktop ? width * .14 : width * .7,
@@ -984,17 +936,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue2 = value!;
-                        // if (ordersMap[selectedValue2] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue2]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal2 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal2]);
-                        //   }
-                        // }
 
                         readProvider.setVal2(selectedValue2);
 
@@ -1009,7 +950,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ),
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue3.isNotEmpty &&
@@ -1033,11 +973,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                     });
                   },
                   bordeText: _locale.orderBy + " 3",
-                  // width: isDesktop ? null : width * .55,
                   width: isDesktop ? width * .14 : width * .7,
                   height: isDesktop ? height * 0.045 : height * 0.045,
                   items: firstList,
-                  // hint: selectedValue3,
                   initialValue:
                       selectedValue3.isNotEmpty ? selectedValue3 : null,
                   valSelected: selectedValue3 != "",
@@ -1051,19 +989,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue3 = value!;
-                        // if (ordersMap[selectedValue3] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue3]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal3 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal3]);
-                        //   }
-                        // }
 
-                        // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
                         readProvider.setVal3(selectedValue3);
 
                         widget.onSelectedValueChanged3(selectedValue3);
@@ -1077,7 +1003,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ),
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue4.isNotEmpty &&
@@ -1102,9 +1027,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   },
                   bordeText: _locale.orderBy + " 4",
                   items: firstList,
-                  // hint: selectedValue4,
                   valSelected: selectedValue4 != "",
-
                   initialValue:
                       selectedValue4.isNotEmpty ? selectedValue4 : null,
                   width: isDesktop ? width * .14 : width * .7,
@@ -1119,19 +1042,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue4 = value!;
-                        // if (ordersMap[selectedValue4] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue4]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal4 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal4]);
-                        //   }
-                        // }
 
-                        // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
                         readProvider.setVal4(selectedValue4);
 
                         widget.onSelectedValueChanged4(selectedValue4);
@@ -1263,7 +1174,6 @@ class _LeftWidgetState extends State<LeftWidget> {
 
                       return newList;
                     },
-                    // bordeText: '',
                   ),
                 );
               }),
@@ -1280,7 +1190,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintStockCatLevel3,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStockCategory3
                         .map((e) => e.branchName!)
@@ -1341,7 +1250,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintSupplierCategory,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesSupplierCategory
                         .map((e) => e.branchName!)
@@ -1403,7 +1311,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintBranches,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesBranch
                         .map((e) => e.branchName!)
@@ -1469,7 +1376,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hinCodesStockCategory2,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStockCategory2
                         .map((e) => e.branchName!)
@@ -1532,7 +1438,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintCodeSuppliers,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesSupplier
                         .map((e) => e.branchName!)
@@ -1594,7 +1499,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                   message: hintStock,
                   child: TestDropdown(
                     cleanPrevSelectedItem: true,
-                    // icon: const Icon(Icons.search),
                     isEnabled: true,
                     stringValue: readProvider.codesStock
                         .map((e) => e.branchName!)
@@ -1649,10 +1553,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               width: width * 0.001,
             ),
             CustomTextField2(
-              // isReport: true,
               width: width * 0.14,
               text: Text(_locale.campaignNo),
-              // label: _locale.campaignNo,
               controller: campaignNoController,
               onSubmitted: (text) {
                 readProvider.setCampaignNo(campaignNoController.text);
@@ -1665,10 +1567,8 @@ class _LeftWidgetState extends State<LeftWidget> {
               width: width * 0.001,
             ),
             CustomTextField2(
-              // isReport: true,
               width: width * 0.13,
               text: Text(_locale.modelNo),
-              // label: _locale.modelNo,
               controller: modelNoController,
               onSubmitted: (text) {
                 readProvider.setModelNo(modelNoController.text);
@@ -1703,7 +1603,6 @@ class _LeftWidgetState extends State<LeftWidget> {
               },
               bordeText: _locale.orderBy + " 1",
               items: firstList,
-              // label: "",
               width: isDesktop ? width * .13 : width * .35,
               height: isDesktop
                   ? height * 0.045
@@ -1711,35 +1610,19 @@ class _LeftWidgetState extends State<LeftWidget> {
               initialValue: selectedValue1.isNotEmpty ? selectedValue1 : null,
               valSelected: selectedValue1 != "",
               onChanged: (value) {
-                print("insidde on change");
                 if (value == null) {
                   setState(() {
                     selectedValue1 = "";
 
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 } else {
                   setState(() {
-                    // print("valvalvalvalval111 $value");
-
                     selectedValue1 = value!;
-                    // print("valvalvalvalval222 $selectedValue1");
-                    // if (ordersMap[selectedValue1] != 0) {
-                    //   if (ordersList.contains(ordersMap[selectedValue1]!) ==
-                    //       false) {
-                    //     ordersList.add(ordersMap[selectedValue1]!);
 
-                    //     readProvider.setOrders(ordersList);
-                    //   }
-                    // } else {
-                    //   if (readProvider.getVal1 != "") {
-                    //     ordersList.remove(ordersMap[readProvider.getVal1]);
-                    //   }
-                    // }
                     readProvider.setVal1(selectedValue1);
-                    //  readProvider.setIndexMap(0, ordersMap[selectedValue1]!);
+
                     widget.onSelectedValueChanged1(selectedValue1);
                   });
                 }
@@ -1759,7 +1642,6 @@ class _LeftWidgetState extends State<LeftWidget> {
               children: [
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue2.isNotEmpty &&
@@ -1783,10 +1665,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     });
                   },
                   bordeText: _locale.orderBy + " 2",
-                  // label: "",
-                  // width: isDesktop ? null : width * .55,
                   items: firstList,
-                  // hint: selectedValue2,
                   initialValue:
                       selectedValue2.isNotEmpty ? selectedValue2 : null,
                   width: isDesktop ? width * .14 : width * .35,
@@ -1802,17 +1681,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue2 = value!;
-                        // if (ordersMap[selectedValue2] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue2]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue2]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal2 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal2]);
-                        //   }
-                        // }
 
                         readProvider.setVal2(selectedValue2);
 
@@ -1827,7 +1695,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ),
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue3.isNotEmpty &&
@@ -1851,11 +1718,9 @@ class _LeftWidgetState extends State<LeftWidget> {
                     });
                   },
                   bordeText: _locale.orderBy + " 3",
-                  // width: isDesktop ? null : width * .55,
                   width: isDesktop ? width * .14 : width * .35,
                   height: isDesktop ? height * 0.045 : height * 0.35,
                   items: firstList,
-                  // hint: selectedValue3,
                   initialValue:
                       selectedValue3.isNotEmpty ? selectedValue3 : null,
                   valSelected: selectedValue3 != "",
@@ -1869,19 +1734,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue3 = value!;
-                        // if (ordersMap[selectedValue3] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue3]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue3]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal3 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal3]);
-                        //   }
-                        // }
 
-                        // readProvider.setIndexMap(2, ordersMap[selectedValue3]!);
                         readProvider.setVal3(selectedValue3);
 
                         widget.onSelectedValueChanged3(selectedValue3);
@@ -1895,7 +1748,6 @@ class _LeftWidgetState extends State<LeftWidget> {
                 ),
                 DropDown(
                   showClearIcon: true,
-
                   onClearIconPressed: () {
                     setState(() {
                       if (selectedValue4.isNotEmpty &&
@@ -1920,9 +1772,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                   },
                   bordeText: _locale.orderBy + " 4",
                   items: firstList,
-                  // hint: selectedValue4,
                   valSelected: selectedValue4 != "",
-
                   initialValue:
                       selectedValue4.isNotEmpty ? selectedValue4 : null,
                   width: isDesktop ? width * .14 : width * .35,
@@ -1937,19 +1787,7 @@ class _LeftWidgetState extends State<LeftWidget> {
                     } else {
                       setState(() {
                         selectedValue4 = value!;
-                        // if (ordersMap[selectedValue4] != 0) {
-                        //   if (ordersList.contains(ordersMap[selectedValue4]!) ==
-                        //       false) {
-                        //     ordersList.add(ordersMap[selectedValue4]!);
-                        //     readProvider.setOrders(ordersList);
-                        //   }
-                        // } else {
-                        //   if (readProvider.getVal4 != "") {
-                        //     ordersList.remove(ordersMap[readProvider.getVal4]);
-                        //   }
-                        // }
 
-                        // readProvider.setIndexMap(3, ordersMap[selectedValue4]!);
                         readProvider.setVal4(selectedValue4);
 
                         widget.onSelectedValueChanged4(selectedValue4);
@@ -2028,7 +1866,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromCateg1(selectedFromStkCategory1);
     readProvider.setToCateg1(selectedToStkCategory1);
-    // readProvider.setCodesStockCategory1(stringStkCategory1List);
   }
 
   void getCategory3List() {
@@ -2042,20 +1879,10 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromCateg3(selectedFromStkCategory3);
     readProvider.setToCateg3(selectedToStkCategory3);
-    // readProvider.setCodesStockCategory3(stringStkCategory3List);
   }
 
   void getSuppCategList() {
     List<String> stringSuppCategList = [];
-
-    // for (int i = 0; i < suppCategoryList.length; i++) {
-    //   if (suppCategoryList[i].toString() == selectedFromSuppCateg) {
-    //     stringSuppCategList.add(suppCategoryList[i].codeToString());
-    //   }
-    //   if (suppCategoryList[i].toString() == selectedToSuppCateg) {
-    //     stringSuppCategList.add(suppCategoryList[i].codeToString());
-    //   }
-    // }
 
     if (selectedFromSuppCateg.isNotEmpty) {
       stringSuppCategList.add(selectedFromSuppCategCode);
@@ -2065,7 +1892,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromSuppCateg(selectedFromSuppCateg);
     readProvider.setToSuppCateg(selectedToSuppCateg);
-    // readProvider.setCodesSupplierCategory(stringSuppCategList);
   }
 
   List<String> getCodesList(List<dynamic> val) {
@@ -2102,21 +1928,6 @@ class _LeftWidgetState extends State<LeftWidget> {
       readProvider.setToDate(endDate);
     });
   }
-  //  DropDownSearchCriteria getSearchCriteriaName(String text) {
-  //   DropDownSearchCriteria dropDownSearchCriteria =
-  //       DropDownSearchCriteria(nameCode: text);
-  //   return dropDownSearchCriteria;
-  // }
-
-  // DropDownSearchCriteria getSearchCriteria(String text) {
-  //   DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
-  //       fromDate: DatesController().formatDate(DatesController()
-  //           .formatDateReverse(readProvider.getFromDate.toString())),
-  //       toDate: DatesController().formatDate(DatesController()
-  //           .formatDateReverse(readProvider.getToDate.toString())),
-  //       nameCode: text);
-  //   return dropDownSearchCriteria;
-  // }
 
   DropDownSearchCriteria getSearchBranches(String text) {
     DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
@@ -2137,7 +1948,6 @@ class _LeftWidgetState extends State<LeftWidget> {
 
     readProvider.setFromBranch(selectedFromBranches);
     readProvider.setToBranch(selectedToBranches);
-    // readProvider.setCodesBranch(stringBranchList);
   }
 
   void getCategory2List() {
@@ -2151,7 +1961,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromCateg2(selectedFromStkCategory2);
     readProvider.setToCateg2(selectedToStkCategory2);
-    // readProvider.setCodesStockCategory2(stringStkCategory2List);
   }
 
   void getSupplierList() {
@@ -2165,7 +1974,6 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromSupp(selectedFromSupplier);
     readProvider.setToSupp(selectedToSupplier);
-    // readProvider.setCodesSupplier(stringSupplierList);
   }
 
   void getStockList() {
@@ -2179,37 +1987,5 @@ class _LeftWidgetState extends State<LeftWidget> {
     }
     readProvider.setFromStock(selectedFromStocks);
     readProvider.setToStock(selectedToStocks);
-    // readProvider.setCodesStock(stringStockList);
   }
-
-  // List<String> getCodesList(List<dynamic> val) {
-  //   List<String> codesString = [];
-  //   for (int i = 0; i < val.length; i++) {
-  //     String newString = (val[i].toString().trim()).replaceAll(" ", "");
-  //     codesString.add(newString.substring(0, newString.indexOf("-")));
-  //   }
-  //   return codesString;
-  // }
-
-  // List<String> getStringList(List<dynamic> val) {
-  //   List<String> codesString = [];
-  //   for (int i = 0; i < val.length; i++) {
-  //     String newString = (val[i].toString().trim()).replaceAll(" ", "");
-  //     codesString.add(newString);
-  //   }
-  //   return codesString;
-  // }
-
-  // DropDownSearchCriteria getSearchCriteriaPage(String text) {
-  //   DropDownSearchCriteria dropDownSearchCriteria = DropDownSearchCriteria(
-  //       fromDate: DatesController().formatDate(DatesController()
-  //           .formatDateReverse(readProvider.getFromDate.toString())),
-  //       toDate: DatesController().formatDate(DatesController()
-  //           .formatDateReverse(readProvider.getToDate.toString())),
-  //       nameCode: text,
-  //       page: 1);
-  //   return dropDownSearchCriteria;
-  // }
 }
-
-//==============================================================================

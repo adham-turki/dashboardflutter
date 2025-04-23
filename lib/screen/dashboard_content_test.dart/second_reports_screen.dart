@@ -1,13 +1,9 @@
 import 'dart:async';
-
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
-import 'package:bi_replicate/model/diff_cash_shift_report_by_cashier_model.dart';
-import 'package:bi_replicate/model/diff_cash_shift_report_model.dart';
 import 'package:bi_replicate/model/total_profit_report_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
-import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:bi_replicate/model/chart/chart_data_model.dart';
@@ -16,7 +12,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class SecondReportsScreen extends StatefulWidget {
@@ -77,7 +72,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
 
   @override
   void initState() {
-    print("asdasdasdasda");
     salesCostFormattedFromDate = DateFormat('dd/MM/yyyy').format(yesterday);
     salesCostFormattedToDate = DateFormat('dd/MM/yyyy').format(now);
     _tooltip = TooltipBehavior(enable: true);
@@ -235,27 +229,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
       if (data.isNotEmpty) {
         data.sort((a, b) => b.y.compareTo(a.y));
       }
-      // if (data.isNotEmpty) {
-      //   maxValue = data
-      //       .map((e) => e.y1)
-      //       .reduce((value, element) => value > element ? value : element);
-      //   minValue = data
-      //       .map((e) => e.y1)
-      //       .reduce((value, element) => value < element ? value : element);
-      //   interval = ((maxValue - minValue) / 10);
-      //   secondaryMaxValue = data
-      //       .map((e) => e.percD)
-      //       .reduce((value, element) => value > element ? value : element);
-      //   secondaryMinValue = data
-      //       .map((e) => e.percD)
-      //       .reduce((value, element) => value < element ? value : element);
-      //   secondaryInterval = ((secondaryMaxValue - secondaryMinValue) / 10);
-      //   print("secondaryMaxValue: ${secondaryMaxValue}");
-      //   print("secondaryMinValue: ${secondaryMinValue}");
-      //   print("secondaryInterval: ${secondaryInterval}");
-      // }
 
-      print("totalProfitsByCategoryList: ${totalProfitsByCategoryList.length}");
       setState(() {});
     });
   }
@@ -284,9 +258,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
       if (data1.isNotEmpty) {
         data1.sort((a, b) => b.y.compareTo(a.y));
       }
-
-      print(
-          "salesCostBasedBranchReportList: ${salesCostBasedBranchReportList.length}");
       setState(() {});
     });
   }
@@ -321,16 +292,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                               : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
                 if (Responsive.isDesktop(context))
@@ -385,7 +346,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         children: [
                           Text(
                               " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                          // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -442,10 +402,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
             child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
-                  // minimum: minValue,
-                  // maximum: maxValue,
                   title: AxisTitle(text: _locale.totalCost),
-                  // interval: interval
                 ),
                 legend: Legend(
                   isVisible: true,
@@ -462,9 +419,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                     name: 'secondaryYAxis',
                     title: AxisTitle(text: _locale.profitPercent),
                     opposedPosition: true,
-                    // minimum: secondaryMinValue,
-                    // maximum: secondaryMaxValue,
-                    // interval: secondaryInterval,
                   ),
                 ],
                 tooltipBehavior: _tooltip1,
@@ -584,7 +538,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                         children: [
                           Text(
                               " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})")
-                          // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
                         ],
                       )
                     : SizedBox.shrink(),
@@ -640,10 +593,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
             child: SfCartesianChart(
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
-                  // minimum: minValue,
-                  // maximum: maxValue,
                   title: AxisTitle(text: _locale.totalCost),
-                  // interval: interval
                 ),
                 legend: Legend(
                   isVisible: true,
@@ -660,9 +610,6 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                     name: 'secondaryYAxis',
                     title: AxisTitle(text: _locale.profitPercent),
                     opposedPosition: true,
-                    // minimum: secondaryMinValue,
-                    // maximum: secondaryMaxValue,
-                    // interval: secondaryInterval,
                   ),
                 ],
                 tooltipBehavior: _tooltip,

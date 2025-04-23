@@ -67,7 +67,6 @@ class _CustomDropDownSearchState extends State<CustomDropDownSearch> {
 
   @override
   Widget build(BuildContext context) {
-    double width = widget.width ?? MediaQuery.of(context).size.width * 0.15;
     double height = MediaQuery.of(context).size.height * 0.3;
     return Column(
       children: [

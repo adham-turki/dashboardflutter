@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
-import '../../../controller/error_controller.dart';
-import '../../../controller/sales_adminstration/branch_controller.dart';
+
 import '../../../controller/settings/user_settings/code_reports_controller.dart';
 import '../../../controller/settings/user_settings/user_report_settings_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
@@ -248,7 +247,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                               selectedBranch = value.toString();
                               selectedBranchCode =
                                   branchesMap[value.toString()]!;
-                              print("inside filter :${selectedBranchCode}");
                             });
                           },
                         ),

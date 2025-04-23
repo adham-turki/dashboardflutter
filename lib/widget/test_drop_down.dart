@@ -125,7 +125,6 @@ class _TestDropdownState extends State<TestDropdown> {
             popupProps: PopupPropsMultiSelection.menu(
               searchDelay: const Duration(milliseconds: 1),
               onItemAdded: (selectedItems, addedItem) {
-                print("dddddddddddddddddddd");
                 items = selectedItems;
                 widget.onItemAddedOrRemoved!(items);
               },

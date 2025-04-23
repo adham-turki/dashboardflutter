@@ -6,7 +6,6 @@ import '../../model/api_url.dart';
 import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
 import '../../utils/constants/responsive.dart';
-import 'package:flutter/foundation.dart';
 
 class LogoutTab extends StatefulWidget {
   final bool isCollapsed;

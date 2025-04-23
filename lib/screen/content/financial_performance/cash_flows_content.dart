@@ -84,10 +84,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
   List<BarChartData> barData = [];
   final usedColors = <Color>[];
 
-  // String nextMonth = DatesController().formatDateReverse(DatesController()
-  //     .formatDate(DateTime(DatesController().today.year,
-  //             DatesController().today.month + 1, DatesController().today.day)
-  //         .toString()));
   @override
   void initState() {
     _fromDateController.text = todayDate;
@@ -271,7 +267,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -284,8 +279,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -293,11 +286,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
         _toDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -311,8 +299,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -334,16 +320,12 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
     String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
@@ -351,22 +333,11 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -379,18 +350,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // CustomDropDown(
-                //   items: periods,
-                //   label: _locale.period,
-                //   initialValue: selectedPeriod,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       checkPeriods(value);
-                //       selectedPeriod = value!;
-                //       getCashFlows();
-                //     });
-                //   },
-                // ),
                 CustomDropDown(
                   items: status,
                   label: _locale.status,
@@ -441,9 +400,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
                 ),
                 CustomDate(
                   dateController: _toDateController,
-                  label: _locale.toDate, lastDate: DateTime.now(),
-
-                  // minYear: 2000,
+                  label: _locale.toDate,
+                  lastDate: DateTime.now(),
                   onValue: (isValid, value) {
                     if (isValid) {
                       setState(() {
@@ -482,19 +440,6 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
             });
           },
         ),
-        // CustomDropDown(
-        //   width: widthMobile * 0.81,
-        //   items: periods,
-        //   label: _locale.period,
-        //   initialValue: selectedPeriod,
-        //   onChanged: (value) {
-        //     setState(() {
-        //       checkPeriods(value);
-        //       selectedPeriod = value!;
-        //       getCashFlows();
-        //     });
-        //   },
-        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: status,
@@ -532,9 +477,8 @@ class _CashFlowsContentState extends State<CashFlowsContent> {
           width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _toDateController,
-            label: _locale.toDate, lastDate: DateTime.now(),
-
-            // minYear: 2000,
+            label: _locale.toDate,
+            lastDate: DateTime.now(),
             onValue: (isValid, value) {
               if (isValid) {
                 setState(() {

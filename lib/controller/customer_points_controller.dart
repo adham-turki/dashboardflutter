@@ -14,7 +14,6 @@ class CustomerPointsController {
       CustomerPointsSearchCriteria searchCriteria) async {
     List<CustomerPointsByBranch> list = [];
     try {
-      print("searchCriteria.toJson(): ${searchCriteria.toJson()}");
       await ApiService()
           .postRequest(
         customerPointsByBranchApi,
@@ -28,8 +27,7 @@ class CustomerPointsController {
           }
         }
       });
-    } catch (e, t) {
-      print("exxxxxxxxxx: $e ,$t");
+    } catch (e) {
       return [];
     }
     return list;

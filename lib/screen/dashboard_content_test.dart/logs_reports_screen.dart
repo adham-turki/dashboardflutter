@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
 
@@ -46,7 +45,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   late AppLocalizations _locale;
   final ScrollController _scrollController = ScrollController();
   List<ChartData> data = [];
-  late TooltipBehavior _tooltip;
   List<BranchSalesViewModel> totalCashierLogsList = [];
   double totalCashierLogs = 0.0;
   List<SalesCostBasedStockCategoryViewModel> salesCostBasedStkCatList = [];
@@ -97,7 +95,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         });
       }
 
-      print("totalCashierLogsList: ${totalCashierLogsList.length}");
       setState(() {});
     });
   }
@@ -111,9 +108,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
 
   @override
   void initState() {
-    print("asdasdasdasda");
-
-    _tooltip = TooltipBehavior(enable: true);
     if (now.day == 1) {
       // If today is the first day of the month, set formattedFromDate to the first day of the previous month
       DateTime firstDayOfPreviousMonth = DateTime(now.year, now.month - 1, 1);
@@ -264,20 +258,9 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                             ? Text(
                                 '(\u200E${NumberFormat('#,###', 'en_US').format(totalCashierLogs)})',
                               )
-                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})")
                             : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
                 if (Responsive.isDesktop(context))
@@ -379,7 +362,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                                   maxY: maxY * 1.3,
                                   lineTouchData: LineTouchData(
                                     touchTooltipData: LineTouchTooltipData(
-                                      // getTooltipColor: defaultLineTooltipColor,
                                       getTooltipItems:
                                           (List<LineBarSpot> touchedSpots) {
                                         return touchedSpots.map((spot) {
@@ -434,7 +416,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                                         int index = entry.key;
                                         double totalSales = double.parse(
                                             entry.value.displayLogsCount);
-                                        print("totalSales: ${totalSales}");
 
                                         return FlSpot(
                                             index.toDouble(), totalSales);
@@ -523,28 +504,11 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                         ),
                         Text(
                             '(\u200E${NumberFormat('#,###', 'en_US').format(totalCashierLogs)})',
-                            // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalCashierLogs)))})",
                             style: TextStyle(fontSize: isDesktop ? 15 : 18))
                       ],
                     ),
                   ],
                 ),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByCashier)
-                //     Text(
-                //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByComputer)
-                //     Text(
-                //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByHours)
-                //     Text(
-                //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByPaymentTypes)
-                //     Text(
-                //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -585,8 +549,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
                 )
               ],
             ),
-            // if (!Responsive.isDesktop(context))
-
             if (title == _locale.cashierLogs)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

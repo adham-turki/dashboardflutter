@@ -1,4 +1,3 @@
-import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 fortyEight600TextStyle(color) {

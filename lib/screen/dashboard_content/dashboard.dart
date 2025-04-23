@@ -3,12 +3,8 @@ import 'package:bi_replicate/screen/dashboard_content/bar_chart_sales_dashboard.
 import 'package:bi_replicate/screen/dashboard_content/daily_sales_dashboard.dart';
 import 'package:flutter/material.dart';
 import '../../components/charts.dart';
-import '../../components/customCard.dart';
-import '../../controller/vouch_header_transiet_controller.dart';
 import '../../model/chart/pie_chart_model.dart';
 import '../../model/vouch_header_transiet_model.dart';
-import '../../utils/constants/responsive.dart';
-import '../../utils/func/converters.dart';
 import 'branches_sales_cat_dashboard.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -52,8 +48,6 @@ class _DashboardContentState extends State<DashboardContent> {
 
   @override
   Widget build(BuildContext context) {
-    bool isDesktop = Responsive.isDesktop(context);
-    bool isMobile = Responsive.isMobile(context);
     width = MediaQuery.of(context).size.width;
     height = MediaQuery.of(context).size.height;
     return const SafeArea(

@@ -42,7 +42,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       ValueNotifier(SalesCostReportModel());
 
   TextEditingController fromDate = TextEditingController();
-  // TextEditingController toDate = TextEditingController();
   double width = 0;
   double height = 0;
   bool isDesktop = false;
@@ -59,9 +58,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   PlutoGridStateManager? stateManager;
   List<PlutoRow> rowList = [];
   List<PlutoColumn> polCols = [];
-  // bool isMobile = false;
-  // String todayDate = DatesController().formatDateReverse(
-  //     DatesController().formatDate(DatesController().todayDate()));
 
   ValueNotifier isReset = ValueNotifier(false);
 
@@ -70,7 +66,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
     _locale = AppLocalizations.of(context)!;
     readProvider = context.read<SalesCriteraProvider>();
     readProvider.emptyProvider();
-    // polCols = [];
 
     orderByColumns = [
       '#',
@@ -127,11 +122,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         stateManager!.columns[i].textAlign = polCols[i].textAlign;
         stateManager!.columns[i].titleSpan = polCols[i].titleSpan;
       }
-      // for (int i = 0; i < stateManager!!.rows.length; i++) {
-      //   stateManager!!.rows[i].cells['intStatus']!.value =
-      //       getStatusNameDependsLang(
-      //           stateManager!!.rows[i].cells['intStatus']!.value, locale);
-      //
+
       stateManager!.notifyListeners(true);
     }
 
@@ -150,27 +141,19 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
   String selectedValueFromDropdown4 = "";
 
   void updateSelectedValue1(String value) {
-    // setState(() {
     selectedValueFromDropdown1 = value;
-    // });
   }
 
   void updateSelectedValue2(String value) {
-    // setState(() {
     selectedValueFromDropdown2 = value;
-    // });
   }
 
   void updateSelectedValue3(String value) {
-    // setState(() {
     selectedValueFromDropdown3 = value;
-    // });
   }
 
   void updateSelectedValue4(String value) {
-    // setState(() {
     selectedValueFromDropdown4 = value;
-    // });
   }
 
   generateColumns() {
@@ -189,10 +172,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
       _locale.qty,
       _locale.averagePrice,
       _locale.total,
-      // _locale.costPriceAvg,
-      // _locale.totalCost,
-      // _locale.diffBetCostAndSale,
-      // _locale.profitPercent
     ];
 
     if ((selectedValueFromDropdown1.isEmpty ||
@@ -267,8 +246,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
           ]);
         }
       }
-
-      // });
     } else {
       Set<String> selectedValues = {};
 
@@ -372,8 +349,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
         for (int i = 0; i < newColumns.length; i++) {
           stateManager!.insertColumns(i, [newColumns[i]]);
         }
-
-// });
       } else {
         List<String> temp = [
           '#',
@@ -409,7 +384,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
           ]);
         }
       }
-      // });
     }
   }
 
@@ -441,9 +415,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                               child:
                                   Text(maxLines: 1, _locale.critiriaAndOrderBy),
                             ),
-                            // Tab(
-                            //   child: Text(maxLines: 1, _locale.orderBy),
-                            // ),
                             Tab(
                               child: Text(maxLines: 1, _locale.setUPSetting),
                             ),
@@ -466,14 +437,10 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                   ],
                 )
               : SizedBox.shrink(),
-          // SizedBox(
-          //   height: isDesktop ? height * 0.0001 : height * 0.05,
-          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
               height: height * 0.04,
-              // width: width * 0.7,
               child: DottedBorder(
                 color: Colors.blue,
                 strokeWidth: 1,
@@ -527,27 +494,18 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                     SizedBox(
                       width: 20,
                     ),
-
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      // crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         IconButton(
                           alignment: Alignment.center,
                           color: primary,
                           onPressed: () async {
-                            // context.read<SalesCriteraProvider>().setFromDate(
-                            //     DatesController().formatDate(fromDate.text));
-                            // context
-                            //     .read<SalesCriteraProvider>()
-                            //     .setToDate(DatesController().formatDate(toDate.text));
-
                             DateTime from = DateTime.parse(DatesController()
                                 .formatDateReverse(DatesController()
-                                    .formatDate(readProvider.getFromDate()!)));
+                                    .formatDate(readProvider.getFromDate())));
                             DateTime to = DateTime.parse(DatesController()
                                 .formatDateReverse(DatesController()
-                                    .formatDate(readProvider.getToDate()!)));
+                                    .formatDate(readProvider.getToDate())));
 
                             if (from.isAfter(to)) {
                               ErrorController.openErrorDialog(
@@ -556,8 +514,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                               setState(() {
                                 hidefilter = !hidefilter;
                               });
-                              // }
-                              // dynamic body = readProvider.toJson();
 
                               pageLis.value = 1;
 
@@ -565,7 +521,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                               dynamic body = readProvider.toJson();
                               stateManager!.setShowLoading(true);
                               await generateColumns();
-                              // if (pageLis.value == 1) {
                               reportsResult = await ReportController()
                                   .getSalesResultMehtod(body, isStart: true);
                               stateManager!.removeAllRows();
@@ -634,7 +589,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                               pageLis.value = pageLis.value + 1;
                               reportsResult = await ReportController()
                                   .getSalesResultMehtod(body);
-                              // setState(() {});
                             }
                           },
                           icon: Icon(
@@ -642,8 +596,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                             color: Colors.black,
                             size: height * 0.025,
                           ),
-                          // style: customButtonStyle(
-                          //     Size(width * 0.13, height * 0.045), 16, primary2),
                         ),
                         Tooltip(
                           message: _locale.reset,
@@ -657,9 +609,7 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                   finalRow = [];
                                 });
                                 Future.delayed(Duration(milliseconds: 20), () {
-                                  // setState(() {
                                   isReset.value = false;
-                                  // });
                                 });
                               },
                               icon: Icon(
@@ -676,8 +626,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                 isDownload.value = true;
 
                                 if (reportsResult!.count == 0) {
-                                  // ErrorController.openErrorDialog(
-                                  //     406, _locale.error406);
                                   isDownload.value = false;
                                 } else {
                                   SearchCriteria searchCriteria =
@@ -700,7 +648,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                                     isDownload.value = false;
                                   });
                                 }
-                                // }
                               },
                               icon: Icon(
                                 Icons.description,
@@ -710,23 +657,14 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                         ),
                       ],
                     ),
-                    // SizedBox(),
                   ],
                 ),
               ),
             ),
           ),
-          // SizedBox(
-          //   height: isDesktop ? height * 0.0001 : height * 0.05,
-          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
-              // width: isDesktop
-              // ? orderByColumns.length > 6
-              //     ? width * 0.8
-              //     : width * double.parse("0.${orderByColumns.length}6")
-              // : width * 0.7,
               height: hidefilter == true
                   ? height * 0.848
                   : _currentIndex == 1
@@ -736,7 +674,6 @@ class _SalesReportScreenState extends State<SalesReportScreen> {
                           : height * 0.4,
               child: TableComponentNew(
                 columnHeight: 70,
-                // key: UniqueKey(),
                 plCols: polCols,
                 polRows: [],
                 footerBuilder: (stateManager) {

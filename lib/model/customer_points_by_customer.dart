@@ -58,8 +58,6 @@ class CustomerPointsByCustomerModel {
   static List<PlutoColumn> getColumns(
       AppLocalizations localizations, BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    // int numberOfColumns = 4;
-    // double width *0.15 = totalWidth / numberOfColumns;
     bool isDesktop = Responsive.isDesktop(context);
     List<PlutoColumn> list = [
       PlutoColumn(

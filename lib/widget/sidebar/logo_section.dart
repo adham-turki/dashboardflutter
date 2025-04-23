@@ -2,6 +2,7 @@ import 'package:bi_replicate/utils/constants/colors.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class LogoSection extends StatelessWidget {
   LogoSection({super.key});
 

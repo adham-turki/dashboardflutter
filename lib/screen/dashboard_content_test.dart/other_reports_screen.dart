@@ -1,11 +1,8 @@
-import 'package:bi_replicate/controller/inventory_performance/inventory_performance_controller.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
 import 'package:bi_replicate/controller/sales_adminstration/sales_category_controller.dart';
 import 'package:bi_replicate/controller/settings/user_settings/user_report_settings_controller.dart';
 import 'package:bi_replicate/controller/total_sales_controller.dart';
-import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/branch_sales_by_stocks_model.dart';
-import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/model/settings/user_settings/user_report_settings.dart';
 import 'package:bi_replicate/screen/dashboard_content/filter_dialog/filter_dialog_sales_by_cat.dart';
@@ -99,7 +96,6 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
         salesByStocksList.add(value[i]);
         salesByStocksList[i].total =
             salesByStocksList[i].creditAmt - salesByStocksList[i].debitAmt;
-        print("baaaaaaaaaal: ${salesByStocksList[i].total}");
         totalSalesByStocks += salesByStocksList[i].total ?? 0.0;
         if ((salesByStocksList[i].total ?? 0.0) > maxY) {
           maxY = salesByStocksList[i].total ?? 0.0;
@@ -119,14 +115,7 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
           ],
         );
       });
-      // barChartData.add(BarChartGroupData(
-      //     x: int.parse(totalSalesByPayTypes[i].displayGroupName),
-      //     barRods: [
-      //       BarChartRodData(
-      //         toY: double.parse(totalSalesByPayTypes[i].displayTotalSales),
-      //         borderRadius: BorderRadius.all(Radius.zero),
-      //       )
-      //     ]));
+
       isLoading = false;
       setState(() {});
     });
@@ -277,8 +266,6 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                   )
                 ],
               ),
-              // if (!Responsive.isDesktop(context))
-
               if (title == locale.branchesSalesByStocks)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -410,32 +397,17 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    // print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: "",
         txtReportcode: "",
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -467,7 +439,6 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                               ? Text(
                                   '(\u200E${NumberFormat('#,###', 'en_US').format(totalSalesByStocks)})',
                                 )
-                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalSalesByStocks)))})")
                               : SizedBox.shrink()
                         ],
                       ),
@@ -604,7 +575,6 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                     maxY: maxY * 1.3,
                                     lineTouchData: LineTouchData(
                                       touchTooltipData: LineTouchTooltipData(
-                                        // getTooltipColor: defaultLineTooltipColor,
                                         getTooltipItems:
                                             (List<LineBarSpot> touchedSpots) {
                                           return touchedSpots.map((spot) {
@@ -659,9 +629,6 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                             .entries
                                             .map((entry) {
                                           int index = entry.key;
-
-                                          print(
-                                              "totalSales: ${entry.value.total}");
 
                                           return FlSpot(index.toDouble(),
                                               entry.value.total ?? 0.0);

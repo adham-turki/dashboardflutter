@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:bi_replicate/components/table_component.dart';
 import 'package:bi_replicate/controller/error_controller.dart';
 import 'package:bi_replicate/controller/settings/user_settings/user_setting_controller.dart';
-import 'package:bi_replicate/model/login/users_model.dart';
 import 'package:bi_replicate/model/settings/user_settings/user_settings_model.dart';
 import 'package:bi_replicate/screen/dashboard_content/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +71,6 @@ class _UsersContentState extends State<UsersContent> {
                   userModel = tempList[i];
                 }
               }
-              print("ssssssssssssss: ${userModel!.toJson()}");
             },
           ),
         )
@@ -114,7 +112,6 @@ class _UsersContentState extends State<UsersContent> {
             ).then((value) {});
             getAllUsers();
           }
-          // setState(() {});
         }).then((value) {});
       }
     });
@@ -182,10 +179,8 @@ class _UsersContentState extends State<UsersContent> {
                   password: password,
                   activeToken: token!,
                   role: role);
-              print(usersModel.toJson());
-              print(createUuid());
+
               UsersController().addUserSetting(usersModel).then((value) {
-                print(value);
                 if (value.statusCode == 200) {
                   showDialog(
                     context: context,
@@ -200,7 +195,6 @@ class _UsersContentState extends State<UsersContent> {
                   getAllUsers();
                 }
               });
-              // Navigator.of(context).pop();
             } else {
               ErrorController.openErrorDialog(406, locale.allFieldsAreReq);
             }
@@ -227,10 +221,8 @@ class _UsersContentState extends State<UsersContent> {
   }
 
   editDialog(UsersModel userModel) {
-    print("toJsonnnnnnnnnn: ${userModel.toJson()}");
-    editUsernameController.text = userModel.username ?? "";
-    // passwordController.text = usersModel.password ?? "";
-    editRoleController.text = userModel.role ?? "";
+    editUsernameController.text = userModel.username;
+    editRoleController.text = userModel.role;
     return AlertDialog(
       title: Text(locale.editUser),
       content: SizedBox(
@@ -263,7 +255,6 @@ class _UsersContentState extends State<UsersContent> {
         ),
         TextButton(
           onPressed: () async {
-            String? token = await storage.read(key: 'jwt');
             String username = "";
             String password = "";
             String role = "";
@@ -277,9 +268,7 @@ class _UsersContentState extends State<UsersContent> {
                 String passEncrypted = Encryption.performAesEncryption(
                     editPasswordController.text, keyEncrypt, byteArray);
                 password = passEncrypted;
-              } else if (editPasswordController.text.isEmpty) {
-                // password = userModel.password;
-              }
+              } else if (editPasswordController.text.isEmpty) {}
 
               username = editUsernameController.text;
               role = editRoleController.text;
@@ -290,10 +279,8 @@ class _UsersContentState extends State<UsersContent> {
                   password: password,
                   activeToken: userModel.activeToken,
                   role: role);
-              print(usersModel.toJson());
-              print(createUuid());
+
               UsersController().updateUserSettings(usersModel).then((value) {
-                print(value);
                 if (value.statusCode == 200) {
                   showDialog(
                     context: context,
@@ -304,11 +291,9 @@ class _UsersContentState extends State<UsersContent> {
                   ).then((value) {
                     Navigator.pop(context);
                   });
-                  // ErrorController.openErrorDialog(200, locale.addedSuccess);
                   getAllUsers();
                 }
               });
-              // Navigator.of(context).pop();
             } else {
               ErrorController.openErrorDialog(406, locale.allFieldsAreReq);
             }
@@ -344,7 +329,6 @@ class _UsersContentState extends State<UsersContent> {
                   return editDialog(usersModel);
                 },
               );
-              // deleteMethod();
             },
             icon: const Icon(Icons.edit)),
         IconButton(
@@ -363,7 +347,6 @@ class _UsersContentState extends State<UsersContent> {
       for (var elemant in value) {
         usersList.add(elemant);
       }
-      print("length: ${usersList.length}");
       tempList = usersList;
       setState(() {});
     });

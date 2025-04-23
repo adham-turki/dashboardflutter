@@ -1,22 +1,10 @@
-import 'dart:convert';
-// import 'dart:html';
-import 'dart:typed_data';
-import 'dart:ui';
-
-import 'package:bi_replicate/controller/general_ledger/journal_report_controller.dart';
 import 'package:bi_replicate/controller/vouch_type_controller.dart';
 import 'package:bi_replicate/model/journal_reports_model.dart';
 import 'package:bi_replicate/model/new_search_criteria_model.dart';
 import 'package:cool_alert/cool_alert.dart';
-import 'package:excel/excel.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pluto_grid/pluto_grid.dart';
-
 import '../components/filter_button.dart';
 import '../components/my_image_button.dart';
 import '../components/searchComp.dart';
@@ -26,11 +14,8 @@ import '../controller/settings/setup/setup_screen_controller.dart';
 import '../model/settings/setup/account_model.dart';
 import '../model/vouch_type_model.dart';
 import '../utils/constants/colors.dart';
-import '../utils/constants/constants_apis.dart';
 import '../utils/constants/maps.dart';
 import '../utils/constants/responsive.dart';
-import '../widget/check_boxes_dialog.dart';
-import '../widget/text_field_custom.dart';
 
 class JournalReportsScreen extends StatefulWidget {
   const JournalReportsScreen({super.key});
@@ -84,7 +69,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
     _locale = AppLocalizations.of(context)!;
     columns = <PlutoColumn>[
       PlutoColumn(
-          // width: 1000,
           title: _locale.date,
           field: 'date',
           type: PlutoColumnType.date(),
@@ -163,31 +147,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         type: PlutoColumnType.text(),
         backgroundColor: colColor,
       ),
-
-      // PlutoColumn(
-      //   title: 'Total',
-      //   field: 'total',
-      //   type: PlutoColumnType.currency(),
-      //           enableRowChecked: true,
-
-      //   footerRenderer: (rendererContext) {
-      //     return PlutoAggregateColumnFooter(
-      //       rendererContext: rendererContext,
-      //       formatAsCurrency: true,
-      //       type: PlutoAggregateColumnType.sum,
-      //       alignment: Alignment.center,
-      //       titleSpanBuilder: (text) {
-      //         return [
-      //           const TextSpan(
-      //             text: 'Total',
-      //             style: TextStyle(color: Colors.red),
-      //           ),
-
-      //         ];
-      //       },
-      //     );
-      //   },
-      // ),
     ];
     getAccountList().then((value) {});
     getVouchTypeList().then((value) {});
@@ -292,20 +251,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                                     selectedStatus = getVoucherStatus(
                                         _locale, selectedStatusName);
                                   });
-
-                                  print("_fromDate.text: $fromDate");
-                                  print("_toDateHere.text: $toDate");
-                                  print(
-                                      "selectedFromAccount: $selectedFromAccountt");
-                                  print(
-                                      "selectedToAccount: $selectedToAccountt");
-                                  print("selectedFromCode: $selectedFromCodee");
-                                  print("selectedToCode: $selectedToCodee");
-                                  print(
-                                      "selectedVocherType: $selectedVocherTypee");
-                                  print("selectedStatus: $selectedStatus");
-                                  print(
-                                      "selectedStatusName: $selectedStatusName");
                                 },
                               ),
                             ).then((value) {
@@ -320,9 +265,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    // MyImageButton(imagePath: , onPressed: (){
-
-                    // }),
                   ],
                 ),
               ),
@@ -335,60 +277,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
                         debugPrint('Whatsapp clicked!');
                       },
                     ),
-                    // MyImageButton(
-                    //   imagePath: 'assets/images/excel.png',
-                    //   onPressed: () {
-                    //     // exportToCsv();
-                    //     showDialog(
-                    //       context: context,
-                    //       builder: (context) {
-                    //         return ExportCheckBoxesDialog(
-                    //           onFilter: (dateBoolVal,
-                    //               voucherBoolVal,
-                    //               voucherNumBoolVal,
-                    //               statusBoolVal,
-                    //               accountBoolVal,
-                    //               referenceBoolVal,
-                    //               currency,
-                    //               debitBoolVal,
-                    //               cridetBoolVal,
-                    //               dibcBoolVal,
-                    //               cibcBoolVal,
-                    //               commentsBoolVal) {
-                    //             dateBoolVall = dateBoolVal;
-                    //             voucherBoolVall = voucherBoolVal;
-                    //             voucherNumBoolVall = voucherNumBoolVal;
-                    //             statusBoolVall = statusBoolVal;
-                    //             accountBoolVall = accountBoolVal;
-                    //             referenceBoolVall = referenceBoolVal;
-                    //             currencyBoolVall = currency;
-                    //             debitBoolVall = debitBoolVal;
-                    //             cridetBoolVall = cridetBoolVal;
-                    //             dibcBoolVall = dibcBoolVal;
-                    //             cibcBoolVall = cibcBoolVal;
-                    //             commentsBoolVall = commentsBoolVal;
-                    //             print('dateBoolVal: $dateBoolVal');
-                    //             print('voucherBoolVal: $voucherBoolVal');
-                    //             print('voucherNumBoolVal: $voucherNumBoolVal');
-                    //             print('statusBoolVal: $statusBoolVal');
-                    //             print('accountBoolVal: $accountBoolVal');
-                    //             print('referenceBoolVal: $referenceBoolVal');
-                    //             print('currencyBoolVal: $currency');
-                    //             print('debitBoolVal: $debitBoolVal');
-                    //             print('creditBoolVal: $cridetBoolVall');
-                    //             print('dibcBoolVal: $dibcBoolVal');
-                    //             print('cibcBoolVal: $cibcBoolVal');
-                    //             print('commentsBoolVal: $commentsBoolVal');
-                    //           },
-                    //         );
-                    //       },
-                    //     ).then((value) {
-                    //       if (value) {
-                    //         exportToExcel();
-                    //       }
-                    //     });
-                    //   },
-                    // ),
                     MyImageButton(
                       imagePath: 'assets/images/printer.png',
                       onPressed: () {
@@ -410,12 +298,8 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
             onLoaded: (event) {
               stateManager = event;
             },
-            // stateManager: stateManager,
             plCols: columns,
             polRows: topList,
-            // footerBuilder: (stateManager) {
-            //   return lazyPaginationFooter(stateManager);
-            // },
           ),
         ),
       ],
@@ -445,9 +329,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         confirmBtnTextStyle: const TextStyle(fontSize: 30, color: Colors.white),
         cancelBtnTextStyle: const TextStyle(fontSize: 30),
         onConfirmBtnTap: () {
-          // setState(() {
-          //   toContinue = true;
-          // });
           Navigator.pop(context);
         });
   }
@@ -475,84 +356,10 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
         confirmBtnTextStyle: const TextStyle(fontSize: 30, color: Colors.white),
         cancelBtnTextStyle: const TextStyle(fontSize: 30),
         onConfirmBtnTap: () {
-          // setState(() {
-          //   toContinue = true;
-          // });
           Navigator.pop(context);
           Navigator.pop(context);
         });
   }
-
-  // void exportToExcel() async {
-  //   // Create a new Excel workbook and sheet
-  //   final workbook = Excel.createExcel();
-  //   final sheet = workbook['Sheet1'];
-  //   showLoading(context);
-  //   JournalController()
-  //       .getAllJournalReports(searchCriteriaForExcel!)
-  //       .then((value) async {
-  //     sheet.appendRow([
-  //       if (dateBoolVall) _locale.date,
-  //       if (voucherBoolVall) _locale.voucher,
-  //       if (voucherNumBoolVall) _locale.voucherNum,
-  //       if (statusBoolVall) _locale.status,
-  //       if (accountBoolVall) _locale.account,
-  //       if (referenceBoolVall) _locale.reference,
-  //       if (currencyBoolVall) _locale.currency,
-  //       if (debitBoolVall) _locale.debit,
-  //       if (cridetBoolVall) _locale.credit,
-  //       if (dibcBoolVall) _locale.dibc,
-  //       if (cibcBoolVall) _locale.cibc,
-  //       if (commentsBoolVall) _locale.comments,
-  //     ]);
-  //     if (value.isNotEmpty) {
-  //       for (int i = 0; i < value.length; i++) {
-  //         final data = value[i];
-  //         sheet.appendRow([
-  //           if (dateBoolVall) data.referDate ?? "",
-  //           if (voucherBoolVall) data.voucherTypeNameE ?? "",
-  //           if (voucherNumBoolVall) data.voucher ?? "",
-  //           if (statusBoolVall) data.statusName ?? "",
-  //           if (accountBoolVall) data.accName ?? "",
-  //           if (referenceBoolVall) data.custSupName ?? "",
-  //           if (currencyBoolVall) data.transCurrency ?? "",
-  //           if (debitBoolVall) data.debit,
-  //           if (cridetBoolVall) data.credit,
-  //           if (dibcBoolVall) data.debitInBaseCur,
-  //           if (cibcBoolVall) data.creditInBaseCur,
-  //           if (commentsBoolVall) data.comments ?? "",
-  //         ]);
-  //       }
-  //       Navigator.pop(context);
-  //       downloadFile(Uint8List.fromList(workbook.encode()!),
-  //           "${_locale.journalReports}.xlsx");
-  //       showSuccesDialog(context);
-  //     } else if (value.isEmpty) {
-  //       showEmptyDialog(context);
-  //     }
-  //   });
-  // }
-
-  // void downloadFile(Uint8List bytes, String fileName) {
-  //   final blob = Blob([bytes]);
-  //   final url = Url.createObjectUrlFromBlob(blob);
-  //   final anchor = AnchorElement(href: url)
-  //     ..download = fileName
-  //     ..click();
-  // }
-
-  // void exportToCsv() async {
-  //   String title = "pluto_grid_export";
-
-  //   var pluto_grid_export;
-  //   var exported = const Utf8Encoder()
-  //       .convert(pluto_grid_export.PlutoGridExport.exportCSV(stateManager));
-  //   print(exported);
-
-  //   // use file_saver from pub.dev
-  //   // await FileSaver.instance
-  //   //     .saveFile(name: "$title.csv", bytes: exported, mimeType: MimeType.csv);
-  // }
 
   fetch() async {
     journalReportsList.clear();
@@ -583,7 +390,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
       journalReportsList = value;
       for (int i = 0; i < journalReportsList.length; i++) {
         topList.add(journalReportsList[i].toPluto());
-        // print(journalReportsList[i].referDate);
       }
     });
   }
@@ -616,10 +422,6 @@ class _JournalReportsScreenState extends State<JournalReportsScreen> {
       for (var elemant in value) {
         vouchTypeNameList.add(elemant.txtEnglishname);
       }
-      // for (int i = 0; i < vouchTypeList.length; i++) {
-      //   vouchTypeToAdd![vouchTypeList[i].txtEnglishname] =
-      //       vouchTypeList[i].intVouchtype;
-      // }
     });
 
     setState(() {});

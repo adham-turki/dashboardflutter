@@ -109,7 +109,6 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
     ];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    // getRecPayData(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -258,7 +257,6 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -271,19 +269,11 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
         _fromDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -297,8 +287,6 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -321,16 +309,12 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          // print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
     String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
@@ -338,22 +322,11 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -389,8 +362,8 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
             ),
             CustomDate(
               dateController: _fromDateController,
-              label: _locale.fromDate, lastDate: DateTime.now(),
-              // minYear: 2000,
+              label: _locale.fromDate,
+              lastDate: DateTime.now(),
               onValue: (isValid, value) {
                 if (isValid) {
                   setState(() {
@@ -444,8 +417,8 @@ class _MonthCompOfRecPayContentState extends State<MonthCompOfRecPayContent> {
           width: widthMobile * 0.81,
           child: CustomDate(
             dateController: _fromDateController,
-            label: _locale.fromDate, lastDate: DateTime.now(),
-            // minYear: 2000,
+            label: _locale.fromDate,
+            lastDate: DateTime.now(),
             onValue: (isValid, value) {
               if (isValid) {
                 setState(() {

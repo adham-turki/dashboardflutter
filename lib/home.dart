@@ -31,7 +31,6 @@ import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screen/content/reports/sales_report_content.dart/sales_report.dart';
-import 'screen/dashboard_content/dashboard.dart';
 import 'widget/new_sideMenue/side_menu.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

@@ -11,6 +11,7 @@ import '../../model/settings/setup/bi_account_model.dart';
 import '../../utils/constants/constants.dart';
 import '../../utils/constants/responsive.dart';
 
+// ignore: must_be_immutable
 class MonthlyDashboard extends StatefulWidget {
   List<BarChartData> barData;
   List<BarChartData> barData2;

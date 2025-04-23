@@ -82,7 +82,6 @@ class _AgingReceivableState extends State<AgingReceivable> {
       _locale.pieChart,
     ];
 
-    // search();
     selectedChart = charts[0];
     selectedStatus = status[0];
 

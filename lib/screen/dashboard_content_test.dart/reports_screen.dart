@@ -77,8 +77,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   @override
   void initState() {
-    print("asdasdasdasda");
-
     _tooltip = TooltipBehavior(enable: true);
     _tooltip1 = TooltipBehavior(enable: true);
 
@@ -230,8 +228,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             (diffCashShiftByCashierReportList[i].diffAmount),
             0.0));
       }
-      print(
-          "diffCashShiftByCashierReportList: ${diffCashShiftByCashierReportList.length}");
+
       setState(() {});
     });
   }
@@ -257,20 +254,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             (diffClosedCashShiftReportList[i].increaseDiffSum),
             (diffClosedCashShiftReportList[i].decreaseDiffSum)));
       }
-      // if (data.isNotEmpty) {
-      //   maxValue = data
-      //       .map((e) => e.y1)
-      //       .reduce((value, element) => value > element ? value : element);
-      //   minValue = data
-      //       .map((e) => e.y1)
-      //       .reduce((value, element) => value < element ? value : element);
-      //   interval = ((maxValue - minValue) / 10);
 
-      //   print("maxValue: ${maxValue}");
-      //   print("minValue: ${minValue}");
-      //   print("interval: ${interval}");
-      // }
-      print("diffCashShiftReportList: ${diffClosedCashShiftReportList.length}");
       setState(() {});
     });
   }
@@ -307,16 +291,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                               : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
                 if (Responsive.isDesktop(context))
@@ -442,17 +416,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   labelPlacement: LabelPlacement.onTicks,
                   labelRotation: -30, // Rotating labels by -30 degrees
                 ),
-
-                // primaryYAxis: NumericAxis(
-                //     minimum: minValue,
-                //     maximum: maxValue,
-                //     title: AxisTitle(text: _locale.totalCost),
-                //     interval: interval),
                 legend: Legend(
                   isVisible: true,
                   position: LegendPosition
                       .bottom, // Position the legend below the chart
-                  // overflowMode: LegendItemOverflowMode.wrap,
                 ),
                 axes: <ChartAxis>[
                   CategoryAxis(
@@ -467,18 +434,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 ],
                 tooltipBehavior: _tooltip,
                 series: <CartesianSeries<ChartData, String>>[
-                  // ColumnSeries<ChartData, String>(
-                  //     dataSource: data,
-                  //     xValueMapper: (ChartData data, _) => data.x,
-                  //     yValueMapper: (ChartData data, _) => data.y,
-                  //     name: _locale.profit,
-                  //     color: const Color.fromRGBO(184, 2, 2, 1)),
-                  // ColumnSeries<ChartData, String>(
-                  //     dataSource: data,
-                  //     xValueMapper: (ChartData data, _) => data.x,
-                  //     yValueMapper: (ChartData data, _) => data.y1,
-                  //     name: _locale.salesCost,
-                  //     color: const Color.fromRGBO(1, 102, 184, 1)),
                   LineSeries<ChartData, String>(
                       dataSource: data,
                       dataLabelSettings: const DataLabelSettings(
@@ -491,8 +446,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       yValueMapper: (ChartData data, _) => data.y,
                       enableTooltip: true,
                       name: _locale.increaseDiffSum,
-                      // xAxisName: 'secondaryXAxis',
-                      // yAxisName: 'secondaryYAxis',
                       dataLabelMapper: (datum, index) {
                         return Converters.formatNumberRounded(double.parse(
                             Converters.formatNumberDigits(datum.y)));
@@ -510,8 +463,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       yValueMapper: (ChartData data, _) => data.y1,
                       enableTooltip: true,
                       name: _locale.decreaseDiffSum,
-                      // xAxisName: 'secondaryXAxis',
-                      // yAxisName: 'secondaryYAxis',
                       dataLabelMapper: (datum, index) {
                         return Converters.formatNumberRounded(double.parse(
                             Converters.formatNumberDigits(datum.y1)));
@@ -529,8 +480,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       yValueMapper: (ChartData data, _) => data.percD,
                       enableTooltip: true,
                       name: _locale.numOfDiffTimes,
-                      // xAxisName: 'secondaryXAxis',
-                      // yAxisName: 'secondaryYAxis',
                       dataLabelMapper: (datum, index) {
                         return Converters.formatNumberRounded(double.parse(
                             Converters.formatNumberDigits(datum.percD)));
@@ -570,20 +519,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           title == _locale.diffCashByShifts
                               ? Text(
                                   '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
-                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})")
                               : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
                 if (Responsive.isDesktop(context))
@@ -646,7 +584,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         children: [
                           Text(
                               '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
-                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffCashShiftByCashierReport)))})"),
                         ],
                       )
                     : SizedBox.shrink(),
@@ -708,11 +645,6 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   labelPlacement: LabelPlacement.onTicks,
                   labelRotation: -30, // Rotating
                 ),
-                // primaryYAxis: NumericAxis(
-                //     minimum: minValue,
-                //     maximum: maxValue,
-                //     title: AxisTitle(text: _locale.totalCost),
-                //     interval: interval),
                 legend: Legend(
                   isVisible: true,
                   position: LegendPosition
@@ -727,24 +659,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     majorTickLines: MajorTickLines(size: 10),
                     labelPlacement: LabelPlacement.onTicks,
                     labelRotation: -30, // Rotating
-                    // name: 'secondaryXAxis',
-                    // opposedPosition: true,
                   ),
                 ],
                 tooltipBehavior: _tooltip1,
                 series: <CartesianSeries<ChartData, String>>[
-                  // ColumnSeries<ChartData, String>(
-                  //     dataSource: data,
-                  //     xValueMapper: (ChartData data, _) => data.x,
-                  //     yValueMapper: (ChartData data, _) => data.y,
-                  //     name: _locale.profit,
-                  //     color: const Color.fromRGBO(184, 2, 2, 1)),
-                  // ColumnSeries<ChartData, String>(
-                  //     dataSource: data,
-                  //     xValueMapper: (ChartData data, _) => data.x,
-                  //     yValueMapper: (ChartData data, _) => data.y1,
-                  //     name: _locale.salesCost,
-                  //     color: const Color.fromRGBO(1, 102, 184, 1)),
                   LineSeries<ChartData, String>(
                       dataSource: data,
                       dataLabelSettings: const DataLabelSettings(
@@ -757,30 +675,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       yValueMapper: (ChartData data, _) => data.y,
                       enableTooltip: true,
                       name: _locale.differenceValue,
-                      // xAxisName: 'secondaryXAxis',
-                      // yAxisName: 'secondaryYAxis',
                       dataLabelMapper: (datum, index) {
                         return "${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(datum.y)))}\n${datum.x.toString()}";
                       },
                       color: Colors.blue),
-                  // LineSeries<ChartData, String>(
-                  //     dataSource: data,
-                  //     dataLabelSettings: const DataLabelSettings(
-                  //       isVisible: true,
-                  //       textStyle: TextStyle(
-                  //           color: Colors.black,
-                  //           fontWeight: FontWeight.w600),
-                  //     ),
-                  //     xValueMapper: (ChartData data, _) => data.perc,
-                  //     yValueMapper: (ChartData data, _) => data.percD,
-                  //     enableTooltip: true,
-                  //     name: _locale.numOfDiffTimes,
-                  //     // xAxisName: 'secondaryXAxis',
-                  //     // yAxisName: 'secondaryYAxis',
-                  //     dataLabelMapper: (datum, index) {
-                  //       return datum.percD.toString();
-                  //     },
-                  //     color: Color.fromARGB(255, 255, 0, 0)),
                 ]),
           ),
         ),

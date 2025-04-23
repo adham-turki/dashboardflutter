@@ -192,7 +192,6 @@ class _CustomerPointsByCustomersScreenState
                         },
                         onChanged: (value) {
                           if (value.isNotEmpty) {
-                            print("innnnnnnnnnnn:111");
                             customersList.clear();
                             customersCodes.clear();
                             tempCustomers.clear();
@@ -204,7 +203,6 @@ class _CustomerPointsByCustomersScreenState
                             criteria.codesCust = customersCodes;
                             setState(() {});
                           } else {
-                            print("innnnnnnnnnnn:222");
                             customersList.clear();
                             customersCodes.clear();
                             tempCustomers.clear();
@@ -225,12 +223,10 @@ class _CustomerPointsByCustomersScreenState
                           List<CustomerModel> value =
                               await CustomerPointsController()
                                   .getCustomers(text);
-                          print("value1: ${value.length}");
                           value = value
                               .where((cust) => !tempCustomers
                                   .any((temp) => temp.value == cust.value))
                               .toList();
-                          print("value1111: ${value.length}");
 
                           return value;
                         }),
@@ -297,7 +293,6 @@ class _CustomerPointsByCustomersScreenState
                         },
                         onChanged: (value) {
                           if (value.isNotEmpty) {
-                            print("innnnnnnnnnnn:111");
                             customersList.clear();
                             customersCodes.clear();
                             tempCustomers.clear();
@@ -309,7 +304,6 @@ class _CustomerPointsByCustomersScreenState
                             criteria.codesCust = customersCodes;
                             setState(() {});
                           } else {
-                            print("innnnnnnnnnnn:222");
                             customersList.clear();
                             customersCodes.clear();
                             tempCustomers.clear();
@@ -330,12 +324,10 @@ class _CustomerPointsByCustomersScreenState
                           List<CustomerModel> value =
                               await CustomerPointsController()
                                   .getCustomers(text);
-                          print("value1: ${value.length}");
                           value = value
                               .where((cust) => !tempCustomers
                                   .any((temp) => temp.value == cust.value))
                               .toList();
-                          print("value1111: ${value.length}");
 
                           return value;
                         }),

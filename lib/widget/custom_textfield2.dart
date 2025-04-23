@@ -14,6 +14,7 @@ import '../../utils/constants/colors.dart';
     ),
     */
 
+// ignore: must_be_immutable
 class CustomTextField2 extends StatefulWidget {
   double? padding;
   // String label;

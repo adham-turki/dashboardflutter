@@ -45,10 +45,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   var selectedPeriod = "";
   String hintValue = '0';
 
-  String todayDate =
-      (DatesController().formatDate(DatesController().todayDate()));
-  String firstDayCurrentMonth =
-      (DatesController().formatDate(DatesController().currentMonth()));
+  String todayDate = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().todayDate()));
+  String firstDayCurrentMonth = DatesController().formatDateReverse(
+      DatesController().formatDate(DatesController().currentMonth()));
   final storage = const FlutterSecureStorage();
 
   SearchCriteria criteria = SearchCriteria();
@@ -61,8 +61,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
   List<StockModel> tempStocks = [];
   List<String> tempStocksCodes = [];
   List<String> branches = [];
-  // String selectedBranch = "";
-  // String selectedBranchCode = "";
+
   List<BranchModel> branchesList = [];
   List<String> branchesCodes = [];
   List<BranchModel> tempBranches = [];
@@ -73,9 +72,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
-    print("fromDate111111111: ${fromDate.text}");
-    print("toDate111111: ${toDate.text}");
-
     criteria.fromDate = DatesController().formatDate(fromDate.text);
     criteria.toDate = DatesController().formatDate(toDate.text);
     criteria.voucherStatus = -100;
@@ -106,8 +102,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
     selectedPeriod = periods[0];
     numberOfrow.text = 10.toString();
     focusNode.requestFocus();
-    // branches = [_locale.all];
-    // selectedBranch = branches[0];
     super.didChangeDependencies();
   }
 
@@ -127,13 +121,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       value.forEach((k, v) {
         if (mounted) {
           setState(() {
-            // branchesList.add(BranchModel(
-            //     txtCode: v,
-            //     txtNamee: k,
-            //     txtCostcentercode: "",
-            //     txtPrefix: "",
-            //     txtWarehouse: "",
-            //     txtJcode: ""));
             branches.add(k);
           });
         }
@@ -312,20 +299,7 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // CustomDropDown(
-            //   hint: periods[0],
-            //   label: _locale.period,
-            //   items: periods,
-            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       checkPeriods(value);
-            //       selectedPeriod = value;
-            //     });
-            //   },
-            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -366,9 +340,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         for (int i = 0; i < value.length; i++) {
                           tempStocks.add(value[i]);
                           tempStocksCodes.add(tempStocks[i].txtStkcode ?? "");
-                          print(
-                              "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
-                          print("asdasdsadTemp1: ${tempStocksCodes[i]}");
                         }
                       },
                       onChanged: (value) {
@@ -401,21 +372,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       onSearch: (text) async {
                         List<StockModel> value =
                             await TotalSalesController().getStocks(0, text);
-                        print("value1: ${value.length}");
                         value = value
                             .where((stock) => !tempStocks.any(
                                 (temp) => temp.txtStkcode == stock.txtStkcode))
                             .toList();
-                        print("value1111: ${value.length}");
-                        // for (var i = 0; i < value.length; i++) {
-                        //   print("asddddd1:${value[i].txtStkcode}");
-                        //   print("asddddd21:${tempStocks.length}");
-                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                        //     value.removeAt(i);
-                        //     print(
-                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                        //   }
-                        // }
+
                         return value;
                       }),
                 ],
@@ -514,7 +475,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       },
                       onChanged: (value) {
                         if (value.isNotEmpty) {
-                          print("innnnnnnnnnnn:111");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -526,7 +486,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           criteria.codesBranch = branchesCodes;
                           setState(() {});
                         } else {
-                          print("innnnnnnnnnnn:222");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -545,30 +504,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       onSearch: (text) async {
                         List<BranchModel> value =
                             await BranchController().getBranchesList();
-                        print("value1: ${value.length}");
                         value = value
                             .where((branch) => !tempBranches
                                 .any((temp) => temp.txtCode == branch.txtCode))
                             .toList();
-                        print("value1111: ${value.length}");
 
                         return value;
                       }),
                 ],
               ),
             ),
-            // CustomDropDown(
-            //   items: branches,
-            //   label: _locale.branch,
-            //   initialValue: selectedBranch,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       selectedBranch = value.toString();
-            //       selectedBranchCode = branchesMap[value.toString()]!;
-            //       criteria.branch = selectedBranchCode;
-            //     });
-            //   },
-            // ),
           ],
         ),
       ],
@@ -583,19 +528,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // CustomDropDown(
-            //   hint: periods[0],
-            //   label: _locale.period,
-            //   width: widthMobile * 0.81,
-            //   items: periods,
-            //   initialValue: selectedPeriod.isNotEmpty ? selectedPeriod : null,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       checkPeriods(value);
-            //       selectedPeriod = value;
-            //     });
-            //   },
-            // ),
             CustomDropDown(
               label: _locale.status,
               hint: status[0],
@@ -662,9 +594,6 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           for (int i = 0; i < value.length; i++) {
                             stocks.add(value[i]);
                             stocksCodes.add(stocks[i].txtStkcode ?? "");
-                            print(
-                                "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
-                            print("asdasdsad1: ${stocksCodes[i]}");
                           }
                           criteria.codesStock = stocksCodes;
                           setState(() {});
@@ -686,21 +615,11 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       onSearch: (text) async {
                         List<StockModel> value =
                             await TotalSalesController().getStocks(0, text);
-                        print("value1: ${value.length}");
                         value = value
                             .where((stock) => !tempStocks.any(
                                 (temp) => temp.txtStkcode == stock.txtStkcode))
                             .toList();
-                        print("value1111: ${value.length}");
-                        // for (var i = 0; i < value.length; i++) {
-                        //   print("asddddd1:${value[i].txtStkcode}");
-                        //   print("asddddd21:${tempStocks.length}");
-                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                        //     value.removeAt(i);
-                        //     print(
-                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                        //   }
-                        // }
+
                         return value;
                       }),
                 ],
@@ -729,15 +648,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                         for (int i = 0; i < value.length; i++) {
                           tempBranches.add(value[i]);
                           tempBranchesCodes.add(tempBranches[i].txtCode ?? "");
-                          print("asdasdsadTemp: ${tempBranches[i].txtNamee}");
-                          print("asdasdsadTemp1: ${tempBranchesCodes[i]}");
                         }
                       },
                       onChanged: (value) {
                         if (value.isNotEmpty) {
-                          print("innnnnnnnnnnn:000");
-                          print("asdasdasddeeee: ${value.length}");
-                          print("asdasdasddeeee");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -745,13 +659,10 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                           for (int i = 0; i < value.length; i++) {
                             branchesList.add(value[i]);
                             branchesCodes.add(branchesList[i].txtCode ?? "");
-                            print("asdasdsad: ${branchesList[i].txtNamee}");
-                            print("asdasdsad1: ${branchesCodes[i]}");
                           }
                           criteria.codesBranch = branchesCodes;
                           setState(() {});
                         } else {
-                          print("innnnnnnnnnnn:111");
                           branchesList.clear();
                           branchesCodes.clear();
                           tempBranches.clear();
@@ -770,39 +681,16 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
                       onSearch: (text) async {
                         List<BranchModel> value =
                             await BranchController().getBranchesList();
-                        print("value1: ${value.length}");
                         value = value
                             .where((stock) => !tempBranches
                                 .any((temp) => temp.txtCode == stock.txtCode))
                             .toList();
-                        print("value1111: ${value.length}");
-                        // for (var i = 0; i < value.length; i++) {
-                        //   print("asddddd1:${value[i].txtStkcode}");
-                        //   print("asddddd21:${tempStocks.length}");
-                        //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                        //     value.removeAt(i);
-                        //     print(
-                        //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                        //   }
-                        // }
+
                         return value;
                       }),
                 ],
               ),
             ),
-            // CustomDropDown(
-            //   width: width * 0.81,
-            //   items: branches,
-            //   label: _locale.branch,
-            //   initialValue: selectedBranch,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       selectedBranch = value.toString();
-            //       selectedBranchCode = branchesMap[value.toString()]!;
-            //       criteria.branch = selectedBranchCode;
-            //     });
-            //   },
-            // ),
           ],
         ),
         Column(
@@ -832,9 +720,8 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
               width: widthMobile * 0.81,
               child: CustomDate(
                 dateController: toDate,
-                label: _locale.toDate, lastDate: DateTime.now(),
-
-                // minYear: 2000,
+                label: _locale.toDate,
+                lastDate: DateTime.now(),
                 onValue: (isValid, value) {
                   if (isValid) {
                     setState(() {

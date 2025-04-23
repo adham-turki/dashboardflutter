@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:bi_replicate/components/dashboard_components/card_content.dart';
 import 'package:bi_replicate/constants/constants.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
@@ -9,11 +6,10 @@ import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import 'package:intl/intl.dart';
 import '../../components/dashboard_components/pie_dashboard_chart.dart';
 import '../../controller/total_sales_controller.dart';
-import '../../controller/vouch_header_transiet_controller.dart';
 
 import '../../model/chart/pie_chart_model.dart';
 import '../../model/sales/search_crit.dart';
@@ -38,7 +34,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   double height = 0;
   bool isDesktop = false;
   late AppLocalizations locale;
-  Timer? _timer;
   double maxY = 0.0;
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
@@ -70,13 +65,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
     payTypesSearchCriteria.chartType = locale.pieChart;
-    // VouchHeaderTransietController().getBranch().then((value) {
-    //   setState(() {
-    //     vouchHeaderTransietModel = value!;
-    //   });
-    // });
-    // _startTimer();
-
     super.didChangeDependencies();
   }
 
@@ -96,24 +84,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
   }
 
-  void _startTimer() {
-    const storage = FlutterSecureStorage();
-
-    const duration = Duration(minutes: 5);
-    _timer = Timer.periodic(duration, (Timer t) async {
-      String? token = await storage.read(key: "jwt");
-      if (token != null) {
-        VouchHeaderTransietController().getBranch().then((value) {
-          setState(() {
-            vouchHeaderTransietModel = value!;
-          });
-        });
-      } else {
-        _timer!.cancel();
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -128,78 +98,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Row(
           children: [
-            // Expanded(
-            //   flex: 1,
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Row(
-            //         children: [
-            //           Expanded(
-            //             child: CustomCards(
-            //               height: height * 0.216,
-            //               content: CardContent(
-            //                 title: locale.totalSales,
-            //                 dates: locale.localeName == "en"
-            //                     ? "$fromDateEn - $toDateEn"
-            //                     : "$fromDateAr - $toDateAr",
-            //                 value: Converters.formatNumber(
-            //                         vouchHeaderTransietModel.paidSales
-            //                             .toDouble())
-            //                     .toString(),
-            //                 icon: Icons.monetization_on,
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //       SizedBox(
-            //         height: height * 0.009,
-            //       ),
-            //       Row(
-            //         children: [
-            //           Expanded(
-            //             child: CustomCards(
-            //               height: height * 0.216,
-            //               content: CardContent(
-            //                 title: locale.totalReturnSal,
-            //                 dates: locale.localeName == "en"
-            //                     ? "$fromDateEn - $toDateEn"
-            //                     : "$fromDateAr - $toDateAr",
-            //                 value: Converters.formatNumber(
-            //                         vouchHeaderTransietModel.returnSales
-            //                             .toDouble())
-            //                     .toString(),
-            //                 icon: Icons.assignment_return_outlined,
-            //               ),
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //       // SizedBox(
-            //       //   height: height * 0.009,
-            //       // ),
-            //       // Row(
-            //       //   children: [
-            //       //     Expanded(
-            //       //       child: CustomCards(
-            //       //         height: height * 0.144,
-            //       //         content: CardContent(
-            //       //           title: locale.numOfCustomers,
-            //       //           value: Converters.formatNumber(
-            //       //                   vouchHeaderTransietModel.numOfCustomers
-            //       //                       .toDouble())
-            //       //               .toString(),
-            //       //           icon: Icons.people,
-            //       //         ),
-            //       //       ),
-            //       //     ),
-            //       //   ],
-            //       // ),
-            //     ],
-            //   ),
-            // ),
-
             Expanded(
               flex: 2,
               child: CustomCards(
@@ -249,62 +147,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget mobileDashboard() {
     return Column(
       children: [
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     Expanded(
-        //       child: CustomCards(
-        //         height: 150,
-        //         content: CardContent(
-        //           title: locale.totalSales,
-        //           dates: locale.localeName == "ar"
-        //               ? "$fromDateEn - $toDateEn"
-        //               : "$fromDateEn - $toDateEn",
-        //           value: Converters.formatNumber(
-        //                   vouchHeaderTransietModel.paidSales.toDouble())
-        //               .toString(),
-        //           icon: Icons.monetization_on,
-        //         ),
-        //       ),
-        //     ),
-        //     SizedBox(
-        //       width: width * 0.01,
-        //     ),
-        //     Expanded(
-        //       child: CustomCards(
-        //         height: 150,
-        //         content: CardContent(
-        //           title: locale.totalReturnSal,
-        //           dates: locale.localeName == "ar"
-        //               ? "$fromDateEn - $toDateEn"
-        //               : "$fromDateEn - $toDateEn",
-        //           value: Converters.formatNumber(
-        //                   vouchHeaderTransietModel.returnSales.toDouble())
-        //               .toString(),
-        //           icon: Icons.assignment_return_outlined,
-        //         ),
-        //       ),
-        //     ),
-        //     // SizedBox(
-        //     //   width: width * 0.003,
-        //     // ),
-        //     // Expanded(
-        //     //   child: CustomCards(
-        //     //     height: 150,
-        //     //     content: CardContent(
-        //     //       title: locale.numOfCustomers,
-        //     //       dates: locale.localeName == "ar"
-        //     //           ? "$fromDateEn - $toDateEn"
-        //     //           : "$fromDateEn - $toDateEn",
-        //     //       value: Converters.formatNumber(
-        //     //               vouchHeaderTransietModel.numOfCustomers.toDouble())
-        //     //           .toString(),
-        //     //       icon: Icons.people,
-        //     //     ),
-        //     //   ),
-        //     // ),
-        //   ],
-        // ),
         Row(
           children: [
             payTypesSearchCriteria.chartType == locale.pieChart
@@ -384,23 +226,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             : SizedBox.shrink()
                       ],
                     ),
-                    // title == "Sales By Cashier"
-                    //     ? Text(
-                    //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                    //     : title == "Sales By Computer"
-                    //         ? Text(
-                    //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                    //         : title == "Sales By Payment Types"
-                    //             ? Text(
-                    //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                    //             : SizedBox.shrink()
                   ],
                 ),
-                // if (Responsive.isDesktop(context))
-                //   if (title == locale.salesByPaymentTypes)
-                //     Text(
-                //         "${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate}",
-                //         style: TextStyle(fontSize: height * 0.015)),
                 blueButton1(
                   onPressed: () async {
                     List<CashierModel> cashiers = [];
@@ -441,7 +268,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 )
               ],
             ),
-            // if (!Responsive.isDesktop(context))
             if (title == locale.salesByPaymentTypes)
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -511,14 +337,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
           );
         });
-        // barChartData.add(BarChartGroupData(
-        //     x: int.parse(totalSalesByPayTypes[i].displayGroupName),
-        //     barRods: [
-        //       BarChartRodData(
-        //         toY: double.parse(totalSalesByPayTypes[i].displayTotalSales),
-        //         borderRadius: BorderRadius.all(Radius.zero),
-        //       )
-        //     ]));
       }
       setState(() {});
     });
@@ -562,38 +380,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Text(
                               '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalPricesPayTypesCount)))})",
                               style: TextStyle(fontSize: isDesktop ? 15 : 18)),
                         ],
                       ),
-                      // title == "Sales By Cashier"
-                      //     ? Text(
-                      //         "Total: ${Converters.formatNumber(totalPricesCashierCount)}")
-                      //     : title == "Sales By Computer"
-                      //         ? Text(
-                      //             "Total: ${Converters.formatNumber(totalPricesComputerCount)}")
-                      //         : title == "Sales By Payment Types"
-                      //             ? Text(
-                      //                 "Total: ${Converters.formatNumber(totalPricesPayTypesCount)}")
-                      //             : SizedBox.shrink()
                     ],
                   ),
-                  // if (Responsive.isDesktop(context))
-                  //   if (title == locale.salesByCashier)
-                  //     Text(
-                  //         "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                  // if (Responsive.isDesktop(context))
-                  //   if (title == locale.salesByComputer)
-                  //     Text(
-                  //         "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                  // if (Responsive.isDesktop(context))
-                  //   if (title == locale.salesByHours)
-                  //     Text(
-                  //         "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                  // if (Responsive.isDesktop(context))
-                  //   if (title == locale.salesByPaymentTypes)
-                  //     Text(
-                  //         "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
                   blueButton1(
                     onPressed: () async {
                       List<CashierModel> cashiers = [];
@@ -637,8 +428,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   )
                 ],
               ),
-              // if (!Responsive.isDesktop(context))
-
               if (title == locale.salesByPaymentTypes)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

@@ -2,7 +2,6 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 import '../../components/key.dart';
-import '../../utils/constants/colors.dart';
 
 // ignore: must_be_immutable
 class DropDown extends StatefulWidget {
@@ -74,7 +73,6 @@ class _CustomDropDownState extends State<DropDown> {
 
   @override
   Widget build(BuildContext context) {
-    double width = widget.width ?? MediaQuery.of(context).size.width * 0.15;
     double height = MediaQuery.of(context).size.height * 0.3;
     ClearButtonProps clearButtonProps = ClearButtonProps(
       alignment: Alignment.topCenter,

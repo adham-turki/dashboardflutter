@@ -7,7 +7,6 @@ import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:uuid/uuid.dart';
 import '../../../components/custom_date.dart';
-import '../../../controller/error_controller.dart';
 import '../../../controller/settings/user_settings/code_reports_controller.dart';
 import '../../../controller/settings/user_settings/user_report_settings_controller.dart';
 import '../../../model/settings/user_settings/code_reports_model.dart';
@@ -106,7 +105,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
     selectedPeriod = periods[0];
     selectedChart = charts[0];
     selectedStatus = status[0];
-    // getTotalCollections(isStart: true);
     super.didChangeDependencies();
   }
 
@@ -207,7 +205,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
@@ -220,8 +217,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
 
         // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        print(
-            "startSearchCriteriastartSearchCriteria2222222: ${startSearchCriteria}");
 
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -229,11 +224,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
         _toDateController.text =
             DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -247,8 +237,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
           if (currentPageName.isNotEmpty) {
             getAllUserReportSettings();
           }
-
-          print("codeReportsList Length: ${codeReportsList.length}");
         });
       }
     });
@@ -271,39 +259,23 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
         setState(() {
           currentPageName = codeReportsList[i].txtReportnamee;
           currentPageCode = codeReportsList[i].txtReportcode;
-          print("codeReportsList[i]: ${codeReportsList[i].toJson()}");
         });
       }
     }
   }
 
   void setSearchCriteria(SearchCriteria searchCriteria) {
-    print(
-        "searchCriteria.toJson().toString(): ${searchCriteria.toJson().toString()}");
-    print("currentPageCode: ${currentPageCode}");
-    String search = "${searchCriteria.toJson()}";
     UserReportSettingsModel userReportSettingsModel = UserReportSettingsModel(
         txtKey: txtKey,
         txtReportcode: currentPageCode,
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
 
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 
@@ -316,18 +288,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // CustomDropDown(
-                //   items: periods,
-                //   label: _locale.period,
-                //   initialValue: selectedPeriod,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       checkPeriods(value);
-                //       selectedPeriod = value!;
-                //       getTotalCollections();
-                //     });
-                //   },
-                // ),
                 CustomDropDown(
                   items: status,
                   label: _locale.status,
@@ -420,19 +380,6 @@ class _TotalCollectionsContentState extends State<TotalCollectionsContent> {
             });
           },
         ),
-        // CustomDropDown(
-        //   width: widthMobile * 0.81,
-        //   items: periods,
-        //   label: _locale.period,
-        //   initialValue: selectedPeriod,
-        //   onChanged: (value) {
-        //     setState(() {
-        //       checkPeriods(value);
-        //       selectedPeriod = value!;
-        //       getTotalCollections();
-        //     });
-        //   },
-        // ),
         CustomDropDown(
           width: widthMobile * 0.81,
           items: status,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../provider/local_provider.dart';
@@ -16,7 +15,6 @@ class LanguageWidget extends StatefulWidget {
 }
 
 class _LanguageWidgetState extends State<LanguageWidget> {
-  late AppLocalizations _local;
   late LocaleProvider _localeProvider;
   List<Widget> lang = [];
   List<Widget> lang2 = [];
@@ -24,7 +22,6 @@ class _LanguageWidgetState extends State<LanguageWidget> {
   @override
   void didChangeDependencies() {
     _localeProvider = Provider.of<LocaleProvider>(context);
-    _local = AppLocalizations.of(context)!;
     super.didChangeDependencies();
   }
 
@@ -40,20 +37,16 @@ class _LanguageWidgetState extends State<LanguageWidget> {
     }
 
     return DropdownButton(
-      // style: TextStyle,
       value: initialFlag,
       selectedItemBuilder: (_) {
         return getWidget(widget.color).map((e) => e).toList();
       },
-      // icon: const Icon(Icons.arrow_downward),
       items: [
         DropdownMenuItem(value: 'en', child: lang[0]),
         DropdownMenuItem(value: 'ar', child: lang[1]),
       ],
       underline: Container(),
-
       onChanged: (value) async {
-        print("ddddddddddddddddd");
         Locale newLocale = Locale(value!);
         widget.onLocaleChanged!(newLocale);
 
@@ -76,15 +69,6 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                   ? MediaQuery.of(context).size.height * 0.03
                   : MediaQuery.of(context).size.height * 0.02,
             ),
-            // const SizedBox(width: 10),
-            // Text(
-            //   _local.dropLangEN,
-            //   style: TextStyle(
-            //     // backgroundColor: Colors.black,
-            //     color: color,
-            //     fontSize: 16,
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -99,14 +83,6 @@ class _LanguageWidgetState extends State<LanguageWidget> {
                   ? MediaQuery.of(context).size.height * 0.03
                   : MediaQuery.of(context).size.height * 0.02,
             ),
-            // const SizedBox(width: 10),
-            // Text(
-            //   _local.dropLangAR,
-            //   style: TextStyle(
-            //     color: color,
-            //     fontSize: 16,
-            //   ),
-            // ),
           ],
         ),
       ),
