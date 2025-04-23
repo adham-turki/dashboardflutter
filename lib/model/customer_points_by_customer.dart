@@ -8,9 +8,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CustomerPointsByCustomerModel {
   String? custCode;
   String? custName;
-  int? custPoints;
-  int? usedPoints;
-  int? remainingPoints;
+  double? custPoints;
+  double? usedPoints;
+  double? remainingPoints;
 
   CustomerPointsByCustomerModel({
     this.custCode,
@@ -24,9 +24,9 @@ class CustomerPointsByCustomerModel {
     return CustomerPointsByCustomerModel(
       custCode: json['custCode'] ?? '',
       custName: json['custName'] ?? '',
-      custPoints: json['custPoints'] ?? 0,
-      usedPoints: json['usedPoints'] ?? 0,
-      remainingPoints: json['remainingPoints'] ?? 0,
+      custPoints: json['custPoints'] ?? 0.0,
+      usedPoints: json['usedPoints'] ?? 0.0,
+      remainingPoints: json['remainingPoints'] ?? 0.0,
     );
   }
 

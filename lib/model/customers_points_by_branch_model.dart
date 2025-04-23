@@ -8,7 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class CustomerPointsByBranch {
   String branchCode;
   String branchName;
-  int custPoints;
+  double custPoints;
 
   CustomerPointsByBranch({
     required this.branchCode,
@@ -20,7 +20,7 @@ class CustomerPointsByBranch {
     return CustomerPointsByBranch(
       branchCode: json['branchCode'] ?? '',
       branchName: json['branchName'] ?? '',
-      custPoints: json['custPoints'] ?? 0,
+      custPoints: json['custPoints'] ?? 0.0,
     );
   }
 
