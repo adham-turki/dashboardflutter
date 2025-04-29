@@ -68,7 +68,7 @@ class _LoginDialogState extends State<LoginDialog> {
           child: Column(
             children: [
               SizedBox(
-                height: isDesktop ? dialogHeight * 0.33 : dialogHeight * 0.25,
+                height: isDesktop ? dialogHeight * 0.37 : dialogHeight * 0.25,
                 width: double.infinity,
                 child: Column(
                   children: [
@@ -147,8 +147,8 @@ class _LoginDialogState extends State<LoginDialog> {
       padding: const EdgeInsets.all(8.0),
       child: Text(
         _locale.expiredSessionLoginDialog,
-        style: const TextStyle(
-          fontSize: 20,
+        style: TextStyle(
+          fontSize: dialogHeight * 0.022,
           shadows: [Shadow(color: Colors.black, offset: Offset(0, -25))],
           color: Colors.transparent,
           decoration: TextDecoration.underline,
@@ -176,7 +176,7 @@ class _LoginDialogState extends State<LoginDialog> {
           ],
         ),
         width: isDesktop ? dialogWidth * 0.3 : dialogWidth * 0.65,
-        height: 60,
+        height: dialogHeight * 0.08,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
           child: TextFormField(
@@ -235,10 +235,10 @@ class _LoginDialogState extends State<LoginDialog> {
   Widget customSubmitButton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        fixedSize: const Size(150, 50),
+        fixedSize: Size(dialogWidth * 0.15, dialogHeight * 0.05),
         backgroundColor: primary,
         foregroundColor: Colors.white,
-        textStyle: const TextStyle(fontSize: 18),
+        textStyle: TextStyle(fontSize: dialogHeight * 0.015),
       ),
       onPressed: () {
         passwordAndEmailCheck();
