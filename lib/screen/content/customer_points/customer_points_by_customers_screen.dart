@@ -111,11 +111,43 @@ class _CustomerPointsByCustomersScreenState
               : Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    tableComponentTopPoints(context),
+                    Column(
+                      children: [
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topPoints,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: height * 0.02,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        tableComponentTopPoints(context),
+                      ],
+                    ),
                     SizedBox(
                       height: height * 0.02,
                     ),
-                    tableComponentTopUsedPoints(context),
+                    Column(
+                      children: [
+                        SelectableText(
+                          maxLines: 1,
+                          _locale.topUsedPoints,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: height * 0.02,
+                            color: Colors.black,
+                          ),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
+                        tableComponentTopUsedPoints(context),
+                      ],
+                    ),
                   ],
                 ),
         ),
