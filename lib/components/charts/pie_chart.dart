@@ -180,7 +180,7 @@ class _PieChartComponentState extends State<PieChartComponent> {
         width: width * 0.2,
         height: height * 0.08,
         decoration: BoxDecoration(
-          color: data.color,
+          color: data.color!.withOpacity(0.5),
           borderRadius: BorderRadius.circular(4),
           boxShadow: const [
             BoxShadow(
