@@ -160,7 +160,20 @@ class _SideMenuState extends State<SideMenu> {
                               localeProvider.setLocale(locale);
                             },
                           ),
-                        )
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return const SessionFilterDialog();
+                                },
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.date_range,
+                              color: Colors.white,
+                            )),
                       ],
                     ),
               isDesktop
