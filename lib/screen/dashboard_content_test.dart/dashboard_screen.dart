@@ -1,6 +1,7 @@
 import 'package:bi_replicate/constants/constants.dart';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/screen/dashboard_content/branches_sales_cat_dashboard.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../components/dashboard_components/pie_dashboard_chart.dart';
 import '../../controller/total_sales_controller.dart';
 
@@ -73,6 +75,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     formattedFromDate =
         DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+    formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionFromDate
+        : formattedFromDate;
+    formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionToDate
+        : formattedToDate;
     payTypesSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",

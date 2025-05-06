@@ -1,3 +1,4 @@
+import 'package:bi_replicate/dialogs/session_filter_dialog.dart';
 import 'package:bi_replicate/widget/new_sideMenue/sub_menu_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -163,36 +164,55 @@ class _SideMenuState extends State<SideMenu> {
                       ],
                     ),
               isDesktop
-                  ? MouseRegion(
-                      onEnter: (event) {
-                        setState(() {
-                          isEnteredCollapseIcon = true;
-                        });
-                      },
-                      onExit: (event) {
-                        setState(() {
-                          isEnteredCollapseIcon = false;
-                        });
-                      },
-                      child: IconButton(
-                        color: Colors.white,
-                        splashRadius: 1,
-                        iconSize: width * 0.015,
-                        onPressed: () {
-                          context
-                              .read<ScreenContentProvider>()
-                              .setIsColapsed(!isCollapsed);
-                          setState(() {
-                            isCollapsed
-                                ? isCollapsed = false
-                                : isCollapsed = true;
-                          });
-                        },
-                        icon: Icon(
-                          Icons.flip_to_back_rounded,
-                          color: isEnteredCollapseIcon ? Colors.white : null,
+                  ? Row(
+                      children: [
+                        if (!isCollapsed)
+                          IconButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const SessionFilterDialog();
+                                  },
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.date_range,
+                                color: Colors.white,
+                              )),
+                        MouseRegion(
+                          onEnter: (event) {
+                            setState(() {
+                              isEnteredCollapseIcon = true;
+                            });
+                          },
+                          onExit: (event) {
+                            setState(() {
+                              isEnteredCollapseIcon = false;
+                            });
+                          },
+                          child: IconButton(
+                            color: Colors.white,
+                            splashRadius: 1,
+                            iconSize: width * 0.015,
+                            onPressed: () {
+                              context
+                                  .read<ScreenContentProvider>()
+                                  .setIsColapsed(!isCollapsed);
+                              setState(() {
+                                isCollapsed
+                                    ? isCollapsed = false
+                                    : isCollapsed = true;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.flip_to_back_rounded,
+                              color:
+                                  isEnteredCollapseIcon ? Colors.white : null,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     )
                   : Container(),
             ],

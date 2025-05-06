@@ -1,10 +1,12 @@
 import 'package:bi_replicate/Encryption/encryption.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/utils/constants/encrypt_key.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../controller/error_controller.dart';
 import '../controller/login/login_controller.dart';
@@ -83,6 +85,12 @@ class _LoginDialogState extends State<LoginDialog> {
                                 color: Color.fromARGB(255, 237, 34, 20)),
                             child: IconButton(
                                 onPressed: () async {
+                                  context
+                                      .read<DatesProvider>()
+                                      .setSessionFromDate("");
+                                  context
+                                      .read<DatesProvider>()
+                                      .setSessionToDate("");
                                   GoRouter.of(context).go(loginScreenRoute);
                                 },
                                 icon: const Icon(

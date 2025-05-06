@@ -1,7 +1,9 @@
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import '../../model/api_url.dart';
 import '../../model/routes.dart';
 import '../../utils/constants/colors.dart';
@@ -50,6 +52,8 @@ class _LogoutTabState extends State<LogoutTab> {
         print("First Logout:${previousUrlServer}");
         ApiURL.urlServer = "";
         print("Second Logout:${previousUrlServer} ${ApiURL.urlServer}");
+        context.read<DatesProvider>().setSessionFromDate("");
+        context.read<DatesProvider>().setSessionToDate("");
         // storage.
         // if (kIsWeb) {
         //   // Navigator.pushReplacementNamed(context, AppRoutes.loginRoute);

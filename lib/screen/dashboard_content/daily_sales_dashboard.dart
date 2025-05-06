@@ -5,12 +5,14 @@ import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart
 import 'package:bi_replicate/components/dashboard_components/line_dasboard_chart.dart';
 import 'package:bi_replicate/components/dashboard_components/pie_dashboard_chart.dart';
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/func/dates_controller.dart';
@@ -108,6 +110,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       statusVar = All_Status;
       selectedBranchCode = "";
     }
+
     counter++;
     super.didChangeDependencies();
   }
@@ -454,6 +457,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
             ? todayDate
             : searchCriteriaa!.fromDate!;
+        fromDateController.text =
+            context.read<DatesProvider>().sessionFromDate.isNotEmpty
+                ? DatesController().dashFormatDate(
+                    context.read<DatesProvider>().sessionFromDate, false)
+                : searchCriteriaa!.fromDate!;
       }
     }
   }

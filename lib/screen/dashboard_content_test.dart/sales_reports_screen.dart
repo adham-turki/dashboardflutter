@@ -7,6 +7,7 @@ import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/model/computer_model.dart';
 
 import 'package:bi_replicate/model/sales_view_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:bi_replicate/utils/constants/colors.dart';
@@ -123,7 +124,14 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     }
 
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
-
+    formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionFromDate
+        : formattedFromDate;
+    formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionToDate
+        : formattedToDate;
+    print("formattedDate: ${formattedFromDate}");
+    print("formattedDate: ${formattedToDate}");
     salesCostBasedBranchReportCrit = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
@@ -131,9 +139,9 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
-    formattedFromDate =
-        DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
-    formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+    // formattedFromDate =
+    //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+    // formattedToDate = DateFormat('dd/MM/yyyy').format(now);
     cashierSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
@@ -232,6 +240,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   fetchSalesByHours() async {
     totalSalesByHours.clear();
+    maxYHours = 0.0;
     totalPricesHoursCount = 0.0;
     barChartData.clear();
     await TotalSalesController()

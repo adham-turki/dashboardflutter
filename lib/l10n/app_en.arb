@@ -314,5 +314,6 @@
     "remainingPoints": "Remaining Points",
     "numOfResults": "Number of Results",
     "topPoints": "Top Points",
-    "topUsedPoints": "Top Used Points"
+    "topUsedPoints": "Top Used Points",
+    "selectSessionDates": "Select Search Period"
 }

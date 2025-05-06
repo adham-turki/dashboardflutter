@@ -1,10 +1,12 @@
 import 'package:bi_replicate/controller/sales_adminstration/branch_controller.dart';
 import 'package:bi_replicate/model/stock_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/test_drop_down.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
 import '../../../components/table_component.dart';
 import '../../../controller/error_controller.dart';
@@ -72,8 +74,25 @@ class _InventoryPerfContentState extends State<InventoryPerfContent> {
 
     fromDate.text = firstDayCurrentMonth;
     toDate.text = todayDate;
-    criteria.fromDate = DatesController().formatDate(fromDate.text);
-    criteria.toDate = DatesController().formatDate(toDate.text);
+    fromDate.text = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionFromDate, true)
+        : fromDate.text;
+    toDate.text = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionToDate, true)
+        : toDate.text;
+    // criteria.fromDate = DatesController().formatDate(fromDate.text);
+    // criteria.toDate = DatesController().formatDate(toDate.text);
+    criteria.fromDate =
+        (context.read<DatesProvider>().sessionFromDate.isNotEmpty
+            ? DatesController().dashFormatDate(
+                context.read<DatesProvider>().sessionFromDate, false)
+            : DatesController().formatDate(fromDate.text));
+    criteria.toDate = (context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionToDate, false)
+        : DatesController().formatDate(toDate.text));
     criteria.voucherStatus = -100;
     criteria.rownum = 10;
     focusNode.requestFocus();

@@ -290,5 +290,6 @@
     "remainingPoints": "النقاط المتبقية",
     "numOfResults": "عدد النتائج",
     "topPoints": "الأكثر نقاط",
-    "topUsedPoints": "الأكثر استخداماً للنقاط"
+    "topUsedPoints": "الأكثر استخداماً للنقاط",
+    "selectSessionDates": "حدد مدة البحث"
 }

@@ -57,6 +57,38 @@ class DatesController {
     return dateFormatter.format(todayDate);
   }
 
+  String slashFormatDate(String date, bool useSlashFormat) {
+    // Split the date string into year, month, and day
+    List<String> parts = date.split('-');
+    String year = parts[0];
+    String month = parts[1];
+    String day = parts[2];
+
+    if (useSlashFormat) {
+      // Return format: yyyy/mm/dd
+      return '$year/$month/$day';
+    } else {
+      // Return format: dd/mm/yyyy
+      return '$day/$month/$year';
+    }
+  }
+
+  String dashFormatDate(String date, bool useSlashFormat) {
+    // Split the date string into year, month, and day
+    List<String> parts = date.split('/');
+    String year = parts[2];
+    String month = parts[1];
+    String day = parts[0];
+
+    if (useSlashFormat) {
+      // Return format: yyyy-mm-dd
+      return '$year-$month-$day';
+    } else {
+      // Return format: dd-mm-yyyy
+      return '$day-$month-$year';
+    }
+  }
+
   formatDate(String date) {
     if (date == "null") {
       return "";

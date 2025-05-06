@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:bi_replicate/components/dashboard_components/bar_dashboard_chart.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/utils/constants/maps.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/utils/func/converters.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../../../controller/sales_adminstration/sales_branches_controller.dart';
 import '../../../model/chart/pie_chart_model.dart';
 import '../../../utils/constants/colors.dart';
@@ -434,6 +436,16 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         toDateController.text = searchCriteriaa!.toDate!.isEmpty
             ? todayDate
             : searchCriteriaa!.toDate!;
+        fromDateController.text =
+            context.read<DatesProvider>().sessionFromDate.isNotEmpty
+                ? DatesController().dashFormatDate(
+                    context.read<DatesProvider>().sessionFromDate, false)
+                : searchCriteriaa!.fromDate!;
+        toDateController.text =
+            context.read<DatesProvider>().sessionToDate.isNotEmpty
+                ? DatesController().dashFormatDate(
+                    context.read<DatesProvider>().sessionToDate, false)
+                : searchCriteriaa!.toDate!;
       }
     }
   }

@@ -5,6 +5,7 @@ import 'package:bi_replicate/controller/sales_adminstration/branch_controller.da
 import 'package:bi_replicate/model/branch_model.dart';
 import 'package:bi_replicate/model/criteria/customer_points_crit_model.dart';
 import 'package:bi_replicate/model/customers_points_by_branch_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
 import 'package:bi_replicate/utils/constants/styles.dart';
 import 'package:bi_replicate/utils/func/dates_controller.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:provider/provider.dart';
 
 class CustomerPointsByBranchScreen extends StatefulWidget {
   const CustomerPointsByBranchScreen({super.key});
@@ -59,12 +61,27 @@ class _CustomerPointsByBranchScreenState
     focusNode.requestFocus();
     fromDate.text = firstDayOfMonth;
     toDate.text = todayDate;
+    fromDate.text = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionFromDate, true)
+        : fromDate.text;
+    toDate.text = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionToDate, true)
+        : toDate.text;
     criteria.codesBranch = [];
     criteria.codesCust = [];
     criteria.count = 10;
     criteria.page = 1;
-    criteria.fromDate = (firstDayOfMonth);
-    criteria.toDate = (todayDate);
+    criteria.fromDate =
+        (context.read<DatesProvider>().sessionFromDate.isNotEmpty
+            ? DatesController().dashFormatDate(
+                context.read<DatesProvider>().sessionFromDate, false)
+            : firstDayOfMonth);
+    criteria.toDate = (context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionToDate, false)
+        : todayDate);
     super.initState();
   }
 

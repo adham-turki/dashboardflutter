@@ -5,6 +5,7 @@ import 'package:bi_replicate/controller/total_sales_controller.dart';
 import 'package:bi_replicate/model/branch_sales_by_stocks_model.dart';
 import 'package:bi_replicate/model/criteria/search_criteria.dart';
 import 'package:bi_replicate/model/settings/user_settings/user_report_settings.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/screen/dashboard_content/filter_dialog/filter_dialog_sales_by_cat.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:bi_replicate/utils/constants/maps.dart';
@@ -15,6 +16,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OtherReportsScreen extends StatefulWidget {
   const OtherReportsScreen({super.key});
@@ -30,7 +32,7 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
   late AppLocalizations locale;
   SearchCriteria salesByStocksSearchCriteria =
       SearchCriteria(branch: "", fromDate: "", toDate: "");
-  bool isLoading = false;
+  bool isLoading = true;
   double totalSalesByStocks = 0.0;
   double maxY = 0.0;
   List<BranchSalesByStocksModel> salesByStocksList = [];
@@ -70,6 +72,18 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
         : salesByStocksSearchCriteria.toDate!;
     salesByStocksSearchCriteria.fromDate = fromDateController.text;
     salesByStocksSearchCriteria.toDate = toDateController.text;
+    salesByStocksSearchCriteria.fromDate =
+        context.read<DatesProvider>().sessionFromDate.isNotEmpty
+            ? DatesController().dashFormatDate(
+                context.read<DatesProvider>().sessionFromDate, false)
+            : salesByStocksSearchCriteria.fromDate;
+    salesByStocksSearchCriteria.toDate = context
+            .read<DatesProvider>()
+            .sessionToDate
+            .isNotEmpty
+        ? DatesController()
+            .dashFormatDate(context.read<DatesProvider>().sessionToDate, false)
+        : salesByStocksSearchCriteria.toDate;
     fetchSalesByStocks();
     if (count == 0) {
       fromDateController.text = "";

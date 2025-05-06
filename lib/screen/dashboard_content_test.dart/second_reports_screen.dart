@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/total_profit_report_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -89,7 +90,12 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     // formattedFromDate =
     //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
-
+    formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionFromDate
+        : formattedFromDate;
+    formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionToDate
+        : formattedToDate;
     salesCostBasedBranchReportCrit = SearchCriteria(
         branch: "all",
         shiftStatus: "all",

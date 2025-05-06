@@ -6,6 +6,19 @@ class DatesProvider with ChangeNotifier {
   bool dayTemp = true;
   bool monthTemp = true;
   bool yearTemp = true;
+  String sessionFromDate = "";
+  String sessionToDate = "";
+
+  setSessionFromDate(String value) {
+    sessionFromDate = value;
+    notifyListeners();
+  }
+
+  setSessionToDate(String value) {
+    sessionToDate = value;
+    notifyListeners();
+  }
+
   setDayTemp(bool temp) {
     dayTemp = temp;
     notifyListeners();

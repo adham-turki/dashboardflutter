@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bi_replicate/model/chart/chart_data_model.dart';
 import 'package:bi_replicate/model/sales/sales_cost_based_stock_cat_view_model.dart';
 import 'package:bi_replicate/model/sales_view_model.dart';
+import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/utils/constants/app_utils.dart';
 
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import '../../controller/total_sales_controller.dart';
 import '../../model/sales/search_crit.dart';
 
@@ -121,7 +123,12 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
     // formattedFromDate =
     //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
     formattedToDate = DateFormat('dd/MM/yyyy').format(now);
-
+    formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionFromDate
+        : formattedFromDate;
+    formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionToDate
+        : formattedToDate;
     cashierLogsSearchCriteria = SearchCriteria(
         branch: "all",
         shiftStatus: "all",
