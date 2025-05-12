@@ -247,7 +247,7 @@ class _SessionFilterDialogState extends State<SessionFilterDialog> {
           readOnly: false,
           height: screenHeight * 0.04,
           dateWidth: Responsive.isDesktop(context)
-              ? screenWidth * 0.14
+              ? screenWidth * 0.16
               : screenWidth * 0.66,
           label: label,
           dateController: controller,
