@@ -308,6 +308,8 @@ class _ContentHeaderState extends State<ContentHeader> {
         return locale.byBranches;
       case 26:
         return locale.byCustomers;
+      // case 33:
+      //   return locale.sessionDate;
       default:
         return "";
     }

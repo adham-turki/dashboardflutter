@@ -357,7 +357,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
-                            '(${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}), ${_locale.decreaseDiffSum}: (\u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
+                            '(${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}, ${_locale.decreaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
                           )
                           // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
                         ],

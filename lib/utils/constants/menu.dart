@@ -262,6 +262,10 @@ List<SideTabModel> getSubMenu(AppLocalizations locale) {
           text: locale.changePassword,
           value: 16,
         ),
+        // SideSubTabModel(
+        //   text: locale.sessionDate,
+        //   value: 33,
+        // ),
       ],
       value: -1,
     ),

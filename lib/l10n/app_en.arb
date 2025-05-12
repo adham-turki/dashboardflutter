@@ -315,5 +315,6 @@
     "numOfResults": "Number of Results",
     "topPoints": "Top Points",
     "topUsedPoints": "Top Used Points",
-    "selectSessionDates": "Select Search Period"
+    "selectSessionDates": "Select Search Period",
+    "sessionDate": "Session Date"
 }

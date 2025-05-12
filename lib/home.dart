@@ -15,6 +15,7 @@ import 'package:bi_replicate/screen/content/sales_adminstration/branch_sales_by_
 import 'package:bi_replicate/screen/content/sales_adminstration/daily_sales_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/sales_by_branches_content.dart';
 import 'package:bi_replicate/screen/content/sales_adminstration/total_collections_content.dart';
+import 'package:bi_replicate/screen/content/settings/session_date_screen.dart';
 import 'package:bi_replicate/screen/content/settings/setup_content/setup.dart';
 import 'package:bi_replicate/screen/content/settings/change_pass/change_password_screen.dart';
 import 'package:bi_replicate/screen/content/settings/users_content/users_content.dart';
@@ -194,6 +195,8 @@ class _HomePageState extends State<HomePage> {
         return const CustomerPointsByBranchScreen();
       case 26:
         return const CustomerPointsByCustomersScreen();
+      // case 33:
+      //   return const SessionDateScreen();
       default:
         return Container();
     }
@@ -256,6 +259,8 @@ class _HomePageState extends State<HomePage> {
         return locale.byBranches;
       case 26:
         return locale.byCustomers;
+      // case 33:
+      //   return locale.sessionDate;
       default:
         return "";
     }

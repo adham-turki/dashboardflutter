@@ -291,5 +291,6 @@
     "numOfResults": "عدد النتائج",
     "topPoints": "الأكثر نقاط",
     "topUsedPoints": "الأكثر استخداماً للنقاط",
-    "selectSessionDates": "اختيار الفترة"
+    "selectSessionDates": "اختيار الفترة",
+    "sessionDate": "تاريخ الجلسة"
 }
