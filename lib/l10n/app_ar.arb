@@ -292,5 +292,22 @@
     "topPoints": "الأكثر نقاط",
     "topUsedPoints": "الأكثر استخداماً للنقاط",
     "selectSessionDates": "اختيار الفترة",
-    "sessionDate": "تاريخ الجلسة"
+    "sessionDate": "تاريخ الجلسة",
+    "freezeColumnToStart": "تثبيت العمود للبداية",
+    "freezeColumnToEnd": "تثبيت العمود للنهاية",
+    "autoFit": "تلاؤم تلقائي",
+    "hideColumn": "إخفاء العمود",
+    "setColumns": "تعيين الأعمدة",
+    "setFilter": "تعيين فلتر",
+    "resetFilter": "إعادة تعيين فلتر",
+    "tableColumn": "العمود",
+    "equals": "يساوي",
+    "startsWith": "يبدا بـ",
+    "endsWith": "ينتهي بـ",
+    "greaterThan": "أكبر من",
+    "greaterThanOrEqual": "أكبر من أو يساوي",
+    "lessThan": "أقل من",
+    "lessThanOrEqual": "أقل من أو يساوي",
+    "type": "النوع",
+    "value": "القيمة"
 }

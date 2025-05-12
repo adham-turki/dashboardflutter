@@ -93,7 +93,6 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       fromDateController.text = "";
       toDateController.text = "";
 
-      selectedChart = Pie_Chart;
       period = Daily_Period;
     }
     count++;
@@ -208,6 +207,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                                   selectedPeriod, _locale);
                                               selectedChart = getChartByName(
                                                   chart, _locale);
+
                                               SearchCriteria searchCriteria =
                                                   SearchCriteria(
                                                 fromDate:
@@ -231,7 +231,13 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
                                         getSalesByBranch().then((value) {
                                           setState(() {
                                             _startTimer();
-
+                                            if (selectedChart == Pie_Chart) {
+                                              if (barData.length < 4) {
+                                                selectedChart = Pie_Chart;
+                                              } else {
+                                                selectedChart = Bar_Chart;
+                                              }
+                                            }
                                             isLoading = false;
                                           });
                                         });
@@ -584,6 +590,11 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
       }
       totalBranchesSale.value = total;
     });
+    if (barData.length < 4) {
+      selectedChart = Pie_Chart;
+    } else {
+      selectedChart = Bar_Chart;
+    }
   }
 
   void _startTimer() {
@@ -679,6 +690,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           total += listOfBalances[i];
         }
         totalBranchesSale.value = total;
+
         // Converters.formatNumberRounded(
         //     double.parse(Converters.formatNumberDigits(total)));
       });

@@ -70,6 +70,25 @@ class _TableComponentState extends State<TableComponent> {
     List<PlutoRow> polRows = widget.polRows;
     return PlutoGrid(
       configuration: PlutoGridConfiguration(
+        localeText: PlutoGridLocaleText(
+            freezeColumnToStart: _locale.freezeColumnToStart,
+            freezeColumnToEnd: _locale.freezeColumnToEnd,
+            autoFitColumn: _locale.autoFit,
+            hideColumn: _locale.hideColumn,
+            setColumns: _locale.setColumns,
+            setFilter: _locale.setFilter,
+            resetFilter: _locale.resetFilter,
+            filterColumn: _locale.tableColumn,
+            filterType: _locale.type,
+            filterValue: _locale.value,
+            filterContains: _locale.contains,
+            filterEquals: _locale.equals,
+            filterEndsWith: _locale.endsWith,
+            filterLessThan: _locale.lessThan,
+            filterGreaterThan: _locale.greaterThan,
+            filterGreaterThanOrEqualTo: _locale.greaterThanOrEqual,
+            filterStartsWith: _locale.startsWith,
+            filterLessThanOrEqualTo: _locale.lessThanOrEqual),
         columnSize: width > 1300
             ? const PlutoGridColumnSizeConfig(
                 autoSizeMode: PlutoAutoSizeMode.scale,

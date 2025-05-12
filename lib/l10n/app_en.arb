@@ -316,5 +316,22 @@
     "topPoints": "Top Points",
     "topUsedPoints": "Top Used Points",
     "selectSessionDates": "Select Search Period",
-    "sessionDate": "Session Date"
+    "sessionDate": "Session Date",
+    "freezeColumnToStart": "Freeze to start",
+    "freezeColumnToEnd": "Freeze to end",
+    "autoFit": "Auto Fit",
+    "hideColumn": "Hide column",
+    "setColumns": "Set columns",
+    "setFilter": "Set filter",
+    "resetFilter": "Reset filter",
+    "tableColumn": "Column",
+    "equals": "Equals",
+    "startsWith": "Starts with",
+    "endsWith": "EndsWith",
+    "greaterThan": "Greater than",
+    "greaterThanOrEqual": "Greater than or equal to",
+    "lessThan": "Less than",
+    "lessThanOrEqual": "Less than or equal to",
+    "type": "Type",
+    "value": "Value"
 }
