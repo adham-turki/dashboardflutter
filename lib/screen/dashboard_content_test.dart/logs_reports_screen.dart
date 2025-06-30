@@ -64,12 +64,14 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
   bool isLoading = false;
   double maxY = 0.0;
   List<String> xLabelsLogs = [];
+  late DatesProvider dateProvider;
 
   fetchSalesByCashierLogs() async {
     totalCashierLogsList.clear();
     totalCashierLogs = 0.0;
     isLoading = true;
     maxY = 0.0;
+    setState(() {});
     await TotalSalesController()
         .getCashierLogs(cashierLogsSearchCriteria)
         .then((value) {
@@ -136,10 +138,35 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
-
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.addListener(_onDateRangeChanged);
+    // });
     fetchData();
     startTimer();
     super.initState();
+  }
+
+  void _onDateRangeChanged() {
+    if (dateProvider.sessionFromDate != "" &&
+        dateProvider.sessionToDate != "") {
+      formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+      formattedFromDate =
+          context.read<DatesProvider>().sessionFromDate.isNotEmpty
+              ? context.read<DatesProvider>().sessionFromDate
+              : formattedFromDate;
+      formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+          ? context.read<DatesProvider>().sessionToDate
+          : formattedToDate;
+      cashierLogsSearchCriteria = SearchCriteria(
+          branch: "all",
+          shiftStatus: "all",
+          transType: "all",
+          cashier: "all",
+          fromDate: formattedFromDate,
+          toDate: formattedToDate);
+      fetchData();
+    }
   }
 
   fetchData() async {

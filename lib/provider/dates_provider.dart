@@ -8,14 +8,23 @@ class DatesProvider with ChangeNotifier {
   bool yearTemp = true;
   String sessionFromDate = "";
   String sessionToDate = "";
+  VoidCallback? onDatesChanged;
 
   setSessionFromDate(String value) {
     sessionFromDate = value;
-    notifyListeners();
+    // notifyListeners();
   }
 
   setSessionToDate(String value) {
     sessionToDate = value;
+    // notifyListeners();
+  }
+
+  void triggerDateChange() {
+    onDatesChanged?.call();
+  }
+
+  notify() {
     notifyListeners();
   }
 

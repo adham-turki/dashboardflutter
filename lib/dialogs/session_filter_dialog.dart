@@ -91,10 +91,7 @@ class _SessionFilterDialogState extends State<SessionFilterDialog> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    value.setSessionFromDate(DatesController()
-                        .slashFormatDate(_fromDateController.text, false));
-                    value.setSessionToDate(DatesController()
-                        .slashFormatDate(_toDateController.text, false));
+                    // value.notify();
                     Navigator.pop(context, false);
                     print("value.date: ${value.sessionFromDate}");
                     print("value.date: ${value.sessionToDate}");
@@ -259,7 +256,17 @@ class _SessionFilterDialogState extends State<SessionFilterDialog> {
             if (isValid) {
               setState(() {
                 controller.text = value;
-
+                if (label == _locale.fromDate) {
+                  context.read<DatesProvider>().setSessionFromDate(
+                      DatesController()
+                          .slashFormatDate(_fromDateController.text, false));
+                } else {
+                  context.read<DatesProvider>().setSessionToDate(
+                      DatesController()
+                          .slashFormatDate(_fromDateController.text, false));
+                }
+                context.read<DatesProvider>().triggerDateChange();
+                // context.read<DatesProvider>().notify();
                 print("controller.text: ${controller.text}");
                 // setFromDateController();
               });

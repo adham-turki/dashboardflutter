@@ -98,6 +98,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   bool isLoading1 = true;
   bool isLoading2 = true;
   bool isLoading3 = true;
+  late DatesProvider dateProvider;
 
   @override
   void didChangeDependencies() {
@@ -170,8 +171,75 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.onDatesChanged = () {
+    //     fetchData();
+    //   };
+    // });
     fetchData();
     super.initState();
+  }
+
+  // void _onDateRangeChanged() {
+  //   formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+  //   formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+  //       ? context.read<DatesProvider>().sessionFromDate
+  //       : formattedFromDate;
+  //   formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+  //       ? context.read<DatesProvider>().sessionToDate
+  //       : formattedToDate;
+  //   print("formattedDate: ${formattedFromDate}");
+  //   print("formattedDate: ${formattedToDate}");
+  //   salesCostBasedBranchReportCrit = SearchCriteria(
+  //       branch: "all",
+  //       shiftStatus: "all",
+  //       transType: "all",
+  //       cashier: "all",
+  //       fromDate: formattedFromDate,
+  //       toDate: formattedToDate);
+  //   // formattedFromDate =
+  //   //     DateFormat('dd/MM/yyyy').format(DateTime(now.year, now.month, 1));
+  //   // formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+  //   cashierSearchCriteria = SearchCriteria(
+  //       branch: "all",
+  //       shiftStatus: "all",
+  //       transType: "all",
+  //       cashier: "all",
+  //       fromDate: formattedFromDate,
+  //       toDate: formattedToDate);
+  //   payTypesSearchCriteria = SearchCriteria(
+  //       branch: "all",
+  //       shiftStatus: "all",
+  //       transType: "all",
+  //       cashier: "all",
+  //       fromDate: formattedFromDate,
+  //       toDate: formattedToDate);
+  //   hoursSearchCriteria = SearchCriteria(
+  //       branch: "all",
+  //       shiftStatus: "all",
+  //       transType: "all",
+  //       cashier: "all",
+  //       fromDate: formattedFromDate,
+  //       toDate: formattedToDate);
+  //   desktopSearchCriteria = SearchCriteria(
+  //       branch: "all",
+  //       shiftStatus: "all",
+  //       transType: "all",
+  //       cashier: "all",
+  //       fromDate: formattedFromDate,
+  //       toDate: formattedToDate);
+  //   isLoading = true;
+  //   isLoading1 = true;
+  //   isLoading2 = true;
+  //   isLoading3 = true;
+  //   fetchData();
+  // }
+
+  @override
+  void dispose() {
+    // dateProvider.removeListener(_onDateRangeChanged); // Always detach
+    super.dispose();
   }
 
   fetchData() async {
@@ -179,7 +247,6 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     await fetchSalesByComputer();
     await fetchsalesCostBasedBranchReportList();
     await fetchSalesByHours();
-    setState(() {});
   }
 
   SearchCriteria salesCostBasedBranchReportCrit = SearchCriteria(
@@ -274,6 +341,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
     totalPricesCashierCount = 0.0;
     maxYByCashier = 0.0;
     barChartDataCashier.clear();
+
     await TotalSalesController()
         .getTotalSalesByCashier(cashierSearchCriteria)
         .then((value) {

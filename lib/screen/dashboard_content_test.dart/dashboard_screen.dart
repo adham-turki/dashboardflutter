@@ -63,6 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String formattedToDate = "";
   ScrollController _scrollController2 = ScrollController();
   bool isLoading = true;
+  late DatesProvider dateProvider;
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
@@ -88,8 +89,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.addListener(_onDateRangeChanged);
+    // });
     fetchSalesByPayTypes();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // dateProvider.removeListener(_onDateRangeChanged); // Always detach
+    super.dispose();
+  }
+
+  void _onDateRangeChanged() {
+    if (dateProvider.sessionFromDate != "" &&
+        dateProvider.sessionToDate != "") {
+      formattedFromDate =
+          context.read<DatesProvider>().sessionFromDate.isNotEmpty
+              ? context.read<DatesProvider>().sessionFromDate
+              : formattedFromDate;
+      formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+          ? context.read<DatesProvider>().sessionToDate
+          : formattedToDate;
+      payTypesSearchCriteria = SearchCriteria(
+          branch: "all",
+          shiftStatus: "all",
+          transType: "all",
+          cashier: "all",
+          fromDate: formattedFromDate,
+          toDate: formattedToDate);
+      fetchSalesByPayTypes();
+    }
   }
 
   @override

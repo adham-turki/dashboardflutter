@@ -51,6 +51,7 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
   String currentMonth = "";
   int count = 0;
   bool filterPressed = false;
+  late DatesProvider dateProvider;
   @override
   void initState() {
     super.initState();
@@ -84,6 +85,10 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
         ? DatesController()
             .dashFormatDate(context.read<DatesProvider>().sessionToDate, false)
         : salesByStocksSearchCriteria.toDate;
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.addListener(_onDateRangeChanged);
+    // });
     fetchSalesByStocks();
     if (count == 0) {
       fromDateController.text = "";
@@ -97,12 +102,39 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
     super.didChangeDependencies();
   }
 
+  void _onDateRangeChanged() {
+    if (dateProvider.sessionFromDate != "" &&
+        dateProvider.sessionToDate != "") {
+      fromDateController.text = salesByStocksSearchCriteria.fromDate!.isEmpty
+          ? currentMonth
+          : salesByStocksSearchCriteria.fromDate!;
+      toDateController.text = salesByStocksSearchCriteria.toDate!.isEmpty
+          ? todayDate
+          : salesByStocksSearchCriteria.toDate!;
+      salesByStocksSearchCriteria.fromDate = fromDateController.text;
+      salesByStocksSearchCriteria.toDate = toDateController.text;
+      salesByStocksSearchCriteria.fromDate =
+          context.read<DatesProvider>().sessionFromDate.isNotEmpty
+              ? DatesController().dashFormatDate(
+                  context.read<DatesProvider>().sessionFromDate, false)
+              : salesByStocksSearchCriteria.fromDate;
+      salesByStocksSearchCriteria.toDate =
+          context.read<DatesProvider>().sessionToDate.isNotEmpty
+              ? DatesController().dashFormatDate(
+                  context.read<DatesProvider>().sessionToDate, false)
+              : salesByStocksSearchCriteria.toDate;
+      fetchSalesByStocks();
+    }
+  }
+
   List<String> xLabels = [];
   fetchSalesByStocks() async {
     totalSalesByStocks = 0.0;
     salesByStocksList.clear();
     barChartData.clear();
     maxY = 0.0;
+    isLoading = true;
+    setState(() {});
     await SalesCategoryController()
         .getSalesByStocks(salesByStocksSearchCriteria)
         .then((value) {

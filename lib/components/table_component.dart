@@ -68,96 +68,102 @@ class _TableComponentState extends State<TableComponent> {
     height = MediaQuery.of(context).size.height;
     List<PlutoColumn> polCols = widget.plCols;
     List<PlutoRow> polRows = widget.polRows;
-    return PlutoGrid(
-      configuration: PlutoGridConfiguration(
-        localeText: PlutoGridLocaleText(
-            freezeColumnToStart: _locale.freezeColumnToStart,
-            freezeColumnToEnd: _locale.freezeColumnToEnd,
-            autoFitColumn: _locale.autoFit,
-            hideColumn: _locale.hideColumn,
-            setColumns: _locale.setColumns,
-            setFilter: _locale.setFilter,
-            resetFilter: _locale.resetFilter,
-            filterColumn: _locale.tableColumn,
-            filterType: _locale.type,
-            filterValue: _locale.value,
-            filterContains: _locale.contains,
-            filterEquals: _locale.equals,
-            filterEndsWith: _locale.endsWith,
-            filterLessThan: _locale.lessThan,
-            filterGreaterThan: _locale.greaterThan,
-            filterGreaterThanOrEqualTo: _locale.greaterThanOrEqual,
-            filterStartsWith: _locale.startsWith,
-            filterLessThanOrEqualTo: _locale.lessThanOrEqual),
-        columnSize: width > 1300
-            ? const PlutoGridColumnSizeConfig(
-                autoSizeMode: PlutoAutoSizeMode.scale,
-                resizeMode: PlutoResizeMode.normal,
-              )
-            : const PlutoGridColumnSizeConfig(),
-        scrollbar: PlutoGridScrollbarConfig(
-          onlyDraggingThumb: false,
-          scrollbarThicknessWhileDragging: 20,
-          draggableScrollbar: true,
-          isAlwaysShown: true,
-          scrollBarColor: primary,
-          scrollbarThickness: scrollThickness,
-          scrollbarRadius: Radius.circular(scrollRadius),
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onPanUpdate: (details) {
+        // Manually scroll if needed
+      },
+      child: PlutoGrid(
+        configuration: PlutoGridConfiguration(
+          localeText: PlutoGridLocaleText(
+              freezeColumnToStart: _locale.freezeColumnToStart,
+              freezeColumnToEnd: _locale.freezeColumnToEnd,
+              autoFitColumn: _locale.autoFit,
+              hideColumn: _locale.hideColumn,
+              setColumns: _locale.setColumns,
+              setFilter: _locale.setFilter,
+              resetFilter: _locale.resetFilter,
+              filterColumn: _locale.tableColumn,
+              filterType: _locale.type,
+              filterValue: _locale.value,
+              filterContains: _locale.contains,
+              filterEquals: _locale.equals,
+              filterEndsWith: _locale.endsWith,
+              filterLessThan: _locale.lessThan,
+              filterGreaterThan: _locale.greaterThan,
+              filterGreaterThanOrEqualTo: _locale.greaterThanOrEqual,
+              filterStartsWith: _locale.startsWith,
+              filterLessThanOrEqualTo: _locale.lessThanOrEqual),
+          columnSize: width > 1300
+              ? const PlutoGridColumnSizeConfig(
+                  autoSizeMode: PlutoAutoSizeMode.scale,
+                  resizeMode: PlutoResizeMode.normal,
+                )
+              : const PlutoGridColumnSizeConfig(),
+          scrollbar: PlutoGridScrollbarConfig(
+            onlyDraggingThumb: false,
+            scrollbarThicknessWhileDragging: 20,
+            draggableScrollbar: true,
+            isAlwaysShown: true,
+            scrollBarColor: primary,
+            scrollbarThickness: scrollThickness,
+            scrollbarRadius: Radius.circular(scrollRadius),
+          ),
+          style: PlutoGridStyleConfig(
+              enableRowColorAnimation: true,
+              activatedColor: gridActiveColor,
+              menuBackgroundColor: Colors.white,
+              // iconColor: Colors.white,
+              columnHeight: 50,
+              columnTextStyle: const TextStyle(
+                  fontSize: 14, color: Colors.white, letterSpacing: 1),
+              oddRowColor: Colors.grey[100],
+              evenRowColor: Colors.white,
+              rowHeight: widget.rowHeight ?? PlutoGridSettings.rowHeight),
         ),
-        style: PlutoGridStyleConfig(
-            enableRowColorAnimation: true,
-            activatedColor: gridActiveColor,
-            menuBackgroundColor: Colors.white,
-            // iconColor: Colors.white,
-            columnHeight: 50,
-            columnTextStyle: const TextStyle(
-                fontSize: 14, color: Colors.white, letterSpacing: 1),
-            oddRowColor: Colors.grey[100],
-            evenRowColor: Colors.white,
-            rowHeight: widget.rowHeight ?? PlutoGridSettings.rowHeight),
+        createFooter: (stateManager) {
+          if (widget.footerBuilder != null) {
+            return widget.footerBuilder!(stateManager);
+          }
+          return const SizedBox();
+        },
+        columns: polCols,
+        rows: polRows,
+        mode: PlutoGridMode.selectWithOneTap,
+        onRowDoubleTap: (event) {
+          if (widget.doubleTab != null) {
+            widget.doubleTab!(event);
+          }
+        },
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          widget.stateManager = event.stateManager;
+          widget.onLoaded!(event.stateManager);
+          stateManager = event.stateManager;
+          stateManager.setShowColumnFilter(false);
+        },
+        onChanged: (PlutoGridOnChangedEvent event) {
+          // print(event);
+        },
+        onSelected: (event) {
+          if (widget.onSelected != null) {
+            widget.onSelected!(event);
+          }
+        },
+        noRowsWidget: Center(
+          child: Text(_locale.noDataAvailable),
+        ),
+        onRowSecondaryTap: (event) {
+          if (widget.rightClickTap != null) {
+            widget.rightClickTap!(event);
+          }
+        },
+        createHeader: (stateManager) {
+          if (widget.headerBuilder != null) {
+            return widget.headerBuilder!(stateManager);
+          }
+          return const SizedBox();
+        },
       ),
-      createFooter: (stateManager) {
-        if (widget.footerBuilder != null) {
-          return widget.footerBuilder!(stateManager);
-        }
-        return const SizedBox();
-      },
-      columns: polCols,
-      rows: polRows,
-      mode: PlutoGridMode.selectWithOneTap,
-      onRowDoubleTap: (event) {
-        if (widget.doubleTab != null) {
-          widget.doubleTab!(event);
-        }
-      },
-      onLoaded: (PlutoGridOnLoadedEvent event) {
-        widget.stateManager = event.stateManager;
-        widget.onLoaded!(event.stateManager);
-        stateManager = event.stateManager;
-        stateManager.setShowColumnFilter(false);
-      },
-      onChanged: (PlutoGridOnChangedEvent event) {
-        // print(event);
-      },
-      onSelected: (event) {
-        if (widget.onSelected != null) {
-          widget.onSelected!(event);
-        }
-      },
-      noRowsWidget: Center(
-        child: Text(_locale.noDataAvailable),
-      ),
-      onRowSecondaryTap: (event) {
-        if (widget.rightClickTap != null) {
-          widget.rightClickTap!(event);
-        }
-      },
-      createHeader: (stateManager) {
-        if (widget.headerBuilder != null) {
-          return widget.headerBuilder!(stateManager);
-        }
-        return const SizedBox();
-      },
     );
   }
 }

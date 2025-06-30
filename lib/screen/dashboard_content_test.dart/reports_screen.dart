@@ -69,6 +69,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Timer? _timer;
   bool isLoading = false;
   bool isLoading1 = false;
+  late DatesProvider dateProvider;
 
   @override
   void didChangeDependencies() {
@@ -114,9 +115,48 @@ class _ReportsScreenState extends State<ReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.addListener(_onDateRangeChanged);
+    // });
     fetchData();
     startTimer();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // dateProvider.removeListener(_onDateRangeChanged); // Always detach
+    super.dispose();
+  }
+
+  void _onDateRangeChanged() {
+    if (dateProvider.sessionFromDate != "" &&
+        dateProvider.sessionToDate != "") {
+      formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+      formattedFromDate =
+          context.read<DatesProvider>().sessionFromDate.isNotEmpty
+              ? context.read<DatesProvider>().sessionFromDate
+              : formattedFromDate;
+      formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+          ? context.read<DatesProvider>().sessionToDate
+          : formattedToDate;
+      diffClosedCashShiftReportCrit = SearchCriteria(
+          branch: "all",
+          shiftStatus: "all",
+          transType: "all",
+          cashier: "all",
+          fromDate: formattedFromDate,
+          toDate: formattedToDate);
+      diffCashShiftByCashierReportCrit = SearchCriteria(
+          branch: "all",
+          shiftStatus: "all",
+          transType: "all",
+          cashier: "all",
+          fromDate: formattedFromDate,
+          toDate: formattedToDate);
+      fetchData();
+    }
   }
 
   startTimer() {
@@ -218,6 +258,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
     totalDiffCashShiftByCashierReport = 0.0;
     data1.clear();
     isLoading1 = true;
+    setState(() {});
+
     await TotalSalesController()
         .getDiffCashShiftReportByCashierReportList(
             diffCashShiftByCashierReportCrit)
@@ -245,6 +287,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     totalDiffDecreaseClosedCashShiftReport = 0.0;
     data.clear();
     isLoading = true;
+    setState(() {});
     await TotalSalesController()
         .getDiffCashShiftReportList(diffClosedCashShiftReportCrit)
         .then((value) {

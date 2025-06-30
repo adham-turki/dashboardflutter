@@ -65,6 +65,7 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
   Timer? _timer;
   bool isLoading = true;
   bool isLoading2 = true;
+  late DatesProvider dateProvider;
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -110,9 +111,39 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
         cashier: "all",
         fromDate: formattedFromDate,
         toDate: formattedToDate);
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   dateProvider = Provider.of<DatesProvider>(context, listen: false);
+    //   dateProvider.addListener(_onDateRangeChanged);
+    // });
     fetchData();
     startTimer();
     super.initState();
+  }
+
+  void _onDateRangeChanged() {
+    formattedToDate = DateFormat('dd/MM/yyyy').format(now);
+    formattedFromDate = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionFromDate
+        : formattedFromDate;
+    formattedToDate = context.read<DatesProvider>().sessionToDate.isNotEmpty
+        ? context.read<DatesProvider>().sessionToDate
+        : formattedToDate;
+    salesCostBasedBranchReportCrit = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: formattedFromDate,
+        toDate: formattedToDate);
+    salesCostSearchCriteria = SearchCriteria(
+        branch: "all",
+        shiftStatus: "all",
+        transType: "all",
+        cashier: "all",
+        fromDate: formattedFromDate,
+        toDate: formattedToDate);
+
+    fetchData();
   }
 
   startTimer() {
