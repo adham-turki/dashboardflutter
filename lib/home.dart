@@ -1,4 +1,5 @@
 import 'package:bi_replicate/components/content_header.dart';
+import 'package:bi_replicate/controller/currency_controller.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/cheques_and_banks.dart';
 import 'package:bi_replicate/screen/content/cheques_anagement/out_standing_cheques.dart';
@@ -48,12 +49,29 @@ class _HomePageState extends State<HomePage> {
   int index = 0;
   late AppLocalizations locale;
   late ScreenContentProvider provider;
+  String baseCurrency = "";
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     locale = AppLocalizations.of(context)!;
     provider = context.read<ScreenContentProvider>();
+  }
+
+  @override
+  void initState() {
+    getBaseCurrency();
+    super.initState();
+  }
+
+  getBaseCurrency() async {
+    CurrencyController().getBaseCurrencyModel().then((value) {
+      if (value.txtCode != "") {
+        baseCurrency = value.txtCode ?? "";
+        print("asdasdsadasd: $baseCurrency");
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -86,7 +104,7 @@ class _HomePageState extends State<HomePage> {
                   })),
 
                   Text(
-                    "${locale.baseCurrency}: ${locale.ils}",
+                    "${locale.baseCurrency}: $baseCurrency",
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

@@ -20,3 +20,4 @@ var topUsedCustomerPointsByCustomerApi =
     "customerPoints/byCustomer/topUsedPoints";
 var topCustomerPointsByCustomerApi = "customerPoints/byCustomer/topPoints";
 var getCustomerListApi = "customer/getCustomer";
+var getCurrenciesApi = "cur/getCurrency";

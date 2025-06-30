@@ -1,3 +1,4 @@
+import 'package:bi_replicate/controller/currency_controller.dart';
 import 'package:bi_replicate/model/vouch_header_transiet_model.dart';
 import 'package:bi_replicate/provider/screen_content_provider.dart';
 import 'package:bi_replicate/utils/constants/responsive.dart';
@@ -29,7 +30,7 @@ class _ContentHeaderState extends State<ContentHeader> {
   String currentMonth = "";
   VouchHeaderTransietModel vouchHeaderTransietModel = VouchHeaderTransietModel(
       paidSales: 0, returnSales: 0.0, numOfCustomers: 0);
-
+  String baseCurrency = "";
   @override
   void didChangeDependencies() {
     locale = AppLocalizations.of(context)!;
@@ -46,6 +47,23 @@ class _ContentHeaderState extends State<ContentHeader> {
     toDateController.text = todayDate;
 
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    getBaseCurrency();
+    super.initState();
+  }
+
+  getBaseCurrency() async {
+    await CurrencyController().getBaseCurrencyModel().then((value) {
+      print("asdasdasdasdasdasdasdasd1111: ${value.txtCode}");
+      if (value.txtCode != "") {
+        baseCurrency = value.txtCode ?? "";
+        print("asdasdsadasd: $baseCurrency");
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -94,7 +112,7 @@ class _ContentHeaderState extends State<ContentHeader> {
           children: [
             SelectableText(
               maxLines: 1,
-              "${locale.baseCurrency}: ${locale.ils}",
+              "${locale.baseCurrency}: $baseCurrency",
               style: TextStyle(
                 fontSize: provider.getPage() == 0
                     ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
@@ -148,7 +166,7 @@ class _ContentHeaderState extends State<ContentHeader> {
         //     : Container(),
         SelectableText(
           maxLines: 1,
-          "${locale.baseCurrency}: ${locale.ils}",
+          "${locale.baseCurrency}: $baseCurrency",
           style: TextStyle(
             fontSize: Responsive.isDesktop(context) ? 18 : 14,
           ),
