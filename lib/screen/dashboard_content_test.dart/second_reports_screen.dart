@@ -299,48 +299,115 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     });
   }
 
-  Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
-    return SizedBox(
-      height: height * 0.465,
-      child: Card(
-        elevation: 2, // Remove shadow effect
-        color: Colors.white, // Set background to transparent
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
+  return Container(
+    // Use a responsive height based on screen size, with a minimum and maximum to ensure usability
+    height: Responsive.isDesktop(context)
+        ? MediaQuery.of(context).size.height * 0.5
+        : MediaQuery.of(context).size.height * 0.6,
+    constraints: BoxConstraints(
+      minHeight: 300, // Minimum height for smaller screens
+      maxHeight: 600, // Maximum height for larger screens
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
-        child: Column(
-          children: [
-            Row(
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(82, 151, 176, 0.05),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        SelectableText(title,
-                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        if (Responsive.isDesktop(context))
-                          title == _locale.salesCostBasedBranch
-                              ? Text(
-                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                              // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReportProfit)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalsalesCostBasedBranchReport)))})")
-                              : SizedBox.shrink()
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 2,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (title == _locale.salesCostBasedBranch)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                "(${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})",
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (Responsive.isDesktop(context) && title == _locale.salesCostBasedBranch)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, left: 12),
+                          child: Text(
+                            "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 12 : 14,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.cashierLogs)
-                    Text(
-                        "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesCostBasedBranch)
-                    Text(
-                        "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                const SizedBox(width: 8), // Add spacing to prevent overlap
                 blueButton1(
                   onPressed: () async {
                     await TotalSalesController().getAllBranches().then((value) {
@@ -372,46 +439,75 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                     color: Colors.white,
                     size: isDesktop ? height * 0.035 : height * 0.03,
                   ),
-                )
+                ),
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedBranch)
-                title == _locale.salesCostBasedBranch
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                              " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                        ],
-                      )
-                    : SizedBox.shrink(),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedBranch)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            isLoading2
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(child: CircularProgressIndicator()))
-                : (data1.isNotEmpty)
-                    ? salesCostBasedBranchWidget(data1)
-                    : SizedBox(
-                        height: height * 0.35,
-                        child: Center(child: Text(_locale.noDataAvailable)),
-                      )
-          ],
-        ),
+          ),
+          if (!Responsive.isDesktop(context) && title == _locale.salesCostBasedBranch)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
+                    style: TextStyle(
+                      fontSize: height * 0.013,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "(${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})",
+                    style: TextStyle(
+                      fontSize: height * 0.013,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: isLoading2
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color.fromRGBO(82, 151, 176, 1),
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : data1.isNotEmpty
+                      ? salesCostBasedBranchWidget(data1)
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bar_chart_outlined,
+                                size: 48,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _locale.noDataAvailable,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
-    );
-  }
-
+    ),
+  );
+}
   Consumer<ScreenContentProvider> salesCostBasedBranchWidget(
       List<ChartData> data1) {
     return Consumer<ScreenContentProvider>(builder: (context, value, child) {
@@ -497,42 +593,115 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
     });
   }
 
-  Widget salesCostChart(List<ChartData> data, String title) {
-    return SizedBox(
-      height: height * 0.465,
-      child: Card(
-        elevation: 2,
-        color: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+Widget salesCostChart(List<ChartData> data, String title) {
+  return Container(
+    // Use a responsive height based on screen size, with a minimum and maximum to ensure usability
+    height: Responsive.isDesktop(context)
+        ? MediaQuery.of(context).size.height * 0.5
+        : MediaQuery.of(context).size.height * 0.6,
+    constraints: BoxConstraints(
+      minHeight: 300, // Minimum height for smaller screens
+      maxHeight: 600, // Maximum height for larger screens
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
-        child: Column(
-          children: [
-            Row(
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(82, 151, 176, 0.05),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        SelectableText(title,
-                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        if (Responsive.isDesktop(context))
-                          title == _locale.salesCostBasedStockCat
-                              ? Text(
-                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})")
-                              // " (${_locale.profit}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCount)))}, ${_locale.sales}: ${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalProfitsByCategoryCountSales)))})")
-                              : SizedBox.shrink()
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 2,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          if (title == _locale.salesCostBasedStockCat)
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                "(${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})",
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      if (Responsive.isDesktop(context) && title == _locale.salesCostBasedStockCat)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, left: 12),
+                          child: Text(
+                            "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 12 : 14,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesCostBasedStockCat)
-                    Text(
-                        "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                const SizedBox(width: 8), // Add spacing to prevent overlap
                 blueButton1(
                   onPressed: () async {
                     await TotalSalesController().getAllBranches().then((value) {
@@ -564,45 +733,75 @@ class _SecondReportsScreenState extends State<SecondReportsScreen> {
                     color: Colors.white,
                     size: isDesktop ? height * 0.035 : height * 0.03,
                   ),
-                )
+                ),
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedStockCat)
-                title == _locale.salesCostBasedStockCat
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                              " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})")
-                        ],
-                      )
-                    : SizedBox.shrink(),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedStockCat)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            isLoading
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(child: CircularProgressIndicator()))
-                : (data.isNotEmpty)
-                    ? salesCostWidget(data)
-                    : SizedBox(
-                        height: height * 0.35,
-                        child: Center(child: Text(_locale.noDataAvailable)),
-                      )
-          ],
-        ),
+          ),
+          if (!Responsive.isDesktop(context) && title == _locale.salesCostBasedStockCat)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "(${salesCostSearchCriteria.fromDate} - ${salesCostSearchCriteria.toDate})",
+                    style: TextStyle(
+                      fontSize: height * 0.013,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "(${_locale.profit}: \u200E${NumberFormat('#,###').format(totalProfitsByCategoryCount)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalProfitsByCategoryCountSales)})",
+                    style: TextStyle(
+                      fontSize: height * 0.013,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color.fromRGBO(82, 151, 176, 1),
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : data.isNotEmpty
+                      ? salesCostWidget(data)
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bar_chart_outlined,
+                                size: 48,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _locale.noDataAvailable,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Consumer<ScreenContentProvider> salesCostWidget(List<ChartData> data) {
     return Consumer<ScreenContentProvider>(builder: (context, value, child) {

@@ -8,7 +8,6 @@ import 'package:bi_replicate/utils/func/dates_controller.dart';
 import 'package:bi_replicate/widget/custom_drop_down_search.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../model/sales/branch_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../model/sales/search_crit.dart';
@@ -48,6 +47,16 @@ class _FilterDialogState extends State<FilterDialog> {
   late AppLocalizations _locale;
   List<String> charts = [];
   String selectedComputer = "";
+
+  // Compact color scheme
+  static const Color primaryColor = Color.fromRGBO(82, 151, 176, 1.0);
+  static const Color primaryLight = Color.fromRGBO(82, 151, 176, 0.08);
+  static const Color primaryDark = Color.fromRGBO(62, 131, 156, 1.0);
+  static const Color backgroundColor = Color(0xFFFAFBFC);
+  static const Color cardColor = Colors.white;
+  static const Color textPrimary = Color(0xFF2D3748);
+  static const Color textSecondary = Color(0xFF718096);
+
   @override
   void didChangeDependencies() {
     _fromDateController =
@@ -70,11 +79,13 @@ class _FilterDialogState extends State<FilterDialog> {
             0, TransTypeConstants(description: _locale.all, id: -1));
       }
     }
+
     if ((widget.computers ?? []).isNotEmpty) {
       if ((widget.computers ?? [])[0].computer != "all") {
         widget.computers!.insert(0, ComputerModel(computer: "all"));
       }
     }
+
     if ((widget.computers ?? []).isNotEmpty) {
       selectedComputer = (widget.computers ?? [])[0].computer ?? "";
     }
@@ -85,6 +96,7 @@ class _FilterDialogState extends State<FilterDialog> {
           txtCode: "all",
           txtNamee: _locale.all,
         ));
+
     widget.branches.insert(
         0,
         BranchModel(
@@ -94,6 +106,7 @@ class _FilterDialogState extends State<FilterDialog> {
             txtPrefix: "",
             txtWarehouse: "",
             txtJcode: ""));
+
     selectedComputer = widget.filter.computer ?? "";
     _selectedBranch = widget.filter.branch;
     _selectedShiftStatus = widget.filter.shiftStatus == "0"
@@ -101,7 +114,6 @@ class _FilterDialogState extends State<FilterDialog> {
         : widget.filter.shiftStatus == "1"
             ? _locale.closed
             : _locale.all;
-
     _selectedTransactionDesc = widget.filter.transType == "all"
         ? _locale.all
         : getDescriptionById(int.parse(widget.filter.transType));
@@ -111,6 +123,7 @@ class _FilterDialogState extends State<FilterDialog> {
     _selectedCashier =
         widget.filter.cashier == "all" ? _locale.all : widget.filter.cashier;
     selectedChartType = widget.filter.chartType ?? charts[0];
+
     if (widget.branches.isNotEmpty) {
       for (var i = 0; i < widget.branches.length; i++) {
         if (widget.branches[i].txtCode == _selectedBranch) {
@@ -119,20 +132,16 @@ class _FilterDialogState extends State<FilterDialog> {
       }
       print("formatDateString: ${formatDateString(widget.filter.fromDate)}");
       print("formatDateString:1 ${formatDateString(widget.filter.toDate)}");
-
       super.didChangeDependencies();
     }
   }
 
   String formatDateString(String dateString) {
     try {
-      // Adjust the input format if needed (e.g., 'dd/MM/yyyy', 'MM-dd-yyyy')
       DateTime dateTime = DateFormat('dd/MM/yyyy').parse(dateString);
-
-      // Convert to 'yyyy-MM-dd'
       return DateFormat('yyyy-MM-dd').format(dateTime);
     } catch (e) {
-      return 'Invalid date'; // Handle incorrect formats gracefully
+      return 'Invalid date';
     }
   }
 
@@ -157,606 +166,311 @@ class _FilterDialogState extends State<FilterDialog> {
   Widget build(BuildContext context) {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
-    return AlertDialog(
-      title: Center(
-        child: Text(
-          _locale.salesReportsSearch,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Colors.blueAccent,
-                fontWeight: FontWeight.bold,
-              ),
+    
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: Responsive.isDesktop(context) ? 40 : 16,
+        vertical: 20,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: Responsive.isDesktop(context) ? 560 : screenWidth - 32,
+          maxHeight: screenHeight * 0.75,
         ),
-      ),
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      content: Responsive.isDesktop(context)
-          ? desktopView(context)
-          : mobileView(context),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                SearchCriteria updatedFilter = SearchCriteria(
-                    branch: _selectedBranch,
-                    shiftStatus: _selectedShiftStatus == _locale.opened
-                        ? "0"
-                        : _selectedShiftStatus == _locale.closed
-                            ? "1"
-                            : "all",
-                    transType: _selectedTransactionType == -1
-                        ? "all"
-                        : "$_selectedTransactionType",
-                    cashier: _selectedCashierCode == ""
-                        ? "all"
-                        : _selectedCashierCode == _locale.all
-                            ? "all"
-                            : _selectedCashierCode,
-                    fromDate: formatDateStringToForwardSlash(
-                        _fromDateController.text),
-                    toDate:
-                        formatDateStringToForwardSlash(_toDateController.text),
-                    chartType: selectedChartType,
-                    computer:
-                        selectedComputer == "" ? "all" : selectedComputer);
-                print("selectedChartType: ${selectedChartType}");
-                Navigator.of(context).pop(updatedFilter);
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.grey[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Compact Header
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [primaryColor, primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.filter_alt_outlined, color: Colors.white, size: 16),
+                    SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        _locale.salesReportsSearch,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(false),
+                      child: Container(
+                        padding: EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(Icons.close, color: Colors.white, size: 14),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              child: Text(
-                _locale.ok,
-                style: TextStyle(fontSize: screenHeight * 0.02),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context)
-                    .pop(false); // Close the dialog without saving
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.grey[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              
+              // Scrollable Content
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(12),
+                  child: Responsive.isDesktop(context)
+                      ? desktopView(context)
+                      : mobileView(context),
                 ),
               ),
-              child: Text(
-                _locale.cancel,
-                style: TextStyle(fontSize: screenHeight * 0.02),
+              
+              // Compact Action Buttons
+              Container(
+                padding: EdgeInsets.fromLTRB(12, 4, 12, 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 36,
+                        child: OutlinedButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          style: OutlinedButton.styleFrom(
+                            side: BorderSide(color: Colors.grey[300]!),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          child: Text(
+                            _locale.cancel,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: textSecondary,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      flex: 2,
+                      child: SizedBox(
+                        height: 36,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            SearchCriteria updatedFilter = SearchCriteria(
+                                branch: _selectedBranch,
+                                shiftStatus: _selectedShiftStatus == _locale.opened
+                                    ? "0"
+                                    : _selectedShiftStatus == _locale.closed
+                                        ? "1"
+                                        : "all",
+                                transType: _selectedTransactionType == -1
+                                    ? "all"
+                                    : "$_selectedTransactionType",
+                                cashier: _selectedCashierCode == ""
+                                    ? "all"
+                                    : _selectedCashierCode == _locale.all
+                                        ? "all"
+                                        : _selectedCashierCode,
+                                fromDate: formatDateStringToForwardSlash(
+                                    _fromDateController.text),
+                                toDate: formatDateStringToForwardSlash(
+                                    _toDateController.text),
+                                chartType: selectedChartType,
+                                computer: selectedComputer == "" ? "all" : selectedComputer);
+                            Navigator.of(context).pop(updatedFilter);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColor,
+                            foregroundColor: Colors.white,
+                            elevation: 1,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.search, size: 12),
+                              SizedBox(width: 4),
+                              Text(
+                                _locale.ok,
+                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 
   Widget mobileView(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      // width: MediaQuery.of(context).size.width * 0.3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: screenWidth,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.66,
-                        height: screenHeight * 0.1,
-                        child: _buildDateField(
-                            label: _locale.fromDate,
-                            controller: _fromDateController,
-                            dateControllerToCompareWith: _toDateController),
-                      ),
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.66,
-                        height: screenHeight * 0.15,
-                        child: _buildDateField(
-                            label: _locale.toDate,
-                            controller: _toDateController,
-                            dateControllerToCompareWith: _fromDateController),
-                      ),
-                    ],
-                  ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Date Fields - Responsive
+        _buildCompactSection(
+          title: "Date Range",
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                constraints: BoxConstraints(
+                  minHeight: 100,
+                  maxHeight: 100,
                 ),
-                SizedBox(
-                  // height: screenHeight * 0.22,
-                  child: Column(
-                    mainAxisAlignment: (widget.hint != _locale.salesByHours &&
-                            widget.hint != _locale.salesCostBasedStockCat &&
-                            widget.hint != _locale.diffClosedCashByShifts &&
-                            widget.hint != _locale.diffCashByShifts &&
-                            widget.hint != _locale.salesCostBasedBranch)
-                        ? MainAxisAlignment.spaceAround
-                        : MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.66,
-                        height: screenHeight * 0.1,
-                        child: CustomDropDownSearch(
-                          isMandatory: true,
-                          bordeText: _locale.selectBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedBranch = value.txtCode ?? "";
-                              _selectedBranchName = value.txtNamee ?? "";
-                            });
-                            print("_selectedBranch: $_selectedBranch");
-                            print("_selectedBranchName: $_selectedBranchName");
-                          },
-                          items: widget.branches,
-                          initialValue: _selectedBranchName == ""
-                              ? "Select Branch"
-                              : _selectedBranchName,
-                        ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: _buildResponsiveDateField(
+                        _locale.fromDate,
+                        _fromDateController,
+                        _toDateController,
+                        constraints.maxWidth < 300,
                       ),
-                      (widget.hint != _locale.salesByHours &&
-                              widget.hint != _locale.salesCostBasedStockCat &&
-                              widget.hint != _locale.diffClosedCashByShifts &&
-                              widget.hint != _locale.diffCashByShifts &&
-                              widget.hint != _locale.salesCostBasedBranch)
-                          ? SizedBox(
-                              width: Responsive.isDesktop(context)
-                                  ? screenWidth * 0.16
-                                  : screenWidth * 0.66,
-                              height: screenHeight * 0.1,
-                              child: CustomDropDownSearch(
-                                isMandatory: true,
-                                bordeText: _locale.selectShiftType,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedShiftStatus = value;
-                                  });
-                                },
-                                items: <String>[
-                                  _locale.all,
-                                  _locale.opened,
-                                  _locale.closed
-                                ],
-                                initialValue: _selectedShiftStatus == ""
-                                    ? "Select Shift"
-                                    : _selectedShiftStatus,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-                // if (Responsive.isDesktop(context))
-                //   SizedBox(
-                //     width: screenWidth * 0.01,
-                //   ),
-                if (Responsive.isDesktop(context))
-                  SizedBox(
-                    // height: screenHeight * 0.22,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: (widget.hint == _locale.cashierLogs)
-                          ? MainAxisAlignment.spaceAround
-                          : MainAxisAlignment.center,
-                      children: [
-                        (widget.hint == _locale.cashierLogs ||
-                                widget.hint == _locale.diffClosedCashByShifts ||
-                                widget.hint == _locale.diffCashByShifts ||
-                                widget.hint == _locale.salesByCashier)
-                            ? SizedBox(
-                                width: Responsive.isDesktop(context)
-                                    ? screenWidth * 0.16
-                                    : screenWidth * 0.66,
-                                height: screenHeight * 0.1,
-                                child: CustomDropDownSearch(
-                                  isMandatory: true,
-                                  bordeText: _locale.selectCashier,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedCashier = value.txtNamee ?? "";
-                                      _selectedCashierCode =
-                                          value.txtCode ?? "";
-                                    });
-                                  },
-                                  items: widget.cashiers,
-                                  initialValue: _selectedCashier == ""
-                                      ? "Select Cashier"
-                                      : _selectedCashier,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        (widget.hint == _locale.cashierLogs)
-                            ? SizedBox(
-                                width: Responsive.isDesktop(context)
-                                    ? screenWidth * 0.16
-                                    : screenWidth * 0.66,
-                                height: screenHeight * 0.1,
-                                child: CustomDropDownSearch(
-                                  isMandatory: true,
-                                  bordeText: _locale.selectTransType,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedTransactionType = value.id;
-                                      _selectedTransactionDesc =
-                                          value.description;
-                                    });
-                                    print(
-                                        "_selectedTransactionType: $_selectedTransactionType");
-                                    print(
-                                        "_selectedTransactionDesc: $_selectedTransactionDesc");
-                                  },
-                                  items: transTypeList,
-                                  initialValue: _selectedTransactionDesc == ""
-                                      ? "Select Transaction Type"
-                                      : _selectedTransactionDesc,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
                     ),
+                    SizedBox(width: constraints.maxWidth < 300 ? 4 : 8),
+                    Expanded(
+                      child: _buildResponsiveDateField(
+                        _locale.toDate,
+                        _toDateController,
+                        _fromDateController,
+                        constraints.maxWidth < 300,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        
+        SizedBox(height: 8),
+        
+        // Branch Selection
+        _buildCompactSection(
+          title: "Branch & Filters",
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildCompactDropdown(
+                CustomDropDownSearch(
+                  isMandatory: true,
+                  bordeText: _locale.selectBranch,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedBranch = value.txtCode ?? "";
+                      _selectedBranchName = value.txtNamee ?? "";
+                    });
+                  },
+                  items: widget.branches,
+                  initialValue: _selectedBranchName.isEmpty ? "Select Branch" : _selectedBranchName,
+                ),
+              ),
+              
+              if (_shouldShowShiftStatus()) ...[
+                SizedBox(height: 8),
+                _buildCompactDropdown(
+                  CustomDropDownSearch(
+                    isMandatory: true,
+                    bordeText: _locale.selectShiftType,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedShiftStatus = value;
+                      });
+                    },
+                    items: <String>[_locale.all, _locale.opened, _locale.closed],
+                    initialValue: _selectedShiftStatus.isEmpty ? "Select Shift" : _selectedShiftStatus,
                   ),
+                ),
               ],
-            ),
-            // if (!Responsive.isDesktop(context))
-            //   SizedBox(
-            //     width: screenWidth * 0.01,
-            //   ),
-            if (!Responsive.isDesktop(context))
-              if (widget.hint == _locale.cashierLogs)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: Responsive.isDesktop(context)
-                          ? screenWidth * 0.16
-                          : screenWidth * 0.66,
-                      height: screenHeight * 0.1,
-                      child: CustomDropDownSearch(
-                        isMandatory: true,
-                        bordeText: _locale.selectCashier,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCashier = value.txtNamee ?? "";
-                            _selectedCashierCode = value.txtCode ?? "";
-                          });
-                        },
-                        items: widget.cashiers,
-                        initialValue: _selectedCashier == ""
-                            ? "Select Cashier"
-                            : _selectedCashier,
-                      ),
-                    ),
-                    SizedBox(
-                      width: Responsive.isDesktop(context)
-                          ? screenWidth * 0.16
-                          : screenWidth * 0.66,
-                      height: screenHeight * 0.1,
-                      child: CustomDropDownSearch(
-                        isMandatory: true,
-                        bordeText: _locale.selectTransType,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedTransactionType = value.id;
-                            _selectedTransactionDesc = value.description;
-                          });
-                          print(
-                              "_selectedTransactionType: $_selectedTransactionType");
-                          print(
-                              "_selectedTransactionDesc: $_selectedTransactionDesc");
-                        },
-                        items: transTypeList,
-                        initialValue: _selectedTransactionDesc == ""
-                            ? "Select Transaction Type"
-                            : _selectedTransactionDesc,
-                      ),
-                    ),
-                  ],
+              
+              if (_shouldShowCashier()) ...[
+                SizedBox(height: 8),
+                _buildCompactDropdown(
+                  CustomDropDownSearch(
+                    isMandatory: true,
+                    bordeText: _locale.selectCashier,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCashier = value.txtNamee ?? "";
+                        _selectedCashierCode = value.txtCode ?? "";
+                      });
+                    },
+                    items: widget.cashiers,
+                    initialValue: _selectedCashier.isEmpty ? "Select Cashier" : _selectedCashier,
+                  ),
                 ),
-            if (!Responsive.isDesktop(context))
-              if (widget.hint == _locale.diffClosedCashByShifts ||
-                  widget.hint == _locale.diffCashByShifts ||
-                  widget.hint == _locale.salesByCashier)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    SizedBox(
-                      width: Responsive.isDesktop(context)
-                          ? screenWidth * 0.16
-                          : screenWidth * 0.66,
-                      height: screenHeight * 0.1,
-                      child: CustomDropDownSearch(
-                        isMandatory: true,
-                        bordeText: _locale.selectCashier,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCashier = value.txtNamee ?? "";
-                            _selectedCashierCode = value.txtCode ?? "";
-                          });
-                        },
-                        items: widget.cashiers,
-                        initialValue: _selectedCashier == ""
-                            ? "Select Cashier"
-                            : _selectedCashier,
-                      ),
-                    ),
-                  ],
+              ],
+              
+              if (widget.hint == _locale.cashierLogs) ...[
+                SizedBox(height: 8),
+                _buildCompactDropdown(
+                  CustomDropDownSearch(
+                    isMandatory: true,
+                    bordeText: _locale.selectTransType,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedTransactionType = value.id;
+                        _selectedTransactionDesc = value.description;
+                      });
+                    },
+                    items: transTypeList,
+                    initialValue: _selectedTransactionDesc.isEmpty ? "Select Transaction Type" : _selectedTransactionDesc,
+                  ),
                 ),
-            // _buildDropdown(
-            //   label: 'Branch',
-            //   value: _selectedBranch,
-            //   items: widget.branches,
-            //   onChanged: (dynamic newValue) {
-            //     setState(() {
-            //       _selectedBranch = newValue!.txtNamee;
-            //     });
-            //   },
-            // ),
-
-            // _buildDropdown(
-            //   label: 'Shift Status',
-            //   value: _selectedShiftStatus,
-            //   items: <String>['all', 'open', 'closed'],
-            //   onChanged: (dynamic? newValue) {
-            //     setState(() {
-            //       _selectedShiftStatus = newValue!;
-            //     });
-            //   },
-            // ),
-            if (widget.hint != _locale.salesCostBasedBranch &&
-                widget.hint != _locale.salesCostBasedStockCat &&
-                widget.hint != _locale.diffClosedCashByShifts &&
-                widget.hint != _locale.diffCashByShifts)
-              SizedBox(
-                width: Responsive.isDesktop(context)
-                    ? screenWidth * 0.16
-                    : screenWidth * 0.66,
-                height: screenHeight * 0.1,
-                child: CustomDropDownSearch(
-                  isMandatory: true,
-                  bordeText: _locale.chartType,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedChartType = value;
-                    });
-                  },
-                  items: charts,
-                  initialValue:
-                      _selectedBranchName == "" ? charts[0] : selectedChartType,
-                ),
-              ),
-            if (widget.hint == _locale.salesByComputer)
-              SizedBox(
-                width: Responsive.isDesktop(context)
-                    ? screenWidth * 0.16
-                    : screenWidth * 0.66,
-                height: screenHeight * 0.1,
-                child: CustomDropDownSearch(
-                  isMandatory: true,
-                  bordeText: _locale.computers,
-                  onChanged: (value) {
-                    setState(() {
-                      selectedComputer = value.computer;
-                    });
-                  },
-                  items: widget.computers ?? [],
-                  initialValue: selectedComputer == ""
-                      ? widget.computers![0].computer
-                      : selectedComputer,
-                ),
-              ),
-          ],
+              ],
+            ],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget desktopView(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      // width: MediaQuery.of(context).size.width * 0.3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        
+        if (_shouldShowChartType() || widget.hint == _locale.salesByComputer) ...[
+          SizedBox(height: 8),
+          _buildCompactSection(
+            title: "Display Options",
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  width: screenWidth * 0.35,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.81,
-                        height: screenHeight * 0.15,
-                        child: _buildDateField(
-                            label: _locale.fromDate,
-                            controller: _fromDateController,
-                            dateControllerToCompareWith: _toDateController),
-                      ),
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.81,
-                        height: screenHeight * 0.15,
-                        child: _buildDateField(
-                            label: _locale.toDate,
-                            controller: _toDateController,
-                            dateControllerToCompareWith: _fromDateController),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  // height: screenHeight * 0.22,
-                  child: Row(
-                    mainAxisAlignment: (widget.hint != _locale.salesByHours &&
-                            widget.hint != _locale.salesCostBasedStockCat &&
-                            widget.hint != _locale.diffClosedCashByShifts &&
-                            widget.hint != _locale.diffCashByShifts &&
-                            widget.hint != _locale.salesCostBasedBranch)
-                        ? MainAxisAlignment.spaceAround
-                        : MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: Responsive.isDesktop(context)
-                            ? screenWidth * 0.16
-                            : screenWidth * 0.6,
-                        height: screenHeight * 0.1,
-                        child: CustomDropDownSearch(
-                          isMandatory: true,
-                          bordeText: _locale.selectBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedBranch = value.txtCode ?? "";
-                              _selectedBranchName = value.txtNamee ?? "";
-                            });
-                            print("_selectedBranch: $_selectedBranch");
-                            print("_selectedBranchName: $_selectedBranchName");
-                          },
-                          items: widget.branches,
-                          initialValue: _selectedBranchName == ""
-                              ? "Select Branch"
-                              : _selectedBranchName,
-                        ),
-                      ),
-                      (widget.hint != _locale.salesByHours &&
-                              widget.hint != _locale.salesCostBasedStockCat &&
-                              widget.hint != _locale.diffClosedCashByShifts &&
-                              widget.hint != _locale.diffCashByShifts &&
-                              widget.hint != _locale.salesCostBasedBranch)
-                          ? SizedBox(
-                              width: Responsive.isDesktop(context)
-                                  ? screenWidth * 0.16
-                                  : screenWidth * 0.6,
-                              height: screenHeight * 0.1,
-                              child: CustomDropDownSearch(
-                                isMandatory: true,
-                                bordeText: _locale.selectShiftType,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _selectedShiftStatus = value;
-                                  });
-                                },
-                                items: <String>[
-                                  _locale.all,
-                                  _locale.opened,
-                                  _locale.closed
-                                ],
-                                initialValue: _selectedShiftStatus == ""
-                                    ? "Select Shift"
-                                    : _selectedShiftStatus,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-                // if (Responsive.isDesktop(context))
-                //   SizedBox(
-                //     width: screenWidth * 0.01,
-                //   ),
-                if (Responsive.isDesktop(context))
-                  SizedBox(
-                    // height: screenHeight * 0.22,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: (widget.hint == _locale.cashierLogs)
-                          ? MainAxisAlignment.spaceAround
-                          : MainAxisAlignment.center,
-                      children: [
-                        (widget.hint == _locale.cashierLogs ||
-                                widget.hint == _locale.diffClosedCashByShifts ||
-                                widget.hint == _locale.diffCashByShifts ||
-                                widget.hint == _locale.salesByCashier)
-                            ? SizedBox(
-                                width: Responsive.isDesktop(context)
-                                    ? screenWidth * 0.16
-                                    : screenWidth * 0.66,
-                                height: screenHeight * 0.1,
-                                child: CustomDropDownSearch(
-                                  isMandatory: true,
-                                  bordeText: _locale.selectCashier,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedCashier = value.txtNamee ?? "";
-                                      _selectedCashierCode =
-                                          value.txtCode ?? "";
-                                    });
-                                  },
-                                  items: widget.cashiers,
-                                  initialValue: _selectedCashier == ""
-                                      ? "Select Cashier"
-                                      : _selectedCashier,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        (widget.hint == _locale.cashierLogs)
-                            ? SizedBox(
-                                width: Responsive.isDesktop(context)
-                                    ? screenWidth * 0.16
-                                    : screenWidth * 0.66,
-                                height: screenHeight * 0.1,
-                                child: CustomDropDownSearch(
-                                  isMandatory: true,
-                                  bordeText: _locale.selectTransType,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedTransactionType = value.id;
-                                      _selectedTransactionDesc =
-                                          value.description;
-                                    });
-                                    print(
-                                        "_selectedTransactionType: $_selectedTransactionType");
-                                    print(
-                                        "_selectedTransactionDesc: $_selectedTransactionDesc");
-                                  },
-                                  items: transTypeList,
-                                  initialValue: _selectedTransactionDesc == ""
-                                      ? "Select Transaction Type"
-                                      : _selectedTransactionDesc,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
-                if (widget.hint != _locale.salesCostBasedBranch &&
-                    widget.hint != _locale.salesCostBasedStockCat &&
-                    widget.hint != _locale.diffClosedCashByShifts &&
-                    widget.hint != _locale.diffCashByShifts)
-                  SizedBox(
-                    width: Responsive.isDesktop(context)
-                        ? screenWidth * 0.16
-                        : screenWidth * 0.66,
-                    height: screenHeight * 0.1,
-                    child: CustomDropDownSearch(
+                if (_shouldShowChartType())
+                  _buildCompactDropdown(
+                    CustomDropDownSearch(
                       isMandatory: true,
                       bordeText: _locale.chartType,
                       onChanged: (value) {
@@ -765,18 +479,14 @@ class _FilterDialogState extends State<FilterDialog> {
                         });
                       },
                       items: charts,
-                      initialValue: _selectedBranchName == ""
-                          ? charts[0]
-                          : selectedChartType,
+                      initialValue: selectedChartType.isEmpty ? charts[0] : selectedChartType,
                     ),
                   ),
-                if (widget.hint == _locale.salesByComputer)
-                  SizedBox(
-                    width: Responsive.isDesktop(context)
-                        ? screenWidth * 0.16
-                        : screenWidth * 0.66,
-                    height: screenHeight * 0.1,
-                    child: CustomDropDownSearch(
+                
+                if (widget.hint == _locale.salesByComputer) ...[
+                  if (_shouldShowChartType()) SizedBox(height: 8),
+                  _buildCompactDropdown(
+                    CustomDropDownSearch(
                       isMandatory: true,
                       bordeText: _locale.computers,
                       onChanged: (value) {
@@ -785,93 +495,321 @@ class _FilterDialogState extends State<FilterDialog> {
                         });
                       },
                       items: widget.computers ?? [],
-                      initialValue: selectedComputer == ""
-                          ? widget.computers![0].computer
-                          : selectedComputer,
+                      initialValue: selectedComputer.isEmpty ? widget.computers![0].computer : selectedComputer,
                     ),
                   ),
+                ],
               ],
             ),
-            // if (!Responsive.isDesktop(context))
-            //   SizedBox(
-            //     width: screenWidth * 0.01,
-            //   ),
-            if (!Responsive.isDesktop(context))
-              if (widget.hint == _locale.cashierLogs)
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget desktopView(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Date Fields Row - Responsive
+        _buildCompactSection(
+          title: "Date Range",
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                constraints: BoxConstraints(
+                  minHeight: 100,
+                  maxHeight: 100,
+                ),
+                child: Row(
                   children: [
-                    SizedBox(
-                      width: Responsive.isDesktop(context)
-                          ? screenWidth * 0.16
-                          : screenWidth * 0.66,
-                      height: screenHeight * 0.1,
-                      child: CustomDropDownSearch(
-                        isMandatory: true,
-                        bordeText: _locale.selectCashier,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCashier = value.txtNamee ?? "";
-                            _selectedCashierCode = value.txtCode ?? "";
-                          });
-                        },
-                        items: widget.cashiers,
-                        initialValue: _selectedCashier == ""
-                            ? "Select Cashier"
-                            : _selectedCashier,
+                    Expanded(
+                      child: _buildResponsiveDateField(
+                        _locale.fromDate,
+                        _fromDateController,
+                        _toDateController,
+                        false,
                       ),
                     ),
-                    SizedBox(
-                      width: Responsive.isDesktop(context)
-                          ? screenWidth * 0.16
-                          : screenWidth * 0.66,
-                      height: screenHeight * 0.1,
-                      child: CustomDropDownSearch(
-                        isMandatory: true,
-                        bordeText: _locale.selectTransType,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedTransactionType = value.id;
-                            _selectedTransactionDesc = value.description;
-                          });
-                          print(
-                              "_selectedTransactionType: $_selectedTransactionType");
-                          print(
-                              "_selectedTransactionDesc: $_selectedTransactionDesc");
-                        },
-                        items: transTypeList,
-                        initialValue: _selectedTransactionDesc == ""
-                            ? "Select Transaction Type"
-                            : _selectedTransactionDesc,
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildResponsiveDateField(
+                        _locale.toDate,
+                        _toDateController,
+                        _fromDateController,
+                        false,
                       ),
                     ),
                   ],
                 ),
-            // _buildDropdown(
-            //   label: 'Branch',
-            //   value: _selectedBranch,
-            //   items: widget.branches,
-            //   onChanged: (dynamic newValue) {
-            //     setState(() {
-            //       _selectedBranch = newValue!.txtNamee;
-            //     });
-            //   },
-            // ),
-
-            // _buildDropdown(
-            //   label: 'Shift Status',
-            //   value: _selectedShiftStatus,
-            //   items: <String>['all', 'open', 'closed'],
-            //   onChanged: (dynamic? newValue) {
-            //     setState(() {
-            //       _selectedShiftStatus = newValue!;
-            //     });
-            //   },
-            // ),
-          ],
+              );
+            },
+          ),
         ),
+        
+        SizedBox(height: 8),
+        
+        // Filters Row
+        _buildCompactSection(
+          title: "Filters",
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildCompactDropdown(
+                      CustomDropDownSearch(
+                        isMandatory: true,
+                        bordeText: _locale.selectBranch,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedBranch = value.txtCode ?? "";
+                            _selectedBranchName = value.txtNamee ?? "";
+                          });
+                        },
+                        items: widget.branches,
+                        initialValue: _selectedBranchName.isEmpty ? "Select Branch" : _selectedBranchName,
+                      ),
+                    ),
+                  ),
+                  
+                  if (_shouldShowShiftStatus()) ...[
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: _buildCompactDropdown(
+                        CustomDropDownSearch(
+                          isMandatory: true,
+                          bordeText: _locale.selectShiftType,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedShiftStatus = value;
+                            });
+                          },
+                          items: <String>[_locale.all, _locale.opened, _locale.closed],
+                          initialValue: _selectedShiftStatus.isEmpty ? "Select Shift" : _selectedShiftStatus,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              
+              if (_shouldShowCashier() || widget.hint == _locale.cashierLogs) ...[
+                SizedBox(height: 8),
+                Row(
+                  children: [
+                    if (_shouldShowCashier())
+                      Expanded(
+                        child: _buildCompactDropdown(
+                          CustomDropDownSearch(
+                            isMandatory: true,
+                            bordeText: _locale.selectCashier,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedCashier = value.txtNamee ?? "";
+                                _selectedCashierCode = value.txtCode ?? "";
+                              });
+                            },
+                            items: widget.cashiers,
+                            initialValue: _selectedCashier.isEmpty ? "Select Cashier" : _selectedCashier,
+                          ),
+                        ),
+                      ),
+                    
+                    if (widget.hint == _locale.cashierLogs) ...[
+                      if (_shouldShowCashier()) SizedBox(width: 12),
+                      Expanded(
+                        child: _buildCompactDropdown(
+                          CustomDropDownSearch(
+                            isMandatory: true,
+                            bordeText: _locale.selectTransType,
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedTransactionType = value.id;
+                                _selectedTransactionDesc = value.description;
+                              });
+                            },
+                            items: transTypeList,
+                            initialValue: _selectedTransactionDesc.isEmpty ? "Select Transaction Type" : _selectedTransactionDesc,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ],
+            ],
+          ),
+        ),
+        
+        if (_shouldShowChartType() || widget.hint == _locale.salesByComputer) ...[
+          SizedBox(height: 8),
+          _buildCompactSection(
+            title: "Display Options",
+            child: Row(
+              children: [
+                if (_shouldShowChartType())
+                  Expanded(
+                    child: _buildCompactDropdown(
+                      CustomDropDownSearch(
+                        isMandatory: true,
+                        bordeText: _locale.chartType,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChartType = value;
+                          });
+                        },
+                        items: charts,
+                        initialValue: selectedChartType.isEmpty ? charts[0] : selectedChartType,
+                      ),
+                    ),
+                  ),
+                
+                if (widget.hint == _locale.salesByComputer) ...[
+                  if (_shouldShowChartType()) SizedBox(width: 12),
+                  Expanded(
+                    child: _buildCompactDropdown(
+                      CustomDropDownSearch(
+                        isMandatory: true,
+                        bordeText: _locale.computers,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedComputer = value.computer;
+                          });
+                        },
+                        items: widget.computers ?? [],
+                        initialValue: selectedComputer.isEmpty ? widget.computers![0].computer : selectedComputer,
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildCompactSection({required String title, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: primaryLight,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: primaryDark,
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: child,
+          ),
+        ],
       ),
     );
+  }
+
+  Widget _buildCompactDropdown(Widget child) {
+    return SizedBox(height: 36, child: child);
+  }
+
+  // New responsive date field method
+  Widget _buildResponsiveDateField(
+    String label, 
+    TextEditingController controller, 
+    TextEditingController compareController,
+    bool isCompact,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: textPrimary,
+            fontSize: isCompact ? 12 : 14,
+            fontWeight: FontWeight.w500,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        SizedBox(height: 4),
+        Expanded(
+          child: Container(
+            constraints: BoxConstraints(
+              maxHeight: isCompact ? 28 : 32,
+              minHeight: isCompact ? 28 : 32,
+            ),
+            child: CustomDate(
+              readOnly: false,
+              height: isCompact ? 28 : 32,
+              dateWidth: double.infinity,
+              label: "",
+              dateController: controller,
+              lastDate: DateTime.now(),
+              isForwardSlashFormat: true,
+              dateControllerToCompareWith: compareController,
+              isInitiaDate: label == _locale.fromDate,
+              onValue: (isValid, value) {
+                if (isValid) {
+                  setState(() {
+                    controller.text = value;
+                  });
+                }
+              },
+              timeControllerToCompareWith: null,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper methods to reduce code duplication
+  bool _shouldShowShiftStatus() {
+    return widget.hint != _locale.salesByHours &&
+        widget.hint != _locale.salesCostBasedStockCat &&
+        widget.hint != _locale.diffClosedCashByShifts &&
+        widget.hint != _locale.diffCashByShifts &&
+        widget.hint != _locale.salesCostBasedBranch;
+  }
+
+  bool _shouldShowCashier() {
+    return widget.hint == _locale.cashierLogs ||
+        widget.hint == _locale.diffClosedCashByShifts ||
+        widget.hint == _locale.diffCashByShifts ||
+        widget.hint == _locale.salesByCashier;
+  }
+
+  bool _shouldShowChartType() {
+    return widget.hint != _locale.salesCostBasedBranch &&
+        widget.hint != _locale.salesCostBasedStockCat &&
+        widget.hint != _locale.diffClosedCashByShifts &&
+        widget.hint != _locale.diffCashByShifts;
   }
 
   Widget _buildDropdown({
@@ -880,19 +818,18 @@ class _FilterDialogState extends State<FilterDialog> {
     required List<dynamic> items,
     required Function(dynamic?) onChanged,
   }) {
-    print("items: ${items.length}");
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: TextStyle(color: Colors.black54)),
+          Text(label, style: TextStyle(color: textSecondary)),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey[400]!),
+              color: Colors.grey[50],
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.grey[300]!),
             ),
             child: DropdownButton<dynamic>(
               value: value,
@@ -903,7 +840,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 return DropdownMenuItem<String>(
                   value: value.toString(),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
                     child: Text(value.toString()),
                   ),
                 );
@@ -912,64 +849,6 @@ class _FilterDialogState extends State<FilterDialog> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDateField({
-    required String label,
-    required TextEditingController controller,
-    required TextEditingController dateControllerToCompareWith,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CustomDate(
-          readOnly: false,
-          height: screenHeight * 0.04,
-          dateWidth: Responsive.isDesktop(context)
-              ? screenWidth * 0.14
-              : screenWidth * 0.66,
-          label: label,
-          dateController: controller,
-          lastDate: DateTime.now(),
-          isForwardSlashFormat: true,
-          dateControllerToCompareWith: dateControllerToCompareWith,
-          isInitiaDate: label == _locale.fromDate ? true : false,
-          onValue: (isValid, value) {
-            if (isValid) {
-              setState(() {
-                controller.text = value;
-
-                print("controller.text: ${controller.text}");
-                // setFromDateController();
-              });
-            }
-          },
-          timeControllerToCompareWith: null,
-        ),
-        // TextFormField(
-        //   controller: controller,
-        //   decoration: InputDecoration(
-        //     suffixIcon: Icon(Icons.calendar_today, color: Colors.blue),
-        //     filled: true,
-        //     fillColor: Colors.grey[200],
-        //     contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-        //     border: OutlineInputBorder(
-        //       borderRadius: BorderRadius.circular(8),
-        //       borderSide: BorderSide(color: Colors.grey[400]!),
-        //     ),
-        //   ),
-        //   onTap: () async {
-        //     DateTime? selectedDate = await _selectDate(context);
-        //     if (selectedDate != null) {
-        //       setState(() {
-        //         controller.text = DateFormat('dd/MM/yyyy').format(selectedDate);
-        //       });
-        //     }
-        //   },
-        //   readOnly: true,
-        // ),
-      ],
     );
   }
 

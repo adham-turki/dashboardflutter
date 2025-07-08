@@ -49,16 +49,12 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   late AppLocalizations _locale;
 
   List<String> status = [];
-
   List<String> charts = [];
-
   bool accountsActive = false;
 
   TextEditingController fromDateController = TextEditingController();
   int statusVar = 0;
-
   String todayDate = "";
-
   int selectedStatus = 0;
   int selectedChart = 0;
   List<double> listOfBalances = [];
@@ -66,12 +62,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   final dataMap = <String, double>{};
   bool boolTemp = false;
   List<BarData> barData = [];
-
   List<PieChartModel> barDataDailySales = [];
   var selectedBranchCode = "";
-
   List<BiAccountModel> payableAccounts = [];
-
   final List<String> items = [
     'Print',
     'Save as JPEG',
@@ -79,8 +72,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   ];
   List<BarData> barDataTest = [];
   String lastBranchCode = "";
-
-  // List<PieChartModel> pieData = [];
   String accountNameString = "";
   String lastFromDate = "";
   String lastStatus = "";
@@ -110,7 +101,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       statusVar = All_Status;
       selectedBranchCode = "";
     }
-
     counter++;
     super.didChangeDependencies();
   }
@@ -124,7 +114,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   @override
   void initState() {
     getAllCodeReports();
-
     getPayableAccounts(isStart: true).then((value) {
       payableAccounts = value;
     });
@@ -132,298 +121,310 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     super.initState();
   }
 
+  // Helper method to get pie chart specific dimensions
+  Size getPieChartSize() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final availableHeight = MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45);
+    
+    if (isDesktop) {
+      double maxSize = min(screenWidth * 0.35, availableHeight * 0.9);
+      return Size(maxSize, maxSize);
+    } else if (Responsive.isTablet(context)) {
+      double maxSize = min(screenWidth * 0.5, availableHeight * 0.85);
+      return Size(maxSize, maxSize);
+    } else {
+      double maxSize = min(screenWidth * 0.8, availableHeight * 0.8);
+      return Size(maxSize, maxSize);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
+
     String fromDate = fromDateController.text.isEmpty
         ? ""
         : DatesController().formatDateReverse(fromDateController.text);
+
     return Container(
-      decoration: const BoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-            child: Container(
-              height: isDesktop ? height * 0.44 : height * 0.48,
-              padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  isDesktop
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ValueListenableBuilder(
-                                valueListenable: totalDailySale,
-                                builder: ((context, value, child) {
-                                  return Text(
-                                    "${_locale.dailySales} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})",
-                                    style: TextStyle(
-                                        fontSize: isDesktop ? 15 : 18),
-                                  );
-                                })),
-                            Text(
-                              _locale.localeName == "en"
-                                  ? "(${fromDateController.text})"
-                                  : "($fromDate)",
-                              style: TextStyle(fontSize: isDesktop ? 15 : 18),
-                            ),
-                            SizedBox(
-                                width: !isDesktop
-                                    ? MediaQuery.of(context).size.width * 0.06
-                                    : MediaQuery.of(context).size.width * 0.03,
-                                child: blueButton1(
-                                  icon: Icon(
-                                    Icons.filter_list_sharp,
-                                    color: whiteColor,
-                                    size: isDesktop
-                                        ? height * 0.035
-                                        : height * 0.03,
-                                  ),
-                                  textColor:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  height:
-                                      isDesktop ? height * .01 : height * .039,
-                                  fontSize:
-                                      isDesktop ? height * .018 : height * .017,
-                                  width:
-                                      isDesktop ? width * 0.08 : width * 0.27,
-                                  onPressed: () {
-                                    if (isLoading == false) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return FilterDialogDailySales(
-                                            selectedChart: getChartByCode(
-                                                selectedChart, _locale),
-                                            selectedStatus:
-                                                getVoucherStatusByCode(
-                                                    _locale, statusVar),
-                                            selectedBranchCodeF:
-                                                selectedBranchCode == ""
-                                                    ? _locale.all
-                                                    : selectedBranchCode,
-                                            fromDate: fromDateController.text,
-                                            branches: branches,
-                                            onFilter: (
-                                              fromDate,
-                                              selectedStatus,
-                                              chart,
-                                              selectedBranchCodeF,
-                                            ) {
-                                              fromDateController.text =
-                                                  fromDate;
-                                              statusVar = getVoucherStatus(
-                                                  _locale, selectedStatus);
-                                              selectedChart = getChartByName(
-                                                  chart, _locale);
-
-                                              selectedBranchCode =
-                                                  selectedBranchCodeF ==
-                                                          _locale.all
-                                                      ? ""
-                                                      : selectedBranchCodeF;
-
-                                              SearchCriteria searchCriteria =
-                                                  SearchCriteria(
-                                                fromDate:
-                                                    fromDateController.text,
-                                                voucherStatus: -100,
-                                                branch: "",
-                                              );
-                                              setSearchCriteria(searchCriteria);
-                                            },
-                                          );
-                                        },
-                                      ).then((value) async {
-                                        setState(() {
-                                          _timer!.cancel();
-                                          isLoading = true;
-                                        });
-                                        getDailySales().then((value) {
-                                          setState(() {
-                                            _startTimer();
-                                            isLoading = false;
-                                          });
-                                        });
-                                      });
-                                    }
-                                  },
-                                )),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                ValueListenableBuilder(
-                                    valueListenable: totalDailySale,
-                                    builder: ((context, value, child) {
-                                      return Text(
-                                        "${_locale.dailySales}  (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})",
-                                        style: TextStyle(
-                                            fontSize: isDesktop ? 15 : 18),
-                                      );
-                                    })),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _locale.localeName == "en"
-                                      ? "(${fromDateController.text})"
-                                      : "($fromDate)",
-                                  style:
-                                      TextStyle(fontSize: isDesktop ? 15 : 10),
-                                ),
-                                SizedBox(
-                                    width: !isDesktop
-                                        ? MediaQuery.of(context).size.width *
-                                            0.12
-                                        : MediaQuery.of(context).size.width *
-                                            0.03,
-                                    child: blueButton1(
-                                      icon: Icon(
-                                        Icons.filter_list_sharp,
-                                        color: whiteColor,
-                                        size: isDesktop
-                                            ? height * 0.035
-                                            : height * 0.055,
-                                      ),
-                                      textColor: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      height: isDesktop
-                                          ? height * .01
-                                          : height * .039,
-                                      fontSize: isDesktop
-                                          ? height * .018
-                                          : height * .017,
-                                      width: isDesktop
-                                          ? width * 0.08
-                                          : width * 0.27,
-                                      onPressed: () {
-                                        if (isLoading == false) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return FilterDialogDailySales(
-                                                selectedChart: getChartByCode(
-                                                    selectedChart, _locale),
-                                                selectedStatus:
-                                                    getVoucherStatusByCode(
-                                                        _locale, statusVar),
-                                                selectedBranchCodeF:
-                                                    selectedBranchCode == ""
-                                                        ? _locale.all
-                                                        : selectedBranchCode,
-                                                fromDate:
-                                                    fromDateController.text,
-                                                branches: branches,
-                                                onFilter: (
-                                                  fromDate,
-                                                  selectedStatus,
-                                                  chart,
-                                                  selectedBranchCodeF,
-                                                ) {
-                                                  fromDateController.text =
-                                                      fromDate;
-                                                  statusVar = getVoucherStatus(
-                                                      _locale, selectedStatus);
-                                                  selectedChart =
-                                                      getChartByName(
-                                                          chart, _locale);
-
-                                                  selectedBranchCode =
-                                                      selectedBranchCodeF ==
-                                                              _locale.all
-                                                          ? ""
-                                                          : selectedBranchCodeF;
-
-                                                  SearchCriteria
-                                                      searchCriteria =
-                                                      SearchCriteria(
-                                                    fromDate:
-                                                        fromDateController.text,
-                                                    voucherStatus: -100,
-                                                    branch: "",
-                                                  );
-                                                  setSearchCriteria(
-                                                      searchCriteria);
-                                                },
-                                              );
-                                            },
-                                          ).then((value) async {
-                                            setState(() {
-                                              _timer!.cancel();
-                                              isLoading = true;
-                                            });
-                                            getDailySales().then((value) {
-                                              setState(() {
-                                                _startTimer();
-                                                isLoading = false;
-                                              });
-                                            });
-                                          });
-                                        }
-                                      },
-                                    )),
-                              ],
-                            )
-                          ],
-                        ),
-                  isLoading
-                      ? const Padding(
-                          padding: EdgeInsets.only(bottom: 150),
-                          child: CircularProgressIndicator(),
-                        )
-                      : selectedChart == Pie_Chart
-                          ? barDataDailySales.length < 4
-                              ? Center(
-                                  child: SizedBox(
-                                    height: height * 0.4,
-                                    child: PieDashboardChart(
-                                      dataList: barDataDailySales,
-                                    ),
-                                  ),
-                                )
-                              : BarDashboardChart(
-                                  barChartData: barData,
-                                  isMax: true,
-                                  isMedium: false,
-                                )
-                          : selectedChart == Bar_Chart
-                              ? BarDashboardChart(
-                                  barChartData: barData,
-                                  isMax: true,
-                                  isMedium: false,
-                                )
-                              : SizedBox(
-                                  height: height * 0.4,
-                                  child: LineDashboardChart(
-                                      isMax: true,
-                                      isMedium: false,
-                                      balances: listOfBalances,
-                                      periods: listOfPeriods),
-                                )
-                ],
-              ),
-            ),
+      height: isDesktop ? height * 0.5 : height * 0.6,
+      constraints: const BoxConstraints(
+        minHeight: 300,
+        maxHeight: 600,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
+      child: Card(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(82, 151, 176, 1),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            _locale.dailySales,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 14 : 16,
+                              fontWeight: FontWeight.w600,
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ValueListenableBuilder(
+                          valueListenable: totalDailySale,
+                          builder: (context, value, child) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 10 : 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _locale.localeName == "en"
+                              ? "(${fromDateController.text})"
+                              : "($fromDate)",
+                          style: TextStyle(
+                            fontSize: isDesktop ? 10 : 11,
+                            color: Colors.grey.shade600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  blueButton1(
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: whiteColor,
+                      size: isDesktop ? height * 0.025 : height * 0.022,
+                    ),
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    height: isDesktop ? height * 0.008 : height * 0.035,
+                    fontSize: isDesktop ? height * 0.016 : height * 0.015,
+                    width: isDesktop ? width * 0.08 : width * 0.27,
+                    onPressed: () {
+                      if (isLoading == false) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return FilterDialogDailySales(
+                              selectedChart: getChartByCode(selectedChart, _locale),
+                              selectedStatus: getVoucherStatusByCode(_locale, statusVar),
+                              selectedBranchCodeF: selectedBranchCode == "" ? _locale.all : selectedBranchCode,
+                              fromDate: fromDateController.text,
+                              branches: branches,
+                              onFilter: (fromDate, selectedStatus, chart, selectedBranchCodeF) {
+                                fromDateController.text = fromDate;
+                                statusVar = getVoucherStatus(_locale, selectedStatus);
+                                selectedChart = getChartByName(chart, _locale);
+                                selectedBranchCode = selectedBranchCodeF == _locale.all ? "" : selectedBranchCodeF;
+                                SearchCriteria searchCriteria = SearchCriteria(
+                                  fromDate: fromDateController.text,
+                                  voucherStatus: -100,
+                                  branch: "",
+                                );
+                                setSearchCriteria(searchCriteria);
+                              },
+                            );
+                          },
+                        ).then((value) async {
+                          setState(() {
+                            _timer!.cancel();
+                            isLoading = true;
+                          });
+                          getDailySales().then((value) {
+                            setState(() {
+                              _startTimer();
+                              isLoading = false;
+                            });
+                          });
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : _buildChartContent(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChartContent() {
+    if (selectedChart == Bar_Chart || (selectedChart == Pie_Chart && barDataDailySales.length >= 4)) {
+      return _buildBarChart();
+    } else if (selectedChart == Line_Chart) {
+      return _buildLineChart();
+    } else {
+      return _buildPieChart();
+    }
+  }
+
+  Widget _buildBarChart() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Scrollbar(
+          thumbVisibility: true,
+          thickness: 6,
+          trackVisibility: true,
+          radius: const Radius.circular(8),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              height: min(MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45), constraints.maxHeight),
+              width: isDesktop
+                  ? barData.length > 20
+                      ? MediaQuery.of(context).size.width * 0.9 * (barData.length / 20)
+                      : MediaQuery.of(context).size.width * 0.9
+                  : barData.length > 5
+                      ? MediaQuery.of(context).size.width * 0.95 * (barData.length / 10)
+                      : MediaQuery.of(context).size.width * 0.95,
+              child: BarDashboardChart(
+                barChartData: barData,
+                isMax: true,
+                isMedium: false,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildLineChart() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45),
+      child: LineDashboardChart(
+        isMax: true,
+        isMedium: false,
+        balances: listOfBalances,
+        periods: listOfPeriods,
+      ),
+    );
+  }
+
+  Widget _buildPieChart() {
+    final pieSize = getPieChartSize();
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double horizontalPadding = isDesktop ? 12 : 16;
+        double verticalPadding = isDesktop ? 8 : 12;
+        return ClipRect(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: horizontalPadding,
+              right: horizontalPadding,
+              top: verticalPadding,
+              bottom: 0,
+            ),
+            alignment: Alignment.topCenter,
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: min(pieSize.height, constraints.maxHeight - verticalPadding),
+                  maxWidth: min(pieSize.width, constraints.maxWidth - (horizontalPadding * 2)),
+                ),
+                child: barDataDailySales.isNotEmpty
+                    ? PieDashboardChart(
+                        dataList: barDataDailySales,
+                      )
+                    : Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.pie_chart_outline,
+                              size: 48,
+                              color: Colors.grey.shade400,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              _locale.noDataAvailable,
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -432,8 +433,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        // Adding double quotes around keys and values to make it valid JSON
-
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
@@ -444,24 +443,15 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-
-        // Removing the extra curly braces
-        startSearchCriteria =
-            startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
-
-        // Wrapping the string with curly braces to make it a valid JSON object
+        startSearchCriteria = startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
         startSearchCriteria = '{$startSearchCriteria}';
-
-        searchCriteriaa =
-            SearchCriteria.fromJson(json.decode(startSearchCriteria));
+        searchCriteriaa = SearchCriteria.fromJson(json.decode(startSearchCriteria));
         fromDateController.text = searchCriteriaa!.fromDate!.isEmpty
             ? todayDate
             : searchCriteriaa!.fromDate!;
-        fromDateController.text =
-            context.read<DatesProvider>().sessionFromDate.isNotEmpty
-                ? DatesController().dashFormatDate(
-                    context.read<DatesProvider>().sessionFromDate, false)
-                : searchCriteriaa!.fromDate!;
+        fromDateController.text = context.read<DatesProvider>().sessionFromDate.isNotEmpty
+            ? DatesController().dashFormatDate(context.read<DatesProvider>().sessionFromDate, false)
+            : searchCriteriaa!.fromDate!;
       }
     }
   }
@@ -486,9 +476,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   }
 
   getAllUserReportSettings() async {
-    UserReportSettingsController()
-        .getAllUserReportSettings()
-        .then((value) async {
+    UserReportSettingsController().getAllUserReportSettings().then((value) async {
       userReportSettingsList = value;
       setStartSearchCriteria();
       lastFromDate = fromDateController.text;
@@ -525,8 +513,7 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    UserReportSettingsController()
-        .editUserReportSettings(userReportSettingsModel);
+    UserReportSettingsController().editUserReportSettings(userReportSettingsModel);
   }
 
   double formatDoubleToTwoDecimalPlaces(double number) {
@@ -535,8 +522,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   Future<void> getDailySales1({bool? isStart}) async {
     final selectedFromDate = fromDateController.text;
-
-    // Load data when selected dates change
     SearchCriteria searchCriteria = SearchCriteria(
       fromDate: selectedFromDate,
       voucherStatus: -100,
@@ -548,46 +533,34 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     barData = [];
     listOfBalances = [];
     listOfPeriods = [];
-    await dailySalesController
-        .getDailySale(searchCriteria, isStart: isStart)
-        .then((response) {
-      // Update lastFromDate and lastToDate
+    await dailySalesController.getDailySale(searchCriteria, isStart: isStart).then((response) {
       lastFromDate = selectedFromDate;
-      // Update the data
       for (var elemant in response) {
         String temp = DatesController().formatDateWithoutYear(elemant.date!);
-
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
         } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
           boolTemp = false;
         }
-
         listOfBalances.add(elemant.dailySale ?? 0.0);
         listOfPeriods.add(temp);
         if (boolTemp) {
-          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-              double.parse(elemant.dailySale.toString()));
+          dataMap[temp] = formatDoubleToTwoDecimalPlaces(double.parse(elemant.dailySale.toString()));
           barDataDailySales.add(PieChartModel(
               title: temp,
               value: double.parse(elemant.dailySale.toString()) == 0.0
                   ? 1.0
-                  : formatDoubleToTwoDecimalPlaces(
-                      double.parse(elemant.dailySale.toString())),
+                  : formatDoubleToTwoDecimalPlaces(double.parse(elemant.dailySale.toString())),
               color: getRandomColor(colorNewList)));
         }
-
         barData.add(
-          BarData(
-              name: temp, percent: double.parse(elemant.dailySale.toString())),
+          BarData(name: temp, percent: double.parse(elemant.dailySale.toString())),
         );
       }
-
       double total = 0;
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
-
       totalDailySale.value = total;
     });
   }
@@ -595,11 +568,9 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
   Future<void> getDailySales({bool? isStart}) async {
     int stat = statusVar;
     var selectedFromDate = fromDateController.text;
-
     lastFromDate = selectedFromDate;
     lastStatus = getVoucherStatusByCode(_locale, statusVar);
     lastBranchCode = selectedBranchCode;
-
     if (selectedFromDate.isEmpty) {
       selectedFromDate = todayDate;
     }
@@ -613,53 +584,39 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     barData = [];
     listOfBalances = [];
     listOfPeriods = [];
-    await dailySalesController
-        .getDailySale(searchCriteria, isStart: isStart)
-        .then((response) {
+    await dailySalesController.getDailySale(searchCriteria, isStart: isStart).then((response) {
       for (var elemant in response) {
         String temp = DatesController().formatDateWithoutYear(elemant.date!);
-
         if (double.parse(elemant.dailySale.toString()) != 0.0) {
           boolTemp = true;
         } else if (double.parse(elemant.dailySale.toString()) == 0.0) {
           boolTemp = false;
         }
-
         listOfBalances.add(double.parse(elemant.dailySale.toString()));
         listOfPeriods.add(temp);
         if (boolTemp) {
-          dataMap[temp] = formatDoubleToTwoDecimalPlaces(
-              double.parse(elemant.dailySale.toString()));
+          dataMap[temp] = formatDoubleToTwoDecimalPlaces(double.parse(elemant.dailySale.toString()));
           barDataDailySales.add(PieChartModel(
               title: temp,
               value: double.parse(elemant.dailySale.toString()) == 0.0
                   ? 1.0
-                  : formatDoubleToTwoDecimalPlaces(
-                      double.parse(elemant.dailySale.toString())),
+                  : formatDoubleToTwoDecimalPlaces(double.parse(elemant.dailySale.toString())),
               color: getRandomColor(colorNewList)));
         }
-
         barData.add(
-          BarData(
-              name: temp, percent: double.parse(elemant.dailySale.toString())),
+          BarData(name: temp, percent: double.parse(elemant.dailySale.toString())),
         );
       }
-
       double total = 0;
       for (int i = 0; i < listOfBalances.length; i++) {
         total += listOfBalances[i];
       }
       totalDailySale.value = total;
-      // Converters.formatNumberRounded(
-      // double.parse(Converters.formatNumberDigits(total)));
     });
-
-    // }
   }
 
   void _startTimer() {
     const storage = FlutterSecureStorage();
-
     const duration = Duration(minutes: 5);
     _timer = Timer.periodic(duration, (Timer t) async {
       String? token = await storage.read(key: "jwt");
@@ -668,7 +625,6 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           setState(() {
             isLoading = true;
           });
-
           await Future.delayed(const Duration(milliseconds: 1));
           setState(() {
             isLoading = false;
@@ -682,25 +638,22 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
 
   @override
   void dispose() {
-    _stopTimer(); // Stop timer when the widget is disposed
-
+    _stopTimer();
     super.dispose();
   }
 
   void _stopTimer() {
     if (_timer != null) {
-      _timer!.cancel(); // Cancel the timer
-      _timer = null; // Reset timer reference
+      _timer!.cancel();
+      _timer = null;
     }
   }
 
   Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    int r = random.nextInt(256); // 0 to 255
-    int g = random.nextInt(256); // 0 to 255
-    int b = random.nextInt(256); // 0 to 255
-
-    // Create Color object from RGB values
+    int r = random.nextInt(256);
+    int g = random.nextInt(256);
+    int b = random.nextInt(256);
     return Color.fromRGBO(r, g, b, 1.0);
   }
 
@@ -711,14 +664,11 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     if (dateParts.length != 3) {
       throw ArgumentError("Invalid date format. Expected dd-mm-yyyy.");
     }
-
     final int day = int.parse(dateParts[0]);
     final int month = int.parse(dateParts[1]);
     final int year = int.parse(dateParts[2]);
-
     final DateTime currentDate = DateTime(year, month, day);
     final DateTime nextDay = currentDate.add(Duration(days: count));
-
     return nextDay;
   }
 

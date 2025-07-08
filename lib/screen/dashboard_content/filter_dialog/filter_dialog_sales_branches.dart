@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/error_controller.dart';
@@ -26,13 +24,14 @@ class FilterDialogSalesByBranches extends StatefulWidget {
           String selectedPeriod, String fromDate, String toDate, String chart)
       onFilter;
 
-  const FilterDialogSalesByBranches(
-      {super.key,
-      required this.onFilter,
-      this.selectedChart,
-      this.selectedPeriod,
-      this.fromDate,
-      this.toDate});
+  const FilterDialogSalesByBranches({
+    super.key,
+    required this.onFilter,
+    this.selectedChart,
+    this.selectedPeriod,
+    this.fromDate,
+    this.toDate,
+  });
 
   @override
   State<FilterDialogSalesByBranches> createState() =>
@@ -41,7 +40,6 @@ class FilterDialogSalesByBranches extends StatefulWidget {
 
 class _FilterDialogSalesByBranchesState
     extends State<FilterDialogSalesByBranches> {
-  late AppLocalizations _locale;
   bool isDesktop = false;
   final TextEditingController _fromDateController =
       TextEditingController(text: "29-10-2021");
@@ -55,7 +53,6 @@ class _FilterDialogSalesByBranchesState
   List<String> status = [];
   List<String> charts = [];
   var selectedChart = "";
-
   var selectedStatus = "";
   List<CodeReportsModel> codeReportsList = [];
   List<UserReportSettingsModel> userReportSettingsList = [];
@@ -65,35 +62,38 @@ class _FilterDialogSalesByBranchesState
   SearchCriteria? searchCriteriaa;
   String txtKey = "";
 
+  // Unified color scheme
+  static const Color primaryColor = Color.fromRGBO(82, 151, 176, 1.0);
+  static const Color primaryLight = Color.fromRGBO(82, 151, 176, 0.08);
+  static const Color primaryDark = Color.fromRGBO(62, 131, 156, 1.0);
+  static const Color backgroundColor = Color(0xFFFAFBFC);
+  static const Color cardColor = Colors.white;
+
   @override
   void didChangeDependencies() {
-    _locale = AppLocalizations.of(context)!;
-
     status = [
-      _locale.all,
-      _locale.posted,
-      _locale.draft,
-      _locale.canceled,
+      "All",
+      "Posted",
+      "Draft",
+      "Canceled",
     ];
     periods = [
-      _locale.daily,
-      _locale.weekly,
-      _locale.monthly,
-      _locale.yearly,
+      "Daily",
+      "Weekly",
+      "Monthly",
+      "Yearly",
     ];
-    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
-    selectedChart = widget.selectedChart!;
-    selectedPeriod = widget.selectedPeriod!;
+    charts = ["Line Chart", "Pie Chart", "Bar Chart"];
+    selectedChart = widget.selectedChart ?? "Line Chart";
+    selectedPeriod = widget.selectedPeriod ?? "Monthly";
     selectedStatus = status[0];
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
-
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().twoYearsAgo()));
-    _toDateController.text = widget.fromDate != null
+    _toDateController.text = widget.toDate != null
         ? DatesController().formatDateReverse(widget.toDate!)
         : todayDate;
-
     _fromDateController.text = widget.fromDate != null
         ? DatesController().formatDateReverse(widget.fromDate!)
         : currentMonth;
@@ -111,194 +111,322 @@ class _FilterDialogSalesByBranchesState
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    return AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      content: SizedBox(
-        width: isDesktop ? width * 0.39 : width * 0.7,
-        height: isDesktop ? height * 0.37 : height * 0.55,
-        child: SingleChildScrollView(
+
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? width * 0.1 : 16,
+        vertical: isDesktop ? 40 : 24,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: isDesktop ? 600 : width * 0.9,
+          maxHeight: height * 0.85,
+          minWidth: isDesktop ? 400 : width * 0.85,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // CustomDropDown(
-                        //   width: width * 0.165,
-                        //   items: periods,
-                        //   label: _locale.period,
-                        //   initialValue: selectedPeriod,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       checkPeriods(value);
-                        //       selectedPeriod = value!;
-                        //     });
-                        //   },
-                        // ),
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: charts,
-                          hint: "",
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // CustomDropDown(
-                        //   items: periods,
-                        //   label: _locale.period,
-                        //   initialValue: selectedPeriod,
-                        //   width: width,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       checkPeriods(value);
-                        //       selectedPeriod = value!;
-                        //     });
-                        //   },
-                        // ),
-                        CustomDropDown(
-                          items: charts,
-                          hint: "",
-                          width: width,
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                      ],
+              // Header
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: isDesktop ? 16 : 12,
+                  horizontal: isDesktop ? 20 : 16,
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [primaryColor, primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.filter_alt_outlined,
+                      color: Colors.white,
+                      size: isDesktop ? 24 : 20,
                     ),
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          lastDate: DateTime.now(),
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                              });
-                            }
-                          },
-                          dateControllerToCompareWith: _toDateController,
-                          isInitiaDate: true,
-                          timeControllerToCompareWith: null,
+                    SizedBox(width: isDesktop ? 12 : 8),
+                    Expanded(
+                      child: Text(
+                        "Sales by Branches Filter",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isDesktop ? 18 : 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                        // SizedBox(
-                        //   width: width * 0.01,
-                        // ),
-                        CustomDate(
-                          dateController: _toDateController,
-                          label: _locale.toDate,
-                          lastDate: DateTime.now(),
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _toDateController.text = value;
-                              });
-                            }
-                          },
-                          dateControllerToCompareWith: _fromDateController,
-                          isInitiaDate: false,
-                          timeControllerToCompareWith: null,
-                        ),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: height * 0.12,
-                          width: isDesktop ? width * 0.135 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _fromDateController,
-                            label: _locale.fromDate,
-                            lastDate: DateTime.now(),
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _fromDateController.text = value;
-                                });
-                              }
-                            },
-                            dateControllerToCompareWith: _toDateController,
-                            isInitiaDate: true,
-                            timeControllerToCompareWith: null,
-                          ),
-                        ),
-                        SizedBox(
-                          height: height * 0.12,
-                          width: isDesktop ? width * 0.135 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _toDateController,
-                            label: _locale.toDate,
-                            lastDate: DateTime.now(),
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _toDateController.text = value;
-                                });
-                              }
-                            },
-                            dateControllerToCompareWith: _fromDateController,
-                            isInitiaDate: false,
-                            timeControllerToCompareWith: null,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        padding: EdgeInsets.all(isDesktop ? 6 : 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: isDesktop ? 20 : 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(isDesktop ? 20 : 16),
+                  child: Column(
+                    children: [
+                      // Date Range Section
+                      _buildSection(
+                        title: "Date Range",
+                        child: _buildDateSection(),
+                      ),
+                      SizedBox(height: isDesktop ? 20 : 16),
+                      // Display Options Section
+                      _buildSection(
+                        title: "Display Options",
+                        child: _buildDisplaySection(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Actions
+              Container(
+                padding: EdgeInsets.all(isDesktop ? 20 : 16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Components().blueButton(
+                      height: isDesktop ? 48 : 40,
+                      fontSize: isDesktop ? 16 : 14,
+                      width: isDesktop ? 120 : width * 0.35,
+                      onPressed: () {
+                        DateTime from = DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, "Start date cannot be after end date");
+                        } else {
+                          widget.onFilter(
+                              selectedPeriod,
+                              DatesController().formatDate(_fromDateController.text),
+                              DatesController().formatDate(_toDateController.text),
+                              selectedChart);
+                          context.read<DatesProvider>().setDatesController(
+                              _fromDateController, _toDateController);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      text: "Filter",
+                      borderRadius: 8,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Components().blueButton(
-              height: width > 800 ? height * .054 : height * .06,
-              fontSize: width > 800 ? height * .0158 : height * .015,
-              width: isDesktop ? width * 0.09 : width * 0.25,
-              onPressed: () {
-                DateTime from = DateTime.parse(_fromDateController.text);
-                DateTime to = DateTime.parse(_toDateController.text);
+    );
+  }
 
-                if (from.isAfter(to)) {
-                  ErrorController.openErrorDialog(
-                      1, _locale.startDateAfterEndDate);
-                } else {
-                  widget.onFilter(
-                      selectedPeriod,
-                      DatesController().formatDate(_fromDateController.text),
-                      DatesController().formatDate(_toDateController.text),
-                      selectedChart);
-
-                  context.read<DatesProvider>().setDatesController(
-                      _fromDateController, _toDateController);
-                  Navigator.of(context).pop();
-                }
-              },
-              text: _locale.filter,
-              borderRadius: 0.3,
-              textColor: Colors.white,
+  Widget _buildSection({required String title, required Widget child}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: isDesktop ? 12 : 8),
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: isDesktop ? 16 : 12,
+              vertical: isDesktop ? 12 : 10,
             ),
-          ],
+            decoration: BoxDecoration(
+              color: primaryLight,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: primaryDark,
+                fontSize: isDesktop ? 15 : 13,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(isDesktop ? 16 : 12),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateSection() {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 400 && isDesktop;
+        return isWide
+            ? Row(
+                children: [
+                  Expanded(
+                    child: CustomDate(
+                      dateController: _fromDateController,
+                      label: "From Date",
+                      lastDate: DateTime.now(),
+                      minYear: 2000,
+                      onValue: (isValid, value) {
+                        if (isValid) {
+                          setState(() {
+                            _fromDateController.text = value;
+                          });
+                        }
+                      },
+                      dateControllerToCompareWith: _toDateController,
+                      isInitiaDate: true,
+                      timeControllerToCompareWith: null,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: CustomDate(
+                      dateController: _toDateController,
+                      label: "To Date",
+                      lastDate: DateTime.now(),
+                      minYear: 2000,
+                      onValue: (isValid, value) {
+                        if (isValid) {
+                          setState(() {
+                            _toDateController.text = value;
+                          });
+                        }
+                      },
+                      dateControllerToCompareWith: _fromDateController,
+                      isInitiaDate: false,
+                      timeControllerToCompareWith: null,
+                    ),
+                  ),
+                ],
+              )
+            : Column(
+                children: [
+                  CustomDate(
+                    dateController: _fromDateController,
+                    label: "From Date",
+                    lastDate: DateTime.now(),
+                    minYear: 2000,
+                    onValue: (isValid, value) {
+                      if (isValid) {
+                        setState(() {
+                          _fromDateController.text = value;
+                        });
+                      }
+                    },
+                    dateControllerToCompareWith: _toDateController,
+                    isInitiaDate: true,
+                    timeControllerToCompareWith: null,
+                  ),
+                  SizedBox(height: 12),
+                  CustomDate(
+                    dateController: _toDateController,
+                    label: "To Date",
+                    lastDate: DateTime.now(),
+                    minYear: 2000,
+                    onValue: (isValid, value) {
+                      if (isValid) {
+                        setState(() {
+                          _toDateController.text = value;
+                        });
+                      }
+                    },
+                    dateControllerToCompareWith: _fromDateController,
+                    isInitiaDate: false,
+                    timeControllerToCompareWith: null,
+                  ),
+                ],
+              );
+      },
+    );
+  }
+
+  Widget _buildDisplaySection() {
+    return Column(
+      children: [
+        CustomDropDown(
+          width: double.infinity,
+          items: charts,
+          hint: "Select Chart Type",
+          label: "Chart Type",
+          initialValue: selectedChart,
+          onChanged: (value) {
+            setState(() {
+              selectedChart = value!;
+            });
+          },
+        ),
+        SizedBox(height: 12),
+        CustomDropDown(
+          width: double.infinity,
+          items: periods,
+          hint: "Select Period",
+          label: "Period",
+          initialValue: selectedPeriod,
+          onChanged: (value) {
+            setState(() {
+              selectedPeriod = value!;
+              checkPeriods(value);
+            });
+          },
         ),
       ],
     );
@@ -309,7 +437,6 @@ class _FilterDialogSalesByBranchesState
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        // Adding double quotes around keys and values to make it valid JSON
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
@@ -320,14 +447,9 @@ class _FilterDialogSalesByBranchesState
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-
-        // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
-
-        // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
       }
@@ -370,7 +492,6 @@ class _FilterDialogSalesByBranchesState
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {

@@ -500,14 +500,48 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   children: [
                     cashierSearchCriteria.chartType == _locale.barChart
                         ? salesByPaymentTypesBarChart(
-                            _locale.salesByCashier, barChartDataCashier)
-                        : dailySalesChart(totalSalesByCashier,
-                            _locale.salesByCashier, maxYByCashier),
+                            _locale.salesByCashier,
+                            barChartDataCashier,
+                            context,
+                            _locale,
+                            isDesktop,
+                            height,
+                            width,
+                            _scrollController,
+                            isLoading,
+                            xLabelsCashier)
+                        : dailySalesChart(
+                            totalSalesByCashier,
+                            _locale.salesByCashier,
+                            maxYByCashier,
+                            context,
+                            _locale,
+                            isDesktop,
+                            height,
+                            _scrollController,
+                            isLoading),
                     desktopSearchCriteria.chartType == _locale.barChart
                         ? salesByPaymentTypesBarChart(
-                            _locale.salesByComputer, barChartDataComputer)
-                        : dailySalesChart(totalSalesByComputer,
-                            _locale.salesByComputer, maxYByComputer),
+                            _locale.salesByComputer,
+                            barChartDataComputer,
+                            context,
+                            _locale,
+                            isDesktop,
+                            height,
+                            width,
+                            _scrollController1,
+                            isLoading1,
+                            xLabelsComputer)
+                        : dailySalesChart(
+                            totalSalesByComputer,
+                            _locale.salesByComputer,
+                            maxYByComputer,
+                            context,
+                            _locale,
+                            isDesktop,
+                            height,
+                            _scrollController1,
+                            isLoading1),
                   ],
                 ),
               ),
@@ -519,7 +553,15 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                         data1, _locale.salesCostBasedBranch),
                     hoursSearchCriteria.chartType == _locale.lineChart
                         ? dailySalesChart(
-                            totalSalesByHours, _locale.salesByHours, maxYHours)
+                            totalSalesByHours,
+                            _locale.salesByHours,
+                            maxYHours,
+                            context,
+                            _locale,
+                            isDesktop,
+                            height,
+                            _scrollController3,
+                            isLoading3)
                         : hourTotalBarChart(barChartData, _locale.salesByHours),
                   ],
                 ),
@@ -691,201 +733,324 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget hourTotalBarChart(List<BarChartGroupData> barChartData, String title) {
-    return SizedBox(
-      height: height * 0.47,
+    return Container(
+      height: height * 0.465,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Card(
-        elevation: 2,
+        elevation: 0,
         color: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
         ),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Row(
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SelectableText(
-                          title,
-                          style: TextStyle(fontSize: height * 0.015),
+                        Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)}',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        title == _locale.salesByCashier
-                            ? Text(
-                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                                style: TextStyle(fontSize: isDesktop ? 15 : 18))
-                            : title == _locale.salesByComputer
-                                ? Text(
-                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                    style: TextStyle(
-                                        fontSize: isDesktop ? 15 : 18))
-                                : title == _locale.salesByPaymentTypes
-                                    ? Text(
-                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                        style: TextStyle(
-                                            fontSize: isDesktop ? 15 : 18))
-                                    : title == _locale.salesByHours
-                                        ? Text(
-                                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                            style: TextStyle(
-                                                fontSize: isDesktop ? 15 : 18))
-                                        : SizedBox.shrink(),
+                        if (Responsive.isDesktop(context))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 12),
+                            child: Text(
+                              "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
                       ],
                     ),
-                  ],
-                ),
-                blueButton1(
-                  onPressed: () async {
-                    List<CashierModel> cashiers = [];
-                    if (title == _locale.salesByCashier) {
-                      cashiers = await TotalSalesController().getAllCashiers();
-                    }
-                    List<ComputerModel> computers = [];
-                    if (title == _locale.salesByComputer) {
-                      computers = await TotalSalesController().getComputers("");
-                    }
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return FilterDialog(
+                  ),
+                  blueButton1(
+                    onPressed: () async {
+                      List<CashierModel> cashiers = [];
+                      List<ComputerModel> computers = [];
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) {
+                            return FilterDialog(
                               cashiers: cashiers,
                               computers: computers,
                               branches: value,
-                              filter: title == _locale.salesByCashier
-                                  ? cashierSearchCriteria
-                                  : title == _locale.salesByComputer
-                                      ? desktopSearchCriteria
-                                      : title == _locale.salesByPaymentTypes
-                                          ? payTypesSearchCriteria
-                                          : hoursSearchCriteria,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          if (title == _locale.salesByCashier) {
-                            cashierSearchCriteria = value;
-                            fetchSalesByCashier();
-                          } else if (title == _locale.salesByComputer) {
-                            desktopSearchCriteria = value;
-                            fetchSalesByComputer();
-                          } else if (title == _locale.salesByPaymentTypes) {
-                            payTypesSearchCriteria = value;
-                            isLoading2 = true;
-                            setState(() {});
-                            fetchSalesByPayTypes();
-                          } else if (title == _locale.salesByHours) {
+                              filter: hoursSearchCriteria,
+                              hint: title,
+                            );
+                          },
+                        ).then((value) {
+                          if (value != false) {
                             hoursSearchCriteria = value;
-                            isLoading3 = true;
-                            setState(() {});
+                            setState(() {
+                              isLoading3 = true;
+                            });
                             fetchSalesByHours();
                           }
-                        }
+                        });
                       });
-                    });
-                  },
-                  textColor: const Color.fromARGB(255, 255, 255, 255),
-                  icon: Icon(
-                    Icons.filter_list_sharp,
-                    color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
-                  ),
-                )
-              ],
-            ),
-            if (title == _locale.salesByCashier)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})",
-                      style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
-                ],
-              ),
-            if (title == _locale.salesByComputer)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})",
-                      style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
-                ],
-              ),
-            if (title == _locale.salesByHours)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
-                      style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
-                ],
-              ),
-            if (title == _locale.salesByPaymentTypes)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
-                      style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
-                ],
-              ),
-            (title == _locale.salesByPaymentTypes && isLoading2)
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
+                    },
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: Colors.white,
+                      size: isDesktop ? height * 0.03 : height * 0.025,
                     ),
-                  )
-                : (title == _locale.salesByHours && isLoading3)
-                    ? SizedBox(
-                        height: height * 0.35,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+                  ),
+                ],
+              ),
+            ),
+            if (!Responsive.isDesktop(context))
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
+                      style: TextStyle(
+                        fontSize: height * 0.013,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading3
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
                         ),
                       )
-                    : SizedBox(
-                        height: height * 0.35,
-                        child: BarChart(
-                          BarChartData(
-                              maxY: maxYHours * 1.4,
-                              barTouchData: BarTouchData(
-                                touchTooltipData: BarTouchTooltipData(
-                                  getTooltipItem:
-                                      (group, groupIndex, rod, rodIndex) {
-                                    return BarTooltipItem(
-                                      Converters.formatNumber(rod.toY),
-                                      const TextStyle(color: Colors.white),
-                                    );
-                                  },
+                    : barChartData.isNotEmpty
+                        ? Scrollbar(
+                            controller: _scrollController3,
+                            thumbVisibility: true,
+                            thickness: 6,
+                            trackVisibility: true,
+                            radius: const Radius.circular(8),
+                            child: SingleChildScrollView(
+                              reverse:
+                                  _locale.localeName == "ar" ? true : false,
+                              controller: _scrollController3,
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                height: double
+                                    .infinity, // Use full available height
+                                width: Responsive.isDesktop(context)
+                                    ? barChartData.length > 20
+                                        ? width * (barChartData.length / 16)
+                                        : width * 0.82
+                                    : barChartData.length > 5
+                                        ? width * (barChartData.length / 8)
+                                        : width * 0.82,
+                                child: BarChart(
+                                  BarChartData(
+                                    maxY: maxYHours * 1.4,
+                                    barTouchData: BarTouchData(
+                                      touchTooltipData: BarTouchTooltipData(
+                                        tooltipRoundedRadius: 8,
+                                        getTooltipItem:
+                                            (group, groupIndex, rod, rodIndex) {
+                                          return BarTooltipItem(
+                                            "${Converters.formatNumber(rod.toY)}\n${totalSalesByHours[groupIndex].displayGroupName}",
+                                            const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    titlesData: FlTitlesData(
+                                      rightTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize: 40,
+                                          getTitlesWidget: (value, meta) {
+                                            int index = value.toInt();
+                                            if (index >= 0 &&
+                                                index <
+                                                    totalSalesByHours.length) {
+                                              return Transform.rotate(
+                                                angle: -30 * 3.14159 / 180,
+                                                child: SizedBox(
+                                                  width: 200,
+                                                  child: Center(
+                                                    child: Text(
+                                                      totalSalesByHours[index]
+                                                          .displayGroupName,
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors
+                                                            .grey.shade700,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return const Text("");
+                                          },
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          getTitlesWidget: (value, meta) =>
+                                              leftTitleWidgets(value),
+                                          showTitles: true,
+                                          reservedSize: 35,
+                                        ),
+                                      ),
+                                      topTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                    ),
+                                    gridData: FlGridData(
+                                      show: true,
+                                      drawVerticalLine: false,
+                                      horizontalInterval: maxYHours * 0.2,
+                                      getDrawingHorizontalLine: (value) {
+                                        return const FlLine(
+                                          color:
+                                              Color.fromRGBO(82, 151, 176, 0.1),
+                                          strokeWidth: 1,
+                                        );
+                                      },
+                                    ),
+                                    borderData: FlBorderData(
+                                      border: Border.all(
+                                        color: const Color.fromRGBO(
+                                            82, 151, 176, 0.3),
+                                      ),
+                                    ),
+                                    barGroups: barChartData.map((data) {
+                                      return BarChartGroupData(
+                                        x: data.x,
+                                        barRods: data.barRods.map((rod) {
+                                          return BarChartRodData(
+                                            toY: rod.toY,
+                                            color: const Color.fromRGBO(
+                                                82, 151, 176, 1),
+                                            width: 20,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(4),
+                                              topRight: Radius.circular(4),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      );
+                                    }).toList(),
+                                  ),
                                 ),
                               ),
-                              titlesData: FlTitlesData(
-                                rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.bar_chart_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
                                 ),
-                                leftTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                  getTitlesWidget: (value, meta) =>
-                                      leftTitleWidgets(value),
-                                  showTitles: true,
-                                  reservedSize: 35,
-                                )),
-                                topTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false),
+                                const SizedBox(height: 16),
+                                Text(
+                                  _locale.noDataAvailable,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                              ),
-                              barGroups: barChartData),
-                        ),
-                      ),
+                              ],
+                            ),
+                          ),
+              ),
+            ),
           ],
         ),
       ),
@@ -893,80 +1058,142 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget dailySalesChart(
-      List<BranchSalesViewModel> totalSales, String title, double maxY) {
-    return SizedBox(
-      height: height * 0.47,
+      List<BranchSalesViewModel> totalSales,
+      String title,
+      double maxY,
+      BuildContext context,
+      AppLocalizations _locale,
+      bool isDesktop,
+      double height,
+      ScrollController _scrollController,
+      bool isLoading) {
+    return Container(
+      height: height * 0.465,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Card(
-        elevation: 2,
+        elevation: 0,
         color: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
         ),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SelectableText(
-                      title,
-                      style: TextStyle(fontSize: height * 0.015),
-                    ),
-                    title == _locale.salesByCashier
-                        ? Text(
-                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                            style: TextStyle(fontSize: isDesktop ? 13 : 16))
-                        : title == _locale.salesByComputer
-                            ? Text(
-                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                style: TextStyle(fontSize: isDesktop ? 15 : 18))
-                            : title == _locale.salesByPaymentTypes
-                                ? Text(
-                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                    style: TextStyle(
-                                        fontSize: isDesktop ? 15 : 18))
-                                : title == _locale.salesByHours
-                                    ? Text(
-                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                        style: TextStyle(
-                                            fontSize: isDesktop ? 15 : 18))
-                                    : SizedBox.shrink()
-                  ],
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesByCashier)
-                    Text(
-                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesByComputer)
-                    Text(
-                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesByHours)
-                    Text(
-                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesByPaymentTypes)
-                    Text(
-                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"),
-                blueButton1(
-                  onPressed: () async {
-                    List<CashierModel> cashiers = [];
-                    if (title == _locale.salesByCashier) {
-                      cashiers = await TotalSalesController().getAllCashiers();
-                    }
-                    List<ComputerModel> computers = [];
-                    if (title == _locale.salesByComputer) {
-                      computers = await TotalSalesController().getComputers("");
-                    }
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return FilterDialog(
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                title == _locale.salesByCashier
+                                    ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)}'
+                                    : title == _locale.salesByComputer
+                                        ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)}'
+                                        : title == _locale.salesByHours
+                                            ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)}'
+                                            : '',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (Responsive.isDesktop(context))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 12),
+                            child: Text(
+                              title == _locale.salesByCashier
+                                  ? "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"
+                                  : title == _locale.salesByComputer
+                                      ? "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"
+                                      : title == _locale.salesByHours
+                                          ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
+                                          : "",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                  blueButton1(
+                    onPressed: () async {
+                      List<CashierModel> cashiers = [];
+                      List<ComputerModel> computers = [];
+                      if (title == _locale.salesByCashier) {
+                        cashiers =
+                            await TotalSalesController().getAllCashiers();
+                      } else if (title == _locale.salesByComputer) {
+                        computers =
+                            await TotalSalesController().getComputers("");
+                      }
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return FilterDialog(
                               cashiers: cashiers,
                               computers: computers,
                               branches: value,
@@ -974,238 +1201,250 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                                   ? cashierSearchCriteria
                                   : title == _locale.salesByComputer
                                       ? desktopSearchCriteria
-                                      : title == _locale.salesByPaymentTypes
-                                          ? payTypesSearchCriteria
-                                          : hoursSearchCriteria,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          if (title == _locale.salesByCashier) {
-                            cashierSearchCriteria = value;
-
-                            setState(() {
-                              isLoading = true;
-                            });
-                            fetchSalesByCashier();
-                          } else if (title == _locale.salesByComputer) {
-                            desktopSearchCriteria = value;
-                            setState(() {
-                              isLoading1 = true;
-                            });
-                            fetchSalesByComputer();
-                          } else if (title == _locale.salesByPaymentTypes) {
-                            payTypesSearchCriteria = value;
-                            isLoading2 = true;
-                            setState(() {});
-                            fetchSalesByPayTypes();
-                          } else if (title == _locale.salesByHours) {
-                            hoursSearchCriteria = value;
-                            setState(() {
-                              isLoading3 = true;
-                            });
-                            fetchSalesByHours();
+                                      : hoursSearchCriteria,
+                              hint: title,
+                            );
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            if (title == _locale.salesByCashier) {
+                              cashierSearchCriteria = value;
+                              setState(() {
+                                isLoading = true;
+                              });
+                              fetchSalesByCashier();
+                            } else if (title == _locale.salesByComputer) {
+                              desktopSearchCriteria = value;
+                              setState(() {
+                                isLoading1 = true;
+                              });
+                              fetchSalesByComputer();
+                            } else if (title == _locale.salesByHours) {
+                              hoursSearchCriteria = value;
+                              setState(() {
+                                isLoading3 = true;
+                              });
+                              fetchSalesByHours();
+                            }
                           }
-                        }
+                        });
                       });
-                    });
-                  },
-                  textColor: const Color.fromARGB(255, 255, 255, 255),
-                  icon: Icon(
-                    Icons.filter_list_sharp,
-                    color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
+                    },
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: Colors.white,
+                      size: isDesktop ? height * 0.03 : height * 0.025,
+                    ),
                   ),
-                )
-              ],
+                ],
+              ),
             ),
             if (!Responsive.isDesktop(context))
-              if (title == _locale.salesByCashier)
-                Row(
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                        "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesByComputer)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesByHours)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesByPaymentTypes)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            (title == _locale.salesByCashier && isLoading)
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
+                      title == _locale.salesByCashier
+                          ? "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"
+                          : title == _locale.salesByComputer
+                              ? "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"
+                              : title == _locale.salesByHours
+                                  ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
+                                  : "",
+                      style: TextStyle(
+                        fontSize: height * 0.013,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
-                  )
-                : (title == _locale.salesByComputer && isLoading1)
-                    ? SizedBox(
-                        height: height * 0.35,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
                         ),
                       )
-                    : (title == _locale.salesByPaymentTypes && isLoading2)
-                        ? SizedBox(
-                            height: height * 0.35,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        : (title == _locale.salesByHours && isLoading3)
-                            ? SizedBox(
-                                height: height * 0.35,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : Scrollbar(
-                                controller: title == _locale.salesByCashier
-                                    ? _scrollController
-                                    : title == _locale.salesByHours
-                                        ? _scrollController3
-                                        : _scrollController1,
-                                thumbVisibility: true,
-                                thickness: 8,
-                                trackVisibility: true,
-                                radius: const Radius.circular(4),
-                                child: SingleChildScrollView(
-                                  reverse:
-                                      _locale.localeName == "ar" ? true : false,
-                                  controller: title == _locale.salesByCashier
-                                      ? _scrollController
-                                      : title == _locale.salesByHours
-                                          ? _scrollController3
-                                          : _scrollController1,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: height * 0.35,
-                                      width: Responsive.isDesktop(context)
-                                          ? totalSales.length > 20
-                                              ? width * (totalSales.length / 16)
-                                              : title == _locale.salesByHours
-                                                  ? width * 0.45
-                                                  : width * 0.82
-                                          : totalSales.length > 7
-                                              ? width * (totalSales.length / 8)
-                                              : width * 0.82,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 50.0, vertical: 40.0),
-                                        child: LineChart(
-                                          LineChartData(
-                                            maxY: maxY * 1.3,
-                                            lineTouchData: LineTouchData(
-                                              touchTooltipData:
-                                                  LineTouchTooltipData(
-                                                getTooltipItems:
-                                                    (List<LineBarSpot>
-                                                        touchedSpots) {
-                                                  return touchedSpots
-                                                      .map((spot) {
-                                                    return LineTooltipItem(
-                                                      "${totalSales[spot.spotIndex].displayGroupName} / ${totalSales[spot.spotIndex].displayBranchName} / ${Converters.formatNumber(spot.y)}",
-                                                      const TextStyle(
-                                                          color: Colors.white),
-                                                    );
-                                                  }).toList();
-                                                },
-                                              ),
-                                            ),
-                                            titlesData: FlTitlesData(
-                                              topTitles: const AxisTitles(
-                                                sideTitles: SideTitles(
-                                                    showTitles: false),
-                                              ),
-                                              rightTitles: const AxisTitles(
-                                                  sideTitles: SideTitles(
-                                                      showTitles: false)),
-                                              leftTitles: AxisTitles(
-                                                  sideTitles: SideTitles(
-                                                getTitlesWidget:
-                                                    (value, meta) =>
-                                                        leftTitleWidgets(value),
-                                                showTitles: true,
-                                                reservedSize: 35,
-                                              )),
-                                              bottomTitles: AxisTitles(
-                                                sideTitles: SideTitles(
-                                                  showTitles: true,
-                                                  interval: 1,
-                                                  getTitlesWidget:
-                                                      (value, meta) =>
-                                                          groupNameTitle(
-                                                              value.toInt(),
-                                                              totalSales,
-                                                              title),
-                                                ),
-                                              ),
-                                            ),
-                                            borderData: FlBorderData(
-                                                border: Border.all(
-                                                    color: const Color.fromARGB(
-                                                        255, 125, 125, 125))),
-                                            lineBarsData: [
-                                              LineChartBarData(
-                                                belowBarData: BarAreaData(
-                                                    show: true,
-                                                    color: Colors.blue
-                                                        .withOpacity(0.5)),
-                                                isCurved: true,
-                                                preventCurveOverShooting: true,
-                                                isStrokeJoinRound: true,
-                                                spots: totalSales
-                                                    .asMap()
-                                                    .entries
-                                                    .map((entry) {
-                                                  int index = entry.key;
-                                                  double totalSales =
-                                                      double.parse(entry.value
-                                                          .displayTotalSales);
-
-                                                  return FlSpot(
-                                                      index.toDouble(),
-                                                      totalSales);
-                                                }).toList(),
-                                              ),
-                                            ],
+                    : totalSales.isNotEmpty
+                        ? Scrollbar(
+                            controller: _scrollController,
+                            thumbVisibility: true,
+                            thickness: 6,
+                            trackVisibility: true,
+                            radius: const Radius.circular(8),
+                            child: SingleChildScrollView(
+                              reverse:
+                                  _locale.localeName == "ar" ? true : false,
+                              controller: _scrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                height: height * 0.3,
+                                width: Responsive.isDesktop(context)
+                                    ? totalSales.length > 20
+                                        ? width * (totalSales.length / 16)
+                                        : width * 0.82
+                                    : totalSales.length > 5
+                                        ? width * (totalSales.length / 8)
+                                        : width * 0.82,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20.0, vertical: 10.0),
+                                  child: LineChart(
+                                    LineChartData(
+                                      maxY: maxY * 1.3,
+                                      lineTouchData: LineTouchData(
+                                        touchTooltipData: LineTouchTooltipData(
+                                          tooltipRoundedRadius: 8,
+                                          getTooltipItems:
+                                              (List<LineBarSpot> touchedSpots) {
+                                            return touchedSpots.map((spot) {
+                                              return LineTooltipItem(
+                                                "${totalSales[spot.spotIndex].displayGroupName}\n${totalSales[spot.spotIndex].displaytransTypeName}\n${Converters.formatNumber(spot.y)}",
+                                                const TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              );
+                                            }).toList();
+                                          },
+                                        ),
+                                      ),
+                                      titlesData: FlTitlesData(
+                                        topTitles: const AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false),
+                                        ),
+                                        rightTitles: const AxisTitles(
+                                          sideTitles:
+                                              SideTitles(showTitles: false),
+                                        ),
+                                        leftTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            getTitlesWidget: (value, meta) =>
+                                                leftTitleWidgets(value),
+                                            showTitles: true,
+                                            reservedSize: 35,
+                                          ),
+                                        ),
+                                        bottomTitles: AxisTitles(
+                                          sideTitles: SideTitles(
+                                            showTitles: true,
+                                            interval: 1,
+                                            getTitlesWidget: (value, meta) =>
+                                                groupNameTitle(value.toInt(),
+                                                    totalSales, title),
                                           ),
                                         ),
                                       ),
+                                      borderData: FlBorderData(
+                                        border: Border.all(
+                                          color: const Color.fromRGBO(
+                                              82, 151, 176, 0.3),
+                                        ),
+                                      ),
+                                      gridData: FlGridData(
+                                        show: true,
+                                        drawVerticalLine: true,
+                                        horizontalInterval: maxY * 0.2,
+                                        verticalInterval: 1,
+                                        getDrawingHorizontalLine: (value) {
+                                          return const FlLine(
+                                            color: Color.fromRGBO(
+                                                82, 151, 176, 0.1),
+                                            strokeWidth: 1,
+                                          );
+                                        },
+                                        getDrawingVerticalLine: (value) {
+                                          return const FlLine(
+                                            color: Color.fromRGBO(
+                                                82, 151, 176, 0.1),
+                                            strokeWidth: 1,
+                                          );
+                                        },
+                                      ),
+                                      lineBarsData: [
+                                        LineChartBarData(
+                                          belowBarData: BarAreaData(
+                                            show: true,
+                                            gradient: const LinearGradient(
+                                              colors: [
+                                                Color.fromRGBO(
+                                                    82, 151, 176, 0.3),
+                                                Color.fromRGBO(
+                                                    82, 151, 176, 0.1),
+                                              ],
+                                              begin: Alignment.topCenter,
+                                              end: Alignment.bottomCenter,
+                                            ),
+                                          ),
+                                          isCurved: true,
+                                          color: const Color.fromRGBO(
+                                              82, 151, 176, 1),
+                                          barWidth: 3,
+                                          isStrokeCapRound: true,
+                                          dotData: FlDotData(
+                                            show: true,
+                                            getDotPainter: (spot, percent,
+                                                    barData, index) =>
+                                                FlDotCirclePainter(
+                                              radius: 4,
+                                              color: const Color.fromRGBO(
+                                                  82, 151, 176, 1),
+                                              strokeWidth: 2,
+                                              strokeColor: Colors.white,
+                                            ),
+                                          ),
+                                          preventCurveOverShooting: true,
+                                          spots: totalSales
+                                              .asMap()
+                                              .entries
+                                              .map((entry) {
+                                            int index = entry.key;
+                                            double totalSalesValue =
+                                                double.parse(entry
+                                                    .value.displayTotalSales);
+                                            return FlSpot(index.toDouble(),
+                                                totalSalesValue);
+                                          }).toList(),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
                               ),
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.bar_chart_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  _locale.noDataAvailable,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+              ),
+            ),
           ],
         ),
       ),
@@ -1267,19 +1506,61 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                     children: [
                       cashierSearchCriteria.chartType == _locale.barChart
                           ? salesByPaymentTypesBarChart(
-                              _locale.salesByCashier, barChartDataCashier)
-                          : dailySalesChart(totalSalesByCashier,
-                              _locale.salesByCashier, maxYByCashier),
+                              _locale.salesByCashier,
+                              barChartDataCashier,
+                              context,
+                              _locale,
+                              isDesktop,
+                              height,
+                              width,
+                              _scrollController,
+                              isLoading,
+                              xLabelsCashier)
+                          : dailySalesChart(
+                              totalSalesByCashier,
+                              _locale.salesByCashier,
+                              maxYByCashier,
+                              context,
+                              _locale,
+                              isDesktop,
+                              height,
+                              _scrollController,
+                              isLoading),
                       desktopSearchCriteria.chartType == _locale.barChart
                           ? salesByPaymentTypesBarChart(
-                              _locale.salesByComputer, barChartDataComputer)
-                          : dailySalesChart(totalSalesByComputer,
-                              _locale.salesByComputer, maxYByComputer),
+                              _locale.salesByComputer,
+                              barChartDataComputer,
+                              context,
+                              _locale,
+                              isDesktop,
+                              height,
+                              width,
+                              _scrollController1,
+                              isLoading1,
+                              xLabelsComputer)
+                          : dailySalesChart(
+                              totalSalesByComputer,
+                              _locale.salesByComputer,
+                              maxYByComputer,
+                              context,
+                              _locale,
+                              isDesktop,
+                              height,
+                              _scrollController1,
+                              isLoading1),
                       salesCostBasedBranchChart(
                           data1, _locale.salesCostBasedBranch),
                       hoursSearchCriteria.chartType == _locale.lineChart
-                          ? dailySalesChart(totalSalesByHours,
-                              _locale.salesByHours, maxYHours)
+                          ? dailySalesChart(
+                              totalSalesByHours,
+                              _locale.salesByHours,
+                              maxYHours,
+                              context,
+                              _locale,
+                              isDesktop,
+                              height,
+                              _scrollController3,
+                              isLoading3)
                           : hourTotalBarChart(
                               barChartData, _locale.salesByHours),
                     ],
@@ -1320,377 +1601,545 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   Widget salesByPaymentTypesBarChart(
-      String title, List<BarChartGroupData> enteredBarChartData) {
-    return SizedBox(
-      height: height * 0.47,
+      String title,
+      List<BarChartGroupData> enteredBarChartData,
+      BuildContext context,
+      AppLocalizations _locale,
+      bool isDesktop,
+      double height,
+      double width,
+      ScrollController _scrollController,
+      bool isLoading,
+      List<String> xLabels) {
+    return Container(
+      height: height * 0.465,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Card(
-        elevation: 2,
+        elevation: 0,
         color: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
         ),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Row(
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SelectableText(
-                          title,
-                          style: TextStyle(fontSize: height * 0.015),
+                        Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                title == _locale.salesByCashier
+                                    ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)}'
+                                    : title == _locale.salesByComputer
+                                        ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)}'
+                                        : title == _locale.salesByPaymentTypes
+                                            ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)}'
+                                            : title == _locale.salesByHours
+                                                ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)}'
+                                                : '',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        title == _locale.salesByCashier
-                            ? Text(
-                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesCashierCount)})',
-                                style: TextStyle(fontSize: isDesktop ? 15 : 18))
-                            : title == _locale.salesByComputer
-                                ? Text(
-                                    '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesComputerCount)})',
-                                    style: TextStyle(
-                                        fontSize: isDesktop ? 15 : 18))
-                                : title == _locale.salesByPaymentTypes
-                                    ? Text(
-                                        '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesPayTypesCount)})',
-                                        style: TextStyle(
-                                            fontSize: isDesktop ? 15 : 18))
-                                    : title == _locale.salesByHours
-                                        ? Text(
-                                            '(\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)})',
-                                            style: TextStyle(
-                                                fontSize: isDesktop ? 15 : 18))
-                                        : SizedBox.shrink(),
+                        if (Responsive.isDesktop(context))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 12),
+                            child: Text(
+                              title == _locale.salesByCashier
+                                  ? "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"
+                                  : title == _locale.salesByComputer
+                                      ? "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"
+                                      : title == _locale.salesByPaymentTypes
+                                          ? "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"
+                                          : title == _locale.salesByHours
+                                              ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
+                                              : "",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
                       ],
+                    ),
+                  ),
+                  blueButton1(
+                    onPressed: () async {
+                      List<CashierModel> cashiers = [];
+                      List<ComputerModel> computers = [];
+                      if (title == _locale.salesByCashier) {
+                        cashiers =
+                            await TotalSalesController().getAllCashiers();
+                      } else if (title == _locale.salesByComputer) {
+                        computers =
+                            await TotalSalesController().getComputers("");
+                      }
+                      await TotalSalesController()
+                          .getAllBranches()
+                          .then((value) {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return FilterDialog(
+                              cashiers: cashiers,
+                              computers: computers,
+                              branches: value,
+                              filter: title == _locale.salesByCashier
+                                  ? cashierSearchCriteria
+                                  : title == _locale.salesByComputer
+                                      ? desktopSearchCriteria
+                                      : title == _locale.salesByPaymentTypes
+                                          ? payTypesSearchCriteria
+                                          : hoursSearchCriteria,
+                              hint: title,
+                            );
+                          },
+                        ).then((value) {
+                          if (value != false) {
+                            if (title == _locale.salesByCashier) {
+                              cashierSearchCriteria = value;
+                              setState(() {
+                                isLoading = true;
+                              });
+                              fetchSalesByCashier();
+                            } else if (title == _locale.salesByComputer) {
+                              desktopSearchCriteria = value;
+                              setState(() {
+                                isLoading1 = true;
+                              });
+                              fetchSalesByComputer();
+                            } else if (title == _locale.salesByPaymentTypes) {
+                              payTypesSearchCriteria = value;
+                              setState(() {
+                                isLoading2 = true;
+                              });
+                              fetchSalesByPayTypes();
+                            } else if (title == _locale.salesByHours) {
+                              hoursSearchCriteria = value;
+                              setState(() {
+                                isLoading3 = true;
+                              });
+                              fetchSalesByHours();
+                            }
+                          }
+                        });
+                      });
+                    },
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: Colors.white,
+                      size: isDesktop ? height * 0.03 : height * 0.025,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (!Responsive.isDesktop(context))
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      title == _locale.salesByCashier
+                          ? "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"
+                          : title == _locale.salesByComputer
+                              ? "(${desktopSearchCriteria.fromDate} - ${desktopSearchCriteria.toDate})"
+                              : title == _locale.salesByPaymentTypes
+                                  ? "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})"
+                                  : title == _locale.salesByHours
+                                      ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
+                                      : "",
+                      style: TextStyle(
+                        fontSize: height * 0.013,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   ],
                 ),
-                blueButton1(
-                  onPressed: () async {
-                    List<CashierModel> cashiers = [];
-                    if (title == _locale.salesByCashier) {
-                      cashiers = await TotalSalesController().getAllCashiers();
-                    }
-                    List<ComputerModel> computers = [];
-                    if (title == _locale.salesByComputer) {
-                      computers = await TotalSalesController().getComputers("");
-                    }
-                    await TotalSalesController().getAllBranches().then((value) {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return FilterDialog(
-                              cashiers: cashiers,
-                              branches: value,
-                              computers: computers,
-                              filter: title == _locale.salesByPaymentTypes
-                                  ? payTypesSearchCriteria
-                                  : title == _locale.salesByCashier
-                                      ? cashierSearchCriteria
-                                      : desktopSearchCriteria,
-                              hint: title);
-                        },
-                      ).then((value) {
-                        if (value != false) {
-                          if (title == _locale.salesByPaymentTypes) {
-                            payTypesSearchCriteria = value;
-                            isLoading2 = true;
-                            setState(() {});
-                            fetchSalesByPayTypes();
-                          } else if (title == _locale.salesByCashier) {
-                            cashierSearchCriteria = value;
-                            isLoading = true;
-
-                            setState(() {});
-                            fetchSalesByCashier();
-                          } else if (title == _locale.salesByComputer) {
-                            desktopSearchCriteria = value;
-                            isLoading1 = true;
-                            setState(() {});
-                            fetchSalesByComputer();
-                          } else if (title == _locale.salesByHours) {
-                            hoursSearchCriteria = value;
-                            isLoading3 = true;
-                            setState(() {});
-                            fetchSalesByHours();
-                          }
-                        }
-                      });
-                    });
-                  },
-                  textColor: const Color.fromARGB(255, 255, 255, 255),
-                  icon: Icon(
-                    Icons.filter_list_sharp,
-                    color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
-                  ),
-                )
-              ],
-            ),
-            // if (!Responsive.isDesktop(context))
-
-            if (title == _locale.salesByPaymentTypes)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "(${payTypesSearchCriteria.fromDate} - ${payTypesSearchCriteria.toDate})",
-                      style:
-                          TextStyle(fontSize: isDesktop ? 14 : height * 0.013)),
-                ],
               ),
-            (title == _locale.salesByCashier && isLoading)
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : (title == _locale.salesByComputer && isLoading1)
-                    ? SizedBox(
-                        height: height * 0.35,
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
                         ),
                       )
-                    : (title == _locale.salesByPaymentTypes && isLoading2)
-                        ? SizedBox(
-                            height: height * 0.35,
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        : (title == _locale.salesByHours && isLoading3)
-                            ? SizedBox(
-                                height: height * 0.35,
-                                child: const Center(
-                                  child: CircularProgressIndicator(),
-                                ),
-                              )
-                            : Scrollbar(
-                                controller: title == _locale.salesByCashier
-                                    ? _scrollController
-                                    : title == _locale.salesByComputer
-                                        ? _scrollController1
-                                        : _scrollController2,
-                                thumbVisibility: true,
-                                thickness: 8,
-                                trackVisibility: true,
-                                radius: const Radius.circular(4),
-                                child: SingleChildScrollView(
-                                  reverse:
-                                      _locale.localeName == "ar" ? true : false,
-                                  controller: title == _locale.salesByCashier
-                                      ? _scrollController
-                                      : title == _locale.salesByComputer
-                                          ? _scrollController1
-                                          : _scrollController2,
-                                  scrollDirection: Axis.horizontal,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: height * 0.35,
-                                      width: Responsive.isDesktop(context)
-                                          ? title == _locale.salesByComputer
-                                              ? enteredBarChartData.length > 10
-                                                  ? width *
-                                                      (enteredBarChartData
-                                                              .length /
-                                                          10)
-                                                  : width * 0.3
-                                              : enteredBarChartData.length > 20
-                                                  ? width *
-                                                      (enteredBarChartData
-                                                              .length /
-                                                          10)
-                                                  : width * 0.3
-                                          : enteredBarChartData.length > 5
-                                              ? width *
-                                                  (enteredBarChartData.length /
-                                                      2)
-                                              : width * 0.95,
-                                      child: BarChart(
-                                        BarChartData(
-                                            maxY: title ==
+                    : enteredBarChartData.isNotEmpty
+                        ? Scrollbar(
+                            controller: _scrollController,
+                            thumbVisibility: true,
+                            thickness: 6,
+                            trackVisibility: true,
+                            radius: const Radius.circular(8),
+                            child: SingleChildScrollView(
+                              reverse:
+                                  _locale.localeName == "ar" ? true : false,
+                              controller: _scrollController,
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                height: double
+                                    .infinity, // Use full available height
+                                width: Responsive.isDesktop(context)
+                                    ? enteredBarChartData.length > 20
+                                        ? width *
+                                            (enteredBarChartData.length / 16)
+                                        : width * 0.82
+                                    : enteredBarChartData.length > 5
+                                        ? width *
+                                            (enteredBarChartData.length / 8)
+                                        : width * 0.82,
+                                child: BarChart(
+                                  BarChartData(
+                                    maxY: title == _locale.salesByCashier
+                                        ? maxYByCashier * 1.4
+                                        : title == _locale.salesByComputer
+                                            ? maxYByComputer * 1.4
+                                            : title ==
                                                     _locale.salesByPaymentTypes
                                                 ? maxY * 1.4
-                                                : title ==
-                                                        _locale.salesByCashier
-                                                    ? maxYByCashier * 1.4
-                                                    : maxYByComputer * 1.4,
-                                            barTouchData: BarTouchData(
-                                              touchTooltipData:
-                                                  BarTouchTooltipData(
-                                                getTooltipItem: (group,
-                                                    groupIndex, rod, rodIndex) {
-                                                  return BarTooltipItem(
-                                                    title ==
-                                                            _locale
-                                                                .salesByPaymentTypes
-                                                        ? "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}"
-                                                        : title ==
-                                                                _locale
-                                                                    .salesByCashier
-                                                            ? "${Converters.formatNumber(rod.toY)}\n${xLabelsCashier[groupIndex]}"
-                                                            : title ==
-                                                                    _locale
-                                                                        .salesByComputer
-                                                                ? "${Converters.formatNumber(rod.toY)}\n${xLabelsComputer[groupIndex]}"
-                                                                : "",
-                                                    const TextStyle(
-                                                        color: Colors.white),
-                                                  );
-                                                },
-                                              ),
+                                                : maxYHours * 1.4,
+                                    barTouchData: BarTouchData(
+                                      touchTooltipData: BarTouchTooltipData(
+                                        tooltipRoundedRadius: 8,
+                                        getTooltipItem:
+                                            (group, groupIndex, rod, rodIndex) {
+                                          return BarTooltipItem(
+                                            "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                            const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
                                             ),
-                                            titlesData: FlTitlesData(
-                                              rightTitles: AxisTitles(
-                                                sideTitles: SideTitles(
-                                                    showTitles: false),
-                                              ),
-                                              bottomTitles: AxisTitles(
-                                                sideTitles: SideTitles(
-                                                  showTitles: true,
-                                                  reservedSize: 40,
-                                                  getTitlesWidget:
-                                                      (value, meta) {
-                                                    int index = value.toInt();
-                                                    if (index >= 0 &&
-                                                        index <
-                                                            (title ==
-                                                                        _locale
-                                                                            .salesByPaymentTypes
-                                                                    ? xLabels
-                                                                    : title ==
-                                                                            _locale
-                                                                                .salesByCashier
-                                                                        ? xLabelsCashier
-                                                                        : title ==
-                                                                                _locale.salesByComputer
-                                                                            ? xLabelsComputer
-                                                                            : [])
-                                                                .length) {
-                                                      return Transform.rotate(
-                                                        angle: -30 *
-                                                            3.14159 /
-                                                            180, // 90 degrees in radians
-                                                        child: SizedBox(
-                                                          width: 200,
-                                                          child: Center(
-                                                            child: Text(
-                                                                title ==
-                                                                        _locale
-                                                                            .salesByPaymentTypes
-                                                                    ? xLabels[
-                                                                        index]
-                                                                    : title ==
-                                                                            _locale
-                                                                                .salesByCashier
-                                                                        ? xLabelsCashier[
-                                                                            index]
-                                                                        : title ==
-                                                                                _locale
-                                                                                    .salesByComputer
-                                                                            ? xLabelsComputer[
-                                                                                index]
-                                                                            : "",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12)),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    }
-                                                    return Text("");
-                                                  },
-                                                ),
-                                              ),
-                                              leftTitles: AxisTitles(
-                                                  sideTitles: SideTitles(
-                                                getTitlesWidget:
-                                                    (value, meta) =>
-                                                        leftTitleWidgets(value),
-                                                showTitles: true,
-                                                reservedSize: 35,
-                                              )),
-                                              topTitles: AxisTitles(
-                                                sideTitles: SideTitles(
-                                                    showTitles: false),
-                                              ),
-                                            ),
-                                            barGroups: enteredBarChartData),
+                                          );
+                                        },
                                       ),
                                     ),
+                                    titlesData: FlTitlesData(
+                                      rightTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                      bottomTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          showTitles: true,
+                                          reservedSize:
+                                              60, // Increased to prevent text overflow
+                                          getTitlesWidget: (value, meta) {
+                                            int index = value.toInt();
+                                            if (index >= 0 &&
+                                                index < xLabels.length) {
+                                              return Transform.rotate(
+                                                angle: -30 * 3.14159 / 180,
+                                                child: SizedBox(
+                                                  width: 200,
+                                                  child: Center(
+                                                    child: Text(
+                                                      xLabels[index],
+                                                      style: TextStyle(
+                                                        fontSize: 10,
+                                                        color: Colors
+                                                            .grey.shade700,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            return const Text("");
+                                          },
+                                        ),
+                                      ),
+                                      leftTitles: AxisTitles(
+                                        sideTitles: SideTitles(
+                                          getTitlesWidget: (value, meta) =>
+                                              leftTitleWidgets(value),
+                                          showTitles: true,
+                                          reservedSize: 35,
+                                        ),
+                                      ),
+                                      topTitles: const AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false),
+                                      ),
+                                    ),
+                                    gridData: FlGridData(
+                                      show: true,
+                                      drawVerticalLine: false,
+                                      horizontalInterval: (title ==
+                                                  _locale.salesByCashier
+                                              ? maxYByCashier
+                                              : title == _locale.salesByComputer
+                                                  ? maxYByComputer
+                                                  : title ==
+                                                          _locale
+                                                              .salesByPaymentTypes
+                                                      ? maxY
+                                                      : maxYHours) *
+                                          0.2,
+                                      getDrawingHorizontalLine: (value) {
+                                        return const FlLine(
+                                          color:
+                                              Color.fromRGBO(82, 151, 176, 0.1),
+                                          strokeWidth: 1,
+                                        );
+                                      },
+                                    ),
+                                    borderData: FlBorderData(
+                                      border: Border.all(
+                                        color: const Color.fromRGBO(
+                                            82, 151, 176, 0.3),
+                                      ),
+                                    ),
+                                    barGroups: enteredBarChartData.map((data) {
+                                      return BarChartGroupData(
+                                        x: data.x,
+                                        barRods: data.barRods.map((rod) {
+                                          return BarChartRodData(
+                                            toY: rod.toY,
+                                            color: const Color.fromRGBO(
+                                                82, 151, 176, 1),
+                                            width: 20,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                              topLeft: Radius.circular(4),
+                                              topRight: Radius.circular(4),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      );
+                                    }).toList(),
                                   ),
                                 ),
                               ),
+                            ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.bar_chart_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  _locale.noDataAvailable,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
-    return SizedBox(
-      height: height * 0.465,
-      child: Card(
-        elevation: 2, // Remove shadow effect
-        color: Colors.white, // Set background to transparent
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
+  return Container(
+    // Use a responsive height based on screen size, with a minimum and maximum to ensure usability
+    height: Responsive.isDesktop(context)
+        ? MediaQuery.of(context).size.height * 0.5
+        : MediaQuery.of(context).size.height * 0.6,
+    constraints: BoxConstraints(
+      minHeight: 300, // Minimum height for smaller screens
+      maxHeight: 600, // Maximum height for larger screens
+    ),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
-        child: Column(
-          children: [
-            Row(
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(82, 151, 176, 0.05),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Column(
-                      children: [
-                        SelectableText(title,
-                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        if (Responsive.isDesktop(context))
-                          title == _locale.salesCostBasedBranch
-                              ? Text(
-                                  " (${_locale.profit}: \u200E${NumberFormat('#,###').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                              : SizedBox.shrink()
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 16 : 18,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 2,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              "(${_locale.profit}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (Responsive.isDesktop(context))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8, left: 12),
+                          child: Text(
+                            "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 12 : 14,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.salesCostBasedBranch)
-                    Text(
-                        "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                const SizedBox(width: 8), // Add spacing to prevent overlap
                 blueButton1(
                   onPressed: () async {
-                    await TotalSalesController().getAllBranches().then((value) {
+                    await TotalSalesController()
+                        .getAllBranches()
+                        .then((value) {
                       showDialog(
                         barrierDismissible: false,
                         context: context,
                         builder: (context) {
                           return FilterDialog(
-                              cashiers: [],
-                              branches: value,
-                              filter: salesCostBasedBranchReportCrit,
-                              hint: title);
+                            cashiers: [],
+                            branches: value,
+                            filter: salesCostBasedBranchReportCrit,
+                            hint: title,
+                          );
                         },
                       ).then((value) {
                         if (value != false) {
-                          if (title == _locale.salesCostBasedBranch) {
-                            isLoading2 = true;
-                            setState(() {});
-                            salesCostBasedBranchReportCrit = value;
-                            fetchsalesCostBasedBranchReportList();
-                          }
+                          isLoading2 = true;
+                          setState(() {});
+                          salesCostBasedBranchReportCrit = value;
+                          fetchsalesCostBasedBranchReportList();
                         }
                       });
                     });
@@ -1699,140 +2148,161 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
                   icon: Icon(
                     Icons.filter_list_sharp,
                     color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
+                    size: isDesktop ? height * 0.03 : height * 0.025,
                   ),
-                )
+                ),
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedBranch)
-                title == _locale.salesCostBasedBranch
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                              "(${_locale.profit}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReportProfit)}, ${_locale.sales}: \u200E${NumberFormat('#,###', 'en_US').format(totalsalesCostBasedBranchReport)})")
-                        ],
-                      )
-                    : SizedBox.shrink(),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.salesCostBasedBranch)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        textDirection: ui.TextDirection.ltr,
-                        "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            isLoading2
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(child: CircularProgressIndicator()))
-                : (data1.isNotEmpty)
-                    ? Consumer<ScreenContentProvider>(
-                        builder: (context, value, child) {
-                        return Scrollbar(
+          ),
+          if (!Responsive.isDesktop(context))
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "(${salesCostBasedBranchReportCrit.fromDate} - ${salesCostBasedBranchReportCrit.toDate})",
+                    style: TextStyle(
+                      fontSize: height * 0.013,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: isLoading2
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color.fromRGBO(82, 151, 176, 1),
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : data1.isNotEmpty
+                      ? Scrollbar(
                           controller: _scrollController2,
                           thumbVisibility: true,
-                          thickness: 8,
+                          thickness: 6,
                           trackVisibility: true,
-                          radius: const Radius.circular(4),
+                          radius: const Radius.circular(8),
                           child: SingleChildScrollView(
                             reverse: _locale.localeName == "ar" ? true : false,
                             controller: _scrollController2,
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
-                              height: height * 0.35,
+                              height: Responsive.isDesktop(context)
+                                  ? MediaQuery.of(context).size.height * 0.35
+                                  : MediaQuery.of(context).size.height * 0.4,
                               width: Responsive.isDesktop(context)
                                   ? data1.length > 20
-                                      ? width * (data1.length / 10)
-                                      : !value.getIsColapsed()
-                                          ? width * 0.42
-                                          : width * 0.52
-                                  : data1.length > 10
-                                      ? width * (data1.length / 5)
-                                      : width * 0.95,
+                                      ? MediaQuery.of(context).size.width *
+                                          0.9 *
+                                          (data1.length / 20)
+                                      : MediaQuery.of(context).size.width * 0.9
+                                  : data1.length > 5
+                                      ? MediaQuery.of(context).size.width *
+                                          0.95 *
+                                          (data1.length / 10)
+                                      : MediaQuery.of(context).size.width * 0.95,
                               child: SfCartesianChart(
-                                  primaryXAxis: CategoryAxis(),
-                                  primaryYAxis: NumericAxis(
-                                    title: AxisTitle(text: _locale.totalCost),
+                                primaryXAxis: CategoryAxis(),
+                                primaryYAxis: NumericAxis(
+                                  title: AxisTitle(text: _locale.totalCost),
+                                ),
+                                legend: Legend(
+                                  isVisible: true,
+                                  position: LegendPosition.bottom,
+                                  overflowMode: LegendItemOverflowMode.wrap,
+                                ),
+                                axes: <ChartAxis>[
+                                  CategoryAxis(
+                                    name: 'secondaryXAxis',
+                                    opposedPosition: true,
                                   ),
-                                  legend: Legend(
-                                    isVisible: true,
-                                    position: LegendPosition
-                                        .bottom, // Position the legend below the chart
-                                    overflowMode: LegendItemOverflowMode
-                                        .wrap, // Handle overflow
+                                  NumericAxis(
+                                    name: 'secondaryYAxis',
+                                    title:
+                                        AxisTitle(text: _locale.profitPercent),
+                                    opposedPosition: true,
                                   ),
-                                  axes: <ChartAxis>[
-                                    CategoryAxis(
-                                      name: 'secondaryXAxis',
-                                      opposedPosition: true,
+                                ],
+                                tooltipBehavior: _tooltip1,
+                                series: <CartesianSeries<ChartData, String>>[
+                                  ColumnSeries<ChartData, String>(
+                                    dataSource: data1,
+                                    xValueMapper: (ChartData data1, _) =>
+                                        data1.x,
+                                    yValueMapper: (ChartData data1, _) =>
+                                        data1.y,
+                                    name: _locale.profit,
+                                    color: Color.fromARGB(255, 14, 185, 11),
+                                  ),
+                                  ColumnSeries<ChartData, String>(
+                                    dataSource: data1,
+                                    xValueMapper: (ChartData data1, _) =>
+                                        data1.x,
+                                    yValueMapper: (ChartData data1, _) =>
+                                        data1.y1,
+                                    name: _locale.salesCost,
+                                    color:
+                                        const Color.fromRGBO(1, 102, 184, 1),
+                                  ),
+                                  LineSeries<ChartData, String>(
+                                    dataSource: data1,
+                                    dataLabelSettings: const DataLabelSettings(
+                                      isVisible: true,
+                                      textStyle: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                    NumericAxis(
-                                      name: 'secondaryYAxis',
-                                      title: AxisTitle(
-                                          text: _locale.profitPercent),
-                                      opposedPosition: true,
-                                    ),
-                                  ],
-                                  tooltipBehavior: _tooltip1,
-                                  series: <CartesianSeries<ChartData, String>>[
-                                    ColumnSeries<ChartData, String>(
-                                        dataSource: data1,
-                                        xValueMapper: (ChartData data1, _) =>
-                                            data1.x,
-                                        yValueMapper: (ChartData data1, _) =>
-                                            data1.y,
-                                        name: _locale.profit,
-                                        color:
-                                            Color.fromARGB(255, 14, 185, 11)),
-                                    ColumnSeries<ChartData, String>(
-                                        dataSource: data1,
-                                        xValueMapper: (ChartData data1, _) =>
-                                            data1.x,
-                                        yValueMapper: (ChartData data1, _) =>
-                                            data1.y1,
-                                        name: _locale.salesCost,
-                                        color: const Color.fromRGBO(
-                                            1, 102, 184, 1)),
-                                    LineSeries<ChartData, String>(
-                                        dataSource: data1,
-                                        dataLabelSettings:
-                                            const DataLabelSettings(
-                                          isVisible: true,
-                                          textStyle: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        xValueMapper: (ChartData data1, _) =>
-                                            double.parse(data1.perc)
-                                                .toStringAsFixed(2),
-                                        yValueMapper: (ChartData data1, _) =>
-                                            data1.percD,
-                                        enableTooltip: true,
-                                        name: _locale.profitPercent,
-                                        xAxisName: 'secondaryXAxis',
-                                        yAxisName: 'secondaryYAxis',
-                                        dataLabelMapper: (datum, index) {
-                                          return "${double.parse(datum.perc).toStringAsFixed(0)}%";
-                                        },
-                                        color:
-                                            const Color.fromRGBO(26, 138, 6, 1))
-                                  ]),
+                                    xValueMapper: (ChartData data1, _) =>
+                                        double.parse(data1.perc)
+                                            .toStringAsFixed(2),
+                                    yValueMapper: (ChartData data1, _) =>
+                                        data1.percD,
+                                    enableTooltip: true,
+                                    name: _locale.profitPercent,
+                                    xAxisName: 'secondaryXAxis',
+                                    yAxisName: 'secondaryYAxis',
+                                    dataLabelMapper: (datum, index) {
+                                      return "${double.parse(datum.perc).toStringAsFixed(0)}%";
+                                    },
+                                    color: const Color.fromRGBO(26, 138, 6, 1),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        );
-                      })
-                    : SizedBox(
-                        height: height * 0.35,
-                        child: Center(child: Text(_locale.noDataAvailable)),
-                      )
-          ],
-        ),
+                        )
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bar_chart_outlined,
+                                size: 48,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _locale.noDataAvailable,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

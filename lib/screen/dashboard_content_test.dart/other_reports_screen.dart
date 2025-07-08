@@ -205,39 +205,116 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
     );
   }
 
-  Widget barChartWidget(String title) {
-    return Expanded(
-      flex: 1,
-      child: SizedBox(
-        height: height * 0.53,
-        child: Card(
-          elevation: 2,
-          color: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.zero, // Remove corner radius for a flat edge
+ Widget barChartWidget(String title) {
+  return Expanded(
+    flex: 1,
+    child: Container(
+      // Use a responsive height based on screen size, with a minimum and maximum to ensure usability
+      height: Responsive.isDesktop(context)
+          ? MediaQuery.of(context).size.height * 0.5
+          : MediaQuery.of(context).size.height * 0.6,
+      constraints: BoxConstraints(
+        minHeight: 300, // Minimum height for smaller screens
+        maxHeight: 600, // Maximum height for larger screens
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
-          child: Column(
-            children: [
-              Row(
+        ],
+      ),
+      child: Card(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SelectableText(
-                            title,
-                            style: TextStyle(fontSize: height * 0.015),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: SelectableText(
+                                title,
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 16 : 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                                maxLines: 2,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(totalSalesByStocks)})',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 12 : 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (Responsive.isDesktop(context))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 12),
+                            child: Text(
+                              "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
                           ),
-                          Text(
-                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalSalesByStocks)})',
-                              style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 8), // Add spacing to prevent overlap
                   blueButton1(
                     onPressed: () async {
                       await TotalSalesController()
@@ -309,48 +386,63 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                       color: Colors.white,
                       size: isDesktop ? height * 0.035 : height * 0.03,
                     ),
-                  )
+                  ),
                 ],
               ),
-              if (title == locale.branchesSalesByStocks)
-                Row(
+            ),
+            if (!Responsive.isDesktop(context) && title == locale.branchesSalesByStocks)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                        "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
-                        style: TextStyle(
-                            fontSize: isDesktop ? 14 : height * 0.013)),
+                      "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
+                      style: TextStyle(
+                        fontSize: height * 0.013,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
                   ],
                 ),
-              (title == locale.branchesSalesByStocks && isLoading)
-                  ? SizedBox(
-                      height: height * 0.35,
-                      child: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : barChartData.isNotEmpty
-                      ? Scrollbar(
-                          controller: _scrollController2,
-                          thumbVisibility: true,
-                          thickness: 8,
-                          trackVisibility: true,
-                          radius: const Radius.circular(4),
-                          child: SingleChildScrollView(
-                            reverse: locale.localeName == "ar" ? true : false,
+              ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: (title == locale.branchesSalesByStocks && isLoading)
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : barChartData.isNotEmpty
+                        ? Scrollbar(
                             controller: _scrollController2,
-                            scrollDirection: Axis.horizontal,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                            thumbVisibility: true,
+                            thickness: 6,
+                            trackVisibility: true,
+                            radius: const Radius.circular(8),
+                            child: SingleChildScrollView(
+                              reverse: locale.localeName == "ar" ? true : false,
+                              controller: _scrollController2,
+                              scrollDirection: Axis.horizontal,
                               child: SizedBox(
-                                height: height * 0.35,
+                                height: Responsive.isDesktop(context)
+                                    ? MediaQuery.of(context).size.height * 0.35
+                                    : MediaQuery.of(context).size.height * 0.4,
                                 width: Responsive.isDesktop(context)
                                     ? barChartData.length > 20
-                                        ? width * (barChartData.length / 10)
-                                        : width * 0.6
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9 *
+                                            (barChartData.length / 20)
+                                        : MediaQuery.of(context).size.width * 0.9
                                     : barChartData.length > 5
-                                        ? width * (barChartData.length / 5)
-                                        : width * 0.95,
+                                        ? MediaQuery.of(context).size.width *
+                                            0.95 *
+                                            (barChartData.length / 10)
+                                        : MediaQuery.of(context).size.width * 0.95,
                                 child: BarChart(
                                   BarChartData(
                                     maxY: maxY * 1.4,
@@ -360,16 +452,14 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                             (group, groupIndex, rod, rodIndex) {
                                           return BarTooltipItem(
                                             "${xLabels[groupIndex]}\n${Converters.formatNumber(rod.toY)}",
-                                            const TextStyle(
-                                                color: Colors.white),
+                                            const TextStyle(color: Colors.white),
                                           );
                                         },
                                       ),
                                     ),
                                     titlesData: FlTitlesData(
                                       rightTitles: AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false),
+                                        sideTitles: SideTitles(showTitles: false),
                                       ),
                                       bottomTitles: AxisTitles(
                                         sideTitles: SideTitles(
@@ -380,15 +470,14 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                             if (index >= 0 &&
                                                 index < xLabels.length) {
                                               return Transform.rotate(
-                                                angle: -30 *
-                                                    3.14159 /
-                                                    180, // 90 degrees in radians
+                                                angle: -30 * 3.14159 / 180,
                                                 child: SizedBox(
                                                   width: 150,
                                                   child: Center(
-                                                    child: Text(xLabels[index],
-                                                        style: TextStyle(
-                                                            fontSize: 12)),
+                                                    child: Text(
+                                                      xLabels[index],
+                                                      style: TextStyle(fontSize: 12),
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -398,15 +487,15 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                         ),
                                       ),
                                       leftTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                        getTitlesWidget: (value, meta) =>
-                                            leftTitleWidgets(value),
-                                        showTitles: true,
-                                        reservedSize: 35,
-                                      )),
+                                        sideTitles: SideTitles(
+                                          getTitlesWidget: (value, meta) =>
+                                              leftTitleWidgets(value),
+                                          showTitles: true,
+                                          reservedSize: 35,
+                                        ),
+                                      ),
                                       topTitles: AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false),
+                                        sideTitles: SideTitles(showTitles: false),
                                       ),
                                     ),
                                     barGroups: barChartData
@@ -416,19 +505,35 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                 ),
                               ),
                             ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.bar_chart_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  locale.noDataAvailable,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        )
-                      : SizedBox(
-                          height: height * 0.35,
-                          child: Center(child: Text(locale.noDataAvailable)),
-                        ),
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
+    ),
     );
   }
-
   Widget leftTitleWidgets(double value) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
@@ -457,51 +562,124 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
     });
   }
 
-  Widget lineChart(List<BranchSalesByStocksModel> totalSales, String title) {
-    return Expanded(
-      flex: 1,
-      child: SizedBox(
-        height: height * 0.465,
-        child: Card(
-          elevation: 2, // Remove shadow effect
-          color: Colors.white, // Set background to transparent
-          shape: const RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.zero, // Remove corner radius for a flat edge
+ Widget lineChart(List<BranchSalesByStocksModel> totalSales, String title) {
+  return Expanded(
+    flex: 1,
+    child: Container(
+      // Use a responsive height based on screen size, with a minimum and maximum to ensure usability
+      height: Responsive.isDesktop(context)
+          ? MediaQuery.of(context).size.height * 0.5
+          : MediaQuery.of(context).size.height * 0.6,
+      constraints: BoxConstraints(
+        minHeight: 300, // Minimum height for smaller screens
+        maxHeight: 600, // Maximum height for larger screens
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
           ),
-          child: Column(
-            children: [
-              Row(
+        ],
+      ),
+      child: Card(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
+              ),
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          SelectableText(title,
-                              style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                          title == locale.branchesSalesByStocks
-                              ? Text(
-                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalSalesByStocks)})',
-                                )
-                              : SizedBox.shrink()
-                        ],
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Container(
+                              width: 4,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: SelectableText(
+                                title,
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 16 : 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                                maxLines: 2,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            title == locale.branchesSalesByStocks
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      '(\u200E${NumberFormat('#,###', 'en_US').format(totalSalesByStocks)})',
+                                      style: TextStyle(
+                                        fontSize: isDesktop ? 12 : 14,
+                                        fontWeight: FontWeight.w500,
+                                        color: const Color.fromRGBO(82, 151, 176, 1),
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                          ],
+                        ),
+                        if (Responsive.isDesktop(context))
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, left: 12),
+                            child: Text(
+                              "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
+                              style: TextStyle(
+                                fontSize: isDesktop ? 12 : 14,
+                                color: Colors.grey.shade600,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                  if (Responsive.isDesktop(context))
-                    if (title == locale.branchesSalesByStocks)
-                      Text(
-                          "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
-                          style: TextStyle(fontSize: isDesktop ? 13 : 16)),
+                  const SizedBox(width: 8), // Add spacing to prevent overlap
                   blueButton1(
                     onPressed: () async {
                       if (!filterPressed) {
                         setState(() {
                           filterPressed = true;
                         });
-
                         await TotalSalesController()
                             .getAllBranches()
                             .then((value) {
@@ -576,46 +754,63 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                       color: Colors.white,
                       size: isDesktop ? height * 0.035 : height * 0.03,
                     ),
-                  )
+                  ),
                 ],
               ),
-              if (!Responsive.isDesktop(context))
-                if (title == locale.branchesSalesByStocks)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                          "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
-                          style: TextStyle(fontSize: height * 0.013)),
-                    ],
-                  ),
-              isLoading
-                  ? SizedBox(
-                      height: height * 0.35,
-                      child: const Center(child: CircularProgressIndicator()))
-                  : salesByStocksList.isNotEmpty
-                      ? Scrollbar(
-                          controller: _scrollController2,
-                          thumbVisibility: true,
-                          thickness: 8,
-                          trackVisibility: true,
-                          radius: const Radius.circular(4),
-                          child: SingleChildScrollView(
-                            reverse: locale.localeName == "ar" ? true : false,
+            ),
+            if (!Responsive.isDesktop(context) && title == locale.branchesSalesByStocks)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "(${salesByStocksSearchCriteria.fromDate} - ${salesByStocksSearchCriteria.toDate})",
+                      style: TextStyle(
+                        fontSize: height * 0.013,
+                        color: Colors.grey.shade600,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : totalSales.isNotEmpty
+                        ? Scrollbar(
                             controller: _scrollController2,
-                            scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              height: height * 0.35,
-                              width: Responsive.isDesktop(context)
-                                  ? totalSales.length > 20
-                                      ? width * (totalSales.length / 16)
-                                      : width * 0.82
-                                  : totalSales.length > 3
-                                      ? width * (totalSales.length / 5)
-                                      : width * 0.82,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 50.0, vertical: 20.0),
+                            thumbVisibility: true,
+                            thickness: 6,
+                            trackVisibility: true,
+                            radius: const Radius.circular(8),
+                            child: SingleChildScrollView(
+                              reverse: locale.localeName == "ar" ? true : false,
+                              controller: _scrollController2,
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                height: Responsive.isDesktop(context)
+                                    ? MediaQuery.of(context).size.height * 0.35
+                                    : MediaQuery.of(context).size.height * 0.4,
+                                width: Responsive.isDesktop(context)
+                                    ? totalSales.length > 20
+                                        ? MediaQuery.of(context).size.width *
+                                            0.9 *
+                                            (totalSales.length / 20)
+                                        : MediaQuery.of(context).size.width * 0.9
+                                    : totalSales.length > 5
+                                        ? MediaQuery.of(context).size.width *
+                                            0.95 *
+                                            (totalSales.length / 10)
+                                        : MediaQuery.of(context).size.width * 0.95,
                                 child: LineChart(
                                   LineChartData(
                                     maxY: maxY * 1.3,
@@ -626,8 +821,7 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                           return touchedSpots.map((spot) {
                                             return LineTooltipItem(
                                               "${totalSales[spot.spotIndex].stockName}\n${Converters.formatNumber(spot.y)}",
-                                              const TextStyle(
-                                                  color: Colors.white),
+                                              const TextStyle(color: Colors.white),
                                             );
                                           }).toList();
                                         },
@@ -635,19 +829,19 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                     ),
                                     titlesData: FlTitlesData(
                                       topTitles: const AxisTitles(
-                                        sideTitles:
-                                            SideTitles(showTitles: false),
+                                        sideTitles: SideTitles(showTitles: false),
                                       ),
                                       rightTitles: const AxisTitles(
-                                          sideTitles:
-                                              SideTitles(showTitles: false)),
+                                        sideTitles: SideTitles(showTitles: false),
+                                      ),
                                       leftTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                        getTitlesWidget: (value, meta) =>
-                                            leftTitleWidgets(value),
-                                        showTitles: true,
-                                        reservedSize: 35,
-                                      )),
+                                        sideTitles: SideTitles(
+                                          getTitlesWidget: (value, meta) =>
+                                              leftTitleWidgets(value),
+                                          showTitles: true,
+                                          reservedSize: 35,
+                                        ),
+                                      ),
                                       bottomTitles: AxisTitles(
                                         sideTitles: SideTitles(
                                           showTitles: true,
@@ -659,25 +853,22 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                       ),
                                     ),
                                     borderData: FlBorderData(
-                                        border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 125, 125, 125))),
+                                      border: Border.all(
+                                        color: const Color.fromARGB(255, 125, 125, 125),
+                                      ),
+                                    ),
                                     lineBarsData: [
                                       LineChartBarData(
                                         belowBarData: BarAreaData(
-                                            show: true,
-                                            color:
-                                                Colors.blue.withOpacity(0.5)),
+                                          show: true,
+                                          color: Colors.blue.withOpacity(0.5),
+                                        ),
                                         isCurved: true,
                                         preventCurveOverShooting: true,
-                                        spots: totalSales
-                                            .asMap()
-                                            .entries
-                                            .map((entry) {
+                                        spots: totalSales.asMap().entries.map((entry) {
                                           int index = entry.key;
-
-                                          return FlSpot(index.toDouble(),
-                                              entry.value.total ?? 0.0);
+                                          return FlSpot(
+                                              index.toDouble(), entry.value.total ?? 0.0);
                                         }).toList(),
                                       ),
                                     ],
@@ -685,19 +876,35 @@ class _OtherReportsScreenState extends State<OtherReportsScreen> {
                                 ),
                               ),
                             ),
+                          )
+                        : Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.show_chart_outlined,
+                                  size: 48,
+                                  color: Colors.grey.shade400,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  locale.noDataAvailable,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        )
-                      : SizedBox(
-                          height: height * 0.35,
-                          child: Center(child: Text(locale.noDataAvailable)),
-                        ),
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
+    ),
     );
   }
-
   void getBranch() async {
     BranchController().getBranch().then((value) {
       branches.add(locale.all);

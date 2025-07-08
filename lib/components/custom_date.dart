@@ -30,6 +30,7 @@ class CustomDate extends StatefulWidget {
   DateTime? lastDate;
   bool isForwardSlashFormat;
   bool isInitiaDate;
+
   CustomDate(
       {super.key,
       this.label,
@@ -69,30 +70,25 @@ class _CustomDateState extends State<CustomDate> {
   TextEditingController monthController = TextEditingController();
   TextEditingController dayController = TextEditingController();
   DateTime formattedDate = DateTime.now();
-
   String yearHint = "YYYY";
   String monthHint = "MM";
   String dayHint = "DD";
-
   Color borderColor = Colors.grey;
   Color borderErrorColor = Colors.red;
   double borderRadius = 5;
-  // TimeOfDay? selectedTime;
   bool isValid = false;
-
   String activeDateErrorMessage = "Check Your Input Format!";
   String yearIsGreater = "Year is Wrong";
   String monthIsGreater = "Month is Wrong";
   String dayIsGreater = "Day is Wrong";
   TextEditingController controller = TextEditingController();
-
   FocusNode yearFocusNode = FocusNode();
   FocusNode monthFocusNode = FocusNode();
   FocusNode dayFocusNode = FocusNode();
-
   bool dayTemp = true;
   bool monthTemp = true;
   bool yearTemp = true;
+
   @override
   void initState() {
     setListeners();
@@ -116,6 +112,7 @@ class _CustomDateState extends State<CustomDate> {
 
   TimeOfDay? selectedTime;
   DateTime? selectedDate;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -132,7 +129,6 @@ class _CustomDateState extends State<CustomDate> {
     yearFocusNode.dispose();
     monthFocusNode.dispose();
     dayFocusNode.dispose();
-
     super.dispose();
   }
 
@@ -142,27 +138,33 @@ class _CustomDateState extends State<CustomDate> {
     height = MediaQuery.of(context).size.height;
     selectedTime = widget.selectedTime;
     selectedDate = DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
-
     String label = widget.label ?? "";
 
     if (widget.dateController!.text.isNotEmpty) {
       formattedDate =
           DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
-
       yearController.text = splitDate()[0];
       monthController.text = splitDate()[1];
       dayController.text = splitDate()[2];
     }
+
+    // Responsive sizing
+    double responsiveHeight = widget.height ?? 
+        (Responsive.isDesktop(context) ? height * 0.053 : height * 0.045);
+    double responsiveFontSize = Responsive.isDesktop(context) 
+        ? height * 0.0165 
+        : height * 0.014;
+    double responsiveIconSize = Responsive.isDesktop(context) 
+        ? height * 0.03 
+        : height * 0.025;
 
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: widget.dateWidth != null ? 0.0 : 8.0, vertical: 0),
       child: SizedBox(
         width: widget.isTimeDate == true
-            ? width * 0.19
-            : widget.dateWidth ?? width * 0.165,
-        // height: height * 0.09,
-
+            ? width * (Responsive.isDesktop(context) ? 0.19 : 0.25)
+            : widget.dateWidth ?? width * (Responsive.isDesktop(context) ? 0.165 : 0.22),
         child: Column(
           children: [
             Consumer<DatesProvider>(
@@ -179,8 +181,7 @@ class _CustomDateState extends State<CustomDate> {
               },
             ),
             Container(
-              //  width: width * 0.9,
-              height: widget.height ?? height * 0.053,
+              height: responsiveHeight,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
@@ -192,20 +193,29 @@ class _CustomDateState extends State<CustomDate> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  getSuffixIcon(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      createDateField(
-                          _maskDayMonth, dayController, dayHint, dayFocusNode),
-                      dateDivider(),
-                      createDateField(_maskDayMonth, monthController, monthHint,
-                          monthFocusNode),
-                      dateDivider(),
-                      createDateField(
-                          _maskYear, yearController, yearHint, yearFocusNode),
-                    ],
+                  getSuffixIcon(responsiveIconSize),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: createDateField(
+                              _maskDayMonth, dayController, dayHint, dayFocusNode, responsiveFontSize),
+                        ),
+                        dateDivider(),
+                        Expanded(
+                          child: createDateField(_maskDayMonth, monthController, monthHint,
+                              monthFocusNode, responsiveFontSize),
+                        ),
+                        dateDivider(),
+                        Expanded(
+                          flex: 2,
+                          child: createDateField(
+                              _maskYear, yearController, yearHint, yearFocusNode, responsiveFontSize),
+                        ),
+                      ],
+                    ),
                   ),
                   widget.isTimeDate == true
                       ? const VerticalDivider(
@@ -241,7 +251,6 @@ class _CustomDateState extends State<CustomDate> {
                                     },
                                   ).then((value) {
                                     widget.selectedTime = value;
-
                                     if (widget.dateControllerToCompareWith !=
                                         null) {
                                       DateTime dateController = DateTime.parse(
@@ -254,7 +263,6 @@ class _CustomDateState extends State<CustomDate> {
                                         checkTimeValidation();
                                       }
                                     }
-
                                     if (value != null) {
                                       widget
                                           .onTimeChanged!(widget.selectedTime);
@@ -265,7 +273,7 @@ class _CustomDateState extends State<CustomDate> {
                               child: Icon(
                                 Icons.timer,
                                 color: primary,
-                                size: MediaQuery.of(context).size.width * 0.012,
+                                size: responsiveIconSize * 0.4,
                               ),
                             ),
                             TextButton(
@@ -292,7 +300,6 @@ class _CustomDateState extends State<CustomDate> {
                                     },
                                   ).then((value) {
                                     widget.selectedTime = value;
-
                                     if (widget.dateControllerToCompareWith !=
                                         null) {
                                       DateTime dateController = DateTime.parse(
@@ -305,7 +312,6 @@ class _CustomDateState extends State<CustomDate> {
                                         checkTimeValidation();
                                       }
                                     }
-
                                     if (value != null) {
                                       widget
                                           .onTimeChanged!(widget.selectedTime);
@@ -320,7 +326,7 @@ class _CustomDateState extends State<CustomDate> {
                                       : TimeOfDay.now().format(context),
                                   style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: height * 0.0165),
+                                      fontSize: responsiveFontSize),
                                 ),
                               ),
                             ),
@@ -341,76 +347,74 @@ class _CustomDateState extends State<CustomDate> {
   }
 
   Widget createDateField(MaskTextInputFormatter mask,
-      TextEditingController controller, String hint, FocusNode focusNode) {
+      TextEditingController controller, String hint, FocusNode focusNode, double fontSize) {
     return Padding(
-      padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 15),
-      child: SizedBox(
-        width: Responsive.isDesktop(context) ? width * 0.033 : width * 0.15,
-        // height: Responsive.isDesktop(context) ? height * 0.03 : height * 0.1,
-        child: Center(
-          child: TextFormField(
-            readOnly: widget.readOnly != null ? widget.readOnly! : false,
-            style: TextStyle(fontSize: height * 0.0165),
-            focusNode: focusNode,
-            controller: controller,
-            inputFormatters: [mask],
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: hint,
+      padding: EdgeInsets.only(bottom: Responsive.isDesktop(context) ? 10 : 8),
+      child: Center(
+        child: TextFormField(
+          readOnly: widget.readOnly != null ? widget.readOnly! : false,
+          style: TextStyle(fontSize: fontSize),
+          focusNode: focusNode,
+          controller: controller,
+          inputFormatters: [mask],
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            hintText: hint,
+            hintStyle: TextStyle(fontSize: fontSize * 0.9),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: Responsive.isDesktop(context) ? 8 : 4,
+              horizontal: 2,
             ),
-            onTap: () {
-              if (hint == dayHint) {
-                if (dayController.text.isNotEmpty) {
-                  dayController.selection = TextSelection(
-                      baseOffset: 0, extentOffset: dayController.text.length);
-                }
-              } else if (hint == monthHint) {
-                if (monthController.text.isNotEmpty) {
-                  monthController.selection = TextSelection(
-                      baseOffset: 0, extentOffset: monthController.text.length);
-                }
-              } else if (hint == yearHint) {
-                if (yearController.text.isNotEmpty) {
-                  yearController.selection = TextSelection(
-                      baseOffset: 0, extentOffset: yearController.text.length);
-                }
+          ),
+          onTap: () {
+            if (hint == dayHint) {
+              if (dayController.text.isNotEmpty) {
+                dayController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: dayController.text.length);
               }
-            },
-            onChanged: (value) {
-              setRequestNodes(hint);
-
-              if (dayController.text.length == 2 &&
-                  monthController.text.length == 2 &&
-                  yearController.text.length == 4) {
-                widget.dateController!.text =
-                    '${yearController.text}-${monthController.text}-${dayController.text}';
-                submitValueDate(focusNode);
-
-                formattedDate =
-                    DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
+            } else if (hint == monthHint) {
+              if (monthController.text.isNotEmpty) {
+                monthController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: monthController.text.length);
               }
-
-              if (widget.dateControllerToCompareWith != null) {
-                checkValidation();
+            } else if (hint == yearHint) {
+              if (yearController.text.isNotEmpty) {
+                yearController.selection = TextSelection(
+                    baseOffset: 0, extentOffset: yearController.text.length);
               }
-            },
-            onTapOutside: (event) {
-              if (focusNode.hasFocus) {
-                submitValueDate(focusNode);
-                if (widget.dateControllerToCompareWith != null) {
-                  checkValidation();
-                }
-                focusNode.unfocus();
-              }
-            },
-            onFieldSubmitted: (value) {
+            }
+          },
+          onChanged: (value) {
+            setRequestNodes(hint);
+            if (dayController.text.length == 2 &&
+                monthController.text.length == 2 &&
+                yearController.text.length == 4) {
+              widget.dateController!.text =
+                  '${yearController.text}-${monthController.text}-${dayController.text}';
+              submitValueDate(focusNode);
+              formattedDate =
+                  DateFormat('yyyy-MM-dd').parse(widget.dateController!.text);
+            }
+            if (widget.dateControllerToCompareWith != null) {
+              checkValidation();
+            }
+          },
+          onTapOutside: (event) {
+            if (focusNode.hasFocus) {
               submitValueDate(focusNode);
               if (widget.dateControllerToCompareWith != null) {
                 checkValidation();
               }
-            },
-          ),
+              focusNode.unfocus();
+            }
+          },
+          onFieldSubmitted: (value) {
+            submitValueDate(focusNode);
+            if (widget.dateControllerToCompareWith != null) {
+              checkValidation();
+            }
+          },
         ),
       ),
     );
@@ -424,23 +428,20 @@ class _CustomDateState extends State<CustomDate> {
     DateTime dateController = DateTime.parse(widget.dateController!.text);
     DateTime dateController2 =
         DateTime.parse(widget.dateControllerToCompareWith!.text);
+
     if (widget.isInitiaDate == false) {
       if (dateController.isBefore(dateController2)) {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-
         widget.dateController!.text =
             DateFormat('yyyy-MM-dd').format(selectedDate!);
-
         setState(() {});
       } else if (dateController.isAtSameMomentAs(dateController2) &&
           (timeController.hour < timeController2.hour ||
               (timeController.hour == timeController2.hour &&
                   timeController.minute < timeController2.minute))) {
         ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
-
         widget.dateController!.text =
             DateFormat('yyyy-MM-dd').format(selectedDate!);
-
         setState(() {});
       } else {
         if (widget.onDateChanged != null) {
@@ -451,20 +452,16 @@ class _CustomDateState extends State<CustomDate> {
     } else if (widget.isInitiaDate == true) {
       if (dateController.isAfter(dateController2)) {
         ErrorController.openErrorDialog(1, _locale.startDateAfterEndDate);
-
         widget.dateController!.text =
             DateFormat('yyyy-MM-dd').format(selectedDate!);
-
         setState(() {});
       } else if (dateController.isAtSameMomentAs(dateController2) &&
           (timeController.hour > timeController2.hour ||
               (timeController.hour == timeController2.hour &&
                   timeController.minute > timeController2.minute))) {
         ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
-
         widget.dateController!.text =
             DateFormat('yyyy-MM-dd').format(selectedDate!);
-
         setState(() {});
       } else {
         if (widget.onDateChanged != null) {
@@ -478,13 +475,13 @@ class _CustomDateState extends State<CustomDate> {
   void checkTimeValidation() {
     TimeOfDay timeController = widget.selectedTime!;
     TimeOfDay timeController2 = widget.timeControllerToCompareWith!;
+
     if (widget.isInitiaDate == false) {
       if (timeController.hour < timeController2.hour ||
           (timeController.hour == timeController2.hour &&
               timeController.minute < timeController2.minute)) {
         ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
         widget.selectedTime = selectedTime;
-
         setState(() {});
       }
     } else if (widget.isInitiaDate == true) {
@@ -493,7 +490,6 @@ class _CustomDateState extends State<CustomDate> {
               timeController.minute > timeController2.minute)) {
         ErrorController.openErrorDialog(2, _locale.startTimeAfterEndTime);
         widget.selectedTime = selectedTime;
-
         setState(() {});
       }
     }
@@ -522,14 +518,12 @@ class _CustomDateState extends State<CustomDate> {
       focusNode.requestFocus();
     } else {
       if (widget.onValue != null) {
-        // String dateValue = getDateValue();
-
         widget.onValue!(isValid, getDateValue());
       }
     }
   }
 
-  Widget getSuffixIcon() {
+  Widget getSuffixIcon(double iconSize) {
     return InkWell(
       onTap: () {
         if (widget.readOnly == true) {
@@ -537,10 +531,13 @@ class _CustomDateState extends State<CustomDate> {
           setDatePickerValues();
         }
       },
-      child: Icon(
-        Icons.date_range,
-        size: MediaQuery.of(context).size.height * 0.03,
-        color: primary,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 4),
+        child: Icon(
+          Icons.date_range,
+          size: iconSize,
+          color: primary,
+        ),
       ),
     );
   }
@@ -549,11 +546,9 @@ class _CustomDateState extends State<CustomDate> {
     String yearStr = yearController.text;
     String monthStr = monthController.text;
     String dayStr = dayController.text;
-
     DateTime dateTime = DateTime.now();
     DateTime firstDate = DateTime.now();
     DateTime lastDate = DateTime.now();
-
     DateTime enteredDate =
         DateTime(int.parse(yearStr), int.parse(monthStr), int.parse(dayStr));
     int yearNow = dateTime.year;
@@ -561,7 +556,6 @@ class _CustomDateState extends State<CustomDate> {
     if (yearStr.isNotEmpty && yearStr.length == 4) {
       if (widget.firstDate != null) {
         firstDate = widget.firstDate!;
-
         if (firstDate.isBefore(enteredDate)) {
           return true;
         } else {
@@ -579,7 +573,6 @@ class _CustomDateState extends State<CustomDate> {
       }
       if (widget.lastDate != null) {
         lastDate = widget.lastDate!;
-
         if (lastDate.isAfter(enteredDate)) {
           return true;
         } else {
@@ -605,15 +598,12 @@ class _CustomDateState extends State<CustomDate> {
     }
 
     if (monthStr.isNotEmpty && monthStr.length == 2) {}
-
     if (yearStr.length != 4 || monthStr.length != 2 || dayStr.length != 2) {
       return false;
     }
-
     try {
       int month = int.parse(monthStr);
       int day = int.parse(dayStr);
-
       if (yearStr.length == 4) {
         if (month <= 12) {
           if (dayStr.length == 2) {
@@ -631,7 +621,6 @@ class _CustomDateState extends State<CustomDate> {
               return true;
             } else if (month == 2 && day > 29) {
               dayController.text = 29.toString();
-
               return true;
             } else if (day <= 31) {
               return true;
@@ -640,23 +629,11 @@ class _CustomDateState extends State<CustomDate> {
               return true;
             }
           }
-
-          //If no condition above true for the day
-          // activeDateErrorMessage = dayIsGreater;
         } else {
-          // activeDateErrorMessage = monthIsGreater;
-          // monthController.text = monthNow.toString();
         }
       } else {
-        // yearController.text = yearNow.toString();
-        // activeDateErrorMessage = yearIsGreater;
       }
     } catch (e) {
-      // String yearStr = yearController.text;
-      // String monthStr = monthController.text;
-      // String dayStr = dayController.text;
-
-      // print("There was an error with date validation");
     }
     return false;
   }
@@ -667,7 +644,7 @@ class _CustomDateState extends State<CustomDate> {
       child: Text(
         msg,
         style: TextStyle(
-          fontSize: 10,
+          fontSize: Responsive.isDesktop(context) ? 10 : 9,
           color: borderErrorColor,
         ),
       ),
@@ -678,7 +655,9 @@ class _CustomDateState extends State<CustomDate> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 9.0),
       child: Text(
-        style: const TextStyle(fontSize: 13),
+        style: TextStyle(
+          fontSize: Responsive.isDesktop(context) ? 13 : 11,
+        ),
         msg,
       ),
     );
@@ -698,12 +677,9 @@ class _CustomDateState extends State<CustomDate> {
           dayTemp = false;
           context.read<DatesProvider>().setDayTemp(false);
           setState(() {});
-
           dayController.text = dateTime.day.toString();
         } else {
-          // dayController.text = dateTime.day.toString();
           context.read<DatesProvider>().setDayTemp(true);
-
           dayTemp = true;
           setState(() {});
         }
@@ -719,12 +695,9 @@ class _CustomDateState extends State<CustomDate> {
           monthTemp = false;
           context.read<DatesProvider>().setMonthTemp(false);
           setState(() {});
-
           monthController.text = dateTime.month.toString();
         } else {
-          // dayController.text = dateTime.day.toString();
           context.read<DatesProvider>().setMonthTemp(true);
-
           monthTemp = true;
           setState(() {});
         }
@@ -735,25 +708,10 @@ class _CustomDateState extends State<CustomDate> {
     } else {
       if (year.length == 4) {
         yearController.text = yearController.text;
-        // if (yearController.text[0] != "0") {
-        //   // yearController.text = dateTime.year.toString();
-        //   // yearTemp = false;
-        //   context.read<DatesProvider>().setYearTemp(false);
-
-        //   // setState(() {});
-
-        //   yearController.text = dateTime.year.toString();
-        // } else {
-        // yearController.text = dateTime.year.toString();
-        // yearTemp = true;
         context.read<DatesProvider>().setYearTemp(true);
         yearTemp = true;
         setState(() {});
-        // }
-        // yearFocusNode.unfocus();
-
         isValid = dateValidation();
-
         if (isValid && textNotEmpty()) {
           if (widget.onValue != null) {
             String dateValue = getDateValue();
@@ -762,40 +720,17 @@ class _CustomDateState extends State<CustomDate> {
         }
       }
     }
-    //Goes to month after finishing year
-    // if (hint.compareTo(yearHint) == 0 && year.length == 4) {
-    //   monthFocusNode.requestFocus();
-    // } else if (hint.compareTo(monthHint) == 0 && year.isNotEmpty) {
-    //   if (month.length == 2) {
-    //     dayFocusNode.requestFocus();
-    //   }
-    // } else if (hint.compareTo(dayHint) == 0 &&
-    //     year.isNotEmpty &&
-    //     month.isNotEmpty) {
-    //   if (day.length == 2) {
-    //     dayFocusNode.unfocus();
-    //   }
-    // }
   }
 
   void setListeners() {
     yearFocusNode.addListener(() {
-      // String year = yearController.text;
       if (!yearFocusNode.hasFocus) {
-        // setState(() {
         isValid = dateValidation();
-        // if (widget.onValue != null) {
-        //   String dateValue = getDateValue();
-        //   widget.onValue!(isValid, dateValue);
-        // }
-        // });
       }
-
       bool backspaceKeyPressed = false;
       yearFocusNode.onKeyEvent = (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.backspace) {
           if (!backspaceKeyPressed) {
-            // Handle the backspace key press here
             yearController.text = "";
             backspaceKeyPressed = true;
           }
@@ -810,7 +745,6 @@ class _CustomDateState extends State<CustomDate> {
     monthFocusNode.addListener(() {
       String month = monthController.text;
       if (!monthFocusNode.hasFocus) {
-        // print(month.length);
         if (month.length == 1) {
           if (month.compareTo("0") == 0) {
             monthController.text = "01";
@@ -820,22 +754,12 @@ class _CustomDateState extends State<CustomDate> {
         } else if (month.compareTo("00") == 0) {
           monthController.text = "01";
         }
-        // setState(() {
         isValid = dateValidation();
-        // print("object9999999");
-        // if (isValid) {
-        //   if (widget.onValue != null) {
-        //     String dateValue = getDateValue();
-        //     widget.onValue!(isValid, dateValue);
-        //   }
-        // }
-        // });
       }
       bool backspaceKeyPressed = false;
       monthFocusNode.onKeyEvent = (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.backspace) {
           if (!backspaceKeyPressed) {
-            // Handle the backspace key press here
             monthController.text = "";
             backspaceKeyPressed = true;
           }
@@ -859,22 +783,12 @@ class _CustomDateState extends State<CustomDate> {
         } else if (day.compareTo("00") == 0) {
           dayController.text = "01";
         }
-        // setState(() {
         isValid = dateValidation();
-        // print("object9999999");
-        // if (isValid) {
-        //   if (widget.onValue != null) {
-        //     String dateValue = getDateValue();
-        //     widget.onValue!(isValid, dateValue);
-        //   }
-        // }
-        // });
       }
       bool backspaceKeyPressed = false;
       dayFocusNode.onKeyEvent = (node, event) {
         if (event.logicalKey == LogicalKeyboardKey.backspace) {
           if (!backspaceKeyPressed) {
-            // Handle the backspace key press here
             dayController.text = "";
             backspaceKeyPressed = true;
           }
@@ -893,6 +807,7 @@ class _CustomDateState extends State<CustomDate> {
     String day = dayController.text;
     String yyyymmddd = "";
     String mmddyyyy = "";
+
     if (day.length == 1) {
       yyyymmddd = "$year-$month-0$day";
       mmddyyyy = "0$day-$month-$year";
@@ -900,6 +815,7 @@ class _CustomDateState extends State<CustomDate> {
       yyyymmddd = "$year-0$month-$day";
       mmddyyyy = "$day-0$month-$year";
     }
+
     if (day.length == 2 && month.length == 2) {
       yyyymmddd = "$year-$month-$day";
     }
@@ -918,7 +834,6 @@ class _CustomDateState extends State<CustomDate> {
         : widget.minYear != null
             ? DateTime(widget.minYear!)
             : DateTime(1900);
-
     DateTime lastDate =
         widget.lastDate != null ? widget.lastDate! : DateTime(2050);
 
@@ -940,7 +855,6 @@ class _CustomDateState extends State<CustomDate> {
             dayController.text = "0${dayController.text}";
           }
           bool isValid = dateValidation();
-
           if (isValid) {
             dayTemp = true;
             monthTemp = true;
@@ -948,7 +862,6 @@ class _CustomDateState extends State<CustomDate> {
             context.read<DatesProvider>().setDayTemp(true);
             context.read<DatesProvider>().setMonthTemp(true);
             context.read<DatesProvider>().setYearTemp(true);
-
             widget.onValue!(true, getDateValue());
             if (widget.dateControllerToCompareWith != null) {
               checkValidation();
@@ -968,7 +881,6 @@ class _CustomDateState extends State<CustomDate> {
     if (day.length == 1) {
       dayController.text = "0$day";
     }
-
     isValid = dateValidation();
   }
 

@@ -90,7 +90,6 @@ class _BranchesSalesByCatDashboardState
 
   CashFlowController cashFlowController = CashFlowController();
 
-  //List<String> status = [];
   TextEditingController fromDateController = TextEditingController();
   TextEditingController toDateController = TextEditingController();
   String todayDate = "";
@@ -177,6 +176,42 @@ class _BranchesSalesByCatDashboardState
     });
   }
 
+  Size getResponsiveChartSize() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final availableHeight = MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45);
+    if (isDesktop) {
+      return Size(
+        min(screenWidth * 0.7, 800),
+        min(availableHeight, 350),
+      );
+    } else if (Responsive.isTablet(context)) {
+      return Size(
+        min(screenWidth * 0.85, 600),
+        min(availableHeight, 280),
+      );
+    } else {
+      return Size(
+        min(screenWidth * 0.95, 400),
+        min(availableHeight, 240),
+      );
+    }
+  }
+
+  Size getPieChartSize() {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final availableHeight = MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45);
+    if (isDesktop) {
+      double maxSize = min(screenWidth * 0.35, availableHeight * 0.9);
+      return Size(maxSize, maxSize);
+    } else if (Responsive.isTablet(context)) {
+      double maxSize = min(screenWidth * 0.5, availableHeight * 0.85);
+      return Size(maxSize, maxSize);
+    } else {
+      double maxSize = min(screenWidth * 0.8, availableHeight * 0.8);
+      return Size(maxSize, maxSize);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     height = MediaQuery.of(context).size.height;
@@ -190,318 +225,296 @@ class _BranchesSalesByCatDashboardState
         : DatesController().formatDateReverse(toDateController.text);
 
     return Container(
-      decoration: const BoxDecoration(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 5, right: 5, bottom: 3, top: 0),
-            child: Container(
-              height: isDesktop ? height * 0.44 : height * 0.48,
-              padding: const EdgeInsets.only(left: 5, right: 5, top: 0),
-              decoration: BoxDecoration(
-                color: whiteColor,
-                borderRadius: BorderRadius.circular(10),
+      height: isDesktop ? height * 0.5 : height * 0.6,
+      constraints: const BoxConstraints(
+        minHeight: 300,
+        maxHeight: 600,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Card(
+        elevation: 0,
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+            color: Color.fromRGBO(82, 151, 176, 0.2),
+            width: 1,
+          ),
+        ),
+        child: Column(
+          children: [
+            // Header Section
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(82, 151, 176, 0.05),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(8),
+                  topRight: Radius.circular(8),
+                ),
               ),
-              child: Column(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  isDesktop
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ValueListenableBuilder(
-                                valueListenable: totalBranchesByCateg,
-                                builder: ((context, value, child) {
-                                  return Text(
-                                    "${_locale.branchesSalesByCategories} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})",
-                                    // "${_locale.branchesSalesByCategories} (${totalBranchesByCateg.value})",
-                                    style: TextStyle(
-                                        fontSize: isDesktop ? 15 : 18),
-                                  );
-                                })),
-                            Text(
-                              _locale.localeName == "en"
-                                  ? "(${fromDateController.text}  -  ${toDateController.text})"
-                                  : "($fromDate  -  $toDate)",
-                              style: TextStyle(fontSize: isDesktop ? 15 : 13),
-                            ),
-                            SizedBox(
-                                width: !isDesktop
-                                    ? MediaQuery.of(context).size.width * 0.06
-                                    : MediaQuery.of(context).size.width * 0.03,
-                                child: blueButton1(
-                                  icon: Icon(
-                                    Icons.filter_list_sharp,
-                                    color: whiteColor,
-                                    size: isDesktop
-                                        ? height * 0.035
-                                        : height * 0.03,
-                                  ),
-                                  textColor:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  height:
-                                      isDesktop ? height * .015 : height * .03,
-                                  fontSize:
-                                      isDesktop ? height * .018 : height * .017,
-                                  width:
-                                      isDesktop ? width * 0.13 : width * 0.25,
-                                  onPressed: () {
-                                    if (isLoading == false) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return FilterDialogSalesByCategory(
-                                            selectedChart: getChartByCode(
-                                                selectedChart, _locale),
-                                            selectedBranchCodeF:
-                                                selectedBranchCode == ""
-                                                    ? _locale.all
-                                                    : selectedBranchCode,
-                                            selectedPeriod: getPeriodByCode(
-                                                selectedPeriod, _locale),
-                                            fromDate: fromDateController.text,
-                                            toDate: toDateController.text,
-                                            selectedCategory: getCategoryByCode(
-                                                selectedCategories, _locale),
-                                            branches: branches,
-                                            onFilter: (selectedPeriodF,
-                                                fromDate,
-                                                toDate,
-                                                selectedCategoriesF,
-                                                selectedBranchCodeF,
-                                                chart,
-                                                stocksCodes) {
-                                              stocksCodes1 = stocksCodes;
-                                              fromDateController.text =
-                                                  fromDate;
-                                              toDateController.text = toDate;
-                                              selectedCategories =
-                                                  getCategoryNum(
-                                                      selectedCategoriesF,
-                                                      _locale);
-                                              selectedBranchCode =
-                                                  selectedBranchCodeF ==
-                                                          _locale.all
-                                                      ? ""
-                                                      : selectedBranchCodeF;
-                                              selectedPeriod = getPeriodByName(
-                                                  selectedPeriodF, _locale);
-                                              selectedChart = getChartByName(
-                                                  chart, _locale);
-                                              SearchCriteria searchCriteria =
-                                                  SearchCriteria(
-                                                fromDate:
-                                                    fromDateController.text,
-                                                toDate: toDateController
-                                                        .text.isEmpty
-                                                    ? todayDate
-                                                    : toDateController.text,
-                                                byCategory: getCategoryNum(
-                                                    selectedCategoriesF,
-                                                    _locale),
-                                                branch: selectedBranchCode,
-                                                codesStock: stocksCodes1,
-                                              );
-                                              setSearchCriteria(searchCriteria);
-                                            },
-                                          );
-                                        },
-                                      ).then((value) async {
-                                        setState(() {
-                                          _timer!.cancel();
-
-                                          isLoading = true;
-                                        });
-                                        getBranchByCat().then((value) {
-                                          setState(() {
-                                            _startTimer();
-
-                                            isLoading = false;
-                                          });
-                                        });
-                                      });
-                                    }
-                                  },
-                                )),
-                          ],
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                ValueListenableBuilder(
-                                    valueListenable: totalBranchesByCateg,
-                                    builder: ((context, value, child) {
-                                      return Text(
-                                        "${_locale.branchesSalesByCategories} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})",
-                                        // "${_locale.branchesSalesByCategories}   (${totalBranchesByCateg.value})",
-                                        style: TextStyle(
-                                            fontSize: isDesktop ? 15 : 18),
-                                      );
-                                    })),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _locale.localeName == "en"
-                                      ? "(${fromDateController.text}  -  ${toDateController.text})"
-                                      : "($fromDate  -  $toDate)",
-                                  style:
-                                      TextStyle(fontSize: isDesktop ? 15 : 10),
-                                ),
-                                SizedBox(
-                                    width: !isDesktop
-                                        ? MediaQuery.of(context).size.width *
-                                            0.12
-                                        : MediaQuery.of(context).size.width *
-                                            0.03,
-                                    child: blueButton1(
-                                      icon: Icon(
-                                        Icons.filter_list_sharp,
-                                        color: whiteColor,
-                                        size: isDesktop
-                                            ? height * 0.035
-                                            : height * 0.055,
-                                      ),
-                                      textColor: const Color.fromARGB(
-                                          255, 255, 255, 255),
-                                      height: isDesktop
-                                          ? height * .015
-                                          : height * .03,
-                                      fontSize: isDesktop
-                                          ? height * .018
-                                          : height * .017,
-                                      width: isDesktop
-                                          ? width * 0.13
-                                          : width * 0.25,
-                                      onPressed: () {
-                                        if (isLoading == false) {
-                                          showDialog(
-                                            context: context,
-                                            builder: (context) {
-                                              return FilterDialogSalesByCategory(
-                                                selectedChart: getChartByCode(
-                                                    selectedChart, _locale),
-                                                selectedBranchCodeF:
-                                                    selectedBranchCode == ""
-                                                        ? _locale.all
-                                                        : selectedBranchCode,
-                                                selectedPeriod: getPeriodByCode(
-                                                    selectedPeriod, _locale),
-                                                fromDate:
-                                                    fromDateController.text,
-                                                toDate: toDateController.text,
-                                                selectedCategory:
-                                                    getCategoryByCode(
-                                                        selectedCategories,
-                                                        _locale),
-                                                branches: branches,
-                                                onFilter: (selectedPeriodF,
-                                                    fromDate,
-                                                    toDate,
-                                                    selectedCategoriesF,
-                                                    selectedBranchCodeF,
-                                                    chart,
-                                                    stocksCodes) {
-                                                  stocksCodes1 = stocksCodes;
-                                                  fromDateController.text =
-                                                      fromDate;
-                                                  toDateController.text =
-                                                      toDate;
-                                                  selectedCategories =
-                                                      getCategoryNum(
-                                                          selectedCategoriesF,
-                                                          _locale);
-                                                  selectedBranchCode =
-                                                      selectedBranchCodeF ==
-                                                              _locale.all
-                                                          ? ""
-                                                          : selectedBranchCodeF;
-                                                  selectedPeriod =
-                                                      getPeriodByName(
-                                                          selectedPeriodF,
-                                                          _locale);
-                                                  selectedChart =
-                                                      getChartByName(
-                                                          chart, _locale);
-                                                  SearchCriteria
-                                                      searchCriteria =
-                                                      SearchCriteria(
-                                                    fromDate:
-                                                        fromDateController.text,
-                                                    toDate: toDateController
-                                                            .text.isEmpty
-                                                        ? todayDate
-                                                        : toDateController.text,
-                                                    byCategory: getCategoryNum(
-                                                        selectedCategoriesF,
-                                                        _locale),
-                                                    branch: selectedBranchCode,
-                                                    codesStock: stocksCodes1,
-                                                  );
-                                                  setSearchCriteria(
-                                                      searchCriteria);
-                                                },
-                                              );
-                                            },
-                                          ).then((value) async {
-                                            setState(() {
-                                              _timer!.cancel();
-
-                                              isLoading = true;
-                                            });
-                                            getBranchByCat().then((value) {
-                                              setState(() {
-                                                _startTimer();
-
-                                                isLoading = false;
-                                              });
-                                            });
-                                          });
-                                        }
-                                      },
-                                    )),
-                              ],
-                            )
-                          ],
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 4,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: const Color.fromRGBO(82, 151, 176, 1),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
                         ),
-                  isLoading
-                      ? const Padding(
-                          padding: EdgeInsets.only(bottom: 150),
-                          child: CircularProgressIndicator(),
-                        )
-                      : selectedChart == Line_Chart
-                          ? SizedBox(
-                              height: height * .4,
-                              child: LineDashboardChart(
-                                  isMax: false,
-                                  isMedium: true,
-                                  balances: listOfBalances,
-                                  periods: listOfPeriods),
-                            )
-                          : selectedChart == Pie_Chart
-                              ? Center(
-                                  child: SizedBox(
-                                    height: height * 0.4,
-                                    child: PieDashboardChart(
-                                      dataList: pieData,
-                                    ),
-                                  ),
-                                )
-                              : BarDashboardChart(
-                                  barChartData: barData,
-                                  isMax: false,
-                                  isMedium: true,
-                                )
+                        const SizedBox(width: 8),
+                        Flexible(
+                          child: Text(
+                            _locale.branchesSalesByCategories,
+                            style: TextStyle(
+                              fontSize: isDesktop ? 14 : 16,
+                              fontWeight: FontWeight.w600,
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        ValueListenableBuilder(
+                          valueListenable: totalBranchesByCateg,
+                          builder: ((context, value, child) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesByCateg.value.toString()))})',
+                                style: TextStyle(
+                                  fontSize: isDesktop ? 10 : 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: const Color.fromRGBO(82, 151, 176, 1),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _locale.localeName == "en"
+                              ? "(${fromDateController.text} - ${toDateController.text})"
+                              : "($fromDate - $toDate)",
+                          style: TextStyle(
+                            fontSize: isDesktop ? 10 : 11,
+                            color: Colors.grey.shade600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  blueButton1(
+                    icon: Icon(
+                      Icons.filter_list_sharp,
+                      color: Colors.white,
+                      size: isDesktop ? height * 0.025 : height * 0.022,
+                    ),
+                    textColor: const Color.fromARGB(255, 255, 255, 255),
+                    onPressed: () {
+                      if (isLoading == false) {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return FilterDialogSalesByCategory(
+                              selectedChart: getChartByCode(selectedChart, _locale),
+                              selectedBranchCodeF: selectedBranchCode == ""
+                                  ? _locale.all
+                                  : selectedBranchCode,
+                              selectedPeriod: getPeriodByCode(selectedPeriod, _locale),
+                              fromDate: fromDateController.text,
+                              toDate: toDateController.text,
+                              selectedCategory: getCategoryByCode(selectedCategories, _locale),
+                              branches: branches,
+                              onFilter: (selectedPeriodF,
+                                  fromDate,
+                                  toDate,
+                                  selectedCategoriesF,
+                                  selectedBranchCodeF,
+                                  chart,
+                                  stocksCodes) {
+                                stocksCodes1 = stocksCodes;
+                                fromDateController.text = fromDate;
+                                toDateController.text = toDate;
+                                selectedCategories = getCategoryNum(selectedCategoriesF, _locale);
+                                selectedBranchCode = selectedBranchCodeF == _locale.all
+                                    ? ""
+                                    : selectedBranchCodeF;
+                                selectedPeriod = getPeriodByName(selectedPeriodF, _locale);
+                                selectedChart = getChartByName(chart, _locale);
+                                SearchCriteria searchCriteria = SearchCriteria(
+                                  fromDate: fromDateController.text,
+                                  toDate: toDateController.text.isEmpty
+                                      ? todayDate
+                                      : toDateController.text,
+                                  byCategory: getCategoryNum(selectedCategoriesF, _locale),
+                                  branch: selectedBranchCode,
+                                  codesStock: stocksCodes1,
+                                );
+                                setSearchCriteria(searchCriteria);
+                              },
+                            );
+                          },
+                        ).then((value) async {
+                          setState(() {
+                            _timer!.cancel();
+                            isLoading = true;
+                          });
+                          getBranchByCat().then((value) {
+                            setState(() {
+                              _startTimer();
+                              isLoading = false;
+                            });
+                          });
+                        });
+                      }
+                    },
+                  ),
                 ],
               ),
+            ),
+
+            // Chart Section
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Color.fromRGBO(82, 151, 176, 1),
+                          strokeWidth: 3,
+                        ),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45),
+                        child: _buildChartContent(),
+                      ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChartContent() {
+    if (selectedChart == Line_Chart) {
+      return LineDashboardChart(
+        isMax: false,
+        isMedium: true,
+        balances: listOfBalances,
+        periods: listOfPeriods,
+      );
+    } else if (selectedChart == Pie_Chart) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final pieSize = getPieChartSize();
+          double horizontalPadding = isDesktop ? 12 : 16;
+          double verticalPadding = isDesktop ? 8 : 12;
+          return ClipRect(
+            child: Container(
+              padding: EdgeInsets.only(
+                left: horizontalPadding,
+                right: horizontalPadding,
+                top: verticalPadding,
+                bottom: 0,
+              ),
+              alignment: Alignment.topCenter,
+              child: AspectRatio(
+                aspectRatio: 1.0,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: min(pieSize.height, constraints.maxHeight - verticalPadding),
+                    maxWidth: min(pieSize.width, constraints.maxWidth - (horizontalPadding * 2)),
+                  ),
+                  child: pieData.isNotEmpty
+                      ? PieDashboardChart(
+                          dataList: pieData,
+                        )
+                      : _buildNoDataWidget(Icons.pie_chart_outline),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } else {
+      // Bar Chart
+      final chartSize = getResponsiveChartSize();
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return Scrollbar(
+            thumbVisibility: true,
+            thickness: 6,
+            trackVisibility: true,
+            radius: const Radius.circular(8),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                height: min(chartSize.height, constraints.maxHeight),
+                width: isDesktop
+                    ? barData.length > 20
+                        ? chartSize.width * (barData.length / 20)
+                        : chartSize.width
+                    : barData.length > 5
+                        ? chartSize.width * (barData.length / 10)
+                        : chartSize.width,
+                child: barData.isNotEmpty
+                    ? BarDashboardChart(
+                        barChartData: barData,
+                        isMax: false,
+                        isMedium: true,
+                      )
+                    : _buildNoDataWidget(Icons.bar_chart_outlined),
+              ),
+            ),
+          );
+        },
+      );
+    }
+  }
+
+  Widget _buildNoDataWidget(IconData icon) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 48,
+            color: Colors.grey.shade400,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            _locale.noDataAvailable,
+            style: TextStyle(
+              color: Colors.grey.shade600,
+              fontSize: 16,
             ),
           ),
         ],
@@ -526,11 +539,8 @@ class _BranchesSalesByCatDashboardState
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-        // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
-
-        // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
@@ -624,11 +634,9 @@ class _BranchesSalesByCatDashboardState
 
   Color getRandomColor(List<Color> colorList) {
     final random = Random();
-    int r = random.nextInt(256); // 0 to 255
-    int g = random.nextInt(256); // 0 to 255
-    int b = random.nextInt(256); // 0 to 255
-
-    // Create Color object from RGB values
+    int r = random.nextInt(256);
+    int g = random.nextInt(256);
+    int b = random.nextInt(256);
     return Color.fromRGBO(r, g, b, 1.0);
   }
 
@@ -729,15 +737,14 @@ class _BranchesSalesByCatDashboardState
 
   @override
   void dispose() {
-    _stopTimer(); // Stop timer when the widget is disposed
-
+    _stopTimer();
     super.dispose();
   }
 
   void _stopTimer() {
     if (_timer != null) {
-      _timer!.cancel(); // Cancel the timer
-      _timer = null; // Reset timer reference
+      _timer!.cancel();
+      _timer = null;
     }
   }
 

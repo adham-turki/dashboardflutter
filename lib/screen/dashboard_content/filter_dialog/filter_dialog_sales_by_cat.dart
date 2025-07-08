@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bi_replicate/controller/total_sales_controller.dart';
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
@@ -89,6 +88,14 @@ class _FilterDialogSalesByCategoryState
   List<String> stocksCodes = [];
   List<StockModel> tempStocks = [];
   List<String> tempStocksCodes = [];
+
+  // Unified color scheme
+  static const Color primaryColor = Color.fromRGBO(82, 151, 176, 1.0);
+  static const Color primaryLight = Color.fromRGBO(82, 151, 176, 0.08);
+  static const Color primaryDark = Color.fromRGBO(62, 131, 156, 1.0);
+  static const Color backgroundColor = Color(0xFFFAFBFC);
+  static const Color cardColor = Colors.white;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
@@ -106,37 +113,29 @@ class _FilterDialogSalesByCategoryState
     ];
     charts = [
       _locale.lineChart,
-      // _locale.pieChart,
       _locale.barChart
     ];
     selectedChart = widget.selectedChart!;
-
     selectedCategories = categories[1];
-
     branches = [_locale.all];
     selectedPeriod = widget.selectedPeriod!;
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
     currentMonth = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().currentMonth()));
-
     _toDateController.text = (widget.toDate ?? "") != ""
         ? DatesController().formatDateReverse(widget.toDate!)
         : todayDate;
-
     _fromDateController.text = (widget.fromDate ?? "") != ""
         ? DatesController().formatDateReverse(widget.fromDate!)
         : currentMonth;
     selectedCategories = widget.selectedCategory ?? "";
-
     branches = widget.branches ?? [_locale.all];
-
     selectedBranch = widget.selectedBranchCodeF == null
         ? _locale.all
         : widget.selectedBranchCodeF == _locale.all
             ? widget.selectedBranchCodeF!
             : branchesMap2[widget.selectedBranchCodeF!];
-
     selectedBranchCode = branchesMap[selectedBranch];
     getAllCodeReports();
     super.didChangeDependencies();
@@ -152,463 +151,473 @@ class _FilterDialogSalesByCategoryState
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    return AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      // title: SelectableText(_locale.filter),
-      content: SizedBox(
-        width: isDesktop ? width * 0.55 : width * 0.7,
-        height: isDesktop ? height * 0.37 : null,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // CustomDropDown(
-                        //   width: width * 0.165,
-                        //   items: periods,
-                        //   label: _locale.period,
-                        //   initialValue: selectedPeriod,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       checkPeriods(value);
-                        //       selectedPeriod = value!;
-                        //     });
-                        //   },
-                        // ),
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: categories,
-                          label: _locale.byCategory,
-                          initialValue: selectedCategories,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCategories = value!;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: charts,
-                          hint: "",
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                        SizedBox(
-                          width: width * 0.16,
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(_locale.stocks),
-                              TestDropdown(
-                                  isEnabled: true,
-                                  icon: const Icon(Icons.search),
-                                  cleanPrevSelectedItem: true,
-                                  onItemAddedOrRemoved: (value) {
-                                    for (int i = 0; i < value.length; i++) {
-                                      tempStocks.add(value[i]);
-                                      tempStocksCodes
-                                          .add(tempStocks[i].txtStkcode ?? "");
-                                      print(
-                                          "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
-                                      print(
-                                          "asdasdsadTemp1: ${tempStocksCodes[i]}");
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    print("asdasdasddeeee: ${value.length}");
-                                    print("asdasdasddeeee");
-                                    if (value.isNotEmpty) {
-                                      stocks.clear();
-                                      stocksCodes.clear();
-                                      tempStocks.clear();
-                                      tempStocksCodes.clear();
-                                      for (int i = 0; i < value.length; i++) {
-                                        stocks.add(value[i]);
-                                        stocksCodes
-                                            .add(stocks[i].txtStkcode ?? "");
-                                      }
-                                      setState(() {});
-                                    }
-                                  },
-                                  stringValue: stocks.isEmpty
-                                      ? "${_locale.select} ${_locale.stocks}"
-                                      : stocks
-                                          .map((b) => b.txtNamee)
-                                          .join(', '),
-                                  borderText: "",
-                                  onClearIconPressed: () {
-                                    // dealsProvider.clearStockCateg();
-                                    // hintCategory = "";
-                                  },
-                                  onPressed: () {},
-                                  onSearch: (text) async {
-                                    List<StockModel> value =
-                                        await TotalSalesController()
-                                            .getStocks(0, text);
-                                    print("value1: ${value.length}");
-                                    value = value
-                                        .where((stock) => !tempStocks.any(
-                                            (temp) =>
-                                                temp.txtStkcode ==
-                                                stock.txtStkcode))
-                                        .toList();
 
-                                    print("value1111: ${value.length}");
-                                    // for (var i = 0; i < value.length; i++) {
-                                    //   print("asddddd1:${value[i].txtStkcode}");
-                                    //   print("asddddd21:${tempStocks.length}");
-                                    //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                                    //     value.removeAt(i);
-                                    //     print(
-                                    //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                                    //   }
-                                    // }
-                                    return value;
-                                  }),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // CustomDropDown(
-                        //   items: periods,
-                        //   label: _locale.period,
-                        //   initialValue: selectedPeriod,
-                        //   width: width,
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       checkPeriods(value);
-                        //       selectedPeriod = value!;
-                        //     });
-                        //   },
-                        // ),
-
-                        CustomDropDown(
-                          items: categories,
-                          width: width,
-                          label: _locale.byCategory,
-                          initialValue: selectedCategories,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedCategories = value!;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          lastDate: DateTime.now(),
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                              });
-                            }
-                          },
-                          dateControllerToCompareWith: _toDateController,
-                          isInitiaDate: true,
-                          timeControllerToCompareWith: null,
-                        ),
-                        // SizedBox(
-                        //   width: width * 0.01,
-                        // ),
-                        CustomDate(
-                          dateController: _toDateController,
-                          label: _locale.toDate,
-                          lastDate: DateTime.now(),
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _toDateController.text = value;
-                              });
-                            }
-                          },
-                          dateControllerToCompareWith: _fromDateController,
-                          isInitiaDate: false,
-                          timeControllerToCompareWith: null,
-                        ),
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: branches,
-                          label: _locale.branch,
-                          initialValue: selectedBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedBranch = value.toString();
-                              selectedBranchCode =
-                                  branchesMap[value.toString()]!;
-                            });
-                          },
-                        ),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: height * 0.12,
-                          width: isDesktop ? width * 0.135 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _fromDateController,
-                            label: _locale.fromDate,
-                            lastDate: DateTime.now(),
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _fromDateController.text = value;
-                                });
-                              }
-                            },
-                            dateControllerToCompareWith: _toDateController,
-                            isInitiaDate: true,
-                            timeControllerToCompareWith: null,
-                          ),
-                        ),
-                        SizedBox(
-                          height: height * 0.12,
-                          width: isDesktop ? width * 0.135 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _toDateController,
-                            label: _locale.toDate,
-                            lastDate: DateTime.now(),
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _toDateController.text = value;
-                                });
-                              }
-                            },
-                            dateControllerToCompareWith: _fromDateController,
-                            isInitiaDate: false,
-                            timeControllerToCompareWith: null,
-                          ),
-                        ),
-                        SizedBox(
-                          width: width * 0.65,
-                          height: height * 0.08,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(_locale.stocks),
-                              TestDropdown(
-                                  isEnabled: true,
-                                  icon: const Icon(Icons.search),
-                                  cleanPrevSelectedItem: true,
-                                  onItemAddedOrRemoved: (value) {
-                                    for (int i = 0; i < value.length; i++) {
-                                      tempStocks.add(value[i]);
-                                      tempStocksCodes
-                                          .add(tempStocks[i].txtStkcode ?? "");
-                                      print(
-                                          "asdasdsadTemp: ${tempStocks[i].txtNamea ?? tempStocks[i].txtNamee}");
-                                      print(
-                                          "asdasdsadTemp1: ${tempStocksCodes[i]}");
-                                    }
-                                  },
-                                  onChanged: (value) {
-                                    print("asdasdasddeeee: ${value.length}");
-                                    print("asdasdasddeeee");
-                                    if (value.isNotEmpty) {
-                                      stocks.clear();
-                                      stocksCodes.clear();
-                                      tempStocks.clear();
-                                      tempStocksCodes.clear();
-                                      for (int i = 0; i < value.length; i++) {
-                                        stocks.add(value[i]);
-                                        stocksCodes
-                                            .add(stocks[i].txtStkcode ?? "");
-                                        print(
-                                            "asdasdsad: ${stocks[i].txtNamea ?? stocks[i].txtNamee}");
-                                        print("asdasdsad1: ${stocksCodes[i]}");
-                                      }
-                                      setState(() {});
-                                    }
-                                  },
-                                  stringValue: stocks.isEmpty
-                                      ? "${_locale.select} ${_locale.stocks}"
-                                      : stocks
-                                          .map((b) => b.txtNamee)
-                                          .join(', '),
-                                  borderText: "",
-                                  onClearIconPressed: () {
-                                    // dealsProvider.clearStockCateg();
-                                    // hintCategory = "";
-                                  },
-                                  onPressed: () {},
-                                  onSearch: (text) async {
-                                    List<StockModel> value =
-                                        await TotalSalesController()
-                                            .getStocks(0, text);
-                                    print("value1: ${value.length}");
-                                    value = value
-                                        .where((stock) => !tempStocks.any(
-                                            (temp) =>
-                                                temp.txtStkcode ==
-                                                stock.txtStkcode))
-                                        .toList();
-                                    print("value1111: ${value.length}");
-                                    // for (var i = 0; i < value.length; i++) {
-                                    //   print("asddddd1:${value[i].txtStkcode}");
-                                    //   print("asddddd21:${tempStocks.length}");
-                                    //   if (tempStocksCodes.contains(value[i].txtStkcode)) {
-                                    //     value.removeAt(i);
-                                    //     print(
-                                    //         "asddddd: ${tempStocksCodes.contains(value[i].txtStkcode)}");
-                                    //   }
-                                    // }
-                                    return value;
-                                  }),
-                            ],
-                          ),
-                        ),
-                        CustomDropDown(
-                          items: charts,
-                          hint: "",
-                          width: width,
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          width: width,
-                          items: branches,
-                          label: _locale.branch,
-                          initialValue: selectedBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedBranch = value.toString();
-                              selectedBranchCode =
-                                  branchesMap[value.toString()]!;
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 40 : 16,
+        vertical: 20,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: isDesktop ? 700 : width - 32,
+          maxHeight: height * 0.85,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
             ],
           ),
-        ),
-      ),
-      actions: [
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Components().blueButton(
-                height: width > 800 ? height * .054 : height * .06,
-                fontSize: width > 800 ? height * .0158 : height * .015,
-                width: isDesktop ? width * 0.09 : width * 0.25,
-                onPressed: () {
-                  DateTime from = DateTime.parse(_fromDateController.text);
-                  DateTime to = DateTime.parse(_toDateController.text);
+              // Header
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: isDesktop ? 16 : 12, 
+                  horizontal: isDesktop ? 20 : 16
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [primaryColor, primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.filter_alt_outlined, 
+                         color: Colors.white, 
+                         size: isDesktop ? 20 : 18),
+                    SizedBox(width: isDesktop ? 8 : 6),
+                    Expanded(
+                      child: Text(
+                        "Sales by Category Filter",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isDesktop ? 16 : 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        padding: EdgeInsets.all(isDesktop ? 4 : 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(Icons.close, 
+                                   color: Colors.white, 
+                                   size: isDesktop ? 16 : 14),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                  if (from.isAfter(to)) {
-                    ErrorController.openErrorDialog(
-                        1, _locale.startDateAfterEndDate);
-                  } else {
-                    // if (stocksCodes.isEmpty) {
-                    //   stocksCodes = [""];
-                    // }
+              // Content
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(isDesktop ? 16 : 12),
+                  child: Column(
+                    children: [
+                      // Date Range Section
+                      _buildSection(
+                        title: "Date Range",
+                        child: _buildDateSection(),
+                      ),
+                      
+                      SizedBox(height: isDesktop ? 16 : 12),
+                      
+                      // Category & Filters Section
+                      _buildSection(
+                        title: "Category & Filters",
+                        child: _buildFiltersSection(),
+                      ),
+                      
+                      SizedBox(height: isDesktop ? 16 : 12),
+                      
+                      // Stocks Section
+                      _buildSection(
+                        title: "Stock Selection",
+                        child: _buildStocksSection(),
+                      ),
+                      
+                      SizedBox(height: isDesktop ? 16 : 12),
+                      
+                      // Display Options Section
+                      _buildSection(
+                        title: "Display Options",
+                        child: _buildDisplaySection(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
-                    widget.onFilter(
-                        selectedPeriod,
-                        DatesController().formatDate(_fromDateController.text),
-                        DatesController().formatDate(_toDateController.text),
-                        selectedCategories,
-                        selectedBranchCode,
-                        selectedChart,
-                        stocksCodes);
-
-                    context.read<DatesProvider>().setDatesController(
-                        _fromDateController, _toDateController);
-                    Navigator.of(context).pop();
-                  }
-                },
-                text: _locale.filter,
-                borderRadius: 0.3,
-                textColor: Colors.white,
+              // Actions
+              Container(
+                padding: EdgeInsets.all(isDesktop ? 16 : 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Components().blueButton(
+                      height: isDesktop ? height * .054 : height * .06,
+                      fontSize: isDesktop ? height * .0158 : height * .015,
+                      width: isDesktop ? width * 0.12 : width * 0.3,
+                      onPressed: () {
+                        DateTime from = DateTime.parse(_fromDateController.text);
+                        DateTime to = DateTime.parse(_toDateController.text);
+                        if (from.isAfter(to)) {
+                          ErrorController.openErrorDialog(
+                              1, _locale.startDateAfterEndDate);
+                        } else {
+                          widget.onFilter(
+                              selectedPeriod,
+                              DatesController().formatDate(_fromDateController.text),
+                              DatesController().formatDate(_toDateController.text),
+                              selectedCategories,
+                              selectedBranchCode,
+                              selectedChart,
+                              stocksCodes);
+                          context.read<DatesProvider>().setDatesController(
+                              _fromDateController, _toDateController);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      text: _locale.filter,
+                      borderRadius: 0.3,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 
+  Widget _buildSection({required String title, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: isDesktop ? 16 : 12, 
+              vertical: isDesktop ? 12 : 10
+            ),
+            decoration: BoxDecoration(
+              color: primaryLight,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: primaryDark,
+                fontSize: isDesktop ? 14 : 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(isDesktop ? 16 : 12),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateSection() {
+    return isDesktop
+        ? Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: height * 0.12,
+                  child: CustomDate(
+                    dateController: _fromDateController,
+                    label: _locale.fromDate,
+                    lastDate: DateTime.now(),
+                    minYear: 2000,
+                    onValue: (isValid, value) {
+                      if (isValid) {
+                        setState(() {
+                          _fromDateController.text = value;
+                        });
+                      }
+                    },
+                    dateControllerToCompareWith: _toDateController,
+                    isInitiaDate: true,
+                    timeControllerToCompareWith: null,
+                  ),
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: SizedBox(
+                  height: height * 0.12,
+                  child: CustomDate(
+                    dateController: _toDateController,
+                    label: _locale.toDate,
+                    lastDate: DateTime.now(),
+                    minYear: 2000,
+                    onValue: (isValid, value) {
+                      if (isValid) {
+                        setState(() {
+                          _toDateController.text = value;
+                        });
+                      }
+                    },
+                    dateControllerToCompareWith: _fromDateController,
+                    isInitiaDate: false,
+                    timeControllerToCompareWith: null,
+                  ),
+                ),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              SizedBox(
+                height: height * 0.12,
+                width: width * 0.9,
+                child: CustomDate(
+                  dateController: _fromDateController,
+                  label: _locale.fromDate,
+                  lastDate: DateTime.now(),
+                  minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _fromDateController.text = value;
+                      });
+                    }
+                  },
+                  dateControllerToCompareWith: _toDateController,
+                  isInitiaDate: true,
+                  timeControllerToCompareWith: null,
+                ),
+              ),
+              SizedBox(height: 12),
+              SizedBox(
+                height: height * 0.12,
+                width: width * 0.9,
+                child: CustomDate(
+                  dateController: _toDateController,
+                  label: _locale.toDate,
+                  lastDate: DateTime.now(),
+                  minYear: 2000,
+                  onValue: (isValid, value) {
+                    if (isValid) {
+                      setState(() {
+                        _toDateController.text = value;
+                      });
+                    }
+                  },
+                  dateControllerToCompareWith: _fromDateController,
+                  isInitiaDate: false,
+                  timeControllerToCompareWith: null,
+                ),
+              ),
+            ],
+          );
+  }
+
+  Widget _buildFiltersSection() {
+    return isDesktop
+        ? Row(
+            children: [
+              Expanded(
+                child: CustomDropDown(
+                  width: double.infinity,
+                  items: categories,
+                  label: _locale.byCategory,
+                  initialValue: selectedCategories,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCategories = value!;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: CustomDropDown(
+                  width: double.infinity,
+                  items: branches,
+                  label: _locale.branch,
+                  initialValue: selectedBranch,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedBranch = value.toString();
+                      selectedBranchCode = branchesMap[value.toString()]!;
+                    });
+                  },
+                ),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              CustomDropDown(
+                items: categories,
+                width: width,
+                label: _locale.byCategory,
+                initialValue: selectedCategories,
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategories = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 12),
+              CustomDropDown(
+                width: width,
+                items: branches,
+                label: _locale.branch,
+                initialValue: selectedBranch,
+                onChanged: (value) {
+                  setState(() {
+                    selectedBranch = value.toString();
+                    selectedBranchCode = branchesMap[value.toString()]!;
+                  });
+                },
+              ),
+            ],
+          );
+  }
+
+  Widget _buildStocksSection() {
+    return SizedBox(
+      width: double.infinity,
+      height: isDesktop ? 100 : height * 0.08,
+      child: Column(
+        mainAxisAlignment: isDesktop ? MainAxisAlignment.center : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(_locale.stocks),
+          Expanded(
+            child: TestDropdown(
+                isEnabled: true,
+                icon: const Icon(Icons.search),
+                cleanPrevSelectedItem: true,
+                onItemAddedOrRemoved: (value) {
+                  for (int i = 0; i < value.length; i++) {
+                    tempStocks.add(value[i]);
+                    tempStocksCodes.add(tempStocks[i].txtStkcode ?? "");
+                  }
+                },
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    stocks.clear();
+                    stocksCodes.clear();
+                    tempStocks.clear();
+                    tempStocksCodes.clear();
+                    for (int i = 0; i < value.length; i++) {
+                      stocks.add(value[i]);
+                      stocksCodes.add(stocks[i].txtStkcode ?? "");
+                    }
+                    setState(() {});
+                  }
+                },
+                stringValue: stocks.isEmpty
+                    ? "${_locale.select} ${_locale.stocks}"
+                    : stocks.map((b) => b.txtNamee).join(', '),
+                borderText: "",
+                onClearIconPressed: () {},
+                onPressed: () {},
+                onSearch: (text) async {
+                  List<StockModel> value =
+                      await TotalSalesController().getStocks(0, text);
+                  value = value
+                      .where((stock) => !tempStocks.any(
+                          (temp) => temp.txtStkcode == stock.txtStkcode))
+                      .toList();
+                  return value;
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDisplaySection() {
+    return CustomDropDown(
+      items: charts,
+      hint: "",
+      width: isDesktop ? double.infinity : width,
+      label: _locale.chartType,
+      initialValue: selectedChart,
+      onChanged: (value) {
+        setState(() {
+          selectedChart = value!;
+        });
+      },
+    );
+  }
+
+  // Keep all existing methods unchanged
   setStartSearchCriteria() {
     for (var i = 0; i < userReportSettingsList.length; i++) {
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        // Adding double quotes around keys and values to make it valid JSON
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
               match.group(1) == "toDate" ||
               match.group(1) == "branch") {
-            print(match.group(1));
             return '"${match.group(1)}":"${match.group(2)!.isEmpty ? "" : match.group(2)!}"';
           } else {
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-
-        // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
         startSearchCriteria = startSearchCriteria.replaceAll('الكل', '');
-        // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-        // print("start search sales dashboard : ${startSearchCriteria}");
-
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        // _fromDateController.text =
-        //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-        // _toDateController.text =
-        //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
-        // selectedCategories = searchCriteriaa!.byCategory! == 1
-        //     ? _locale.brands
-        //     : searchCriteriaa!.byCategory! == 2
-        //         ? _locale.categories("1")
-        //         : searchCriteriaa!.byCategory! == 3
-        //             ? _locale.categories("2")
-        //             : _locale.classifications;
-
-        // selectedBranchCode = searchCriteriaa!.branch!;
-        // selectedBranchCode = searchCriteriaa!.byCategory!;
-
-        print(
-            "startSearchCriteriastartSearchCriteria: ${searchCriteriaa!.fromDate}");
       }
     }
   }
@@ -649,22 +658,10 @@ class _FilterDialogSalesByCategoryState
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-    // UserReportSettingsModel.fromJson(userReportSettingsModel.toJson());
-    // print(
-    //     "json.encode: ${UserReportSettingsModel.fromJson(userReportSettingsModel.toJson()).txtJsoncrit}");
-    // Map<String, dynamic> toJson = parseStringToJson(
-    //     UserReportSettingsModel.fromJson(userReportSettingsModel.toJson())
-    //         .txtJsoncrit);
-    // print(toJson.toString());
-    // print(
-    //     "json.encode: ${SearchCriteria.fromJson(searchCriteria.toJson()).voucherStatus}");
-
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel)
         .then((value) {
-      if (value.statusCode == 200) {
-        print("value.statusCode: ${value.statusCode}");
-      }
+      if (value.statusCode == 200) {}
     });
   }
 

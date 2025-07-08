@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bi_replicate/model/settings/user_settings/code_reports_model.dart';
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
-
 import '../../../controller/settings/user_settings/code_reports_controller.dart';
 import '../../../controller/settings/user_settings/user_report_settings_controller.dart';
 import '../../../model/criteria/search_criteria.dart';
@@ -65,19 +63,23 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
   var selectedBranch = "";
   var selectedBranchCode = "";
 
+  // Unified color scheme
+  static const Color primaryColor = Color.fromRGBO(82, 151, 176, 1.0);
+  static const Color primaryLight = Color.fromRGBO(82, 151, 176, 0.08);
+  static const Color primaryDark = Color.fromRGBO(62, 131, 156, 1.0);
+  static const Color backgroundColor = Color(0xFFFAFBFC);
+  static const Color cardColor = Colors.white;
+
   @override
   void didChangeDependencies() {
     _locale = AppLocalizations.of(context)!;
-
     status = [
       _locale.all,
       _locale.posted,
       _locale.draft,
       _locale.canceled,
     ];
-
     branches = widget.branches ?? [_locale.all];
-
     charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
     selectedChart = widget.selectedChart!;
     selectedStatus = widget.selectedStatus!;
@@ -89,15 +91,12 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         ? DatesController().formatDateReverse(widget.fromDate!)
         : currentMonth;
     _toDateController.text = todayDate;
-
     selectedBranch = widget.selectedBranchCodeF == null
         ? _locale.all
         : widget.selectedBranchCodeF == _locale.all
             ? widget.selectedBranchCodeF!
             : branchesMap2[widget.selectedBranchCodeF!];
-
     selectedBranchCode = branchesMap[selectedBranch];
-
     getAllCodeReports();
     super.didChangeDependencies();
   }
@@ -112,186 +111,313 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     isDesktop = Responsive.isDesktop(context);
-    return AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      content: SizedBox(
-        width: isDesktop ? width * 0.39 : width * 0.75,
-        height: isDesktop ? height * 0.37 : height * 0.55,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: status,
-                          label: _locale.status,
-                          initialValue: selectedStatus,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedStatus = value!;
-                            });
-                          },
-                        ),
-                        CustomDate(
-                          dateController: _fromDateController,
-                          label: _locale.fromDate,
-                          lastDate: DateTime.now(),
-                          minYear: 2000,
-                          onValue: (isValid, value) {
-                            if (isValid) {
-                              setState(() {
-                                _fromDateController.text = value;
-                              });
-                            }
-                          },
-                          dateControllerToCompareWith: null,
-                          isInitiaDate: true,
-                          timeControllerToCompareWith: null,
-                        ),
-                      ],
-                    )
-                  : Container(),
-              isDesktop
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomDropDown(
-                          width: width * 0.165,
-                          items: charts,
-                          hint: "",
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          width: width * 0.165,
 
-                          //   width: width,
-                          items: branches,
-                          label: _locale.branch,
-                          initialValue: selectedBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedBranch = value.toString();
-                              selectedBranchCode =
-                                  branchesMap[value.toString()]!;
-                            });
-                          },
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: isDesktop ? 40 : 16,
+        vertical: 20,
+      ),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: isDesktop ? 600 : width - 32,
+          maxHeight: height * 0.8,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 10,
+                offset: Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: isDesktop ? 16 : 12, 
+                  horizontal: isDesktop ? 20 : 16
+                ),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [primaryColor, primaryDark],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Icons.filter_alt_outlined, 
+                         color: Colors.white, 
+                         size: isDesktop ? 20 : 18),
+                    SizedBox(width: isDesktop ? 8 : 6),
+                    Expanded(
+                      child: Text(
+                        "Daily Sales Filter",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: isDesktop ? 16 : 14,
+                          fontWeight: FontWeight.w600,
                         ),
-                      ],
-                    )
-                  : Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: height * 0.12,
-                          width: isDesktop ? width * 0.135 : width * 0.9,
-                          child: CustomDate(
-                            dateController: _fromDateController,
-                            label: _locale.fromDate,
-                            lastDate: DateTime.now(),
-                            minYear: 2000,
-                            onValue: (isValid, value) {
-                              if (isValid) {
-                                setState(() {
-                                  _fromDateController.text = value;
-                                });
-                              }
-                            },
-                            dateControllerToCompareWith: null,
-                            isInitiaDate: true,
-                            timeControllerToCompareWith: null,
-                          ),
-                        ),
-                        CustomDropDown(
-                          items: charts,
-                          hint: "",
-                          width: width,
-                          label: _locale.chartType,
-                          initialValue: selectedChart,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedChart = value!;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          items: status,
-                          label: _locale.status,
-                          initialValue: selectedStatus,
-                          width: width,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedStatus = value!;
-                            });
-                          },
-                        ),
-                        CustomDropDown(
-                          width: width,
-                          items: branches,
-                          label: _locale.branch,
-                          initialValue: selectedBranch,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedBranch = value.toString();
-                              selectedBranchCode =
-                                  branchesMap[value.toString()]!;
-                            });
-                          },
-                        ),
-                      ],
+                      ),
                     ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: Container(
+                        padding: EdgeInsets.all(isDesktop ? 4 : 3),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Icon(Icons.close, 
+                                   color: Colors.white, 
+                                   size: isDesktop ? 16 : 14),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.all(isDesktop ? 16 : 12),
+                  child: Column(
+                    children: [
+                      // Date Section
+                      _buildSection(
+                        title: "Date Range",
+                        child: _buildDateSection(),
+                      ),
+                      
+                      SizedBox(height: isDesktop ? 16 : 12),
+                      
+                      // Filters Section
+                      _buildSection(
+                        title: "Filters",
+                        child: _buildFiltersSection(),
+                      ),
+                      
+                      SizedBox(height: isDesktop ? 16 : 12),
+                      
+                      // Display Options Section
+                      _buildSection(
+                        title: "Display Options",
+                        child: _buildDisplaySection(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Actions
+              Container(
+                padding: EdgeInsets.all(isDesktop ? 16 : 12),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50],
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Components().blueButton(
+                      height: isDesktop ? height * .057 : height * .06,
+                      fontSize: isDesktop ? height * .018 : height * .015,
+                      width: isDesktop ? width * 0.12 : width * 0.3,
+                      onPressed: () {
+                        widget.onFilter(
+                            DatesController().formatDate(_fromDateController.text),
+                            selectedStatus,
+                            selectedChart,
+                            selectedBranchCode);
+                        context
+                            .read<DatesProvider>()
+                            .setDatesController(_fromDateController, _toDateController);
+                        Navigator.of(context).pop();
+                      },
+                      text: _locale.filter,
+                      borderRadius: 0.3,
+                      textColor: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
       ),
-      actions: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Components().blueButton(
-              height: width > 800 ? height * .057 : height * .06,
-              fontSize: width > 800 ? height * .018 : height * .015,
-              width: isDesktop ? width * 0.09 : width * 0.25,
-              onPressed: () {
-                widget.onFilter(
-                    DatesController().formatDate(_fromDateController.text),
-                    selectedStatus,
-                    selectedChart,
-                    selectedBranchCode);
-
-                context
-                    .read<DatesProvider>()
-                    .setDatesController(_fromDateController, _toDateController);
-                Navigator.of(context).pop();
-              },
-              text: _locale.filter,
-              borderRadius: 0.3,
-              textColor: Colors.white,
-            ),
-          ],
-        ),
-      ],
     );
   }
 
+  Widget _buildSection({required String title, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: cardColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[200]!),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(
+              horizontal: isDesktop ? 16 : 12, 
+              vertical: isDesktop ? 12 : 10
+            ),
+            decoration: BoxDecoration(
+              color: primaryLight,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Text(
+              title,
+              style: TextStyle(
+                color: primaryDark,
+                fontSize: isDesktop ? 14 : 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(isDesktop ? 16 : 12),
+            child: child,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDateSection() {
+    return SizedBox(
+      height: isDesktop ? height * 0.12 : height * 0.1,
+      width: double.infinity,
+      child: CustomDate(
+        dateController: _fromDateController,
+        label: _locale.fromDate,
+        lastDate: DateTime.now(),
+        minYear: 2000,
+        onValue: (isValid, value) {
+          if (isValid) {
+            setState(() {
+              _fromDateController.text = value;
+            });
+          }
+        },
+        dateControllerToCompareWith: null,
+        isInitiaDate: true,
+        timeControllerToCompareWith: null,
+      ),
+    );
+  }
+
+  Widget _buildFiltersSection() {
+    return isDesktop
+        ? Row(
+            children: [
+              Expanded(
+                child: CustomDropDown(
+                  width: double.infinity,
+                  items: status,
+                  label: _locale.status,
+                  initialValue: selectedStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedStatus = value!;
+                    });
+                  },
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: CustomDropDown(
+                  width: double.infinity,
+                  items: branches,
+                  label: _locale.branch,
+                  initialValue: selectedBranch,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedBranch = value.toString();
+                      selectedBranchCode = branchesMap[value.toString()]!;
+                    });
+                  },
+                ),
+              ),
+            ],
+          )
+        : Column(
+            children: [
+              CustomDropDown(
+                items: status,
+                label: _locale.status,
+                initialValue: selectedStatus,
+                width: width,
+                onChanged: (value) {
+                  setState(() {
+                    selectedStatus = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 12),
+              CustomDropDown(
+                width: width,
+                items: branches,
+                label: _locale.branch,
+                initialValue: selectedBranch,
+                onChanged: (value) {
+                  setState(() {
+                    selectedBranch = value.toString();
+                    selectedBranchCode = branchesMap[value.toString()]!;
+                  });
+                },
+              ),
+            ],
+          );
+  }
+
+  Widget _buildDisplaySection() {
+    return CustomDropDown(
+      items: charts,
+      hint: "",
+      width: isDesktop ? double.infinity : width,
+      label: _locale.chartType,
+      initialValue: selectedChart,
+      onChanged: (value) {
+        setState(() {
+          selectedChart = value!;
+        });
+      },
+    );
+  }
+
+  // Keep all existing methods unchanged
   setStartSearchCriteria() {
     for (var i = 0; i < userReportSettingsList.length; i++) {
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {
         txtKey = userReportSettingsList[i].txtKey;
         startSearchCriteria = userReportSettingsList[i].txtJsoncrit;
-        // Adding double quotes around keys and values to make it valid JSON
         startSearchCriteria = startSearchCriteria
             .replaceAllMapped(RegExp(r'(\w+):\s*([\w-]+|)(?=,|\})'), (match) {
           if (match.group(1) == "fromDate" ||
@@ -302,20 +428,11 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
             return '"${match.group(1)}":${match.group(2)}';
           }
         });
-
-        // Removing the extra curly braces
         startSearchCriteria =
             startSearchCriteria.replaceAll('{', '').replaceAll('}', '');
-
-        // Wrapping the string with curly braces to make it a valid JSON object
         startSearchCriteria = '{$startSearchCriteria}';
-
         searchCriteriaa =
             SearchCriteria.fromJson(json.decode(startSearchCriteria));
-        // _fromDateController.text =
-        //     DatesController().formatDateReverse(searchCriteriaa!.fromDate!);
-        // _toDateController.text =
-        //     DatesController().formatDateReverse(searchCriteriaa!.toDate!);
       }
     }
   }
@@ -355,7 +472,6 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
         txtUsercode: "",
         txtJsoncrit: searchCriteria.toJson().toString(),
         bolAutosave: 1);
-
     UserReportSettingsController()
         .editUserReportSettings(userReportSettingsModel);
   }
