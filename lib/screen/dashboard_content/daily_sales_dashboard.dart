@@ -121,219 +121,198 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     super.initState();
   }
 
-  // Helper method to get pie chart specific dimensions
-  Size getPieChartSize() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final availableHeight = MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45);
-    
-    if (isDesktop) {
-      double maxSize = min(screenWidth * 0.35, availableHeight * 0.9);
-      return Size(maxSize, maxSize);
-    } else if (Responsive.isTablet(context)) {
-      double maxSize = min(screenWidth * 0.5, availableHeight * 0.85);
-      return Size(maxSize, maxSize);
-    } else {
-      double maxSize = min(screenWidth * 0.8, availableHeight * 0.8);
-      return Size(maxSize, maxSize);
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
-    isDesktop = Responsive.isDesktop(context);
+Widget build(BuildContext context) {
+  height = MediaQuery.of(context).size.height;
+  width = MediaQuery.of(context).size.width;
+  isDesktop = Responsive.isDesktop(context);
 
-    String fromDate = fromDateController.text.isEmpty
-        ? ""
-        : DatesController().formatDateReverse(fromDateController.text);
+  String fromDate = fromDateController.text.isEmpty
+      ? ""
+      : DatesController().formatDateReverse(fromDateController.text);
 
-    return Container(
-      height: isDesktop ? height * 0.5 : height * 0.6,
-      constraints: const BoxConstraints(
-        minHeight: 300,
-        maxHeight: 600,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Card(
-        elevation: 0,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return Container(
+        height: constraints.maxHeight,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(
-            color: Color.fromRGBO(82, 151, 176, 0.2),
-            width: 1,
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(82, 151, 176, 0.05),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 4,
-                          height: 16,
-                          decoration: BoxDecoration(
-                            color: const Color.fromRGBO(82, 151, 176, 1),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            _locale.dailySales,
-                            style: TextStyle(
-                              fontSize: isDesktop ? 14 : 16,
-                              fontWeight: FontWeight.w600,
-                              color: const Color.fromRGBO(82, 151, 176, 1),
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        ValueListenableBuilder(
-                          valueListenable: totalDailySale,
-                          builder: (context, value, child) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(82, 151, 176, 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})',
-                                style: TextStyle(
-                                  fontSize: isDesktop ? 10 : 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: const Color.fromRGBO(82, 151, 176, 1),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _locale.localeName == "en"
-                              ? "(${fromDateController.text})"
-                              : "($fromDate)",
-                          style: TextStyle(
-                            fontSize: isDesktop ? 10 : 11,
-                            color: Colors.grey.shade600,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  blueButton1(
-                    icon: Icon(
-                      Icons.filter_list_sharp,
-                      color: whiteColor,
-                      size: isDesktop ? height * 0.025 : height * 0.022,
-                    ),
-                    textColor: const Color.fromARGB(255, 255, 255, 255),
-                    height: isDesktop ? height * 0.008 : height * 0.035,
-                    fontSize: isDesktop ? height * 0.016 : height * 0.015,
-                    width: isDesktop ? width * 0.08 : width * 0.27,
-                    onPressed: () {
-                      if (isLoading == false) {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return FilterDialogDailySales(
-                              selectedChart: getChartByCode(selectedChart, _locale),
-                              selectedStatus: getVoucherStatusByCode(_locale, statusVar),
-                              selectedBranchCodeF: selectedBranchCode == "" ? _locale.all : selectedBranchCode,
-                              fromDate: fromDateController.text,
-                              branches: branches,
-                              onFilter: (fromDate, selectedStatus, chart, selectedBranchCodeF) {
-                                fromDateController.text = fromDate;
-                                statusVar = getVoucherStatus(_locale, selectedStatus);
-                                selectedChart = getChartByName(chart, _locale);
-                                selectedBranchCode = selectedBranchCodeF == _locale.all ? "" : selectedBranchCodeF;
-                                SearchCriteria searchCriteria = SearchCriteria(
-                                  fromDate: fromDateController.text,
-                                  voucherStatus: -100,
-                                  branch: "",
-                                );
-                                setSearchCriteria(searchCriteria);
-                              },
-                            );
-                          },
-                        ).then((value) async {
-                          setState(() {
-                            _timer!.cancel();
-                            isLoading = true;
-                          });
-                          getDailySales().then((value) {
-                            setState(() {
-                              _startTimer();
-                              isLoading = false;
-                            });
-                          });
-                        });
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                child: isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Color.fromRGBO(82, 151, 176, 1),
-                          strokeWidth: 3,
-                        ),
-                      )
-                    : _buildChartContent(),
-              ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildChartContent() {
+        child: Card(
+          elevation: 0,
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+            side: const BorderSide(
+              color: Color.fromRGBO(82, 151, 176, 0.2),
+              width: 1,
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6), // Reduced vertical padding from 10 to 6
+                decoration: const BoxDecoration(
+                  color: Color.fromRGBO(82, 151, 176, 0.05),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 6), // Reduced from 8
+                          Flexible(
+                            child: Text(
+                              _locale.dailySales,
+                              style: TextStyle(
+                                fontSize: isDesktop ? 14 : 16,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 6), // Reduced from 8
+                          ValueListenableBuilder(
+                            valueListenable: totalDailySale,
+                            builder: (context, value, child) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1), // Reduced vertical padding from 2 to 1
+                                decoration: BoxDecoration(
+                                  color: const Color.fromRGBO(82, 151, 176, 0.1),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  '(\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalDailySale.value.toString()))})',
+                                  style: TextStyle(
+                                    fontSize: isDesktop ? 10 : 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: const Color.fromRGBO(82, 151, 176, 1),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 6), // Reduced from 8
+                          Text(
+                            _locale.localeName == "en"
+                                ? "(${fromDateController.text})"
+                                : "($fromDate)",
+                            style: TextStyle(
+                              fontSize: isDesktop ? 10 : 11,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 6), // Reduced from 8
+                    blueButton1(
+                      icon: Icon(
+                        Icons.filter_list_sharp,
+                        color: whiteColor,
+                        size: isDesktop ? height * 0.025 : height * 0.022,
+                      ),
+                      textColor: const Color.fromARGB(255, 255, 255, 255),
+                      onPressed: () {
+                        if (isLoading == false) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return FilterDialogDailySales(
+                                selectedChart: getChartByCode(selectedChart, _locale),
+                                selectedStatus: getVoucherStatusByCode(_locale, statusVar),
+                                selectedBranchCodeF: selectedBranchCode == "" ? _locale.all : selectedBranchCode,
+                                fromDate: fromDateController.text,
+                                branches: branches,
+                                onFilter: (fromDate, selectedStatus, chart, selectedBranchCodeF) {
+                                  fromDateController.text = fromDate;
+                                  statusVar = getVoucherStatus(_locale, selectedStatus);
+                                  selectedChart = getChartByName(chart, _locale);
+                                  selectedBranchCode = selectedBranchCodeF == _locale.all ? "" : selectedBranchCodeF;
+                                  SearchCriteria searchCriteria = SearchCriteria(
+                                    fromDate: fromDateController.text,
+                                    voucherStatus: -100,
+                                    branch: "",
+                                  );
+                                  setSearchCriteria(searchCriteria);
+                                },
+                              );
+                            },
+                          ).then((value) async {
+                            setState(() {
+                              _timer!.cancel();
+                              isLoading = true;
+                            });
+                            getDailySales().then((value) {
+                              setState(() {
+                                _startTimer();
+                                isLoading = false;
+                              });
+                            });
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(8), // Reduced from 16
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Color.fromRGBO(82, 151, 176, 1),
+                            strokeWidth: 3,
+                          ),
+                        )
+                      : _buildChartContent(constraints),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+  Widget _buildChartContent(BoxConstraints constraints) {
     if (selectedChart == Bar_Chart || (selectedChart == Pie_Chart && barDataDailySales.length >= 4)) {
-      return _buildBarChart();
+      return _buildBarChart(constraints);
     } else if (selectedChart == Line_Chart) {
-      return _buildLineChart();
+      return _buildLineChart(constraints);
     } else {
-      return _buildPieChart();
+      return _buildPieChart(constraints);
     }
   }
 
-  Widget _buildBarChart() {
+  Widget _buildBarChart(BoxConstraints constraints) {
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (context, chartConstraints) {
         return Scrollbar(
           thumbVisibility: true,
           thickness: 6,
@@ -342,14 +321,14 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: min(MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45), constraints.maxHeight),
+              height: chartConstraints.maxHeight,
               width: isDesktop
                   ? barData.length > 20
-                      ? MediaQuery.of(context).size.width * 0.9 * (barData.length / 20)
-                      : MediaQuery.of(context).size.width * 0.9
+                      ? chartConstraints.maxWidth * (barData.length / 20)
+                      : chartConstraints.maxWidth
                   : barData.length > 5
-                      ? MediaQuery.of(context).size.width * 0.95 * (barData.length / 10)
-                      : MediaQuery.of(context).size.width * 0.95,
+                      ? chartConstraints.maxWidth * (barData.length / 10)
+                      : chartConstraints.maxWidth,
               child: BarDashboardChart(
                 barChartData: barData,
                 isMax: true,
@@ -362,72 +341,62 @@ class _DailySalesDashboardState extends State<DailySalesDashboard> {
     );
   }
 
-  Widget _buildLineChart() {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * (isDesktop ? 0.4 : 0.45),
-      child: LineDashboardChart(
-        isMax: true,
-        isMedium: false,
-        balances: listOfBalances,
-        periods: listOfPeriods,
-      ),
-    );
-  }
-
-  Widget _buildPieChart() {
-    final pieSize = getPieChartSize();
+  Widget _buildLineChart(BoxConstraints constraints) {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        double horizontalPadding = isDesktop ? 12 : 16;
-        double verticalPadding = isDesktop ? 8 : 12;
-        return ClipRect(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: horizontalPadding,
-              right: horizontalPadding,
-              top: verticalPadding,
-              bottom: 0,
-            ),
-            alignment: Alignment.topCenter,
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: min(pieSize.height, constraints.maxHeight - verticalPadding),
-                  maxWidth: min(pieSize.width, constraints.maxWidth - (horizontalPadding * 2)),
-                ),
-                child: barDataDailySales.isNotEmpty
-                    ? PieDashboardChart(
-                        dataList: barDataDailySales,
-                      )
-                    : Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.pie_chart_outline,
-                              size: 48,
-                              color: Colors.grey.shade400,
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              _locale.noDataAvailable,
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-              ),
-            ),
+      builder: (context, chartConstraints) {
+        return SizedBox(
+          height: chartConstraints.maxHeight,
+          width: chartConstraints.maxWidth,
+          child: LineDashboardChart(
+            isMax: true,
+            isMedium: false,
+            balances: listOfBalances,
+            periods: listOfPeriods,
           ),
         );
       },
     );
   }
 
+Widget _buildPieChart(BoxConstraints constraints) {
+  return LayoutBuilder(
+    builder: (context, chartConstraints) {
+      final availableSize = chartConstraints.biggest.shortestSide;
+      final chartSize = availableSize * 0.9; // Increased from 0.8 to 0.9 for taller chart
+      
+      return Center(
+        child: SizedBox(
+          height: chartSize,
+          width: chartSize,
+          child: barDataDailySales.isNotEmpty
+              ? PieDashboardChart(
+                  dataList: barDataDailySales,
+                )
+              : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.pie_chart_outline,
+                        size: 48,
+                        color: Colors.grey.shade400,
+                      ),
+                      const SizedBox(height: 8), // Reduced from 16
+                      Text(
+                        _locale.noDataAvailable,
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        ),
+      );
+    },
+  );
+}
   setStartSearchCriteria() {
     for (var i = 0; i < userReportSettingsList.length; i++) {
       if (currentPageCode == userReportSettingsList[i].txtReportcode) {

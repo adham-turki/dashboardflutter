@@ -170,6 +170,12 @@
     "barCode": "BarCode",
     "sales": "Sales",
     "returnSales": "Return Sales",
+    
+  "dailySalesFilter": "Daily Sales Filter",
+  "dateRange": "Date Range", 
+  "filters": "Filters",
+  "displayOptions": "Display Options",
+
     "appearBasicUnitEquivalence": "Appear Basic Unit Equivalence",
     "appearInactiveStocksForPurchase": "Appear Inactive Stocks ForPurchase",
     "appearBasicUnitEquivalenceMobile": "Appear Basic\nUnit Equivalence",
@@ -333,5 +339,11 @@
     "lessThan": "Less than",
     "lessThanOrEqual": "Less than or equal to",
     "type": "Type",
-    "value": "Value"
+    "value": "Value",
+     "salesByBranchesFilter": "Sales by Branches Filter",
+    "selectChartType": "Select Chart Type",
+    "selectPeriod": "Select Period",
+    "salesByCategoryFilter": "Sales by Category Filter",
+    "categoryAndFilters": "Category & Filters",
+    "stockSelection": "Stock Selection"
 }

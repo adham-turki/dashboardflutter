@@ -309,5 +309,16 @@
     "lessThan": "أقل من",
     "lessThanOrEqual": "أقل من أو يساوي",
     "type": "النوع",
-    "value": "القيمة"
+    "value": "القيمة",
+    "dailySalesFilter": "فلتر المبيعات اليومية",
+  "dateRange": "نطاق التاريخ",
+  "filters": "المرشحات", 
+  "displayOptions": "خيارات العرض",
+  "salesByBranchesFilter": "فلتر المبيعات حسب الفروع",
+    "selectChartType": "اختر نوع الرسم البياني",
+    "selectPeriod": "اختر الفترة",
+    "salesByCategoryFilter": "فلتر المبيعات حسب التصنيف",
+    "categoryAndFilters": "التصنيف والمرشحات", 
+    "stockSelection": "اختيار الأصناف"
+
 }

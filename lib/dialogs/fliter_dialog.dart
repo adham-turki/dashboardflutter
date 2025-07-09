@@ -170,13 +170,13 @@ class _FilterDialogState extends State<FilterDialog> {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.symmetric(
-        horizontal: Responsive.isDesktop(context) ? 40 : 16,
-        vertical: 20,
+        horizontal: Responsive.isDesktop(context) ? 40 : 12,
+        vertical: Responsive.isDesktop(context) ? 20 : 10,
       ),
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: Responsive.isDesktop(context) ? 560 : screenWidth - 32,
-          maxHeight: screenHeight * 0.75,
+          maxWidth: Responsive.isDesktop(context) ? 560 : screenWidth - 24,
+          maxHeight: screenHeight * (Responsive.isDesktop(context) ? 0.75 : 0.85),
         ),
         child: Container(
           decoration: BoxDecoration(
@@ -195,7 +195,10 @@ class _FilterDialogState extends State<FilterDialog> {
             children: [
               // Compact Header
               Container(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: EdgeInsets.symmetric(
+                  vertical: Responsive.isDesktop(context) ? 12 : 10,
+                  horizontal: Responsive.isDesktop(context) ? 16 : 12,
+                ),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [primaryColor, primaryDark],
@@ -209,14 +212,18 @@ class _FilterDialogState extends State<FilterDialog> {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.filter_alt_outlined, color: Colors.white, size: 16),
+                    Icon(
+                      Icons.filter_alt_outlined, 
+                      color: Colors.white, 
+                      size: Responsive.isDesktop(context) ? 16 : 14,
+                    ),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         _locale.salesReportsSearch,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: Responsive.isDesktop(context) ? 14 : 13,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -224,12 +231,16 @@ class _FilterDialogState extends State<FilterDialog> {
                     GestureDetector(
                       onTap: () => Navigator.of(context).pop(false),
                       child: Container(
-                        padding: EdgeInsets.all(3),
+                        padding: EdgeInsets.all(Responsive.isDesktop(context) ? 3 : 2),
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: Icon(Icons.close, color: Colors.white, size: 14),
+                        child: Icon(
+                          Icons.close, 
+                          color: Colors.white, 
+                          size: Responsive.isDesktop(context) ? 14 : 12,
+                        ),
                       ),
                     ),
                   ],
@@ -239,7 +250,7 @@ class _FilterDialogState extends State<FilterDialog> {
               // Scrollable Content
               Flexible(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(12),
+                  padding: EdgeInsets.all(Responsive.isDesktop(context) ? 12 : 8),
                   child: Responsive.isDesktop(context)
                       ? desktopView(context)
                       : mobileView(context),
@@ -248,7 +259,12 @@ class _FilterDialogState extends State<FilterDialog> {
               
               // Compact Action Buttons
               Container(
-                padding: EdgeInsets.fromLTRB(12, 4, 12, 12),
+                padding: EdgeInsets.fromLTRB(
+                  Responsive.isDesktop(context) ? 12 : 8,
+                  4,
+                  Responsive.isDesktop(context) ? 12 : 8,
+                  Responsive.isDesktop(context) ? 12 : 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.grey[50],
                   borderRadius: BorderRadius.only(
@@ -260,7 +276,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   children: [
                     Expanded(
                       child: SizedBox(
-                        height: 36,
+                        height: Responsive.isDesktop(context) ? 36 : 32,
                         child: OutlinedButton(
                           onPressed: () => Navigator.of(context).pop(false),
                           style: OutlinedButton.styleFrom(
@@ -272,18 +288,18 @@ class _FilterDialogState extends State<FilterDialog> {
                           child: Text(
                             _locale.cancel,
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: Responsive.isDesktop(context) ? 12 : 11,
                               color: textSecondary,
                             ),
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: 6),
                     Expanded(
                       flex: 2,
                       child: SizedBox(
-                        height: 36,
+                        height: Responsive.isDesktop(context) ? 36 : 32,
                         child: ElevatedButton(
                           onPressed: () {
                             SearchCriteria updatedFilter = SearchCriteria(
@@ -321,11 +337,14 @@ class _FilterDialogState extends State<FilterDialog> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.search, size: 12),
-                              SizedBox(width: 4),
+                              Icon(Icons.search, size: Responsive.isDesktop(context) ? 12 : 10),
+                              SizedBox(width: 3),
                               Text(
                                 _locale.ok,
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                style: TextStyle(
+                                  fontSize: Responsive.isDesktop(context) ? 12 : 11,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ],
                           ),
@@ -343,163 +362,181 @@ class _FilterDialogState extends State<FilterDialog> {
   }
 
   Widget mobileView(BuildContext context) {
+    final isVerySmallScreen = screenWidth < 320;
+    final spacing = isVerySmallScreen ? 6.0 : 8.0;
+    
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Date Fields - Responsive
+        // Date Fields - Mobile Optimized
         _buildCompactSection(
           title: "Date Range",
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Container(
-                constraints: BoxConstraints(
-                  minHeight: 100,
-                  maxHeight: 100,
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: isVerySmallScreen ? 90 : 100,
+              maxHeight: isVerySmallScreen ? 90 : 100,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildResponsiveDateField(
+                    _locale.fromDate,
+                    _fromDateController,
+                    _toDateController,
+                    isVerySmallScreen,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _buildResponsiveDateField(
-                        _locale.fromDate,
-                        _fromDateController,
-                        _toDateController,
-                        constraints.maxWidth < 300,
-                      ),
-                    ),
-                    SizedBox(width: constraints.maxWidth < 300 ? 4 : 8),
-                    Expanded(
-                      child: _buildResponsiveDateField(
-                        _locale.toDate,
-                        _toDateController,
-                        _fromDateController,
-                        constraints.maxWidth < 300,
-                      ),
-                    ),
-                  ],
+                SizedBox(width: isVerySmallScreen ? 4 : 6),
+                Expanded(
+                  child: _buildResponsiveDateField(
+                    _locale.toDate,
+                    _toDateController,
+                    _fromDateController,
+                    isVerySmallScreen,
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
         
-        SizedBox(height: 8),
+        SizedBox(height: spacing),
         
-        // Branch Selection
+        // Branch & Filters Section - Mobile Optimized with increased height
         _buildCompactSection(
           title: "Branch & Filters",
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildCompactDropdown(
-                CustomDropDownSearch(
-                  isMandatory: true,
-                  bordeText: _locale.selectBranch,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedBranch = value.txtCode ?? "";
-                      _selectedBranchName = value.txtNamee ?? "";
-                    });
-                  },
-                  items: widget.branches,
-                  initialValue: _selectedBranchName.isEmpty ? "Select Branch" : _selectedBranchName,
-                ),
-              ),
-              
-              if (_shouldShowShiftStatus()) ...[
-                SizedBox(height: 8),
-                _buildCompactDropdown(
-                  CustomDropDownSearch(
-                    isMandatory: true,
-                    bordeText: _locale.selectShiftType,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedShiftStatus = value;
-                      });
-                    },
-                    items: <String>[_locale.all, _locale.opened, _locale.closed],
-                    initialValue: _selectedShiftStatus.isEmpty ? "Select Shift" : _selectedShiftStatus,
-                  ),
-                ),
-              ],
-              
-              if (_shouldShowCashier()) ...[
-                SizedBox(height: 8),
-                _buildCompactDropdown(
-                  CustomDropDownSearch(
-                    isMandatory: true,
-                    bordeText: _locale.selectCashier,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedCashier = value.txtNamee ?? "";
-                        _selectedCashierCode = value.txtCode ?? "";
-                      });
-                    },
-                    items: widget.cashiers,
-                    initialValue: _selectedCashier.isEmpty ? "Select Cashier" : _selectedCashier,
-                  ),
-                ),
-              ],
-              
-              if (widget.hint == _locale.cashierLogs) ...[
-                SizedBox(height: 8),
-                _buildCompactDropdown(
-                  CustomDropDownSearch(
-                    isMandatory: true,
-                    bordeText: _locale.selectTransType,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedTransactionType = value.id;
-                        _selectedTransactionDesc = value.description;
-                      });
-                    },
-                    items: transTypeList,
-                    initialValue: _selectedTransactionDesc.isEmpty ? "Select Transaction Type" : _selectedTransactionDesc,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        
-        if (_shouldShowChartType() || widget.hint == _locale.salesByComputer) ...[
-          SizedBox(height: 8),
-          _buildCompactSection(
-            title: "Display Options",
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: _calculateBranchSectionHeight(),
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (_shouldShowChartType())
-                  _buildCompactDropdown(
+                // Branch Selection - Always full width on mobile
+                _buildMobileDropdown(
+                  CustomDropDownSearch(
+                    isMandatory: true,
+                    bordeText: _locale.selectBranch,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedBranch = value.txtCode ?? "";
+                        _selectedBranchName = value.txtNamee ?? "";
+                      });
+                    },
+                    items: widget.branches,
+                    initialValue: _selectedBranchName.isEmpty ? "Select Branch" : _selectedBranchName,
+                  ),
+                ),
+                
+                // Shift Status - Conditional
+                if (_shouldShowShiftStatus()) ...[
+                  SizedBox(height: spacing),
+                  _buildMobileDropdown(
                     CustomDropDownSearch(
                       isMandatory: true,
-                      bordeText: _locale.chartType,
+                      bordeText: _locale.selectShiftType,
                       onChanged: (value) {
                         setState(() {
-                          selectedChartType = value;
+                          _selectedShiftStatus = value;
                         });
                       },
-                      items: charts,
-                      initialValue: selectedChartType.isEmpty ? charts[0] : selectedChartType,
+                      items: <String>[_locale.all, _locale.opened, _locale.closed],
+                      initialValue: _selectedShiftStatus.isEmpty ? "Select Shift" : _selectedShiftStatus,
                     ),
                   ),
+                ],
                 
-                if (widget.hint == _locale.salesByComputer) ...[
-                  if (_shouldShowChartType()) SizedBox(height: 8),
-                  _buildCompactDropdown(
+                // Cashier Selection - Conditional
+                if (_shouldShowCashier()) ...[
+                  SizedBox(height: spacing),
+                  _buildMobileDropdown(
                     CustomDropDownSearch(
                       isMandatory: true,
-                      bordeText: _locale.computers,
+                      bordeText: _locale.selectCashier,
                       onChanged: (value) {
                         setState(() {
-                          selectedComputer = value.computer;
+                          _selectedCashier = value.txtNamee ?? "";
+                          _selectedCashierCode = value.txtCode ?? "";
                         });
                       },
-                      items: widget.computers ?? [],
-                      initialValue: selectedComputer.isEmpty ? widget.computers![0].computer : selectedComputer,
+                      items: widget.cashiers,
+                      initialValue: _selectedCashier.isEmpty ? "Select Cashier" : _selectedCashier,
+                    ),
+                  ),
+                ],
+                
+                // Transaction Type - Conditional
+                if (widget.hint == _locale.cashierLogs) ...[
+                  SizedBox(height: spacing),
+                  _buildMobileDropdown(
+                    CustomDropDownSearch(
+                      isMandatory: true,
+                      bordeText: _locale.selectTransType,
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedTransactionType = value.id;
+                          _selectedTransactionDesc = value.description;
+                        });
+                      },
+                      items: transTypeList,
+                      initialValue: _selectedTransactionDesc.isEmpty ? "Select Transaction Type" : _selectedTransactionDesc,
                     ),
                   ),
                 ],
               ],
+            ),
+          ),
+        ),
+        
+        // Display Options Section - Mobile Optimized with increased height
+        if (_shouldShowChartType() || widget.hint == _locale.salesByComputer) ...[
+          SizedBox(height: spacing),
+          _buildCompactSection(
+            title: "Display Options",
+            child: Container(
+              constraints: BoxConstraints(
+                minHeight: _calculateDisplayOptionsSectionHeight(),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Chart Type
+                  if (_shouldShowChartType())
+                    _buildMobileDropdown(
+                      CustomDropDownSearch(
+                        isMandatory: true,
+                        bordeText: _locale.chartType,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedChartType = value;
+                          });
+                        },
+                        items: charts,
+                        initialValue: selectedChartType.isEmpty ? charts[0] : selectedChartType,
+                      ),
+                    ),
+                  
+                  // Computer Selection
+                  if (widget.hint == _locale.salesByComputer) ...[
+                    if (_shouldShowChartType()) SizedBox(height: spacing),
+                    _buildMobileDropdown(
+                      CustomDropDownSearch(
+                        isMandatory: true,
+                        bordeText: _locale.computers,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedComputer = value.computer;
+                          });
+                        },
+                        items: widget.computers ?? [],
+                        initialValue: selectedComputer.isEmpty ? 
+                          (widget.computers?.isNotEmpty == true ? widget.computers![0].computer : "") : 
+                          selectedComputer,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ],
@@ -511,50 +548,47 @@ class _FilterDialogState extends State<FilterDialog> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // Date Fields Row - Responsive
+        // Date Fields Row - Desktop
         _buildCompactSection(
           title: "Date Range",
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return Container(
-                constraints: BoxConstraints(
-                  minHeight: 100,
-                  maxHeight: 100,
+          child: Container(
+            constraints: BoxConstraints(
+              minHeight: 100,
+              maxHeight: 100,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _buildResponsiveDateField(
+                    _locale.fromDate,
+                    _fromDateController,
+                    _toDateController,
+                    false,
+                  ),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: _buildResponsiveDateField(
-                        _locale.fromDate,
-                        _fromDateController,
-                        _toDateController,
-                        false,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: _buildResponsiveDateField(
-                        _locale.toDate,
-                        _toDateController,
-                        _fromDateController,
-                        false,
-                      ),
-                    ),
-                  ],
+                SizedBox(width: 12),
+                Expanded(
+                  child: _buildResponsiveDateField(
+                    _locale.toDate,
+                    _toDateController,
+                    _fromDateController,
+                    false,
+                  ),
                 ),
-              );
-            },
+              ],
+            ),
           ),
         ),
         
         SizedBox(height: 8),
         
-        // Filters Row
+        // Filters Section - Desktop
         _buildCompactSection(
           title: "Filters",
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              // First Row: Branch and Shift Status
               Row(
                 children: [
                   Expanded(
@@ -595,6 +629,7 @@ class _FilterDialogState extends State<FilterDialog> {
                 ],
               ),
               
+              // Second Row: Cashier and Transaction Type
               if (_shouldShowCashier() || widget.hint == _locale.cashierLogs) ...[
                 SizedBox(height: 8),
                 Row(
@@ -643,6 +678,7 @@ class _FilterDialogState extends State<FilterDialog> {
           ),
         ),
         
+        // Display Options Section - Desktop
         if (_shouldShowChartType() || widget.hint == _locale.salesByComputer) ...[
           SizedBox(height: 8),
           _buildCompactSection(
@@ -679,7 +715,9 @@ class _FilterDialogState extends State<FilterDialog> {
                           });
                         },
                         items: widget.computers ?? [],
-                        initialValue: selectedComputer.isEmpty ? widget.computers![0].computer : selectedComputer,
+                        initialValue: selectedComputer.isEmpty ? 
+                          (widget.computers?.isNotEmpty == true ? widget.computers![0].computer : "") : 
+                          selectedComputer,
                       ),
                     ),
                   ),
@@ -692,7 +730,45 @@ class _FilterDialogState extends State<FilterDialog> {
     );
   }
 
+  // Helper method to calculate branch section height based on content
+  double _calculateBranchSectionHeight() {
+    final isVerySmallScreen = screenWidth < 320;
+    final dropdownHeight = isVerySmallScreen ? 30.0 : 32.0;
+    final spacing = isVerySmallScreen ? 6.0 : 8.0;
+    
+    int itemCount = 1; // Branch is always shown
+    
+    if (_shouldShowShiftStatus()) itemCount++;
+    if (_shouldShowCashier()) itemCount++;
+    if (widget.hint == _locale.cashierLogs) itemCount++;
+    
+    // Calculate total height: dropdowns + spacing between them + padding
+    double totalHeight = (itemCount * dropdownHeight) + ((itemCount - 1) * spacing) + 16;
+    
+    return totalHeight;
+  }
+
+  // Helper method to calculate display options section height based on content
+  double _calculateDisplayOptionsSectionHeight() {
+    final isVerySmallScreen = screenWidth < 320;
+    final dropdownHeight = isVerySmallScreen ? 30.0 : 32.0;
+    final spacing = isVerySmallScreen ? 6.0 : 8.0;
+    
+    int itemCount = 0;
+    
+    if (_shouldShowChartType()) itemCount++;
+    if (widget.hint == _locale.salesByComputer) itemCount++;
+    
+    // Calculate total height: dropdowns + spacing between them + padding
+    double totalHeight = (itemCount * dropdownHeight) + ((itemCount - 1) * spacing) + 16;
+    
+    return totalHeight;
+  }
+
   Widget _buildCompactSection({required String title, required Widget child}) {
+    final isDesktop = Responsive.isDesktop(context);
+    final isVerySmallScreen = screenWidth < 320;
+    
     return Container(
       decoration: BoxDecoration(
         color: cardColor,
@@ -705,7 +781,10 @@ class _FilterDialogState extends State<FilterDialog> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: EdgeInsets.symmetric(
+              horizontal: isDesktop ? 8 : (isVerySmallScreen ? 6 : 7),
+              vertical: isDesktop ? 4 : 3,
+            ),
             decoration: BoxDecoration(
               color: primaryLight,
               borderRadius: BorderRadius.only(
@@ -717,13 +796,13 @@ class _FilterDialogState extends State<FilterDialog> {
               title,
               style: TextStyle(
                 color: primaryDark,
-                fontSize: 10,
+                fontSize: isDesktop ? 10 : (isVerySmallScreen ? 9 : 9.5),
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(isDesktop ? 8 : (isVerySmallScreen ? 6 : 7)),
             child: child,
           ),
         ],
@@ -732,16 +811,35 @@ class _FilterDialogState extends State<FilterDialog> {
   }
 
   Widget _buildCompactDropdown(Widget child) {
-    return SizedBox(height: 36, child: child);
+    final isDesktop = Responsive.isDesktop(context);
+    final isVerySmallScreen = screenWidth < 320;
+    final height = isDesktop ? 36.0 : (isVerySmallScreen ? 30.0 : 32.0);
+    
+    return SizedBox(height: height, child: child);
   }
 
-  // New responsive date field method
+  // Mobile-specific dropdown builder
+  Widget _buildMobileDropdown(Widget child) {
+    final isVerySmallScreen = screenWidth < 320;
+    final height = isVerySmallScreen ? 30.0 : 32.0;
+    
+    return SizedBox(
+      height: height,
+      width: double.infinity, // Ensure full width on mobile
+      child: child,
+    );
+  }
+
+  // Enhanced responsive date field method
   Widget _buildResponsiveDateField(
     String label, 
     TextEditingController controller, 
     TextEditingController compareController,
     bool isCompact,
   ) {
+    final isDesktop = Responsive.isDesktop(context);
+    final isVerySmallScreen = screenWidth < 320;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -751,22 +849,22 @@ class _FilterDialogState extends State<FilterDialog> {
           label,
           style: TextStyle(
             color: textPrimary,
-            fontSize: isCompact ? 12 : 14,
+            fontSize: isDesktop ? 14 : (isVerySmallScreen ? 11 : 12),
             fontWeight: FontWeight.w500,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 4),
+        SizedBox(height: isDesktop ? 4 : 3),
         Expanded(
           child: Container(
             constraints: BoxConstraints(
-              maxHeight: isCompact ? 28 : 32,
-              minHeight: isCompact ? 28 : 32,
+              maxHeight: isDesktop ? 32 : (isVerySmallScreen ? 26 : 28),
+              minHeight: isDesktop ? 32 : (isVerySmallScreen ? 26 : 28),
             ),
             child: CustomDate(
               readOnly: false,
-              height: isCompact ? 28 : 32,
+              height: isDesktop ? 32 : (isVerySmallScreen ? 26 : 28),
               dateWidth: double.infinity,
               label: "",
               dateController: controller,

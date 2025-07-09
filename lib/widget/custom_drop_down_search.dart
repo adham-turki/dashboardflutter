@@ -72,7 +72,7 @@ class _CustomDropDownSearchState extends State<CustomDropDownSearch> {
       children: [
         SizedBox(
           // width: width,
-          height: height * 0.15,
+          height: height * 0.11,
           child: DropdownSearch<dynamic>(
             enabled: widget.isEnabled ?? true,
             validator: (value) =>

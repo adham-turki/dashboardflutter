@@ -49,54 +49,31 @@ class Components {
 }
 
 Widget blueButton1({
-  width,
-  onPressed,
-  height,
-  textColor,
-  fontSize,
-  fontWeight,
-  Icon? icon, // New parameter for the icon
+  required VoidCallback onPressed,
+  required Color textColor,
+  required Icon icon,
 }) {
-  return ElevatedButton(
-    onPressed: onPressed,
-    style: ElevatedButton.styleFrom(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0), // Make it circular
-        // side: BorderSide(
-        //   color: primary,
-        //   width: 1.0,
-        // ),
-      ),
-      padding: EdgeInsets.all(0),
-      minimumSize: Size(width ?? 50.0, height ?? 50.0),
-      // Remove the primary color from styleFrom since it's set in the gradient
-    ),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        gradient: LinearGradient(
-          colors: [Color.fromARGB(255, 65, 114, 193), primary],
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+  return Container(
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: const [
+        BoxShadow(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          blurRadius: 4,
+          offset: Offset(0, 2),
         ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) icon,
-          // Container(
-          //   alignment: Alignment.center,
-          //   padding: const EdgeInsets.all(10),
-          //   // child: Text(
-          //   //   "" ?? text.toString(),
-          //   //   style: TextStyle(
-          //   //     color: textColor ?? whiteColor,
-          //   //     fontSize: fontSize ?? 13,
-          //   //     fontWeight: fontWeight ?? FontWeight.bold,
-          //   //   ),
-          //   // ),
-          // ),
-        ],
+      ],
+    ),
+    child: Material(
+      color: const Color.fromRGBO(82, 151, 176, 1),
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: onPressed,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          child: icon,
+        ),
       ),
     ),
   );

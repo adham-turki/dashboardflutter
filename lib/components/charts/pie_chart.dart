@@ -4,7 +4,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../model/chart/pie_chart_model.dart';
 import '../../utils/func/converters.dart';
-import 'indicator.dart';
 
 class PieChartComponent extends StatefulWidget {
   final double? width;
@@ -49,7 +48,6 @@ class _PieChartComponentState extends State<PieChartComponent> {
   @override
   void initState() {
     setAttributes();
-    // getBuildWidget();
     super.initState();
   }
 
@@ -64,60 +62,33 @@ class _PieChartComponentState extends State<PieChartComponent> {
       isLoading = true;
     });
 
-    buildWidget = SizedBox(
-      height: isMobile ? height * 0.4 : height * 0.37,
+    buildWidget = Container(
+      height: height,
       width: width,
-      child: Column(
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  height: isMobile ? height * 0.27 : height * 0.14,
-                  child: PieChart(
-                    PieChartData(
-                      centerSpaceRadius: 1,
-                      pieTouchData: PieTouchData(
-                        enabled: true,
-                        touchCallback: (event, pieTouchResponse) {
-                          setState(() {
-                            if (!event.isInterestedForInteractions ||
-                                pieTouchResponse == null ||
-                                pieTouchResponse.touchedSection == null) {
-                              touchedIndex = -1;
-                              return;
-                            }
-                            touchedIndex = pieTouchResponse
-                                .touchedSection!.touchedSectionIndex;
-                          });
-                        },
-                      ),
-                      sections: isEmpty ? noDataList() : showList(dataList),
-                    ),
-                    swapAnimationDuration: Duration(milliseconds: duration),
-                  ),
-                ),
-                Container(
-                  height: isMobile ? height * 0.08 : height * 0.08,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black38),
-                  ),
-                  child: ScrollConfiguration(
-                    behavior: CustomScrollBehavior(),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: showIndicators(dataList),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      padding: const EdgeInsets.all(20), // Add padding to prevent badge cutoff
+      child: Center(
+        child: PieChart(
+          PieChartData(
+            centerSpaceRadius: 1,
+            pieTouchData: PieTouchData(
+              enabled: true,
+              touchCallback: (event, pieTouchResponse) {
+                setState(() {
+                  if (!event.isInterestedForInteractions ||
+                      pieTouchResponse == null ||
+                      pieTouchResponse.touchedSection == null) {
+                    touchedIndex = -1;
+                    return;
+                  }
+                  touchedIndex = pieTouchResponse
+                      .touchedSection!.touchedSectionIndex;
+                });
+              },
             ),
+            sections: isEmpty ? noDataList() : showList(dataList),
           ),
-        ],
+          swapAnimationDuration: Duration(milliseconds: duration),
+        ),
       ),
     );
     setState(() {
@@ -150,13 +121,25 @@ class _PieChartComponentState extends State<PieChartComponent> {
       bool isTouched = i == touchedIndex;
       final radius = isTouched ? radiusHover : radiusNormal;
       PieChartModel data = dataList[i];
+      
       return PieChartSectionData(
         value: data.value,
-        title:
-            "${data.title}\n${Converters.formatNumber(data.value!)}\n${Converters.formatNumber((((data.value ?? 1.0) / total) * 100))}%",
+        // Inner labels always visible
+        title: "${data.title}\n${Converters.formatNumber(data.value!)}\n${Converters.formatNumber((((data.value ?? 1.0) / total) * 100))}%",
         color: data.color,
         radius: radius,
-        titleStyle: const TextStyle(color: Colors.white, fontSize: 10),
+        titleStyle: TextStyle(
+          color: Colors.white, 
+          fontSize: isMobile ? 8 : 10,
+          fontWeight: FontWeight.bold,
+          shadows: [
+            Shadow(
+              offset: const Offset(1, 1),
+              blurRadius: 2,
+              color: Colors.black.withOpacity(0.7),
+            ),
+          ],
+        ),
         borderSide: isTouched
             ? BorderSide(
                 color: borderColor,
@@ -164,8 +147,9 @@ class _PieChartComponentState extends State<PieChartComponent> {
                 width: 5,
               )
             : null,
-        badgeWidget: Responsive.isDesktop(context) ? badgeLabel(data) : null,
-        badgePositionPercentageOffset: 1.5,
+        // Outside badge only appears on hover
+        badgeWidget: isTouched ? badgeLabel(data) : null,
+        badgePositionPercentageOffset: 0.8,
       );
     });
     print("widget.lidt.dataaaa444 ${list.length}");
@@ -173,38 +157,54 @@ class _PieChartComponentState extends State<PieChartComponent> {
     return list;
   }
 
-  Padding badgeLabel(PieChartModel data) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: width * 0.2,
-        height: height * 0.08,
-        decoration: BoxDecoration(
-          color: data.color!.withOpacity(0.5),
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: const [
-            BoxShadow(
-              blurRadius: 5,
-              color: Colors.black38,
-            ),
-          ],
-        ),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                (data.title ?? "NONE").length > 13
-                    ? (data.title ?? "NONE").substring(0, 12)
-                    : (data.title ?? "NONE"),
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-              Text(
-                "${data.value ?? 0.0}",
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              )
-            ],
+  Widget badgeLabel(PieChartModel data) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: data.color!, width: 2),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 8,
+            color: Colors.black.withOpacity(0.3),
+            offset: const Offset(0, 2),
           ),
-        ),
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            (data.title ?? "NONE").length > 15
+                ? "${(data.title ?? "NONE").substring(0, 15)}..."
+                : (data.title ?? "NONE"),
+            style: const TextStyle(
+              color: Colors.white, 
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            Converters.formatNumber(data.value!),
+            style: TextStyle(
+              color: data.color, 
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          Text(
+            "${Converters.formatNumber((((data.value ?? 1.0) / total) * 100))}%",
+            style: const TextStyle(
+              color: Colors.white70, 
+              fontSize: 10,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
@@ -227,22 +227,6 @@ class _PieChartComponentState extends State<PieChartComponent> {
     ];
 
     return noData;
-  }
-
-  List<Widget> showIndicators(List<PieChartModel> dataList) {
-    return List.generate(dataList.length, (i) {
-      PieChartModel data = dataList[i];
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Indicator(
-          color: data.color!,
-          isSquare: true,
-          text: "${data.title!} (${Converters.formatNumber(data.value!)})",
-          size: 10,
-          textSize: 10,
-        ),
-      );
-    });
   }
 
   void setAttributes() {

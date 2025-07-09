@@ -163,7 +163,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                     SizedBox(width: isDesktop ? 8 : 6),
                     Expanded(
                       child: Text(
-                        "Daily Sales Filter",
+                        _locale.dailySalesFilter ?? "Daily Sales Filter",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: isDesktop ? 16 : 14,
@@ -196,7 +196,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                     children: [
                       // Date Section
                       _buildSection(
-                        title: "Date Range",
+                        title: _locale.dateRange ?? "Date Range",
                         child: _buildDateSection(),
                       ),
                       
@@ -204,7 +204,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       
                       // Filters Section
                       _buildSection(
-                        title: "Filters",
+                        title: _locale.filters ?? "Filters",
                         child: _buildFiltersSection(),
                       ),
                       
@@ -212,7 +212,7 @@ class _FilterDialogDailySalesState extends State<FilterDialogDailySales> {
                       
                       // Display Options Section
                       _buildSection(
-                        title: "Display Options",
+                        title: _locale.displayOptions ?? "Display Options",
                         child: _buildDisplaySection(),
                       ),
                     ],

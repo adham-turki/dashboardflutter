@@ -297,7 +297,6 @@ class _LogsReportsScreenState extends State<LogsReportsScreen> {
         ),
         child: Column(
           children: [
-            // Enhanced Header with better spacing and visual hierarchy
             Container(
               padding: const EdgeInsets.all(16),
               decoration: const BoxDecoration(

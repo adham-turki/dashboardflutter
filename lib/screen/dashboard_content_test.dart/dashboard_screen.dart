@@ -123,106 +123,125 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget desktopDashboard() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: CustomCards(
-                height: height * 0.5,
-                content: const DailySalesDashboard(),
-              ),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final usableHeight = screenHeight - kToolbarHeight - MediaQuery.of(context).padding.top - MediaQuery.of(context).padding.bottom;
+    final cardHeight = (usableHeight - 28) / 2;
+
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            height: cardHeight,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: CustomCards(
+                    height: cardHeight,
+                    content: const DailySalesDashboard(),
+                  ),
+                ),
+                SizedBox(width: width * 0.003),
+                payTypesSearchCriteria.chartType == locale.pieChart
+                    ? totalSalesByPayTypes.length <= 4
+                        ? pieChart(pieData, locale.salesByPaymentTypes, cardHeight)
+                        : salesByPaymentTypesBarChart(locale.salesByPaymentTypes, cardHeight)
+                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes, cardHeight),
+              ],
             ),
-            SizedBox(width: width * 0.003),
-            payTypesSearchCriteria.chartType == locale.pieChart
-                ? totalSalesByPayTypes.length <= 4
-                    ? pieChart(pieData, locale.salesByPaymentTypes)
-                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
-                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
-          ],
-        ),
-        SizedBox(height: height * 0.01),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              flex: 2,
-              child: CustomCards(
-                height: height * 0.5,
-                content: const BalanceBarChartDashboard(),
-              ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: cardHeight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: CustomCards(
+                    height: cardHeight,
+                    content: const BalanceBarChartDashboard(),
+                  ),
+                ),
+                SizedBox(width: width * 0.003),
+                Expanded(
+                  flex: 3,
+                  child: CustomCards(
+                    height: cardHeight,
+                    content: const BranchesSalesByCatDashboard(),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              flex: 3,
-              child: CustomCards(
-                height: height * 0.5,
-                content: const BranchesSalesByCatDashboard(),
-              ),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget mobileDashboard() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            payTypesSearchCriteria.chartType == locale.pieChart
-                ? totalSalesByPayTypes.length <= 4
-                    ? pieChart(pieData, locale.salesByPaymentTypes)
-                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes)
-                : salesByPaymentTypesBarChart(locale.salesByPaymentTypes),
-          ],
-        ),
-        SizedBox(height: height * 0.01),
-        Row(
-          children: [
-            Expanded(
-              child: CustomCards(
-                height: height * 0.6,
-                content: const DailySalesDashboard(),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: payTypesSearchCriteria.chartType == locale.pieChart
+                    ? totalSalesByPayTypes.length <= 4
+                        ? pieChart(pieData, locale.salesByPaymentTypes, height * 0.6)
+                        : salesByPaymentTypesBarChart(locale.salesByPaymentTypes, height * 0.6)
+                    : salesByPaymentTypesBarChart(locale.salesByPaymentTypes, height * 0.6),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: height * 0.01),
-        Row(
-          children: [
-            Expanded(
-              child: CustomCards(
-                height: height * 0.6,
-                content: const BalanceBarChartDashboard(),
+            ],
+          ),
+          SizedBox(height: height * 0.01),
+          Row(
+            children: [
+              Expanded(
+                child: CustomCards(
+                  height: height * 0.6,
+                  content: const DailySalesDashboard(),
+                ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: height * 0.01),
-        Row(
-          children: [
-            Expanded(
-              child: CustomCards(
-                height: height * 0.6,
-                content: const BranchesSalesByCatDashboard(),
+            ],
+          ),
+          SizedBox(height: height * 0.01),
+          Row(
+            children: [
+              Expanded(
+                child: CustomCards(
+                  height: height * 0.6,
+                  content: const BalanceBarChartDashboard(),
+                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+          SizedBox(height: height * 0.01),
+          Row(
+            children: [
+              Expanded(
+                child: CustomCards(
+                  height: height * 0.6,
+                  content: const BranchesSalesByCatDashboard(),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  Widget pieChart(List<PieChartModel> pieData, String title) {
+  Widget pieChart(List<PieChartModel> pieData, String title, double cardHeight) {
     return Expanded(
       flex: 1,
       child: Container(
-        height: isDesktop ? height * 0.5 : height * 0.6,
-        constraints: const BoxConstraints(
-          minHeight: 300,
-          maxHeight: 600,
+        height: cardHeight,
+        constraints: BoxConstraints(
+          minHeight: 250,
+          maxHeight: cardHeight,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -364,15 +383,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         )
                       : pieData.isNotEmpty
-                          ? Center(
-                              child: SizedBox(
-                                height: isDesktop
-                                    ? MediaQuery.of(context).size.height * 0.4
-                                    : MediaQuery.of(context).size.height * 0.45,
-                                child: PieDashboardChart(
-                                  dataList: pieData,
-                                ),
-                              ),
+                          ? LayoutBuilder(
+                              builder: (context, constraints) {
+                                final availableSize = constraints.biggest;
+                                final chartSize = availableSize.shortestSide * 0.7; // Reduced to avoid overflow
+                                return Center(
+                                  child: SizedBox(
+                                    height: chartSize,
+                                    width: chartSize,
+                                    child: PieDashboardChart(
+                                      dataList: pieData,
+                                    ),
+                                  ),
+                                );
+                              },
                             )
                           : Center(
                               child: Column(
@@ -403,14 +427,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget salesByPaymentTypesBarChart(String title) {
+  Widget salesByPaymentTypesBarChart(String title, double cardHeight) {
     return Expanded(
       flex: 1,
       child: Container(
-        height: isDesktop ? height * 0.5 : height * 0.6,
-        constraints: const BoxConstraints(
-          minHeight: 300,
-          maxHeight: 600,
+        height: cardHeight,
+        constraints: BoxConstraints(
+          minHeight: 250,
+          maxHeight: cardHeight,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -552,84 +576,89 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         )
                       : barChartData.isNotEmpty
-                          ? Scrollbar(
-                              controller: _scrollController2,
-                              thumbVisibility: true,
-                              thickness: 6,
-                              trackVisibility: true,
-                              radius: const Radius.circular(8),
-                              child: SingleChildScrollView(
-                                reverse: locale.localeName == "ar" ? true : false,
-                                controller: _scrollController2,
-                                scrollDirection: Axis.horizontal,
-                                child: SizedBox(
-                                  height: isDesktop
-                                      ? MediaQuery.of(context).size.height * 0.4
-                                      : MediaQuery.of(context).size.height * 0.45,
-                                  width: isDesktop
-                                      ? barChartData.length > 20
-                                          ? MediaQuery.of(context).size.width * 0.9 * (barChartData.length / 20)
-                                          : MediaQuery.of(context).size.width * 0.9
-                                      : barChartData.length > 5
-                                          ? MediaQuery.of(context).size.width * 0.95 * (barChartData.length / 10)
-                                          : MediaQuery.of(context).size.width * 0.95,
-                                  child: BarChart(
-                                    BarChartData(
-                                      maxY: maxY * 1.4,
-                                      barTouchData: BarTouchData(
-                                        touchTooltipData: BarTouchTooltipData(
-                                          getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                                            return BarTooltipItem(
-                                              "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
-                                              const TextStyle(color: Colors.white),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      titlesData: FlTitlesData(
-                                        rightTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false),
-                                        ),
-                                        bottomTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                            showTitles: true,
-                                            reservedSize: 40,
-                                            getTitlesWidget: (value, meta) {
-                                              int index = value.toInt();
-                                              if (index >= 0 && index < xLabels.length) {
-                                                return Transform.rotate(
-                                                  angle: -30 * 3.14159 / 180,
-                                                  child: SizedBox(
-                                                    width: 200,
-                                                    child: Center(
-                                                      child: Text(
-                                                        xLabels[index],
-                                                        style: TextStyle(fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  ),
+                          ? LayoutBuilder(
+                              builder: (context, constraints) {
+                                // Calculate chart width based on data length
+                                final chartWidth = isDesktop
+                                    ? barChartData.length > 20
+                                        ? constraints.maxWidth * (barChartData.length / 20)
+                                        : constraints.maxWidth
+                                    : barChartData.length > 5
+                                        ? constraints.maxWidth * (barChartData.length / 10)
+                                        : constraints.maxWidth;
+                                // Show Scrollbar only if content exceeds available width
+                                return Scrollbar(
+                                  controller: chartWidth > constraints.maxWidth ? _scrollController2 : null,
+                                  thumbVisibility: chartWidth > constraints.maxWidth,
+                                  trackVisibility: chartWidth > constraints.maxWidth,
+                                  thickness: 6,
+                                  radius: const Radius.circular(8),
+                                  child: SingleChildScrollView(
+                                    reverse: locale.localeName == "ar" ? true : false,
+                                    controller: _scrollController2,
+                                    scrollDirection: Axis.horizontal,
+                                    child: SizedBox(
+                                      height: constraints.maxHeight,
+                                      width: chartWidth,
+                                      child: BarChart(
+                                        BarChartData(
+                                          maxY: maxY * 1.4,
+                                          barTouchData: BarTouchData(
+                                            touchTooltipData: BarTouchTooltipData(
+                                              getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                                                return BarTooltipItem(
+                                                  "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                                  const TextStyle(color: Colors.white),
                                                 );
-                                              }
-                                              return Text("");
-                                            },
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                        leftTitles: AxisTitles(
-                                          sideTitles: SideTitles(
-                                            getTitlesWidget: (value, meta) => leftTitleWidgets(value),
-                                            showTitles: true,
-                                            reservedSize: 35,
+                                          titlesData: FlTitlesData(
+                                            rightTitles: AxisTitles(
+                                              sideTitles: SideTitles(showTitles: false),
+                                            ),
+                                            bottomTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                showTitles: true,
+                                                reservedSize: 40,
+                                                getTitlesWidget: (value, meta) {
+                                                  int index = value.toInt();
+                                                  if (index >= 0 && index < xLabels.length) {
+                                                    return Transform.rotate(
+                                                      angle: -30 * 3.14159 / 180,
+                                                      child: SizedBox(
+                                                        width: 200,
+                                                        child: Center(
+                                                          child: Text(
+                                                            xLabels[index],
+                                                            style: TextStyle(fontSize: 12),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                  return Text("");
+                                                },
+                                              ),
+                                            ),
+                                            leftTitles: AxisTitles(
+                                              sideTitles: SideTitles(
+                                                getTitlesWidget: (value, meta) => leftTitleWidgets(value),
+                                                showTitles: true,
+                                                reservedSize: 35,
+                                              ),
+                                            ),
+                                            topTitles: AxisTitles(
+                                              sideTitles: SideTitles(showTitles: false),
+                                            ),
                                           ),
-                                        ),
-                                        topTitles: AxisTitles(
-                                          sideTitles: SideTitles(showTitles: false),
+                                          barGroups: barChartData,
                                         ),
                                       ),
-                                      barGroups: barChartData,
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             )
                           : Center(
                               child: Column(

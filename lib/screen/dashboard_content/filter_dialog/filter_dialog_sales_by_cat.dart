@@ -203,7 +203,7 @@ class _FilterDialogSalesByCategoryState
                     SizedBox(width: isDesktop ? 8 : 6),
                     Expanded(
                       child: Text(
-                        "Sales by Category Filter",
+                        _locale.salesByCategoryFilter ?? "Sales by Category Filter",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: isDesktop ? 16 : 14,
@@ -236,7 +236,7 @@ class _FilterDialogSalesByCategoryState
                     children: [
                       // Date Range Section
                       _buildSection(
-                        title: "Date Range",
+                        title: _locale.dateRange ?? "Date Range",
                         child: _buildDateSection(),
                       ),
                       
@@ -244,7 +244,7 @@ class _FilterDialogSalesByCategoryState
                       
                       // Category & Filters Section
                       _buildSection(
-                        title: "Category & Filters",
+                        title: _locale.categoryAndFilters ?? "Category & Filters",
                         child: _buildFiltersSection(),
                       ),
                       
@@ -252,7 +252,7 @@ class _FilterDialogSalesByCategoryState
                       
                       // Stocks Section
                       _buildSection(
-                        title: "Stock Selection",
+                        title: _locale.stockSelection ?? "Stock Selection",
                         child: _buildStocksSection(),
                       ),
                       
@@ -260,7 +260,7 @@ class _FilterDialogSalesByCategoryState
                       
                       // Display Options Section
                       _buildSection(
-                        title: "Display Options",
+                        title: _locale.displayOptions ?? "Display Options",
                         child: _buildDisplaySection(),
                       ),
                     ],

@@ -309,44 +309,111 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   bool filterPressed = false;
-  Widget diffClosedCashChart(List<ChartData> data, String title) {
-    return SizedBox(
-      height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
-      child: Card(
-        elevation: 2, // Remove shadow effect
-        color: Colors.white, // Set background to transparent
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+Widget diffClosedCashChart(List<ChartData> data, String title) {
+  return Container(
+    height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
-        child: Column(
-          children: [
-            Row(
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: Responsive.isDesktop(context) ? 16 : 12,
+              vertical: Responsive.isDesktop(context) ? 8 : 6,
+            ),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(82, 151, 176, 0.05),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        SelectableText(title,
-                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        if (Responsive.isDesktop(context))
-                          title == _locale.diffClosedCashByShifts
-                              ? Text(
-                                  ' (${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}, ${_locale.decreaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
-                                )
-                              // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})")
-                              : SizedBox.shrink()
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: Responsive.isDesktop(context) ? 14 : 12,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Responsive.isDesktop(context) ? 6 : 4,
+                              vertical: Responsive.isDesktop(context) ? 2 : 1,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '(${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}, ${_locale.decreaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
+                              style: TextStyle(
+                                fontSize: Responsive.isDesktop(context) ? 10 : 8,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (Responsive.isDesktop(context))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4, left: 12),
+                          child: Text(
+                            "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
+                            style: TextStyle(
+                              fontSize: Responsive.isDesktop(context) ? 10 : 8,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.diffClosedCashByShifts)
-                    Text(
-                        "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
                     if (!filterPressed) {
@@ -354,12 +421,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                         filterPressed = true;
                       });
                       List<CashierModel> cashiers = [];
-
                       cashiers = await TotalSalesController().getAllCashiers();
-
-                      await TotalSalesController()
-                          .getAllBranches()
-                          .then((value) {
+                      await TotalSalesController().getAllBranches().then((value) {
                         setState(() {
                           filterPressed = false;
                         });
@@ -368,10 +431,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           context: context,
                           builder: (context) {
                             return FilterDialog(
-                                cashiers: cashiers,
-                                branches: value,
-                                filter: diffClosedCashShiftReportCrit,
-                                hint: title);
+                              cashiers: cashiers,
+                              branches: value,
+                              filter: diffClosedCashShiftReportCrit,
+                              hint: title,
+                            );
                           },
                         ).then((value) {
                           if (value != false) {
@@ -388,50 +452,68 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   icon: Icon(
                     Icons.filter_list_sharp,
                     color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
+                    size: Responsive.isDesktop(context) ? height * 0.025 : height * 0.018,
                   ),
-                )
+                ),
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.diffClosedCashByShifts)
-                title == _locale.diffClosedCashByShifts
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            '(${_locale.increaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffIncreaseClosedCashShiftReport)}, ${_locale.decreaseDiffSum}: \u200E${NumberFormat('#,###', 'en_US').format(totalDiffDecreaseClosedCashShiftReport)})',
-                          )
-                          // " (${Converters.formatNumberRounded(double.parse(Converters.formatNumberDigits(totalDiffClosedCashShiftReport)))})"),
-                        ],
-                      )
-                    : SizedBox.shrink(),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.diffClosedCashByShifts)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            isLoading
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(child: CircularProgressIndicator()))
-                : (data.isNotEmpty)
-                    ? diffClosedCashWidget(data)
-                    : SizedBox(
-                        height: height * 0.38,
-                        child: Center(child: Text(_locale.noDataAvailable)),
-                      )
-          ],
-        ),
+          ),
+          if (!Responsive.isDesktop(context))
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "(${diffClosedCashShiftReportCrit.fromDate} - ${diffClosedCashShiftReportCrit.toDate})",
+                    style: TextStyle(
+                      fontSize: height * 0.01,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color.fromRGBO(82, 151, 176, 1),
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : data.isNotEmpty
+                      ? diffClosedCashWidget(data)
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bar_chart_outlined,
+                                size: 48,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _locale.noDataAvailable,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
+    ),
     );
-  }
-
+  }  
   Consumer<ScreenContentProvider> diffClosedCashWidget(List<ChartData> data) {
     return Consumer<ScreenContentProvider>(builder: (context, value, child) {
       return Scrollbar(
@@ -542,68 +624,133 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   bool filterPressed2 = false;
-  Widget diffCashChart(List<ChartData> data, String title) {
-    return SizedBox(
-      height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
-      child: Card(
-        elevation: 2, // Remove shadow effect
-        color: Colors.white, // Set background to transparent
-        shape: const RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.zero, // Remove corner radius for a flat edge
+Widget diffCashChart(List<ChartData> data, String title) {
+  return Container(
+    height: Responsive.isDesktop(context) ? height * 0.465 : height * 0.48,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(8),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.1),
+          blurRadius: 8,
+          offset: const Offset(0, 2),
         ),
-        child: Column(
-          children: [
-            Row(
+      ],
+    ),
+    child: Card(
+      elevation: 0,
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: const BorderSide(
+          color: Color.fromRGBO(82, 151, 176, 0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: Responsive.isDesktop(context) ? 16 : 12,
+              vertical: Responsive.isDesktop(context) ? 8 : 6,
+            ),
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(82, 151, 176, 0.05),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        SelectableText(title,
-                            style: TextStyle(fontSize: isDesktop ? 15 : 18)),
-                        if (Responsive.isDesktop(context))
-                          title == _locale.diffCashByShifts
-                              ? Text(
-                                  '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
-                              : SizedBox.shrink()
-                      ],
-                    ),
-                  ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 4,
+                            height: 16,
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 1),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: SelectableText(
+                              title,
+                              style: TextStyle(
+                                fontSize: Responsive.isDesktop(context) ? 14 : 12,
+                                fontWeight: FontWeight.w600,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 1,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: Responsive.isDesktop(context) ? 6 : 4,
+                              vertical: Responsive.isDesktop(context) ? 2 : 1,
+                            ),
+                            decoration: BoxDecoration(
+                              color: const Color.fromRGBO(82, 151, 176, 0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})',
+                              style: TextStyle(
+                                fontSize: Responsive.isDesktop(context) ? 10 : 8,
+                                fontWeight: FontWeight.w500,
+                                color: const Color.fromRGBO(82, 151, 176, 1),
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      if (Responsive.isDesktop(context))
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4, left: 12),
+                          child: Text(
+                            "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
+                            style: TextStyle(
+                              fontSize: Responsive.isDesktop(context) ? 10 : 8,
+                              color: Colors.grey.shade600,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-                if (Responsive.isDesktop(context))
-                  if (title == _locale.diffCashByShifts)
-                    Text(
-                        "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
-                        style: TextStyle(fontSize: isDesktop ? 13 : 16)),
                 blueButton1(
                   onPressed: () async {
                     if (!filterPressed2) {
                       setState(() {
                         filterPressed2 = true;
                       });
-
                       List<CashierModel> cashiers = [];
-
                       cashiers = await TotalSalesController().getAllCashiers();
-                      await TotalSalesController()
-                          .getAllBranches()
-                          .then((value) {
+                      await TotalSalesController().getAllBranches().then((value) {
                         setState(() {
                           filterPressed2 = false;
                         });
-
                         showDialog(
                           barrierDismissible: false,
                           context: context,
                           builder: (context) {
                             return FilterDialog(
-                                cashiers: cashiers,
-                                branches: value,
-                                filter: diffCashShiftByCashierReportCrit,
-                                hint: title);
+                              cashiers: cashiers,
+                              branches: value,
+                              filter: diffCashShiftByCashierReportCrit,
+                              hint: title,
+                            );
                           },
                         ).then((value) {
                           if (value != false) {
@@ -620,45 +767,66 @@ class _ReportsScreenState extends State<ReportsScreen> {
                   icon: Icon(
                     Icons.filter_list_sharp,
                     color: Colors.white,
-                    size: isDesktop ? height * 0.035 : height * 0.03,
+                    size: Responsive.isDesktop(context) ? height * 0.025 : height * 0.018,
                   ),
-                )
+                ),
               ],
             ),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.diffCashByShifts)
-                title == _locale.diffCashByShifts
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                              '(\u200E${NumberFormat('#,###', 'en_US').format(totalDiffCashShiftByCashierReport)})')
-                        ],
-                      )
-                    : SizedBox.shrink(),
-            if (!Responsive.isDesktop(context))
-              if (title == _locale.diffCashByShifts)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                        "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
-                        style: TextStyle(fontSize: height * 0.013)),
-                  ],
-                ),
-            isLoading1
-                ? SizedBox(
-                    height: height * 0.35,
-                    child: const Center(child: CircularProgressIndicator()))
-                : (data.isNotEmpty)
-                    ? diffCashWidget(data)
-                    : SizedBox(
-                        height: height * 0.38,
-                        child: Center(child: Text(_locale.noDataAvailable)),
-                      )
-          ],
-        ),
+          ),
+          if (!Responsive.isDesktop(context))
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "(${diffCashShiftByCashierReportCrit.fromDate} - ${diffCashShiftByCashierReportCrit.toDate})",
+                    style: TextStyle(
+                      fontSize: height * 0.01,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: isLoading1
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: Color.fromRGBO(82, 151, 176, 1),
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : data.isNotEmpty
+                      ? diffCashWidget(data)
+                      : Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bar_chart_outlined,
+                                size: 48,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _locale.noDataAvailable,
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+            ),
+          ),
+        ],
       ),
+    ),
     );
   }
 

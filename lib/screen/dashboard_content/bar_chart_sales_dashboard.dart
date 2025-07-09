@@ -110,63 +110,7 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
   void initState() {
     getAllCodeReports();
     _startTimer();
-
     super.initState();
-  }
-
-  // Helper method to get available chart area dimensions
-  Size getAvailableChartArea() {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-    
-    double headerHeight = Responsive.isDesktop(context) ? 80 : 90;
-    double dateRowHeight = Responsive.isDesktop(context) ? 0 : 40;
-    double totalPadding = 40;
-    double availableHeight = (Responsive.isDesktop(context) 
-        ? screenHeight * 0.48 
-        : screenHeight * 0.6) - headerHeight - dateRowHeight - totalPadding;
-    
-    return Size(screenWidth, max(availableHeight, 250));
-  }
-
-  // Helper method to get responsive chart dimensions
-  Size getResponsiveChartSize() {
-    final availableArea = getAvailableChartArea();
-    final screenWidth = MediaQuery.of(context).size.width;
-    
-    if (Responsive.isDesktop(context)) {
-      return Size(
-        min(screenWidth * 0.7, 800),
-        min(availableArea.height, 350),
-      );
-    } else if (Responsive.isTablet(context)) {
-      return Size(
-        min(screenWidth * 0.85, 600),
-        min(availableArea.height, 280),
-      );
-    } else {
-      return Size(
-        min(screenWidth * 0.95, 400),
-        min(availableArea.height, 240),
-      );
-    }
-  }
-
-  // Helper method to get pie chart specific dimensions
-  Size getPieChartSize() {
-    final availableArea = getAvailableChartArea();
-    final screenWidth = MediaQuery.of(context).size.width;
-    
-    if (Responsive.isDesktop(context)) {
-      double maxSize = min(screenWidth * 0.35, availableArea.height * 0.9);
-      return Size(maxSize, maxSize);
-    } else if (Responsive.isTablet(context)) {
-      double maxSize = min(screenWidth * 0.5, availableArea.height * 0.85);
-      return Size(maxSize, maxSize);
-    } else {
-      double maxSize = min(screenWidth * 0.8, availableArea.height * 0.8);
-      return Size(maxSize, maxSize);
-    }
   }
 
   @override
@@ -182,228 +126,219 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
         ? ""
         : DatesController().formatDateReverse(toDateController.text);
 
-    return Container(
-      height: Responsive.isDesktop(context)
-          ? min(MediaQuery.of(context).size.height * 0.48, 550)
-          : min(MediaQuery.of(context).size.height * 0.6, 500),
-      constraints: BoxConstraints(
-        minHeight: 300,
-        maxHeight: Responsive.isDesktop(context) ? 550 : 550,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Card(
-        elevation: 0,
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: const BorderSide(
-            color: Color.fromRGBO(82, 151, 176, 0.2),
-            width: 1,
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: Responsive.isDesktop(context) ? 6 : 10,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          height: constraints.maxHeight,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
               ),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(82, 151, 176, 0.05),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(8),
-                  topRight: Radius.circular(8),
-                ),
+            ],
+          ),
+          child: Card(
+            elevation: 0,
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+              side: const BorderSide(
+                color: Color.fromRGBO(82, 151, 176, 0.2),
+                width: 1,
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
+            ),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: Responsive.isDesktop(context) ? 6 : 10,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Color.fromRGBO(82, 151, 176, 0.05),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8),
+                      topRight: Radius.circular(8),
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Container(
-                              width: 4,
-                              height: 18,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(82, 151,176, 1),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
+                            Row(
+                              children: [
+                                Container(
+                                  width: 4,
+                                  height: 18,
+                                  decoration: BoxDecoration(
+                                    color: const Color.fromRGBO(82, 151,176, 1),
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: ValueListenableBuilder(
+                                    valueListenable: totalBranchesSale,
+                                    builder: (context, value, child) {
+                                      return SelectableText(
+                                        "${_locale.salesByBranches} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})",
+                                        style: TextStyle(
+                                          fontSize: isDesktop ? 15 : 17,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color.fromRGBO(82, 151, 176, 1),
+                                        ),
+                                        maxLines: 1,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            Flexible(
-                              child: ValueListenableBuilder(
-                                valueListenable: totalBranchesSale,
-                                builder: (context, value, child) {
-                                  return SelectableText(
-                                    "${_locale.salesByBranches} (\u200E${NumberFormat('#,###', 'en_US').format(double.parse(totalBranchesSale.value.toString()))})",
-                                    style: TextStyle(
-                                      fontSize: isDesktop ? 15 : 17,
-                                      fontWeight: FontWeight.w600,
-                                      color: const Color.fromRGBO(82, 151, 176, 1),
-                                    ),
-                                    maxLines: 1,
-                                  );
-                                },
+                            if (Responsive.isDesktop(context))
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4, left: 12),
+                                child: Text(
+                                  _locale.localeName == "en"
+                                      ? "(${fromDateController.text} - ${toDateController.text})"
+                                      : "($fromDate - $toDate)",
+                                  style: TextStyle(
+                                    fontSize: isDesktop ? 11 : 13,
+                                    color: Colors.grey.shade600,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
                               ),
-                            ),
                           ],
                         ),
-                        if (Responsive.isDesktop(context))
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4, left: 12),
-                            child: Text(
-                              _locale.localeName == "en"
-                                  ? "(${fromDateController.text} - ${toDateController.text})"
-                                  : "($fromDate - $toDate)",
-                              style: TextStyle(
-                                fontSize: isDesktop ? 11 : 13,
-                                color: Colors.grey.shade600,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
+                      ),
+                      const SizedBox(width: 8),
+                      SizedBox(
+                        width: isDesktop
+                            ? MediaQuery.of(context).size.width * 0.08
+                            : MediaQuery.of(context).size.width * 0.27,
+                        child: blueButton1(
+                          icon: Icon(
+                            Icons.filter_list_sharp,
+                            color: whiteColor,
+                            size: isDesktop ? height * 0.03 : height * 0.025,
                           ),
+                          textColor: const Color.fromARGB(255, 255, 255, 255),
+                          onPressed: () {
+                            if (isLoading == false) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return FilterDialogSalesByBranches(
+                                    selectedChart: getChartByCode(selectedChart, _locale),
+                                    selectedPeriod: getPeriodByCode(period, _locale),
+                                    fromDate: fromDateController.text,
+                                    toDate: toDateController.text,
+                                    onFilter: (selectedPeriod, fromDate, toDate, chart) {
+                                      fromDateController.text = fromDate;
+                                      toDateController.text = toDate;
+                                      period = getPeriodByName(selectedPeriod, _locale);
+                                      selectedChart = getChartByName(chart, _locale);
+                                      SearchCriteria searchCriteria = SearchCriteria(
+                                        fromDate: fromDateController.text,
+                                        toDate: toDateController.text.isEmpty
+                                            ? todayDate
+                                            : toDateController.text,
+                                        voucherStatus: -100,
+                                      );
+                                      setSearchCriteria(searchCriteria);
+                                    },
+                                  );
+                                },
+                              ).then((value) async {
+                                setState(() {
+                                  _timer!.cancel();
+                                  isLoading = true;
+                                });
+                                getSalesByBranch().then((value) {
+                                  setState(() {
+                                    _startTimer();
+                                    if (selectedChart == Pie_Chart) {
+                                      if (barData.length < 4) {
+                                        selectedChart = Pie_Chart;
+                                      } else {
+                                        selectedChart = Bar_Chart;
+                                      }
+                                    }
+                                    isLoading = false;
+                                  });
+                                });
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                if (!Responsive.isDesktop(context))
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          _locale.localeName == "en"
+                              ? "(${fromDateController.text} - ${toDateController.text})"
+                              : "($fromDate - $toDate)",
+                          style: TextStyle(
+                            fontSize: height * 0.013,
+                            color: Colors.grey.shade600,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: isDesktop
-                        ? MediaQuery.of(context).size.width * 0.08
-                        : MediaQuery.of(context).size.width * 0.27,
-                    child: blueButton1(
-                      icon: Icon(
-                        Icons.filter_list_sharp,
-                        color: whiteColor,
-                        size: isDesktop ? height * 0.03 : height * 0.025,
-                      ),
-                      textColor: const Color.fromARGB(255, 255, 255, 255),
-                      height: isDesktop ? height * 0.008 : height * 0.035,
-                      fontSize: isDesktop ? height * 0.016 : height * 0.015,
-                      width: isDesktop
-                          ? width * 0.08
-                          : width * 0.27,
-                      onPressed: () {
-                        if (isLoading == false) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return FilterDialogSalesByBranches(
-                                selectedChart: getChartByCode(selectedChart, _locale),
-                                selectedPeriod: getPeriodByCode(period, _locale),
-                                fromDate: fromDateController.text,
-                                toDate: toDateController.text,
-                                onFilter: (selectedPeriod, fromDate, toDate, chart) {
-                                  fromDateController.text = fromDate;
-                                  toDateController.text = toDate;
-                                  period = getPeriodByName(selectedPeriod, _locale);
-                                  selectedChart = getChartByName(chart, _locale);
-                                  SearchCriteria searchCriteria = SearchCriteria(
-                                    fromDate: fromDateController.text,
-                                    toDate: toDateController.text.isEmpty
-                                        ? todayDate
-                                        : toDateController.text,
-                                    voucherStatus: -100,
-                                  );
-                                  setSearchCriteria(searchCriteria);
-                                },
-                              );
-                            },
-                          ).then((value) async {
-                            setState(() {
-                              _timer!.cancel();
-                              isLoading = true;
-                            });
-                            getSalesByBranch().then((value) {
-                              setState(() {
-                                _startTimer();
-                                if (selectedChart == Pie_Chart) {
-                                  if (barData.length < 4) {
-                                    selectedChart = Pie_Chart;
-                                  } else {
-                                    selectedChart = Bar_Chart;
-                                  }
-                                }
-                                isLoading = false;
-                              });
-                            });
-                          });
-                        }
-                      },
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: Responsive.isDesktop(context) ? 2 : 6,
                     ),
+                    child: isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Color.fromRGBO(82, 151, 176, 1),
+                              strokeWidth: 3,
+                            ),
+                          )
+                        : _buildChartContent(constraints),
                   ),
-                ],
-              ),
-            ),
-            if (!Responsive.isDesktop(context))
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      _locale.localeName == "en"
-                          ? "(${fromDateController.text} - ${toDateController.text})"
-                          : "($fromDate - $toDate)",
-                      style: TextStyle(
-                        fontSize: height * 0.013,
-                        color: Colors.grey.shade600,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ],
                 ),
-              ),
-            Expanded(
-              child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: Responsive.isDesktop(context) ? 2 : 6,
-                ),
-                child: isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Color.fromRGBO(82, 151, 176, 1),
-                          strokeWidth: 3,
-                        ),
-                      )
-                    : _buildChartContent(),
-              ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildChartContent() {
+  Widget _buildChartContent(BoxConstraints constraints) {
     if (selectedChart == Bar_Chart || (selectedChart == Pie_Chart && barData.length >= 4)) {
-      return _buildBarChart();
+      return _buildBarChart(constraints);
     } else if (selectedChart == Line_Chart) {
-      return _buildLineChart();
+      return _buildLineChart(constraints);
     } else {
-      return _buildPieChart();
+      return _buildPieChart(constraints);
     }
   }
 
-  Widget _buildBarChart() {
-    final chartSize = getResponsiveChartSize();
-    
+  Widget _buildBarChart(BoxConstraints constraints) {
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (context, chartConstraints) {
         return Scrollbar(
           thumbVisibility: true,
           thickness: 6,
@@ -412,14 +347,14 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
           child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: SizedBox(
-              height: min(chartSize.height, constraints.maxHeight),
+              height: chartConstraints.maxHeight,
               width: Responsive.isDesktop(context)
                   ? barData.length > 20
-                      ? chartSize.width * (barData.length / 20)
-                      : chartSize.width
+                      ? chartConstraints.maxWidth * (barData.length / 20)
+                      : chartConstraints.maxWidth
                   : barData.length > 5
-                      ? chartSize.width * (barData.length / 10)
-                      : chartSize.width,
+                      ? chartConstraints.maxWidth * (barData.length / 10)
+                      : chartConstraints.maxWidth,
               child: BarDashboardChart(
                 barChartData: barData,
                 isMax: false,
@@ -432,14 +367,12 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     );
   }
 
-  Widget _buildLineChart() {
-    final chartSize = getResponsiveChartSize();
-    
+  Widget _buildLineChart(BoxConstraints constraints) {
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (context, chartConstraints) {
         return SizedBox(
-          height: min(chartSize.height, constraints.maxHeight),
-          width: min(chartSize.width, constraints.maxWidth),
+          height: chartConstraints.maxHeight,
+          width: chartConstraints.maxWidth,
           child: LineDashboardChart(
             isMax: false,
             isMedium: false,
@@ -451,34 +384,18 @@ class _BalanceBarChartDashboardState extends State<BalanceBarChartDashboard> {
     );
   }
 
-  Widget _buildPieChart() {
-    final pieSize = getPieChartSize();
-    
+  Widget _buildPieChart(BoxConstraints constraints) {
     return LayoutBuilder(
-      builder: (context, constraints) {
-        double horizontalPadding = Responsive.isDesktop(context) ? 12 : 16;
-        double verticalPadding = Responsive.isDesktop(context) ? 8 : 12;
+      builder: (context, chartConstraints) {
+        final availableSize = chartConstraints.biggest.shortestSide;
+        final chartSize = availableSize * 0.8;
         
-        return ClipRect(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: horizontalPadding,
-              right: horizontalPadding,
-              top: verticalPadding,
-              bottom: 0, // Reduced bottom padding to align chart at top
-            ),
-            alignment: Alignment.topCenter, // Align chart to top
-            child: AspectRatio(
-              aspectRatio: 1.0, // Ensures square shape for pie chart
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: min(pieSize.height, constraints.maxHeight - verticalPadding),
-                  maxWidth: min(pieSize.width, constraints.maxWidth - (horizontalPadding * 2)),
-                ),
-                child: PieDashboardChart(
-                  dataList: pieData,
-                ),
-              ),
+        return Center(
+          child: SizedBox(
+            height: chartSize,
+            width: chartSize,
+            child: PieDashboardChart(
+              dataList: pieData,
             ),
           ),
         );

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bi_replicate/provider/dates_provider.dart';
 import 'package:bi_replicate/widget/drop_down/custom_dropdown.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import '../../../components/custom_date.dart';
 import '../../../controller/error_controller.dart';
@@ -40,6 +41,7 @@ class FilterDialogSalesByBranches extends StatefulWidget {
 
 class _FilterDialogSalesByBranchesState
     extends State<FilterDialogSalesByBranches> {
+  late AppLocalizations _locale;
   bool isDesktop = false;
   final TextEditingController _fromDateController =
       TextEditingController(text: "29-10-2021");
@@ -71,21 +73,23 @@ class _FilterDialogSalesByBranchesState
 
   @override
   void didChangeDependencies() {
+    _locale = AppLocalizations.of(context)!;
+    
     status = [
-      "All",
-      "Posted",
-      "Draft",
-      "Canceled",
+      _locale.all,
+      _locale.posted,
+      _locale.draft,
+      _locale.canceled,
     ];
     periods = [
-      "Daily",
-      "Weekly",
-      "Monthly",
-      "Yearly",
+      _locale.daily,
+      _locale.weekly,
+      _locale.monthly,
+      _locale.yearly,
     ];
-    charts = ["Line Chart", "Pie Chart", "Bar Chart"];
-    selectedChart = widget.selectedChart ?? "Line Chart";
-    selectedPeriod = widget.selectedPeriod ?? "Monthly";
+    charts = [_locale.lineChart, _locale.pieChart, _locale.barChart];
+    selectedChart = widget.selectedChart ?? _locale.lineChart;
+    selectedPeriod = widget.selectedPeriod ?? _locale.monthly;
     selectedStatus = status[0];
     todayDate = DatesController().formatDateReverse(
         DatesController().formatDate(DatesController().todayDate()));
@@ -166,7 +170,7 @@ class _FilterDialogSalesByBranchesState
                     SizedBox(width: isDesktop ? 12 : 8),
                     Expanded(
                       child: Text(
-                        "Sales by Branches Filter",
+                        _locale.salesByBranchesFilter ?? "Sales by Branches Filter",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: isDesktop ? 18 : 16,
@@ -201,13 +205,13 @@ class _FilterDialogSalesByBranchesState
                     children: [
                       // Date Range Section
                       _buildSection(
-                        title: "Date Range",
+                        title: _locale.dateRange ?? "Date Range",
                         child: _buildDateSection(),
                       ),
                       SizedBox(height: isDesktop ? 20 : 16),
                       // Display Options Section
                       _buildSection(
-                        title: "Display Options",
+                        title: _locale.displayOptions ?? "Display Options",
                         child: _buildDisplaySection(),
                       ),
                     ],
@@ -237,7 +241,7 @@ class _FilterDialogSalesByBranchesState
                         DateTime to = DateTime.parse(_toDateController.text);
                         if (from.isAfter(to)) {
                           ErrorController.openErrorDialog(
-                              1, "Start date cannot be after end date");
+                              1, _locale.startDateAfterEndDate ?? "Start date cannot be after end date");
                         } else {
                           widget.onFilter(
                               selectedPeriod,
@@ -249,7 +253,7 @@ class _FilterDialogSalesByBranchesState
                           Navigator.of(context).pop();
                         }
                       },
-                      text: "Filter",
+                      text: _locale.filter,
                       borderRadius: 8,
                       textColor: Colors.white,
                     ),
@@ -322,7 +326,7 @@ class _FilterDialogSalesByBranchesState
                   Expanded(
                     child: CustomDate(
                       dateController: _fromDateController,
-                      label: "From Date",
+                      label: _locale.fromDate,
                       lastDate: DateTime.now(),
                       minYear: 2000,
                       onValue: (isValid, value) {
@@ -341,7 +345,7 @@ class _FilterDialogSalesByBranchesState
                   Expanded(
                     child: CustomDate(
                       dateController: _toDateController,
-                      label: "To Date",
+                      label: _locale.toDate,
                       lastDate: DateTime.now(),
                       minYear: 2000,
                       onValue: (isValid, value) {
@@ -362,7 +366,7 @@ class _FilterDialogSalesByBranchesState
                 children: [
                   CustomDate(
                     dateController: _fromDateController,
-                    label: "From Date",
+                    label: _locale.fromDate,
                     lastDate: DateTime.now(),
                     minYear: 2000,
                     onValue: (isValid, value) {
@@ -379,7 +383,7 @@ class _FilterDialogSalesByBranchesState
                   SizedBox(height: 12),
                   CustomDate(
                     dateController: _toDateController,
-                    label: "To Date",
+                    label: _locale.toDate,
                     lastDate: DateTime.now(),
                     minYear: 2000,
                     onValue: (isValid, value) {
@@ -405,8 +409,8 @@ class _FilterDialogSalesByBranchesState
         CustomDropDown(
           width: double.infinity,
           items: charts,
-          hint: "Select Chart Type",
-          label: "Chart Type",
+          hint: _locale.selectChartType ?? "Select Chart Type",
+          label: _locale.chartType,
           initialValue: selectedChart,
           onChanged: (value) {
             setState(() {
@@ -418,8 +422,8 @@ class _FilterDialogSalesByBranchesState
         CustomDropDown(
           width: double.infinity,
           items: periods,
-          hint: "Select Period",
-          label: "Period",
+          hint: _locale.selectPeriod ?? "Select Period",
+          label: _locale.period,
           initialValue: selectedPeriod,
           onChanged: (value) {
             setState(() {

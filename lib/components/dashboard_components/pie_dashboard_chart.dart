@@ -32,9 +32,10 @@ class _PieDashboardChartState extends State<PieDashboardChart> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: isMobile ? 0 : 14.0),
           ),
-          PieChartComponent(
-            // height: height * 0.4,
-            dataList: dataList,
+          Expanded(
+            child: PieChartComponent(
+              dataList: dataList,
+            ),
           ),
         ],
       ),

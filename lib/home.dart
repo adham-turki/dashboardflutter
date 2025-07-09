@@ -113,6 +113,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+      
       drawer: isDesktop ? null : const SideMenu(),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
