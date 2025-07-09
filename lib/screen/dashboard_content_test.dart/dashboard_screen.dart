@@ -128,7 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final cardHeight = (usableHeight - 28) / 2;
 
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(2.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -247,10 +247,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
+              spreadRadius: 1,
+              offset: const Offset(0, 8),
+              blurRadius: 10,
+              color: Colors.grey.withOpacity(0.3),
+            )
           ],
         ),
         child: Card(
@@ -438,7 +439,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
+           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.1),
               blurRadius: 8,

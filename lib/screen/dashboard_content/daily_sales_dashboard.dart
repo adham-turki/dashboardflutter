@@ -137,13 +137,7 @@ Widget build(BuildContext context) {
         height: constraints.maxHeight,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+          
         ),
         child: Card(
           elevation: 0,

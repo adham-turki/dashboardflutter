@@ -79,63 +79,109 @@ class _ContentHeaderState extends State<ContentHeader> {
   }
 
   Widget desktopView(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Consumer<ScreenContentProvider>(builder: ((context, value, child) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SelectableText(
-                maxLines: 1,
-                getPage(),
-                style: TextStyle(
-                  fontSize: provider.getPage() == 0
-                      ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                      : (Responsive.isDesktop(context) ? width * 0.012 : 18),
-                  fontWeight: FontWeight.w500,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
+        
+        borderRadius: BorderRadius.circular(8),
+        
+        
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Consumer<ScreenContentProvider>(builder: ((context, value, child) {
+            return Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.blue.shade600,
+                      Colors.blue.shade700,
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _getPageIcon(),
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: SelectableText(
+                        getPage(),
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          letterSpacing: 0.3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          );
-        })),
-        // provider.getPage() == 0
-        //     ? Responsive.isDesktop(context)
-        //         ? cardsDesktopView()
-        //         : cardsMobileView()
-        //     : Container(),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SelectableText(
-              maxLines: 1,
-              "${locale.baseCurrency}: $baseCurrency",
-              style: TextStyle(
-                fontSize: provider.getPage() == 0
-                    ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-                    : (Responsive.isDesktop(context) ? width * 0.012 : 18),
+            );
+          })),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.green.shade50,
+                  Colors.green.shade100,
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(
+                color: Colors.green.shade200,
+                width: 1,
               ),
             ),
-            // provider.getPage() == 0
-            //     ? SelectableText(
-            //         maxLines: 1,
-            //         "$currentMonth / $todayDate",
-            //         style: TextStyle(
-            //           fontSize: context
-            //                       .read<ScreenContentProvider>()
-            //                       .getPage() ==
-            //                   0
-            //               ? (Responsive.isDesktop(context) ? width * 0.01 : 15)
-            //               : (Responsive.isDesktop(context) ? width * 0.01 : 18),
-            //         ),
-            //       )
-            //     : Container(),
-          ],
-        ),
-      ],
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.account_balance_wallet_outlined,
+                  color: Colors.green.shade700,
+                  size: 14,
+                ),
+                const SizedBox(width: 6),
+                SelectableText(
+                  "${locale.baseCurrency}: $baseCurrency",
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green.shade700,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -144,35 +190,93 @@ class _ContentHeaderState extends State<ContentHeader> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Consumer<ScreenContentProvider>(builder: ((context, value, child) {
-          return SelectableText(
-            maxLines: 1,
-            getPage(),
-            style: TextStyle(
-              fontSize: Responsive.isDesktop(context) ? width * 0.015 : 13,
-              fontWeight: FontWeight.w500,
+          return Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.blue.shade600,
+                    Colors.blue.shade700,
+                  ],
+                ),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    _getPageIcon(),
+                    color: Colors.white,
+                    size: 12,
+                  ),
+                  const SizedBox(width: 4),
+                  Flexible(
+                    child: SelectableText(
+                      getPage(),
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         })),
-        // provider.getPage() == 0
-        //     ? SelectableText(
-        //         maxLines: 1,
-        //         "$currentMonth / $todayDate",
-        //         style: TextStyle(
-        //           fontSize: provider.getPage() == 0
-        //               ? (Responsive.isDesktop(context) ? width * 0.01 : 13)
-        //               : (Responsive.isDesktop(context) ? width * 0.01 : 15),
-        //         ),
-        //       )
-        //     : Container(),
-        SelectableText(
-          maxLines: 1,
-          "${locale.baseCurrency}: $baseCurrency",
-          style: TextStyle(
-            fontSize: Responsive.isDesktop(context) ? 18 : 14,
+        const SizedBox(width: 4),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: Colors.green.shade50,
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: Colors.green.shade200),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.account_balance_wallet_outlined,
+                color: Colors.green.shade700,
+                size: 12,
+              ),
+              const SizedBox(width: 4),
+              SelectableText(
+                "${locale.baseCurrency}: $baseCurrency",
+                maxLines: 1,
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.green.shade700,
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
+  }
+
+  IconData _getPageIcon() {
+    int index = context.read<ScreenContentProvider>().getPage();
+    switch (index) {
+      case 0: return Icons.dashboard_outlined;
+      case 1: case 2: case 3: case 4: return Icons.trending_up_outlined;
+      case 5: case 6: return Icons.account_balance_outlined;
+      case 7: return Icons.inventory_outlined;
+      case 8: case 9: return Icons.receipt_long_outlined;
+      case 10: case 11: return Icons.payment_outlined;
+      case 12: case 13: case 14: return Icons.bar_chart_outlined;
+      case 15: case 16: return Icons.people_outline;
+      case 17: case 18: return Icons.settings_outlined;
+      case 19: case 20: case 21: case 22: case 23: case 24: return Icons.assessment_outlined;
+      case 25: case 26: return Icons.star_outline;
+      default: return Icons.circle_outlined;
+    }
   }
 
   // Row cardsMobileView() {

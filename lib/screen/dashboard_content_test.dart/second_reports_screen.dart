@@ -331,7 +331,7 @@ Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
           Container(
             padding: EdgeInsets.symmetric(
               horizontal: Responsive.isDesktop(context) ? 16 : 12,
-              vertical: Responsive.isDesktop(context) ? 8 : 6,
+              vertical: Responsive.isDesktop(context) ? 2 : 1,
             ),
             decoration: const BoxDecoration(
               color: Color.fromRGBO(82, 151, 176, 0.05),
