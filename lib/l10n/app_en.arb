@@ -345,5 +345,6 @@
     "selectPeriod": "Select Period",
     "salesByCategoryFilter": "Sales by Category Filter",
     "categoryAndFilters": "Category & Filters",
-    "stockSelection": "Stock Selection"
+    "stockSelection": "Stock Selection",
+    "sessionDateRange": "Session Date Range"
 }

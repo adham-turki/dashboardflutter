@@ -432,39 +432,52 @@
       );
     }
 
-    Widget _buildBarChart(BoxConstraints constraints) {
-      return LayoutBuilder(
-        builder: (context, chartConstraints) {
-          return Scrollbar(
-            thumbVisibility: true,
-            thickness: 6,
-            trackVisibility: true,
-            radius: const Radius.circular(8),
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                height: chartConstraints.maxHeight,
-                width: isDesktop
-                    ? barData.length > 20
-                        ? chartConstraints.maxWidth * (barData.length / 20)
-                        : chartConstraints.maxWidth
-                    : barData.length > 5
-                        ? chartConstraints.maxWidth * (barData.length / 10)
-                        : chartConstraints.maxWidth,
-                child: barData.isNotEmpty
-                    ? BarDashboardChart(
-                        barChartData: barData,
-                        isMax: false,
-                        isMedium: true,
-                      )
-                    : _buildNoDataWidget(Icons.bar_chart_outlined),
-              ),
-            ),
-          );
-        },
-      );
-    }
+ Widget _buildBarChart(BoxConstraints constraints) {
+  return LayoutBuilder(
+    builder: (context, chartConstraints) {
+      final ScrollController scrollController = ScrollController();
 
+      if (_locale.localeName == "ar") {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            scrollController.jumpTo(0); // Start from left
+          }
+        });
+      }
+      
+      return Scrollbar(
+        thumbVisibility: true,
+        thickness: 6,
+        trackVisibility: true,
+        radius: const Radius.circular(8),
+        controller: scrollController,
+        child: SingleChildScrollView(
+          controller: scrollController,
+          scrollDirection: Axis.horizontal,
+          // Force LTR scrolling behavior for Arabic locale
+          reverse: _locale.localeName == "ar" ? true : false,
+          child: SizedBox(
+            height: chartConstraints.maxHeight,
+            width: isDesktop
+                ? barData.length > 20
+                    ? chartConstraints.maxWidth * (barData.length / 20)
+                    : chartConstraints.maxWidth
+                : barData.length > 5
+                    ? chartConstraints.maxWidth * (barData.length / 10)
+                    : chartConstraints.maxWidth,
+            child: barData.isNotEmpty
+                ? BarDashboardChart(
+                    barChartData: barData,
+                    isMax: false,
+                    isMedium: true,
+                  )
+                : _buildNoDataWidget(Icons.bar_chart_outlined),
+          ),
+        ),
+      );
+    },
+  );
+}
     Widget _buildNoDataWidget(IconData icon) {
       return Center(
         child: Column(

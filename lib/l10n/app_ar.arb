@@ -319,6 +319,7 @@
     "selectPeriod": "اختر الفترة",
     "salesByCategoryFilter": "فلتر المبيعات حسب التصنيف",
     "categoryAndFilters": "التصنيف والمرشحات", 
-    "stockSelection": "اختيار الأصناف"
+    "stockSelection": "اختيار الأصناف",
+    "sessionDateRange": "نطاق تاريخ الجلسة"
 
 }
