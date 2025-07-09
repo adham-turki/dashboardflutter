@@ -5,6 +5,7 @@ import 'package:bi_replicate/dialogs/fliter_dialog.dart';
 import 'package:bi_replicate/model/cashier_model.dart';
 import 'package:bi_replicate/model/chart/pie_chart_model.dart';
 import 'package:bi_replicate/model/computer_model.dart';
+import 'dart:math' as math;
 
 import 'package:bi_replicate/model/sales_view_model.dart';
 import 'package:bi_replicate/provider/dates_provider.dart';
@@ -236,11 +237,16 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   //   fetchData();
   // }
 
-  @override
-  void dispose() {
-    // dateProvider.removeListener(_onDateRangeChanged); // Always detach
-    super.dispose();
-  }
+  
+@override
+void dispose() {
+  _timer?.cancel(); // Cancel any running timer
+  _scrollController.dispose();
+  _scrollController1.dispose();
+  _scrollController2.dispose();
+  _scrollController3.dispose();
+  super.dispose();
+}
 
   fetchData() async {
     await fetchSalesByCashier();
@@ -336,45 +342,7 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
 
   List<String> xLabelsCashier = [];
 
-  fetchSalesByCashier() async {
-    totalSalesByCashier.clear();
-    totalPricesCashierCount = 0.0;
-    maxYByCashier = 0.0;
-    barChartDataCashier.clear();
-
-    await TotalSalesController()
-        .getTotalSalesByCashier(cashierSearchCriteria)
-        .then((value) {
-      isLoading = false;
-      for (var i = 0; i < value.length; i++) {
-        totalSalesByCashier.add(BranchSalesViewModel.fromDBModel(value[i]));
-        totalPricesCashierCount +=
-            double.parse(totalSalesByCashier[i].displayTotalSales);
-        if (double.parse(totalSalesByCashier[i].displayTotalSales) >
-            maxYByCashier) {
-          maxYByCashier =
-              double.parse(totalSalesByCashier[i].displayTotalSales);
-        }
-        xLabelsCashier =
-            totalSalesByCashier.map((e) => e.displayGroupName).toList();
-
-        barChartDataCashier =
-            List.generate(totalSalesByCashier.length, (index) {
-          return BarChartGroupData(
-            x: index, // Use index as x-value
-            barRods: [
-              BarChartRodData(
-                toY: double.parse(totalSalesByCashier[index].displayTotalSales),
-                borderRadius: BorderRadius.all(Radius.zero),
-              ),
-            ],
-          );
-        });
-      }
-      setState(() {});
-    });
-  }
-
+ 
   List<String> xLabels = [];
   double maxY = 0.0;
 
@@ -420,44 +388,119 @@ class _SalesReportsScreenState extends State<SalesReportsScreen> {
   }
 
   List<String> xLabelsComputer = [];
-  fetchSalesByComputer() async {
-    totalSalesByComputer.clear();
-    totalPricesComputerCount = 0.0;
-
-    maxYByComputer = 0.0;
-    await TotalSalesController()
-        .getTotalSalesByComputer(desktopSearchCriteria)
-        .then((value) {
-      isLoading1 = false;
-      for (var i = 0; i < value.length; i++) {
-        totalSalesByComputer.add(BranchSalesViewModel.fromDBModel(value[i]));
-        totalPricesComputerCount +=
+ fetchSalesByComputer() async {
+  if (!mounted) return; // Add mounted check
+  
+  totalSalesByComputer.clear();
+  totalPricesComputerCount = 0.0;
+  maxYByComputer = 0.0;
+  barChartDataComputer.clear(); // Clear before rebuilding
+  xLabelsComputer.clear(); // Clear before rebuilding
+  
+  await TotalSalesController()
+      .getTotalSalesByComputer(desktopSearchCriteria)
+      .then((value) {
+    if (!mounted) return; // Add mounted check
+    
+    isLoading1 = false;
+    for (var i = 0; i < value.length; i++) {
+      totalSalesByComputer.add(BranchSalesViewModel.fromDBModel(value[i]));
+      totalPricesComputerCount +=
+          double.parse(totalSalesByComputer[i].displayTotalSales);
+      if (double.parse(totalSalesByComputer[i].displayTotalSales) >
+          maxYByComputer) {
+        maxYByComputer =
             double.parse(totalSalesByComputer[i].displayTotalSales);
-        if (double.parse(totalSalesByComputer[i].displayTotalSales) >
-            maxYByComputer) {
-          maxYByComputer =
-              double.parse(totalSalesByComputer[i].displayTotalSales);
-        }
-        xLabelsComputer =
-            totalSalesByComputer.map((e) => e.displayGroupName).toList();
-
-        barChartDataComputer =
-            List.generate(totalSalesByComputer.length, (index) {
-          return BarChartGroupData(
-            x: index, // Use index as x-value
-            barRods: [
-              BarChartRodData(
-                toY:
-                    double.parse(totalSalesByComputer[index].displayTotalSales),
-                borderRadius: BorderRadius.all(Radius.zero),
-              ),
-            ],
-          );
-        });
       }
-      setState(() {});
+    }
+    
+    // Rebuild labels and chart data together
+    xLabelsComputer = totalSalesByComputer.map((e) => e.displayGroupName).toList();
+    barChartDataComputer = List.generate(totalSalesByComputer.length, (index) {
+      return BarChartGroupData(
+        x: index, // Use index as x-value
+        barRods: [
+          BarChartRodData(
+            toY: double.parse(totalSalesByComputer[index].displayTotalSales),
+            borderRadius: BorderRadius.all(Radius.zero),
+          ),
+        ],
+      );
     });
-  }
+    
+    if (mounted) {
+      setState(() {});
+    }
+  });
+}
+Widget _buildEmptyChartContent(AppLocalizations _locale) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.bar_chart_outlined,
+          size: 48,
+          color: Colors.grey.shade400,
+        ),
+        const SizedBox(height: 16),
+        Text(
+          _locale.noDataAvailable,
+          style: TextStyle(
+            color: Colors.grey.shade600,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+// 2. Fix for fetchSalesByCashier method to ensure proper data synchronization
+fetchSalesByCashier() async {
+  if (!mounted) return; // Add mounted check
+  
+  totalSalesByCashier.clear();
+  totalPricesCashierCount = 0.0;
+  maxYByCashier = 0.0;
+  barChartDataCashier.clear(); // Clear before rebuilding
+  xLabelsCashier.clear(); // Clear before rebuilding
+
+  await TotalSalesController()
+      .getTotalSalesByCashier(cashierSearchCriteria)
+      .then((value) {
+    if (!mounted) return; // Add mounted check
+    
+    isLoading = false;
+    for (var i = 0; i < value.length; i++) {
+      totalSalesByCashier.add(BranchSalesViewModel.fromDBModel(value[i]));
+      totalPricesCashierCount +=
+          double.parse(totalSalesByCashier[i].displayTotalSales);
+      if (double.parse(totalSalesByCashier[i].displayTotalSales) >
+          maxYByCashier) {
+        maxYByCashier =
+            double.parse(totalSalesByCashier[i].displayTotalSales);
+      }
+    }
+    
+    // Rebuild labels and chart data together
+    xLabelsCashier = totalSalesByCashier.map((e) => e.displayGroupName).toList();
+    barChartDataCashier = List.generate(totalSalesByCashier.length, (index) {
+      return BarChartGroupData(
+        x: index, // Use index as x-value
+        barRods: [
+          BarChartRodData(
+            toY: double.parse(totalSalesByCashier[index].displayTotalSales),
+            borderRadius: BorderRadius.all(Radius.zero),
+          ),
+        ],
+      );
+    });
+    
+    if (mounted) {
+      setState(() {});
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -1502,6 +1545,20 @@ Widget salesByPaymentTypesBarChart(
     ScrollController _scrollController,
     bool isLoading,
     List<String> xLabels) {
+  
+  // Validate data consistency before rendering
+  bool hasValidData = enteredBarChartData.isNotEmpty && xLabels.isNotEmpty;
+  
+  // Ensure data consistency - xLabels should match the number of bar chart data points
+  List<BarChartGroupData> validBarChartData = [];
+  List<String> validXLabels = [];
+  
+  if (hasValidData) {
+    final validDataCount = math.min(enteredBarChartData.length, xLabels.length);
+    validBarChartData = enteredBarChartData.take(validDataCount).toList();
+    validXLabels = xLabels.take(validDataCount).toList();
+  }
+  
   return Container(
     height: height * 0.465,
     decoration: BoxDecoration(
@@ -1526,8 +1583,9 @@ Widget salesByPaymentTypesBarChart(
       ),
       child: Column(
         children: [
+          // Header section (unchanged)
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8), // Reduced vertical padding
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: const BoxDecoration(
               color: Color.fromRGBO(82, 151, 176, 0.05),
               borderRadius: BorderRadius.only(
@@ -1547,7 +1605,7 @@ Widget salesByPaymentTypesBarChart(
                         children: [
                           Container(
                             width: 4,
-                            height: 16, // Reduced height
+                            height: 16,
                             decoration: BoxDecoration(
                               color: const Color.fromRGBO(82, 151, 176, 1),
                               borderRadius: BorderRadius.circular(2),
@@ -1557,7 +1615,7 @@ Widget salesByPaymentTypesBarChart(
                           SelectableText(
                             title,
                             style: TextStyle(
-                              fontSize: isDesktop ? 14 : 16, // Slightly smaller font
+                              fontSize: isDesktop ? 14 : 16,
                               fontWeight: FontWeight.w600,
                               color: const Color.fromRGBO(82, 151, 176, 1),
                             ),
@@ -1583,7 +1641,7 @@ Widget salesByPaymentTypesBarChart(
                                               ? '\u200E${NumberFormat('#,###', 'en_US').format(totalPricesHoursCount)}'
                                               : '',
                               style: TextStyle(
-                                fontSize: isDesktop ? 10 : 12, // Smaller font
+                                fontSize: isDesktop ? 10 : 12,
                                 fontWeight: FontWeight.w500,
                                 color: const Color.fromRGBO(82, 151, 176, 1),
                               ),
@@ -1593,7 +1651,7 @@ Widget salesByPaymentTypesBarChart(
                       ),
                       if (Responsive.isDesktop(context))
                         Padding(
-                          padding: const EdgeInsets.only(top: 4, left: 12), // Reduced top padding
+                          padding: const EdgeInsets.only(top: 4, left: 12),
                           child: Text(
                             title == _locale.salesByCashier
                                 ? "(${cashierSearchCriteria.fromDate} - ${cashierSearchCriteria.toDate})"
@@ -1605,7 +1663,7 @@ Widget salesByPaymentTypesBarChart(
                                             ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
                                             : "",
                             style: TextStyle(
-                              fontSize: isDesktop ? 10 : 12, // Smaller font
+                              fontSize: isDesktop ? 10 : 12,
                               color: Colors.grey.shade600,
                               fontStyle: FontStyle.italic,
                             ),
@@ -1677,7 +1735,7 @@ Widget salesByPaymentTypesBarChart(
                   icon: Icon(
                     Icons.filter_list_sharp,
                     color: Colors.white,
-                    size: isDesktop ? height * 0.025 : height * 0.02, // Adjusted icon size
+                    size: isDesktop ? height * 0.025 : height * 0.02,
                   ),
                 ),
               ],
@@ -1685,7 +1743,7 @@ Widget salesByPaymentTypesBarChart(
           ),
           if (!Responsive.isDesktop(context))
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4), // Reduced padding
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -1700,7 +1758,7 @@ Widget salesByPaymentTypesBarChart(
                                     ? "(${hoursSearchCriteria.fromDate} - ${hoursSearchCriteria.toDate})"
                                     : "",
                     style: TextStyle(
-                      fontSize: height * 0.011, // Slightly smaller font
+                      fontSize: height * 0.011,
                       color: Colors.grey.shade600,
                       fontStyle: FontStyle.italic,
                     ),
@@ -1718,7 +1776,7 @@ Widget salesByPaymentTypesBarChart(
                         strokeWidth: 3,
                       ),
                     )
-                  : enteredBarChartData.isNotEmpty
+                  : hasValidData && validBarChartData.isNotEmpty && validXLabels.isNotEmpty
                       ? Scrollbar(
                           controller: _scrollController,
                           thumbVisibility: true,
@@ -1732,28 +1790,37 @@ Widget salesByPaymentTypesBarChart(
                             child: SizedBox(
                               height: double.infinity,
                               width: Responsive.isDesktop(context)
-                                  ? enteredBarChartData.length > 20
-                                      ? width * (enteredBarChartData.length / 16)
+                                  ? validBarChartData.length > 20
+                                      ? width * (validBarChartData.length / 16)
                                       : width * 0.82
-                                  : enteredBarChartData.length > 5
-                                      ? width * (enteredBarChartData.length / 8)
+                                  : validBarChartData.length > 5
+                                      ? width * (validBarChartData.length / 8)
                                       : width * 0.82,
                               child: BarChart(
                                 BarChartData(
-                                  maxY: title == _locale.salesByCashier
-                                      ? maxYByCashier * 1.4
+                                  maxY: (title == _locale.salesByCashier
+                                      ? maxYByCashier
                                       : title == _locale.salesByComputer
-                                          ? maxYByComputer * 1.4
+                                          ? maxYByComputer
                                           : title == _locale.salesByPaymentTypes
-                                              ? maxY * 1.4
-                                              : maxYHours * 1.4,
+                                              ? maxY
+                                              : maxYHours) * 1.4,
                                   barTouchData: BarTouchData(
                                     touchTooltipData: BarTouchTooltipData(
                                       tooltipRoundedRadius: 8,
-                                      getTooltipItem:
-                                          (group, groupIndex, rod, rodIndex) {
+                                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                                        // Use the bar's x value to find the correct label
+                                        int barIndex = group.x;
+                                        String labelText = "";
+                                        
+                                        if (barIndex >= 0 && barIndex < validXLabels.length) {
+                                          labelText = validXLabels[barIndex];
+                                        } else {
+                                          labelText = "Item ${barIndex + 1}";
+                                        }
+                                        
                                         return BarTooltipItem(
-                                          "${Converters.formatNumber(rod.toY)}\n${xLabels[groupIndex]}",
+                                          "${Converters.formatNumber(rod.toY)}\n$labelText",
                                           const TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.w500,
@@ -1772,14 +1839,14 @@ Widget salesByPaymentTypesBarChart(
                                         reservedSize: 60,
                                         getTitlesWidget: (value, meta) {
                                           int index = value.toInt();
-                                          if (index >= 0 && index < xLabels.length) {
+                                          if (index >= 0 && index < validXLabels.length) {
                                             return Transform.rotate(
                                               angle: -30 * 3.14159 / 180,
                                               child: SizedBox(
                                                 width: 200,
                                                 child: Center(
                                                   child: Text(
-                                                    xLabels[index],
+                                                    validXLabels[index],
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                       color: Colors.grey.shade700,
@@ -1796,8 +1863,7 @@ Widget salesByPaymentTypesBarChart(
                                     ),
                                     leftTitles: AxisTitles(
                                       sideTitles: SideTitles(
-                                        getTitlesWidget: (value, meta) =>
-                                            leftTitleWidgets(value),
+                                        getTitlesWidget: (value, meta) => leftTitleWidgets(value),
                                         showTitles: true,
                                         reservedSize: 35,
                                       ),
@@ -1809,15 +1875,13 @@ Widget salesByPaymentTypesBarChart(
                                   gridData: FlGridData(
                                     show: true,
                                     drawVerticalLine: false,
-                                    horizontalInterval: (title ==
-                                            _locale.salesByCashier
+                                    horizontalInterval: (title == _locale.salesByCashier
                                         ? maxYByCashier
                                         : title == _locale.salesByComputer
                                             ? maxYByComputer
                                             : title == _locale.salesByPaymentTypes
                                                 ? maxY
-                                                : maxYHours) *
-                                        0.2,
+                                                : maxYHours) * 0.2,
                                     getDrawingHorizontalLine: (value) {
                                       return const FlLine(
                                         color: Color.fromRGBO(82, 151, 176, 0.1),
@@ -1830,9 +1894,12 @@ Widget salesByPaymentTypesBarChart(
                                       color: const Color.fromRGBO(82, 151, 176, 0.3),
                                     ),
                                   ),
-                                  barGroups: enteredBarChartData.map((data) {
+                                  barGroups: validBarChartData.asMap().entries.map((entry) {
+                                    int index = entry.key;
+                                    BarChartGroupData data = entry.value;
+                                    
                                     return BarChartGroupData(
-                                      x: data.x,
+                                      x: index, // Use the loop index as x
                                       barRods: data.barRods.map((rod) {
                                         return BarChartRodData(
                                           toY: rod.toY,
@@ -1851,33 +1918,14 @@ Widget salesByPaymentTypesBarChart(
                             ),
                           ),
                         )
-                      : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.bar_chart_outlined,
-                                size: 48,
-                                color: Colors.grey.shade400,
-                              ),
-                              const SizedBox(height: 16),
-                              Text(
-                                _locale.noDataAvailable,
-                                style: TextStyle(
-                                  color: Colors.grey.shade600,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      : _buildEmptyChartContent(_locale),
             ),
           ),
         ],
       ),
     ),
-    );
-}
+  );
+} 
 
 Widget salesCostBasedBranchChart(List<ChartData> data1, String title) {
   return Container(
